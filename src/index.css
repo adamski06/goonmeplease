@@ -116,7 +116,7 @@
 
 .bg-gradient-aurora::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   background: 
@@ -148,7 +148,7 @@
 
 /* Noise texture overlay */
 .noise-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0.25;
