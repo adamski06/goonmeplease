@@ -198,14 +198,15 @@
   }
 }
 
-/* Logo glow - soft ellipse behind logo */
+/* Logo glow - blurred version that follows logo shape */
 .logo-glow {
-  background: radial-gradient(ellipse at center, rgba(100, 220, 240, 0.6) 0%, transparent 70%);
-  filter: blur(30px);
+  background: rgba(100, 220, 240, 1);
+  filter: blur(20px) brightness(1.5);
+  transform: scale(1.15);
   animation: auroraColors 30s linear infinite;
 }
 
-/* Logo glass effect - matches center of page with subtle fade */
+/* Logo glass effect - sharp logo on top */
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
@@ -213,6 +214,6 @@
       rgba(100, 200, 220, 1) 60%,
       rgba(60, 160, 190, 1) 100%
     );
-  filter: brightness(2.2) saturate(1.5) blur(0.8px);
+  filter: brightness(2) saturate(1.4);
   animation: auroraColors 30s linear infinite;
 }
