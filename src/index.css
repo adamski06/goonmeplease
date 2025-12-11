@@ -202,10 +202,11 @@
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
-      rgba(160, 240, 250, 1) 0%,
-      rgba(100, 200, 220, 1) 60%,
-      rgba(60, 160, 190, 1) 100%
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.9) 40%,
+      rgba(160, 240, 250, 0.5) 80%,
+      rgba(100, 200, 220, 0.4) 100%
     );
-  filter: brightness(2) saturate(1.4);
+  filter: brightness(1.2) saturate(1.2);
   animation: auroraColors 90s linear infinite;
 }
