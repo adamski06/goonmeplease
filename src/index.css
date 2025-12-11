@@ -131,29 +131,13 @@
   animation: introColorCycle 2s ease-out forwards;
 }
 
-/* Fast intro color cycle - cycles through all hues in 2 seconds then fades to white */
+/* Fast intro color cycle - smooth rotation then fades to white */
 @keyframes introColorCycle {
   0% {
     filter: hue-rotate(0deg);
     opacity: 1;
   }
-  20% {
-    filter: hue-rotate(72deg);
-    opacity: 1;
-  }
-  40% {
-    filter: hue-rotate(144deg);
-    opacity: 1;
-  }
-  60% {
-    filter: hue-rotate(216deg);
-    opacity: 1;
-  }
-  80% {
-    filter: hue-rotate(288deg);
-    opacity: 1;
-  }
-  95% {
+  90% {
     filter: hue-rotate(360deg);
     opacity: 1;
   }
@@ -232,23 +216,11 @@
   0% {
     filter: hue-rotate(0deg) brightness(2) saturate(1.4);
   }
-  20% {
-    filter: hue-rotate(72deg) brightness(2) saturate(1.4);
-  }
-  40% {
-    filter: hue-rotate(144deg) brightness(2) saturate(1.4);
-  }
-  60% {
-    filter: hue-rotate(216deg) brightness(2) saturate(1.4);
-  }
-  80% {
-    filter: hue-rotate(288deg) brightness(2) saturate(1.4);
-  }
-  95% {
+  90% {
     filter: hue-rotate(360deg) brightness(2) saturate(1.4);
   }
   100% {
-    filter: hue-rotate(0deg) brightness(0.2) saturate(0);
+    filter: hue-rotate(360deg) brightness(0.2) saturate(0);
   }
 }
 
@@ -263,19 +235,7 @@
     color: hsl(186 100% 83%);
     filter: hue-rotate(0deg);
   }
-  20% {
-    filter: hue-rotate(72deg);
-  }
-  40% {
-    filter: hue-rotate(144deg);
-  }
-  60% {
-    filter: hue-rotate(216deg);
-  }
-  80% {
-    filter: hue-rotate(288deg);
-  }
-  95% {
+  90% {
     filter: hue-rotate(360deg);
   }
   100% {
