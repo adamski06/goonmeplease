@@ -183,15 +183,16 @@
   }
 }
 
-/* Logo glass effect - white center with deep blue edges */
+/* Logo glass effect - white center with faded blue edges */
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
       hsl(0 0% 100% / 0.95) 0%,
-      hsl(0 0% 95% / 0.9) 30%,
-      hsl(220 50% 75% / 0.8) 60%,
-      hsl(215 55% 65% / 0.8) 100%
+      hsl(0 0% 98% / 0.92) 25%,
+      hsl(220 20% 92% / 0.88) 50%,
+      hsl(220 35% 85% / 0.85) 75%,
+      hsl(215 45% 78% / 0.8) 100%
     );
-  filter: brightness(1.25) saturate(1.2) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
+  filter: brightness(1.25) saturate(1.15) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.3));
   backdrop-filter: blur(8px);
 }
