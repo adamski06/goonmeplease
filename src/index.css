@@ -122,7 +122,8 @@
   background: 
     radial-gradient(circle farthest-side at 50% 50%, transparent 0%, transparent 30%, rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
     rgba(0, 80, 120, 1);
-  animation: auroraIntro 4s ease-in-out, auroraLoop 12s ease-in-out 4s infinite;
+  transform-origin: center;
+  animation: auroraIntro 1.8s linear, auroraScale 1.5s ease-out 1.8s forwards, auroraLoop 12s linear 1.8s infinite;
 }
 
 /* White center overlay that fades in and pushes colors to edges */
@@ -131,29 +132,35 @@
   position: fixed;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(circle at 50% 50%, white 0%, white 35%, transparent 70%);
+  background: radial-gradient(circle at 50% 50%, white 0%, white 45%, transparent 80%);
   opacity: 0;
-  animation: whiteFadeIn 2s ease-in-out 4s forwards;
+  animation: whiteFadeIn 1.5s ease-out 1.8s forwards;
 }
 
 @keyframes auroraIntro {
   0% {
     filter: hue-rotate(0deg);
   }
-  20% {
-    filter: hue-rotate(60deg);
+  25% {
+    filter: hue-rotate(90deg);
   }
-  40% {
-    filter: hue-rotate(150deg);
+  50% {
+    filter: hue-rotate(180deg);
   }
-  60% {
-    filter: hue-rotate(240deg);
-  }
-  80% {
-    filter: hue-rotate(300deg);
+  75% {
+    filter: hue-rotate(270deg);
   }
   100% {
-    filter: hue-rotate(0deg);
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes auroraScale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.8);
   }
 }
 
