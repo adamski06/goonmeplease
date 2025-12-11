@@ -5,9 +5,9 @@ const Index = () => {
       <div className="noise-layer" />
       
       <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
-        {/* Logo with glass effect */}
-        <div className="flex items-center justify-center px-12 py-8 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-          <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-semibold tracking-tight text-foreground/90">
+        {/* Logo placeholder - replace with your actual logo */}
+        <div className="flex items-center justify-center">
+          <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-semibold tracking-tight text-foreground">
             Jarla
           </h1>
         </div>
