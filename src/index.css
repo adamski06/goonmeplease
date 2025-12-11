@@ -121,9 +121,11 @@
   z-index: 0;
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
-      rgba(0, 180, 200, 0.15) 0%, 
-      rgba(0, 180, 200, 0.4) 45%, 
-      rgba(0, 80, 120, 1) 85%
+      transparent 0%, 
+      transparent 25%, 
+      rgba(0, 180, 200, 0.15) 45%, 
+      rgba(0, 180, 200, 0.4) 65%, 
+      rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
   animation: auroraColors 12s linear infinite;
