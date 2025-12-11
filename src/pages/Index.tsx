@@ -1,8 +1,6 @@
 import jarlaLogo from "@/assets/jarla-logo.png";
-
 const Index = () => {
-  return (
-    <div className="bg-gradient-aurora">
+  return <div className="bg-gradient-aurora">
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
@@ -11,22 +9,19 @@ const Index = () => {
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center relative">
             {/* Main logo */}
-            <div 
-              className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
-              style={{ 
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center'
-              }}
-            />
+            <div className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass" style={{
+            WebkitMaskImage: `url(${jarlaLogo})`,
+            maskImage: `url(${jarlaLogo})`,
+            WebkitMaskSize: 'contain',
+            maskSize: 'contain',
+            WebkitMaskRepeat: 'no-repeat',
+            maskRepeat: 'no-repeat',
+            WebkitMaskPosition: 'center',
+            maskPosition: 'center'
+          }} />
           </div>
           
-          <p className="text-lg md:text-xl text-white text-center max-w-md animate-fade-in-delayed">
+          <p className="text-lg text-white text-center max-w-md animate-fade-in-delayed md:text-5xl">
             Human networks are the new distribution.
           </p>
         </div>
@@ -55,8 +50,6 @@ const Index = () => {
           </p>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
