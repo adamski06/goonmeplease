@@ -111,7 +111,7 @@
 /* Solid light blue background */
 .bg-gradient-aurora {
   position: relative;
-  background: hsl(195, 70%, 55%);
+  background: hsl(195, 70%, 42%);
 }
 
 @keyframes auroraColors {
