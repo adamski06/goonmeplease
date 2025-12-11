@@ -11,10 +11,18 @@ const Index = () => {
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center relative">
             {/* Shadow backdrop */}
+            <svg className="absolute w-0 h-0">
+              <filter id="grainy-blur">
+                <feGaussianBlur stdDeviation="8" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" />
+                <feBlend in="SourceGraphic" in2="noise" mode="multiply" />
+              </filter>
+            </svg>
             <img 
               src={jarlaLogo}
               alt=""
-              className="absolute h-24 md:h-32 lg:h-40 w-auto blur-[15px] opacity-60 brightness-0 translate-y-3"
+              className="absolute h-24 md:h-32 lg:h-40 w-auto opacity-50 translate-y-3"
+              style={{ filter: 'url(#grainy-blur) brightness(0)' }}
             />
             {/* Main logo */}
             <div 
