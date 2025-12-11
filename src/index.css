@@ -121,15 +121,37 @@
   z-index: 0;
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
+      rgba(0, 200, 220, 0.9) 0%, 
+      rgba(0, 150, 180, 1) 30%, 
+      rgba(0, 100, 140, 1) 60%, 
+      rgba(0, 60, 100, 1) 100%
+    );
+  animation: auroraIntro 4s ease-in-out, auroraLoop 12s ease-in-out 4s infinite;
+}
+
+/* White overlay that fades in after intro */
+.bg-gradient-aurora::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: 
+    radial-gradient(circle farthest-side at 50% 50%, 
       white 0%, 
       white 20%, 
-      rgba(0, 200, 220, 0.7) 35%, 
-      rgba(0, 150, 180, 0.9) 50%, 
-      rgba(0, 200, 220, 0.7) 65%, 
+      transparent 40%, 
+      transparent 60%, 
       white 80%, 
       white 100%
     );
-  animation: auroraIntro 4s ease-in-out, auroraLoop 12s ease-in-out 4s infinite;
+  opacity: 0;
+  animation: whiteReveal 1.5s ease-out 4s forwards;
+}
+
+@keyframes whiteReveal {
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes auroraIntro {
