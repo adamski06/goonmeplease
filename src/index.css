@@ -207,11 +207,10 @@
   animation: auroraColors 90s linear infinite;
 }
 
-/* White glow wrapper for logo */
+/* Subtle white glow wrapper for logo */
 .logo-glow {
-  filter: drop-shadow(0 0 20px hsl(0 0% 100%)) 
-          drop-shadow(0 0 40px hsl(0 0% 100%)) 
-          drop-shadow(0 0 60px hsl(0 0% 100% / 0.8));
+  filter: drop-shadow(0 0 10px hsl(0 0% 100% / 0.4)) 
+          drop-shadow(0 0 25px hsl(0 0% 100% / 0.2));
 }
 
 /* Animated text color synced with aurora */
