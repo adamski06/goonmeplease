@@ -211,9 +211,3 @@
   background: rgba(255, 255, 255, 1);
 }
 
-/* Logo glow backdrop */
-.logo-glow {
-  background: rgba(0, 140, 180, 0.8);
-  filter: blur(60px);
-  transform: scale(1.2) translateY(15px);
-}
