@@ -132,17 +132,23 @@
 }
 
 @keyframes auroraColors {
-  0%, 100% {
+  0% {
     filter: hue-rotate(0deg);
   }
+  5% {
+    filter: hue-rotate(80deg);
+  }
   25% {
-    filter: hue-rotate(90deg);
+    filter: hue-rotate(120deg);
   }
   50% {
     filter: hue-rotate(180deg);
   }
   75% {
     filter: hue-rotate(270deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
   }
 }
 
