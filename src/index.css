@@ -108,7 +108,7 @@
   }
 }
 
-/* Static gradient background - cyan center, dark blue middle, white outer */
+/* Animated gradient background - color cycling with white outer edge */
 .bg-gradient-aurora {
   position: relative;
   background: hsl(0 0% 100%);
@@ -129,6 +129,19 @@
       hsl(0 0% 95%) 86%, 
       hsl(0 0% 100%) 100%
     );
+  animation: auroraColors 90s linear infinite;
+}
+
+@keyframes auroraColors {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  8% {
+    filter: hue-rotate(170deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 /* Noise texture overlay - heavy grain */
@@ -183,16 +196,24 @@
   }
 }
 
-/* Logo glass effect - white center with faded blue edges */
+/* Logo glass effect - animated inner colors with white outer edge */
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
-      hsl(210 15% 97% / 0.95) 0%,
-      hsl(215 25% 92% / 0.92) 25%,
+      hsl(215 50% 72% / 0.85) 0%,
+      hsl(215 45% 78% / 0.88) 25%,
       hsl(215 35% 85% / 0.9) 50%,
-      hsl(215 45% 78% / 0.88) 75%,
-      hsl(215 50% 72% / 0.85) 100%
+      hsl(215 25% 92% / 0.92) 75%,
+      hsl(210 15% 97% / 0.95) 100%
     );
-  filter: brightness(1.2) saturate(1.2) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
+  filter: brightness(2.5) saturate(1.4) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
   backdrop-filter: blur(8px);
+  animation: auroraColors 90s linear infinite;
+}
+
+/* Animated text color synced with aurora */
+.text-aurora {
+  color: hsl(215 70% 50%);
+  animation: auroraColors 90s linear infinite;
+  filter: brightness(2);
 }
