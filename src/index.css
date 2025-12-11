@@ -198,15 +198,9 @@
   }
 }
 
-/* Logo glass effect - uses same gradient as background, synced */
+/* Logo glass effect - exact same colors as background for perfect sync */
 .logo-glass {
-  background: 
-    radial-gradient(circle farthest-side at 50% 50%, 
-      rgba(255, 255, 255, 0.95) 0%, 
-      rgba(200, 255, 255, 0.85) 25%, 
-      rgba(0, 180, 200, 0.7) 60%, 
-      rgba(0, 120, 160, 0.6) 100%
-    );
-  filter: brightness(1.4) saturate(1.1);
+  background: rgba(0, 180, 200, 1);
+  filter: brightness(1.8) saturate(1.3);
   animation: auroraColors 30s linear infinite;
 }
