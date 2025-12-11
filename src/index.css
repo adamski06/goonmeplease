@@ -198,17 +198,9 @@
   }
 }
 
-/* Logo glass effect - same gradient as background, but brighter */
+/* Logo glass effect - bright blurry light that follows background colors */
 .logo-glass {
-  background: 
-    radial-gradient(circle farthest-side at 50% 50%, 
-      transparent 0%, 
-      transparent 25%, 
-      rgba(0, 180, 200, 0.15) 45%, 
-      rgba(0, 180, 200, 0.4) 65%, 
-      rgba(0, 80, 120, 1) 90%
-    ),
-    rgba(0, 80, 120, 1);
-  filter: brightness(2.2) saturate(1.5);
+  background: rgba(100, 220, 240, 1);
+  filter: brightness(1.8) saturate(1.2) blur(0.5px);
   animation: auroraColors 30s linear infinite;
 }
