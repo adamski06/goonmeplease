@@ -108,10 +108,10 @@
   }
 }
 
-/* Airbrushed gradient background with smooth color animation */
+/* Airbrushed gradient background with intro animation */
 .bg-gradient-aurora {
   position: relative;
-  background: rgba(0, 80, 120, 1);
+  background: hsl(0 0% 100%);
 }
 
 .bg-gradient-aurora::before {
@@ -128,21 +128,38 @@
       rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
-  animation: auroraColors 30s linear infinite;
+  animation: introColorCycle 2s ease-out forwards;
 }
 
-@keyframes auroraColors {
-  0%, 100% {
+/* Fast intro color cycle - cycles through all hues in 2 seconds then fades to white */
+@keyframes introColorCycle {
+  0% {
     filter: hue-rotate(0deg);
+    opacity: 1;
   }
-  25% {
-    filter: hue-rotate(90deg);
+  20% {
+    filter: hue-rotate(72deg);
+    opacity: 1;
   }
-  50% {
-    filter: hue-rotate(180deg);
+  40% {
+    filter: hue-rotate(144deg);
+    opacity: 1;
   }
-  75% {
-    filter: hue-rotate(270deg);
+  60% {
+    filter: hue-rotate(216deg);
+    opacity: 1;
+  }
+  80% {
+    filter: hue-rotate(288deg);
+    opacity: 1;
+  }
+  95% {
+    filter: hue-rotate(360deg);
+    opacity: 1;
+  }
+  100% {
+    filter: hue-rotate(360deg);
+    opacity: 0;
   }
 }
 
@@ -198,7 +215,7 @@
   }
 }
 
-/* Logo glass effect */
+/* Logo glass effect with intro animation */
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
@@ -207,5 +224,30 @@
       rgba(60, 160, 190, 1) 100%
     );
   filter: brightness(2) saturate(1.4);
-  animation: auroraColors 30s linear infinite;
+  animation: introLogoColor 2s ease-out forwards;
+}
+
+/* Logo syncs with background intro animation then becomes dark */
+@keyframes introLogoColor {
+  0% {
+    filter: hue-rotate(0deg) brightness(2) saturate(1.4);
+  }
+  20% {
+    filter: hue-rotate(72deg) brightness(2) saturate(1.4);
+  }
+  40% {
+    filter: hue-rotate(144deg) brightness(2) saturate(1.4);
+  }
+  60% {
+    filter: hue-rotate(216deg) brightness(2) saturate(1.4);
+  }
+  80% {
+    filter: hue-rotate(288deg) brightness(2) saturate(1.4);
+  }
+  95% {
+    filter: hue-rotate(360deg) brightness(2) saturate(1.4);
+  }
+  100% {
+    filter: hue-rotate(0deg) brightness(0.2) saturate(0);
+  }
 }
