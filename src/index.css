@@ -108,6 +108,19 @@
   }
 }
 
+/* Custom properties for smooth gradient animation */
+@property --center-color {
+  syntax: '<color>';
+  initial-value: transparent;
+  inherits: false;
+}
+
+@property --center-stop {
+  syntax: '<percentage>';
+  initial-value: 30%;
+  inherits: false;
+}
+
 /* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
@@ -119,8 +132,10 @@
   position: fixed;
   inset: 0;
   z-index: 0;
+  --center-color: transparent;
+  --center-stop: 30%;
   background: 
-    radial-gradient(circle farthest-side at 50% 50%, transparent 0%, transparent 30%, rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
+    radial-gradient(circle farthest-side at 50% 50%, var(--center-color) 0%, var(--center-color) var(--center-stop), rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
     rgba(0, 80, 120, 1);
   transform-origin: center;
   animation: auroraIntro 1.8s linear, auroraTransition 1.5s ease-out 1.8s forwards, auroraLoop 12s linear 1.8s infinite;
@@ -147,15 +162,13 @@
 @keyframes auroraTransition {
   0% {
     transform: scale(1);
-    background: 
-      radial-gradient(circle farthest-side at 50% 50%, transparent 0%, transparent 30%, rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
-      rgba(0, 80, 120, 1);
+    --center-color: transparent;
+    --center-stop: 30%;
   }
   100% {
     transform: scale(1.8);
-    background: 
-      radial-gradient(circle farthest-side at 50% 50%, white 0%, white 40%, rgba(0, 200, 220, 0.5) 55%, rgba(0, 180, 200, 0.8) 70%, rgba(0, 80, 120, 1) 85%),
-      rgba(0, 80, 120, 1);
+    --center-color: white;
+    --center-stop: 45%;
   }
 }
 
