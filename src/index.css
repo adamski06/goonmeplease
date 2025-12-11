@@ -136,13 +136,13 @@
 .bg-gradient-aurora::before {
   content: '';
   position: fixed;
-  inset: -25%;
+  inset: 0;
   z-index: 0;
   --center-color: transparent;
   --center-stop: 30%;
   --color-start: 45%;
   background: 
-    radial-gradient(circle at 50% 50%, var(--center-color) 0%, var(--center-color) var(--center-stop), rgba(0, 200, 220, 0.4) var(--color-start), rgba(0, 180, 200, 0.6) 55%, rgba(0, 150, 180, 0.8) 65%, rgba(0, 80, 120, 1) 80%),
+    radial-gradient(circle farthest-side at 50% 50%, var(--center-color) 0%, var(--center-color) var(--center-stop), rgba(0, 200, 220, 0.4) var(--color-start), rgba(0, 180, 200, 0.6) 55%, rgba(0, 150, 180, 0.8) 65%, rgba(0, 80, 120, 1) 80%),
     rgba(0, 80, 120, 1);
   transform-origin: center;
   animation: 
