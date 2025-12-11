@@ -120,8 +120,15 @@
   inset: 0;
   z-index: 0;
   background: 
-    radial-gradient(circle farthest-side at 50% 50%, transparent 0%, transparent 30%, rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
-    rgba(0, 80, 120, 1);
+    radial-gradient(circle farthest-side at 50% 50%, 
+      white 0%, 
+      white 20%, 
+      rgba(0, 200, 220, 0.7) 35%, 
+      rgba(0, 150, 180, 0.9) 50%, 
+      rgba(0, 200, 220, 0.7) 65%, 
+      white 80%, 
+      white 100%
+    );
   animation: auroraIntro 4s ease-in-out, auroraLoop 12s ease-in-out 4s infinite;
 }
 
