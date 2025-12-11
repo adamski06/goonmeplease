@@ -198,6 +198,14 @@
   }
 }
 
+/* Logo glow layer - blurred version behind */
+.logo-glow {
+  background: rgba(100, 220, 240, 1);
+  filter: blur(25px) brightness(2);
+  animation: auroraColors 30s linear infinite;
+  transform: scale(1.1);
+}
+
 /* Logo glass effect - matches center of page with subtle fade */
 .logo-glass {
   background: 
@@ -206,6 +214,6 @@
       rgba(100, 200, 220, 1) 60%,
       rgba(60, 160, 190, 1) 100%
     );
-  filter: brightness(2.2) saturate(1.5) blur(0.8px) drop-shadow(0 0 20px rgba(100, 220, 240, 0.8)) drop-shadow(0 0 50px rgba(100, 220, 240, 0.5)) drop-shadow(0 0 80px rgba(100, 220, 240, 0.3));
+  filter: brightness(2.2) saturate(1.5) blur(0.8px);
   animation: auroraColors 30s linear infinite;
 }
