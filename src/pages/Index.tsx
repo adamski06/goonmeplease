@@ -13,7 +13,7 @@ const Index = () => {
             <img 
               src={jarlaLogo} 
               alt="Jarla" 
-              className="h-24 md:h-32 lg:h-40 w-auto mix-blend-overlay opacity-70"
+              className="h-24 md:h-32 lg:h-40 w-auto mix-blend-screen brightness-125 drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]"
             />
           </div>
           
