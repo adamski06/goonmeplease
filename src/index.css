@@ -185,6 +185,6 @@
 
 /* Logo glass effect - black with subtle glow */
 .logo-glass {
-  background: hsl(220 20% 10%);
-  filter: brightness(1) blur(0.3px) drop-shadow(0 4px 20px hsl(220 20% 10% / 0.4));
+  background: hsl(220 20% 10% / 0.8);
+  filter: brightness(1) blur(0.3px) drop-shadow(0 4px 20px hsl(220 20% 10% / 0.3));
 }
