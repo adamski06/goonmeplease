@@ -206,6 +206,6 @@
       rgba(100, 200, 220, 1) 60%,
       rgba(60, 160, 190, 1) 100%
     );
-  filter: brightness(2) saturate(1.4) blur(0.8px) drop-shadow(0 0 30px rgba(100, 220, 240, 0.6));
+  filter: brightness(2.2) saturate(1.5) blur(0.8px) drop-shadow(0 0 20px rgba(100, 220, 240, 0.8)) drop-shadow(0 0 50px rgba(100, 220, 240, 0.5)) drop-shadow(0 0 80px rgba(100, 220, 240, 0.3));
   animation: auroraColors 30s linear infinite;
 }
