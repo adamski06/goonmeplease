@@ -125,9 +125,9 @@
       transparent 25%, 
       rgba(0, 180, 200, 0.15) 45%, 
       rgba(0, 180, 200, 0.4) 65%, 
-      rgba(0, 80, 120, 1) 90%
+      rgba(255, 255, 255, 1) 90%
     ),
-    rgba(0, 80, 120, 1);
+    rgba(255, 255, 255, 1);
   animation: auroraColors 90s linear infinite;
 }
 
