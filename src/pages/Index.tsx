@@ -14,7 +14,7 @@ const Index = () => {
             <img 
               src={jarlaLogo}
               alt=""
-              className="absolute h-24 md:h-32 lg:h-40 w-auto blur-[40px] opacity-60 brightness-0 translate-y-3"
+              className="absolute h-24 md:h-32 lg:h-40 w-auto blur-[15px] opacity-60 brightness-0 translate-y-3"
             />
             {/* Main logo */}
             <div 
