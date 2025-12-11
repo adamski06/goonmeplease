@@ -204,12 +204,6 @@
 
 /* Logo glass effect */
 .logo-glass {
-  background: 
-    radial-gradient(circle at 50% 50%, 
-      rgba(200, 250, 255, 1) 0%,
-      rgba(150, 230, 245, 1) 60%,
-      rgba(100, 200, 230, 1) 100%
-    );
-  filter: brightness(2.5) saturate(1.2);
-  animation: auroraColors 90s linear infinite;
+  background: hsl(195, 100%, 85%);
+  filter: brightness(1.1);
 }
