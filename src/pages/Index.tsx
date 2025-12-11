@@ -11,9 +11,8 @@ const Index = () => {
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center">
             <div 
-              className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px]"
+              className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
               style={{ 
-                backgroundColor: 'hsl(195, 100%, 85%)',
                 WebkitMaskImage: `url(${jarlaLogo})`,
                 maskImage: `url(${jarlaLogo})`,
                 WebkitMaskSize: 'contain',
