@@ -179,10 +179,10 @@
     --fade-stop: 45%;
   }
   100% {
-    transform: scale(1.6);
+    transform: scale(2.2);
     --center-color: white;
-    --center-stop: 50%;
-    --fade-stop: 65%;
+    --center-stop: 55%;
+    --fade-stop: 70%;
   }
 }
 
