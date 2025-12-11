@@ -197,3 +197,39 @@
     transform: translateY(0);
   }
 }
+
+/* Logo glow that syncs with aurora colors */
+.logo-glow {
+  filter: 
+    drop-shadow(0 0 20px rgba(0, 180, 200, 0.6))
+    drop-shadow(0 0 40px rgba(0, 180, 200, 0.4))
+    drop-shadow(0 0 60px rgba(0, 180, 200, 0.2));
+  animation: logoGlowColors 30s linear infinite;
+}
+
+@keyframes logoGlowColors {
+  0%, 100% {
+    filter: 
+      drop-shadow(0 0 20px rgba(0, 180, 200, 0.6))
+      drop-shadow(0 0 40px rgba(0, 180, 200, 0.4))
+      drop-shadow(0 0 60px rgba(0, 180, 200, 0.2));
+  }
+  25% {
+    filter: 
+      drop-shadow(0 0 20px rgba(180, 100, 200, 0.6))
+      drop-shadow(0 0 40px rgba(180, 100, 200, 0.4))
+      drop-shadow(0 0 60px rgba(180, 100, 200, 0.2));
+  }
+  50% {
+    filter: 
+      drop-shadow(0 0 20px rgba(200, 100, 80, 0.6))
+      drop-shadow(0 0 40px rgba(200, 100, 80, 0.4))
+      drop-shadow(0 0 60px rgba(200, 100, 80, 0.2));
+  }
+  75% {
+    filter: 
+      drop-shadow(0 0 20px rgba(100, 200, 100, 0.6))
+      drop-shadow(0 0 40px rgba(100, 200, 100, 0.4))
+      drop-shadow(0 0 60px rgba(100, 200, 100, 0.2));
+  }
+}
