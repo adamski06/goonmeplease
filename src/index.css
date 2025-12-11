@@ -207,7 +207,8 @@
 
 /* Logo glass effect */
 .logo-glass {
-  background: rgba(220, 240, 255, 1);
+  background: rgba(180, 230, 255, 1);
+  animation: auroraColors 90s linear infinite;
 }
 
 /* Logo shadow backdrop */
