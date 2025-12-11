@@ -138,11 +138,13 @@
     radial-gradient(circle farthest-side at 50% 50%, var(--center-color) 0%, var(--center-color) var(--center-stop), rgba(0, 200, 220, 0.5) 45%, rgba(0, 180, 200, 0.8) 60%, rgba(0, 80, 120, 1) 75%),
     rgba(0, 80, 120, 1);
   transform-origin: center;
-  animation: auroraIntro 1.8s linear, auroraTransition 1.5s ease-out 1.8s forwards, auroraLoop 12s linear 1.8s infinite;
+  animation: 
+    auroraColors 12s linear infinite,
+    auroraTransition 1.5s ease-out 1.8s forwards;
 }
 
-@keyframes auroraIntro {
-  0% {
+@keyframes auroraColors {
+  0%, 100% {
     filter: hue-rotate(0deg);
   }
   25% {
@@ -153,9 +155,6 @@
   }
   75% {
     filter: hue-rotate(270deg);
-  }
-  100% {
-    filter: hue-rotate(360deg);
   }
 }
 
@@ -169,21 +168,6 @@
     transform: scale(1.8);
     --center-color: white;
     --center-stop: 45%;
-  }
-}
-
-@keyframes auroraLoop {
-  0%, 100% {
-    filter: hue-rotate(0deg);
-  }
-  25% {
-    filter: hue-rotate(90deg);
-  }
-  50% {
-    filter: hue-rotate(180deg);
-  }
-  75% {
-    filter: hue-rotate(270deg);
   }
 }
 
