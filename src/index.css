@@ -117,7 +117,13 @@
 
 @property --center-stop {
   syntax: '<percentage>';
-  initial-value: 30%;
+  initial-value: 25%;
+  inherits: false;
+}
+
+@property --fade-stop {
+  syntax: '<percentage>';
+  initial-value: 45%;
   inherits: false;
 }
 
@@ -133,13 +139,15 @@
   inset: 0;
   z-index: 0;
   --center-color: transparent;
-  --center-stop: 30%;
+  --center-stop: 25%;
+  --fade-stop: 45%;
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
       var(--center-color) 0%, 
       var(--center-color) var(--center-stop), 
-      rgba(0, 180, 200, 0.6) 60%, 
-      rgba(0, 80, 120, 1) 85%
+      rgba(0, 180, 200, 0.15) var(--fade-stop), 
+      rgba(0, 180, 200, 0.4) 65%, 
+      rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
   transform-origin: center;
@@ -167,12 +175,14 @@
   0% {
     transform: scale(1);
     --center-color: transparent;
-    --center-stop: 30%;
+    --center-stop: 25%;
+    --fade-stop: 45%;
   }
   100% {
     transform: scale(1.6);
     --center-color: white;
-    --center-stop: 60%;
+    --center-stop: 50%;
+    --fade-stop: 65%;
   }
 }
 
