@@ -118,34 +118,25 @@
   content: '';
   position: fixed;
   inset: 0;
-  background: 
-    radial-gradient(
-      ellipse 100% 80% at 50% 50%,
-      transparent 0%,
-      transparent 20%,
-      var(--aurora-color, rgba(166, 247, 255, 0.5)) 60%,
-      var(--aurora-color, rgba(166, 247, 255, 0.4)) 100%
-    );
   animation: auroraColorShift 12s ease-in-out infinite;
   z-index: 0;
 }
 
 @keyframes auroraColorShift {
   0%, 100% {
-    --aurora-color: rgba(166, 247, 255, 0.5);
-    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, transparent 20%, rgba(166, 247, 255, 0.5) 60%, rgba(166, 247, 255, 0.4) 100%);
+    background: radial-gradient(ellipse 55% 55% at 50% 50%, #FFFFFF 0%, #FFFFFF 50%, rgba(60, 180, 180, 0.8) 85%, rgba(30, 80, 120, 0.95) 100%);
   }
   20% {
-    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, transparent 20%, rgba(124, 185, 255, 0.5) 60%, rgba(124, 185, 255, 0.4) 100%);
+    background: radial-gradient(ellipse 55% 55% at 50% 50%, #FFFFFF 0%, #FFFFFF 50%, rgba(80, 140, 220, 0.8) 85%, rgba(40, 60, 150, 0.95) 100%);
   }
   40% {
-    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, transparent 20%, rgba(200, 156, 255, 0.5) 60%, rgba(200, 156, 255, 0.4) 100%);
+    background: radial-gradient(ellipse 55% 55% at 50% 50%, #FFFFFF 0%, #FFFFFF 50%, rgba(160, 120, 220, 0.8) 85%, rgba(100, 60, 160, 0.95) 100%);
   }
   60% {
-    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, transparent 20%, rgba(255, 154, 213, 0.45) 60%, rgba(255, 154, 213, 0.35) 100%);
+    background: radial-gradient(ellipse 55% 55% at 50% 50%, #FFFFFF 0%, #FFFFFF 50%, rgba(220, 120, 180, 0.8) 85%, rgba(160, 60, 120, 0.95) 100%);
   }
   80% {
-    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, transparent 20%, rgba(255, 184, 116, 0.5) 60%, rgba(255, 184, 116, 0.4) 100%);
+    background: radial-gradient(ellipse 55% 55% at 50% 50%, #FFFFFF 0%, #FFFFFF 50%, rgba(240, 160, 100, 0.8) 85%, rgba(180, 100, 60, 0.95) 100%);
   }
 }
 
