@@ -119,7 +119,7 @@
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(ellipse 60% 55% at 50% 50%, transparent 0%, transparent 45%, rgba(60, 180, 200, 0.7) 75%, rgba(40, 100, 140, 0.9) 100%);
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 0%, transparent 55%, rgba(60, 180, 200, 0.3) 70%, rgba(60, 180, 200, 0.6) 85%, rgba(40, 100, 140, 0.85) 100%);
   animation: auroraHue 20s ease-in-out infinite;
 }
 

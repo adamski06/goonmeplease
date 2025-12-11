@@ -4,7 +4,7 @@ const Index = () => {
       <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
         {/* Logo placeholder - replace with your actual logo */}
         <div className="flex items-center justify-center">
-          <h1 className="text-6xl md:text-8xl font-semibold tracking-tight text-foreground drop-shadow-sm">
+          <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-semibold tracking-tight text-foreground">
             Jarla
           </h1>
         </div>
