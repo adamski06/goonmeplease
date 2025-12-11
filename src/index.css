@@ -170,9 +170,9 @@
     --center-stop: 30%;
   }
   100% {
-    transform: scale(1.3);
+    transform: scale(1.6);
     --center-color: white;
-    --center-stop: 50%;
+    --center-stop: 60%;
   }
 }
 
