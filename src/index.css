@@ -209,5 +209,11 @@
 /* Logo glass effect */
 .logo-glass {
   background: rgba(255, 255, 255, 1);
-  filter: brightness(1.05) drop-shadow(0 0 60px rgba(0, 120, 160, 0.7)) drop-shadow(0 0 100px rgba(0, 140, 180, 0.5)) drop-shadow(0 20px 40px rgba(0, 80, 120, 0.4));
+}
+
+/* Logo glow backdrop */
+.logo-glow {
+  background: rgba(0, 140, 180, 0.8);
+  filter: blur(30px);
+  transform: scale(1.1) translateY(10px);
 }
