@@ -21,7 +21,7 @@ const Index = () => {
           }} />
           </div>
           
-          <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full text-secondary-foreground md:text-4xl">
+          <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full text-secondary-foreground md:text-4xl font-bold">
             Human networks are the new distribution.
           </p>
         </div>
