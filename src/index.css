@@ -128,7 +128,7 @@
       rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
-  animation: auroraColors 12s linear infinite;
+  animation: auroraColors 30s linear infinite;
 }
 
 @keyframes auroraColors {
