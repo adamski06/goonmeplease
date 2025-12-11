@@ -196,13 +196,13 @@
   }
 }
 
-/* Logo glass effect - slightly whiter at top, color synced */
+/* Logo glass effect - mostly white with subtle color tint */
 .logo-glass {
   background: linear-gradient(180deg, 
-    hsl(215 60% 75%) 0%,
-    hsl(215 70% 65%) 100%
+    hsl(215 25% 95%) 0%,
+    hsl(215 35% 90%) 100%
   );
-  filter: brightness(1.8) saturate(1.4) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
+  filter: brightness(1.15) saturate(2.5) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
   backdrop-filter: blur(8px);
   animation: auroraColors 90s linear infinite;
 }
