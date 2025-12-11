@@ -1,10 +1,10 @@
 const Index = () => {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-background px-6">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-aurora noise-overlay px-6">
       <div className="flex flex-col items-center gap-8 animate-fade-in-up">
         {/* Logo placeholder - replace with your actual logo */}
         <div className="flex items-center justify-center">
-          <h1 className="text-6xl md:text-8xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-6xl md:text-8xl font-semibold tracking-tight text-foreground drop-shadow-sm">
             Jarla
           </h1>
         </div>
