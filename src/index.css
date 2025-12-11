@@ -111,7 +111,7 @@
 /* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
-  background: rgba(0, 80, 120, 1);
+  background: rgba(0, 100, 140, 1);
 }
 
 .bg-gradient-aurora::before {
@@ -123,11 +123,12 @@
     radial-gradient(circle farthest-side at 50% 50%, 
       transparent 0%, 
       transparent 25%, 
-      rgba(0, 180, 200, 0.15) 45%, 
-      rgba(0, 180, 200, 0.4) 65%, 
-      rgba(0, 80, 120, 1) 90%
+      rgba(0, 200, 220, 0.2) 45%, 
+      rgba(0, 200, 220, 0.5) 65%, 
+      rgba(0, 100, 140, 1) 90%
     ),
-    rgba(0, 80, 120, 1);
+    rgba(0, 100, 140, 1);
+  filter: saturate(1.4);
   animation: auroraColors 90s linear infinite;
 }
 
