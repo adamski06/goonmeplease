@@ -11,18 +11,10 @@ const Index = () => {
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center relative">
             {/* Shadow backdrop */}
-            <div 
-              className="absolute h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-shadow"
-              style={{ 
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center'
-              }}
+            <img 
+              src={jarlaLogo}
+              alt=""
+              className="absolute h-24 md:h-32 lg:h-40 w-auto blur-[40px] opacity-60 brightness-0 translate-y-3"
             />
             {/* Main logo */}
             <div 
