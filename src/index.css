@@ -135,17 +135,14 @@
   0% {
     filter: hue-rotate(0deg);
   }
-  5% {
-    filter: hue-rotate(80deg);
-  }
-  25% {
-    filter: hue-rotate(120deg);
+  8% {
+    filter: hue-rotate(170deg);
   }
   50% {
-    filter: hue-rotate(180deg);
+    filter: hue-rotate(250deg);
   }
   75% {
-    filter: hue-rotate(270deg);
+    filter: hue-rotate(305deg);
   }
   100% {
     filter: hue-rotate(360deg);
