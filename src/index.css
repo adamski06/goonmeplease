@@ -128,7 +128,7 @@
       rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
-  animation: auroraColors 30s linear infinite;
+  animation: auroraColors 90s linear infinite;
 }
 
 @keyframes auroraColors {
@@ -207,5 +207,5 @@
       rgba(60, 160, 190, 1) 100%
     );
   filter: brightness(2) saturate(1.4);
-  animation: auroraColors 30s linear infinite;
+  animation: auroraColors 90s linear infinite;
 }
