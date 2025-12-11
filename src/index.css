@@ -138,10 +138,12 @@
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
       white 0%, 
-      white 20%, 
-      transparent 40%, 
-      transparent 60%, 
-      white 80%, 
+      white 15%, 
+      rgba(255, 255, 255, 0.8) 25%,
+      transparent 45%, 
+      transparent 55%, 
+      rgba(255, 255, 255, 0.8) 75%,
+      white 85%, 
       white 100%
     );
   opacity: 0;
