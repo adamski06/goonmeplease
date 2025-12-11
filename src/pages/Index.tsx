@@ -5,7 +5,7 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6">
+      <section className="min-h-screen px-6 items-center justify-center flex flex-col">
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center relative">
             {/* Main logo */}
@@ -21,7 +21,7 @@ const Index = () => {
           }} />
           </div>
           
-          <p className="text-lg text-white text-center whitespace-nowrap animate-fade-in-delayed md:text-5xl w-full">
+          <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full text-secondary-foreground md:text-4xl">
             Human networks are the new distribution.
           </p>
         </div>
