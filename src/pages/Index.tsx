@@ -25,7 +25,7 @@ const Index = () => {
             />
           </div>
           
-          <p className="text-lg md:text-xl text-muted-foreground text-center max-w-md animate-fade-in-delayed">
+          <p className="text-lg md:text-xl text-center max-w-md intro-text">
             Your app, simplified.
           </p>
         </div>

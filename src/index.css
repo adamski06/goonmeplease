@@ -251,3 +251,35 @@
     filter: hue-rotate(0deg) brightness(0.2) saturate(0);
   }
 }
+
+/* Text syncs with intro animation */
+.intro-text {
+  color: hsl(186 100% 83%);
+  animation: introTextColor 2s ease-out forwards;
+}
+
+@keyframes introTextColor {
+  0% {
+    color: hsl(186 100% 83%);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    filter: hue-rotate(72deg);
+  }
+  40% {
+    filter: hue-rotate(144deg);
+  }
+  60% {
+    filter: hue-rotate(216deg);
+  }
+  80% {
+    filter: hue-rotate(288deg);
+  }
+  95% {
+    filter: hue-rotate(360deg);
+  }
+  100% {
+    color: hsl(var(--muted-foreground));
+    filter: hue-rotate(0deg);
+  }
+}
