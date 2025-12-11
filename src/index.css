@@ -207,7 +207,11 @@
 
 /* Logo glass effect */
 .logo-glass {
-  background: rgba(180, 230, 255, 1);
+  background: radial-gradient(ellipse at center, 
+    rgba(255, 255, 255, 1) 0%,
+    rgba(220, 245, 255, 1) 40%,
+    rgba(160, 220, 255, 1) 100%
+  );
   animation: auroraColors 90s linear infinite;
 }
 
