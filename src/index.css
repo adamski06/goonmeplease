@@ -208,8 +208,8 @@
 /* Logo glass effect */
 .logo-glass {
   background: radial-gradient(ellipse at center, 
-    rgba(255, 255, 255, 1) 0%,
-    rgba(220, 245, 255, 1) 40%,
+    rgba(245, 252, 255, 1) 0%,
+    rgba(200, 235, 250, 1) 40%,
     rgba(160, 220, 255, 1) 100%
   );
   animation: auroraColors 90s linear infinite;
