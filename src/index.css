@@ -188,10 +188,11 @@
   background: 
     radial-gradient(circle at 50% 50%, 
       hsl(0 0% 100% / 0.95) 0%,
-      hsl(0 0% 98% / 0.92) 20%,
-      hsl(220 30% 88% / 0.88) 45%,
-      hsl(215 50% 75% / 0.85) 70%,
-      hsl(215 60% 65% / 0.85) 100%
+      hsl(215 20% 95% / 0.92) 15%,
+      hsl(215 40% 85% / 0.88) 35%,
+      hsl(215 55% 72% / 0.85) 55%,
+      hsl(215 60% 65% / 0.85) 80%,
+      hsl(215 65% 60% / 0.85) 100%
     );
   filter: brightness(1.25) saturate(1.2) blur(0.8px) drop-shadow(0 6px 30px hsl(215 50% 40% / 0.35));
   backdrop-filter: blur(8px);
