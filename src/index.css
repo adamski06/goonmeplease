@@ -108,28 +108,10 @@
   }
 }
 
-/* Airbrushed gradient background with smooth color animation */
+/* Solid light blue background */
 .bg-gradient-aurora {
   position: relative;
-  background: rgba(0, 100, 140, 1);
-}
-
-.bg-gradient-aurora::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: 
-    radial-gradient(circle farthest-side at 50% 50%, 
-      transparent 0%, 
-      transparent 25%, 
-      rgba(0, 200, 220, 0.2) 45%, 
-      rgba(0, 200, 220, 0.5) 65%, 
-      rgba(0, 100, 140, 1) 90%
-    ),
-    rgba(0, 100, 140, 1);
-  filter: saturate(1.4);
-  animation: auroraColors 90s linear infinite;
+  background: hsl(195, 70%, 55%);
 }
 
 @keyframes auroraColors {
