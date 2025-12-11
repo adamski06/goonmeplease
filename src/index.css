@@ -108,25 +108,6 @@
   }
 }
 
-/* Custom properties for smooth gradient animation */
-@property --center-color {
-  syntax: '<color>';
-  initial-value: transparent;
-  inherits: false;
-}
-
-@property --center-stop {
-  syntax: '<percentage>';
-  initial-value: 25%;
-  inherits: false;
-}
-
-@property --fade-stop {
-  syntax: '<percentage>';
-  initial-value: 45%;
-  inherits: false;
-}
-
 /* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
@@ -138,22 +119,14 @@
   position: fixed;
   inset: 0;
   z-index: 0;
-  --center-color: transparent;
-  --center-stop: 25%;
-  --fade-stop: 45%;
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
-      var(--center-color) 0%, 
-      var(--center-color) var(--center-stop), 
-      rgba(0, 180, 200, 0.15) var(--fade-stop), 
-      rgba(0, 180, 200, 0.4) 65%, 
-      rgba(0, 80, 120, 1) 90%
+      rgba(0, 180, 200, 0.15) 0%, 
+      rgba(0, 180, 200, 0.4) 45%, 
+      rgba(0, 80, 120, 1) 85%
     ),
     rgba(0, 80, 120, 1);
-  transform-origin: center;
-  animation: 
-    auroraColors 12s linear infinite,
-    auroraTransition 1.5s ease-out 1.8s forwards;
+  animation: auroraColors 12s linear infinite;
 }
 
 @keyframes auroraColors {
@@ -168,21 +141,6 @@
   }
   75% {
     filter: hue-rotate(270deg);
-  }
-}
-
-@keyframes auroraTransition {
-  0% {
-    transform: scale(1);
-    --center-color: transparent;
-    --center-stop: 25%;
-    --fade-stop: 45%;
-  }
-  100% {
-    transform: scale(1.8);
-    --center-color: white;
-    --center-stop: 52%;
-    --fade-stop: 68%;
   }
 }
 
