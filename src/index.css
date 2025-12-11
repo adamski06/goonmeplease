@@ -196,19 +196,22 @@
   }
 }
 
-/* Logo glass effect - mostly white with subtle color tint and glow */
+/* Logo glass effect - mostly white with subtle color tint */
 .logo-glass {
   background: linear-gradient(180deg, 
     hsl(215 20% 97%) 0%,
     hsl(215 30% 93%) 100%
   );
-  filter: brightness(1.2) saturate(2.8) blur(0.3px) 
-    drop-shadow(0 0 8px hsl(0 0% 100%))
-    drop-shadow(0 0 15px hsl(0 0% 100%))
-    drop-shadow(0 0 30px hsl(0 0% 100% / 0.8))
-    drop-shadow(0 0 50px hsl(0 0% 100% / 0.5));
+  filter: brightness(1.2) saturate(2.8) blur(0.3px);
   backdrop-filter: blur(8px);
   animation: auroraColors 90s linear infinite;
+}
+
+/* White glow wrapper for logo */
+.logo-glow {
+  filter: drop-shadow(0 0 20px hsl(0 0% 100%)) 
+          drop-shadow(0 0 40px hsl(0 0% 100%)) 
+          drop-shadow(0 0 60px hsl(0 0% 100% / 0.8));
 }
 
 /* Animated text color synced with aurora */

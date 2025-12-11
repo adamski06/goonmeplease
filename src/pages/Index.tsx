@@ -9,7 +9,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6">
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center logo-glow">
             <div 
               className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
               style={{ 
