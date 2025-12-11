@@ -25,8 +25,8 @@ const Index = () => {
             />
           </div>
           
-          <p className="text-lg md:text-xl text-muted-foreground text-center max-w-md animate-fade-in-delayed">
-            Your app, simplified.
+          <p className="text-lg md:text-xl text-white text-center max-w-md animate-fade-in-delayed">
+            Human networks are the new distribution.
           </p>
         </div>
       </section>
