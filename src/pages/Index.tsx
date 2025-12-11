@@ -9,7 +9,22 @@ const Index = () => {
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6">
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center relative">
+            {/* Shadow backdrop */}
+            <div 
+              className="absolute h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-shadow"
+              style={{ 
+                WebkitMaskImage: `url(${jarlaLogo})`,
+                maskImage: `url(${jarlaLogo})`,
+                WebkitMaskSize: 'contain',
+                maskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center'
+              }}
+            />
+            {/* Main logo */}
             <div 
               className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
               style={{ 
