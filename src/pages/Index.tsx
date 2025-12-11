@@ -13,7 +13,7 @@ const Index = () => {
             <img 
               src={jarlaLogo} 
               alt="Jarla" 
-              className="h-24 md:h-32 lg:h-40 w-auto"
+              className="h-24 md:h-32 lg:h-40 w-auto mix-blend-difference"
             />
           </div>
           
