@@ -213,7 +213,7 @@
 
 /* Logo shadow backdrop */
 .logo-shadow {
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
   filter: blur(40px);
   transform: scale(1.1) translateY(12px);
 }
