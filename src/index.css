@@ -108,10 +108,10 @@
   }
 }
 
-/* Animated gradient background - color cycling with white outer edge */
+/* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
-  background: hsl(0 0% 100%);
+  background: rgba(0, 80, 120, 1);
 }
 
 .bg-gradient-aurora::before {
@@ -121,35 +121,37 @@
   z-index: 0;
   background: 
     radial-gradient(circle farthest-side at 50% 50%, 
-      hsl(185 90% 60%) 0%, 
-      hsl(200 95% 50%) 24%, 
-      hsl(215 85% 40%) 39%, 
-      hsl(220 70% 55%) 55%, 
-      hsl(220 40% 75%) 70%, 
-      hsl(0 0% 95%) 86%, 
-      hsl(0 0% 100%) 100%
-    );
+      transparent 0%, 
+      transparent 25%, 
+      rgba(0, 180, 200, 0.15) 45%, 
+      rgba(0, 180, 200, 0.4) 65%, 
+      rgba(0, 80, 120, 1) 90%
+    ),
+    rgba(0, 80, 120, 1);
   animation: auroraColors 90s linear infinite;
 }
 
 @keyframes auroraColors {
-  0% {
+  0%, 100% {
     filter: hue-rotate(0deg);
   }
-  8% {
-    filter: hue-rotate(170deg);
+  25% {
+    filter: hue-rotate(90deg);
   }
-  100% {
-    filter: hue-rotate(360deg);
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    filter: hue-rotate(270deg);
   }
 }
 
-/* Noise texture overlay - heavy grain */
+/* Noise texture overlay */
 .noise-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.25;
   z-index: 2;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
@@ -196,26 +198,14 @@
   }
 }
 
-/* Logo glass effect - subtle white center with color tint cycling */
+/* Logo glass effect */
 .logo-glass {
-  background: radial-gradient(ellipse at 50% 50%, 
-    hsl(215 30% 92%) 0%,
-    hsl(215 45% 85%) 30%,
-    hsl(215 50% 82%) 100%
-  );
-  filter: brightness(1.3) saturate(1.2) blur(0.3px);
-  backdrop-filter: blur(8px);
+  background: 
+    radial-gradient(circle at 50% 50%, 
+      rgba(160, 240, 250, 1) 0%,
+      rgba(100, 200, 220, 1) 60%,
+      rgba(60, 160, 190, 1) 100%
+    );
+  filter: brightness(2) saturate(1.4);
   animation: auroraColors 90s linear infinite;
-}
-
-/* Backdrop shadow for logo */
-.logo-glow {
-  filter: drop-shadow(0 4px 15px hsl(220 30% 40% / 0.3));
-}
-
-/* Animated text color synced with aurora */
-.text-aurora {
-  color: hsl(215 70% 50%);
-  animation: auroraColors 90s linear infinite;
-  filter: brightness(2);
 }
