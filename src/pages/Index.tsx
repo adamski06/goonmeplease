@@ -1,6 +1,12 @@
 const Index = () => {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-aurora noise-overlay px-6">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-aurora px-6">
+      {/* White center that fades in */}
+      <div className="white-center" />
+      
+      {/* Subtle noise texture */}
+      <div className="noise-layer" />
+      
       <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
         {/* Logo placeholder - replace with your actual logo */}
         <div className="flex items-center justify-center">
