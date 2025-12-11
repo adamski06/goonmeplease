@@ -111,7 +111,7 @@
 /* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
-  background: #FFFFFF;
+  background: rgba(0, 80, 120, 1);
 }
 
 .bg-gradient-aurora::before {
