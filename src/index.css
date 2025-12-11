@@ -108,10 +108,10 @@
   }
 }
 
-/* Airbrushed gradient background with intro animation */
+/* Airbrushed gradient background with smooth color animation */
 .bg-gradient-aurora {
   position: relative;
-  background: hsl(0 0% 100%);
+  background: rgba(0, 80, 120, 1);
 }
 
 .bg-gradient-aurora::before {
@@ -128,22 +128,21 @@
       rgba(0, 80, 120, 1) 90%
     ),
     rgba(0, 80, 120, 1);
-  animation: introColorCycle 2s ease-out forwards;
+  animation: auroraColors 30s linear infinite;
 }
 
-/* Fast intro color cycle - smooth rotation then fades to white */
-@keyframes introColorCycle {
-  0% {
+@keyframes auroraColors {
+  0%, 100% {
     filter: hue-rotate(0deg);
-    opacity: 1;
   }
-  90% {
-    filter: hue-rotate(360deg);
-    opacity: 1;
+  25% {
+    filter: hue-rotate(90deg);
   }
-  100% {
-    filter: hue-rotate(360deg);
-    opacity: 0;
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    filter: hue-rotate(270deg);
   }
 }
 
@@ -199,7 +198,7 @@
   }
 }
 
-/* Logo glass effect with intro animation */
+/* Logo glass effect */
 .logo-glass {
   background: 
     radial-gradient(circle at 50% 50%, 
@@ -208,38 +207,5 @@
       rgba(60, 160, 190, 1) 100%
     );
   filter: brightness(2) saturate(1.4);
-  animation: introLogoColor 2s ease-out forwards;
-}
-
-/* Logo syncs with background intro animation then becomes dark */
-@keyframes introLogoColor {
-  0% {
-    filter: hue-rotate(0deg) brightness(2) saturate(1.4);
-  }
-  90% {
-    filter: hue-rotate(360deg) brightness(2) saturate(1.4);
-  }
-  100% {
-    filter: hue-rotate(360deg) brightness(0.2) saturate(0);
-  }
-}
-
-/* Text syncs with intro animation */
-.intro-text {
-  color: hsl(186 100% 83%);
-  animation: introTextColor 2s ease-out forwards;
-}
-
-@keyframes introTextColor {
-  0% {
-    color: hsl(186 100% 83%);
-    filter: hue-rotate(0deg);
-  }
-  90% {
-    filter: hue-rotate(360deg);
-  }
-  100% {
-    color: hsl(var(--muted-foreground));
-    filter: hue-rotate(0deg);
-  }
+  animation: auroraColors 30s linear infinite;
 }
