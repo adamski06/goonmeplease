@@ -11,23 +11,11 @@ const Index = () => {
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
           <div className="flex items-center justify-center">
             <div className="relative">
-              {/* Glow layer */}
-              <div 
-                className="absolute inset-0 h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glow"
-                style={{ 
-                  WebkitMaskImage: `url(${jarlaLogo})`,
-                  maskImage: `url(${jarlaLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center'
-                }}
-              />
+              {/* Glow effect - simple blurred shape */}
+              <div className="absolute inset-0 logo-glow rounded-full" />
               {/* Main logo */}
               <div 
-                className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
+                className="relative h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass"
                 style={{ 
                   WebkitMaskImage: `url(${jarlaLogo})`,
                   maskImage: `url(${jarlaLogo})`,

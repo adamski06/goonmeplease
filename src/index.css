@@ -198,12 +198,11 @@
   }
 }
 
-/* Logo glow layer - blurred version behind */
+/* Logo glow - soft ellipse behind logo */
 .logo-glow {
-  background: rgba(100, 220, 240, 1);
-  filter: blur(25px) brightness(2);
+  background: radial-gradient(ellipse at center, rgba(100, 220, 240, 0.6) 0%, transparent 70%);
+  filter: blur(30px);
   animation: auroraColors 30s linear infinite;
-  transform: scale(1.1);
 }
 
 /* Logo glass effect - matches center of page with subtle fade */
