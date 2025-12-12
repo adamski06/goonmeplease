@@ -114,8 +114,12 @@ const Index = () => {
                 <>
                   <span className="block text-4xl md:text-7xl">Earn money</span>
                   <span 
-                    className="inline-block text-6xl md:text-[7rem] bg-gradient-to-b from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]"
-                    style={{ WebkitBackgroundClip: 'text' }}
+                    className="inline-block text-6xl md:text-[7rem] bg-clip-text text-transparent relative"
+                    style={{ 
+                      WebkitBackgroundClip: 'text',
+                      backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0.9) 70%, #FF0050 100%)',
+                      filter: 'drop-shadow(-4px -4px 15px rgba(0,242,234,0.4)) drop-shadow(4px 4px 15px rgba(255,0,80,0.4))'
+                    }}
                   >
                     per view
                   </span>
