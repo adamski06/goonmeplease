@@ -393,7 +393,7 @@
 }
 
 .tiktok-gradient-text {
-  background-image: linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%);
+  background-image: linear-gradient(135deg, #00F2EA 0%, #00F2EA 20%, rgba(255,255,255,0.9) 45%, rgba(255,255,255,0.9) 55%, #FF0050 80%, #FF0050 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
