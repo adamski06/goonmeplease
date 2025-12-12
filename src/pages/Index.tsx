@@ -86,7 +86,7 @@ const Index = () => {
           <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
             Log in
           </button>
-          <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-white text-black rounded-full hover:bg-white/90 transition-opacity">
+          <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-aurora-sync text-white rounded-full hover:opacity-90 transition-opacity">
             Sign up
           </button>
         </div>
