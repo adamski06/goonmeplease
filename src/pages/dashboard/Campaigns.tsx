@@ -47,8 +47,8 @@ const Campaigns: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Campaign Marketplace</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-2xl font-bold text-white">Campaign Marketplace</h1>
+        <p className="text-white/60 mt-1">
           Browse available campaigns and start creating content
         </p>
       </div>
@@ -56,12 +56,12 @@ const Campaigns: React.FC = () => {
       {/* Search and Filter */}
       <div className="flex gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
           <Input
             placeholder="Search campaigns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-white/30"
           />
         </div>
       </div>
@@ -70,13 +70,13 @@ const Campaigns: React.FC = () => {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
+            <Card key={i} className="bg-white/5 border-white/10 animate-pulse">
               <CardHeader>
-                <div className="h-6 bg-muted rounded w-3/4" />
-                <div className="h-4 bg-muted rounded w-1/2 mt-2" />
+                <div className="h-6 bg-white/10 rounded w-3/4" />
+                <div className="h-4 bg-white/10 rounded w-1/2 mt-2" />
               </CardHeader>
               <CardContent>
-                <div className="h-20 bg-muted rounded" />
+                <div className="h-20 bg-white/10 rounded" />
               </CardContent>
             </Card>
           ))}
@@ -86,27 +86,29 @@ const Campaigns: React.FC = () => {
           {filteredCampaigns.map((campaign) => {
             const rates = getMinMaxRate(campaign.campaign_tiers);
             return (
-              <Card key={campaign.id} className="hover:shadow-lg transition-shadow">
+              <Card key={campaign.id} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 group">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-lg">{campaign.title}</CardTitle>
-                      <CardDescription className="mt-1">
+                      <CardTitle className="text-lg text-white group-hover:text-white">{campaign.title}</CardTitle>
+                      <CardDescription className="mt-1 text-white/60">
                         by {campaign.brand_name}
                       </CardDescription>
                     </div>
                     {campaign.category && (
-                      <Badge variant="secondary">{campaign.category}</Badge>
+                      <Badge variant="secondary" className="bg-white/10 text-white/80 border-0">
+                        {campaign.category}
+                      </Badge>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-white/50 line-clamp-2">
                     {campaign.description || 'No description provided'}
                   </p>
 
                   <div className="flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1 text-green-600">
+                    <div className="flex items-center gap-1 text-emerald-400">
                       <DollarSign className="h-4 w-4" />
                       <span>
                         ${rates.min.toFixed(4)} - ${rates.max.toFixed(4)}/view
@@ -115,13 +117,13 @@ const Campaigns: React.FC = () => {
                   </div>
 
                   {campaign.deadline && (
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1 text-sm text-white/50">
                       <Calendar className="h-4 w-4" />
                       <span>Ends {format(new Date(campaign.deadline), 'MMM d, yyyy')}</span>
                     </div>
                   )}
 
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full bg-white text-black hover:bg-white/90 rounded-full">
                     <Link to={`/dashboard/campaigns/${campaign.id}`}>
                       View Details
                     </Link>
@@ -132,11 +134,11 @@ const Campaigns: React.FC = () => {
           })}
         </div>
       ) : (
-        <Card className="py-12">
+        <Card className="py-12 bg-white/5 border-white/10">
           <CardContent className="text-center">
-            <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold">No campaigns available</h3>
-            <p className="text-muted-foreground mt-1">
+            <Users className="h-12 w-12 mx-auto text-white/30 mb-4" />
+            <h3 className="text-lg font-semibold text-white">No campaigns available</h3>
+            <p className="text-white/60 mt-1">
               {searchQuery 
                 ? 'No campaigns match your search. Try different keywords.'
                 : 'Check back soon for new campaign opportunities!'}

@@ -134,8 +134,8 @@ const CampaignDetail: React.FC = () => {
     return (
       <div className="space-y-6">
         <div className="animate-pulse">
-          <div className="h-8 bg-muted rounded w-1/3 mb-4" />
-          <div className="h-4 bg-muted rounded w-1/2" />
+          <div className="h-8 bg-white/10 rounded w-1/3 mb-4" />
+          <div className="h-4 bg-white/10 rounded w-1/2" />
         </div>
       </div>
     );
@@ -144,8 +144,8 @@ const CampaignDetail: React.FC = () => {
   if (!campaign) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-xl font-semibold">Campaign not found</h2>
-        <Button variant="link" onClick={() => navigate('/dashboard/campaigns')}>
+        <h2 className="text-xl font-semibold text-white">Campaign not found</h2>
+        <Button variant="link" onClick={() => navigate('/dashboard/campaigns')} className="text-white/70">
           Back to campaigns
         </Button>
       </div>
@@ -156,79 +156,85 @@ const CampaignDetail: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <Button variant="ghost" onClick={() => navigate('/dashboard/campaigns')} className="gap-2">
+      <Button 
+        variant="ghost" 
+        onClick={() => navigate('/dashboard/campaigns')} 
+        className="gap-2 text-white/70 hover:text-white hover:bg-white/10"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to campaigns
       </Button>
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{campaign.title}</h1>
-          <p className="text-muted-foreground mt-1">by {campaign.brand_name}</p>
+          <h1 className="text-2xl font-bold text-white">{campaign.title}</h1>
+          <p className="text-white/60 mt-1">by {campaign.brand_name}</p>
         </div>
         {campaign.category && (
-          <Badge variant="secondary" className="text-sm">{campaign.category}</Badge>
+          <Badge variant="secondary" className="text-sm bg-white/10 text-white/80 border-0">
+            {campaign.category}
+          </Badge>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Campaign Details</CardTitle>
+            <CardTitle className="text-white">Campaign Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-medium mb-2">Description</h4>
-              <p className="text-muted-foreground">
+              <h4 className="font-medium mb-2 text-white">Description</h4>
+              <p className="text-white/60">
                 {campaign.description || 'No description provided'}
               </p>
             </div>
 
             {campaign.guidelines && (
               <div>
-                <h4 className="font-medium mb-2 flex items-center gap-2">
+                <h4 className="font-medium mb-2 flex items-center gap-2 text-white">
                   <FileText className="h-4 w-4" />
                   Guidelines
                 </h4>
-                <p className="text-muted-foreground whitespace-pre-wrap">
+                <p className="text-white/60 whitespace-pre-wrap">
                   {campaign.guidelines}
                 </p>
               </div>
             )}
 
             {campaign.deadline && (
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-2 text-sm text-white/50">
+                <Calendar className="h-4 w-4" />
                 <span>Deadline: {format(new Date(campaign.deadline), 'MMMM d, yyyy')}</span>
               </div>
             )}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <DollarSign className="h-5 w-5 text-emerald-400" />
               Payment Tiers
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-white/60">
               Earn more as your views increase
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {sortedTiers.map((tier: any, index: number) => (
-                <div key={tier.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-sm">
+                <div key={tier.id} className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/10">
+                  <div className="text-sm text-white/70">
                     {tier.min_views.toLocaleString()} - {tier.max_views ? tier.max_views.toLocaleString() : '∞'} views
                   </div>
-                  <div className="font-semibold text-green-600">
+                  <div className="font-semibold text-emerald-400">
                     ${Number(tier.rate_per_view).toFixed(4)}/view
                   </div>
                 </div>
               ))}
               {sortedTiers.length === 0 && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/50">
                   Payment rates not specified
                 </p>
               )}
@@ -238,25 +244,25 @@ const CampaignDetail: React.FC = () => {
       </div>
 
       {/* Submit Section */}
-      <Card>
+      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Submit Your Content</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white">Submit Your Content</CardTitle>
+          <CardDescription className="text-white/60">
             Create content following the guidelines above and submit your TikTok video
           </CardDescription>
         </CardHeader>
         <CardContent>
           {existingSubmission ? (
-            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
               <div>
-                <p className="font-medium">You've already submitted content for this campaign</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Status: <Badge variant={existingSubmission.status === 'approved' ? 'default' : 'secondary'}>
+                <p className="font-medium text-white">You've already submitted content for this campaign</p>
+                <p className="text-sm text-white/60 mt-1">
+                  Status: <Badge variant="secondary" className="bg-white/10 text-white/80 border-0">
                     {existingSubmission.status.replace('_', ' ')}
                   </Badge>
                 </p>
               </div>
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="border-white/20 text-white hover:bg-white/10 rounded-full">
                 <a href={existingSubmission.tiktok_video_url} target="_blank" rel="noopener noreferrer">
                   View Video <ExternalLink className="h-4 w-4 ml-2" />
                 </a>
@@ -265,25 +271,25 @@ const CampaignDetail: React.FC = () => {
           ) : tiktokAccounts && tiktokAccounts.length > 0 ? (
             <Dialog open={isSubmitOpen} onOpenChange={setIsSubmitOpen}>
               <DialogTrigger asChild>
-                <Button>Submit Content</Button>
+                <Button className="bg-white text-black hover:bg-white/90 rounded-full">Submit Content</Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="bg-[hsl(220,20%,10%)] border-white/10 text-white">
                 <DialogHeader>
                   <DialogTitle>Submit Your TikTok Video</DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-white/60">
                     Enter your TikTok video URL to submit for this campaign
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label>TikTok Account</Label>
+                    <Label className="text-white">TikTok Account</Label>
                     <Select value={selectedAccount} onValueChange={setSelectedAccount}>
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white/5 border-white/10 text-white">
                         <SelectValue placeholder="Select your TikTok account" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-[hsl(220,20%,12%)] border-white/10">
                         {tiktokAccounts.map((account) => (
-                          <SelectItem key={account.id} value={account.id}>
+                          <SelectItem key={account.id} value={account.id} className="text-white hover:bg-white/10">
                             @{account.tiktok_username}
                           </SelectItem>
                         ))}
@@ -291,19 +297,20 @@ const CampaignDetail: React.FC = () => {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>TikTok Video URL</Label>
+                    <Label className="text-white">TikTok Video URL</Label>
                     <Input
                       placeholder="https://www.tiktok.com/@username/video/..."
                       value={videoUrl}
                       onChange={(e) => setVideoUrl(e.target.value)}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsSubmitOpen(false)}>
+                  <Button variant="outline" onClick={() => setIsSubmitOpen(false)} className="border-white/20 text-white hover:bg-white/10 rounded-full">
                     Cancel
                   </Button>
-                  <Button onClick={handleSubmit} disabled={submitMutation.isPending}>
+                  <Button onClick={handleSubmit} disabled={submitMutation.isPending} className="bg-white text-black hover:bg-white/90 rounded-full">
                     {submitMutation.isPending ? 'Submitting...' : 'Submit'}
                   </Button>
                 </DialogFooter>
@@ -311,10 +318,10 @@ const CampaignDetail: React.FC = () => {
             </Dialog>
           ) : (
             <div className="text-center py-4">
-              <p className="text-muted-foreground mb-4">
+              <p className="text-white/60 mb-4">
                 Connect your TikTok account to submit content
               </p>
-              <Button variant="outline" onClick={() => navigate('/dashboard/settings')}>
+              <Button variant="outline" onClick={() => navigate('/dashboard/settings')} className="border-white/20 text-white hover:bg-white/10 rounded-full">
                 Go to Settings
               </Button>
             </div>
