@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import jarlaLogo from "@/assets/jarla-logo.png";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
+  const [showBackdrop, setShowBackdrop] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowBackdrop(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const TabButtons = () => (
     <>
@@ -34,10 +40,10 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4 backdrop-blur-sm after:absolute after:inset-x-0 after:top-0 after:h-14 after:bg-gradient-to-b after:from-black/50 after:to-transparent after:-z-10 after:pointer-events-none after:animate-fade-in">
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4 transition-all duration-500 ${showBackdrop ? 'backdrop-blur-sm' : ''} after:absolute after:inset-x-0 after:top-0 after:h-14 after:bg-gradient-to-b after:from-black/50 after:to-transparent after:-z-10 after:pointer-events-none after:transition-opacity after:duration-500 ${showBackdrop ? 'after:opacity-100' : 'after:opacity-0'}`}>
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
           <div 
-            className="absolute inset-0 bg-white animate-fade-in"
+            className="absolute inset-0 bg-white"
             style={{
               WebkitMaskImage: `url(${jarlaLogo})`,
               maskImage: `url(${jarlaLogo})`,
@@ -52,7 +58,7 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex border-[3px] border-white rounded-full animate-fade-in overflow-hidden">
+        <div className="flex border-[3px] border-white rounded-full overflow-hidden">
           <TabButtons />
         </div>
       </nav>
