@@ -96,9 +96,9 @@ const Index = () => {
       <section className="min-h-screen px-6 flex flex-col relative">
         <div className="flex-1 flex items-center justify-center">
           <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
-            <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full md:text-4xl font-bold text-muted font-montserrat">
-              Human networks are the new distribution.
-            </p>
+            <h1 className="text-4xl md:text-7xl text-center animate-fade-in-delayed font-bold text-white font-montserrat">
+              Earn money per view
+            </h1>
           </div>
         </div>
       </section>
