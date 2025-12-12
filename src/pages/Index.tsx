@@ -87,7 +87,7 @@ const Index = () => {
             Log in
           </button>
           <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-white text-black rounded-full hover:bg-white/90 transition-opacity">
-            Make Account
+            Sign up
           </button>
         </div>
       </nav>
