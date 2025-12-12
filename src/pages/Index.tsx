@@ -69,12 +69,12 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex border-[3px] border-white overflow-hidden">
+        <div className="flex border-[3px] border-white overflow-hidden ml-8">
           <TabButtons />
         </div>
         
         {/* Nav buttons */}
-        <button className="px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+        <button className="ml-8 px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           How do I earn money?
         </button>
         <button className="px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
