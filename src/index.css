@@ -166,15 +166,18 @@
   5.5% {
     filter: hue-rotate(200deg);
   }
-  /* Then slow down for remaining animation */
-  30% {
+  /* Medium pace for remaining animation */
+  20% {
     filter: hue-rotate(240deg);
   }
-  55% {
+  40% {
     filter: hue-rotate(280deg);
   }
+  60% {
+    filter: hue-rotate(310deg);
+  }
   80% {
-    filter: hue-rotate(320deg);
+    filter: hue-rotate(340deg);
   }
   100% {
     filter: hue-rotate(360deg);
