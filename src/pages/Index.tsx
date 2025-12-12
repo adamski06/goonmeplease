@@ -113,15 +113,18 @@ const Index = () => {
               {activeTab === 'creator' ? (
                 <>
                   <span className="block text-4xl md:text-7xl">Earn money</span>
-                  <span 
-                    className="inline-block text-6xl md:text-[7rem] bg-clip-text text-transparent relative"
-                    style={{ 
-                      WebkitBackgroundClip: 'text',
-                      backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0.9) 70%, #FF0050 100%)',
-                      filter: 'drop-shadow(-4px -4px 15px rgba(0,242,234,0.4)) drop-shadow(4px 4px 15px rgba(255,0,80,0.4))'
-                    }}
-                  >
-                    per view
+                  <span className="block text-6xl md:text-[7rem]">
+                    per{' '}
+                    <span 
+                      className="inline-block bg-clip-text text-transparent"
+                      style={{ 
+                        WebkitBackgroundClip: 'text',
+                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0.9) 70%, #FF0050 100%)',
+                        filter: 'drop-shadow(-4px -4px 15px rgba(0,242,234,0.4)) drop-shadow(4px 4px 15px rgba(255,0,80,0.4))'
+                      }}
+                    >
+                      view
+                    </span>
                   </span>
                 </>
               ) : (
