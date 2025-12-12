@@ -116,7 +116,10 @@ const Index = () => {
                   <span className="block text-6xl md:text-[7rem]">per view</span>
                 </>
               ) : (
-                <span className="block text-4xl md:text-6xl">Human network is the new distribution</span>
+                <>
+                  <span className="block text-4xl md:text-6xl">Human network</span>
+                  <span className="block text-4xl md:text-6xl">is the new distribution</span>
+                </>
               )}
             </h1>
           </div>
