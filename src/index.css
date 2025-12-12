@@ -206,6 +206,53 @@
   background-size: 256px 256px;
 }
 
+/* Aurora-synced button background */
+.bg-aurora-sync {
+  background: hsl(190, 100%, 30%);
+  animation: auroraButtonColors 90s linear infinite;
+}
+
+@keyframes auroraButtonColors {
+  /* Fast burst in first 3 seconds (3.33% of 90s) - synced with aurora */
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  0.5% {
+    filter: hue-rotate(45deg);
+  }
+  1% {
+    filter: hue-rotate(90deg);
+  }
+  1.5% {
+    filter: hue-rotate(135deg);
+  }
+  2% {
+    filter: hue-rotate(180deg);
+  }
+  2.5% {
+    filter: hue-rotate(225deg);
+  }
+  3% {
+    filter: hue-rotate(270deg);
+  }
+  3.33% {
+    filter: hue-rotate(300deg);
+  }
+  /* Then slow down for remaining animation */
+  25% {
+    filter: hue-rotate(320deg);
+  }
+  50% {
+    filter: hue-rotate(340deg);
+  }
+  75% {
+    filter: hue-rotate(350deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
 @layer utilities {
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out forwards;
