@@ -380,31 +380,35 @@
   }
 }
 
-@keyframes tiktokGradient {
+@property --tiktok-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes tiktokRotate {
   0% {
-    background-position: 0% 0%; /* cyan top-left, red bottom-right */
-  }
-  25% {
-    background-position: 100% 0%; /* sweep to top-right */
-  }
-  50% {
-    background-position: 100% 100%; /* down to bottom-right */
-  }
-  75% {
-    background-position: 0% 100%; /* across to bottom-left */
+    --tiktok-angle: 0deg;
   }
   100% {
-    background-position: 0% 0%; /* back to top-left */
+    --tiktok-angle: 360deg;
   }
 }
 
 .tiktok-gradient-text {
-  background-image: linear-gradient(135deg, rgba(0,242,234,0.9) 0%, rgba(0,242,234,0.7) 20%, rgba(255,255,255,0.9) 45%, rgba(255,255,255,0.9) 55%, rgba(255,0,80,0.7) 80%, rgba(255,0,80,0.9) 100%);
-  background-size: 220% 220%;
+  --tiktok-angle: 0deg;
+  background-image: conic-gradient(
+    from var(--tiktok-angle),
+    rgba(0,242,234,0.8) 0deg,
+    rgba(255,255,255,0.95) 90deg,
+    rgba(255,0,80,0.8) 180deg,
+    rgba(255,255,255,0.95) 270deg,
+    rgba(0,242,234,0.8) 360deg
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: tiktokGradient 4s linear infinite;
+  animation: tiktokRotate 8s linear infinite;
 }
 
 .animate-tiktok-glow {
