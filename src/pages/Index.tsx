@@ -82,6 +82,9 @@ const Index = () => {
           <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
             About us
           </button>
+          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+            Careers
+          </button>
           
           {/* Right side auth buttons */}
           <div className="ml-auto flex items-center gap-2">
