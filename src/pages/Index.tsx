@@ -20,20 +20,20 @@ const Index = () => {
     <>
       <button
         onClick={() => handleTabChange('creator')}
-        className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
+        className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full transition-colors ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
-            : 'text-white group-hover:text-black'
+            : 'text-white hover:bg-white hover:text-black'
         }`}
       >
         Creator
       </button>
       <button
         onClick={() => handleTabChange('business')}
-        className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
+        className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full transition-colors ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
-            : 'text-white group-hover:text-black'
+            : 'text-white hover:bg-white hover:text-black'
         }`}
       >
         Business
@@ -78,7 +78,7 @@ const Index = () => {
           </div>
           
           {/* Tabs next to logo */}
-          <div className="group flex bg-white/20 hover:bg-white rounded-full overflow-hidden ml-8 transition-colors">
+          <div className="flex bg-white/20 rounded-full overflow-hidden ml-8">
             <TabButtons />
           </div>
           
