@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import jarlaLogo from "@/assets/jarla-logo.png";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
   const [showBackdrop, setShowBackdrop] = useState(false);
 
@@ -99,10 +101,16 @@ const Index = () => {
           
           {/* Right side auth buttons */}
           <div className="ml-auto flex items-center gap-2">
-            <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+            <button 
+              onClick={() => navigate('/auth')}
+              className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity"
+            >
               Log in
             </button>
-            <button className="signup-button px-6 py-2 text-base font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300">
+            <button 
+              onClick={() => navigate('/auth')}
+              className="signup-button px-6 py-2 text-base font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300"
+            >
               <span className="relative z-10">Sign up</span>
             </button>
           </div>
@@ -126,7 +134,10 @@ const Index = () => {
                     </span>
                   </span>
                   <div className="flex justify-center mt-8">
-                    <button className="signup-button px-12 py-4 text-xl font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300">
+                    <button 
+                      onClick={() => navigate('/auth')}
+                      className="signup-button px-12 py-4 text-xl font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300"
+                    >
                       <span className="relative z-10">Sign up</span>
                     </button>
                   </div>
