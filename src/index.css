@@ -382,29 +382,29 @@
 
 @keyframes tiktokGradient {
   0% {
-    background-position: 0% 100%; /* cyan top-left */
+    background-position: 0% 0%; /* cyan top-left, red bottom-right */
   }
   25% {
-    background-position: 100% 100%; /* cyan top-right */
+    background-position: 100% 0%; /* sweep to top-right */
   }
   50% {
-    background-position: 100% 0%; /* cyan bottom-right */
+    background-position: 100% 100%; /* down to bottom-right */
   }
   75% {
-    background-position: 0% 0%; /* cyan bottom-left */
+    background-position: 0% 100%; /* across to bottom-left */
   }
   100% {
-    background-position: 0% 100%; /* back to start */
+    background-position: 0% 0%; /* back to top-left */
   }
 }
 
 .tiktok-gradient-text {
-  background-image: linear-gradient(135deg, #00F2EA 0%, #00F2EA 20%, rgba(255,255,255,0.9) 45%, rgba(255,255,255,0.9) 55%, #FF0050 80%, #FF0050 100%);
-  background-size: 200% 200%;
+  background-image: linear-gradient(135deg, rgba(0,242,234,0.9) 0%, rgba(0,242,234,0.7) 20%, rgba(255,255,255,0.9) 45%, rgba(255,255,255,0.9) 55%, rgba(255,0,80,0.7) 80%, rgba(255,0,80,0.9) 100%);
+  background-size: 220% 220%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: tiktokGradient 3s ease-in-out infinite;
+  animation: tiktokGradient 4s linear infinite;
 }
 
 .animate-tiktok-glow {
