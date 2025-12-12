@@ -382,10 +382,10 @@
 
 @keyframes tiktokBreathe {
   0%, 100% {
-    background-size: 100% 100%;
+    filter: brightness(1);
   }
   50% {
-    background-size: 110% 110%;
+    filter: brightness(1.15);
   }
 }
 
@@ -399,12 +399,10 @@
       rgba(255,0,80,0.6) 80%,
       #FF0050 100%
     );
-  background-size: 100% 100%;
-  background-position: center;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: tiktokBreathe 8s ease-in-out infinite;
+  animation: tiktokBreathe 6s ease-in-out infinite;
 }
 
 .animate-tiktok-glow {
