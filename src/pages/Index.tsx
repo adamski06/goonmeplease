@@ -41,7 +41,11 @@ const Index = () => {
     </>
   );
 
-  return <div className={`overflow-x-hidden ${activeTab === 'creator' ? 'bg-gradient-aurora' : 'bg-gradient-aurora-business'}`}>
+  return <div className="overflow-x-hidden relative bg-white">
+      {/* Aurora gradients - both always mounted, toggle opacity */}
+      <div className={`aurora-gradient-creator transition-opacity duration-500 ${activeTab === 'creator' ? 'opacity-100' : 'opacity-0'}`} />
+      <div className={`aurora-gradient-business transition-opacity duration-500 ${activeTab === 'business' ? 'opacity-100' : 'opacity-0'}`} />
+      
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
