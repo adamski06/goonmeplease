@@ -139,17 +139,31 @@
 }
 
 @keyframes auroraColors {
-  0%, 100% {
+  /* Fast burst in first 3 seconds (3.33% of 90s) */
+  0% {
     filter: hue-rotate(0deg);
   }
-  25% {
-    filter: hue-rotate(90deg);
+  1% {
+    filter: hue-rotate(60deg);
   }
-  50% {
+  2% {
+    filter: hue-rotate(120deg);
+  }
+  3.33% {
     filter: hue-rotate(180deg);
   }
+  /* Then slow down for remaining animation */
+  25% {
+    filter: hue-rotate(200deg);
+  }
+  50% {
+    filter: hue-rotate(250deg);
+  }
   75% {
-    filter: hue-rotate(270deg);
+    filter: hue-rotate(310deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
   }
 }
 
