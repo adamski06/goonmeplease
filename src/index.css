@@ -147,40 +147,17 @@
 }
 
 @keyframes auroraColors {
-  /* Fast burst in first 3 seconds (3.33% of 90s) */
   0% {
     filter: hue-rotate(0deg);
   }
-  0.5% {
-    filter: hue-rotate(45deg);
-  }
-  1% {
+  25% {
     filter: hue-rotate(90deg);
   }
-  1.5% {
-    filter: hue-rotate(135deg);
-  }
-  2% {
+  50% {
     filter: hue-rotate(180deg);
   }
-  2.5% {
-    filter: hue-rotate(225deg);
-  }
-  3% {
-    filter: hue-rotate(270deg);
-  }
-  3.33% {
-    filter: hue-rotate(300deg);
-  }
-  /* Then slow down for remaining animation */
-  25% {
-    filter: hue-rotate(320deg);
-  }
-  50% {
-    filter: hue-rotate(340deg);
-  }
   75% {
-    filter: hue-rotate(350deg);
+    filter: hue-rotate(270deg);
   }
   100% {
     filter: hue-rotate(360deg);
