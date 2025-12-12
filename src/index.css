@@ -353,6 +353,6 @@
 }
 
 .animate-tiktok-glow {
-  animation: tiktokGlow 4s ease-in-out infinite;
+  /* glow disabled */
 }
 
