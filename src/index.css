@@ -376,14 +376,6 @@
   }
 }
 
-@keyframes tiktokBreathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.02);
-  }
-}
 
 .tiktok-gradient-text {
   background-image: 
@@ -399,7 +391,14 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: tiktokBreathe 4s ease-in-out infinite;
+  transition: all 0.3s ease-out;
+  cursor: pointer;
+}
+
+.tiktok-gradient-text:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 4px 12px rgba(0,242,234,0.4)) drop-shadow(0 4px 12px rgba(255,0,80,0.4));
+  text-shadow: 0 0 30px rgba(255,255,255,0.3);
 }
 
 .animate-tiktok-glow {
