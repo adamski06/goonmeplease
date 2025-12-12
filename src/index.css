@@ -119,7 +119,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  will-change: filter;
+  will-change: clip-path, filter;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background: 
@@ -139,26 +139,8 @@
       rgba(255, 255, 255, 1) 100%
     ),
     rgba(255, 255, 255, 1);
-  animation: auroraColors 90s linear infinite;
-}
-
-/* White wash overlay that fades out from center like a wave */
-.bg-gradient-aurora::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 47%,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 0.9) 25%,
-      rgba(255, 255, 255, 0.7) 45%,
-      rgba(255, 255, 255, 0.3) 65%,
-      rgba(255, 255, 255, 0) 80%
-    );
-  opacity: 1;
-  animation: whiteWave 3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation: auroraColors 90s linear infinite, gradientExpand 3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  clip-path: circle(0% at 50% 47%);
 }
 
 @keyframes auroraColors {
@@ -202,22 +184,12 @@
   }
 }
 
-@keyframes whiteWave {
+@keyframes gradientExpand {
   0% {
-    opacity: 1;
-    transform: scale(0.95);
-  }
-  40% {
-    opacity: 0.9;
-    transform: scale(1.02);
-  }
-  70% {
-    opacity: 0.4;
-    transform: scale(1.08);
+    clip-path: circle(0% at 50% 47%);
   }
   100% {
-    opacity: 0;
-    transform: scale(1.12);
+    clip-path: circle(200% at 50% 47%);
   }
 }
 
