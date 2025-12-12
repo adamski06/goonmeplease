@@ -23,7 +23,7 @@ const Index = () => {
         className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
           activeTab === 'creator'
             ? 'bg-white text-black rounded-full'
-            : 'text-white hover:text-black'
+            : 'text-white group-hover:text-black hover:text-black'
         }`}
       >
         Creator
@@ -33,7 +33,7 @@ const Index = () => {
         className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
           activeTab === 'business'
             ? 'bg-white text-black rounded-full'
-            : 'text-white hover:text-black'
+            : 'text-white group-hover:text-black hover:text-black'
         }`}
       >
         Business
