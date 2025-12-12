@@ -387,7 +387,7 @@
 
 .tiktok-gradient-text {
   background-image: 
-    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%),
+    linear-gradient(to bottom, transparent 0%, transparent 75%, rgba(0,0,0,0.7) 100%),
     linear-gradient(135deg, 
       #00F2EA 0%,
       rgba(0,242,234,0.6) 20%,
