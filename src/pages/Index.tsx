@@ -47,7 +47,7 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between">
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px]">
           <div 
-            className="absolute inset-0 logo-dark animate-fade-in"
+            className="absolute inset-0 bg-white animate-fade-in"
             style={{
               WebkitMaskImage: `url(${jarlaLogo})`,
               maskImage: `url(${jarlaLogo})`,
