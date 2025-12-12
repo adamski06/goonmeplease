@@ -14,7 +14,7 @@ const Index = () => {
     <>
       <button
         onClick={() => setActiveTab('creator')}
-        className={`px-4 py-1.5 text-xs font-bold font-montserrat transition-all duration-300 ${
+        className={`px-4 py-1.5 text-xs font-bold font-montserrat ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
             : 'text-white hover:bg-white hover:text-black'
@@ -24,7 +24,7 @@ const Index = () => {
       </button>
       <button
         onClick={() => setActiveTab('business')}
-        className={`px-4 py-1.5 text-xs font-bold font-montserrat transition-all duration-300 ${
+        className={`px-4 py-1.5 text-xs font-bold font-montserrat ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
             : 'text-white hover:bg-white hover:text-black'
