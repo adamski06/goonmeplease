@@ -74,10 +74,10 @@ const Index = () => {
         </div>
         
         {/* Nav buttons */}
-        <button className="px-4 py-1.5 text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+        <button className="px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           How do I earn money?
         </button>
-        <button className="px-4 py-1.5 text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+        <button className="px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           About us
         </button>
       </nav>
