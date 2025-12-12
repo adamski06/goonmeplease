@@ -205,13 +205,19 @@
   }
 }
 
-/* Logo glass effect */
+/* Logo glass effect - white/light for colored backgrounds */
 .logo-glass {
   background: radial-gradient(ellipse at center, 
     rgba(245, 252, 255, 1) 0%,
     rgba(200, 235, 250, 1) 40%,
     rgba(160, 220, 255, 1) 100%
   );
+  animation: auroraColors 90s linear infinite;
+}
+
+/* Logo dark effect - for white backgrounds */
+.logo-dark {
+  background: hsl(190, 80%, 35%);
   animation: auroraColors 90s linear infinite;
 }
 
