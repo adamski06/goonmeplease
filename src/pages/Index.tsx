@@ -70,9 +70,9 @@ const Index = () => {
       </nav>
       
       {/* Hero Section */}
-      <section className="min-h-screen px-6 flex flex-col">
+      <section className="min-h-screen px-6 flex flex-col relative">
         {/* Hero tabs - positioned towards top, hidden when scrolled */}
-        <div className={`flex justify-center pt-32 transition-all duration-300 ${
+        <div className={`absolute top-32 left-1/2 -translate-x-1/2 transition-all duration-300 ${
           scrolled ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
         }`}>
           <div className="flex gap-1 bg-muted/50 rounded-full p-1">
