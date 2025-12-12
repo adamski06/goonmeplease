@@ -9,10 +9,17 @@ const Index = () => {
     setShowBackdrop(true);
   }, []);
 
+  const handleTabChange = (tab: 'creator' | 'business') => {
+    if (tab !== activeTab) {
+      setActiveTab(tab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const TabButtons = () => (
     <>
       <button
-        onClick={() => setActiveTab('creator')}
+        onClick={() => handleTabChange('creator')}
         className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
@@ -22,7 +29,7 @@ const Index = () => {
         Creator
       </button>
       <button
-        onClick={() => setActiveTab('business')}
+        onClick={() => handleTabChange('business')}
         className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
