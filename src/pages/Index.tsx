@@ -2,24 +2,14 @@ import { useState, useEffect } from "react";
 import jarlaLogo from "@/assets/jarla-logo.png";
 
 const Index = () => {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Change at ~40% of viewport height (when logo is over colored area)
-      setScrolled(window.scrollY > window.innerHeight * 0.4);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
 
   return <div className="bg-gradient-aurora">
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between">
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px]">
           <div 
             className="absolute inset-0 logo-dark animate-fade-in"
@@ -35,6 +25,33 @@ const Index = () => {
             }} 
           />
         </div>
+        
+        {/* Center tabs */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex gap-1 bg-muted/50 rounded-full p-1 animate-fade-in">
+          <button
+            onClick={() => setActiveTab('creator')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              activeTab === 'creator' 
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-foreground/60 hover:text-foreground'
+            }`}
+          >
+            Creator
+          </button>
+          <button
+            onClick={() => setActiveTab('business')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              activeTab === 'business' 
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-foreground/60 hover:text-foreground'
+            }`}
+          >
+            Business
+          </button>
+        </div>
+        
+        {/* Spacer for balance */}
+        <div className="w-[120px] md:w-[150px]" />
       </nav>
       
       {/* Hero Section */}
