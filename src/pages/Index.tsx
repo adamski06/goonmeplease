@@ -44,11 +44,19 @@ const Index = () => {
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
           {/* Logo backdrop blur */}
           <div 
-            className={`absolute -inset-3 -z-10 rounded-lg transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.4), transparent 70%)',
-              backdropFilter: 'blur(4px)',
-              WebkitBackdropFilter: 'blur(4px)',
+              background: 'rgba(0,0,0,0.3)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              WebkitMaskImage: `url(${jarlaLogo})`,
+              maskImage: `url(${jarlaLogo})`,
+              maskSize: 'contain',
+              WebkitMaskSize: 'contain',
+              maskRepeat: 'no-repeat',
+              WebkitMaskRepeat: 'no-repeat',
+              maskPosition: 'left center',
+              WebkitMaskPosition: 'left center'
             }}
           />
           <div 
@@ -70,11 +78,11 @@ const Index = () => {
         <div className="relative">
           {/* Tabs backdrop blur */}
           <div 
-            className={`absolute -inset-2 -z-10 rounded-lg transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.4), transparent 70%)',
-              backdropFilter: 'blur(4px)',
-              WebkitBackdropFilter: 'blur(4px)',
+              background: 'rgba(0,0,0,0.3)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
             }}
           />
           <div className="flex border-[3px] border-white overflow-hidden">
