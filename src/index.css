@@ -132,7 +132,8 @@
       rgba(40, 160, 180, 1) 62%,
       rgba(100, 190, 210, 1) 70%,
       rgba(170, 220, 235, 1) 80%,
-      rgba(255, 255, 255, 1) 92%
+      rgba(255, 255, 255, 1) 92%,
+      rgba(255, 255, 255, 1) 100%
     ),
     rgba(255, 255, 255, 1);
   animation: auroraColors 90s linear infinite, gradientExpand 3s ease-out forwards;
@@ -185,7 +186,7 @@
     clip-path: circle(0% at 50% 47%);
   }
   100% {
-    clip-path: circle(150% at 50% 47%);
+    clip-path: circle(200% at 50% 47%);
   }
 }
 
