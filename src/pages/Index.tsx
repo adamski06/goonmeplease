@@ -115,14 +115,16 @@ const Index = () => {
                   <span className="block text-4xl md:text-7xl">Earn money</span>
                   <span className="block text-6xl md:text-[7rem]">
                     per{' '}
-                    <span 
-                      className="inline-block bg-clip-text text-transparent animate-tiktok-glow"
-                      style={{ 
-                        WebkitBackgroundClip: 'text',
-                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%)'
-                      }}
-                    >
-                      view
+                    <span className="inline-block animate-tiktok-glow">
+                      <span 
+                        className="inline-block bg-clip-text text-transparent"
+                        style={{ 
+                          WebkitBackgroundClip: 'text',
+                          backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%)'
+                        }}
+                      >
+                        view
+                      </span>
                     </span>
                   </span>
                 </>
