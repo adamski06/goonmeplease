@@ -86,8 +86,8 @@ const Index = () => {
           <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
             Log in
           </button>
-          <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-aurora-sync text-white rounded-full hover:opacity-90 transition-opacity">
-            Sign up
+          <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-aurora-sync text-black rounded-full hover:opacity-90 transition-opacity">
+            <span className="relative z-10">Sign up</span>
           </button>
         </div>
       </nav>
