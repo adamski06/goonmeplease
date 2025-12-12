@@ -382,13 +382,19 @@
 
 @keyframes tiktokGradient {
   0% {
-    background-position: 0% 100%; /* blue top-left, red bottom-right */
+    background-position: 0% 100%; /* cyan top-left */
+  }
+  25% {
+    background-position: 100% 100%; /* cyan top-right */
   }
   50% {
-    background-position: 100% 0%; /* red top-right, blue bottom-left */
+    background-position: 100% 0%; /* cyan bottom-right */
+  }
+  75% {
+    background-position: 0% 0%; /* cyan bottom-left */
   }
   100% {
-    background-position: 0% 100%;
+    background-position: 0% 100%; /* back to start */
   }
 }
 
