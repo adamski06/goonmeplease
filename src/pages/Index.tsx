@@ -20,19 +20,36 @@ const Index = () => {
       
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
-        <div 
-          className={`h-8 md:h-10 w-[120px] md:w-[150px] transition-all duration-300 ${scrolled ? 'logo-glass' : 'logo-dark'}`}
-          style={{
-            WebkitMaskImage: `url(${jarlaLogo})`,
-            maskImage: `url(${jarlaLogo})`,
-            WebkitMaskSize: 'contain',
-            maskSize: 'contain',
-            WebkitMaskRepeat: 'no-repeat',
-            maskRepeat: 'no-repeat',
-            WebkitMaskPosition: 'left',
-            maskPosition: 'left'
-          }} 
-        />
+        <div className="relative h-8 md:h-10 w-[120px] md:w-[150px]">
+          {/* Dark logo (visible on white background) */}
+          <div 
+            className={`absolute inset-0 logo-dark transition-opacity duration-500 ${scrolled ? 'opacity-0' : 'opacity-100'}`}
+            style={{
+              WebkitMaskImage: `url(${jarlaLogo})`,
+              maskImage: `url(${jarlaLogo})`,
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'left',
+              maskPosition: 'left'
+            }} 
+          />
+          {/* Light logo (visible on colored background) */}
+          <div 
+            className={`absolute inset-0 logo-glass transition-opacity duration-500 ${scrolled ? 'opacity-100' : 'opacity-0'}`}
+            style={{
+              WebkitMaskImage: `url(${jarlaLogo})`,
+              maskImage: `url(${jarlaLogo})`,
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'left',
+              maskPosition: 'left'
+            }} 
+          />
+        </div>
       </nav>
       
       {/* Hero Section */}
