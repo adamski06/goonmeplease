@@ -108,18 +108,15 @@ const Index = () => {
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
         <div className="flex-1 flex items-center max-w-7xl mx-auto w-full">
-          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up w-1/2">
-            <h1 className="text-left animate-fade-in-delayed font-bold text-white font-montserrat">
+          <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : 'w-1/2'}`}>
+            <h1 className={`animate-fade-in-delayed font-bold text-white font-montserrat ${activeTab === 'business' ? 'text-center w-full' : 'text-left'}`}>
               {activeTab === 'creator' ? (
                 <>
                   <span className="block text-4xl md:text-7xl">Earn money</span>
                   <span className="block text-6xl md:text-[7rem]">per view</span>
                 </>
               ) : (
-                <>
-                  <span className="block text-4xl md:text-7xl">Human network</span>
-                  <span className="block text-6xl md:text-[7rem]">is the new distribution</span>
-                </>
+                <span className="block text-4xl md:text-6xl">Human network is the new distribution</span>
               )}
             </h1>
           </div>
