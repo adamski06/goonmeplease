@@ -119,8 +119,8 @@ const Index = () => {
                       className="inline-block bg-clip-text text-transparent"
                       style={{ 
                         WebkitBackgroundClip: 'text',
-                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.9) 30%, rgba(255,255,255,0.9) 70%, #FF0050 100%)',
-                        filter: 'drop-shadow(-4px -4px 15px rgba(0,242,234,0.4)) drop-shadow(4px 4px 15px rgba(255,0,80,0.4))'
+                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.95) 40%, rgba(255,255,255,0.95) 60%, #FF0050 100%)',
+                        filter: 'drop-shadow(-6px -6px 20px rgba(0,242,234,0.5)) drop-shadow(6px 6px 20px rgba(255,0,80,0.5))'
                       }}
                     >
                       view
