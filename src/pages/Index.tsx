@@ -80,6 +80,16 @@ const Index = () => {
         <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           About us
         </button>
+        
+        {/* Right side auth buttons */}
+        <div className="ml-auto flex items-center gap-2">
+          <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+            Log in
+          </button>
+          <button className="px-5 py-1.5 text-sm font-bold font-montserrat bg-white text-black rounded-full hover:bg-white/90 transition-opacity">
+            Make Account
+          </button>
+        </div>
       </nav>
       
       {/* Hero Section */}
