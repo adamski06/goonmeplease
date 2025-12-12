@@ -135,7 +135,9 @@
       rgba(255, 255, 255, 1) 92%
     ),
     rgba(255, 255, 255, 1);
-  animation: auroraColors 90s linear infinite;
+  animation: auroraColors 90s linear infinite, gradientExpand 3s ease-out forwards;
+  background-size: 0% 0%;
+  background-position: center;
 }
 
 @keyframes auroraColors {
@@ -143,27 +145,48 @@
   0% {
     filter: hue-rotate(0deg);
   }
+  0.5% {
+    filter: hue-rotate(45deg);
+  }
   1% {
-    filter: hue-rotate(60deg);
+    filter: hue-rotate(90deg);
+  }
+  1.5% {
+    filter: hue-rotate(135deg);
   }
   2% {
-    filter: hue-rotate(120deg);
+    filter: hue-rotate(180deg);
+  }
+  2.5% {
+    filter: hue-rotate(225deg);
+  }
+  3% {
+    filter: hue-rotate(270deg);
   }
   3.33% {
-    filter: hue-rotate(180deg);
+    filter: hue-rotate(300deg);
   }
   /* Then slow down for remaining animation */
   25% {
-    filter: hue-rotate(200deg);
+    filter: hue-rotate(320deg);
   }
   50% {
-    filter: hue-rotate(250deg);
+    filter: hue-rotate(340deg);
   }
   75% {
-    filter: hue-rotate(310deg);
+    filter: hue-rotate(350deg);
   }
   100% {
     filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes gradientExpand {
+  0% {
+    background-size: 0% 0%;
+  }
+  100% {
+    background-size: 200% 200%;
   }
 }
 
