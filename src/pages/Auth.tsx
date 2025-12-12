@@ -24,7 +24,7 @@ const Auth: React.FC = () => {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/dashboard');
+      navigate('/campaigns');
     }
   }, [user, loading, navigate]);
 
@@ -62,7 +62,7 @@ const Auth: React.FC = () => {
         variant: 'destructive',
       });
     } else {
-      navigate('/dashboard');
+      navigate('/campaigns');
     }
   };
 
@@ -91,9 +91,9 @@ const Auth: React.FC = () => {
     } else {
       toast({
         title: 'Account created!',
-        description: 'Welcome to Jarla! Redirecting to dashboard...',
+        description: 'Welcome to Jarla! Redirecting...',
       });
-      navigate('/dashboard');
+      navigate('/campaigns');
     }
   };
 
