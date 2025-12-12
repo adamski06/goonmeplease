@@ -97,7 +97,7 @@ const Index = () => {
         <div className="flex-1 flex items-center justify-center">
           <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
             <h1 className="text-4xl md:text-7xl text-center animate-fade-in-delayed font-bold text-white font-montserrat">
-              Earn money per view
+              Earn money<br />per view
             </h1>
           </div>
         </div>
