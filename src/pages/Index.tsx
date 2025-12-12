@@ -34,7 +34,7 @@ const Index = () => {
     </>
   );
 
-  return <div className="bg-gradient-aurora">
+  return <div className={activeTab === 'creator' ? 'bg-gradient-aurora' : 'bg-gradient-aurora-business'}>
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
@@ -77,7 +77,7 @@ const Index = () => {
           
           {/* Nav buttons */}
           <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
-            How do I earn money?
+            {activeTab === 'creator' ? 'How do I earn money?' : 'Pricing'}
           </button>
           <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
             About us
