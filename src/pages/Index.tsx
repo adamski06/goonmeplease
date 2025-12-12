@@ -13,7 +13,7 @@ const Index = () => {
     <>
       <button
         onClick={() => setActiveTab('creator')}
-        className={`px-4 py-1.5 text-xs font-bold font-montserrat ${
+        className={`px-4 py-1 text-sm font-bold font-montserrat ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
             : 'text-white hover:bg-white hover:text-black'
@@ -23,7 +23,7 @@ const Index = () => {
       </button>
       <button
         onClick={() => setActiveTab('business')}
-        className={`px-4 py-1.5 text-xs font-bold font-montserrat ${
+        className={`px-4 py-1 text-sm font-bold font-montserrat ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
             : 'text-white hover:bg-white hover:text-black'
@@ -74,10 +74,10 @@ const Index = () => {
         </div>
         
         {/* Nav buttons */}
-        <button className="ml-8 px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+        <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           How do I earn money?
         </button>
-        <button className="px-4 pt-1.5 pb-[9px] text-xs font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+        <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
           About us
         </button>
       </nav>
