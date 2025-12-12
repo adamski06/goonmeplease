@@ -69,7 +69,7 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex bg-white/20 rounded-full overflow-hidden ml-8">
+        <div className="flex border-[3px] border-white rounded-full overflow-hidden ml-8 gap-1 p-0.5">
           <TabButtons />
         </div>
         
