@@ -1,18 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import jarlaLogo from "@/assets/jarla-logo.png";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const TabButtons = () => (
     <>
@@ -20,8 +10,8 @@ const Index = () => {
         onClick={() => setActiveTab('creator')}
         className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'creator' 
-            ? 'bg-background text-foreground shadow-sm' 
-            : 'text-foreground/60 hover:text-foreground'
+            ? 'bg-white/20 text-white shadow-sm' 
+            : 'text-white/60 hover:text-white'
         }`}
       >
         Creator
@@ -30,8 +20,8 @@ const Index = () => {
         onClick={() => setActiveTab('business')}
         className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'business' 
-            ? 'bg-background text-foreground shadow-sm' 
-            : 'text-foreground/60 hover:text-foreground'
+            ? 'bg-white/20 text-white shadow-sm' 
+            : 'text-white/60 hover:text-white'
         }`}
       >
         Business
@@ -44,7 +34,7 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between after:absolute after:inset-x-0 after:top-0 after:h-32 after:bg-gradient-to-b after:from-black/20 after:via-black/10 after:to-transparent after:-z-10 after:pointer-events-none after:animate-fade-in">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4 after:absolute after:inset-x-0 after:top-0 after:h-32 after:bg-gradient-to-b after:from-black/20 after:via-black/10 after:to-transparent after:-z-10 after:pointer-events-none after:animate-fade-in">
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px]">
           <div 
             className="absolute inset-0 bg-white animate-fade-in"
@@ -61,25 +51,14 @@ const Index = () => {
           />
         </div>
         
-        {/* Navbar tabs - visible when scrolled, on the right */}
-        <div className={`flex gap-1 bg-muted/50 rounded-full p-1 transition-all duration-300 ${
-          scrolled ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'
-        }`}>
+        {/* Tabs next to logo */}
+        <div className="flex gap-1 bg-white/10 rounded-full p-1 animate-fade-in">
           <TabButtons />
         </div>
       </nav>
       
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
-        {/* Hero tabs - positioned towards top, hidden when scrolled */}
-        <div className={`absolute top-32 left-1/2 -translate-x-1/2 transition-all duration-300 ${
-          scrolled ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
-        }`}>
-          <div className="flex gap-1 bg-muted/50 rounded-full p-1">
-            <TabButtons />
-          </div>
-        </div>
-        
         <div className="flex-1 flex items-center justify-center">
           <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
             <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full md:text-4xl font-bold text-muted font-montserrat">
