@@ -119,6 +119,9 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  will-change: clip-path, filter;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   background: 
     radial-gradient(circle farthest-side at 50% 47%,
       rgba(0, 50, 70, 1) 0%, 
@@ -136,7 +139,7 @@
       rgba(255, 255, 255, 1) 100%
     ),
     rgba(255, 255, 255, 1);
-  animation: auroraColors 90s linear infinite, gradientExpand 3s ease-out forwards;
+  animation: auroraColors 90s linear infinite, gradientExpand 3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   clip-path: circle(0% at 50% 47%);
 }
 
