@@ -100,7 +100,7 @@ const Index = () => {
               <span className="block text-4xl md:text-7xl">Earn money</span>
               <span className="block">
                 <span className="text-4xl md:text-7xl">per </span>
-                <span className="text-5xl md:text-[5.5rem]">view</span>
+                <span className="text-6xl md:text-[6.5rem]">view</span>
               </span>
             </h1>
           </div>
