@@ -4,23 +4,23 @@ const Index = () => {
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
+      {/* Fixed Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div className="h-8 md:h-10 w-[120px] md:w-[150px] logo-glass" style={{
+          WebkitMaskImage: `url(${jarlaLogo})`,
+          maskImage: `url(${jarlaLogo})`,
+          WebkitMaskSize: 'contain',
+          maskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          maskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'left',
+          maskPosition: 'left'
+        }} />
+      </nav>
+      
       {/* Hero Section */}
       <section className="min-h-screen px-6 items-center justify-center flex flex-col">
         <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up">
-          <div className="flex items-center justify-center relative">
-            {/* Main logo */}
-            <div className="h-24 md:h-32 lg:h-40 w-[400px] md:w-[500px] lg:w-[600px] logo-glass" style={{
-            WebkitMaskImage: `url(${jarlaLogo})`,
-            maskImage: `url(${jarlaLogo})`,
-            WebkitMaskSize: 'contain',
-            maskSize: 'contain',
-            WebkitMaskRepeat: 'no-repeat',
-            maskRepeat: 'no-repeat',
-            WebkitMaskPosition: 'center',
-            maskPosition: 'center'
-          }} />
-          </div>
-          
           <p className="text-lg text-center whitespace-nowrap animate-fade-in-delayed w-full md:text-4xl font-bold text-muted font-montserrat">
             Human networks are the new distribution.
           </p>
