@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Megaphone, 
@@ -23,6 +23,7 @@ const navItems = [
 const DashboardSidebar: React.FC = () => {
   const { signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string, end?: boolean) => {
     if (end) {
@@ -34,7 +35,10 @@ const DashboardSidebar: React.FC = () => {
   return (
     <aside className="w-64 h-screen bg-white border-r border-border flex flex-col">
       <div className="p-6 border-b border-border">
-        <div className="relative h-8 w-[120px]">
+        <button 
+          onClick={() => navigate('/')}
+          className="relative h-8 w-[120px] cursor-pointer"
+        >
           <div 
             className="absolute inset-0 bg-foreground"
             style={{
@@ -48,7 +52,7 @@ const DashboardSidebar: React.FC = () => {
               maskPosition: 'left center'
             }} 
           />
-        </div>
+        </button>
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
