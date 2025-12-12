@@ -5,7 +5,7 @@ import DashboardHeader from './DashboardHeader';
 
 const DashboardLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex w-full bg-[hsl(220,20%,6%)]">
+    <div className="min-h-screen flex w-full bg-secondary/30">
       <DashboardSidebar />
       <div className="flex-1 flex flex-col">
         <DashboardHeader />
