@@ -6,7 +6,7 @@ const Index = () => {
   const [showBackdrop, setShowBackdrop] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowBackdrop(true), 2500);
+    const timer = setTimeout(() => setShowBackdrop(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -43,7 +43,7 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
         {/* Backdrop blur and shadow - fades in after delay */}
         <div 
-          className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-500 ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-1000 ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
           style={{
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.2), transparent)',
             backdropFilter: 'blur(4px)',
