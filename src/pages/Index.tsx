@@ -107,8 +107,8 @@ const Index = () => {
       
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
-        <div className={`flex-1 flex items-center max-w-7xl mx-auto w-full ${activeTab === 'business' ? 'justify-center' : ''}`}>
-          <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : 'w-1/2'}`}>
+        <div className={`flex-1 flex items-center max-w-7xl mx-auto w-full ${activeTab === 'business' ? 'justify-center' : 'justify-center gap-16'}`}>
+          <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : ''}`}>
             <h1 className={`animate-fade-in-delayed font-bold text-white font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
               {activeTab === 'creator' ? (
                 <>
@@ -125,7 +125,7 @@ const Index = () => {
           </div>
           {/* Vertical video placeholder - right side (only for creator) */}
           {activeTab === 'creator' && (
-            <div className="w-1/2 flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <div className="w-80 h-[560px] bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 flex items-center justify-center">
                 <span className="text-white/50 text-sm font-montserrat">Video</span>
               </div>
