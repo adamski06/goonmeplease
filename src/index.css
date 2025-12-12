@@ -214,12 +214,12 @@
   background-size: 256px 256px;
 }
 
-/* Signup button with glass effect matching video placeholder */
+/* Signup button with black glass effect */
 .bg-aurora-sync {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .signup-button {
@@ -227,7 +227,7 @@
 }
 
 .signup-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
   transform: translateY(-1px);
 }
 
