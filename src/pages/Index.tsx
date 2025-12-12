@@ -40,17 +40,19 @@ const Index = () => {
       
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
-        {/* Logo with backdrop */}
+        {/* Backdrop blur and shadow - fades in after delay */}
+        <div 
+          className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.2), transparent)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)'
+          }}
+        />
+        
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
-          {/* Logo shadow glow + blur */}
-          <div 
-            className={`absolute -inset-4 -z-10 rounded-lg transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
-            }}
-          />
           <div 
             className="absolute inset-0 bg-white"
             style={{
@@ -66,20 +68,9 @@ const Index = () => {
           />
         </div>
         
-        {/* Tabs with backdrop */}
-        <div className="relative">
-          {/* Tabs shadow glow + blur */}
-          <div 
-            className={`absolute -inset-3 -z-10 rounded-sm transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
-            }}
-          />
-          <div className="flex border-[3px] border-white overflow-hidden">
-            <TabButtons />
-          </div>
+        {/* Tabs next to logo */}
+        <div className="flex border-[3px] border-white overflow-hidden">
+          <TabButtons />
         </div>
       </nav>
       
