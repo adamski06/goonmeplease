@@ -117,30 +117,31 @@
 .bg-gradient-aurora::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 47%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
   z-index: 0;
-  will-change: clip-path, filter;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center center;
+  border-radius: 50%;
   background: 
-    radial-gradient(circle farthest-side at 50% 47%,
+    radial-gradient(circle at center,
       rgba(0, 50, 70, 1) 0%, 
-      rgba(0, 50, 70, 1) 8%,
-      rgba(0, 80, 100, 1) 16%, 
-      rgba(0, 80, 100, 1) 24%,
-      rgba(0, 110, 130, 1) 32%, 
-      rgba(0, 110, 130, 1) 40%,
-      rgba(0, 140, 160, 1) 48%, 
-      rgba(0, 140, 160, 1) 55%,
-      rgba(40, 160, 180, 1) 62%,
-      rgba(100, 190, 210, 1) 70%,
-      rgba(170, 220, 235, 1) 80%,
-      rgba(255, 255, 255, 1) 92%,
+      rgba(0, 50, 70, 1) 4%,
+      rgba(0, 80, 100, 1) 8%, 
+      rgba(0, 80, 100, 1) 12%,
+      rgba(0, 110, 130, 1) 16%, 
+      rgba(0, 110, 130, 1) 20%,
+      rgba(0, 140, 160, 1) 24%, 
+      rgba(0, 140, 160, 1) 28%,
+      rgba(40, 160, 180, 1) 32%,
+      rgba(100, 190, 210, 1) 38%,
+      rgba(170, 220, 235, 1) 45%,
+      rgba(255, 255, 255, 1) 55%,
       rgba(255, 255, 255, 1) 100%
-    ),
-    rgba(255, 255, 255, 1);
+    );
   animation: auroraColors 90s linear infinite, gradientExpand 3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-  clip-path: circle(0% at 50% 47%);
 }
 
 @keyframes auroraColors {
@@ -186,10 +187,10 @@
 
 @keyframes gradientExpand {
   0% {
-    clip-path: circle(0% at 50% 47%);
+    transform: translate(-50%, -50%) scale(0);
   }
   100% {
-    clip-path: circle(200% at 50% 47%);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
