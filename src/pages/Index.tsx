@@ -95,7 +95,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
         <div className="flex-1 flex items-center">
-          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up pl-12 md:pl-24 lg:pl-32 w-1/2">
+          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up pl-16 md:pl-32 lg:pl-48 w-1/2">
             <h1 className="text-left animate-fade-in-delayed font-bold text-white font-montserrat">
               <span className="block text-4xl md:text-7xl">Earn money</span>
               <span className="block text-6xl md:text-[7rem]">per view</span>
