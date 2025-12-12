@@ -41,7 +41,7 @@ const Index = () => {
     </>
   );
 
-  return <div className={activeTab === 'creator' ? 'bg-gradient-aurora' : 'bg-gradient-aurora-business'}>
+  return <div className={`overflow-x-hidden ${activeTab === 'creator' ? 'bg-gradient-aurora' : 'bg-gradient-aurora-business'}`}>
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
