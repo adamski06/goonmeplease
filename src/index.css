@@ -378,10 +378,12 @@
 
 @keyframes tiktokBreathe {
   0%, 100% {
-    filter: brightness(1);
+    opacity: 1;
+    filter: brightness(1) saturate(1);
   }
   50% {
-    filter: brightness(1.15);
+    opacity: 0.85;
+    filter: brightness(1.2) saturate(1.3);
   }
 }
 
