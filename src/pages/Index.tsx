@@ -32,8 +32,8 @@ const Index = () => {
             onClick={() => setActiveTab('creator')}
             className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
               activeTab === 'creator' 
-                ? 'bg-background text-muted shadow-sm' 
-                : 'text-muted/60 hover:text-muted'
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-foreground/60 hover:text-foreground'
             }`}
           >
             Creator
@@ -42,8 +42,8 @@ const Index = () => {
             onClick={() => setActiveTab('business')}
             className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
               activeTab === 'business' 
-                ? 'bg-background text-muted shadow-sm' 
-                : 'text-muted/60 hover:text-muted'
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-foreground/60 hover:text-foreground'
             }`}
           >
             Business
