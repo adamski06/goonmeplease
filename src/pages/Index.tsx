@@ -8,20 +8,20 @@ const Index = () => {
     <>
       <button
         onClick={() => setActiveTab('creator')}
-        className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
+        className={`px-6 py-2 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'creator' 
-            ? 'bg-white/20 text-white shadow-sm' 
-            : 'text-white/60 hover:text-white'
+            ? 'bg-white text-black' 
+            : 'text-white hover:text-white/80'
         }`}
       >
         Creator
       </button>
       <button
         onClick={() => setActiveTab('business')}
-        className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
+        className={`px-6 py-2 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'business' 
-            ? 'bg-white/20 text-white shadow-sm' 
-            : 'text-white/60 hover:text-white'
+            ? 'bg-white text-black' 
+            : 'text-white hover:text-white/80'
         }`}
       >
         Business
@@ -52,7 +52,7 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex gap-1 bg-white/10 rounded-full p-1 animate-fade-in">
+        <div className="flex gap-1 bg-black/40 backdrop-blur-sm rounded-full p-1 animate-fade-in">
           <TabButtons />
         </div>
       </nav>
