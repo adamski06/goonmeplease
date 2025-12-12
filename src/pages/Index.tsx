@@ -39,7 +39,7 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
         {/* Backdrop blur and shadow - fades in after delay */}
         <div 
           className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
@@ -52,50 +52,53 @@ const Index = () => {
           }}
         />
         
-        <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
-          <div 
-            className="absolute inset-0 bg-white"
-            style={{
-              WebkitMaskImage: `url(${jarlaLogo})`,
-              maskImage: `url(${jarlaLogo})`,
-              WebkitMaskSize: 'contain',
-              maskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'left center',
-              maskPosition: 'left center'
-            }} 
-          />
-        </div>
-        
-        {/* Tabs next to logo */}
-        <div className="group flex bg-white/20 hover:bg-white rounded-full overflow-hidden ml-8 transition-colors">
-          <TabButtons />
-        </div>
-        
-        {/* Nav buttons */}
-        <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
-          How do I earn money?
-        </button>
-        <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
-          About us
-        </button>
-        
-        {/* Right side auth buttons */}
-        <div className="ml-auto flex items-center gap-2">
-          <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
-            Log in
+        {/* Constrained content container */}
+        <div className="max-w-7xl mx-auto flex items-end gap-4">
+          <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
+            <div 
+              className="absolute inset-0 bg-white"
+              style={{
+                WebkitMaskImage: `url(${jarlaLogo})`,
+                maskImage: `url(${jarlaLogo})`,
+                WebkitMaskSize: 'contain',
+                maskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'left center',
+                maskPosition: 'left center'
+              }} 
+            />
+          </div>
+          
+          {/* Tabs next to logo */}
+          <div className="group flex bg-white/20 hover:bg-white rounded-full overflow-hidden ml-8 transition-colors">
+            <TabButtons />
+          </div>
+          
+          {/* Nav buttons */}
+          <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+            How do I earn money?
           </button>
-          <button className="px-6 py-2 text-base font-bold font-montserrat bg-aurora-sync text-black rounded-full hover:opacity-90 transition-opacity">
-            <span className="relative z-10">Sign up</span>
+          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+            About us
           </button>
+          
+          {/* Right side auth buttons */}
+          <div className="ml-auto flex items-center gap-2">
+            <button className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+              Log in
+            </button>
+            <button className="px-6 py-2 text-base font-bold font-montserrat bg-aurora-sync text-black rounded-full hover:opacity-90 transition-opacity">
+              <span className="relative z-10">Sign up</span>
+            </button>
+          </div>
         </div>
       </nav>
       
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
-        <div className="flex-1 flex items-center">
-          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up pl-16 md:pl-32 lg:pl-48 w-1/2">
+        <div className="flex-1 flex items-center max-w-7xl mx-auto w-full">
+          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up w-1/2">
             <h1 className="text-left animate-fade-in-delayed font-bold text-white font-montserrat">
               <span className="block text-4xl md:text-7xl">Earn money</span>
               <span className="block text-6xl md:text-[7rem]">per view</span>
