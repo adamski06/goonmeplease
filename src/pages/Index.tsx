@@ -52,7 +52,7 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex gap-1 border-4 border-white rounded-full p-1 animate-fade-in">
+        <div className="flex border-[5px] border-white rounded-full animate-fade-in overflow-hidden">
           <TabButtons />
         </div>
       </nav>
