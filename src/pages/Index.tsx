@@ -40,7 +40,19 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4 transition-all duration-500 ${showBackdrop ? 'backdrop-blur-sm' : ''} after:absolute after:inset-x-0 after:top-0 after:h-24 after:bg-gradient-to-b after:from-black/50 after:via-black/20 after:to-transparent after:-z-10 after:pointer-events-none after:transition-opacity after:duration-500 ${showBackdrop ? 'after:opacity-100' : 'after:opacity-0'}`}>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4">
+        {/* Backdrop blur and shadow - fades in after delay */}
+        <div 
+          className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-500 ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.2), transparent)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)'
+          }}
+        />
+        
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
           <div 
             className="absolute inset-0 bg-white"
