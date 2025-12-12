@@ -16,7 +16,7 @@ const Index = () => {
         className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
-            : 'text-white hover:bg-white hover:text-black'
+            : 'text-white group-hover:text-black'
         }`}
       >
         Creator
@@ -26,7 +26,7 @@ const Index = () => {
         className={`px-5 py-1.5 text-sm font-bold font-montserrat rounded-full ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
-            : 'text-white hover:bg-white hover:text-black'
+            : 'text-white group-hover:text-black'
         }`}
       >
         Business
@@ -69,7 +69,7 @@ const Index = () => {
         </div>
         
         {/* Tabs next to logo */}
-        <div className="flex bg-white rounded-full overflow-hidden ml-8">
+        <div className="group flex bg-white/20 hover:bg-white rounded-full overflow-hidden ml-8 transition-colors">
           <TabButtons />
         </div>
         
