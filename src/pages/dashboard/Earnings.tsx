@@ -48,37 +48,37 @@ const Earnings: React.FC = () => {
       title: 'Total Earnings',
       value: `$${totalEarnings.toFixed(2)}`,
       icon: DollarSign,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
+      gradient: 'from-emerald-500/20 to-emerald-500/5',
+      iconColor: 'text-emerald-400',
     },
     {
       title: 'Available Balance',
       value: `$${pendingEarnings.toFixed(2)}`,
       icon: Wallet,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
+      gradient: 'from-blue-500/20 to-blue-500/5',
+      iconColor: 'text-blue-400',
     },
     {
       title: 'Paid Out',
       value: `$${paidEarnings.toFixed(2)}`,
       icon: TrendingUp,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
+      gradient: 'from-violet-500/20 to-violet-500/5',
+      iconColor: 'text-violet-400',
     },
     {
       title: 'Total Views Counted',
       value: totalViews.toLocaleString(),
       icon: Clock,
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
+      gradient: 'from-amber-500/20 to-amber-500/5',
+      iconColor: 'text-amber-400',
     },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Earnings</h1>
-        <p className="text-muted-foreground mt-1">
+        <h1 className="text-2xl font-bold text-white">Earnings</h1>
+        <p className="text-white/60 mt-1">
           Track your earnings and payment history
         </p>
       </div>
@@ -86,27 +86,26 @@ const Earnings: React.FC = () => {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+          <Card key={stat.title} className="bg-white/5 border-white/10 backdrop-blur-sm overflow-hidden relative">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} pointer-events-none`} />
+            <CardHeader className="flex flex-row items-center justify-between pb-2 relative">
+              <CardTitle className="text-sm font-medium text-white/70">
                 {stat.title}
               </CardTitle>
-              <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              </div>
+              <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+            <CardContent className="relative">
+              <div className="text-2xl font-bold text-white">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
       </div>
 
       {/* Earnings History */}
-      <Card>
+      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Earnings History</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white">Earnings History</CardTitle>
+          <CardDescription className="text-white/60">
             Detailed breakdown of your earnings
           </CardDescription>
         </CardHeader>
@@ -114,45 +113,45 @@ const Earnings: React.FC = () => {
           {isLoading ? (
             <div className="animate-pulse space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-12 bg-muted rounded" />
+                <div key={i} className="h-12 bg-white/10 rounded" />
               ))}
             </div>
           ) : earnings && earnings.length > 0 ? (
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Campaign</TableHead>
-                  <TableHead>Views</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
+                <TableRow className="border-white/10 hover:bg-transparent">
+                  <TableHead className="text-white/70">Campaign</TableHead>
+                  <TableHead className="text-white/70">Views</TableHead>
+                  <TableHead className="text-white/70">Amount</TableHead>
+                  <TableHead className="text-white/70">Status</TableHead>
+                  <TableHead className="text-white/70">Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {earnings.map((earning) => (
-                  <TableRow key={earning.id}>
+                  <TableRow key={earning.id} className="border-white/10 hover:bg-white/5">
                     <TableCell>
-                      <p className="font-medium">
+                      <p className="font-medium text-white">
                         {earning.content_submissions?.campaigns?.title}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-white/50">
                         {earning.content_submissions?.campaigns?.brand_name}
                       </p>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-white/70">
                       {earning.views_counted.toLocaleString()}
                     </TableCell>
-                    <TableCell className="text-green-600 font-medium">
+                    <TableCell className="text-emerald-400 font-medium">
                       ${Number(earning.amount).toFixed(2)}
                     </TableCell>
                     <TableCell>
                       {earning.is_paid ? (
-                        <span className="text-green-600">Paid</span>
+                        <span className="text-emerald-400">Paid</span>
                       ) : (
-                        <span className="text-yellow-600">Pending</span>
+                        <span className="text-amber-400">Pending</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-white/50">
                       {format(new Date(earning.created_at), 'MMM d, yyyy')}
                     </TableCell>
                   </TableRow>
@@ -160,9 +159,9 @@ const Earnings: React.FC = () => {
               </TableBody>
             </Table>
           ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No earnings yet. Start submitting content to campaigns!</p>
+            <div className="text-center py-8">
+              <DollarSign className="h-12 w-12 mx-auto mb-4 text-white/20" />
+              <p className="text-white/60">No earnings yet. Start submitting content to campaigns!</p>
             </div>
           )}
         </CardContent>
