@@ -218,10 +218,9 @@
 /* Logo dark effect - for white backgrounds */
 .logo-dark {
   background: radial-gradient(ellipse at center, 
-    rgba(255, 255, 255, 0.7) 0%,
-    rgba(255, 255, 255, 0.4) 25%,
-    hsl(190, 70%, 45%) 60%,
-    hsl(190, 80%, 30%) 100%
+    hsl(190, 60%, 55%) 0%,
+    hsl(190, 70%, 45%) 50%,
+    hsl(190, 80%, 35%) 100%
   );
   animation: auroraColors 90s linear infinite;
 }
