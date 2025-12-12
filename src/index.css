@@ -392,12 +392,12 @@
 .tiktok-gradient-text {
   background-image: 
     linear-gradient(135deg, 
-      rgba(0,242,234,0.7) 0%,
-      rgba(0,242,234,0.4) 20%,
+      #00F2EA 0%,
+      rgba(0,242,234,0.6) 20%,
       rgba(255,255,255,1) 40%,
       rgba(255,255,255,1) 60%,
-      rgba(255,0,80,0.4) 80%,
-      rgba(255,0,80,0.7) 100%
+      rgba(255,0,80,0.6) 80%,
+      #FF0050 100%
     );
   background-size: 100% 100%;
   background-position: center;
