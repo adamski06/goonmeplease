@@ -127,6 +127,9 @@ const Index = () => {
                       </span>
                     </span>
                   </span>
+                  <button className="signup-button mt-8 px-10 py-4 text-xl font-bold font-montserrat bg-aurora-sync text-black rounded-full transition-all duration-300">
+                    <span className="relative z-10">Sign up</span>
+                  </button>
                 </>
               ) : (
                 <div className="mt-80">
