@@ -12,27 +12,27 @@ const DashboardHeader: React.FC = () => {
   };
 
   return (
-    <header className="h-16 border-b border-white/10 bg-[hsl(220,20%,8%)] px-6 flex items-center justify-between">
+    <header className="h-16 border-b border-border bg-white px-6 flex items-center justify-between">
       <div>
-        <h2 className="text-lg font-semibold text-white">Creator Dashboard</h2>
+        <h2 className="text-lg font-semibold text-foreground">Creator Dashboard</h2>
       </div>
       
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="relative text-white/70 hover:text-white hover:bg-white/10">
+        <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 h-4 w-4 bg-white text-black text-xs rounded-full flex items-center justify-center font-bold">
+          <span className="absolute -top-1 -right-1 h-4 w-4 bg-foreground text-background text-xs rounded-full flex items-center justify-center font-bold">
             0
           </span>
         </Button>
         
         <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8 border border-white/20">
+          <Avatar className="h-8 w-8 border border-border">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
-            <AvatarFallback className="text-xs bg-white/10 text-white">
+            <AvatarFallback className="text-xs bg-muted text-foreground">
               {user?.email ? getInitials(user.email) : 'U'}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium text-white hidden md:block">
+          <span className="text-sm font-medium text-foreground hidden md:block">
             {user?.user_metadata?.full_name || user?.email}
           </span>
         </div>

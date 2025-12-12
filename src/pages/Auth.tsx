@@ -99,28 +99,20 @@ const Auth: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,6%)]">
-        <div className="animate-pulse text-white/60">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[hsl(220,20%,6%)] p-4">
-      {/* Subtle gradient background */}
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: 'radial-gradient(ellipse at center, hsl(220, 50%, 20%) 0%, transparent 70%)'
-        }}
-      />
-      
-      <Card className="w-full max-w-md bg-white/5 border-white/10 backdrop-blur-sm relative z-10">
+    <div className="min-h-screen flex items-center justify-center bg-secondary/30 p-4">
+      <Card className="w-full max-w-md bg-white border-border shadow-lg">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="relative h-10 w-[130px]">
               <div 
-                className="absolute inset-0 bg-white"
+                className="absolute inset-0 bg-foreground"
                 style={{
                   WebkitMaskImage: `url(${jarlaLogo})`,
                   maskImage: `url(${jarlaLogo})`,
@@ -134,26 +126,22 @@ const Auth: React.FC = () => {
               />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Welcome to Jarla</CardTitle>
-          <CardDescription className="text-white/60">
+          <CardTitle className="text-2xl font-bold text-foreground">Welcome to Jarla</CardTitle>
+          <CardDescription>
             Earn money for every view on your TikTok content
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10">
-              <TabsTrigger value="signin" className="data-[state=active]:bg-white data-[state=active]:text-black text-white/70 rounded-full">
-                Sign In
-              </TabsTrigger>
-              <TabsTrigger value="signup" className="data-[state=active]:bg-white data-[state=active]:text-black text-white/70 rounded-full">
-                Sign Up
-              </TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="signin" className="rounded-full">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-full">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email" className="text-white">Email</Label>
+                  <Label htmlFor="signin-email">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -162,11 +150,10 @@ const Auth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password" className="text-white">Password</Label>
+                  <Label htmlFor="signin-password">Password</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -175,10 +162,9 @@ const Auth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
-                <Button type="submit" className="w-full bg-white text-black hover:bg-white/90 rounded-full" disabled={isLoading}>
+                <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
@@ -187,7 +173,7 @@ const Auth: React.FC = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-white">Full Name</Label>
+                  <Label htmlFor="signup-name">Full Name</Label>
                   <Input
                     id="signup-name"
                     type="text"
@@ -195,11 +181,10 @@ const Auth: React.FC = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-white">Email</Label>
+                  <Label htmlFor="signup-email">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -208,11 +193,10 @@ const Auth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-white">Password</Label>
+                  <Label htmlFor="signup-password">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -221,10 +205,9 @@ const Auth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
-                <Button type="submit" className="w-full bg-white text-black hover:bg-white/90 rounded-full" disabled={isLoading}>
+                <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>

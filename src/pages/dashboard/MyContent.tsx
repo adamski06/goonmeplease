@@ -18,10 +18,10 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 const statusColors: Record<string, string> = {
-  pending_review: 'bg-amber-500/20 text-amber-400 border-amber-500/20',
-  approved: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20',
-  denied: 'bg-red-500/20 text-red-400 border-red-500/20',
-  paid: 'bg-blue-500/20 text-blue-400 border-blue-500/20',
+  pending_review: 'bg-amber-100 text-amber-700 border-amber-200',
+  approved: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  denied: 'bg-red-100 text-red-700 border-red-200',
+  paid: 'bg-blue-100 text-blue-700 border-blue-200',
 };
 
 const MyContent: React.FC = () => {
@@ -55,49 +55,49 @@ const MyContent: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">My Content</h1>
-        <p className="text-white/60 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">My Content</h1>
+        <p className="text-muted-foreground mt-1">
           Track your submissions and earnings
         </p>
       </div>
 
       {isLoading ? (
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-white border-border">
           <CardContent className="py-8">
             <div className="animate-pulse space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-16 bg-white/10 rounded" />
+                <div key={i} className="h-16 bg-muted rounded" />
               ))}
             </div>
           </CardContent>
         </Card>
       ) : submissions && submissions.length > 0 ? (
-        <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+        <Card className="bg-white border-border">
           <CardHeader>
-            <CardTitle className="text-white">Your Submissions</CardTitle>
-            <CardDescription className="text-white/60">
+            <CardTitle className="text-foreground">Your Submissions</CardTitle>
+            <CardDescription>
               {submissions.length} submission{submissions.length !== 1 ? 's' : ''} total
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow className="border-white/10 hover:bg-transparent">
-                  <TableHead className="text-white/70">Campaign</TableHead>
-                  <TableHead className="text-white/70">Status</TableHead>
-                  <TableHead className="text-white/70">Views</TableHead>
-                  <TableHead className="text-white/70">Earnings</TableHead>
-                  <TableHead className="text-white/70">Submitted</TableHead>
+                <TableRow>
+                  <TableHead>Campaign</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Views</TableHead>
+                  <TableHead>Earnings</TableHead>
+                  <TableHead>Submitted</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {submissions.map((submission) => (
-                  <TableRow key={submission.id} className="border-white/10 hover:bg-white/5">
+                  <TableRow key={submission.id}>
                     <TableCell>
                       <div>
-                        <p className="font-medium text-white">{submission.campaigns?.title}</p>
-                        <p className="text-sm text-white/50">
+                        <p className="font-medium text-foreground">{submission.campaigns?.title}</p>
+                        <p className="text-sm text-muted-foreground">
                           @{submission.tiktok_accounts?.tiktok_username}
                         </p>
                       </div>
@@ -111,22 +111,22 @@ const MyContent: React.FC = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1 text-white/70">
-                        <Eye className="h-4 w-4 text-white/50" />
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Eye className="h-4 w-4" />
                         {submission.current_views?.toLocaleString() || 0}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1 text-emerald-400">
+                      <div className="flex items-center gap-1 text-emerald-600">
                         <DollarSign className="h-4 w-4" />
                         {getTotalEarnings(submission.earnings).toFixed(2)}
                       </div>
                     </TableCell>
-                    <TableCell className="text-white/50">
+                    <TableCell className="text-muted-foreground">
                       {format(new Date(submission.created_at), 'MMM d, yyyy')}
                     </TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="sm" asChild className="text-white/70 hover:text-white hover:bg-white/10">
+                      <Button variant="ghost" size="sm" asChild>
                         <a 
                           href={submission.tiktok_video_url} 
                           target="_blank" 
@@ -143,14 +143,14 @@ const MyContent: React.FC = () => {
           </CardContent>
         </Card>
       ) : (
-        <Card className="py-12 bg-white/5 border-white/10">
+        <Card className="py-12 bg-white border-border">
           <CardContent className="text-center">
-            <Video className="h-12 w-12 mx-auto text-white/30 mb-4" />
-            <h3 className="text-lg font-semibold text-white">No submissions yet</h3>
-            <p className="text-white/60 mt-1 mb-4">
+            <Video className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold text-foreground">No submissions yet</h3>
+            <p className="text-muted-foreground mt-1 mb-4">
               Start by browsing available campaigns and submitting content
             </p>
-            <Button asChild className="bg-white text-black hover:bg-white/90 rounded-full">
+            <Button asChild className="rounded-full">
               <Link to="/dashboard/campaigns">Browse Campaigns</Link>
             </Button>
           </CardContent>

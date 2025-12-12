@@ -32,11 +32,11 @@ const DashboardSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 h-screen bg-[hsl(220,20%,8%)] border-r border-white/10 flex flex-col">
-      <div className="p-6 border-b border-white/10">
+    <aside className="w-64 h-screen bg-white border-r border-border flex flex-col">
+      <div className="p-6 border-b border-border">
         <div className="relative h-8 w-[120px]">
           <div 
-            className="absolute inset-0 bg-white"
+            className="absolute inset-0 bg-foreground"
             style={{
               WebkitMaskImage: `url(${jarlaLogo})`,
               maskImage: `url(${jarlaLogo})`,
@@ -60,8 +60,8 @@ const DashboardSidebar: React.FC = () => {
             className={cn(
               'flex items-center gap-3 px-4 py-3 rounded-full text-sm font-medium transition-all duration-200',
               isActive(item.to, item.end)
-                ? 'bg-white text-black'
-                : 'text-white/70 hover:bg-white/10 hover:text-white'
+                ? 'bg-foreground text-background'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             )}
           >
             <item.icon className="h-5 w-5" />
@@ -70,10 +70,10 @@ const DashboardSidebar: React.FC = () => {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-white/10">
+      <div className="p-4 border-t border-border">
         <button
           onClick={signOut}
-          className="flex items-center gap-3 px-4 py-3 rounded-full text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all duration-200 w-full"
+          className="flex items-center gap-3 px-4 py-3 rounded-full text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200 w-full"
         >
           <LogOut className="h-5 w-5" />
           Sign Out
