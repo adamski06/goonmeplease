@@ -117,11 +117,7 @@ const Index = () => {
                     per{' '}
                     <span className="inline-block animate-tiktok-glow">
                       <span 
-                        className="inline-block bg-clip-text text-transparent"
-                        style={{ 
-                          WebkitBackgroundClip: 'text',
-                          backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%)'
-                        }}
+                        className="inline-block tiktok-gradient-text"
                       >
                         view
                       </span>
