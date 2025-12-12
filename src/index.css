@@ -218,7 +218,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, hsl(190, 80%, 70%) 0%, hsl(190, 70%, 85%) 100%);
-  opacity: 0.35;
+  opacity: 0.55;
   animation: auroraButtonColors 90s linear infinite;
   pointer-events: none;
 }
