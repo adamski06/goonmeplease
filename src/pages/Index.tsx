@@ -40,7 +40,7 @@ const Index = () => {
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
         {/* Backdrop blur and shadow - fades in after delay */}
         <div 
           className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-500 ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
