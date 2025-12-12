@@ -237,59 +237,21 @@
   background-size: 256px 256px;
 }
 
-/* Signup button with glass effect and subtle complementary color */
+/* Signup button with glass effect matching video placeholder */
 .bg-aurora-sync {
-  position: relative;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  overflow: hidden;
-}
-
-.bg-aurora-sync::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: hsl(195, 100%, 50%);
-  opacity: 0.35;
-  animation: complementaryColors 90s linear infinite;
-  pointer-events: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .signup-button {
-  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2);
-  animation: signupGlow 2s ease-in-out infinite;
-}
-
-@keyframes complementaryColors {
-  0% { filter: hue-rotate(180deg); }
-  0.5% { filter: hue-rotate(225deg); }
-  1% { filter: hue-rotate(270deg); }
-  1.5% { filter: hue-rotate(315deg); }
-  2% { filter: hue-rotate(360deg); }
-  2.5% { filter: hue-rotate(405deg); }
-  3% { filter: hue-rotate(450deg); }
-  3.33% { filter: hue-rotate(480deg); }
-  25% { filter: hue-rotate(500deg); }
-  50% { filter: hue-rotate(520deg); }
-  75% { filter: hue-rotate(530deg); }
-  100% { filter: hue-rotate(540deg); }
-}
-
-@keyframes signupGlow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 50px rgba(255, 255, 255, 0.3);
-  }
+  transition: all 0.3s ease-out;
 }
 
 .signup-button:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 @layer utilities {
