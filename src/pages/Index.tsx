@@ -73,18 +73,13 @@ const Index = () => {
           <TabButtons />
         </div>
         
-        {/* Spacer */}
-        <div className="flex-1" />
-        
-        {/* Right side buttons */}
-        <div className="flex items-center gap-4">
-          <button className="text-white text-xs font-bold font-montserrat hover:opacity-80 transition-opacity">
-            How do I earn money?
-          </button>
-          <button className="text-white text-xs font-bold font-montserrat hover:opacity-80 transition-opacity">
-            About us
-          </button>
-        </div>
+        {/* Nav buttons */}
+        <button className="text-white text-sm md:text-base font-bold font-montserrat hover:opacity-80 transition-opacity">
+          How do I earn money?
+        </button>
+        <button className="text-white text-sm md:text-base font-bold font-montserrat hover:opacity-80 transition-opacity">
+          About us
+        </button>
       </nav>
       
       {/* Hero Section */}
