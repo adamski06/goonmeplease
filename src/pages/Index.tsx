@@ -42,21 +42,12 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
         {/* Logo with backdrop */}
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
-          {/* Logo backdrop blur */}
+          {/* Logo shadow glow */}
           <div 
-            className={`absolute inset-0 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute -inset-4 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              background: 'rgba(0,0,0,0.3)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              WebkitMaskImage: `url(${jarlaLogo})`,
-              maskImage: `url(${jarlaLogo})`,
-              maskSize: 'contain',
-              WebkitMaskSize: 'contain',
-              maskRepeat: 'no-repeat',
-              WebkitMaskRepeat: 'no-repeat',
-              maskPosition: 'left center',
-              WebkitMaskPosition: 'left center'
+              background: 'rgba(0,0,0,0.15)',
+              filter: 'blur(12px)',
             }}
           />
           <div 
@@ -76,13 +67,12 @@ const Index = () => {
         
         {/* Tabs with backdrop */}
         <div className="relative">
-          {/* Tabs backdrop blur */}
+          {/* Tabs shadow glow */}
           <div 
-            className={`absolute inset-0 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute -inset-3 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
-              background: 'rgba(0,0,0,0.3)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
+              background: 'rgba(0,0,0,0.15)',
+              filter: 'blur(10px)',
             }}
           />
           <div className="flex border-[3px] border-white overflow-hidden">
