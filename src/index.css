@@ -380,30 +380,31 @@
   }
 }
 
-@keyframes tiktokShift {
+@keyframes tiktokBreathe {
   0%, 100% {
-    background-position: 0% 50%;
+    background-size: 100% 100%;
   }
   50% {
-    background-position: 100% 50%;
+    background-size: 110% 110%;
   }
 }
 
 .tiktok-gradient-text {
   background-image: 
     linear-gradient(135deg, 
-      rgba(0,242,234,0.8) 0%,
-      rgba(0,242,234,0.5) 15%,
-      rgba(255,255,255,1) 35%,
-      rgba(255,255,255,1) 65%,
-      rgba(255,0,80,0.5) 85%,
-      rgba(255,0,80,0.8) 100%
+      rgba(0,242,234,0.7) 0%,
+      rgba(0,242,234,0.4) 20%,
+      rgba(255,255,255,1) 40%,
+      rgba(255,255,255,1) 60%,
+      rgba(255,0,80,0.4) 80%,
+      rgba(255,0,80,0.7) 100%
     );
-  background-size: 200% 200%;
+  background-size: 100% 100%;
+  background-position: center;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: tiktokShift 5s ease-in-out infinite;
+  animation: tiktokBreathe 8s ease-in-out infinite;
 }
 
 .animate-tiktok-glow {
