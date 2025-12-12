@@ -113,7 +113,12 @@ const Index = () => {
               {activeTab === 'creator' ? (
                 <>
                   <span className="block text-4xl md:text-7xl">Earn money</span>
-                  <span className="inline-block text-6xl md:text-[7rem] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-2">per view</span>
+                  <span 
+                    className="inline-block text-6xl md:text-[7rem] bg-gradient-to-b from-white/90 via-white/70 to-white/50 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]"
+                    style={{ WebkitBackgroundClip: 'text' }}
+                  >
+                    per view
+                  </span>
                 </>
               ) : (
                 <>
