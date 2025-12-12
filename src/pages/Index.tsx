@@ -30,20 +30,20 @@ const Index = () => {
         <div className="absolute left-1/2 -translate-x-1/2 flex gap-1 bg-muted/50 rounded-full p-1 animate-fade-in">
           <button
             onClick={() => setActiveTab('creator')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium font-montserrat transition-all duration-300 ${
+            className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
               activeTab === 'creator' 
-                ? 'bg-background text-foreground shadow-sm' 
-                : 'text-foreground/60 hover:text-foreground'
+                ? 'bg-background text-muted shadow-sm' 
+                : 'text-muted/60 hover:text-muted'
             }`}
           >
             Creator
           </button>
           <button
             onClick={() => setActiveTab('business')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium font-montserrat transition-all duration-300 ${
+            className={`px-4 py-1.5 rounded-full text-sm font-bold font-montserrat transition-all duration-300 ${
               activeTab === 'business' 
-                ? 'bg-background text-foreground shadow-sm' 
-                : 'text-foreground/60 hover:text-foreground'
+                ? 'bg-background text-muted shadow-sm' 
+                : 'text-muted/60 hover:text-muted'
             }`}
           >
             Business
