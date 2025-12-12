@@ -17,7 +17,7 @@ const Index = () => {
         className={`px-4 py-1.5 text-xs font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'creator' 
             ? 'bg-white text-black' 
-            : 'text-white hover:text-white/80'
+            : 'text-white hover:bg-white hover:text-black'
         }`}
       >
         Creator
@@ -27,7 +27,7 @@ const Index = () => {
         className={`px-4 py-1.5 text-xs font-bold font-montserrat transition-all duration-300 ${
           activeTab === 'business' 
             ? 'bg-white text-black' 
-            : 'text-white hover:text-white/80'
+            : 'text-white hover:bg-white hover:text-black'
         }`}
       >
         Business
