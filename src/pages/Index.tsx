@@ -72,6 +72,19 @@ const Index = () => {
         <div className="flex border-[3px] border-white overflow-hidden">
           <TabButtons />
         </div>
+        
+        {/* Spacer */}
+        <div className="flex-1" />
+        
+        {/* Right side buttons */}
+        <div className="flex items-center gap-4">
+          <button className="text-white text-xs font-bold font-montserrat hover:opacity-80 transition-opacity">
+            How do I earn money?
+          </button>
+          <button className="text-white text-xs font-bold font-montserrat hover:opacity-80 transition-opacity">
+            About us
+          </button>
+        </div>
       </nav>
       
       {/* Hero Section */}
