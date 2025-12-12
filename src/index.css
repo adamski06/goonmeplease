@@ -136,8 +136,7 @@
     ),
     rgba(255, 255, 255, 1);
   animation: auroraColors 90s linear infinite, gradientExpand 3s ease-out forwards;
-  background-size: 0% 0%;
-  background-position: center;
+  transform-origin: 50% 47%;
 }
 
 @keyframes auroraColors {
@@ -183,10 +182,10 @@
 
 @keyframes gradientExpand {
   0% {
-    background-size: 0% 0%;
+    transform: scale(0);
   }
   100% {
-    background-size: 200% 200%;
+    transform: scale(1);
   }
 }
 
