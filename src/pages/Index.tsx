@@ -94,12 +94,16 @@ const Index = () => {
       
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="relative z-10 flex flex-col items-center gap-8 animate-fade-in-up -ml-48 md:-ml-96">
+        <div className="flex-1 flex items-center">
+          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up pl-12 md:pl-24 lg:pl-32 w-1/2">
             <h1 className="text-left animate-fade-in-delayed font-bold text-white font-montserrat">
               <span className="block text-4xl md:text-7xl">Earn money</span>
               <span className="block text-6xl md:text-[7rem]">per view</span>
             </h1>
+          </div>
+          {/* Phone demo placeholder - right side */}
+          <div className="w-1/2 flex items-center justify-center">
+            {/* Phone mockup will go here */}
           </div>
         </div>
       </section>
