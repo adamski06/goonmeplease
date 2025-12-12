@@ -116,11 +116,10 @@ const Index = () => {
                   <span className="block text-6xl md:text-[7rem]">
                     per{' '}
                     <span 
-                      className="inline-block bg-clip-text text-transparent"
+                      className="inline-block bg-clip-text text-transparent animate-tiktok-glow"
                       style={{ 
                         WebkitBackgroundClip: 'text',
-                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%)',
-                        filter: 'drop-shadow(-8px -8px 25px rgba(0,242,234,0.6)) drop-shadow(8px 8px 25px rgba(255,0,80,0.6))'
+                        backgroundImage: 'linear-gradient(135deg, #00F2EA 0%, rgba(255,255,255,0.85) 35%, rgba(255,255,255,0.85) 65%, #FF0050 100%)'
                       }}
                     >
                       view
