@@ -1,21 +1,38 @@
+import { useState, useEffect } from "react";
 import jarlaLogo from "@/assets/jarla-logo.png";
+
 const Index = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Change at ~40% of viewport height (when logo is over colored area)
+      setScrolled(window.scrollY > window.innerHeight * 0.4);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return <div className="bg-gradient-aurora">
       {/* Subtle noise texture */}
       <div className="noise-layer" />
       
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
-        <div className="h-8 md:h-10 w-[120px] md:w-[150px] logo-glass" style={{
-          WebkitMaskImage: `url(${jarlaLogo})`,
-          maskImage: `url(${jarlaLogo})`,
-          WebkitMaskSize: 'contain',
-          maskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          maskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'left',
-          maskPosition: 'left'
-        }} />
+        <div 
+          className={`h-8 md:h-10 w-[120px] md:w-[150px] transition-all duration-300 ${scrolled ? 'logo-glass' : 'logo-dark'}`}
+          style={{
+            WebkitMaskImage: `url(${jarlaLogo})`,
+            maskImage: `url(${jarlaLogo})`,
+            WebkitMaskSize: 'contain',
+            maskSize: 'contain',
+            WebkitMaskRepeat: 'no-repeat',
+            maskRepeat: 'no-repeat',
+            WebkitMaskPosition: 'left',
+            maskPosition: 'left'
+          }} 
+        />
       </nav>
       
       {/* Hero Section */}
