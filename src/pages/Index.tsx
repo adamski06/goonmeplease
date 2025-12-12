@@ -113,7 +113,7 @@ const Index = () => {
               {activeTab === 'creator' ? (
                 <>
                   <span className="block text-4xl md:text-7xl">Earn money</span>
-                  <span className="block text-6xl md:text-[7rem]">per view</span>
+                  <span className="inline-block text-6xl md:text-[7rem] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-2">per view</span>
                 </>
               ) : (
                 <>
