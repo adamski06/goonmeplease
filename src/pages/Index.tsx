@@ -128,7 +128,7 @@ const Index = () => {
                     </span>
                   </span>
                   <div className="flex justify-center mt-8">
-                    <button className="signup-button px-14 py-5 text-2xl font-bold font-montserrat bg-aurora-sync text-black rounded-full transition-all duration-300">
+                    <button className="signup-button px-12 py-4 text-xl font-bold font-montserrat bg-aurora-sync text-black rounded-full transition-all duration-300">
                       <span className="relative z-10">Sign up</span>
                     </button>
                   </div>
