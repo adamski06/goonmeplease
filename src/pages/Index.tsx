@@ -42,12 +42,13 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-end gap-4">
         {/* Logo with backdrop */}
         <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
-          {/* Logo shadow glow */}
+          {/* Logo shadow glow + blur */}
           <div 
-            className={`absolute -inset-4 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute -inset-4 -z-10 rounded-lg transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
               background: 'rgba(0,0,0,0.15)',
-              filter: 'blur(12px)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
             }}
           />
           <div 
@@ -67,12 +68,13 @@ const Index = () => {
         
         {/* Tabs with backdrop */}
         <div className="relative">
-          {/* Tabs shadow glow */}
+          {/* Tabs shadow glow + blur */}
           <div 
-            className={`absolute -inset-3 -z-10 transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute -inset-3 -z-10 rounded-sm transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
             style={{
               background: 'rgba(0,0,0,0.15)',
-              filter: 'blur(10px)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
             }}
           />
           <div className="flex border-[3px] border-white overflow-hidden">
