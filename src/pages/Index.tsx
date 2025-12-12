@@ -35,7 +35,7 @@ const Index = () => {
       
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center gap-4 after:absolute after:inset-x-0 after:top-0 after:h-32 after:bg-gradient-to-b after:from-black/20 after:via-black/10 after:to-transparent after:-z-10 after:pointer-events-none after:animate-fade-in">
-        <div className="relative h-8 md:h-10 w-[120px] md:w-[150px]">
+        <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
           <div 
             className="absolute inset-0 bg-white animate-fade-in"
             style={{
@@ -45,8 +45,8 @@ const Index = () => {
               maskSize: 'contain',
               WebkitMaskRepeat: 'no-repeat',
               maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'left',
-              maskPosition: 'left'
+              WebkitMaskPosition: 'left center',
+              maskPosition: 'left center'
             }} 
           />
         </div>
