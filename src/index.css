@@ -186,10 +186,16 @@
 
 @keyframes gradientExpand {
   0% {
-    clip-path: circle(0% at 50% 47%);
+    /* start slightly visible to avoid harsh aliasing */
+    clip-path: circle(8% at 50% 47%);
+  }
+  60% {
+    /* main wave growth */
+    clip-path: circle(140% at 50% 47%);
   }
   100% {
-    clip-path: circle(200% at 50% 47%);
+    /* overshoot a bit so edges are never exposed */
+    clip-path: circle(170% at 50% 47%);
   }
 }
 
