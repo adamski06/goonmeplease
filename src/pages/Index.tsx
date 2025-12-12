@@ -119,10 +119,8 @@ const Index = () => {
                   <span className="block text-4xl md:text-7xl">Earn money</span>
                   <span className="block text-6xl md:text-[7rem]">
                     per{' '}
-                    <span className="inline-block animate-tiktok-glow">
-                      <span 
-                        className="inline-block tiktok-gradient-text"
-                      >
+                    <span className="inline-block">
+                      <span className="inline-block text-white">
                         view
                       </span>
                     </span>
