@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -20,7 +20,6 @@ const Campaigns: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -29,14 +28,6 @@ const Campaigns: React.FC = () => {
   }, [user, loading, navigate]);
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
-
-  const handleScroll = (e: React.WheelEvent) => {
-    if (e.deltaY > 0 && currentIndex < campaigns.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    } else if (e.deltaY < 0 && currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-  };
 
   const currentCampaign = campaigns[currentIndex];
 
@@ -128,30 +119,36 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content - TikTok Style */}
-      <main className="flex-1 relative z-10" onWheel={handleScroll} ref={containerRef}>
-        {/* Video Feed - Centered on screen */}
-        <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          {/* Video Placeholder - 9:16 aspect ratio */}
-          <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden transition-all duration-300">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-            <span className="text-muted-foreground text-lg">Video {currentIndex + 1}</span>
-            
-            {/* Video Info Overlay */}
-            <div className="absolute bottom-4 left-4 right-16 text-foreground">
-              <p className="font-semibold text-sm">{currentCampaign.creator}</p>
-              <p className="text-xs text-muted-foreground mt-1">{currentCampaign.description}</p>
+      <main className="flex-1 relative z-10">
+        {/* Video Feed - Snap Scroll Container */}
+        <div 
+          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onScroll={(e) => {
+            const container = e.currentTarget;
+            const scrollTop = container.scrollTop;
+            const itemHeight = container.clientHeight;
+            const newIndex = Math.round(scrollTop / itemHeight);
+            if (newIndex !== currentIndex && newIndex >= 0 && newIndex < campaigns.length) {
+              setCurrentIndex(newIndex);
+            }
+          }}
+        >
+          {campaigns.map((campaign, idx) => (
+            <div key={campaign.id} className="h-screen flex items-center justify-center snap-center py-6">
+              {/* Video Placeholder - 9:16 aspect ratio */}
+              <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+                <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
+                
+                {/* Video Info Overlay */}
+                <div className="absolute bottom-4 left-4 right-4 text-foreground">
+                  <p className="font-semibold text-sm">{campaign.creator}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{campaign.description}</p>
+                </div>
+              </div>
             </div>
-
-            {/* Scroll Indicator */}
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-1">
-              {campaigns.map((_, idx) => (
-                <div 
-                  key={idx} 
-                  className={`w-1 h-6 rounded-full transition-colors ${idx === currentIndex ? 'bg-white' : 'bg-white/30'}`} 
-                />
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Action Bubbles - Right Side of Video */}
