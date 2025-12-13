@@ -52,9 +52,13 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* Aurora Background */}
+      <div className="aurora-gradient-creator absolute inset-0" />
+      <div className="noise-layer absolute inset-0 pointer-events-none" />
+      
       {/* Left Sidebar */}
-      <aside className="w-64 bg-white flex flex-col">
+      <aside className="w-64 flex flex-col relative z-10">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -123,7 +127,7 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 px-6 py-8">
+      <main className="flex-1 px-6 py-8 relative z-10">
       </main>
     </div>
   );
