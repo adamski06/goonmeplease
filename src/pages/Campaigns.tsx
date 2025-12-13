@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { LogOut, Megaphone } from 'lucide-react';
+import { User } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 interface Campaign {
@@ -85,11 +85,10 @@ const Campaigns: React.FC = () => {
           </button>
           <Button 
             variant="ghost" 
-            onClick={handleSignOut}
+            size="icon"
             className="text-muted-foreground hover:text-foreground"
           >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
+            <User className="h-5 w-5" />
           </Button>
         </div>
       </header>
