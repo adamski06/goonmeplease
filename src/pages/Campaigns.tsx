@@ -52,12 +52,12 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden bg-white">
+    <div className="min-h-screen flex relative overflow-hidden">
       {/* Radial Background - centered below page */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 120% 80% at 50% 150%, hsl(220, 80%, 70%) 0%, hsl(280, 60%, 75%) 25%, hsl(340, 70%, 80%) 50%, transparent 70%)'
+          background: 'radial-gradient(ellipse 150% 100% at 50% 120%, hsl(220, 90%, 65%) 0%, hsl(280, 70%, 70%) 30%, hsl(340, 80%, 75%) 50%, white 80%)'
         }}
       />
       
