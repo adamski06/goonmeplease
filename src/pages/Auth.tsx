@@ -207,7 +207,7 @@ const Auth: React.FC = () => {
                   className="px-8 py-4 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-lg"
                 >
                   Connect TikTok
-                  <TikTokIcon className="w-5 h-5" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert" />
                 </Button>
               </div>
               
