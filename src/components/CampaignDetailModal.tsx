@@ -120,10 +120,19 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
           </section>
 
           {/* Inspiration Section */}
-          <section className="bg-muted/30 rounded-2xl border border-border/50 p-5 mb-5">
+          <section className="bg-white/40 rounded-2xl border border-border/50 p-5 mb-5">
             <h3 className="text-lg font-bold text-foreground mb-4">Inspiration</h3>
             <div className="grid grid-cols-3 gap-3">
-              {[1, 2, 3].map((i) => (
+              {/* TikTok Video Embed */}
+              <div className="aspect-[9/16] rounded-xl overflow-hidden border border-border/30">
+                <iframe
+                  src="https://www.tiktok.com/embed/v2/7449317677498630421"
+                  className="w-full h-full"
+                  allowFullScreen
+                  allow="encrypted-media"
+                />
+              </div>
+              {[2, 3].map((i) => (
                 <div 
                   key={i} 
                   className="aspect-[9/16] bg-black/5 rounded-xl border border-border/30 flex items-center justify-center"
