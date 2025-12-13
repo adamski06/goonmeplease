@@ -389,3 +389,19 @@
   /* glow disabled */
 }
 
+/* Fast scroll snap */
+.snap-fast {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.snap-fast > * {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+@supports (scroll-snap-type: y mandatory) {
+  .snap-fast {
+    scroll-behavior: auto;
+  }
+}
