@@ -16,7 +16,7 @@ import CampaignDetailModal from '@/components/CampaignDetailModal';
 
 // Hook to extract a vivid dominant edge color from the video for ambient glow
 const useVideoAmbientColor = (videoRef: React.RefObject<HTMLVideoElement>) => {
-  const [ambientColor, setAmbientColor] = useState('rgba(0,0,0,0)');
+  const [ambientColor, setAmbientColor] = useState('rgba(255, 0, 128, 0.9)');
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number>();
   const lastUpdateRef = useRef<number>(0);
@@ -72,14 +72,23 @@ const useVideoAmbientColor = (videoRef: React.RefObject<HTMLVideoElement>) => {
         g = Math.round(g / count);
         b = Math.round(b / count);
 
-        // Boost saturation for a more pronounced hue
+        // Boost saturation & ensure it's not too dark
         const max = Math.max(r, g, b) || 1;
-        const boost = (255 / max) * 0.8;
+        const boost = (255 / max) * 0.9;
         r = Math.min(255, Math.round(r * boost));
         g = Math.min(255, Math.round(g * boost));
         b = Math.min(255, Math.round(b * boost));
 
-        setAmbientColor(`rgba(${r}, ${g}, ${b}, 0.8)`);
+        // If still very dark, blend with vibrant fallback
+        const brightness = (r + g + b) / 3;
+        const mix = brightness < 80 ? 0.7 : 0.3; // 0 = use sample, 1 = use fallback
+        const fallback = { r: 255, g: 0, b: 128 };
+
+        const finalR = Math.round(r * (1 - mix) + fallback.r * mix);
+        const finalG = Math.round(g * (1 - mix) + fallback.g * mix);
+        const finalB = Math.round(b * (1 - mix) + fallback.b * mix);
+
+        setAmbientColor(`rgba(${finalR}, ${finalG}, ${finalB}, 0.95)`);
       }
     } catch {
       // ignore cross-origin or rendering errors
@@ -369,10 +378,10 @@ const Campaigns: React.FC = () => {
                 {/* Ambient radial glow around the video */}
                 {idx === 0 && (
                   <div 
-                    className="absolute inset-0 rounded-[2rem] blur-3xl scale-125 -z-10 transition-all duration-200"
+                    className="absolute inset-0 rounded-[2.5rem] blur-[60px] scale-150 -z-10 transition-all duration-300"
                     style={{
-                      background: `radial-gradient(circle at 50% 50%, ${ambientColor} 0%, transparent 60%)`,
-                      opacity: 0.9,
+                      background: `radial-gradient(circle at 50% 50%, ${ambientColor} 0%, transparent 80%)`,
+                      opacity: 1,
                     }}
                   />
                 )}
