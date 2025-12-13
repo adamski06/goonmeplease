@@ -86,7 +86,13 @@ const Campaigns: React.FC = () => {
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
           <button className="text-2xl font-bold text-foreground bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <Home className="h-6 w-6" fill="currentColor" />
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
+                fill="currentColor"
+              />
+              <rect x="10" y="14" width="4" height="7" rx="0.5" fill="hsl(210, 30%, 88%)" />
+            </svg>
             Home
           </button>
           <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
