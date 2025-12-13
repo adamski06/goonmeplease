@@ -67,7 +67,7 @@ const Index = () => {
         
         {/* Constrained content container */}
         <div className="max-w-7xl mx-auto flex items-end gap-4">
-          <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
+          <div className="relative h-8 w-[120px] flex items-center">
             <div 
               className="absolute inset-0 bg-white"
               style={{
