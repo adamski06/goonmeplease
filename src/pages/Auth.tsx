@@ -51,16 +51,17 @@ const Auth: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
   const [signUpStep, setSignUpStep] = useState(1);
+  const [devMode, setDevMode] = useState(false);
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Only auto-redirect if user is logged in AND we're not in the TikTok connect step
-    if (!loading && user && signUpStep !== 2) {
+    // Only auto-redirect if user is logged in AND we're not in the TikTok connect step AND not in dev mode
+    if (!loading && user && signUpStep !== 2 && !devMode) {
       navigate('/campaigns');
     }
-  }, [user, loading, navigate, signUpStep]);
+  }, [user, loading, navigate, signUpStep, devMode]);
 
   const validateForm = (isSignUp: boolean) => {
     try {
@@ -151,6 +152,40 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Dev mode toggle - top right */}
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+        <button
+          onClick={() => setDevMode(!devMode)}
+          className={`px-3 py-1 text-xs rounded-full transition-all ${
+            devMode ? 'bg-green-500 text-white' : 'bg-white/20 text-white/60 hover:bg-white/30'
+          }`}
+        >
+          Dev Mode
+        </button>
+        {devMode && (
+          <div className="flex gap-1">
+            <button
+              onClick={() => { setSignUpStep(1); setIsSignUp(true); }}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && isSignUp ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+            >
+              Sign Up
+            </button>
+            <button
+              onClick={() => { setSignUpStep(1); setIsSignUp(false); }}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && !isSignUp ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+            >
+              Log In
+            </button>
+            <button
+              onClick={() => setSignUpStep(2)}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 2 ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+            >
+              TikTok
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Aurora gradient background */}
       <div className="aurora-gradient-auth" />
       <div className="noise-layer" />
