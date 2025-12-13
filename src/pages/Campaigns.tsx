@@ -97,14 +97,14 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/activity')}
-            className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:bg-white/30 hover:backdrop-blur-sm hover:border hover:border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3"
           >
             <Activity className="h-6 w-6" />
             Activity
           </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:bg-white/30 hover:backdrop-blur-sm hover:border hover:border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
