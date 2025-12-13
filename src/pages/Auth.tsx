@@ -4,8 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import jarlaLogo from '@/assets/jarla-logo.png';
@@ -18,6 +17,7 @@ const Auth: React.FC = () => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -135,92 +135,103 @@ const Auth: React.FC = () => {
           <CardTitle className="text-5xl font-bold text-white">Let's start!</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10">
-              <TabsTrigger value="signin" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black text-white">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black text-white">Sign Up</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email" className="text-white">Email</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoComplete="email"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password" className="text-white">Password</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="current-password"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
-                  {isLoading ? 'Signing in...' : 'Sign In'}
-                </Button>
-              </form>
-            </TabsContent>
-
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-white">Full Name</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="Your name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    autoComplete="name"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-white">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoComplete="email"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-white">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="At least 6 characters"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="new-password"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
-                  {isLoading ? 'Creating account...' : 'Create Account'}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          {isSignUp ? (
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signup-name" className="text-white">Full Name</Label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  placeholder="Your name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  autoComplete="name"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email" className="text-white">Email</Label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password" className="text-white">Password</Label>
+                <Input
+                  id="signup-password"
+                  type="password"
+                  placeholder="At least 6 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
+              </div>
+              <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
+                {isLoading ? 'Creating account...' : 'Create Account'}
+              </Button>
+              <p className="text-center text-white/70 text-sm mt-4">
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  className="text-white underline hover:text-white/80"
+                >
+                  Log in
+                </button>
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signin-email" className="text-white">Email</Label>
+                <Input
+                  id="signin-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signin-password" className="text-white">Password</Label>
+                <Input
+                  id="signin-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                />
+              </div>
+              <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
+                {isLoading ? 'Signing in...' : 'Sign In'}
+              </Button>
+              <p className="text-center text-white/70 text-sm mt-4">
+                Don't have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(true)}
+                  className="text-white underline hover:text-white/80"
+                >
+                  Sign up
+                </button>
+              </p>
+            </form>
+          )}
         </CardContent>
       </Card>
     </div>
