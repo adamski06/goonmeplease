@@ -6,14 +6,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
+import nikeLogo from '@/assets/logos/nike.png';
+import spotifyLogo from '@/assets/logos/spotify.png';
+import samsungLogo from '@/assets/logos/samsung.png';
+import redbullLogo from '@/assets/logos/redbull.png';
+import adobeLogo from '@/assets/logos/adobe.png';
 
 // Mock campaign data - ads from companies
 const campaigns = [
-  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50, maxEarnings: 25000 },
-  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35, maxEarnings: 15000 },
-  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72, maxEarnings: 50000 },
-  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45, maxEarnings: 30000 },
-  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60, maxEarnings: 20000 },
+  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50, maxEarnings: 25000, logo: nikeLogo },
+  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35, maxEarnings: 15000, logo: spotifyLogo },
+  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72, maxEarnings: 50000, logo: samsungLogo },
+  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45, maxEarnings: 30000, logo: redbullLogo },
+  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60, maxEarnings: 20000, logo: adobeLogo },
 ];
 
 const Campaigns: React.FC = () => {
@@ -176,9 +181,9 @@ const Campaigns: React.FC = () => {
             className="relative flex flex-col items-center gap-4"
             style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
           >
-            {/* Company Icon centered above first pill */}
-            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
-              {currentCampaign.brand.charAt(0)}
+            {/* Company Logo centered above first pill */}
+            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4">
+              <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
             </div>
 
             {/* Spacer so pills stay visually centered while icon overlaps */}
