@@ -52,10 +52,14 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden">
-      {/* Aurora Background */}
-      <div className="aurora-gradient-creator absolute inset-0" />
-      <div className="noise-layer absolute inset-0 pointer-events-none" />
+    <div className="min-h-screen flex relative overflow-hidden bg-white">
+      {/* Radial Background - centered below page */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 120% 80% at 50% 150%, hsl(220, 80%, 70%) 0%, hsl(280, 60%, 75%) 25%, hsl(340, 70%, 80%) 50%, transparent 70%)'
+        }}
+      />
       
       {/* Left Sidebar */}
       <aside className="w-64 flex flex-col relative z-10">
