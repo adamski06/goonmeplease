@@ -107,8 +107,52 @@ const Campaigns: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 px-6 py-8 relative z-10">
+      {/* Main Content - TikTok Style */}
+      <main className="flex-1 flex justify-center items-center relative z-10">
+        {/* Video Feed - Center */}
+        <div className="flex flex-col items-center gap-4">
+          {/* Video Placeholder */}
+          <div className="w-80 h-[560px] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+            <span className="text-muted-foreground text-lg">Video</span>
+            
+            {/* Video Info Overlay */}
+            <div className="absolute bottom-4 left-4 right-16 text-foreground">
+              <p className="font-semibold text-sm">@creator_username</p>
+              <p className="text-xs text-muted-foreground mt-1">Campaign description here...</p>
+            </div>
+          </div>
+          
+          {/* Swipe Indicators */}
+          <div className="flex gap-2">
+            <div className="w-2 h-2 rounded-full bg-foreground" />
+            <div className="w-2 h-2 rounded-full bg-foreground/30" />
+            <div className="w-2 h-2 rounded-full bg-foreground/30" />
+          </div>
+        </div>
+
+        {/* Action Bubbles - Right Side */}
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4">
+          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
+            <span className="text-xs font-medium text-foreground">💰</span>
+          </button>
+          <div className="text-center text-xs text-foreground/70">Payment</div>
+          
+          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
+            <span className="text-xs font-medium text-foreground">📊</span>
+          </button>
+          <div className="text-center text-xs text-foreground/70">Stats</div>
+          
+          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
+            <span className="text-xs font-medium text-foreground">🔔</span>
+          </button>
+          <div className="text-center text-xs text-foreground/70">Alerts</div>
+          
+          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
+            <span className="text-xs font-medium text-foreground">⚙️</span>
+          </button>
+          <div className="text-center text-xs text-foreground/70">Settings</div>
+        </div>
       </main>
     </div>
   );
