@@ -153,7 +153,7 @@ const Index = () => {
           {/* Vertical video placeholder - right side (only for creator) */}
           {activeTab === 'creator' && (
             <div className="flex items-center justify-center">
-              <div className="w-80 h-[560px] bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 flex items-center justify-center">
+              <div className="w-56 h-[400px] bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 flex items-center justify-center">
                 <span className="text-white/50 text-sm font-montserrat">Video</span>
               </div>
             </div>
