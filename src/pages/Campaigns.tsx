@@ -76,7 +76,7 @@ const Campaigns: React.FC = () => {
 
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-foreground bg-white/40 backdrop-blur-md border border-white/50 shadow-sm rounded-xl px-3 py-2 text-left transition-colors flex items-center gap-3">
+          <button className="text-2xl font-bold text-foreground bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-3 py-2 text-left transition-colors flex items-center gap-3">
             <svg
               className="h-6 w-6 text-foreground"
               viewBox="0 0 24 24"
