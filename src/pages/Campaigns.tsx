@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Home, Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
+import defaultAvatar from '@/assets/default-avatar.png';
 
 interface Profile {
   full_name: string | null;
@@ -85,7 +86,7 @@ const Campaigns: React.FC = () => {
           </button>
           <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
             <Avatar className="h-6 w-6">
-              <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
+              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground text-xs font-medium">
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
@@ -98,7 +99,7 @@ const Campaigns: React.FC = () => {
         <div className="mt-auto px-4 py-4 border-t border-border">
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
-              <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
+              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground font-medium">
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
