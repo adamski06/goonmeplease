@@ -152,24 +152,32 @@ const Campaigns: React.FC = () => {
           ))}
         </div>
 
-        {/* Company Icon - Above Pills */}
-        <div className="fixed left-1/2 flex items-center justify-center" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)', top: 'calc(50% - 180px)', transform: 'translateX(50px)' }}>
-          <div className="w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
-            {currentCampaign.brand.charAt(0)}
-          </div>
-        </div>
+        {/* Icon + Action Bubbles - Right Side of Video */}
+        <div
+          className="fixed left-1/2 top-1/2 -translate-y-1/2"
+          style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
+        >
+          <div className="relative flex flex-col items-center gap-4">
+            {/* Company Icon centered above first pill */}
+            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
+              {currentCampaign.brand.charAt(0)}
+            </div>
 
-        {/* Action Bubbles - Right Side of Video */}
-        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
-          <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-            <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
-            <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
-          </button>
-          
-          <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-            <span className="text-xs font-semibold text-white/60">up to</span>
-            <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
-          </button>
+            {/* Spacer so pills stay visually centered while icon overlaps */}
+            <div className="h-8" />
+
+            {/* First pill: sek / views */}
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+              <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
+              <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
+            </button>
+
+            {/* Second pill: max earnings */}
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+              <span className="text-xs font-semibold text-white/60">up to</span>
+              <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
+            </button>
+          </div>
         </div>
       </main>
     </div>
