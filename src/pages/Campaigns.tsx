@@ -125,26 +125,22 @@ const Campaigns: React.FC = () => {
         </div>
 
         {/* Action Bubbles - Right Side of Video */}
-        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 24px)' }}>
-          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
-            <span className="text-xs font-medium text-foreground">💰</span>
+        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-3" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 24px)' }}>
+          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-sm font-medium">5000 sek</span>
           </button>
-          <div className="text-center text-xs text-foreground/70">Payment</div>
           
-          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
-            <span className="text-xs font-medium text-foreground">📊</span>
+          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-sm font-medium">Stats</span>
           </button>
-          <div className="text-center text-xs text-foreground/70">Stats</div>
           
-          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
-            <span className="text-xs font-medium text-foreground">🔔</span>
+          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-sm font-medium">Alerts</span>
           </button>
-          <div className="text-center text-xs text-foreground/70">Alerts</div>
           
-          <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors mt-2">
-            <span className="text-xs font-medium text-foreground">⚙️</span>
+          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-sm font-medium">Settings</span>
           </button>
-          <div className="text-center text-xs text-foreground/70">Settings</div>
         </div>
       </main>
     </div>
