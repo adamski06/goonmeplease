@@ -86,9 +86,9 @@ const Campaigns: React.FC = () => {
           <Button 
             variant="ghost" 
             size="icon"
-            className="text-muted-foreground hover:text-foreground"
+            className="hover:bg-muted"
           >
-            <User className="h-5 w-5" />
+            <User className="h-5 w-5 text-foreground" strokeWidth={2.5} />
           </Button>
         </div>
       </header>
