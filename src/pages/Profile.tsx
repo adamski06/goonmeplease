@@ -10,9 +10,11 @@ import defaultAvatar from '@/assets/default-avatar.png';
 interface Profile {
   full_name: string | null;
   avatar_url: string | null;
+  username: string | null;
+  bio: string | null;
 }
 
-const Campaigns: React.FC = () => {
+const ProfilePage: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -29,7 +31,7 @@ const Campaigns: React.FC = () => {
       
       const { data } = await supabase
         .from('profiles')
-        .select('full_name, avatar_url')
+        .select('full_name, avatar_url, username, bio')
         .eq('user_id', user.id)
         .single();
 
@@ -53,7 +55,7 @@ const Campaigns: React.FC = () => {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
-      {/* Radial Background - blue, centered below page */}
+      {/* Radial Background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -83,16 +85,13 @@ const Campaigns: React.FC = () => {
           </button>
         </div>
 
-        {/* Navigation - centered vertically */}
+        {/* Navigation */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-foreground bg-white/30 backdrop-blur-sm border border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-                fill="currentColor"
-              />
-              <rect x="10.5" y="15" width="3" height="6" rx="0.5" fill="hsl(210, 30%, 88%)" />
-            </svg>
+          <button 
+            onClick={() => navigate('/campaigns')}
+            className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3"
+          >
+            <Home className="h-6 w-6" />
             Home
           </button>
           <button 
@@ -102,11 +101,8 @@ const Campaigns: React.FC = () => {
             <Activity className="h-6 w-6" />
             Activity
           </button>
-          <button 
-            onClick={() => navigate('/profile')}
-            className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3"
-          >
-            <Avatar className="h-6 w-6">
+          <button className="text-2xl font-bold text-foreground bg-white/30 backdrop-blur-sm border border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3">
+            <Avatar className="h-6 w-6 ring-2 ring-foreground">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground text-xs font-medium">
                 {firstName.charAt(0).toUpperCase()}
@@ -132,9 +128,28 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 px-6 py-8 relative z-10">
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-6 mb-8">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+              <AvatarFallback className="bg-muted text-foreground text-2xl font-medium">
+                {firstName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">{profile?.full_name || 'User'}</h1>
+              {profile?.username && (
+                <p className="text-muted-foreground">@{profile.username}</p>
+              )}
+            </div>
+          </div>
+          {profile?.bio && (
+            <p className="text-foreground">{profile.bio}</p>
+          )}
+        </div>
       </main>
     </div>
   );
 };
 
-export default Campaigns;
+export default ProfilePage;
