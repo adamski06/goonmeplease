@@ -180,7 +180,7 @@ const Auth: React.FC = () => {
           <CardContent className="pt-12 pb-8">
             <div className="space-y-8">
               {/* Logos */}
-              <div className="flex items-center justify-center gap-5 py-4">
+              <div className="flex flex-col items-center justify-center gap-3 py-4">
                 <div className="relative h-10 w-[140px]">
                   <div 
                     className="absolute inset-0 bg-white"
