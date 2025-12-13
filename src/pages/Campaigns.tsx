@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -7,10 +7,20 @@ import { Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 
+const campaigns = [
+  { id: 1, creator: '@nike_collab', description: 'Summer sneaker campaign', payment: 5000 },
+  { id: 2, creator: '@adidas_run', description: 'Marathon training series', payment: 7500 },
+  { id: 3, creator: '@spotify_music', description: 'New artist spotlight', payment: 3200 },
+  { id: 4, creator: '@redbull_energy', description: 'Extreme sports content', payment: 8900 },
+  { id: 5, creator: '@apple_tech', description: 'Product unboxing review', payment: 12000 },
+];
+
 const Campaigns: React.FC = () => {
   const { user, loading } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -19,6 +29,16 @@ const Campaigns: React.FC = () => {
   }, [user, loading, navigate]);
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
+
+  const handleScroll = (e: React.WheelEvent) => {
+    if (e.deltaY > 0 && currentIndex < campaigns.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else if (e.deltaY < 0 && currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
+  const currentCampaign = campaigns[currentIndex];
 
   if (loading) {
     return (
@@ -108,18 +128,28 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content - TikTok Style */}
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-10" onWheel={handleScroll} ref={containerRef}>
         {/* Video Feed - Centered on screen */}
         <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {/* Video Placeholder - 9:16 aspect ratio */}
-          <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+          <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden transition-all duration-300">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-            <span className="text-muted-foreground text-lg">Video</span>
+            <span className="text-muted-foreground text-lg">Video {currentIndex + 1}</span>
             
             {/* Video Info Overlay */}
             <div className="absolute bottom-4 left-4 right-16 text-foreground">
-              <p className="font-semibold text-sm">@creator_username</p>
-              <p className="text-xs text-muted-foreground mt-1">Campaign description here...</p>
+              <p className="font-semibold text-sm">{currentCampaign.creator}</p>
+              <p className="text-xs text-muted-foreground mt-1">{currentCampaign.description}</p>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+              {campaigns.map((_, idx) => (
+                <div 
+                  key={idx} 
+                  className={`w-1 h-6 rounded-full transition-colors ${idx === currentIndex ? 'bg-white' : 'bg-white/30'}`} 
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -127,7 +157,7 @@ const Campaigns: React.FC = () => {
         {/* Action Bubbles - Right Side of Video */}
         <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-base font-semibold">5000 sek</span>
+            <span className="text-base font-semibold">{currentCampaign.payment} sek</span>
           </button>
           
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
