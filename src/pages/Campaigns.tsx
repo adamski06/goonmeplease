@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -11,14 +11,120 @@ import spotifyLogo from '@/assets/logos/spotify.png';
 import samsungLogo from '@/assets/logos/samsung.png';
 import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
+import CampaignDetailModal from '@/components/CampaignDetailModal';
 
-// Mock campaign data - ads from companies
+// Extended mock campaign data
 const campaigns = [
-  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50, maxEarnings: 25000, logo: nikeLogo },
-  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35, maxEarnings: 15000, logo: spotifyLogo },
-  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72, maxEarnings: 50000, logo: samsungLogo },
-  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45, maxEarnings: 30000, logo: redbullLogo },
-  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60, maxEarnings: 20000, logo: adobeLogo },
+  { 
+    id: 1, 
+    brand: 'Nike', 
+    description: 'Show off your workout routine with our new collection', 
+    ratePerThousand: 50, 
+    maxEarnings: 25000, 
+    logo: nikeLogo,
+    contentType: 'Workout/Fitness video',
+    productVisibility: 'Product must be clearly visible for at least 3 seconds',
+    videoLength: '15-60 seconds',
+    guidelines: [
+      'Wear Nike apparel or shoes throughout the video',
+      'Show yourself actively working out',
+      'Include the hashtag #JustDoIt',
+      'No competitor brands visible'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 10000, rate: 50 },
+      { minViews: 10000, maxViews: 100000, rate: 40 },
+      { minViews: 100000, maxViews: null, rate: 30 }
+    ]
+  },
+  { 
+    id: 2, 
+    brand: 'Spotify', 
+    description: 'Share your favorite playlist moment', 
+    ratePerThousand: 35, 
+    maxEarnings: 15000, 
+    logo: spotifyLogo,
+    contentType: 'Music/Lifestyle video',
+    productVisibility: 'Show Spotify app on screen for at least 2 seconds',
+    videoLength: '10-30 seconds',
+    guidelines: [
+      'Play music through Spotify app visibly',
+      'Show genuine reaction to the music',
+      'Mention discovering new music',
+      'Use trending sounds when possible'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 5000, rate: 35 },
+      { minViews: 5000, maxViews: 50000, rate: 28 },
+      { minViews: 50000, maxViews: null, rate: 20 }
+    ]
+  },
+  { 
+    id: 3, 
+    brand: 'Samsung', 
+    description: 'Unbox and review the new Galaxy phone', 
+    ratePerThousand: 72, 
+    maxEarnings: 50000, 
+    logo: samsungLogo,
+    contentType: 'Unboxing/Tech Review',
+    productVisibility: 'Product must be the main focus throughout',
+    videoLength: '30-90 seconds',
+    guidelines: [
+      'Show complete unboxing experience',
+      'Highlight at least 3 key features',
+      'Share your genuine first impressions',
+      'Include the phone in good lighting'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 20000, rate: 72 },
+      { minViews: 20000, maxViews: 200000, rate: 55 },
+      { minViews: 200000, maxViews: null, rate: 40 }
+    ]
+  },
+  { 
+    id: 4, 
+    brand: 'Red Bull', 
+    description: 'Capture your most extreme moment', 
+    ratePerThousand: 45, 
+    maxEarnings: 30000, 
+    logo: redbullLogo,
+    contentType: 'Extreme Sports/Adventure',
+    productVisibility: 'Red Bull can visible at start or end',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Feature an adrenaline-pumping activity',
+      'Keep it safe but exciting',
+      'Show the Red Bull can naturally',
+      'High energy editing preferred'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 15000, rate: 45 },
+      { minViews: 15000, maxViews: 150000, rate: 35 },
+      { minViews: 150000, maxViews: null, rate: 25 }
+    ]
+  },
+  { 
+    id: 5, 
+    brand: 'Adobe', 
+    description: 'Create something amazing with our tools', 
+    ratePerThousand: 60, 
+    maxEarnings: 20000, 
+    logo: adobeLogo,
+    contentType: 'Creative Process/Tutorial',
+    productVisibility: 'Show Adobe software interface clearly',
+    videoLength: '20-60 seconds',
+    guidelines: [
+      'Demonstrate a creative workflow',
+      'Show before/after if applicable',
+      'Mention which Adobe tool you\'re using',
+      'Make it inspirational for other creators'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 10000, rate: 60 },
+      { minViews: 10000, maxViews: 100000, rate: 45 },
+      { minViews: 100000, maxViews: null, rate: 35 }
+    ]
+  },
 ];
 
 const Campaigns: React.FC = () => {
@@ -27,6 +133,7 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -167,7 +274,7 @@ const Campaigns: React.FC = () => {
             <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
               {/* Video Placeholder - 9:16 aspect ratio */}
               <div 
-                onClick={() => navigate(`/campaigns/${campaign.id}`)}
+                onClick={() => setSelectedCampaign(campaign)}
                 className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
@@ -194,7 +301,7 @@ const Campaigns: React.FC = () => {
           >
             {/* Company Logo centered above first pill */}
             <div 
-              onClick={() => navigate(`/campaigns/${currentCampaign.id}`)}
+              onClick={() => setSelectedCampaign(currentCampaign)}
               className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
             >
               <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
@@ -217,6 +324,13 @@ const Campaigns: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Campaign Detail Modal */}
+      <CampaignDetailModal 
+        campaign={selectedCampaign}
+        isOpen={!!selectedCampaign}
+        onClose={() => setSelectedCampaign(null)}
+      />
     </div>
   );
 };
