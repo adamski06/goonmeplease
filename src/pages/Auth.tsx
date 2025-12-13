@@ -201,13 +201,15 @@ const Auth: React.FC = () => {
               </div>
               
               {/* Connect button */}
-              <Button 
-                onClick={handleConnectTikTok}
-                className="w-full rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2"
-              >
-                <TikTokIcon className="w-5 h-5" />
-                Connect TikTok
-              </Button>
+              <div className="flex justify-center">
+                <Button 
+                  onClick={handleConnectTikTok}
+                  className="px-8 py-4 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-lg"
+                >
+                  <TikTokIcon className="w-5 h-5" />
+                  Connect TikTok
+                </Button>
+              </div>
               
               {/* Skip option */}
               <p className="text-center text-white/70 text-sm">
