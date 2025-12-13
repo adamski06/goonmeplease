@@ -125,21 +125,21 @@ const Campaigns: React.FC = () => {
         </div>
 
         {/* Action Bubbles - Right Side of Video */}
-        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-3" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 24px)' }}>
-          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-sm font-medium">5000 sek</span>
+        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
+          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-base font-semibold">5000 sek</span>
           </button>
           
-          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-sm font-medium">Stats</span>
+          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-base font-semibold">Stats</span>
           </button>
           
-          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-sm font-medium">Alerts</span>
+          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-base font-semibold">Alerts</span>
           </button>
           
-          <button className="px-5 py-3 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-sm font-medium">Settings</span>
+          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+            <span className="text-base font-semibold">Settings</span>
           </button>
         </div>
       </main>
