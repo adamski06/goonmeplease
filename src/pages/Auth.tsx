@@ -111,25 +111,27 @@ const Auth: React.FC = () => {
       <div className="aurora-gradient-auth" />
       <div className="noise-layer" />
       
+      {/* Logo in top left corner */}
+      <div className="absolute top-6 left-6 z-20">
+        <div className="relative h-10 w-[130px]">
+          <div 
+            className="absolute inset-0 bg-white"
+            style={{
+              WebkitMaskImage: `url(${jarlaLogo})`,
+              maskImage: `url(${jarlaLogo})`,
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskPosition: 'center'
+            }} 
+          />
+        </div>
+      </div>
+      
       <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
         <CardHeader className="text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="relative h-10 w-[130px]">
-              <div 
-                className="absolute inset-0 bg-white"
-                style={{
-                  WebkitMaskImage: `url(${jarlaLogo})`,
-                  maskImage: `url(${jarlaLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center'
-                }} 
-              />
-            </div>
-          </div>
           <CardTitle className="text-2xl font-bold text-white">Let's start!</CardTitle>
         </CardHeader>
         <CardContent>
