@@ -50,52 +50,57 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
-              <div 
-                className="absolute inset-0 bg-foreground"
-                style={{
-                  WebkitMaskImage: `url(${jarlaLogo})`,
-                  maskImage: `url(${jarlaLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'left center',
-                  maskPosition: 'left center'
-                }} 
-              />
-            </button>
-            <nav className="flex items-center gap-6">
-              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
-                Home
-              </button>
-              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
-                Activity
-              </button>
-              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
-                My Page
-              </button>
-            </nav>
-          </div>
+    <div className="min-h-screen bg-background flex">
+      {/* Left Sidebar */}
+      <aside className="w-64 bg-white border-r border-border flex flex-col">
+        {/* Logo */}
+        <div className="px-6 py-4">
+          <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
+            <div 
+              className="absolute inset-0 bg-foreground"
+              style={{
+                WebkitMaskImage: `url(${jarlaLogo})`,
+                maskImage: `url(${jarlaLogo})`,
+                WebkitMaskSize: 'contain',
+                maskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'left center',
+                maskPosition: 'left center'
+              }} 
+            />
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-col px-4 py-2 gap-1">
+          <button className="text-sm font-medium text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+            Home
+          </button>
+          <button className="text-sm font-medium text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+            Activity
+          </button>
+          <button className="text-sm font-medium text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+            My Page
+          </button>
+        </nav>
+
+        {/* Profile at bottom */}
+        <div className="mt-auto px-4 py-4 border-t border-border">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-foreground">{firstName}</span>
             <Avatar className="h-9 w-9">
               <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground font-medium">
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
+            <span className="text-sm font-semibold text-foreground">{firstName}</span>
           </div>
         </div>
-      </header>
+      </aside>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="flex-1 px-6 py-8">
       </main>
     </div>
   );
