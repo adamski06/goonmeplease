@@ -62,8 +62,8 @@ const Campaigns: React.FC = () => {
 
         {/* Navigation */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+          <button className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-400 bg-clip-text text-transparent px-3 py-2 text-left transition-colors flex items-center gap-3">
+            <svg className="h-6 w-6 text-blue-800" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
                 fill="currentColor"
@@ -74,14 +74,14 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/activity')}
-            className="text-2xl font-bold text-foreground hover:text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
-            <Activity className="h-6 w-6" />
+            <Activity className="h-6 w-6 group-hover:text-blue-800" />
             Activity
           </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="text-2xl font-bold text-foreground hover:text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
