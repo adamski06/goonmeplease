@@ -58,7 +58,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
         </button>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto max-h-[85vh] p-8">
+        <div className="relative z-10 overflow-y-auto max-h-[85vh] p-8">
           {/* Hero Section */}
           <div className="flex items-start gap-6 mb-8">
             <div className="w-24 h-24 rounded-2xl bg-muted/50 flex items-center justify-center border border-border/50 p-3 flex-shrink-0">
