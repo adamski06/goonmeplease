@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Home, Activity } from 'lucide-react';
+import { Home, Activity as ActivityIcon } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 
@@ -12,7 +12,7 @@ interface Profile {
   avatar_url: string | null;
 }
 
-const Campaigns: React.FC = () => {
+const Activity: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -53,7 +53,7 @@ const Campaigns: React.FC = () => {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
-      {/* Radial Background - blue, centered below page */}
+      {/* Radial Background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -83,23 +83,17 @@ const Campaigns: React.FC = () => {
           </button>
         </div>
 
-        {/* Navigation - centered vertically */}
+        {/* Navigation */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-foreground bg-white/30 backdrop-blur-sm border border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-                fill="currentColor"
-              />
-              <rect x="10.5" y="15" width="3" height="6" rx="0.5" fill="hsl(210, 30%, 88%)" />
-            </svg>
-            Home
-          </button>
           <button 
-            onClick={() => navigate('/activity')}
+            onClick={() => navigate('/campaigns')}
             className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3"
           >
-            <Activity className="h-6 w-6" />
+            <Home className="h-6 w-6" />
+            Home
+          </button>
+          <button className="text-2xl font-bold text-foreground bg-white/30 backdrop-blur-sm border border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3">
+            <ActivityIcon className="h-6 w-6" fill="currentColor" />
             Activity
           </button>
           <button 
@@ -132,9 +126,11 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 px-6 py-8 relative z-10">
+        <h1 className="text-3xl font-bold text-foreground mb-6">Activity</h1>
+        <p className="text-muted-foreground">Your recent activity will appear here.</p>
       </main>
     </div>
   );
 };
 
-export default Campaigns;
+export default Activity;
