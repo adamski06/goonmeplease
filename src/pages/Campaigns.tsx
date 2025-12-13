@@ -21,7 +21,6 @@ const Campaigns: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayedCampaign, setDisplayedCampaign] = useState(campaigns[0]);
   const [scrollOpacity, setScrollOpacity] = useState(1);
 
   useEffect(() => {
@@ -30,34 +29,31 @@ const Campaigns: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  // Update displayed campaign when scroll settles
-  useEffect(() => {
-    if (scrollOpacity > 0.9) {
-      setDisplayedCampaign(campaigns[currentIndex]);
-    }
-  }, [currentIndex, scrollOpacity]);
-
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
     const scrollTop = container.scrollTop;
     const itemHeight = container.clientHeight;
     
     // Calculate which video we're closest to
-    const newIndex = Math.round(scrollTop / itemHeight);
-    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < campaigns.length) {
-      setCurrentIndex(newIndex);
+    const nearestIndex = Math.round(scrollTop / itemHeight);
+    const clampedIndex = Math.max(0, Math.min(nearestIndex, campaigns.length - 1));
+    
+    // Update index immediately so new campaign data is ready
+    if (clampedIndex !== currentIndex) {
+      setCurrentIndex(clampedIndex);
     }
     
-    // Calculate how far we are from the nearest snap point (0 = centered, 0.5 = halfway)
-    const offset = Math.abs(scrollTop - (newIndex * itemHeight));
+    // Calculate how far we are from the nearest snap point
+    const offset = Math.abs(scrollTop - (clampedIndex * itemHeight));
     const progress = offset / itemHeight;
     
-    // Fade out as we scroll away, fade in as we approach next snap
-    const opacity = 1 - Math.min(progress * 3, 1);
+    // Fade based on distance from snap point
+    const opacity = 1 - Math.min(progress * 4, 1);
     setScrollOpacity(Math.max(0, opacity));
   };
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  const currentCampaign = campaigns[currentIndex];
 
   if (loading) {
     return (
@@ -182,7 +178,7 @@ const Campaigns: React.FC = () => {
           >
             {/* Company Icon centered above first pill */}
             <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
-              {displayedCampaign.brand.charAt(0)}
+              {currentCampaign.brand.charAt(0)}
             </div>
 
             {/* Spacer so pills stay visually centered while icon overlaps */}
@@ -190,14 +186,14 @@ const Campaigns: React.FC = () => {
 
             {/* First pill: sek / views */}
             <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-              <span className="text-2xl font-bold">{displayedCampaign.ratePerThousand} sek</span>
+              <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
               <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
             </button>
 
             {/* Second pill: max earnings */}
             <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
               <span className="text-xs font-semibold text-white/60">up to</span>
-              <span className="text-2xl font-bold">{displayedCampaign.maxEarnings.toLocaleString()} sek</span>
+              <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
             </button>
           </div>
         </div>
