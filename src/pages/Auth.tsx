@@ -116,7 +116,7 @@ const Auth: React.FC = () => {
           <div className="flex justify-center">
             <div className="relative h-10 w-[130px]">
               <div 
-                className="absolute inset-0 bg-foreground"
+                className="absolute inset-0 bg-white"
                 style={{
                   WebkitMaskImage: `url(${jarlaLogo})`,
                   maskImage: `url(${jarlaLogo})`,
@@ -130,22 +130,22 @@ const Auth: React.FC = () => {
               />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-foreground">Welcome to Jarla</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-bold text-white">Welcome to Jarla</CardTitle>
+          <CardDescription className="text-white/80">
             Earn money for every view on your TikTok content
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signin" className="rounded-full">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="rounded-full">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10">
+              <TabsTrigger value="signin" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black text-white">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black text-white">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email" className="text-white">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -154,10 +154,11 @@ const Auth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
+                  <Label htmlFor="signin-password" className="text-white">Password</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -166,6 +167,7 @@ const Auth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
                 </div>
                 <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
@@ -177,7 +179,7 @@ const Auth: React.FC = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Full Name</Label>
+                  <Label htmlFor="signup-name" className="text-white">Full Name</Label>
                   <Input
                     id="signup-name"
                     type="text"
@@ -185,10 +187,11 @@ const Auth: React.FC = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-white">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -197,10 +200,11 @@ const Auth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="signup-password" className="text-white">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -209,6 +213,7 @@ const Auth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                   />
                 </div>
                 <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
