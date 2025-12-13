@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
+import campaignVideoPlaceholder from '@/assets/campaign-video-placeholder.mp4';
 import nikeLogo from '@/assets/logos/nike.png';
 import spotifyLogo from '@/assets/logos/spotify.png';
 import samsungLogo from '@/assets/logos/samsung.png';
@@ -277,8 +278,19 @@ const Campaigns: React.FC = () => {
                 onClick={() => setSelectedCampaign(campaign)}
                 className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
               >
+                {idx === 0 ? (
+                  <video 
+                    src={campaignVideoPlaceholder} 
+                    className="absolute inset-0 w-full h-full object-cover"
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                  />
+                ) : (
+                  <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-                <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
                 
                 {/* Video Info Overlay */}
                 <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
