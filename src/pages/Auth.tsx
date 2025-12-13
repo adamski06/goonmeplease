@@ -111,7 +111,7 @@ const Auth: React.FC = () => {
       <div className="aurora-gradient-creator" />
       <div className="noise-layer" />
       
-      <Card className="w-full max-w-md bg-white border-border shadow-lg relative z-10">
+      <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="relative h-10 w-[130px]">
