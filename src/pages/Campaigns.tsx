@@ -76,8 +76,8 @@ const Campaigns: React.FC = () => {
 
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-[hsl(210,100%,60%)] hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <Home className="h-6 w-6" />
+          <button className="text-2xl font-bold text-[hsl(220,80%,45%)] hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
+            <Home className="h-6 w-6" fill="currentColor" />
             Home
           </button>
           <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
