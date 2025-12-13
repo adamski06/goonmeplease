@@ -34,6 +34,14 @@ const Campaigns: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
+  // Preload all campaign logos
+  useEffect(() => {
+    campaigns.forEach((campaign) => {
+      const img = new Image();
+      img.src = campaign.logo;
+    });
+  }, []);
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
     const scrollTop = container.scrollTop;
