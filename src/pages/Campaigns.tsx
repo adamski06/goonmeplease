@@ -96,64 +96,6 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
-          <p className="text-muted-foreground mt-2">
-            Browse available campaigns and start earning money per view
-          </p>
-        </div>
-
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="h-6 bg-muted rounded w-3/4"></div>
-                  <div className="h-4 bg-muted rounded w-1/2 mt-2"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-20 bg-muted rounded"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : campaigns.length === 0 ? (
-          <Card className="text-center py-12">
-            <CardContent>
-              <Megaphone className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">No campaigns available</h3>
-              <p className="text-muted-foreground">
-                Check back soon for new earning opportunities
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {campaigns.map((campaign) => (
-              <Card key={campaign.id} className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{campaign.title}</CardTitle>
-                    {campaign.category && (
-                      <Badge variant="secondary">{campaign.category}</Badge>
-                    )}
-                  </div>
-                  <CardDescription>{campaign.brand_name}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {campaign.description || 'No description available'}
-                  </p>
-                  {campaign.deadline && (
-                    <p className="text-xs text-muted-foreground mt-4">
-                      Deadline: {new Date(campaign.deadline).toLocaleDateString()}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
       </main>
     </div>
   );
