@@ -152,13 +152,15 @@ const Campaigns: React.FC = () => {
           ))}
         </div>
 
-        {/* Action Bubbles - Right Side of Video */}
-        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
-          {/* Company Icon */}
-          <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center text-3xl font-bold text-black border-2 border-white/50">
+        {/* Company Icon - Above Pills */}
+        <div className="fixed left-1/2 top-1/2 flex items-center justify-center" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)', transform: 'translateY(calc(-50% - 120px))' }}>
+          <div className="w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
             {currentCampaign.brand.charAt(0)}
           </div>
-          
+        </div>
+
+        {/* Action Bubbles - Right Side of Video */}
+        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
             <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
             <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
