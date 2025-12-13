@@ -35,7 +35,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60"
         onClick={onClose}
       />
       
@@ -45,7 +45,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse 180% 120% at 50% 100%, hsl(220, 60%, 25%) 0%, hsl(215, 50%, 40%) 25%, hsl(210, 40%, 60%) 50%, hsl(200, 30%, 85%) 75%, white 95%)'
+            background: 'radial-gradient(circle at 50% 50%, hsl(220, 60%, 25%) 0%, hsl(215, 50%, 40%) 30%, hsl(210, 40%, 65%) 55%, hsl(200, 30%, 85%) 75%, white 100%)'
           }}
         />
         
