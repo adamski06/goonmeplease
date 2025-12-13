@@ -177,11 +177,11 @@ const Auth: React.FC = () => {
       <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
         {signUpStep === 2 ? (
           // Step 2: Connect TikTok - no header title
-          <CardContent className="pt-8 pb-6">
+          <CardContent className="pt-12 pb-8">
             <div className="space-y-8">
               {/* Logos */}
-              <div className="flex items-center justify-center gap-6">
-                <div className="relative h-12 w-[160px]">
+              <div className="flex items-center justify-center gap-5 py-4">
+                <div className="relative h-8 w-[120px]">
                   <div 
                     className="absolute inset-0 bg-white"
                     style={{
@@ -197,7 +197,7 @@ const Auth: React.FC = () => {
                   />
                 </div>
                 <Link className="w-4 h-4 text-white/60" />
-                <img src={tiktokLogo} alt="TikTok" className="h-12 object-contain invert" />
+                <img src={tiktokLogo} alt="TikTok" className="h-8 object-contain invert" />
               </div>
               
               {/* Connect button */}
