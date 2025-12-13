@@ -7,12 +7,13 @@ import { Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 
+// Mock campaign data - ads from companies
 const campaigns = [
-  { id: 1, creator: '@nike_collab', description: 'Summer sneaker campaign', payment: 5000 },
-  { id: 2, creator: '@adidas_run', description: 'Marathon training series', payment: 7500 },
-  { id: 3, creator: '@spotify_music', description: 'New artist spotlight', payment: 3200 },
-  { id: 4, creator: '@redbull_energy', description: 'Extreme sports content', payment: 8900 },
-  { id: 5, creator: '@apple_tech', description: 'Product unboxing review', payment: 12000 },
+  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50 },
+  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35 },
+  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72 },
+  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45 },
+  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60 },
 ];
 
 const Campaigns: React.FC = () => {
@@ -142,9 +143,9 @@ const Campaigns: React.FC = () => {
                 <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
                 
                 {/* Video Info Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 text-foreground">
-                  <p className="font-semibold text-sm">{campaign.creator}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{campaign.description}</p>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <p className="font-bold text-lg">{campaign.brand}</p>
+                  <p className="text-sm text-white/80 mt-1">{campaign.description}</p>
                 </div>
               </div>
             </div>
@@ -154,7 +155,7 @@ const Campaigns: React.FC = () => {
         {/* Action Bubbles - Right Side of Video */}
         <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}>
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-base font-semibold">{currentCampaign.payment} sek</span>
+            <span className="text-base font-semibold">{currentCampaign.ratePerThousand} sek / 1000 views</span>
           </button>
           
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
