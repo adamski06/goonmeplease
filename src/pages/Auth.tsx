@@ -180,8 +180,8 @@ const Auth: React.FC = () => {
           <CardContent className="pt-12 pb-8">
             <div className="space-y-8">
               {/* Logos */}
-              <div className="flex flex-col items-center justify-center gap-3 py-4">
-                <div className="relative h-10 w-[140px]">
+              <div className="flex flex-col items-center justify-center gap-4 py-4">
+                <div className="relative h-14 w-[180px]">
                   <div 
                     className="absolute inset-0 bg-white"
                     style={{
@@ -196,18 +196,18 @@ const Auth: React.FC = () => {
                     }} 
                   />
                 </div>
-                <Link className="w-4 h-4 text-white/60" />
-                <img src={tiktokLogo} alt="TikTok" className="h-10 object-contain invert" />
+                <Link className="w-5 h-5 text-white/60" />
+                <img src={tiktokLogo} alt="TikTok" className="h-14 object-contain invert" />
               </div>
               
               {/* Connect button */}
               <div className="flex justify-center">
                 <Button 
                   onClick={handleConnectTikTok}
-                  className="px-8 py-4 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-lg"
+                  className="px-6 py-2 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-base"
                 >
                   Connect
-                  <img src={tiktokLogo} alt="TikTok" className="h-6 object-contain invert" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert" />
                 </Button>
               </div>
               
