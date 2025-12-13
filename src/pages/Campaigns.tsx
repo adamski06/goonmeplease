@@ -123,8 +123,8 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10">
         {/* Video Feed - Snap Scroll Container */}
         <div 
-          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always' }}
           onScroll={(e) => {
             const container = e.currentTarget;
             const scrollTop = container.scrollTop;
@@ -136,7 +136,7 @@ const Campaigns: React.FC = () => {
           }}
         >
           {campaigns.map((campaign, idx) => (
-            <div key={campaign.id} className="h-screen flex items-center justify-center snap-center py-6">
+            <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
               {/* Video Placeholder - 9:16 aspect ratio */}
               <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
