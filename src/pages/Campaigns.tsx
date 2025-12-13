@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -21,6 +21,9 @@ const Campaigns: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayedCampaign, setDisplayedCampaign] = useState(campaigns[0]);
+  const [isVisible, setIsVisible] = useState(true);
+  const isTransitioning = useRef(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,9 +31,21 @@ const Campaigns: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  // Handle fade transition when currentIndex changes
+  useEffect(() => {
+    if (campaigns[currentIndex].id !== displayedCampaign.id && !isTransitioning.current) {
+      isTransitioning.current = true;
+      setIsVisible(false);
+      
+      setTimeout(() => {
+        setDisplayedCampaign(campaigns[currentIndex]);
+        setIsVisible(true);
+        isTransitioning.current = false;
+      }, 150);
+    }
+  }, [currentIndex, displayedCampaign.id]);
 
-  const currentCampaign = campaigns[currentIndex];
+  const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
   if (loading) {
     return (
@@ -157,25 +172,27 @@ const Campaigns: React.FC = () => {
           className="fixed left-1/2 top-1/2 -translate-y-1/2"
           style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
         >
-          <div className="relative flex flex-col items-center gap-4">
+          <div 
+            className={`relative flex flex-col items-center gap-4 transition-opacity duration-150 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+          >
             {/* Company Icon centered above first pill */}
-            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50 transition-all duration-300">
-              {currentCampaign.brand.charAt(0)}
+            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
+              {displayedCampaign.brand.charAt(0)}
             </div>
 
             {/* Spacer so pills stay visually centered while icon overlaps */}
             <div className="h-8" />
 
             {/* First pill: sek / views */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-all duration-300 gap-1">
-              <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+              <span className="text-2xl font-bold">{displayedCampaign.ratePerThousand} sek</span>
               <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
             </button>
 
             {/* Second pill: max earnings */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-all duration-300 gap-1">
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
               <span className="text-xs font-semibold text-white/60">up to</span>
-              <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
+              <span className="text-2xl font-bold">{displayedCampaign.maxEarnings.toLocaleString()} sek</span>
             </button>
           </div>
         </div>
