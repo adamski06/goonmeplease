@@ -108,11 +108,11 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content - TikTok Style */}
-      <main className="flex-1 flex justify-center items-center relative z-10">
+      <main className="flex-1 flex justify-center items-center relative z-10 py-6">
         {/* Video Feed - Center */}
-        <div className="flex flex-col items-center gap-4">
+        <div className="h-full flex flex-col items-center justify-center">
           {/* Video Placeholder */}
-          <div className="w-80 h-[560px] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+          <div className="w-80 h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
             <span className="text-muted-foreground text-lg">Video</span>
             
@@ -121,13 +121,6 @@ const Campaigns: React.FC = () => {
               <p className="font-semibold text-sm">@creator_username</p>
               <p className="text-xs text-muted-foreground mt-1">Campaign description here...</p>
             </div>
-          </div>
-          
-          {/* Swipe Indicators */}
-          <div className="flex gap-2">
-            <div className="w-2 h-2 rounded-full bg-foreground" />
-            <div className="w-2 h-2 rounded-full bg-foreground/30" />
-            <div className="w-2 h-2 rounded-full bg-foreground/30" />
           </div>
         </div>
 
