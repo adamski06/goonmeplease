@@ -159,8 +159,8 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10">
         {/* Video Feed - Snap Scroll Container */}
         <div 
-          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always' }}
+          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none scroll-smooth"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always', scrollBehavior: 'auto' }}
           onScroll={handleScroll}
         >
           {campaigns.map((campaign, idx) => (
