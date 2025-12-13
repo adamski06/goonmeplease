@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import jarlaLogo from '@/assets/jarla-logo.png';
+import tiktokLogo from '@/assets/tiktok-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -195,7 +196,7 @@ const Auth: React.FC = () => {
                   />
                 </div>
                 <span className="text-white/40 text-2xl">×</span>
-                <TikTokColoredIcon className="w-12 h-12" />
+                <img src={tiktokLogo} alt="TikTok" className="h-12 object-contain" />
               </div>
               
               {/* Connect button */}
