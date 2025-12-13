@@ -111,8 +111,8 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 flex justify-center items-center relative z-10 py-6">
         {/* Video Feed - Center */}
         <div className="h-full flex flex-col items-center justify-center">
-          {/* Video Placeholder */}
-          <div className="w-80 h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+          {/* Video Placeholder - 9:16 aspect ratio */}
+          <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
             <span className="text-muted-foreground text-lg">Video</span>
             
