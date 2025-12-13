@@ -57,7 +57,7 @@ const Campaigns: React.FC = () => {
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 90%, 55%) 0%, hsl(210, 80%, 65%) 25%, hsl(200, 70%, 75%) 40%, white 70%)'
+          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 40%, 80%) 0%, hsl(210, 30%, 85%) 25%, hsl(200, 20%, 90%) 40%, white 65%)'
         }}
       />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
