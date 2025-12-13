@@ -2,28 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { User } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
-interface Campaign {
-  id: string;
-  title: string;
-  brand_name: string;
-  brand_logo_url: string | null;
-  description: string | null;
-  category: string | null;
-  deadline: string | null;
-  is_active: boolean | null;
+interface Profile {
+  full_name: string | null;
+  avatar_url: string | null;
 }
 
 const Campaigns: React.FC = () => {
-  const { user, signOut, loading } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -32,28 +22,24 @@ const Campaigns: React.FC = () => {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    const fetchCampaigns = async () => {
-      const { data, error } = await supabase
-        .from('campaigns')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+    const fetchProfile = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('user_id', user.id)
+        .single();
 
-      if (!error && data) {
-        setCampaigns(data);
+      if (data) {
+        setProfile(data);
       }
-      setIsLoading(false);
     };
 
-    if (user) {
-      fetchCampaigns();
-    }
+    fetchProfile();
   }, [user]);
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
+  const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
   if (loading) {
     return (
@@ -83,13 +69,15 @@ const Campaigns: React.FC = () => {
               }} 
             />
           </button>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="hover:bg-muted"
-          >
-            <User className="h-7 w-7 text-foreground" strokeWidth={2.5} />
-          </Button>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-foreground">{firstName}</span>
+            <Avatar className="h-9 w-9">
+              <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
+              <AvatarFallback className="bg-muted text-foreground font-medium">
+                {firstName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </div>
       </header>
 
