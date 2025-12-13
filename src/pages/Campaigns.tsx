@@ -74,13 +74,13 @@ const Campaigns: React.FC = () => {
 
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+          <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
             Home
           </button>
-          <button className="text-xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+          <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
             Activity
           </button>
-          <button className="text-xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
+          <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
             My Page
           </button>
         </nav>
