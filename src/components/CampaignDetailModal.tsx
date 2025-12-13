@@ -45,7 +45,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse 150% 100% at 50% 100%, hsl(220, 40%, 85%) 0%, hsl(210, 30%, 90%) 30%, white 60%)'
+            background: 'radial-gradient(ellipse 180% 120% at 50% 100%, hsl(220, 50%, 70%) 0%, hsl(210, 40%, 78%) 25%, hsl(200, 30%, 88%) 45%, white 70%)'
           }}
         />
         
