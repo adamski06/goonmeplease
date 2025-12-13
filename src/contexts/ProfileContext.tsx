@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -21,11 +21,18 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const fetchedUserIdRef = useRef<string | null>(null);
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     if (!user) {
       setProfile(null);
       setLoading(false);
+      fetchedUserIdRef.current = null;
+      return;
+    }
+
+    // Skip if we already fetched for this user
+    if (fetchedUserIdRef.current === user.id) {
       return;
     }
 
@@ -37,16 +44,23 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (data) {
       setProfile(data);
+      fetchedUserIdRef.current = user.id;
     }
     setLoading(false);
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchProfile();
-  }, [user]);
+  }, [fetchProfile]);
+
+  const refetchProfile = useCallback(async () => {
+    if (!user) return;
+    fetchedUserIdRef.current = null; // Reset to force refetch
+    await fetchProfile();
+  }, [user, fetchProfile]);
 
   return (
-    <ProfileContext.Provider value={{ profile, loading, refetchProfile: fetchProfile }}>
+    <ProfileContext.Provider value={{ profile, loading, refetchProfile }}>
       {children}
     </ProfileContext.Provider>
   );
