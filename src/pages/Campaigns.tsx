@@ -143,7 +143,7 @@ const Campaigns: React.FC = () => {
                 <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
                 
                 {/* Video Info Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 text-white">
+                <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
                   <p className="font-bold text-lg">{campaign.brand}</p>
                   <p className="text-sm text-white/80 mt-1">{campaign.description}</p>
                 </div>
@@ -159,7 +159,7 @@ const Campaigns: React.FC = () => {
         >
           <div className="relative flex flex-col items-center gap-4">
             {/* Company Icon centered above first pill */}
-            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
+            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50 transition-all duration-300">
               {currentCampaign.brand.charAt(0)}
             </div>
 
@@ -167,13 +167,13 @@ const Campaigns: React.FC = () => {
             <div className="h-8" />
 
             {/* First pill: sek / views */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-all duration-300 gap-1">
               <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
               <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
             </button>
 
             {/* Second pill: max earnings */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-all duration-300 gap-1">
               <span className="text-xs font-semibold text-white/60">up to</span>
               <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
             </button>
