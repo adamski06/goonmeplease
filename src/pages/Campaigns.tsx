@@ -14,23 +14,33 @@ import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
 import CampaignDetailModal from '@/components/CampaignDetailModal';
 
-// Hook to extract dominant color from video
+// Hook to extract dominant colors from video edges for ambient glow
 const useVideoAmbientColor = (videoRef: React.RefObject<HTMLVideoElement>) => {
-  const [ambientColor, setAmbientColor] = useState('rgba(0,0,0,0)');
+  const [ambientColors, setAmbientColors] = useState({ top: 'transparent', bottom: 'transparent', left: 'transparent', right: 'transparent' });
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number>();
+  const lastUpdateRef = useRef<number>(0);
 
-  const extractColor = useCallback(() => {
+  const extractColors = useCallback(() => {
     const video = videoRef.current;
-    if (!video || video.paused || video.ended) {
-      animationRef.current = requestAnimationFrame(extractColor);
+    const now = performance.now();
+    
+    // Throttle to ~15fps for smoother performance
+    if (now - lastUpdateRef.current < 66) {
+      animationRef.current = requestAnimationFrame(extractColors);
+      return;
+    }
+    lastUpdateRef.current = now;
+
+    if (!video || video.paused || video.ended || video.readyState < 2) {
+      animationRef.current = requestAnimationFrame(extractColors);
       return;
     }
 
     if (!canvasRef.current) {
       canvasRef.current = document.createElement('canvas');
-      canvasRef.current.width = 16;
-      canvasRef.current.height = 16;
+      canvasRef.current.width = 32;
+      canvasRef.current.height = 32;
     }
 
     const canvas = canvasRef.current;
@@ -38,42 +48,60 @@ const useVideoAmbientColor = (videoRef: React.RefObject<HTMLVideoElement>) => {
     if (!ctx) return;
 
     try {
-      ctx.drawImage(video, 0, 0, 16, 16);
-      const imageData = ctx.getImageData(0, 0, 16, 16);
+      ctx.drawImage(video, 0, 0, 32, 32);
+      const imageData = ctx.getImageData(0, 0, 32, 32);
       const data = imageData.data;
 
-      let r = 0, g = 0, b = 0, count = 0;
+      // Sample edges
+      const sampleEdge = (pixels: number[][]) => {
+        let r = 0, g = 0, b = 0;
+        pixels.forEach(([x, y]) => {
+          const i = (y * 32 + x) * 4;
+          r += data[i];
+          g += data[i + 1];
+          b += data[i + 2];
+        });
+        r = Math.round(r / pixels.length);
+        g = Math.round(g / pixels.length);
+        b = Math.round(b / pixels.length);
+        // Boost saturation for more vivid colors
+        const max = Math.max(r, g, b);
+        const boost = max > 0 ? 255 / max * 0.8 : 1;
+        r = Math.min(255, Math.round(r * boost));
+        g = Math.min(255, Math.round(g * boost));
+        b = Math.min(255, Math.round(b * boost));
+        return `rgb(${r}, ${g}, ${b})`;
+      };
 
-      // Sample pixels from edges for ambient effect
-      for (let i = 0; i < data.length; i += 4) {
-        r += data[i];
-        g += data[i + 1];
-        b += data[i + 2];
-        count++;
-      }
+      // Get edge pixels
+      const topPixels = Array.from({ length: 32 }, (_, x) => [x, 0]);
+      const bottomPixels = Array.from({ length: 32 }, (_, x) => [x, 31]);
+      const leftPixels = Array.from({ length: 32 }, (_, y) => [0, y]);
+      const rightPixels = Array.from({ length: 32 }, (_, y) => [31, y]);
 
-      r = Math.round(r / count);
-      g = Math.round(g / count);
-      b = Math.round(b / count);
-
-      setAmbientColor(`rgba(${r}, ${g}, ${b}, 0.6)`);
+      setAmbientColors({
+        top: sampleEdge(topPixels),
+        bottom: sampleEdge(bottomPixels),
+        left: sampleEdge(leftPixels),
+        right: sampleEdge(rightPixels),
+      });
     } catch (e) {
       // Cross-origin or other error
     }
 
-    animationRef.current = requestAnimationFrame(extractColor);
+    animationRef.current = requestAnimationFrame(extractColors);
   }, [videoRef]);
 
   useEffect(() => {
-    animationRef.current = requestAnimationFrame(extractColor);
+    animationRef.current = requestAnimationFrame(extractColors);
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [extractColor]);
+  }, [extractColors]);
 
-  return ambientColor;
+  return ambientColors;
 };
 
 // Extended mock campaign data
@@ -198,7 +226,7 @@ const Campaigns: React.FC = () => {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const ambientColor = useVideoAmbientColor(videoRef);
+  const ambientColors = useVideoAmbientColor(videoRef);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -340,12 +368,23 @@ const Campaigns: React.FC = () => {
               {/* Video Placeholder - 9:16 aspect ratio */}
               <div 
                 onClick={() => setSelectedCampaign(campaign)}
-                className="aspect-[9/16] h-[calc(100vh-48px)] rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer transition-all duration-300"
-                style={{
-                  boxShadow: idx === 0 ? `0 0 80px 30px ${ambientColor}, 0 0 120px 60px ${ambientColor}` : undefined,
-                  background: idx === 0 ? 'transparent' : 'rgba(0,0,0,0.1)',
-                }}
+                className="aspect-[9/16] h-[calc(100vh-48px)] rounded-2xl border border-white/20 flex items-center justify-center relative overflow-visible cursor-pointer"
               >
+                {/* Ambient glow layer behind video */}
+                {idx === 0 && (
+                  <div 
+                    className="absolute inset-0 rounded-2xl blur-3xl scale-110 -z-10 transition-all duration-200"
+                    style={{
+                      background: `
+                        linear-gradient(to bottom, ${ambientColors.top}, transparent 30%),
+                        linear-gradient(to top, ${ambientColors.bottom}, transparent 30%),
+                        linear-gradient(to right, ${ambientColors.left}, transparent 30%),
+                        linear-gradient(to left, ${ambientColors.right}, transparent 30%)
+                      `,
+                      opacity: 0.8,
+                    }}
+                  />
+                )}
                 {idx === 0 ? (
                   <video 
                     ref={videoRef}
@@ -357,7 +396,10 @@ const Campaigns: React.FC = () => {
                     playsInline
                   />
                 ) : (
-                  <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
+                  <>
+                    <div className="absolute inset-0 bg-black/10 backdrop-blur-sm rounded-2xl" />
+                    <span className="text-muted-foreground text-lg relative z-10">Video {idx + 1}</span>
+                  </>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 rounded-2xl" />
                 
