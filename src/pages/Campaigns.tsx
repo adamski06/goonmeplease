@@ -166,7 +166,10 @@ const Campaigns: React.FC = () => {
           {campaigns.map((campaign, idx) => (
             <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
               {/* Video Placeholder - 9:16 aspect ratio */}
-              <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
+              <div 
+                onClick={() => navigate(`/campaigns/${campaign.id}`)}
+                className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
+              >
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
                 <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
                 
@@ -190,7 +193,10 @@ const Campaigns: React.FC = () => {
             style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
           >
             {/* Company Logo centered above first pill */}
-            <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4">
+            <div 
+              onClick={() => navigate(`/campaigns/${currentCampaign.id}`)}
+              className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
+            >
               <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
             </div>
 
