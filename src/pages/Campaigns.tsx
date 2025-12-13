@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -13,6 +13,68 @@ import samsungLogo from '@/assets/logos/samsung.png';
 import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
 import CampaignDetailModal from '@/components/CampaignDetailModal';
+
+// Hook to extract dominant color from video
+const useVideoAmbientColor = (videoRef: React.RefObject<HTMLVideoElement>) => {
+  const [ambientColor, setAmbientColor] = useState('rgba(0,0,0,0)');
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const animationRef = useRef<number>();
+
+  const extractColor = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || video.paused || video.ended) {
+      animationRef.current = requestAnimationFrame(extractColor);
+      return;
+    }
+
+    if (!canvasRef.current) {
+      canvasRef.current = document.createElement('canvas');
+      canvasRef.current.width = 16;
+      canvasRef.current.height = 16;
+    }
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return;
+
+    try {
+      ctx.drawImage(video, 0, 0, 16, 16);
+      const imageData = ctx.getImageData(0, 0, 16, 16);
+      const data = imageData.data;
+
+      let r = 0, g = 0, b = 0, count = 0;
+
+      // Sample pixels from edges for ambient effect
+      for (let i = 0; i < data.length; i += 4) {
+        r += data[i];
+        g += data[i + 1];
+        b += data[i + 2];
+        count++;
+      }
+
+      r = Math.round(r / count);
+      g = Math.round(g / count);
+      b = Math.round(b / count);
+
+      setAmbientColor(`rgba(${r}, ${g}, ${b}, 0.6)`);
+    } catch (e) {
+      // Cross-origin or other error
+    }
+
+    animationRef.current = requestAnimationFrame(extractColor);
+  }, [videoRef]);
+
+  useEffect(() => {
+    animationRef.current = requestAnimationFrame(extractColor);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [extractColor]);
+
+  return ambientColor;
+};
 
 // Extended mock campaign data
 const campaigns = [
@@ -135,6 +197,8 @@ const Campaigns: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const ambientColor = useVideoAmbientColor(videoRef);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -276,12 +340,17 @@ const Campaigns: React.FC = () => {
               {/* Video Placeholder - 9:16 aspect ratio */}
               <div 
                 onClick={() => setSelectedCampaign(campaign)}
-                className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
+                className="aspect-[9/16] h-[calc(100vh-48px)] rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer transition-all duration-300"
+                style={{
+                  boxShadow: idx === 0 ? `0 0 80px 30px ${ambientColor}, 0 0 120px 60px ${ambientColor}` : undefined,
+                  background: idx === 0 ? 'transparent' : 'rgba(0,0,0,0.1)',
+                }}
               >
                 {idx === 0 ? (
                   <video 
+                    ref={videoRef}
                     src={campaignVideoPlaceholder} 
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover rounded-2xl"
                     autoPlay 
                     loop 
                     muted 
@@ -290,7 +359,7 @@ const Campaigns: React.FC = () => {
                 ) : (
                   <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 rounded-2xl" />
                 
                 {/* Video Info Overlay */}
                 <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
