@@ -216,7 +216,7 @@ const Auth: React.FC = () => {
             <div className="space-y-8">
               {/* Logos */}
               <div className="flex flex-col items-center justify-center gap-4 py-4">
-                <div className="relative h-14 w-[180px]">
+                <div className="relative h-20 w-[220px]">
                   <div 
                     className="absolute inset-0 bg-white"
                     style={{
@@ -232,7 +232,7 @@ const Auth: React.FC = () => {
                   />
                 </div>
                 <Link className="w-5 h-5 text-white/60" />
-                <img src={tiktokLogo} alt="TikTok" className="h-14 object-contain invert" />
+                <img src={tiktokLogo} alt="TikTok" className="h-20 object-contain invert" />
               </div>
               
               {/* Connect button */}
