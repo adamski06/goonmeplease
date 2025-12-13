@@ -196,7 +196,7 @@ const Auth: React.FC = () => {
                   />
                 </div>
                 <span className="text-white/40 text-2xl">×</span>
-                <img src={tiktokLogo} alt="TikTok" className="h-12 object-contain" />
+                <img src={tiktokLogo} alt="TikTok" className="h-12 object-contain invert" />
               </div>
               
               {/* Connect button */}
