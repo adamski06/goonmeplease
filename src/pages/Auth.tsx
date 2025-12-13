@@ -12,21 +12,30 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
+// TikTok logo SVG component
+const TikTokIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+  </svg>
+);
+
 const Auth: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(true);
+  const [signUpStep, setSignUpStep] = useState(1);
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!loading && user) {
+    // Only auto-redirect if user is logged in AND we're not in the TikTok connect step
+    if (!loading && user && signUpStep !== 2) {
       navigate('/campaigns');
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, signUpStep]);
 
   const validateForm = (isSignUp: boolean) => {
     try {
@@ -89,12 +98,22 @@ const Auth: React.FC = () => {
         });
       }
     } else {
-      toast({
-        title: 'Account created!',
-        description: 'Welcome to Jarla! Redirecting...',
-      });
-      navigate('/campaigns');
+      // Move to step 2 instead of navigating away
+      setSignUpStep(2);
     }
+  };
+
+  const handleConnectTikTok = () => {
+    // TODO: Implement TikTok OAuth connection
+    toast({
+      title: 'Coming soon',
+      description: 'TikTok connection will be available soon.',
+    });
+    navigate('/campaigns');
+  };
+
+  const handleSkipTikTok = () => {
+    navigate('/campaigns');
   };
 
   if (loading) {
@@ -132,10 +151,59 @@ const Auth: React.FC = () => {
       
       <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
         <CardHeader className="text-center py-8">
-          <CardTitle className="text-5xl font-bold text-white">Let's start!</CardTitle>
+          <CardTitle className="text-5xl font-bold text-white">
+            {signUpStep === 2 ? 'Connect TikTok' : "Let's start!"}
+          </CardTitle>
+          {isSignUp && (
+            <p className="text-white/60 text-sm mt-2">{signUpStep}/2</p>
+          )}
         </CardHeader>
         <CardContent>
-          {isSignUp ? (
+          {signUpStep === 2 ? (
+            // Step 2: Connect TikTok
+            <div className="space-y-8">
+              {/* Logos */}
+              <div className="flex items-center justify-center gap-6">
+                <div className="relative h-12 w-[160px]">
+                  <div 
+                    className="absolute inset-0 bg-white"
+                    style={{
+                      WebkitMaskImage: `url(${jarlaLogo})`,
+                      maskImage: `url(${jarlaLogo})`,
+                      WebkitMaskSize: 'contain',
+                      maskSize: 'contain',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskPosition: 'center',
+                      maskPosition: 'center'
+                    }} 
+                  />
+                </div>
+                <span className="text-white/40 text-2xl">×</span>
+                <TikTokIcon className="w-12 h-12 text-white" />
+              </div>
+              
+              {/* Connect button */}
+              <Button 
+                onClick={handleConnectTikTok}
+                className="w-full rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2"
+              >
+                <TikTokIcon className="w-5 h-5" />
+                Connect TikTok
+              </Button>
+              
+              {/* Skip option */}
+              <p className="text-center text-white/70 text-sm">
+                <button
+                  type="button"
+                  onClick={handleSkipTikTok}
+                  className="text-white underline hover:text-white/80"
+                >
+                  Skip for now
+                </button>
+              </p>
+            </div>
+          ) : isSignUp ? (
             <form onSubmit={handleSignUp} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="signup-name" className="text-white">Full Name</Label>
