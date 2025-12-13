@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Home, Activity, User } from 'lucide-react';
+import { Home, Activity } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 interface Profile {
@@ -84,7 +84,12 @@ const Campaigns: React.FC = () => {
             Activity
           </button>
           <button className="text-2xl font-bold text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <User className="h-6 w-6" />
+            <Avatar className="h-6 w-6">
+              <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
+              <AvatarFallback className="bg-muted text-foreground text-xs font-medium">
+                {firstName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
             My Page
           </button>
         </nav>
