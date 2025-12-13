@@ -106,8 +106,12 @@ const Auth: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary/30 p-4">
-      <Card className="w-full max-w-md bg-white border-border shadow-lg">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Aurora gradient background */}
+      <div className="aurora-gradient-creator" />
+      <div className="noise-layer" />
+      
+      <Card className="w-full max-w-md bg-white border-border shadow-lg relative z-10">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="relative h-10 w-[130px]">
