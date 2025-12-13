@@ -76,7 +76,7 @@ const Campaigns: React.FC = () => {
 
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
-          <button className="text-2xl font-bold text-[hsl(220,80%,45%)] hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors flex items-center gap-3">
+          <button className="text-2xl font-bold text-[hsl(220,80%,45%)] bg-[hsl(220,80%,45%)]/10 backdrop-blur-sm border border-[hsl(220,80%,45%)]/20 rounded-xl px-3 py-2 text-left transition-colors flex items-center gap-3">
             <svg
               className="h-6 w-6"
               viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ const Campaigns: React.FC = () => {
                 strokeWidth="1.5"
                 strokeLinejoin="round"
               />
-              <rect x="10" y="13" width="4" height="6" fill="white" rx="0.5" />
+              <rect x="10" y="13" width="4" height="6" fill="hsl(220,80%,95%)" rx="0.5" />
             </svg>
             Home
           </button>
