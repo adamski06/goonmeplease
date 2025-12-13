@@ -124,8 +124,8 @@ const Index = () => {
             <h1 className={`animate-fade-in-delayed font-bold text-white font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
               {activeTab === 'creator' ? (
                 <div className="mt-16">
-                  <span className="block text-5xl md:text-7xl">Earn money</span>
-                  <span className="block text-5xl md:text-7xl -ml-0.5">
+                  <span className="block text-6xl md:text-8xl">Earn money</span>
+                  <span className="block text-6xl md:text-8xl -ml-0.5">
                     per{' '}
                     <span className="inline-block">
                       <span className="inline-block text-white">
