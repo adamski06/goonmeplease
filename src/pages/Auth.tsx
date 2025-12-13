@@ -132,7 +132,7 @@ const Auth: React.FC = () => {
       
       <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
         <CardHeader className="text-center space-y-4">
-          <CardTitle className="text-2xl font-bold text-white">Let's start!</CardTitle>
+          <CardTitle className="text-5xl font-bold text-white">Let's start!</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
