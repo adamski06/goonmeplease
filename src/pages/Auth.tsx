@@ -130,10 +130,7 @@ const Auth: React.FC = () => {
               />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Welcome to Jarla</CardTitle>
-          <CardDescription className="text-white/80">
-            Earn money for every view on your TikTok content
-          </CardDescription>
+          <CardTitle className="text-2xl font-bold text-white">Let's start!</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
