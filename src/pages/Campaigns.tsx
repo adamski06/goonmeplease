@@ -91,7 +91,7 @@ const Campaigns: React.FC = () => {
                 d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
                 fill="currentColor"
               />
-              <rect x="10" y="14" width="4" height="7" rx="0.5" fill="hsl(210, 30%, 88%)" />
+              <rect x="10.5" y="15" width="3" height="6" rx="0.5" fill="hsl(210, 30%, 88%)" />
             </svg>
             Home
           </button>
