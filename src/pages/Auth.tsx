@@ -196,7 +196,7 @@ const Auth: React.FC = () => {
                     }} 
                   />
                 </div>
-                <Link className="w-6 h-6 text-white/60" />
+                <Link className="w-4 h-4 text-white/60" />
                 <img src={tiktokLogo} alt="TikTok" className="h-12 object-contain invert" />
               </div>
               
