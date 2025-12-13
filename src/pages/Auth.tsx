@@ -247,15 +247,16 @@ const Auth: React.FC = () => {
               </div>
               
               {/* Skip option with step indicator */}
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-white/60">2/2</span>
+              <div className="flex items-center text-sm">
+                <span className="text-white/60 w-8">2/2</span>
                 <button
                   type="button"
                   onClick={handleSkipTikTok}
-                  className="text-white underline hover:text-white/80"
+                  className="text-white underline hover:text-white/80 flex-1 text-center"
                 >
                   Skip for now
                 </button>
+                <span className="w-8"></span>
               </div>
             </div>
           </CardContent>
@@ -308,9 +309,9 @@ const Auth: React.FC = () => {
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                     {isLoading ? 'Creating account...' : 'Create Account'}
                   </Button>
-                  <div className="flex items-center justify-between text-sm mt-4">
-                    <span className="text-white/60">1/2</span>
-                    <p className="text-white/70">
+                  <div className="flex items-center text-sm mt-4">
+                    <span className="text-white/60 w-8">1/2</span>
+                    <p className="text-white/70 flex-1 text-center">
                       Already have an account?{' '}
                       <button
                         type="button"
@@ -320,6 +321,7 @@ const Auth: React.FC = () => {
                         Log in
                       </button>
                     </p>
+                    <span className="w-8"></span>
                   </div>
                 </form>
               ) : (
