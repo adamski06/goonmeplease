@@ -64,7 +64,7 @@ const ProfilePage: React.FC = () => {
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
           <button 
             onClick={() => navigate('/campaigns')}
-            className="text-2xl font-bold text-foreground hover:bg-white/30 hover:backdrop-blur-sm hover:border hover:border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
               <path
@@ -77,12 +77,12 @@ const ProfilePage: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/activity')}
-            className="text-2xl font-bold text-foreground hover:bg-white/30 hover:backdrop-blur-sm hover:border hover:border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3"
+            className="text-2xl font-bold text-foreground hover:text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3"
           >
             <Activity className="h-6 w-6" />
             Activity
           </button>
-          <button className="text-2xl font-bold text-foreground bg-white/30 backdrop-blur-sm border border-white/40 rounded-none px-3 py-2 text-left transition-colors flex items-center gap-3">
+          <button className="text-2xl font-bold text-blue-600 px-3 py-2 text-left transition-colors flex items-center gap-3">
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground text-xs font-medium">
