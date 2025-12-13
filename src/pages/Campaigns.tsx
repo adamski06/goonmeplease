@@ -153,7 +153,7 @@ const Campaigns: React.FC = () => {
         </div>
 
         {/* Company Icon - Above Pills */}
-        <div className="fixed left-1/2 flex items-center justify-center" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)', top: 'calc(50% - 180px)' }}>
+        <div className="fixed left-1/2 flex items-center justify-center" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)', top: 'calc(50% - 180px)', transform: 'translateX(50px)' }}>
           <div className="w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
             {currentCampaign.brand.charAt(0)}
           </div>
