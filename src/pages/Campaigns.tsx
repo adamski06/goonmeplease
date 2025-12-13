@@ -108,9 +108,9 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content - TikTok Style */}
-      <main className="flex-1 flex justify-center items-center relative z-10 py-6">
-        {/* Video Feed - Center */}
-        <div className="h-full flex flex-col items-center justify-center">
+      <main className="flex-1 relative z-10">
+        {/* Video Feed - Centered on screen */}
+        <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {/* Video Placeholder - 9:16 aspect ratio */}
           <div className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
@@ -124,8 +124,8 @@ const Campaigns: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Bubbles - Right Side */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4">
+        {/* Action Bubbles - Right Side of Video */}
+        <div className="fixed left-1/2 top-1/2 -translate-y-1/2 flex flex-col gap-4" style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 24px)' }}>
           <button className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors">
             <span className="text-xs font-medium text-foreground">💰</span>
           </button>
