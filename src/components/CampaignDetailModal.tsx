@@ -40,7 +40,15 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
       />
       
       {/* Modal */}
-      <div className="relative w-[90vw] max-w-4xl max-h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="relative w-[90vw] max-w-4xl max-h-[85vh] rounded-3xl shadow-2xl overflow-hidden">
+        {/* Radial Background */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse 150% 100% at 50% 100%, hsl(220, 40%, 85%) 0%, hsl(210, 30%, 90%) 30%, white 60%)'
+          }}
+        />
+        
         {/* Close Button */}
         <button 
           onClick={onClose}
