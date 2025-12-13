@@ -9,11 +9,11 @@ import defaultAvatar from '@/assets/default-avatar.png';
 
 // Mock campaign data - ads from companies
 const campaigns = [
-  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50 },
-  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35 },
-  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72 },
-  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45 },
-  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60 },
+  { id: 1, brand: 'Nike', description: 'Show off your workout routine with our new collection', ratePerThousand: 50, maxEarnings: 25000 },
+  { id: 2, brand: 'Spotify', description: 'Share your favorite playlist moment', ratePerThousand: 35, maxEarnings: 15000 },
+  { id: 3, brand: 'Samsung', description: 'Unbox and review the new Galaxy phone', ratePerThousand: 72, maxEarnings: 50000 },
+  { id: 4, brand: 'Red Bull', description: 'Capture your most extreme moment', ratePerThousand: 45, maxEarnings: 30000 },
+  { id: 5, brand: 'Adobe', description: 'Create something amazing with our tools', ratePerThousand: 60, maxEarnings: 20000 },
 ];
 
 const Campaigns: React.FC = () => {
@@ -159,8 +159,9 @@ const Campaigns: React.FC = () => {
             <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
           </button>
           
-          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-base font-semibold">Stats</span>
+          <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+            <span className="text-xs font-semibold text-white/60">up to</span>
+            <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
           </button>
           
           <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
