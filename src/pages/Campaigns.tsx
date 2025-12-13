@@ -72,8 +72,8 @@ const Campaigns: React.FC = () => {
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex flex-col px-4 py-2 gap-1">
+        {/* Navigation - centered vertically */}
+        <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
           <button className="text-sm font-medium text-foreground hover:bg-muted rounded-lg px-3 py-2 text-left transition-colors">
             Home
           </button>
