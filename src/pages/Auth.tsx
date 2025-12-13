@@ -246,8 +246,9 @@ const Auth: React.FC = () => {
                 </Button>
               </div>
               
-              {/* Skip option */}
-              <p className="text-center text-white/70 text-sm">
+              {/* Skip option with step indicator */}
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-white/60">2/2</span>
                 <button
                   type="button"
                   onClick={handleSkipTikTok}
@@ -255,10 +256,7 @@ const Auth: React.FC = () => {
                 >
                   Skip for now
                 </button>
-              </p>
-              
-              {/* Step indicator at bottom */}
-              <p className="text-white/60 text-sm text-center">2/2</p>
+              </div>
             </div>
           </CardContent>
         ) : (
@@ -310,18 +308,19 @@ const Auth: React.FC = () => {
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                     {isLoading ? 'Creating account...' : 'Create Account'}
                   </Button>
-                  <p className="text-center text-white/70 text-sm mt-4">
-                    Already have an account?{' '}
-                    <button
-                      type="button"
-                      onClick={() => setIsSignUp(false)}
-                      className="text-white underline hover:text-white/80"
-                    >
-                      Log in
-                    </button>
-                  </p>
-                  {/* Step indicator at bottom */}
-                  <p className="text-white/60 text-sm text-center mt-4">1/2</p>
+                  <div className="flex items-center justify-between text-sm mt-4">
+                    <span className="text-white/60">1/2</span>
+                    <p className="text-white/70">
+                      Already have an account?{' '}
+                      <button
+                        type="button"
+                        onClick={() => setIsSignUp(false)}
+                        className="text-white underline hover:text-white/80"
+                      >
+                        Log in
+                      </button>
+                    </p>
+                  </div>
                 </form>
               ) : (
                 <form onSubmit={handleSignIn} className="space-y-4">
