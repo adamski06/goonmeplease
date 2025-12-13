@@ -53,13 +53,14 @@ const Campaigns: React.FC = () => {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
-      {/* Radial Background - centered below page */}
+      {/* Radial Background - blue, centered below page */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 90%, 65%) 0%, hsl(280, 70%, 70%) 25%, hsl(340, 80%, 75%) 40%, white 70%)'
+          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 90%, 55%) 0%, hsl(210, 80%, 65%) 25%, hsl(200, 70%, 75%) 40%, white 70%)'
         }}
       />
+      <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
       <aside className="w-64 flex flex-col relative z-10">
