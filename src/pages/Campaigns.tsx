@@ -22,8 +22,7 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayedCampaign, setDisplayedCampaign] = useState(campaigns[0]);
-  const [isVisible, setIsVisible] = useState(true);
-  const isTransitioning = useRef(false);
+  const [scrollOpacity, setScrollOpacity] = useState(1);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -31,19 +30,32 @@ const Campaigns: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  // Handle fade transition when currentIndex changes
+  // Update displayed campaign when scroll settles
   useEffect(() => {
-    if (campaigns[currentIndex].id !== displayedCampaign.id && !isTransitioning.current) {
-      isTransitioning.current = true;
-      setIsVisible(false);
-      
-      setTimeout(() => {
-        setDisplayedCampaign(campaigns[currentIndex]);
-        setIsVisible(true);
-        isTransitioning.current = false;
-      }, 150);
+    if (scrollOpacity > 0.9) {
+      setDisplayedCampaign(campaigns[currentIndex]);
     }
-  }, [currentIndex, displayedCampaign.id]);
+  }, [currentIndex, scrollOpacity]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const scrollTop = container.scrollTop;
+    const itemHeight = container.clientHeight;
+    
+    // Calculate which video we're closest to
+    const newIndex = Math.round(scrollTop / itemHeight);
+    if (newIndex !== currentIndex && newIndex >= 0 && newIndex < campaigns.length) {
+      setCurrentIndex(newIndex);
+    }
+    
+    // Calculate how far we are from the nearest snap point (0 = centered, 0.5 = halfway)
+    const offset = Math.abs(scrollTop - (newIndex * itemHeight));
+    const progress = offset / itemHeight;
+    
+    // Fade out as we scroll away, fade in as we approach next snap
+    const opacity = 1 - Math.min(progress * 3, 1);
+    setScrollOpacity(Math.max(0, opacity));
+  };
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
@@ -140,15 +152,7 @@ const Campaigns: React.FC = () => {
         <div 
           className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always' }}
-          onScroll={(e) => {
-            const container = e.currentTarget;
-            const scrollTop = container.scrollTop;
-            const itemHeight = container.clientHeight;
-            const newIndex = Math.round(scrollTop / itemHeight);
-            if (newIndex !== currentIndex && newIndex >= 0 && newIndex < campaigns.length) {
-              setCurrentIndex(newIndex);
-            }
-          }}
+          onScroll={handleScroll}
         >
           {campaigns.map((campaign, idx) => (
             <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
@@ -173,7 +177,8 @@ const Campaigns: React.FC = () => {
           style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
         >
           <div 
-            className={`relative flex flex-col items-center gap-4 transition-opacity duration-150 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+            className="relative flex flex-col items-center gap-4"
+            style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
           >
             {/* Company Icon centered above first pill */}
             <div className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center text-6xl font-bold text-black border-2 border-white/50">
