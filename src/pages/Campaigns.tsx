@@ -88,7 +88,7 @@ const Campaigns: React.FC = () => {
             size="icon"
             className="hover:bg-muted"
           >
-            <User className="h-5 w-5 text-foreground" strokeWidth={2.5} />
+            <User className="h-7 w-7 text-foreground" strokeWidth={2.5} />
           </Button>
         </div>
       </header>
