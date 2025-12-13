@@ -1,45 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Home, Activity as ActivityIcon } from 'lucide-react';
+import { Activity as ActivityIcon } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 
-interface Profile {
-  full_name: string | null;
-  avatar_url: string | null;
-}
-
 const Activity: React.FC = () => {
   const { user, loading } = useAuth();
+  const { profile } = useProfile();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth');
     }
   }, [user, loading, navigate]);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user) return;
-      
-      const { data } = await supabase
-        .from('profiles')
-        .select('full_name, avatar_url')
-        .eq('user_id', user.id)
-        .single();
-
-      if (data) {
-        setProfile(data);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
