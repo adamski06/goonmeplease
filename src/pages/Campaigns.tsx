@@ -70,7 +70,7 @@ const Campaigns: React.FC = () => {
             />
           </button>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-foreground">{firstName}</span>
+            <span className="text-sm font-semibold text-foreground">{firstName}</span>
             <Avatar className="h-9 w-9">
               <AvatarImage src={profile?.avatar_url || undefined} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground font-medium">
