@@ -54,21 +54,34 @@ const Campaigns: React.FC = () => {
       {/* Header */}
       <header className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
-            <div 
-              className="absolute inset-0 bg-foreground"
-              style={{
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'left center',
-                maskPosition: 'left center'
-              }} 
-            />
-          </button>
+          <div className="flex items-center gap-8">
+            <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
+              <div 
+                className="absolute inset-0 bg-foreground"
+                style={{
+                  WebkitMaskImage: `url(${jarlaLogo})`,
+                  maskImage: `url(${jarlaLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'left center',
+                  maskPosition: 'left center'
+                }} 
+              />
+            </button>
+            <nav className="flex items-center gap-6">
+              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
+                Home
+              </button>
+              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
+                Activity
+              </button>
+              <button className="text-sm font-medium text-foreground hover:text-foreground/70 transition-colors">
+                My Page
+              </button>
+            </nav>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-foreground">{firstName}</span>
             <Avatar className="h-9 w-9">
