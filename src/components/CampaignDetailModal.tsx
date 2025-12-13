@@ -40,7 +40,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
       />
       
       {/* Modal */}
-      <div className="relative w-[90vw] max-w-4xl max-h-[85vh] rounded-3xl shadow-2xl overflow-hidden">
+      <div className="relative w-[95vw] max-w-5xl max-h-[92vh] rounded-3xl shadow-2xl overflow-hidden">
         {/* Radial Background */}
         <div 
           className="absolute inset-0"
@@ -58,7 +58,7 @@ const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({ campaign, isO
         </button>
 
         {/* Scrollable Content */}
-        <div className="relative z-10 overflow-y-auto max-h-[85vh] p-8">
+        <div className="relative z-10 overflow-y-auto max-h-[92vh] p-10">
           {/* Hero Section */}
           <div className="flex items-start gap-6 mb-8">
             <div className="w-24 h-24 rounded-2xl bg-muted/50 flex items-center justify-center border border-border/50 p-3 flex-shrink-0">
