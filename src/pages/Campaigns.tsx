@@ -93,7 +93,7 @@ const Campaigns: React.FC = () => {
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
             <div 
-              className="absolute inset-0 bg-white"
+              className="absolute inset-0 bg-foreground"
               style={{
                 WebkitMaskImage: `url(${jarlaLogo})`,
                 maskImage: `url(${jarlaLogo})`,
