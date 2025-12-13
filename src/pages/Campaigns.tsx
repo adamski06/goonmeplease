@@ -52,7 +52,7 @@ const Campaigns: React.FC = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Left Sidebar */}
-      <aside className="w-64 bg-white border-r border-border flex flex-col">
+      <aside className="w-64 bg-white flex flex-col">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
