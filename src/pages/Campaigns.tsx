@@ -163,14 +163,6 @@ const Campaigns: React.FC = () => {
             <span className="text-xs font-semibold text-white/60">up to</span>
             <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
           </button>
-          
-          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-base font-semibold">Alerts</span>
-          </button>
-          
-          <button className="px-8 py-4 rounded-full bg-black text-white flex items-center justify-center hover:bg-black/80 transition-colors">
-            <span className="text-base font-semibold">Settings</span>
-          </button>
         </div>
       </main>
     </div>
