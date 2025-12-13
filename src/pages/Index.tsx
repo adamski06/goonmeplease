@@ -123,9 +123,9 @@ const Index = () => {
           <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : ''}`}>
             <h1 className={`animate-fade-in-delayed font-bold text-white font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
               {activeTab === 'creator' ? (
-                <div className="mt-16">
+                <div className="mt-16 text-center">
                   <span className="block text-6xl md:text-8xl">Earn money</span>
-                  <span className="block text-6xl md:text-8xl -ml-0.5">
+                  <span className="block text-6xl md:text-8xl">
                     per{' '}
                     <span className="inline-block">
                       <span className="inline-block text-white">
