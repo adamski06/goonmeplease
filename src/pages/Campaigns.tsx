@@ -769,9 +769,9 @@ const Campaigns: React.FC = () => {
                           <div className="h-6 w-6 rounded-full bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
                             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover rounded-full" />
                           </div>
-                          <span className="text-base font-semibold text-foreground">{campaign.brand}</span>
+                          <span className="text-base font-bold text-foreground">{campaign.brand}</span>
                         </div>
-                        <p className="text-sm text-black dark:text-white">{campaign.description}</p>
+                        <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-4">
                         <div className="bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
