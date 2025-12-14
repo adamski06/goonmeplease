@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User } from 'lucide-react';
+import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -139,6 +140,7 @@ const campaigns = [
 const Campaigns: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollOpacity, setScrollOpacity] = useState(1);
@@ -280,12 +282,11 @@ const Campaigns: React.FC = () => {
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
-              <div className="px-2 py-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Theme</span>
-                  <ThemeToggle />
-                </div>
-              </div>
+              <DropdownMenuItem onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="cursor-pointer">
+                <Moon className="mr-2 h-4 w-4" />
+                <span className="flex-1">Theme</span>
+                <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
                 <LogOut className="mr-2 h-4 w-4" />
