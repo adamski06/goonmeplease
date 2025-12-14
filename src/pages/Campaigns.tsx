@@ -774,7 +774,7 @@ const Campaigns: React.FC = () => {
                         <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-4">
-                        <div className="bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
+                        <div className="bg-black/80 text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
                           {campaign.maxEarnings.toLocaleString()} sek
                         </div>
                       </div>
