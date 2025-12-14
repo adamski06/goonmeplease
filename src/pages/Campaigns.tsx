@@ -282,7 +282,13 @@ const Campaigns: React.FC = () => {
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="cursor-pointer">
+              <DropdownMenuItem 
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                }} 
+                className="cursor-pointer"
+              >
                 <Moon className="mr-2 h-4 w-4" />
                 <span className="flex-1">Theme</span>
                 <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
