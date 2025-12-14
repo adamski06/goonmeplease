@@ -305,7 +305,8 @@ const Campaigns: React.FC = () => {
                   {/* Video Placeholder - 9:16 aspect ratio */}
                   <div 
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
+                    className="aspect-[9/16] h-[calc(100vh-48px)] bg-white/15 rounded-2xl border border-white/25 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-white/20 transition-colors"
+                    style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
                   >
                     {idx === 0 ? (
                       <video 
