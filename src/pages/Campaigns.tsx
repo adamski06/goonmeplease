@@ -772,8 +772,8 @@ const Campaigns: React.FC = () => {
                       />
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-4">
-                          <div className="h-6 w-6 bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
-                            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+                          <div className="h-6 w-6 rounded-full bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
+                            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover rounded-full" />
                           </div>
                           <span className="text-base font-semibold text-foreground">{campaign.brand}</span>
                         </div>
