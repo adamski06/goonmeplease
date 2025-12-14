@@ -760,10 +760,10 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white dark:bg-black/20"
                   >
                     {/* Left side - Campaign info */}
-                    <div className="flex-1 p-6 flex flex-col justify-between relative bg-white dark:bg-black/20">
+                    <div className="flex-1 p-6 flex flex-col justify-between relative">
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-6 w-6 rounded-full bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
