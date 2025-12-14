@@ -789,9 +789,9 @@ const Campaigns: React.FC = () => {
                     className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white/60 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20"
                   >
                     {/* Left side - Campaign info */}
-                    <div className="flex-1 p-6 flex flex-col justify-between relative">
+                    <div className="flex-1 p-4 pt-3 pr-2 pb-3 flex flex-col justify-between relative">
                       <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center gap-2 mb-3">
                           <div className="h-6 w-6 rounded-full overflow-hidden">
                             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover rounded-full" />
                           </div>
@@ -799,7 +799,7 @@ const Campaigns: React.FC = () => {
                         </div>
                         <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
                       </div>
-                      <div className="relative z-10 mt-4">
+                      <div className="relative z-10 mt-auto flex justify-end">
                         <div className="bg-black text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
                           {campaign.maxEarnings.toLocaleString()} sek
                         </div>
