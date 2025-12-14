@@ -207,7 +207,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 bg-black/5 dark:bg-white/10 backdrop-blur-sm border-r border-black/10 dark:border-white/20">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 bg-white dark:bg-white/10 backdrop-blur-sm border-r border-black/10 dark:border-white/20">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -306,7 +306,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 bg-black/5 dark:bg-white/10 backdrop-blur-sm border-b border-black/10 dark:border-white/20 flex items-center px-6 gap-3 shrink-0">
+        <div className="h-14 bg-white dark:bg-white/10 backdrop-blur-sm border-b border-black/10 dark:border-white/20 flex items-center px-6 gap-3 shrink-0">
           <button className="px-4 py-1.5 rounded-full bg-black/10 dark:bg-white/20 backdrop-blur-sm border border-black/15 dark:border-white/30 text-foreground text-sm font-medium hover:bg-black/15 dark:hover:bg-white/30 transition-colors">
             For you
           </button>
