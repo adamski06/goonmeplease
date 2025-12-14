@@ -191,7 +191,7 @@ const Campaigns: React.FC = () => {
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 85%, 30%) 0%, hsl(215, 75%, 45%) 30%, transparent 60%)'
+          background: 'radial-gradient(ellipse 180% 120% at 50% 130%, hsl(220, 90%, 20%) 0%, hsl(215, 80%, 35%) 35%, transparent 65%)'
         }}
       />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
@@ -267,7 +267,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10">
         {/* View Mode Toggle */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 bg-white/5 backdrop-blur-xl rounded-full border border-white/10 shadow-xl">
           <button
             onClick={() => setViewMode('scroll')}
             className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
