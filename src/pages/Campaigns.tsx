@@ -731,6 +731,10 @@ const Campaigns: React.FC = () => {
                         background: `radial-gradient(circle 300px at center -100px, ${gradientColor} 0%, transparent 100%)`
                       }}
                     />
+                    <div className="absolute top-4 left-4 flex items-center gap-2">
+                      <img src={campaign.logo} alt={campaign.brand} className="h-8 w-8 object-contain rounded-full bg-white p-1" />
+                      <span className="text-sm font-semibold text-foreground">{campaign.brand}</span>
+                    </div>
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black text-white text-sm font-semibold px-4 py-1.5 rounded-full">
                       {campaign.maxEarnings.toLocaleString()} sek
                     </div>
