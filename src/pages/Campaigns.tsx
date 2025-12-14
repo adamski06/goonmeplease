@@ -763,16 +763,16 @@ const Campaigns: React.FC = () => {
                     className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20"
                   >
                     {/* Left side - Campaign info */}
-                    <div className="flex-1 p-6 flex flex-col justify-between relative">
+                    <div className="flex-1 p-6 flex flex-col justify-between relative bg-white dark:bg-black/20">
                       <div 
-                        className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-50"
+                        className="absolute inset-0 pointer-events-none opacity-60 dark:opacity-40"
                         style={{
-                          background: `radial-gradient(circle 300px at left center, ${gradientColor} 0%, transparent 100%)`
+                          background: `linear-gradient(to bottom, ${gradientColor} 0%, transparent 40%)`
                         }}
                       />
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-4">
-                          <div className="h-6 w-6 rounded-full bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)]">
+                          <div className="h-6 w-6 bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
                             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
                           </div>
                           <span className="text-base font-semibold text-foreground">{campaign.brand}</span>
