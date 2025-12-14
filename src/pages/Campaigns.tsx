@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play } from 'lucide-react';
+import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
@@ -130,7 +137,7 @@ const campaigns = [
 ];
 
 const Campaigns: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -251,20 +258,41 @@ const Campaigns: React.FC = () => {
           </button>
         </nav>
 
-        {/* Profile and Theme Toggle at bottom */}
-        <div className="mt-auto px-4 py-4 border-t border-white/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-                <AvatarFallback className="bg-muted text-foreground font-medium">
-                  {firstName.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-semibold text-foreground">{firstName}</span>
-            </div>
-            <ThemeToggle />
-          </div>
+        {/* More Menu at bottom */}
+        <div className="mt-auto px-3 py-4 border-t border-white/20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group">
+                <Menu className="h-5 w-5 group-hover:text-blue-800" />
+                More
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent 
+              side="top" 
+              align="start" 
+              className="w-48 bg-background border-border"
+            >
+              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+              <div className="px-2 py-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Theme</span>
+                  <ThemeToggle />
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </aside>
 
