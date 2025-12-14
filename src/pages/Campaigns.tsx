@@ -424,7 +424,7 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-sidebar-background border border-transparent dark:border-sidebar-border relative"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-[hsl(220,30%,5%)] border border-transparent dark:border-[hsl(220,25%,10%)] relative"
                   >
                     <div className="w-full aspect-video"></div>
                     <div 
