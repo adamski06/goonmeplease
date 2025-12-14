@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Activity, LayoutGrid, Play } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 import campaignVideoPlaceholder from '@/assets/campaign-video-placeholder.mp4';
@@ -250,16 +251,19 @@ const Campaigns: React.FC = () => {
           </button>
         </nav>
 
-        {/* Profile at bottom */}
+        {/* Profile and Theme Toggle at bottom */}
         <div className="mt-auto px-4 py-4 border-t border-white/20">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-muted text-foreground font-medium">
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-semibold text-foreground">{firstName}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-9 w-9">
+                <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+                <AvatarFallback className="bg-muted text-foreground font-medium">
+                  {firstName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-semibold text-foreground">{firstName}</span>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </aside>
