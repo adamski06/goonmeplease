@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity } from 'lucide-react';
+import { Activity, LayoutGrid, Play } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 import campaignVideoPlaceholder from '@/assets/campaign-video-placeholder.mp4';
@@ -135,6 +135,7 @@ const Campaigns: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
+  const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('scroll');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -263,78 +264,160 @@ const Campaigns: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content - TikTok Style */}
+      {/* Main Content */}
       <main className="flex-1 relative z-10">
-        {/* Video Feed - Snap Scroll Container */}
-        <div 
-          className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always', scrollBehavior: 'auto' }}
-          onScroll={handleScroll}
-        >
-          {campaigns.map((campaign, idx) => (
-            <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
-              {/* Video Placeholder - 9:16 aspect ratio */}
-              <div 
-                onClick={() => setSelectedCampaign(campaign)}
-                className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
-              >
-                {idx === 0 ? (
-                  <video 
-                    src={campaignVideoPlaceholder} 
-                    className="absolute inset-0 w-full h-full object-cover"
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline
-                  />
-                ) : (
-                  <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-                
-                {/* Video Info Overlay */}
-                <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
-                  <p className="font-bold text-lg">{campaign.brand}</p>
-                  <p className="text-sm text-white/80 mt-1">{campaign.description}</p>
+        {/* View Mode Toggle */}
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30">
+          <button
+            onClick={() => setViewMode('scroll')}
+            className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
+              viewMode === 'scroll' 
+                ? 'bg-black text-white' 
+                : 'text-foreground hover:bg-white/30'
+            }`}
+          >
+            <Play className="h-4 w-4" />
+            Scroll
+          </button>
+          <button
+            onClick={() => setViewMode('browse')}
+            className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
+              viewMode === 'browse' 
+                ? 'bg-black text-white' 
+                : 'text-foreground hover:bg-white/30'
+            }`}
+          >
+            <LayoutGrid className="h-4 w-4" />
+            Browse
+          </button>
+        </div>
+
+        {viewMode === 'scroll' ? (
+          <>
+            {/* Video Feed - Snap Scroll Container */}
+            <div 
+              className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always', scrollBehavior: 'auto' }}
+              onScroll={handleScroll}
+            >
+              {campaigns.map((campaign, idx) => (
+                <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
+                  {/* Video Placeholder - 9:16 aspect ratio */}
+                  <div 
+                    onClick={() => setSelectedCampaign(campaign)}
+                    className="aspect-[9/16] h-[calc(100vh-48px)] bg-black/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-black/15 transition-colors"
+                  >
+                    {idx === 0 ? (
+                      <video 
+                        src={campaignVideoPlaceholder} 
+                        className="absolute inset-0 w-full h-full object-cover"
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                      />
+                    ) : (
+                      <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+                    
+                    {/* Video Info Overlay */}
+                    <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
+                      <p className="font-bold text-lg">{campaign.brand}</p>
+                      <p className="text-sm text-white/80 mt-1">{campaign.description}</p>
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Icon + Action Bubbles - Right Side of Video */}
+            <div
+              className="fixed left-1/2 top-1/2 -translate-y-1/2"
+              style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
+            >
+              <div 
+                className="relative flex flex-col items-center gap-4"
+                style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
+              >
+                {/* Company Logo centered above first pill */}
+                <div 
+                  onClick={() => setSelectedCampaign(currentCampaign)}
+                  className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
+                >
+                  <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
+                </div>
+
+                {/* Spacer so pills stay visually centered while icon overlaps */}
+                <div className="h-8" />
+
+                {/* First pill: sek / views */}
+                <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+                  <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
+                  <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
+                </button>
+
+                {/* Second pill: max earnings */}
+                <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
+                  <span className="text-xs font-semibold text-white/60">up to</span>
+                  <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
+                </button>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Icon + Action Bubbles - Right Side of Video */}
-        <div
-          className="fixed left-1/2 top-1/2 -translate-y-1/2"
-          style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
-        >
-          <div 
-            className="relative flex flex-col items-center gap-4"
-            style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
-          >
-            {/* Company Logo centered above first pill */}
-            <div 
-              onClick={() => setSelectedCampaign(currentCampaign)}
-              className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
-            >
-              <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
+          </>
+        ) : (
+          /* Browse Mode - Grid Layout */
+          <div className="pt-24 pb-8 px-8 overflow-y-auto h-screen">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {campaigns.map((campaign) => (
+                <div 
+                  key={campaign.id}
+                  onClick={() => setSelectedCampaign(campaign)}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.02] group"
+                >
+                  {/* Thumbnail */}
+                  <div className="aspect-[9/16] relative">
+                    {campaign.id === 1 ? (
+                      <video 
+                        src={campaignVideoPlaceholder} 
+                        className="absolute inset-0 w-full h-full object-cover"
+                        muted 
+                        playsInline
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
+                        <span className="text-muted-foreground">Preview</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+                    
+                    {/* Logo Badge */}
+                    <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center p-1.5">
+                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+                    </div>
+                    
+                    {/* Info Overlay */}
+                    <div className="absolute bottom-3 left-3 right-3 text-white">
+                      <p className="font-bold">{campaign.brand}</p>
+                      <p className="text-xs text-white/70 mt-0.5 line-clamp-2">{campaign.description}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Rate Info */}
+                  <div className="p-3 flex items-center justify-between">
+                    <div>
+                      <span className="text-lg font-bold">{campaign.ratePerThousand} sek</span>
+                      <span className="text-xs text-muted-foreground ml-1">/1k views</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      up to {campaign.maxEarnings.toLocaleString()} sek
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-
-            {/* Spacer so pills stay visually centered while icon overlaps */}
-            <div className="h-8" />
-
-            {/* First pill: sek / views */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-              <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
-              <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
-            </button>
-
-            {/* Second pill: max earnings */}
-            <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-              <span className="text-xs font-semibold text-white/60">up to</span>
-              <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
-            </button>
           </div>
-        </div>
+        )}
       </main>
 
       {/* Campaign Detail Modal */}
