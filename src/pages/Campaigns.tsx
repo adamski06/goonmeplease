@@ -376,7 +376,7 @@ const Campaigns: React.FC = () => {
                   className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.02] group"
                 >
                   {/* Thumbnail */}
-                  <div className="aspect-[9/16] relative">
+                  <div className="aspect-video relative">
                     {campaign.id === 1 ? (
                       <video 
                         src={campaignVideoPlaceholder} 
