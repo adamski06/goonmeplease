@@ -23,6 +23,26 @@ import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
 import CampaignDetailModal from '@/components/CampaignDetailModal';
 
+// Campaign images
+import fitnessWorkout from '@/assets/campaigns/fitness-workout.jpg';
+import musicLifestyle from '@/assets/campaigns/music-lifestyle.jpg';
+import techUnboxing from '@/assets/campaigns/tech-unboxing.jpg';
+import extremeSports from '@/assets/campaigns/extreme-sports.jpg';
+import creativeDesign from '@/assets/campaigns/creative-design.jpg';
+import mobileCreative from '@/assets/campaigns/mobile-creative.jpg';
+import summerDrink from '@/assets/campaigns/summer-drink.jpg';
+import entertainment from '@/assets/campaigns/entertainment.jpg';
+import streetStyle from '@/assets/campaigns/street-style.jpg';
+import adventurePov from '@/assets/campaigns/adventure-pov.jpg';
+import coffeeMoment from '@/assets/campaigns/coffee-moment.jpg';
+import gaming from '@/assets/campaigns/gaming.jpg';
+import fashionStyle from '@/assets/campaigns/fashion-style.jpg';
+import unboxingHaul from '@/assets/campaigns/unboxing-haul.jpg';
+import homeInterior from '@/assets/campaigns/home-interior.jpg';
+import fastFood from '@/assets/campaigns/fast-food.jpg';
+import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
+import electricCar from '@/assets/campaigns/electric-car.jpg';
+
 // Extended mock campaign data
 const campaigns = [
   { 
@@ -32,6 +52,7 @@ const campaigns = [
     ratePerThousand: 50, 
     maxEarnings: 750, 
     logo: nikeLogo,
+    image: fitnessWorkout,
     contentType: 'Workout/Fitness video',
     productVisibility: 'Product must be clearly visible for at least 3 seconds',
     videoLength: '15-60 seconds',
@@ -54,6 +75,7 @@ const campaigns = [
     ratePerThousand: 35, 
     maxEarnings: 600, 
     logo: spotifyLogo,
+    image: musicLifestyle,
     contentType: 'Music/Lifestyle video',
     productVisibility: 'Show Spotify app on screen for at least 2 seconds',
     videoLength: '10-30 seconds',
@@ -76,6 +98,7 @@ const campaigns = [
     ratePerThousand: 72, 
     maxEarnings: 2500,
     logo: samsungLogo,
+    image: techUnboxing,
     contentType: 'Unboxing/Tech Review',
     productVisibility: 'Product must be the main focus throughout',
     videoLength: '30-90 seconds',
@@ -98,6 +121,7 @@ const campaigns = [
     ratePerThousand: 45, 
     maxEarnings: 850, 
     logo: redbullLogo,
+    image: extremeSports,
     contentType: 'Extreme Sports/Adventure',
     productVisibility: 'Red Bull can visible at start or end',
     videoLength: '15-45 seconds',
@@ -120,6 +144,7 @@ const campaigns = [
     ratePerThousand: 60, 
     maxEarnings: 950, 
     logo: adobeLogo,
+    image: creativeDesign,
     contentType: 'Creative Process/Tutorial',
     productVisibility: 'Show Adobe software interface clearly',
     videoLength: '20-60 seconds',
@@ -142,6 +167,7 @@ const campaigns = [
     ratePerThousand: 55, 
     maxEarnings: 1800, 
     logo: nikeLogo,
+    image: mobileCreative,
     contentType: 'Creative/Lifestyle',
     productVisibility: 'iPhone must be visible throughout',
     videoLength: '15-45 seconds',
@@ -164,6 +190,7 @@ const campaigns = [
     ratePerThousand: 40, 
     maxEarnings: 550, 
     logo: spotifyLogo,
+    image: summerDrink,
     contentType: 'Lifestyle/Summer vibes',
     productVisibility: 'Coca-Cola product visible for 3+ seconds',
     videoLength: '10-30 seconds',
@@ -186,6 +213,7 @@ const campaigns = [
     ratePerThousand: 48, 
     maxEarnings: 700, 
     logo: samsungLogo,
+    image: entertainment,
     contentType: 'Entertainment/Reaction',
     productVisibility: 'Show Netflix interface or content',
     videoLength: '15-60 seconds',
@@ -208,6 +236,7 @@ const campaigns = [
     ratePerThousand: 52, 
     maxEarnings: 800, 
     logo: redbullLogo,
+    image: streetStyle,
     contentType: 'Fashion/Street Style',
     productVisibility: 'Adidas products must be the focus',
     videoLength: '15-45 seconds',
@@ -230,6 +259,7 @@ const campaigns = [
     ratePerThousand: 65, 
     maxEarnings: 1500, 
     logo: adobeLogo,
+    image: adventurePov,
     contentType: 'Adventure/Action',
     productVisibility: 'Filmed with GoPro',
     videoLength: '15-60 seconds',
@@ -252,6 +282,7 @@ const campaigns = [
     ratePerThousand: 35, 
     maxEarnings: 500, 
     logo: nikeLogo,
+    image: coffeeMoment,
     contentType: 'Lifestyle/Food & Drink',
     productVisibility: 'Starbucks cup clearly visible',
     videoLength: '10-30 seconds',
@@ -274,6 +305,7 @@ const campaigns = [
     ratePerThousand: 58, 
     maxEarnings: 2000, 
     logo: spotifyLogo,
+    image: gaming,
     contentType: 'Gaming/Entertainment',
     productVisibility: 'PlayStation gameplay or console visible',
     videoLength: '20-60 seconds',
@@ -296,6 +328,7 @@ const campaigns = [
     ratePerThousand: 38, 
     maxEarnings: 650, 
     logo: samsungLogo,
+    image: fashionStyle,
     contentType: 'Fashion/Styling',
     productVisibility: 'H&M clothing featured',
     videoLength: '15-45 seconds',
@@ -318,6 +351,7 @@ const campaigns = [
     ratePerThousand: 42, 
     maxEarnings: 900, 
     logo: redbullLogo,
+    image: unboxingHaul,
     contentType: 'Unboxing/Haul',
     productVisibility: 'Amazon packaging visible',
     videoLength: '20-60 seconds',
@@ -340,6 +374,7 @@ const campaigns = [
     ratePerThousand: 55, 
     maxEarnings: 1200, 
     logo: adobeLogo,
+    image: homeInterior,
     contentType: 'Home/DIY',
     productVisibility: 'IKEA products featured',
     videoLength: '30-90 seconds',
@@ -362,6 +397,7 @@ const campaigns = [
     ratePerThousand: 32, 
     maxEarnings: 450,
     logo: nikeLogo,
+    image: fastFood,
     contentType: 'Food/Lifestyle',
     productVisibility: 'McDonalds food clearly visible',
     videoLength: '10-30 seconds',
@@ -384,6 +420,7 @@ const campaigns = [
     ratePerThousand: 44, 
     maxEarnings: 700, 
     logo: spotifyLogo,
+    image: foodDelivery,
     contentType: 'Food/Delivery',
     productVisibility: 'Show Uber Eats app or delivery',
     videoLength: '15-45 seconds',
@@ -406,6 +443,7 @@ const campaigns = [
     ratePerThousand: 70, 
     maxEarnings: 3000,
     logo: samsungLogo,
+    image: electricCar,
     contentType: 'Automotive/Tech',
     productVisibility: 'Tesla vehicle clearly featured',
     videoLength: '20-60 seconds',
@@ -722,9 +760,9 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10 backdrop-blur-sm relative"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col relative"
                   >
-                    <div className="w-full aspect-[4/3]"></div>
+                    <img src={campaign.image} alt={campaign.brand} className="w-full aspect-[4/3] object-cover" />
                     <div 
                       className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-50"
                       style={{
