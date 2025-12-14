@@ -197,7 +197,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
-      <aside className="w-64 flex flex-col relative z-10 bg-white/15 backdrop-blur-2xl border-r border-white/25" style={{ backdropFilter: 'blur(24px) saturate(180%)' }}>
+      <aside className="w-64 flex flex-col relative z-10 bg-white/15 border-r border-white/25" style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}>
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -267,7 +267,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10">
         {/* View Mode Toggle */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 bg-white/15 backdrop-blur-2xl rounded-full border border-white/25 shadow-2xl" style={{ backdropFilter: 'blur(24px) saturate(180%)' }}>
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 bg-white/15 rounded-full border border-white/25 shadow-2xl" style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}>
           <button
             onClick={() => setViewMode('scroll')}
             className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
