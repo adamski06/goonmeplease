@@ -196,7 +196,7 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden">
+    <div className="h-screen flex relative overflow-hidden">
       {/* Radial Background */}
       <div 
         className="absolute inset-0 pointer-events-none"
