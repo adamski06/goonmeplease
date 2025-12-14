@@ -409,3 +409,33 @@
     scroll-behavior: auto;
   }
 }
+
+/* Dashboard radial background with slow Apple color shift */
+@keyframes dashboardColorShift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  16.67% {
+    filter: hue-rotate(60deg);
+  }
+  33.33% {
+    filter: hue-rotate(120deg);
+  }
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  66.67% {
+    filter: hue-rotate(240deg);
+  }
+  83.33% {
+    filter: hue-rotate(300deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.dashboard-gradient-bg {
+  background: radial-gradient(ellipse 180% 120% at 50% 130%, hsl(220, 90%, 12%) 0%, hsl(215, 80%, 22%) 35%, transparent 65%);
+  animation: dashboardColorShift 60s linear infinite;
+}
