@@ -765,7 +765,7 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white/60 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20"
                   >
                     {/* Left side - Campaign info */}
                     <div className="flex-1 p-6 flex flex-col justify-between relative">
