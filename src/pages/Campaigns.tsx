@@ -373,7 +373,10 @@ const Campaigns: React.FC = () => {
                 <div 
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.01] group flex"
+                  className="rounded-2xl border border-white/30 overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex"
+                  style={{
+                    background: 'radial-gradient(ellipse at 30% 50%, hsl(210, 50%, 85%) 0%, hsl(220, 40%, 92%) 50%, white 100%)'
+                  }}
                 >
                   {/* Thumbnail */}
                   <div className="w-64 h-36 relative flex-shrink-0">
