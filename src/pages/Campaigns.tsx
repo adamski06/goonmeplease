@@ -366,17 +366,17 @@ const Campaigns: React.FC = () => {
             </div>
           </>
         ) : (
-          /* Browse Mode - Grid Layout */
+          /* Browse Mode - Horizontal List Layout */
           <div className="pt-24 pb-8 px-8 overflow-y-auto h-screen">
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div className="flex flex-col gap-4 max-w-5xl mx-auto">
               {campaigns.map((campaign) => (
                 <div 
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.02] group"
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.01] group flex"
                 >
                   {/* Thumbnail */}
-                  <div className="aspect-video relative">
+                  <div className="w-64 h-36 relative flex-shrink-0">
                     {campaign.id === 1 ? (
                       <video 
                         src={campaignVideoPlaceholder} 
@@ -389,28 +389,32 @@ const Campaigns: React.FC = () => {
                         <span className="text-muted-foreground">Preview</span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
-                    
-                    {/* Logo Badge */}
-                    <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center p-1.5">
-                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
-                    </div>
-                    
-                    {/* Info Overlay */}
-                    <div className="absolute bottom-3 left-3 right-3 text-white">
-                      <p className="font-bold">{campaign.brand}</p>
-                      <p className="text-xs text-white/70 mt-0.5 line-clamp-2">{campaign.description}</p>
-                    </div>
                   </div>
                   
-                  {/* Rate Info */}
-                  <div className="p-3 flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-bold">{campaign.ratePerThousand} sek</span>
-                      <span className="text-xs text-muted-foreground ml-1">/1k views</span>
+                  {/* Content */}
+                  <div className="flex-1 p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      {/* Logo */}
+                      <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center p-2 flex-shrink-0">
+                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+                      </div>
+                      
+                      {/* Info */}
+                      <div>
+                        <p className="font-bold text-lg">{campaign.brand}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5">{campaign.description}</p>
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      up to {campaign.maxEarnings.toLocaleString()} sek
+                    
+                    {/* Rate Info */}
+                    <div className="text-right flex-shrink-0 ml-4">
+                      <div>
+                        <span className="text-2xl font-bold">{campaign.ratePerThousand} sek</span>
+                        <span className="text-sm text-muted-foreground ml-1">/1k views</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        up to {campaign.maxEarnings.toLocaleString()} sek
+                      </div>
                     </div>
                   </div>
                 </div>
