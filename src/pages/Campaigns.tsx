@@ -553,7 +553,7 @@ const Campaigns: React.FC = () => {
         {/* Navigation */}
         <nav className="flex flex-col px-3 gap-4 mt-8">
           <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-colors flex items-center gap-2">
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
                 fill="currentColor"
@@ -566,7 +566,7 @@ const Campaigns: React.FC = () => {
             onClick={() => navigate('/profile')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
-            <Avatar className="h-5 w-5">
+            <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
                 {firstName.charAt(0).toUpperCase()}
@@ -578,7 +578,7 @@ const Campaigns: React.FC = () => {
             onClick={() => navigate('/activity')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
-            <Activity className="h-5 w-5" />
+            <Activity className="h-6 w-6" />
             Activity
           </button>
         </nav>
@@ -588,7 +588,7 @@ const Campaigns: React.FC = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2">
-                <Menu className="h-5 w-5" />
+                <Menu className="h-6 w-6" />
                 More
               </button>
             </DropdownMenuTrigger>
