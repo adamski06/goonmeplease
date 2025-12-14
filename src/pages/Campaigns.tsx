@@ -199,7 +199,7 @@ const Campaigns: React.FC = () => {
       {/* Left Sidebar */}
       <aside className="w-64 flex flex-col relative z-10 bg-white/10 backdrop-blur-sm border-r border-white/20">
         {/* Logo */}
-        <div className="px-6 py-4 flex justify-center">
+        <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
             <div 
               className="absolute inset-0 bg-foreground"
@@ -210,8 +210,8 @@ const Campaigns: React.FC = () => {
                 maskSize: 'contain',
                 WebkitMaskRepeat: 'no-repeat',
                 maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center'
+                WebkitMaskPosition: 'left center',
+                maskPosition: 'left center'
               }} 
             />
           </button>
