@@ -697,12 +697,24 @@ const Campaigns: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-[1200px] justify-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
-                  'rgba(97, 188, 70, 0.85)',   // Apple green
+                  'rgba(34, 139, 34, 0.9)',    // Forest green (dark)
+                  'rgba(97, 188, 70, 0.85)',   // Apple green (light)
+                  'rgba(255, 140, 0, 0.9)',    // Dark orange
                   'rgba(251, 186, 0, 0.85)',   // Apple yellow
-                  'rgba(247, 148, 30, 0.85)',  // Apple orange
-                  'rgba(233, 63, 51, 0.85)',   // Apple red
-                  'rgba(148, 103, 189, 0.85)', // Apple purple
-                  'rgba(0, 168, 225, 0.85)',   // Apple blue
+                  'rgba(220, 20, 60, 0.9)',    // Crimson red (dark)
+                  'rgba(247, 148, 30, 0.85)',  // Apple orange (light)
+                  'rgba(75, 0, 130, 0.9)',     // Indigo (dark purple)
+                  'rgba(148, 103, 189, 0.85)', // Apple purple (light)
+                  'rgba(0, 100, 180, 0.9)',    // Dark blue
+                  'rgba(0, 168, 225, 0.85)',   // Apple blue (light)
+                  'rgba(139, 69, 19, 0.9)',    // Saddle brown
+                  'rgba(199, 21, 133, 0.9)',   // Medium violet red
+                  'rgba(46, 139, 87, 0.9)',    // Sea green
+                  'rgba(255, 69, 0, 0.9)',     // Red-orange
+                  'rgba(106, 90, 205, 0.9)',   // Slate blue
+                  'rgba(0, 139, 139, 0.9)',    // Dark cyan
+                  'rgba(178, 34, 34, 0.9)',    // Firebrick
+                  'rgba(72, 61, 139, 0.9)',    // Dark slate blue
                 ];
                 const gradientColor = gradientColors[index % gradientColors.length];
                 
