@@ -424,11 +424,11 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10 relative"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-sidebar-background border border-transparent dark:border-sidebar-border relative"
                   >
                     <div className="w-full aspect-video"></div>
                     <div 
-                      className="absolute inset-0 pointer-events-none"
+                      className="absolute inset-0 pointer-events-none dark:hidden"
                       style={{
                         background: `radial-gradient(circle 300px at center -100px, ${gradientColor} 0%, transparent 100%)`
                       }}
