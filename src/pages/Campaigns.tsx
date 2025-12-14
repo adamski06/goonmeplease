@@ -408,7 +408,7 @@ const Campaigns: React.FC = () => {
           <div 
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
           >
-            <div className="grid gap-4 mx-auto" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', maxWidth: '1200px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-[1200px] mx-auto [&>*]:max-w-[380px] [&>*]:mx-auto md:[&>*]:mx-0">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
                   'rgba(97, 188, 70, 0.85)',   // Apple green
