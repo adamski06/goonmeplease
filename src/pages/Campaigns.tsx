@@ -730,12 +730,13 @@ const Campaigns: React.FC = () => {
         ) : (
           /* Browse Mode - Horizontal List Layout */
           <div className="relative flex-1 overflow-hidden">
-            {/* Top fade overlay */}
-            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent pointer-events-none z-10" />
-            {/* Bottom fade overlay */}
-            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
-            
-            <div className="pt-8 pb-8 px-8 overflow-y-auto h-full">
+            <div 
+              className="pt-8 pb-8 px-8 overflow-y-auto h-full"
+              style={{ 
+                maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)'
+              }}
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
