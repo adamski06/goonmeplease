@@ -4,7 +4,7 @@ const getStoredDelay = (): number => {
   if (stored) {
     return parseFloat(stored);
   }
-  const randomDelay = Math.random() * 300;
+  const randomDelay = Math.random() * 120;
   sessionStorage.setItem('dashboard-bg-delay', randomDelay.toString());
   return randomDelay;
 };
