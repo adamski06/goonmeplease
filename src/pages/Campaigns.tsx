@@ -267,7 +267,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10">
         {/* View Mode Toggle */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 rounded-full border border-white/25 shadow-2xl" style={{ backgroundColor: 'hsla(220, 70%, 55%, 0.18)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}>
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 rounded-full border border-white/25 shadow-2xl" style={{ backgroundColor: 'hsla(220, 70%, 55%, 0.25)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}>
           <button
             onClick={() => setViewMode('scroll')}
             className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
