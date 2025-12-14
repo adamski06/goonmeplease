@@ -408,15 +408,15 @@ const Campaigns: React.FC = () => {
           <div 
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
           >
-            <div className="flex flex-col gap-4 max-w-5xl mx-auto">
+            <div className="grid grid-cols-2 gap-4 max-w-5xl mx-auto">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex bg-white dark:bg-white/10"
+                  className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10"
                 >
                   {/* Thumbnail */}
-                  <div className="w-64 h-36 relative flex-shrink-0">
+                  <div className="w-full aspect-video relative">
                     {campaign.id === 1 ? (
                       <video 
                         src={campaignVideoPlaceholder} 
@@ -425,31 +425,31 @@ const Campaigns: React.FC = () => {
                         playsInline
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-white/10 backdrop-blur-md">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-white/10">
                         <span className="text-muted-foreground">Preview</span>
                       </div>
                     )}
                   </div>
                   
                   {/* Content */}
-                  <div className="flex-1 p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                  <div className="p-4">
+                    <div className="flex items-center gap-3">
                       {/* Logo */}
-                      <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center p-2 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center p-1.5 flex-shrink-0">
                         <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
                       </div>
                       
                       {/* Info */}
-                      <div>
-                        <p className="font-bold text-lg text-foreground">{campaign.brand}</p>
-                        <p className="text-sm text-muted-foreground mt-0.5">{campaign.description}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-foreground">{campaign.brand}</p>
+                        <p className="text-sm text-muted-foreground truncate">{campaign.description}</p>
                       </div>
                     </div>
                     
                     {/* Rate Info */}
-                    <div className="text-right flex-shrink-0 ml-4">
+                    <div className="mt-3 flex items-baseline justify-between">
                       <div>
-                        <span className="text-2xl font-bold text-foreground">{campaign.ratePerThousand} sek</span>
+                        <span className="text-xl font-bold text-foreground">{campaign.ratePerThousand} sek</span>
                         <span className="text-sm text-muted-foreground ml-1">/1k views</span>
                       </div>
                       <div className="text-sm text-muted-foreground">
