@@ -433,7 +433,7 @@ const Campaigns: React.FC = () => {
                         background: `radial-gradient(circle 300px at center -100px, ${gradientColor} 0%, transparent 100%)`
                       }}
                     />
-                    <div className="absolute bottom-4 left-4 bg-black text-white text-sm font-semibold px-4 py-2 rounded-full">
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black text-white text-sm font-semibold px-4 py-2 rounded-full">
                       ${campaign.maxEarnings.toLocaleString()}
                     </div>
                   </div>
