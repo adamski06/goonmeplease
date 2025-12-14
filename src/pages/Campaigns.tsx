@@ -230,13 +230,6 @@ const Campaigns: React.FC = () => {
             Home
           </button>
           <button 
-            onClick={() => navigate('/activity')}
-            className="text-base lg:text-sm font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group"
-          >
-            <Activity className="h-5 w-5 group-hover:text-blue-800" />
-            Activity
-          </button>
-          <button 
             onClick={() => navigate('/profile')}
             className="text-base lg:text-sm font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group"
           >
@@ -247,6 +240,13 @@ const Campaigns: React.FC = () => {
               </AvatarFallback>
             </Avatar>
             My Page
+          </button>
+          <button 
+            onClick={() => navigate('/activity')}
+            className="text-base lg:text-sm font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group"
+          >
+            <Activity className="h-5 w-5 group-hover:text-blue-800" />
+            Activity
           </button>
         </nav>
 
