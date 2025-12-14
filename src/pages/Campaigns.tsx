@@ -428,7 +428,7 @@ const Campaigns: React.FC = () => {
                   >
                     <div className="w-full aspect-video"></div>
                     <div 
-                      className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-30"
+                      className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-50"
                       style={{
                         background: `radial-gradient(circle 300px at center -100px, ${gradientColor} 0%, transparent 100%)`
                       }}
