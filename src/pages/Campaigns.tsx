@@ -207,7 +207,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
-      <aside className="w-48 lg:w-44 flex flex-col relative z-10 bg-white/10 backdrop-blur-sm border-r border-t border-white/20">
+      <aside className="w-48 lg:w-44 flex flex-col relative z-10 bg-white/10 backdrop-blur-sm border-r border-white/20">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
