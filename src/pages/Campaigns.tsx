@@ -251,7 +251,7 @@ const Campaigns: React.FC = () => {
         </nav>
 
         {/* Profile at bottom */}
-        <div className="mt-auto px-4 py-4">
+        <div className="mt-auto px-4 py-4 border-t border-white/20">
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
