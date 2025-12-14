@@ -135,6 +135,292 @@ const campaigns = [
       { minViews: 100000, maxViews: null, rate: 35 }
     ]
   },
+  { 
+    id: 6, 
+    brand: 'Apple', 
+    description: 'Show how you use your iPhone creatively', 
+    ratePerThousand: 55, 
+    maxEarnings: 2800, 
+    logo: nikeLogo,
+    contentType: 'Creative/Lifestyle',
+    productVisibility: 'iPhone must be visible throughout',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Showcase a unique way you use your iPhone',
+      'Keep it authentic and relatable',
+      'Good lighting is essential',
+      'No competitor devices visible'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 10000, rate: 55 },
+      { minViews: 10000, maxViews: 100000, rate: 42 },
+      { minViews: 100000, maxViews: null, rate: 30 }
+    ]
+  },
+  { 
+    id: 7, 
+    brand: 'Coca-Cola', 
+    description: 'Share your refreshing summer moment', 
+    ratePerThousand: 40, 
+    maxEarnings: 1200, 
+    logo: spotifyLogo,
+    contentType: 'Lifestyle/Summer vibes',
+    productVisibility: 'Coca-Cola product visible for 3+ seconds',
+    videoLength: '10-30 seconds',
+    guidelines: [
+      'Capture a fun summer moment',
+      'Show the product naturally',
+      'Include friends or family if possible',
+      'Upbeat music encouraged'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 8000, rate: 40 },
+      { minViews: 8000, maxViews: 80000, rate: 30 },
+      { minViews: 80000, maxViews: null, rate: 22 }
+    ]
+  },
+  { 
+    id: 8, 
+    brand: 'Netflix', 
+    description: 'React to your favorite new show', 
+    ratePerThousand: 48, 
+    maxEarnings: 2200, 
+    logo: samsungLogo,
+    contentType: 'Entertainment/Reaction',
+    productVisibility: 'Show Netflix interface or content',
+    videoLength: '15-60 seconds',
+    guidelines: [
+      'Share genuine reactions to a show',
+      'No major spoilers',
+      'Mention the show name clearly',
+      'Encourage others to watch'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 12000, rate: 48 },
+      { minViews: 12000, maxViews: 120000, rate: 36 },
+      { minViews: 120000, maxViews: null, rate: 26 }
+    ]
+  },
+  { 
+    id: 9, 
+    brand: 'Adidas', 
+    description: 'Show your street style', 
+    ratePerThousand: 52, 
+    maxEarnings: 2400, 
+    logo: redbullLogo,
+    contentType: 'Fashion/Street Style',
+    productVisibility: 'Adidas products must be the focus',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Showcase your unique style',
+      'Urban setting preferred',
+      'Include outfit details',
+      'No competitor brands visible'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 10000, rate: 52 },
+      { minViews: 10000, maxViews: 100000, rate: 40 },
+      { minViews: 100000, maxViews: null, rate: 28 }
+    ]
+  },
+  { 
+    id: 10, 
+    brand: 'GoPro', 
+    description: 'Capture your adventure', 
+    ratePerThousand: 65, 
+    maxEarnings: 2600, 
+    logo: adobeLogo,
+    contentType: 'Adventure/Action',
+    productVisibility: 'Filmed with GoPro',
+    videoLength: '15-60 seconds',
+    guidelines: [
+      'Must be filmed with a GoPro',
+      'Show exciting activities',
+      'Use unique angles',
+      'High quality footage required'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 15000, rate: 65 },
+      { minViews: 15000, maxViews: 150000, rate: 50 },
+      { minViews: 150000, maxViews: null, rate: 38 }
+    ]
+  },
+  { 
+    id: 11, 
+    brand: 'Starbucks', 
+    description: 'Share your coffee ritual', 
+    ratePerThousand: 35, 
+    maxEarnings: 900, 
+    logo: nikeLogo,
+    contentType: 'Lifestyle/Food & Drink',
+    productVisibility: 'Starbucks cup clearly visible',
+    videoLength: '10-30 seconds',
+    guidelines: [
+      'Show your morning coffee routine',
+      'Cup must be recognizable',
+      'Cozy vibes encouraged',
+      'Mention your favorite drink'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 5000, rate: 35 },
+      { minViews: 5000, maxViews: 50000, rate: 26 },
+      { minViews: 50000, maxViews: null, rate: 18 }
+    ]
+  },
+  { 
+    id: 12, 
+    brand: 'PlayStation', 
+    description: 'Share your gaming highlights', 
+    ratePerThousand: 58, 
+    maxEarnings: 2900, 
+    logo: spotifyLogo,
+    contentType: 'Gaming/Entertainment',
+    productVisibility: 'PlayStation gameplay or console visible',
+    videoLength: '20-60 seconds',
+    guidelines: [
+      'Show exciting gameplay moments',
+      'Include your reactions',
+      'Mention the game title',
+      'High quality capture required'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 18000, rate: 58 },
+      { minViews: 18000, maxViews: 180000, rate: 44 },
+      { minViews: 180000, maxViews: null, rate: 32 }
+    ]
+  },
+  { 
+    id: 13, 
+    brand: 'H&M', 
+    description: 'Style your favorite outfit', 
+    ratePerThousand: 38, 
+    maxEarnings: 1100, 
+    logo: samsungLogo,
+    contentType: 'Fashion/Styling',
+    productVisibility: 'H&M clothing featured',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Create a stylish outfit',
+      'Show how to style the pieces',
+      'Tag the collection if applicable',
+      'Good lighting essential'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 7000, rate: 38 },
+      { minViews: 7000, maxViews: 70000, rate: 28 },
+      { minViews: 70000, maxViews: null, rate: 20 }
+    ]
+  },
+  { 
+    id: 14, 
+    brand: 'Amazon', 
+    description: 'Unbox your latest finds', 
+    ratePerThousand: 42, 
+    maxEarnings: 1600, 
+    logo: redbullLogo,
+    contentType: 'Unboxing/Haul',
+    productVisibility: 'Amazon packaging visible',
+    videoLength: '20-60 seconds',
+    guidelines: [
+      'Show the unboxing experience',
+      'Share genuine reactions',
+      'Mention product names',
+      'Good production quality'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 10000, rate: 42 },
+      { minViews: 10000, maxViews: 100000, rate: 32 },
+      { minViews: 100000, maxViews: null, rate: 24 }
+    ]
+  },
+  { 
+    id: 15, 
+    brand: 'IKEA', 
+    description: 'Show your room transformation', 
+    ratePerThousand: 55, 
+    maxEarnings: 2100, 
+    logo: adobeLogo,
+    contentType: 'Home/DIY',
+    productVisibility: 'IKEA products featured',
+    videoLength: '30-90 seconds',
+    guidelines: [
+      'Show before and after',
+      'Include assembly if possible',
+      'Mention product names',
+      'Inspire others to decorate'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 12000, rate: 55 },
+      { minViews: 12000, maxViews: 120000, rate: 42 },
+      { minViews: 120000, maxViews: null, rate: 30 }
+    ]
+  },
+  { 
+    id: 16, 
+    brand: 'McDonalds', 
+    description: 'Share your go-to order', 
+    ratePerThousand: 32, 
+    maxEarnings: 800, 
+    logo: nikeLogo,
+    contentType: 'Food/Lifestyle',
+    productVisibility: 'McDonalds food clearly visible',
+    videoLength: '10-30 seconds',
+    guidelines: [
+      'Show your favorite meal',
+      'Make it look delicious',
+      'Include taste reaction',
+      'Fun and casual vibe'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 5000, rate: 32 },
+      { minViews: 5000, maxViews: 50000, rate: 24 },
+      { minViews: 50000, maxViews: null, rate: 16 }
+    ]
+  },
+  { 
+    id: 17, 
+    brand: 'Uber Eats', 
+    description: 'Film your food delivery moment', 
+    ratePerThousand: 44, 
+    maxEarnings: 1400, 
+    logo: spotifyLogo,
+    contentType: 'Food/Delivery',
+    productVisibility: 'Show Uber Eats app or delivery',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Show the ordering process or delivery',
+      'Capture the excitement',
+      'Show the food reveal',
+      'Mention convenience factor'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 8000, rate: 44 },
+      { minViews: 8000, maxViews: 80000, rate: 34 },
+      { minViews: 80000, maxViews: null, rate: 24 }
+    ]
+  },
+  { 
+    id: 18, 
+    brand: 'Tesla', 
+    description: 'Show off your Tesla experience', 
+    ratePerThousand: 70, 
+    maxEarnings: 3000, 
+    logo: samsungLogo,
+    contentType: 'Automotive/Tech',
+    productVisibility: 'Tesla vehicle clearly featured',
+    videoLength: '20-60 seconds',
+    guidelines: [
+      'Showcase unique Tesla features',
+      'Include driving footage if safe',
+      'Show the interior tech',
+      'High production quality required'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 20000, rate: 70 },
+      { minViews: 20000, maxViews: 200000, rate: 55 },
+      { minViews: 200000, maxViews: null, rate: 40 }
+    ]
+  },
 ];
 
 const Campaigns: React.FC = () => {
