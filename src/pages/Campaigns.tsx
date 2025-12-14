@@ -304,7 +304,30 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-10 flex flex-col">
+        {/* Top Filter Bar */}
+        <div className="h-14 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center px-6 gap-2 shrink-0">
+          <button className="px-4 py-1.5 rounded-full bg-white text-black text-sm font-medium transition-colors">
+            For you
+          </button>
+          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+            Beauty
+          </button>
+          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+            Fashion
+          </button>
+          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+            Tech
+          </button>
+          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+            Food
+          </button>
+          <div className="ml-auto flex items-center gap-2">
+            <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors border border-white/20">
+              Payment ↓
+            </button>
+          </div>
+        </div>
 
         {viewMode === 'scroll' ? (
           <>
