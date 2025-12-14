@@ -436,6 +436,6 @@
 }
 
 .dashboard-gradient-bg {
-  background: radial-gradient(ellipse 180% 120% at 50% 130%, hsl(220, 90%, 12%) 0%, hsl(215, 80%, 22%) 35%, transparent 65%);
+  background: radial-gradient(ellipse 180% 150% at 50% 130%, hsl(220, 90%, 12%) 0%, hsl(215, 80%, 22%) 35%, transparent 65%);
   animation: dashboardColorShift 300s linear infinite;
 }
