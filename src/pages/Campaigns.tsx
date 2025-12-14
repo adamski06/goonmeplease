@@ -429,7 +429,7 @@ const Campaigns: React.FC = () => {
                     <div 
                       className="absolute inset-0 pointer-events-none"
                       style={{
-                        background: `radial-gradient(ellipse at center top, ${gradientColor} 0%, transparent 60%)`
+                        background: `radial-gradient(ellipse 120% 40% at center top, ${gradientColor} 0%, transparent 100%)`
                       }}
                     />
                   </div>
