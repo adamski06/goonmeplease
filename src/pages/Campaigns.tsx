@@ -775,8 +775,7 @@ const Campaigns: React.FC = () => {
                           <img src={campaign.logo} alt={campaign.brand} className="h-10 w-10 object-contain rounded-full bg-white p-1" />
                           <span className="text-base font-semibold text-foreground">{campaign.brand}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-foreground mb-2">{campaign.brand}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-3">{campaign.description}</p>
+                        <p className="text-sm text-black dark:text-white">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-4">
                         <div className="bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
