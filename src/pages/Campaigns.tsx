@@ -694,7 +694,7 @@ const Campaigns: React.FC = () => {
           <div 
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-8 max-w-[1200px] justify-start">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
                   'rgba(34, 139, 34, 0.9)',    // Forest green (dark)
