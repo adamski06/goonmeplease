@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -510,6 +510,44 @@ const Campaigns: React.FC = () => {
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
   const currentCampaign = campaigns[currentIndex];
+  
+  // Scroll container ref and card transforms for depth effect
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [cardTransforms, setCardTransforms] = useState<number[]>([]);
+
+  const handleBrowseScroll = useCallback(() => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const centerY = containerRect.top + containerRect.height / 2;
+    
+    const cards = container.querySelectorAll('[data-campaign-card]');
+    const transforms: number[] = [];
+    
+    cards.forEach((card) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenterY = cardRect.top + cardRect.height / 2;
+      const distanceFromCenter = cardCenterY - centerY;
+      const maxDistance = containerRect.height / 2;
+      const normalizedDistance = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
+      // Push cards away from center based on distance
+      const translateY = normalizedDistance * Math.abs(normalizedDistance) * 30;
+      transforms.push(translateY);
+    });
+    
+    setCardTransforms(transforms);
+  }, []);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || viewMode !== 'browse') return;
+    
+    container.addEventListener('scroll', handleBrowseScroll);
+    handleBrowseScroll(); // Initial calculation
+    
+    return () => container.removeEventListener('scroll', handleBrowseScroll);
+  }, [viewMode, handleBrowseScroll]);
 
   if (loading) {
     return (
@@ -735,7 +773,7 @@ const Campaigns: React.FC = () => {
             {/* Bottom blur overlay */}
             <div className="absolute bottom-0 left-0 right-0 h-16 backdrop-blur-sm pointer-events-none z-10" style={{ maskImage: 'linear-gradient(to top, black, transparent)', WebkitMaskImage: 'linear-gradient(to top, black, transparent)' }} />
             
-            <div className="pt-8 pb-8 px-8 overflow-y-auto h-full">
+            <div ref={scrollContainerRef} className="pt-8 pb-8 px-8 overflow-y-auto h-full">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
@@ -763,8 +801,10 @@ const Campaigns: React.FC = () => {
                 return (
                   <div
                     key={campaign.id}
+                    data-campaign-card
                     onClick={() => setSelectedCampaign(campaign)}
                     className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white/60 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20"
+                    style={{ transform: `translateY(${cardTransforms[index] || 0}px)`, transition: 'transform 0.1s ease-out' }}
                   >
                     {/* Left side - Campaign info */}
                     <div className="flex-1 p-6 flex flex-col justify-between relative">
