@@ -413,12 +413,7 @@ const Campaigns: React.FC = () => {
                 <div 
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="rounded-2xl border border-white/25 overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex"
-                  style={{ 
-                    backgroundColor: 'hsla(220, 70%, 55%, 0.18)', 
-                    WebkitBackdropFilter: 'blur(24px) saturate(180%)', 
-                    backdropFilter: 'blur(24px) saturate(180%)' 
-                  }}
+                  className="rounded-2xl border border-black/10 dark:border-white/20 overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex bg-black/5 dark:bg-white/10 backdrop-blur-md"
                 >
                   {/* Thumbnail */}
                   <div className="w-64 h-36 relative flex-shrink-0">
@@ -430,15 +425,8 @@ const Campaigns: React.FC = () => {
                         playsInline
                       />
                     ) : (
-                      <div 
-                        className="absolute inset-0 flex items-center justify-center"
-                        style={{ 
-                          backgroundColor: 'hsla(220, 70%, 45%, 0.25)', 
-                          WebkitBackdropFilter: 'blur(24px) saturate(180%)', 
-                          backdropFilter: 'blur(24px) saturate(180%)' 
-                        }}
-                      >
-                        <span className="text-white/60">Preview</span>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-white/10 backdrop-blur-md">
+                        <span className="text-muted-foreground">Preview</span>
                       </div>
                     )}
                   </div>
@@ -453,18 +441,18 @@ const Campaigns: React.FC = () => {
                       
                       {/* Info */}
                       <div>
-                        <p className="font-bold text-lg text-white">{campaign.brand}</p>
-                        <p className="text-sm text-white/70 mt-0.5">{campaign.description}</p>
+                        <p className="font-bold text-lg text-foreground">{campaign.brand}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5">{campaign.description}</p>
                       </div>
                     </div>
                     
                     {/* Rate Info */}
                     <div className="text-right flex-shrink-0 ml-4">
                       <div>
-                        <span className="text-2xl font-bold text-white">{campaign.ratePerThousand} sek</span>
-                        <span className="text-sm text-white/60 ml-1">/1k views</span>
+                        <span className="text-2xl font-bold text-foreground">{campaign.ratePerThousand} sek</span>
+                        <span className="text-sm text-muted-foreground ml-1">/1k views</span>
                       </div>
-                      <div className="text-sm text-white/60">
+                      <div className="text-sm text-muted-foreground">
                         up to {campaign.maxEarnings.toLocaleString()} sek
                       </div>
                     </div>
