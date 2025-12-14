@@ -266,31 +266,6 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10">
-        {/* View Mode Toggle */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-          <button
-            onClick={() => setViewMode('scroll')}
-            className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
-              viewMode === 'scroll' 
-                ? 'bg-black text-white' 
-                : 'text-foreground hover:bg-white/30'
-            }`}
-          >
-            <Play className="h-4 w-4" />
-            Scroll
-          </button>
-          <button
-            onClick={() => setViewMode('browse')}
-            className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
-              viewMode === 'browse' 
-                ? 'bg-black text-white' 
-                : 'text-foreground hover:bg-white/30'
-            }`}
-          >
-            <LayoutGrid className="h-4 w-4" />
-            Browse
-          </button>
-        </div>
 
         {viewMode === 'scroll' ? (
           <>
