@@ -411,11 +411,12 @@ const Campaigns: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 max-w-5xl mx-auto">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
-                  'rgba(255, 107, 107, 0.5)', // coral/red
-                  'rgba(78, 205, 196, 0.5)',  // teal
-                  'rgba(255, 195, 113, 0.5)', // orange/gold
-                  'rgba(138, 43, 226, 0.5)',  // purple
-                  'rgba(0, 206, 201, 0.5)',   // cyan
+                  'rgba(97, 188, 70, 0.5)',   // Apple green
+                  'rgba(251, 186, 0, 0.5)',   // Apple yellow
+                  'rgba(247, 148, 30, 0.5)',  // Apple orange
+                  'rgba(233, 63, 51, 0.5)',   // Apple red
+                  'rgba(148, 103, 189, 0.5)', // Apple purple
+                  'rgba(0, 168, 225, 0.5)',   // Apple blue
                 ];
                 const gradientColor = gradientColors[index % gradientColors.length];
                 
