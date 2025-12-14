@@ -135,7 +135,7 @@ const Campaigns: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
-  const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('scroll');
+  const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
 
   useEffect(() => {
     if (!loading && !user) {
