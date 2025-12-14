@@ -781,7 +781,7 @@ const Campaigns: React.FC = () => {
                       <img src={campaign.logo} alt={campaign.brand} className="h-8 w-8 object-contain rounded-full bg-white p-1" />
                       <span className="text-sm font-semibold text-foreground">{campaign.brand}</span>
                     </div>
-                    <div className="absolute bottom-4 left-4 bg-green-500 text-white text-sm font-semibold px-4 py-1.5 rounded-full">
+                    <div className="absolute bottom-4 left-4 bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full">
                       {campaign.maxEarnings.toLocaleString()} sek
                     </div>
                   </div>
