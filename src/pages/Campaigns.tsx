@@ -760,9 +760,33 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col relative"
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20"
                   >
-                    <div className="relative w-full aspect-[4/3]">
+                    {/* Left side - Campaign info */}
+                    <div className="flex-1 p-6 flex flex-col justify-between relative">
+                      <div 
+                        className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-50"
+                        style={{
+                          background: `radial-gradient(circle 300px at left center, ${gradientColor} 0%, transparent 100%)`
+                        }}
+                      />
+                      <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-4">
+                          <img src={campaign.logo} alt={campaign.brand} className="h-10 w-10 object-contain rounded-full bg-white p-1" />
+                          <span className="text-base font-semibold text-foreground">{campaign.brand}</span>
+                        </div>
+                        <h3 className="text-lg font-bold text-foreground mb-2">{campaign.brand}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-3">{campaign.description}</p>
+                      </div>
+                      <div className="relative z-10 mt-4">
+                        <div className="bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full inline-block">
+                          {campaign.maxEarnings.toLocaleString()} sek
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Right side - Vertical iPhone aspect ratio image */}
+                    <div className="relative w-32 md:w-40 aspect-[9/16] flex-shrink-0">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
@@ -771,20 +795,7 @@ const Campaigns: React.FC = () => {
                         }}
                       />
                       {/* Bottom fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                    </div>
-                    <div 
-                      className="absolute inset-0 pointer-events-none opacity-100 dark:opacity-50"
-                      style={{
-                        background: `radial-gradient(circle 300px at center -100px, ${gradientColor} 0%, transparent 100%)`
-                      }}
-                    />
-                    <div className="absolute top-4 left-4 flex items-center gap-2">
-                      <img src={campaign.logo} alt={campaign.brand} className="h-8 w-8 object-contain rounded-full bg-white p-1" />
-                      <span className="text-sm font-semibold text-foreground">{campaign.brand}</span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 bg-gradient-to-r from-green-700 to-green-600 text-white text-sm font-semibold px-4 py-1.5 rounded-full">
-                      {campaign.maxEarnings.toLocaleString()} sek
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                     </div>
                   </div>
                 );
