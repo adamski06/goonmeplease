@@ -1,12 +1,2 @@
-// Generate a random delay once per session for consistent background color across pages
-const getStoredDelay = (): number => {
-  const stored = sessionStorage.getItem('dashboard-bg-delay');
-  if (stored) {
-    return parseFloat(stored);
-  }
-  const randomDelay = Math.random() * 120;
-  sessionStorage.setItem('dashboard-bg-delay', randomDelay.toString());
-  return randomDelay;
-};
-
-export const backgroundDelay = typeof window !== 'undefined' ? getStoredDelay() : 0;
+// Random delay computed once per page load, consistent across navigations
+export const backgroundDelay = Math.random() * 120;
