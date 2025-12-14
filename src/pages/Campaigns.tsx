@@ -733,8 +733,8 @@ const Campaigns: React.FC = () => {
             <div 
               className="pt-8 pb-8 px-8 overflow-y-auto h-full"
               style={{ 
-                maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)'
+                maskImage: 'linear-gradient(to bottom, black, black 85%, transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black, black 85%, transparent)'
               }}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
