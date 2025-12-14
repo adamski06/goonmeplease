@@ -200,7 +200,7 @@ const Campaigns: React.FC = () => {
       <aside className="w-40 lg:w-36 flex flex-col relative z-10 bg-white/10 backdrop-blur-sm border-r border-white/20">
         {/* Logo */}
         <div className="px-6 py-4">
-          <button onClick={() => navigate('/')} className="relative h-6 lg:h-5 w-[100px] lg:w-[80px]">
+          <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
             <div 
               className="absolute inset-0 bg-foreground"
               style={{
