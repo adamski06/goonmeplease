@@ -3,14 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity as ActivityIcon } from 'lucide-react';
+import { Activity as ActivityIcon, Menu, User, Settings, Moon, LogOut } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 
 const Activity: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -29,18 +38,18 @@ const Activity: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden">
+    <div className="h-screen flex relative overflow-hidden">
       {/* Radial Background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 40%, 80%) 0%, hsl(210, 30%, 85%) 25%, hsl(200, 20%, 90%) 40%, white 65%)'
+          background: 'radial-gradient(ellipse 180% 120% at 50% 130%, hsl(220, 90%, 12%) 0%, hsl(215, 80%, 22%) 35%, transparent 65%)'
         }}
       />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
-      <aside className="w-64 flex flex-col relative z-10">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -61,12 +70,12 @@ const Activity: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
+        <nav className="flex flex-col px-3 gap-4 mt-8">
           <button 
             onClick={() => navigate('/campaigns')}
-            className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-colors flex items-center gap-2"
           >
-            <svg className="h-6 w-6 group-hover:text-blue-800" viewBox="0 0 24 24" fill="none">
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
                 fill="currentColor"
@@ -75,35 +84,64 @@ const Activity: React.FC = () => {
             </svg>
             Home
           </button>
-          <button className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-400 bg-clip-text text-transparent px-3 py-2 text-left transition-colors flex items-center gap-3">
-            <ActivityIcon className="h-6 w-6 text-blue-800" />
-            Activity
-          </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
-            <Avatar className="h-6 w-6">
+            <Avatar className="h-5 w-5">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-muted text-foreground text-xs font-medium">
+              <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            My Page
+            Profile
+          </button>
+          <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-2">
+            <ActivityIcon className="h-5 w-5" />
+            Activity
           </button>
         </nav>
 
-        {/* Profile at bottom */}
-        <div className="mt-auto px-4 py-4 border-t border-border">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-muted text-foreground font-medium">
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-semibold text-foreground">{firstName}</span>
-          </div>
+        {/* More Menu at bottom */}
+        <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2">
+                <Menu className="h-5 w-5" />
+                More
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent 
+              side="top" 
+              align="start" 
+              className="w-48 bg-background border-border"
+            >
+              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                My Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                }} 
+                className="cursor-pointer"
+              >
+                <Moon className="mr-2 h-4 w-4" />
+                <span className="flex-1">Theme</span>
+                <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </aside>
 
