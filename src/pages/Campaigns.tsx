@@ -367,16 +367,18 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div className="pt-24 pb-8 px-8 overflow-y-auto h-screen">
+          <div 
+            className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
+            style={{
+              background: 'radial-gradient(ellipse 120% 80% at 50% 80%, hsl(210, 50%, 75%) 0%, hsl(210, 40%, 85%) 30%, transparent 70%)'
+            }}
+          >
             <div className="flex flex-col gap-4 max-w-5xl mx-auto">
               {campaigns.map((campaign) => (
                 <div 
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="rounded-2xl border border-white/30 overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex"
-                  style={{
-                    background: 'radial-gradient(ellipse at 30% 50%, hsl(210, 50%, 85%) 0%, hsl(220, 40%, 92%) 50%, white 100%)'
-                  }}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden cursor-pointer hover:bg-white/20 transition-all hover:scale-[1.01] group flex"
                 >
                   {/* Thumbnail */}
                   <div className="w-64 h-36 relative flex-shrink-0">
