@@ -370,7 +370,7 @@ const Campaigns: React.FC = () => {
           <div 
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
             style={{
-              background: 'radial-gradient(ellipse 120% 80% at 50% 80%, hsl(210, 70%, 55%) 0%, hsl(210, 60%, 70%) 40%, transparent 80%)'
+              background: 'radial-gradient(ellipse 100% 60% at 50% 85%, hsl(210, 80%, 45%) 0%, hsl(210, 70%, 60%) 25%, transparent 55%)'
             }}
           >
             <div className="flex flex-col gap-4 max-w-5xl mx-auto">
