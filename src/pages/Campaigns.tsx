@@ -30,7 +30,7 @@ const campaigns = [
     brand: 'Nike', 
     description: 'Show off your workout routine with our new collection', 
     ratePerThousand: 50, 
-    maxEarnings: 25000, 
+    maxEarnings: 2500, 
     logo: nikeLogo,
     contentType: 'Workout/Fitness video',
     productVisibility: 'Product must be clearly visible for at least 3 seconds',
@@ -52,7 +52,7 @@ const campaigns = [
     brand: 'Spotify', 
     description: 'Share your favorite playlist moment', 
     ratePerThousand: 35, 
-    maxEarnings: 15000, 
+    maxEarnings: 1500, 
     logo: spotifyLogo,
     contentType: 'Music/Lifestyle video',
     productVisibility: 'Show Spotify app on screen for at least 2 seconds',
@@ -74,7 +74,7 @@ const campaigns = [
     brand: 'Samsung', 
     description: 'Unbox and review the new Galaxy phone', 
     ratePerThousand: 72, 
-    maxEarnings: 50000, 
+    maxEarnings: 3000, 
     logo: samsungLogo,
     contentType: 'Unboxing/Tech Review',
     productVisibility: 'Product must be the main focus throughout',
@@ -96,7 +96,7 @@ const campaigns = [
     brand: 'Red Bull', 
     description: 'Capture your most extreme moment', 
     ratePerThousand: 45, 
-    maxEarnings: 30000, 
+    maxEarnings: 2000, 
     logo: redbullLogo,
     contentType: 'Extreme Sports/Adventure',
     productVisibility: 'Red Bull can visible at start or end',
@@ -118,7 +118,7 @@ const campaigns = [
     brand: 'Adobe', 
     description: 'Create something amazing with our tools', 
     ratePerThousand: 60, 
-    maxEarnings: 20000, 
+    maxEarnings: 1800, 
     logo: adobeLogo,
     contentType: 'Creative Process/Tutorial',
     productVisibility: 'Show Adobe software interface clearly',
@@ -434,7 +434,7 @@ const Campaigns: React.FC = () => {
                       }}
                     />
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black text-white text-base font-semibold px-5 py-2.5 rounded-full">
-                      ${campaign.maxEarnings.toLocaleString()}
+                      {campaign.maxEarnings.toLocaleString()} sek
                     </div>
                   </div>
                 );
