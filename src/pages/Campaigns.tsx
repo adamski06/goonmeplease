@@ -808,7 +808,7 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Right side - Vertical iPhone aspect ratio image */}
-                    <div className="relative w-24 md:w-32 aspect-[9/16] flex-shrink-0 m-3 rounded overflow-hidden">
+                    <div className="relative w-24 md:w-32 aspect-[9/16] flex-shrink-0 m-3 rounded-sm overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
