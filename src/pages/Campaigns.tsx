@@ -731,9 +731,9 @@ const Campaigns: React.FC = () => {
           /* Browse Mode - Horizontal List Layout */
           <div className="relative flex-1 overflow-hidden">
             {/* Top blur overlay */}
-            <div className="absolute top-0 left-0 right-0 h-16 backdrop-blur-md bg-gradient-to-b from-white/30 to-transparent pointer-events-none z-10" style={{ maskImage: 'linear-gradient(to bottom, black, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)' }} />
+            <div className="absolute top-0 left-0 right-0 h-16 backdrop-blur-sm pointer-events-none z-10" style={{ maskImage: 'linear-gradient(to bottom, black, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)' }} />
             {/* Bottom blur overlay */}
-            <div className="absolute bottom-0 left-0 right-0 h-16 backdrop-blur-md bg-gradient-to-t from-white/30 to-transparent pointer-events-none z-10" style={{ maskImage: 'linear-gradient(to top, black, transparent)', WebkitMaskImage: 'linear-gradient(to top, black, transparent)' }} />
+            <div className="absolute bottom-0 left-0 right-0 h-16 backdrop-blur-sm pointer-events-none z-10" style={{ maskImage: 'linear-gradient(to top, black, transparent)', WebkitMaskImage: 'linear-gradient(to top, black, transparent)' }} />
             
             <div className="pt-8 pb-8 px-8 overflow-y-auto h-full">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
