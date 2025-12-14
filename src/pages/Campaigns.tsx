@@ -565,7 +565,7 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="text-lg lg:text-base font-medium text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
             <Avatar className="h-5 w-5">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
@@ -577,9 +577,9 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/activity')}
-            className="text-lg lg:text-base font-medium text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
-            <Activity className="h-5 w-5 group-hover:text-blue-800" />
+            <Activity className="h-5 w-5" />
             Activity
           </button>
         </nav>
@@ -588,8 +588,8 @@ const Campaigns: React.FC = () => {
         <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-1.5 text-left transition-all flex items-center gap-2 group">
-                <Menu className="h-5 w-5 group-hover:text-blue-800" />
+              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2">
+                <Menu className="h-5 w-5" />
                 More
               </button>
             </DropdownMenuTrigger>
