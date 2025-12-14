@@ -531,7 +531,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 bg-white/60 dark:bg-white/10 backdrop-blur-md border-r border-white/40 dark:border-white/20">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 bg-blue-50/60 dark:bg-blue-950/30 backdrop-blur-md border-r border-white/40 dark:border-white/20">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
