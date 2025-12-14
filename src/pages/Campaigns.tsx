@@ -239,7 +239,7 @@ const Campaigns: React.FC = () => {
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            My Page
+            Profile
           </button>
           <button 
             onClick={() => navigate('/activity')}
