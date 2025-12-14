@@ -191,7 +191,7 @@ const Campaigns: React.FC = () => {
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 40%, 80%) 0%, hsl(210, 30%, 85%) 25%, hsl(200, 20%, 90%) 40%, white 65%)'
+          background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 85%, 30%) 0%, hsl(215, 75%, 45%) 30%, transparent 60%)'
         }}
       />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
@@ -369,9 +369,6 @@ const Campaigns: React.FC = () => {
           /* Browse Mode - Horizontal List Layout */
           <div 
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
-            style={{
-              background: 'radial-gradient(ellipse 200% 150% at 50% 100%, hsl(220, 85%, 30%) 0%, hsl(215, 75%, 45%) 30%, transparent 60%)'
-            }}
           >
             <div className="flex flex-col gap-4 max-w-5xl mx-auto">
               {campaigns.map((campaign) => (
