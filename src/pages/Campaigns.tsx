@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { backgroundDelay } from '@/lib/backgroundDelay';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -524,7 +525,7 @@ const Campaigns: React.FC = () => {
       {/* Radial Background */}
       <div 
         className="absolute inset-0 pointer-events-none dashboard-gradient-bg" 
-        style={{ animationDelay: `-${Math.random() * 300}s` }}
+        style={{ animationDelay: `-${backgroundDelay}s` }}
       />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
