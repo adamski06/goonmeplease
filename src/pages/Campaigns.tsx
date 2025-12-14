@@ -409,15 +409,32 @@ const Campaigns: React.FC = () => {
             className="pt-24 pb-8 px-8 overflow-y-auto h-screen"
           >
             <div className="grid grid-cols-2 gap-4 max-w-5xl mx-auto">
-              {campaigns.map((campaign) => (
-                <div
-                  key={campaign.id}
-                  onClick={() => setSelectedCampaign(campaign)}
-                  className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10"
-                >
-                  <div className="w-full aspect-video"></div>
-                </div>
-              ))}
+              {campaigns.map((campaign, index) => {
+                const gradientColors = [
+                  'rgba(255, 107, 107, 0.3)', // coral/red
+                  'rgba(78, 205, 196, 0.3)',  // teal
+                  'rgba(255, 195, 113, 0.3)', // orange/gold
+                  'rgba(138, 43, 226, 0.3)',  // purple
+                  'rgba(0, 206, 201, 0.3)',   // cyan
+                ];
+                const gradientColor = gradientColors[index % gradientColors.length];
+                
+                return (
+                  <div
+                    key={campaign.id}
+                    onClick={() => setSelectedCampaign(campaign)}
+                    className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10 relative"
+                  >
+                    <div className="w-full aspect-video"></div>
+                    <div 
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: `radial-gradient(ellipse at center bottom, ${gradientColor} 0%, transparent 60%)`
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
