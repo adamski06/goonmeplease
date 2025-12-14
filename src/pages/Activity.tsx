@@ -40,7 +40,10 @@ const Activity: React.FC = () => {
   return (
     <div className="h-screen flex relative overflow-hidden">
       {/* Radial Background */}
-      <div className="absolute inset-0 pointer-events-none dashboard-gradient-bg" />
+      <div 
+        className="absolute inset-0 pointer-events-none dashboard-gradient-bg" 
+        style={{ animationDelay: `-${Math.random() * 300}s` }}
+      />
       <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
       
       {/* Left Sidebar */}
