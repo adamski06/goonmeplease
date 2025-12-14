@@ -218,7 +218,7 @@ const Campaigns: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 flex flex-col justify-center px-6 gap-1">
+        <nav className="flex-1 flex flex-col justify-center px-3 gap-1">
           <button className="text-lg font-bold bg-gradient-to-r from-blue-900 to-blue-400 bg-clip-text text-transparent px-3 py-2 text-left transition-colors flex items-center gap-2">
             <svg className="h-5 w-5 text-blue-800" viewBox="0 0 24 24" fill="none">
               <path
