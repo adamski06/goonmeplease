@@ -306,24 +306,24 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center px-6 gap-2 shrink-0">
-          <button className="px-4 py-1.5 rounded-full bg-white text-black text-sm font-medium transition-colors">
+        <div className="h-14 bg-white/10 backdrop-blur-sm border-b border-white/20 flex items-center px-6 gap-3 shrink-0">
+          <button className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-foreground text-sm font-medium hover:bg-white/30 transition-colors">
             For you
           </button>
-          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
             Beauty
           </button>
-          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
             Fashion
           </button>
-          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
             Tech
           </button>
-          <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
             Food
           </button>
           <div className="ml-auto flex items-center gap-2">
-            <button className="px-4 py-1.5 rounded-full text-foreground text-sm font-medium hover:bg-white/20 transition-colors border border-white/20">
+            <button className="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-foreground text-sm font-medium hover:bg-white/20 transition-colors">
               Payment ↓
             </button>
           </div>
