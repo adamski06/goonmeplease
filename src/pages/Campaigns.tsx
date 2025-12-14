@@ -307,23 +307,23 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
         <div className="h-14 bg-white dark:bg-white/10 backdrop-blur-sm border-b border-black/10 dark:border-white/20 flex items-center px-6 gap-3 shrink-0">
-          <button className="px-4 py-1.5 rounded-full bg-black/10 dark:bg-white/20 backdrop-blur-sm border border-black/15 dark:border-white/30 text-foreground text-sm font-medium hover:bg-black/15 dark:hover:bg-white/30 transition-colors">
+          <button className="px-4 py-1.5 rounded-full border border-black/15 dark:border-white/30 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             For you
           </button>
-          <button className="px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             Beauty
           </button>
-          <button className="px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             Fashion
           </button>
-          <button className="px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             Tech
           </button>
-          <button className="px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
             Food
           </button>
           <div className="ml-auto flex items-center gap-2">
-            <button className="px-4 py-1.5 rounded-full bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+            <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
               Payment ↓
             </button>
           </div>
