@@ -267,7 +267,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10">
         {/* View Mode Toggle */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 flex gap-1 p-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg">
           <button
             onClick={() => setViewMode('scroll')}
             className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-all ${
