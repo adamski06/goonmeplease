@@ -413,7 +413,7 @@ const Campaigns: React.FC = () => {
                 <div
                   key={campaign.id}
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="rounded-2xl border border-black/10 dark:border-white/20 overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex bg-white dark:bg-white/10"
+                  className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex bg-white dark:bg-white/10"
                 >
                   {/* Thumbnail */}
                   <div className="w-64 h-36 relative flex-shrink-0">
