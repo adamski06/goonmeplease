@@ -764,12 +764,6 @@ const Campaigns: React.FC = () => {
                   >
                     {/* Left side - Campaign info */}
                     <div className="flex-1 p-6 flex flex-col justify-between relative bg-white dark:bg-black/20">
-                      <div 
-                        className="absolute inset-0 pointer-events-none opacity-60 dark:opacity-40"
-                        style={{
-                          background: `linear-gradient(to bottom, ${gradientColor} 0%, transparent 40%)`
-                        }}
-                      />
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-4">
                           <div className="h-6 w-6 rounded-full bg-white p-0.5 shadow-[0_-2px_8px_rgba(255,255,255,0.4)] overflow-hidden">
