@@ -415,48 +415,7 @@ const Campaigns: React.FC = () => {
                   onClick={() => setSelectedCampaign(campaign)}
                   className="rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-col bg-white dark:bg-white/10"
                 >
-                  {/* Thumbnail */}
-                  <div className="w-full aspect-video relative">
-                    {campaign.id === 1 ? (
-                      <video 
-                        src={campaignVideoPlaceholder} 
-                        className="absolute inset-0 w-full h-full object-cover"
-                        muted 
-                        playsInline
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/5 dark:bg-white/10">
-                        <span className="text-muted-foreground">Preview</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="p-4">
-                    <div className="flex items-center gap-3">
-                      {/* Logo */}
-                      <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center p-1.5 flex-shrink-0">
-                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
-                      </div>
-                      
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-foreground">{campaign.brand}</p>
-                        <p className="text-sm text-muted-foreground truncate">{campaign.description}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Rate Info */}
-                    <div className="mt-3 flex items-baseline justify-between">
-                      <div>
-                        <span className="text-xl font-bold text-foreground">{campaign.ratePerThousand} sek</span>
-                        <span className="text-sm text-muted-foreground ml-1">/1k views</span>
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        up to {campaign.maxEarnings.toLocaleString()} sek
-                      </div>
-                    </div>
-                  </div>
+                  <div className="w-full aspect-video"></div>
                 </div>
               ))}
             </div>
