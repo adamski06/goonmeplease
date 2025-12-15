@@ -69,6 +69,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000001', 
     brand: 'Spotify', 
+    title: 'Share your music discovery moment',
     description: 'We want to see how you discover new music on Spotify. Film yourself scrolling through your Discover Weekly or Release Radar, find a song you genuinely like, and show your authentic reaction when you hear it for the first time. This works best when you\'re doing something casual - cooking, getting ready, or just chilling at home.', 
     ratePerThousand: 35, 
     maxEarnings: 600, 
@@ -93,6 +94,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000002', 
     brand: 'Starbucks', 
+    title: 'Film your morning coffee run',
     description: 'Show us your morning Starbucks run. We\'re looking for authentic "day in my life" style content where you pick up your usual order, customize it if you do, and enjoy your first sip. Works great if you film the walk to the store, ordering process, or the moment you get your drink. No scripts needed - just your real morning routine.', 
     ratePerThousand: 32, 
     maxEarnings: 500, 
@@ -117,6 +119,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000003', 
     brand: 'McDonald\'s', 
+    title: 'Try our new menu items',
     description: 'We\'re promoting our new menu items and want real customers showing their genuine reactions. Visit any McDonald\'s, order something from the menu (we\'ll reimburse up to 150 SEK), and film yourself trying it. Focus on the unwrapping, the first bite, and your honest reaction. This isn\'t about perfection - we want authentic "I just got McDonald\'s" energy.', 
     ratePerThousand: 38, 
     maxEarnings: 550,
@@ -141,6 +144,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000004', 
     brand: 'Red Bull', 
+    title: 'Show us what gives you wings',
     description: 'Film yourself cracking open a Red Bull before doing something that requires energy - gym session, late night study grind, gaming marathon, early morning, whatever fits your life. We want the can crack sound, the first sip, and then you getting into your activity. Keep it natural and show us what gives you wings.', 
     ratePerThousand: 42, 
     maxEarnings: 750, 
@@ -165,6 +169,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000005', 
     brand: 'Adobe', 
+    title: 'Show your creative editing process',
     description: 'Show your creative process using any Adobe app - Lightroom, Photoshop, Premiere, whatever you actually use. We want to see a quick before/after transformation or a sped-up edit session. This is perfect for creators who already edit their content. Show us a 10-second edit that took you 30 minutes and let people see the magic.', 
     ratePerThousand: 55, 
     maxEarnings: 900, 
@@ -189,6 +194,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000006', 
     brand: 'Uber Eats', 
+    title: 'Film your food delivery experience',
     description: 'Film your next Uber Eats order from start to finish. We want to see you scrolling through the app, deciding what to get, placing the order, and then the satisfying moment when the food arrives. The food reveal and first bite are key - that\'s what makes people want to order. Works especially well for late night cravings or lazy Sunday content.', 
     ratePerThousand: 40, 
     maxEarnings: 650, 
@@ -213,6 +219,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000007', 
     brand: 'Coca-Cola', 
+    title: 'Capture a refreshing moment',
     description: 'Grab a Coke and film a chill moment - could be at a restaurant, at home watching something, hanging with friends, or just taking a break from your day. We\'re not looking for anything over-produced, just that satisfying first sip and the sound of the fizz. Summer vibes, hangout vibes, any vibe works as long as it feels real.', 
     ratePerThousand: 36, 
     maxEarnings: 500, 
@@ -237,6 +244,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000008', 
     brand: 'Netflix', 
+    title: 'React to your favorite show',
     description: 'We want genuine show reactions - find a new series on Netflix, film yourself watching a key moment (no spoilers!), and show your real reaction. This works best with trending shows or new releases. The setup is simple: show yourself settling in to watch, then cut to your reaction. "Can\'t believe that just happened" energy is what we\'re after.', 
     ratePerThousand: 44, 
     maxEarnings: 700, 
@@ -261,6 +269,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000009', 
     brand: 'Duolingo', 
+    title: 'Show your language learning streak',
     description: 'Show your Duolingo streak or a study session. We love content about maintaining streaks, learning new words, or the panic of almost losing your streak. Film yourself doing a quick lesson, reacting to getting something wrong, or celebrating a milestone. The owl memes are encouraged - lean into the Duolingo humor.', 
     ratePerThousand: 38, 
     maxEarnings: 550, 
@@ -285,6 +294,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000010', 
     brand: 'IKEA', 
+    title: 'Take us on your IKEA trip',
     description: 'Film your IKEA trip or show off a recent IKEA haul. We want the full experience - navigating the store, finding your items, the checkout line, loading the car, and ideally a quick assembly montage. Or just film a room tour featuring IKEA furniture you already own. Swedish meatball content is also welcome.', 
     ratePerThousand: 45, 
     maxEarnings: 800, 
@@ -309,6 +319,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000011', 
     brand: 'Chipotle', 
+    title: 'Show us your order',
     description: 'Show us your Chipotle order - whether you\'re eating in, getting takeout, or ordering ahead on the app. We want to see your customization process (the bowl assembly is satisfying content), and your first bite reaction. Bonus points for showing portion sizes, secret menu items, or your go-to order combination.', 
     ratePerThousand: 34, 
     maxEarnings: 480, 
@@ -333,6 +344,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000012', 
     brand: 'Notion', 
+    title: 'Show how you organize your life',
     description: 'Show us how you organize your life with Notion. Whether it\'s a productivity setup, habit tracker, content calendar, or just your daily to-do list - we want to see your system. Quick screenshare walkthroughs or "how I plan my week" content performs great. The aesthetic template tours are especially popular.', 
     ratePerThousand: 48, 
     maxEarnings: 750, 
@@ -357,6 +369,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000013', 
     brand: 'H&M', 
+    title: 'Style an affordable outfit',
     description: 'Film a haul video from your recent H&M shopping trip or show us how you style H&M pieces you already own. We\'re looking for affordable fashion content - the kind where you share prices and help people recreate looks without breaking the bank. Try-on content, outfit checks, or "building an outfit for under 500 SEK" style videos work great.', 
     ratePerThousand: 36, 
     maxEarnings: 600, 
@@ -381,6 +394,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000014', 
     brand: 'Amazon Prime', 
+    title: 'React to your fast delivery',
     description: 'Show us the Prime delivery experience or react to something you ordered arriving faster than expected. Same-day and next-day delivery reactions perform really well. Film the notification, the doorbell moment, and the unboxing. "I literally just ordered this yesterday" content is what we\'re looking for.', 
     ratePerThousand: 40, 
     maxEarnings: 650, 
@@ -404,6 +418,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000015', 
     brand: 'Subway', 
+    title: 'Build your perfect sandwich',
     description: 'Film your Subway order - the sandwich building process is oddly satisfying content. We want to see your customization choices, the assembly line, and your first bite. "My $100 Subway order" content that shows multiple sandwiches also performs well. Show us your go-to combination or try something new.', 
     ratePerThousand: 30, 
     maxEarnings: 420, 
@@ -427,6 +442,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000016', 
     brand: 'Canva', 
+    title: 'Create something in 60 seconds',
     description: 'Show how you use Canva to create something - Instagram posts, thumbnails, presentations, whatever you actually use it for. Quick design tutorials or "watch me make this in 60 seconds" content performs great. The before/after transformations and template customizations are especially popular.', 
     ratePerThousand: 42, 
     maxEarnings: 680, 
@@ -450,6 +466,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000017', 
     brand: 'Taco Bell', 
+    title: 'Film your late night run',
     description: 'Late night Taco Bell runs are iconic - film yours. Whether it\'s the drive-through at 2am, a Crunchwrap review, or trying every item on the menu, we want authentic fast food content. The messier and more real, the better. Mukbang style or quick taste tests both work.', 
     ratePerThousand: 32, 
     maxEarnings: 450, 
@@ -473,6 +490,7 @@ const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000018', 
     brand: 'ChatGPT', 
+    title: 'Show a surprising AI conversation',
     description: 'Show us how you use ChatGPT in your daily life or work. This could be anything from asking weird questions, using it for studying, getting it to help with writing, or testing its limits with creative prompts. Screen recordings of conversations that are funny, useful, or surprising perform best.', 
     ratePerThousand: 50, 
     maxEarnings: 850, 
@@ -996,7 +1014,7 @@ const Campaigns: React.FC = () => {
                         <div className="mb-1">
                           <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                         </div>
-                        <p className="text-base font-bold text-foreground font-jakarta leading-tight overflow-hidden [display:-webkit-box] [-webkit-line-clamp:4] [-webkit-box-orient:vertical]">{campaign.description}</p>
+                        <p className="text-base font-bold text-foreground font-jakarta leading-tight">{campaign.title}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
                         <div className="inline-flex items-baseline gap-0.5">
