@@ -837,7 +837,7 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Right side - Campaign info */}
-                    <div className="flex-1 p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-white/10 backdrop-blur-md">
+                    <div className="flex-1 p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-dark-surface backdrop-blur-md">
                       <div className="relative z-10">
                         <div className="mb-1">
                           <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
