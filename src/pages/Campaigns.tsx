@@ -45,7 +45,7 @@ import fastFood from '@/assets/campaigns/fast-food.jpg';
 import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
 import electricCar from '@/assets/campaigns/electric-car.jpg';
 
-type FilterType = 'foryou' | 'featured' | 'beauty' | 'fashion' | 'tech' | 'food';
+type FilterType = 'foryou' | 'featured';
 
 // Extended mock campaign data
 const campaigns = [
@@ -474,7 +474,7 @@ const Campaigns: React.FC = () => {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
-  const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured' | 'beauty' | 'fashion' | 'tech' | 'food'>('featured');
+  const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
   const [favorites, setFavorites] = useState<number[]>([]);
 
   // Fetch user favorites
@@ -558,7 +558,7 @@ const Campaigns: React.FC = () => {
   const isFilterActive = (filter: FilterType) => activeFilter === filter;
 
   const renderFilterButtons = (includeSort = false) => (
-    <div className="flex items-center gap-3 font-jakarta flex-wrap">
+    <div className="flex items-center gap-3 font-jakarta">
       <button 
         onClick={() => setActiveFilter('foryou')}
         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('foryou') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
@@ -570,30 +570,6 @@ const Campaigns: React.FC = () => {
         className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('featured') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
       >
         Featured
-      </button>
-      <button 
-        onClick={() => setActiveFilter('beauty')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('beauty') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-      >
-        Beauty
-      </button>
-      <button 
-        onClick={() => setActiveFilter('fashion')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('fashion') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-      >
-        Fashion
-      </button>
-      <button 
-        onClick={() => setActiveFilter('tech')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('tech') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-      >
-        Tech
-      </button>
-      <button 
-        onClick={() => setActiveFilter('food')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('food') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-      >
-        Food
       </button>
       {includeSort && (
         <div className="ml-auto">
@@ -745,18 +721,18 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
+        {/* Fixed overlay filter buttons */}
+        <div className="absolute top-6 left-8 z-20">
+          {renderFilterButtons(activeFilter !== 'foryou')}
+        </div>
 
         {activeFilter === 'foryou' ? (
           /* For You - Large single ad with photo left, info right */
           <div 
-            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide pt-16"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
-            {/* Filter buttons at top */}
-            <div className="pt-6 px-8 pb-4">
-              {renderFilterButtons()}
-            </div>
             {campaigns.map((campaign, idx) => (
               <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always p-8 gap-8">
                 {/* Left side - Full vertical photo (standalone) */}
@@ -875,12 +851,8 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div className="relative flex-1 overflow-y-auto">
-            <div className="pt-6 pb-8 pl-8 pr-32">
-              {/* Filter buttons inside scroll area */}
-              <div className="mb-8">
-                {renderFilterButtons(true)}
-              </div>
+          <div className="relative flex-1 overflow-y-auto pt-16">
+            <div className="pb-8 pl-8 pr-32">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-20 justify-items-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
