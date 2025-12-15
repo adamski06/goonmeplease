@@ -563,6 +563,13 @@ const Campaigns: React.FC = () => {
             Home
           </button>
           <button 
+            onClick={() => navigate('/activity')}
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
+          >
+            <Activity className="h-6 w-6" />
+            Activity
+          </button>
+          <button 
             onClick={() => navigate('/profile')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
@@ -573,13 +580,6 @@ const Campaigns: React.FC = () => {
               </AvatarFallback>
             </Avatar>
             Profile
-          </button>
-          <button 
-            onClick={() => navigate('/activity')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
-          >
-            <Activity className="h-6 w-6" />
-            Activity
           </button>
         </nav>
 
