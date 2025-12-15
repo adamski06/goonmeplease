@@ -836,8 +836,8 @@ const Campaigns: React.FC = () => {
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center gap-2">
                         <div className="inline-flex items-baseline gap-0.5">
-                          <span className="text-xl font-bold text-foreground">{campaign.maxEarnings.toLocaleString()}</span>
-                          <span className="text-xs font-semibold text-muted-foreground">sek</span>
+                          <span className="text-2xl font-bold text-foreground">{campaign.maxEarnings.toLocaleString()}</span>
+                          <span className="text-xs font-semibold text-foreground">sek</span>
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
