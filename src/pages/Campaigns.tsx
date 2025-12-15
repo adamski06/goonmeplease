@@ -853,7 +853,7 @@ const Campaigns: React.FC = () => {
                           className="h-[34px] w-[34px] rounded bg-white/10 backdrop-blur-xl border border-white/15 flex items-center justify-center hover:bg-white/15 transition-colors"
                         >
                           <Heart 
-                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-white/70'}`} 
+                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black'}`} 
                           />
                         </button>
                       </div>
