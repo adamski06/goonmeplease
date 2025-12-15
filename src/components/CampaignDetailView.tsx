@@ -77,25 +77,28 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <div className="mb-6">
             <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
             
-            <ul className="space-y-2 mb-4">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
+            <div className="flex gap-8">
+              {/* Bullet points */}
+              <ul className="space-y-2 flex-1">
+                {campaign.guidelines.map((guideline, idx) => (
+                  <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
+                    <span className="text-foreground">•</span>
+                    {guideline}
+                  </li>
+                ))}
+              </ul>
 
-            {/* Example pictures row */}
-            <div className="flex gap-2">
-              {[1, 2, 3].map((i) => (
-                <div 
-                  key={i}
-                  className="w-20 h-20 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
-                >
-                  <span className="text-xs text-muted-foreground">Example {i}</span>
-                </div>
-              ))}
+              {/* Example pictures */}
+              <div className="flex gap-3 flex-shrink-0">
+                {[1, 2, 3].map((i) => (
+                  <div 
+                    key={i}
+                    className="w-60 h-60 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                  >
+                    <span className="text-sm text-muted-foreground">Example {i}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
