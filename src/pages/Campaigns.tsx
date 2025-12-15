@@ -558,47 +558,45 @@ const Campaigns: React.FC = () => {
   const isFilterActive = (filter: FilterType) => activeFilter === filter;
 
   const renderFilterButtons = (includeSort = false) => (
-    <div className="flex items-center gap-3 font-jakarta">
+    <div className="flex items-center gap-4 font-jakarta">
       <button 
         onClick={() => setActiveFilter('foryou')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors backdrop-blur-md ${isFilterActive('foryou') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
+        className={`px-5 py-2 rounded-full text-base font-medium transition-colors backdrop-blur-md ${isFilterActive('foryou') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
       >
         For you
       </button>
       <button 
         onClick={() => setActiveFilter('featured')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors backdrop-blur-md ${isFilterActive('featured') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
+        className={`px-5 py-2 rounded-full text-base font-medium transition-colors backdrop-blur-md ${isFilterActive('featured') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
       >
         Featured
       </button>
       {includeSort && (
-        <div className="ml-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors flex items-center gap-1">
-                Sort by
-                <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
-                </svg>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-background border-border">
-              <DropdownMenuItem className="cursor-pointer">
-                Price: Low to High
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                Price: High to Low
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                Newest First
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                Deadline Soon
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="px-5 py-2 rounded-full backdrop-blur-md bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground text-base font-medium hover:bg-white/50 dark:hover:bg-white/20 transition-colors flex items-center gap-1">
+              Sort by
+              <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
+              </svg>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48 bg-background border-border">
+            <DropdownMenuItem className="cursor-pointer">
+              Price: Low to High
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              Price: High to Low
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer">
+              Newest First
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              Deadline Soon
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   );
@@ -722,8 +720,37 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {/* Fixed overlay filter buttons */}
-        <div className="absolute top-6 left-8 z-20">
-          {renderFilterButtons(activeFilter !== 'foryou')}
+        <div className="absolute top-6 left-8 right-8 z-20 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            {renderFilterButtons(false)}
+          </div>
+          {activeFilter !== 'foryou' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="px-5 py-2 rounded-full backdrop-blur-md bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground text-base font-medium hover:bg-white/50 dark:hover:bg-white/20 transition-colors flex items-center gap-1 font-jakarta">
+                  Sort by
+                  <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
+                  </svg>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-background border-border">
+                <DropdownMenuItem className="cursor-pointer">
+                  Price: Low to High
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  Price: High to Low
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  Newest First
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  Deadline Soon
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {activeFilter === 'foryou' ? (
