@@ -911,7 +911,7 @@ const Campaigns: React.FC = () => {
                     className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-transparent max-w-[320px]"
                   >
                     {/* Left side - Image */}
-                    <div className="relative w-24 md:w-28 flex-shrink-0 overflow-hidden">
+                    <div className="relative w-28 flex-shrink-0 overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
