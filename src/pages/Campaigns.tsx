@@ -908,10 +908,10 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-transparent max-w-[320px]"
+                    className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-transparent w-[320px] h-[152px]"
                   >
                     {/* Left side - Image */}
-                    <div className="relative w-28 flex-shrink-0 overflow-hidden">
+                    <div className="relative w-28 h-full flex-shrink-0 overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
@@ -924,12 +924,12 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Right side - Campaign info */}
-                    <div className="flex-1 p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-dark-surface backdrop-blur-md">
+                    <div className="flex-1 h-full p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-dark-surface backdrop-blur-md">
                       <div className="relative z-10">
                         <div className="mb-1">
                           <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                         </div>
-                        <p className="text-sm font-bold text-foreground font-jakarta">{campaign.description}</p>
+                        <p className="text-sm font-bold text-foreground font-jakarta overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
                         <div className="inline-flex items-baseline gap-0.5">
