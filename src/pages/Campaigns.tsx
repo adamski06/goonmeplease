@@ -671,7 +671,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 backdrop-blur-md flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-dark-surface font-jakarta">
+        <div className="h-14 flex items-center px-6 gap-3 shrink-0 font-jakarta">
           <button 
             onClick={() => setActiveFilter('foryou')}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'foryou' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
