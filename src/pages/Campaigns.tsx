@@ -756,7 +756,7 @@ const Campaigns: React.FC = () => {
         {activeFilter === 'foryou' ? (
           /* For You - Large single ad with photo left, info right */
           <div 
-            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide pt-16"
+            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide pt-24"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
