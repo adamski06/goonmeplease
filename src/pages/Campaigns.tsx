@@ -570,7 +570,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/10 bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -671,7 +671,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/10 flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-dark-surface font-jakarta">
+        <div className="h-14 backdrop-blur-md flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-dark-surface font-jakarta">
           <button 
             onClick={() => setActiveFilter('foryou')}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'foryou' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
