@@ -917,7 +917,7 @@ const Campaigns: React.FC = () => {
                   >
                     {/* Left side - Image */}
                     <div className="relative w-28 h-full flex-shrink-0 overflow-hidden">
-                      <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                      <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-contain" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
                         style={{
