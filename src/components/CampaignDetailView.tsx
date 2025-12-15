@@ -71,7 +71,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {/* Video type / Creative freedom description */}
           <div className="mb-6">
             <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
-            <p className="text-base text-muted-foreground mt-1">{campaign.description}</p>
+            <p className="text-base text-black mt-1">{campaign.description}</p>
           </div>
 
           {/* Requirements */}
