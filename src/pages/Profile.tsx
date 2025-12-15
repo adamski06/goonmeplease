@@ -83,6 +83,13 @@ const ProfilePage: React.FC = () => {
             </svg>
             Home
           </button>
+          <button 
+            onClick={() => navigate('/activity')}
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
+          >
+            <Activity className="h-6 w-6" />
+            Activity
+          </button>
           <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-2">
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
@@ -91,13 +98,6 @@ const ProfilePage: React.FC = () => {
               </AvatarFallback>
             </Avatar>
             Profile
-          </button>
-          <button 
-            onClick={() => navigate('/activity')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
-          >
-            <Activity className="h-6 w-6" />
-            Activity
           </button>
         </nav>
 
