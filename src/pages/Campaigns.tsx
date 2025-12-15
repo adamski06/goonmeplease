@@ -766,11 +766,11 @@ const Campaigns: React.FC = () => {
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-screen flex items-center justify-start snap-center snap-always p-8 pl-16 gap-8">
+              <div key={campaign.id} className="h-screen flex items-center justify-start snap-center snap-always py-6 pl-16 gap-8">
                 {/* Left side - Full vertical photo (standalone) */}
                 <div 
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="relative h-full max-h-[600px] aspect-[9/16] overflow-hidden flex-shrink-0 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all"
+                  className="relative h-[calc(100vh-48px)] aspect-[9/16] overflow-hidden flex-shrink-0 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all"
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div 
@@ -782,7 +782,7 @@ const Campaigns: React.FC = () => {
                 </div>
                 
                 {/* Right side - Campaign info (standalone) */}
-                <div className="h-full max-h-[600px] flex flex-col justify-between min-w-[280px] py-4">
+                <div className="h-[calc(100vh-48px)] flex flex-col justify-between min-w-[280px] py-4">
                   <div>
                     <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                     <p className="text-2xl font-bold text-foreground mt-2 font-jakarta">{campaign.description}</p>
