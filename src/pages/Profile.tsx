@@ -40,12 +40,9 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="h-screen flex relative overflow-hidden">
-      {/* Radial Background */}
-      <div 
-        className="absolute inset-0 pointer-events-none dashboard-gradient-bg" 
-        style={{ animationDelay: `-${backgroundDelay}s` }}
-      />
-      <div className="noise-layer absolute inset-0 pointer-events-none opacity-50" />
+      {/* Static Grainy Background */}
+      <div className="absolute inset-0 pointer-events-none grainy-background" />
+      <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
       <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10">

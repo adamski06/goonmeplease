@@ -186,15 +186,15 @@ const Auth: React.FC = () => {
         )}
       </div>
 
-      {/* Aurora gradient background */}
-      <div className="aurora-gradient-auth" />
+      {/* Static Grainy Background */}
+      <div className="absolute inset-0 grainy-background" />
       <div className="noise-layer" />
       
       {/* Logo in top left corner */}
       <div className="absolute top-6 left-6 z-20">
         <div className="relative h-10 w-[130px]">
           <div 
-            className="absolute inset-0 bg-white"
+            className="absolute inset-0 bg-foreground"
             style={{
               WebkitMaskImage: `url(${jarlaLogo})`,
               maskImage: `url(${jarlaLogo})`,
@@ -209,7 +209,7 @@ const Auth: React.FC = () => {
         </div>
       </div>
       
-      <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-lg relative z-10">
+      <Card className="w-full max-w-md bg-black/5 dark:bg-white/10 backdrop-blur-md border-black/10 dark:border-white/20 shadow-lg relative z-10">
         {signUpStep === 2 ? (
           // Step 2: Connect TikTok - no header title
           <CardContent className="pt-12 pb-8">
@@ -218,7 +218,7 @@ const Auth: React.FC = () => {
               <div className="flex flex-col items-center justify-center gap-4 py-4">
                 <div className="relative h-20 w-[220px]">
                   <div 
-                    className="absolute inset-0 bg-white"
+                    className="absolute inset-0 bg-foreground"
                     style={{
                       WebkitMaskImage: `url(${jarlaLogo})`,
                       maskImage: `url(${jarlaLogo})`,
@@ -231,18 +231,18 @@ const Auth: React.FC = () => {
                     }} 
                   />
                 </div>
-                <Link className="w-5 h-5 text-white/60" />
-                <img src={tiktokLogo} alt="TikTok" className="h-20 object-contain invert" />
+                <Link className="w-5 h-5 text-muted-foreground" />
+                <img src={tiktokLogo} alt="TikTok" className="h-20 object-contain dark:invert" />
               </div>
               
               {/* Connect button */}
               <div className="flex justify-center">
                 <Button 
                   onClick={handleConnectTikTok}
-                  className="px-6 py-2 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-base"
+                  className="px-6 py-2 h-auto rounded-full bg-foreground text-background hover:bg-foreground/80 flex items-center justify-center gap-2 text-base"
                 >
                   Connect
-                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert dark:invert-0" />
                 </Button>
               </div>
               
@@ -251,24 +251,24 @@ const Auth: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleSkipTikTok}
-                  className="text-white underline hover:text-white/80 text-sm"
+                  className="text-foreground underline hover:text-foreground/80 text-sm"
                 >
                   Skip for now
                 </button>
-                <p className="text-white/60 text-sm">2/2</p>
+                <p className="text-muted-foreground text-sm">2/2</p>
               </div>
             </div>
           </CardContent>
         ) : (
           <>
             <CardHeader className="text-center py-8">
-              <CardTitle className="text-5xl font-bold text-white">Let's start!</CardTitle>
+              <CardTitle className="text-5xl font-bold text-foreground">Let's start!</CardTitle>
             </CardHeader>
             <CardContent>
               {isSignUp ? (
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name" className="text-white">Full Name</Label>
+                    <Label htmlFor="signup-name" className="text-foreground">Full Name</Label>
                     <Input
                       id="signup-name"
                       type="text"
@@ -276,11 +276,11 @@ const Auth: React.FC = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       autoComplete="name"
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="text-white">Email</Label>
+                    <Label htmlFor="signup-email" className="text-foreground">Email</Label>
                     <Input
                       id="signup-email"
                       type="email"
@@ -289,11 +289,11 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password" className="text-white">Password</Label>
+                    <Label htmlFor="signup-password" className="text-foreground">Password</Label>
                     <Input
                       id="signup-password"
                       type="password"
@@ -302,30 +302,30 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="new-password"
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                     {isLoading ? 'Creating account...' : 'Create Account'}
                   </Button>
                   <div className="text-center space-y-1 mt-4">
-                    <p className="text-white/70 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       Already have an account?{' '}
                       <button
                         type="button"
                         onClick={() => setIsSignUp(false)}
-                        className="text-white underline hover:text-white/80"
+                        className="text-foreground underline hover:text-foreground/80"
                       >
                         Log in
                       </button>
                     </p>
-                    <p className="text-white/60 text-sm">1/2</p>
+                    <p className="text-muted-foreground text-sm">1/2</p>
                   </div>
                 </form>
               ) : (
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email" className="text-white">Email</Label>
+                    <Label htmlFor="signin-email" className="text-foreground">Email</Label>
                     <Input
                       id="signin-email"
                       type="email"
@@ -334,11 +334,11 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password" className="text-white">Password</Label>
+                    <Label htmlFor="signin-password" className="text-foreground">Password</Label>
                     <Input
                       id="signin-password"
                       type="password"
@@ -347,18 +347,18 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="current-password"
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
                     {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
-                  <p className="text-center text-white/70 text-sm mt-4">
+                  <p className="text-center text-muted-foreground text-sm mt-4">
                     Don't have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setIsSignUp(true)}
-                      className="text-white underline hover:text-white/80"
+                      className="text-foreground underline hover:text-foreground/80"
                     >
                       Sign up
                     </button>
