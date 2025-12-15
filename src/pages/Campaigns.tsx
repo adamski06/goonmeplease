@@ -720,7 +720,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {/* Fixed overlay filter buttons */}
-        <div className="absolute top-6 left-8 right-8 z-20 flex justify-between items-center">
+        <div className="absolute top-2 left-8 right-8 z-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             {renderFilterButtons(false)}
           </div>
