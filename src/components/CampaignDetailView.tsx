@@ -21,6 +21,7 @@ interface Campaign {
   tiers: CampaignTier[];
   maxEarnings: number;
   ratePerThousand: number;
+  exampleImages?: string[];
 }
 
 interface CampaignDetailViewProps {
@@ -90,14 +91,25 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
               {/* Example pictures */}
               <div className="flex gap-3 flex-shrink-0">
-                {[1, 2, 3].map((i) => (
-                  <div 
-                    key={i}
-                    className="w-36 h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
-                  >
-                    <span className="text-sm text-muted-foreground">Example {i}</span>
-                  </div>
-                ))}
+                {(campaign.exampleImages || []).length > 0 ? (
+                  campaign.exampleImages?.map((img, i) => (
+                    <div 
+                      key={i}
+                      className="w-36 h-36 rounded-lg overflow-hidden border border-border/50"
+                    >
+                      <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))
+                ) : (
+                  [1, 2, 3].map((i) => (
+                    <div 
+                      key={i}
+                      className="w-36 h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                    >
+                      <span className="text-sm text-muted-foreground">Example {i}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

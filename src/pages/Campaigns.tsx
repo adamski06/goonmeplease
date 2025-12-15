@@ -45,6 +45,11 @@ import fastFood from '@/assets/campaigns/fast-food.jpg';
 import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
 import electricCar from '@/assets/campaigns/electric-car.jpg';
 
+// Example images for product placement
+import nikeExample1 from '@/assets/examples/nike-example-1.jpg';
+import nikeExample2 from '@/assets/examples/nike-example-2.jpg';
+import nikeExample3 from '@/assets/examples/nike-example-3.jpg';
+
 type FilterType = 'foryou' | 'featured';
 
 // Extended mock campaign data
@@ -70,7 +75,8 @@ const campaigns = [
       { minViews: 0, maxViews: 10000, rate: 50 },
       { minViews: 10000, maxViews: 100000, rate: 40 },
       { minViews: 100000, maxViews: null, rate: 30 }
-    ]
+    ],
+    exampleImages: [nikeExample1, nikeExample2, nikeExample3]
   },
   { 
     id: '00000000-0000-0000-0000-000000000002', 
