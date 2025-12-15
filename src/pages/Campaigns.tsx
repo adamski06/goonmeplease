@@ -793,7 +793,7 @@ const Campaigns: React.FC = () => {
           /* Browse Mode - Horizontal List Layout */
           <div className="relative flex-1 overflow-hidden">
             <div className="pt-8 pb-8 pl-8 pr-32 overflow-y-auto h-full">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-16 justify-items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-20 justify-items-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
                   'rgba(34, 139, 34, 0.9)',    // Forest green (dark)
