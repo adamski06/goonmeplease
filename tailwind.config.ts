@@ -20,6 +20,7 @@ export default {
         jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
+        'dark-surface': '#1c1c1c',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
