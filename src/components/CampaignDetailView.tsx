@@ -76,6 +76,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {/* Requirements */}
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-foreground mb-2 font-montserrat">Requirements</h3>
+            
+            {/* Example pictures row */}
+            <div className="flex gap-2 mb-4">
+              {[1, 2, 3].map((i) => (
+                <div 
+                  key={i}
+                  className="w-20 h-20 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                >
+                  <span className="text-xs text-muted-foreground">Example {i}</span>
+                </div>
+              ))}
+            </div>
+
             <ul className="space-y-1.5">
               {campaign.guidelines.map((guideline, idx) => (
                 <li key={idx} className="text-sm text-muted-foreground font-jakarta flex items-start gap-2">
