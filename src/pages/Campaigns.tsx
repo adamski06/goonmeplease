@@ -670,7 +670,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/20 flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-white/10 font-jakarta">
+        <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/10 flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-black/90 font-jakarta">
           <button className="px-4 py-1.5 rounded-full bg-black text-white text-sm font-medium">
             Featured
           </button>
