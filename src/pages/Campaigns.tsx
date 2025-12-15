@@ -852,7 +852,7 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Right side - Image fits to content height */}
-                    <div className="relative w-28 md:w-32 flex-shrink-0 overflow-hidden">
+                    <div className="relative w-20 md:w-24 flex-shrink-0 overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
