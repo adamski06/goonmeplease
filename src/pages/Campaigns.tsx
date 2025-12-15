@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { backgroundDelay } from '@/lib/backgroundDelay';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -476,6 +476,14 @@ const Campaigns: React.FC = () => {
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
   const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
   const [favorites, setFavorites] = useState<string[]>([]);
+  const featuredScrollRef = useRef<HTMLDivElement>(null);
+
+  // Reset scroll position when switching to Featured mode
+  useEffect(() => {
+    if (activeFilter === 'featured' && featuredScrollRef.current) {
+      featuredScrollRef.current.scrollTop = 0;
+    }
+  }, [activeFilter]);
 
   // Fetch user favorites
   useEffect(() => {
@@ -875,7 +883,7 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div className="relative flex-1 overflow-y-auto pt-24">
+          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24">
             <div className="pb-8 pl-8 pr-8">
               <div className="flex flex-wrap gap-x-4 gap-y-20">
               {campaigns.map((campaign, index) => {
