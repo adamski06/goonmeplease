@@ -472,6 +472,7 @@ const Campaigns: React.FC = () => {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
+  const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured' | 'beauty' | 'fashion' | 'tech' | 'food'>('featured');
   const [favorites, setFavorites] = useState<number[]>([]);
 
   // Fetch user favorites
@@ -671,19 +672,40 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
         <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/10 flex items-center px-6 gap-3 shrink-0 bg-white/95 dark:bg-dark-surface font-jakarta">
-          <button className="px-4 py-1.5 rounded-full bg-black text-white text-sm font-medium">
+          <button 
+            onClick={() => setActiveFilter('foryou')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'foryou' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
+            For you
+          </button>
+          <button 
+            onClick={() => setActiveFilter('featured')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'featured' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
             Featured
           </button>
-          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+          <button 
+            onClick={() => setActiveFilter('beauty')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'beauty' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
             Beauty
           </button>
-          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+          <button 
+            onClick={() => setActiveFilter('fashion')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'fashion' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
             Fashion
           </button>
-          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+          <button 
+            onClick={() => setActiveFilter('tech')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'tech' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
             Tech
           </button>
-          <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+          <button 
+            onClick={() => setActiveFilter('food')}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'food' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+          >
             Food
           </button>
           <div className="ml-auto flex items-center gap-2">
@@ -715,7 +737,50 @@ const Campaigns: React.FC = () => {
           </div>
         </div>
 
-        {viewMode === 'scroll' ? (
+        {activeFilter === 'foryou' ? (
+          /* For You - Large single ad scroll view */
+          <div 
+            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onScroll={handleScroll}
+          >
+            {campaigns.map((campaign, idx) => (
+              <div key={campaign.id} className="h-[calc(100vh-3.5rem)] flex items-center justify-center snap-center snap-always p-8">
+                <div 
+                  onClick={() => setSelectedCampaign(campaign)}
+                  className="w-full max-w-2xl h-full rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.005] transition-all relative flex flex-col bg-white/60 dark:bg-dark-surface border border-white/40 dark:border-transparent"
+                >
+                  {/* Large Image */}
+                  <div className="relative flex-1 overflow-hidden">
+                    <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                    
+                    {/* Info overlay at bottom of image */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                      <span className="text-sm font-medium opacity-80 font-montserrat">{campaign.brand}</span>
+                      <p className="text-2xl font-bold mt-1 font-jakarta">{campaign.description}</p>
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="inline-flex items-baseline gap-1">
+                          <span className="text-4xl font-bold font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                          <span className="text-lg font-semibold font-montserrat">sek</span>
+                        </div>
+                        <button
+                          onClick={(e) => toggleFavorite(campaign.id, e)}
+                          className="flex items-center justify-center hover:scale-110 transition-transform p-2"
+                        >
+                          <Heart 
+                            className={`h-8 w-8 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-white/50'}`}
+                            strokeWidth={1.5}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : viewMode === 'scroll' ? (
           <>
             {/* Video Feed - Snap Scroll Container */}
             <div 
