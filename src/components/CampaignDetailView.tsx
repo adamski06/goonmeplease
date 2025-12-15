@@ -37,19 +37,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   onToggleSave 
 }) => {
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto px-8">
       {/* Back button */}
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 font-jakarta"
+        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-jakarta"
       >
         <ArrowLeft className="h-5 w-5" />
         <span className="text-base font-medium">Back to ads</span>
       </button>
 
-      <div className="flex gap-8">
+      <div className="flex gap-16 justify-center">
         {/* Left side - Campaign info */}
-        <div className="flex-1 max-w-md">
+        <div className="flex-1 max-w-lg">
           {/* Header - Logo and company name */}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
