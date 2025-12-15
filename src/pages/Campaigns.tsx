@@ -49,6 +49,18 @@ import electricCar from '@/assets/campaigns/electric-car.jpg';
 import nikeExample1 from '@/assets/examples/nike-example-1.jpg';
 import nikeExample2 from '@/assets/examples/nike-example-2.jpg';
 import nikeExample3 from '@/assets/examples/nike-example-3.jpg';
+import spotifyExample1 from '@/assets/examples/spotify-example-1.jpg';
+import samsungExample1 from '@/assets/examples/samsung-example-1.jpg';
+import redbullExample1 from '@/assets/examples/redbull-example-1.jpg';
+import adobeExample1 from '@/assets/examples/adobe-example-1.jpg';
+import cocacolaExample1 from '@/assets/examples/cocacola-example-1.jpg';
+import appleExample1 from '@/assets/examples/apple-example-1.jpg';
+import netflixExample1 from '@/assets/examples/netflix-example-1.jpg';
+import adidasExample1 from '@/assets/examples/adidas-example-1.jpg';
+import goproExample1 from '@/assets/examples/gopro-example-1.jpg';
+import starbucksExample1 from '@/assets/examples/starbucks-example-1.jpg';
+import playstationExample1 from '@/assets/examples/playstation-example-1.jpg';
+import hmExample1 from '@/assets/examples/hm-example-1.jpg';
 
 type FilterType = 'foryou' | 'featured';
 
@@ -99,7 +111,8 @@ const campaigns = [
       { minViews: 0, maxViews: 5000, rate: 35 },
       { minViews: 5000, maxViews: 50000, rate: 28 },
       { minViews: 50000, maxViews: null, rate: 20 }
-    ]
+    ],
+    exampleImages: [spotifyExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000003', 
@@ -122,7 +135,8 @@ const campaigns = [
       { minViews: 0, maxViews: 20000, rate: 72 },
       { minViews: 20000, maxViews: 200000, rate: 55 },
       { minViews: 200000, maxViews: null, rate: 40 }
-    ]
+    ],
+    exampleImages: [samsungExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000004', 
@@ -145,7 +159,8 @@ const campaigns = [
       { minViews: 0, maxViews: 15000, rate: 45 },
       { minViews: 15000, maxViews: 150000, rate: 35 },
       { minViews: 150000, maxViews: null, rate: 25 }
-    ]
+    ],
+    exampleImages: [redbullExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000005', 
@@ -168,7 +183,8 @@ const campaigns = [
       { minViews: 0, maxViews: 10000, rate: 60 },
       { minViews: 10000, maxViews: 100000, rate: 45 },
       { minViews: 100000, maxViews: null, rate: 35 }
-    ]
+    ],
+    exampleImages: [adobeExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000006', 
@@ -191,7 +207,8 @@ const campaigns = [
       { minViews: 0, maxViews: 10000, rate: 55 },
       { minViews: 10000, maxViews: 100000, rate: 42 },
       { minViews: 100000, maxViews: null, rate: 30 }
-    ]
+    ],
+    exampleImages: [appleExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000007', 
@@ -214,7 +231,8 @@ const campaigns = [
       { minViews: 0, maxViews: 8000, rate: 40 },
       { minViews: 8000, maxViews: 80000, rate: 30 },
       { minViews: 80000, maxViews: null, rate: 22 }
-    ]
+    ],
+    exampleImages: [cocacolaExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000008', 
@@ -237,7 +255,8 @@ const campaigns = [
       { minViews: 0, maxViews: 12000, rate: 48 },
       { minViews: 12000, maxViews: 120000, rate: 36 },
       { minViews: 120000, maxViews: null, rate: 26 }
-    ]
+    ],
+    exampleImages: [netflixExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000009', 
@@ -260,7 +279,8 @@ const campaigns = [
       { minViews: 0, maxViews: 10000, rate: 52 },
       { minViews: 10000, maxViews: 100000, rate: 40 },
       { minViews: 100000, maxViews: null, rate: 28 }
-    ]
+    ],
+    exampleImages: [adidasExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000010', 
@@ -283,7 +303,8 @@ const campaigns = [
       { minViews: 0, maxViews: 15000, rate: 65 },
       { minViews: 15000, maxViews: 150000, rate: 50 },
       { minViews: 150000, maxViews: null, rate: 38 }
-    ]
+    ],
+    exampleImages: [goproExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000011', 
@@ -306,7 +327,8 @@ const campaigns = [
       { minViews: 0, maxViews: 5000, rate: 35 },
       { minViews: 5000, maxViews: 50000, rate: 26 },
       { minViews: 50000, maxViews: null, rate: 18 }
-    ]
+    ],
+    exampleImages: [starbucksExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000012', 
@@ -329,7 +351,8 @@ const campaigns = [
       { minViews: 0, maxViews: 18000, rate: 58 },
       { minViews: 18000, maxViews: 180000, rate: 44 },
       { minViews: 180000, maxViews: null, rate: 32 }
-    ]
+    ],
+    exampleImages: [playstationExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000013', 
@@ -352,7 +375,8 @@ const campaigns = [
       { minViews: 0, maxViews: 7000, rate: 38 },
       { minViews: 7000, maxViews: 70000, rate: 28 },
       { minViews: 70000, maxViews: null, rate: 20 }
-    ]
+    ],
+    exampleImages: [hmExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000014', 
