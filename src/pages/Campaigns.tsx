@@ -839,10 +839,10 @@ const Campaigns: React.FC = () => {
                     {/* Right side - Campaign info */}
                     <div className="flex-1 p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-white/10 backdrop-blur-md">
                       <div className="relative z-10">
-                        <div className="mb-2">
-                          <span className="text-sm font-bold text-foreground">{campaign.brand}</span>
+                        <div className="mb-1">
+                          <span className="text-xs font-medium text-muted-foreground">{campaign.brand}</span>
                         </div>
-                        <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
+                        <p className="text-base font-bold text-foreground">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-end justify-between">
                         <div className="inline-flex items-baseline gap-0.5 mb-[-4px]">
