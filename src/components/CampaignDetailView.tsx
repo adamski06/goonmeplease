@@ -93,7 +93,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 {[1, 2, 3].map((i) => (
                   <div 
                     key={i}
-                    className="w-60 h-60 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                    className="w-36 h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
                   >
                     <span className="text-sm text-muted-foreground">Example {i}</span>
                   </div>
