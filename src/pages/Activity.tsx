@@ -85,7 +85,7 @@ const Activity: React.FC = () => {
           </button>
           <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-2">
             <ActivityIcon className="h-6 w-6" />
-            Activity
+            Action
           </button>
           <button 
             onClick={() => navigate('/profile')}
