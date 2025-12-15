@@ -231,46 +231,34 @@ const Activity: React.FC = () => {
         {favoriteCampaigns.length === 0 ? (
           <p className="text-muted-foreground">No favorites yet. Heart some campaigns to see them here!</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="flex gap-4 overflow-x-auto pb-4">
             {favoriteCampaigns.map((campaign) => (
               <div 
                 key={campaign.id}
-                className="flex bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-xl overflow-hidden hover:bg-black/10 dark:hover:bg-white/15 transition-colors cursor-pointer"
+                className="flex-shrink-0 w-32 cursor-pointer group"
                 onClick={() => navigate('/campaigns')}
               >
-                {/* Left side - Campaign info */}
-                <div className="flex-1 p-4 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="h-6 w-6 rounded-full overflow-hidden">
-                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <span className="text-base font-bold text-foreground">{campaign.brand}</span>
-                    </div>
-                    <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
-                  </div>
-                  <div className="mt-auto flex items-center gap-2">
-                    <div className="bg-black text-white font-semibold px-3 py-1 rounded inline-flex items-baseline gap-0.5">
-                      <span className="text-xl">{campaign.maxEarnings.toLocaleString()}</span>
-                      <span className="text-xs">sek</span>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeFavorite(campaign.id);
-                      }}
-                      className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors"
-                    >
-                      <Heart className="h-4 w-4 fill-red-500 text-red-500" />
-                    </button>
-                  </div>
-                </div>
-                
-                {/* Right side - Image */}
-                <div className="relative w-24 aspect-[9/16] flex-shrink-0 m-3 rounded-sm overflow-hidden">
+                {/* Image */}
+                <div className="relative aspect-[9/16] rounded-xl overflow-hidden mb-2">
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  {/* Remove button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFavorite(campaign.id);
+                    }}
+                    className="absolute top-2 right-2 h-7 w-7 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Heart className="h-4 w-4 fill-red-500 text-red-500" />
+                  </button>
+                  {/* Logo */}
+                  <div className="absolute bottom-2 left-2 h-5 w-5 rounded-full overflow-hidden">
+                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                  </div>
                 </div>
+                {/* Brand name */}
+                <p className="text-xs font-semibold text-foreground truncate">{campaign.brand}</p>
               </div>
             ))}
           </div>
