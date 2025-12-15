@@ -844,14 +844,14 @@ const Campaigns: React.FC = () => {
                         </div>
                         <p className="text-sm font-bold text-foreground">{campaign.description}</p>
                       </div>
-                      <div className="relative z-10 mt-auto flex flex-row items-end justify-between">
-                        <div className="inline-flex items-baseline gap-0.5 mb-[-4px]">
+                      <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
+                        <div className="inline-flex items-baseline gap-0.5">
                           <span className="text-2xl font-bold text-foreground">{campaign.maxEarnings.toLocaleString()}</span>
                           <span className="text-xs font-semibold text-foreground">sek</span>
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
-                          className="flex items-center justify-center hover:scale-110 transition-transform mr-[-4px] mb-[-4px]"
+                          className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
                           <Heart 
                             className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black/25'}`}
