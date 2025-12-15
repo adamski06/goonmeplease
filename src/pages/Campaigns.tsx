@@ -507,11 +507,31 @@ const Campaigns: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
   const [favorites, setFavorites] = useState<string[]>([]);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
+  const savedScrollPosition = useRef<number>(0);
+
+  // Save scroll position before showing detail, restore when going back
+  const handleSelectCampaign = (campaign: typeof campaigns[0]) => {
+    if (featuredScrollRef.current) {
+      savedScrollPosition.current = featuredScrollRef.current.scrollTop;
+    }
+    setSelectedCampaign(campaign);
+  };
+
+  const handleBackFromDetail = () => {
+    setSelectedCampaign(null);
+    // Restore scroll position after render
+    requestAnimationFrame(() => {
+      if (featuredScrollRef.current) {
+        featuredScrollRef.current.scrollTop = savedScrollPosition.current;
+      }
+    });
+  };
 
   // Reset scroll position when switching to Featured mode
   useEffect(() => {
-    if (activeFilter === 'featured' && featuredScrollRef.current) {
+    if (activeFilter === 'featured' && featuredScrollRef.current && !selectedCampaign) {
       featuredScrollRef.current.scrollTop = 0;
+      savedScrollPosition.current = 0;
     }
   }, [activeFilter]);
 
@@ -759,7 +779,7 @@ const Campaigns: React.FC = () => {
           <div className="flex-1 overflow-y-auto px-8 py-8">
             <CampaignDetailView
               campaign={selectedCampaign}
-              onBack={() => setSelectedCampaign(null)}
+              onBack={handleBackFromDetail}
               isSaved={favorites.includes(selectedCampaign.id)}
               onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
             />
@@ -811,7 +831,7 @@ const Campaigns: React.FC = () => {
               <div key={campaign.id} className="h-screen flex items-center justify-start snap-center snap-always py-6 pl-16 gap-8">
                 {/* Left side - Full vertical photo (standalone) */}
                 <div 
-                  onClick={() => setSelectedCampaign(campaign)}
+                  onClick={() => handleSelectCampaign(campaign)}
                   className="relative h-[calc(100vh-48px)] aspect-[9/16] overflow-hidden flex-shrink-0 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all"
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
@@ -861,7 +881,7 @@ const Campaigns: React.FC = () => {
                 <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
                   {/* Video Placeholder - 9:16 aspect ratio */}
                   <div 
-                    onClick={() => setSelectedCampaign(campaign)}
+                    onClick={() => handleSelectCampaign(campaign)}
                     className="aspect-[9/16] h-[calc(100vh-48px)] rounded-2xl border border-white/25 flex items-center justify-center relative overflow-hidden cursor-pointer transition-colors"
                     style={{ backgroundColor: 'hsla(220, 70%, 55%, 0.18)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
                   >
@@ -954,7 +974,7 @@ const Campaigns: React.FC = () => {
                 return (
                   <div
                     key={campaign.id}
-                    onClick={() => setSelectedCampaign(campaign)}
+                    onClick={() => handleSelectCampaign(campaign)}
                     className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-transparent w-[280px] h-[170px]"
                   >
                     {/* Left side - Image */}
