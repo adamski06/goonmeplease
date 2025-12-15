@@ -15,8 +15,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Roboto', 'system-ui', 'sans-serif'],
-        display: ['Roboto', 'system-ui', 'sans-serif'],
-        roboto: ['Roboto', 'system-ui', 'sans-serif'],
+        display: ['Montserrat', 'system-ui', 'sans-serif'],
+        montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
