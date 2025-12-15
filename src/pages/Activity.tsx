@@ -45,24 +45,24 @@ import adobeLogo from '@/assets/logos/adobe.png';
 
 // Mock campaigns data (should match Campaigns.tsx)
 const allCampaigns = [
-  { id: 1, brand: 'Nike', description: 'Show your workout routine', maxEarnings: 500, logo: nikeLogo, image: fitnessWorkout },
-  { id: 2, brand: 'Spotify', description: 'Share your music moments', maxEarnings: 350, logo: spotifyLogo, image: musicLifestyle },
-  { id: 3, brand: 'Samsung', description: 'Unbox the new Galaxy', maxEarnings: 800, logo: samsungLogo, image: techUnboxing },
-  { id: 4, brand: 'Red Bull', description: 'Capture extreme moments', maxEarnings: 600, logo: redbullLogo, image: extremeSports },
-  { id: 5, brand: 'Adobe', description: 'Show your creative process', maxEarnings: 450, logo: adobeLogo, image: creativeDesign },
-  { id: 6, brand: 'Samsung', description: 'Mobile photography tips', maxEarnings: 400, logo: samsungLogo, image: mobileCreative },
-  { id: 7, brand: 'Red Bull', description: 'Summer energy vibes', maxEarnings: 300, logo: redbullLogo, image: summerDrink },
-  { id: 8, brand: 'Spotify', description: 'Concert experience', maxEarnings: 550, logo: spotifyLogo, image: entertainment },
-  { id: 9, brand: 'Nike', description: 'Street style showcase', maxEarnings: 420, logo: nikeLogo, image: streetStyle },
-  { id: 10, brand: 'Red Bull', description: 'Adventure POV shots', maxEarnings: 700, logo: redbullLogo, image: adventurePov },
-  { id: 11, brand: 'Spotify', description: 'Morning coffee playlist', maxEarnings: 280, logo: spotifyLogo, image: coffeeMoment },
-  { id: 12, brand: 'Samsung', description: 'Gaming setup tour', maxEarnings: 650, logo: samsungLogo, image: gaming },
-  { id: 13, brand: 'Nike', description: 'Fashion forward looks', maxEarnings: 480, logo: nikeLogo, image: fashionStyle },
-  { id: 14, brand: 'Samsung', description: 'Tech unboxing haul', maxEarnings: 520, logo: samsungLogo, image: unboxingHaul },
-  { id: 15, brand: 'Adobe', description: 'Home office setup', maxEarnings: 380, logo: adobeLogo, image: homeInterior },
-  { id: 16, brand: 'Red Bull', description: 'Quick meal energy', maxEarnings: 250, logo: redbullLogo, image: fastFood },
-  { id: 17, brand: 'Spotify', description: 'Food delivery unboxing', maxEarnings: 320, logo: spotifyLogo, image: foodDelivery },
-  { id: 18, brand: 'Samsung', description: 'Electric car review', maxEarnings: 900, logo: samsungLogo, image: electricCar },
+  { id: '00000000-0000-0000-0000-000000000001', brand: 'Nike', description: 'Show your workout routine', maxEarnings: 500, logo: nikeLogo, image: fitnessWorkout },
+  { id: '00000000-0000-0000-0000-000000000002', brand: 'Spotify', description: 'Share your music moments', maxEarnings: 350, logo: spotifyLogo, image: musicLifestyle },
+  { id: '00000000-0000-0000-0000-000000000003', brand: 'Samsung', description: 'Unbox the new Galaxy', maxEarnings: 800, logo: samsungLogo, image: techUnboxing },
+  { id: '00000000-0000-0000-0000-000000000004', brand: 'Red Bull', description: 'Capture extreme moments', maxEarnings: 600, logo: redbullLogo, image: extremeSports },
+  { id: '00000000-0000-0000-0000-000000000005', brand: 'Adobe', description: 'Show your creative process', maxEarnings: 450, logo: adobeLogo, image: creativeDesign },
+  { id: '00000000-0000-0000-0000-000000000006', brand: 'Samsung', description: 'Mobile photography tips', maxEarnings: 400, logo: samsungLogo, image: mobileCreative },
+  { id: '00000000-0000-0000-0000-000000000007', brand: 'Red Bull', description: 'Summer energy vibes', maxEarnings: 300, logo: redbullLogo, image: summerDrink },
+  { id: '00000000-0000-0000-0000-000000000008', brand: 'Spotify', description: 'Concert experience', maxEarnings: 550, logo: spotifyLogo, image: entertainment },
+  { id: '00000000-0000-0000-0000-000000000009', brand: 'Nike', description: 'Street style showcase', maxEarnings: 420, logo: nikeLogo, image: streetStyle },
+  { id: '00000000-0000-0000-0000-000000000010', brand: 'Red Bull', description: 'Adventure POV shots', maxEarnings: 700, logo: redbullLogo, image: adventurePov },
+  { id: '00000000-0000-0000-0000-000000000011', brand: 'Spotify', description: 'Morning coffee playlist', maxEarnings: 280, logo: spotifyLogo, image: coffeeMoment },
+  { id: '00000000-0000-0000-0000-000000000012', brand: 'Samsung', description: 'Gaming setup tour', maxEarnings: 650, logo: samsungLogo, image: gaming },
+  { id: '00000000-0000-0000-0000-000000000013', brand: 'Nike', description: 'Fashion forward looks', maxEarnings: 480, logo: nikeLogo, image: fashionStyle },
+  { id: '00000000-0000-0000-0000-000000000014', brand: 'Samsung', description: 'Tech unboxing haul', maxEarnings: 520, logo: samsungLogo, image: unboxingHaul },
+  { id: '00000000-0000-0000-0000-000000000015', brand: 'Adobe', description: 'Home office setup', maxEarnings: 380, logo: adobeLogo, image: homeInterior },
+  { id: '00000000-0000-0000-0000-000000000016', brand: 'Red Bull', description: 'Quick meal energy', maxEarnings: 250, logo: redbullLogo, image: fastFood },
+  { id: '00000000-0000-0000-0000-000000000017', brand: 'Spotify', description: 'Food delivery unboxing', maxEarnings: 320, logo: spotifyLogo, image: foodDelivery },
+  { id: '00000000-0000-0000-0000-000000000018', brand: 'Samsung', description: 'Electric car review', maxEarnings: 900, logo: samsungLogo, image: electricCar },
 ];
 
 const Activity: React.FC = () => {
@@ -70,7 +70,7 @@ const Activity: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -87,21 +87,20 @@ const Activity: React.FC = () => {
           .select('campaign_id')
           .eq('user_id', user.id);
         if (data) {
-          setFavorites(data.map(f => parseInt(f.campaign_id.split('-')[0]) || 0));
+          setFavorites(data.map(f => f.campaign_id));
         }
       };
       fetchFavorites();
     }
   }, [user]);
 
-  const removeFavorite = async (campaignId: number) => {
+  const removeFavorite = async (campaignId: string) => {
     if (!user) return;
-    const campaignUuid = `${campaignId}-0000-0000-0000-000000000000`;
     await supabase
       .from('favorites')
       .delete()
       .eq('user_id', user.id)
-      .eq('campaign_id', campaignUuid);
+      .eq('campaign_id', campaignId);
     setFavorites(favorites.filter(id => id !== campaignId));
   };
 

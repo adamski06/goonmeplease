@@ -50,7 +50,7 @@ type FilterType = 'foryou' | 'featured';
 // Extended mock campaign data
 const campaigns = [
   { 
-    id: 1, 
+    id: '00000000-0000-0000-0000-000000000001', 
     brand: 'Nike', 
     description: 'Show off your workout routine with our new collection', 
     ratePerThousand: 50, 
@@ -73,7 +73,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 2, 
+    id: '00000000-0000-0000-0000-000000000002', 
     brand: 'Spotify', 
     description: 'Share your favorite playlist moment', 
     ratePerThousand: 35, 
@@ -96,7 +96,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 3, 
+    id: '00000000-0000-0000-0000-000000000003', 
     brand: 'Samsung', 
     description: 'Unbox and review the new Galaxy phone', 
     ratePerThousand: 72, 
@@ -119,7 +119,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 4, 
+    id: '00000000-0000-0000-0000-000000000004', 
     brand: 'Red Bull', 
     description: 'Capture your most extreme moment', 
     ratePerThousand: 45, 
@@ -142,7 +142,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 5, 
+    id: '00000000-0000-0000-0000-000000000005', 
     brand: 'Adobe', 
     description: 'Create something amazing with our tools', 
     ratePerThousand: 60, 
@@ -165,7 +165,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 6, 
+    id: '00000000-0000-0000-0000-000000000006', 
     brand: 'Apple', 
     description: 'Show how you use your iPhone creatively', 
     ratePerThousand: 55, 
@@ -188,7 +188,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 7, 
+    id: '00000000-0000-0000-0000-000000000007', 
     brand: 'Coca-Cola', 
     description: 'Share your refreshing summer moment', 
     ratePerThousand: 40, 
@@ -211,7 +211,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 8, 
+    id: '00000000-0000-0000-0000-000000000008', 
     brand: 'Netflix', 
     description: 'React to your favorite new show', 
     ratePerThousand: 48, 
@@ -234,7 +234,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 9, 
+    id: '00000000-0000-0000-0000-000000000009', 
     brand: 'Adidas', 
     description: 'Show your street style', 
     ratePerThousand: 52, 
@@ -257,7 +257,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 10, 
+    id: '00000000-0000-0000-0000-000000000010', 
     brand: 'GoPro', 
     description: 'Capture your adventure', 
     ratePerThousand: 65, 
@@ -280,7 +280,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 11, 
+    id: '00000000-0000-0000-0000-000000000011', 
     brand: 'Starbucks', 
     description: 'Share your coffee ritual', 
     ratePerThousand: 35, 
@@ -303,7 +303,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 12, 
+    id: '00000000-0000-0000-0000-000000000012', 
     brand: 'PlayStation', 
     description: 'Share your gaming highlights', 
     ratePerThousand: 58, 
@@ -326,7 +326,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 13, 
+    id: '00000000-0000-0000-0000-000000000013', 
     brand: 'H&M', 
     description: 'Style your favorite outfit', 
     ratePerThousand: 38, 
@@ -349,7 +349,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 14, 
+    id: '00000000-0000-0000-0000-000000000014', 
     brand: 'Amazon', 
     description: 'Unbox your latest finds', 
     ratePerThousand: 42, 
@@ -372,7 +372,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 15, 
+    id: '00000000-0000-0000-0000-000000000015', 
     brand: 'IKEA', 
     description: 'Show your room transformation', 
     ratePerThousand: 55, 
@@ -395,7 +395,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 16, 
+    id: '00000000-0000-0000-0000-000000000016', 
     brand: 'McDonalds', 
     description: 'Share your go-to order', 
     ratePerThousand: 32, 
@@ -418,7 +418,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 17, 
+    id: '00000000-0000-0000-0000-000000000017', 
     brand: 'Uber Eats', 
     description: 'Film your food delivery moment', 
     ratePerThousand: 44, 
@@ -441,7 +441,7 @@ const campaigns = [
     ]
   },
   { 
-    id: 18, 
+    id: '00000000-0000-0000-0000-000000000018', 
     brand: 'Tesla', 
     description: 'Show off your Tesla experience', 
     ratePerThousand: 70, 
@@ -475,7 +475,7 @@ const Campaigns: React.FC = () => {
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
   const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   // Fetch user favorites
   useEffect(() => {
@@ -486,19 +486,16 @@ const Campaigns: React.FC = () => {
           .select('campaign_id')
           .eq('user_id', user.id);
         if (data) {
-          // Extract campaign IDs (we're using mock data with number IDs, so we need to handle this)
-          setFavorites(data.map(f => parseInt(f.campaign_id.split('-')[0]) || 0));
+          setFavorites(data.map(f => f.campaign_id));
         }
       };
       fetchFavorites();
     }
   }, [user]);
 
-  const toggleFavorite = async (campaignId: number, e: React.MouseEvent) => {
+  const toggleFavorite = async (campaignId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
-    
-    const campaignUuid = `${campaignId}-0000-0000-0000-000000000000`;
     
     if (favorites.includes(campaignId)) {
       // Remove favorite
@@ -506,13 +503,13 @@ const Campaigns: React.FC = () => {
         .from('favorites')
         .delete()
         .eq('user_id', user.id)
-        .eq('campaign_id', campaignUuid);
+        .eq('campaign_id', campaignId);
       setFavorites(favorites.filter(id => id !== campaignId));
     } else {
       // Add favorite
       await supabase
         .from('favorites')
-        .insert({ user_id: user.id, campaign_id: campaignUuid });
+        .insert({ user_id: user.id, campaign_id: campaignId });
       setFavorites([...favorites, campaignId]);
     }
   };

@@ -9,7 +9,7 @@ interface CampaignTier {
 }
 
 interface Campaign {
-  id: number;
+  id: string;
   brand: string;
   description: string;
   logo: string;
