@@ -879,7 +879,7 @@ const Campaigns: React.FC = () => {
         ) : (
           /* Browse Mode - Horizontal List Layout */
           <div className="relative flex-1 overflow-y-auto pt-16">
-            <div className="pb-8 pl-8 pr-32">
+            <div className="pb-8 pl-8 pr-8">
               <div className="flex flex-wrap gap-x-4 gap-y-20">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
