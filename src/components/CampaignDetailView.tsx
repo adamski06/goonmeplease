@@ -44,7 +44,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 font-jakarta"
       >
         <ArrowLeft className="h-5 w-5" />
-        <span className="text-sm font-medium">Back to ads</span>
+        <span className="text-base font-medium">Back to ads</span>
       </button>
 
       <div className="flex gap-8">
@@ -55,7 +55,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
             </div>
-            <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+            <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
             <button
               onClick={onToggleSave}
               className="ml-auto flex items-center justify-center hover:scale-110 transition-transform"
@@ -69,13 +69,13 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
           {/* Video type / Creative freedom description */}
           <div className="mb-6">
-            <p className="text-foreground font-jakarta">{campaign.contentType}</p>
-            <p className="text-sm text-muted-foreground mt-1">{campaign.description}</p>
+            <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
+            <p className="text-base text-muted-foreground mt-1">{campaign.description}</p>
           </div>
 
           {/* Requirements */}
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-foreground mb-2 font-montserrat">Requirements</h3>
+            <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
             
             {/* Example pictures row */}
             <div className="flex gap-2 mb-4">
@@ -89,9 +89,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               ))}
             </div>
 
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-sm text-muted-foreground font-jakarta flex items-start gap-2">
+                <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
                   <span className="text-foreground">•</span>
                   {guideline}
                 </li>
@@ -100,14 +100,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </div>
 
           {/* Price */}
-          <div className="bg-black text-white rounded-xl p-4 mb-6">
+          <div className="bg-black text-white rounded-xl p-5 mb-6">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-montserrat">{campaign.ratePerThousand} sek</span>
-              <span className="text-white/60 text-xs">/ 1000 views</span>
+              <span className="text-3xl font-bold font-montserrat">{campaign.ratePerThousand} sek</span>
+              <span className="text-white/60 text-sm">/ 1000 views</span>
             </div>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-sm text-white/60">up to</span>
-              <span className="text-lg font-semibold">{campaign.maxEarnings.toLocaleString()} sek</span>
+              <span className="text-base text-white/60">up to</span>
+              <span className="text-xl font-semibold">{campaign.maxEarnings.toLocaleString()} sek</span>
             </div>
           </div>
 
