@@ -68,44 +68,20 @@ type FilterType = 'foryou' | 'featured';
 const campaigns = [
   { 
     id: '00000000-0000-0000-0000-000000000001', 
-    brand: 'Nike', 
-    description: 'Show off your workout routine with our new collection', 
-    ratePerThousand: 50, 
-    maxEarnings: 750, 
-    logo: nikeLogo,
-    image: fitnessWorkout,
-    contentType: 'Workout/Fitness video',
-    productVisibility: 'Product must be clearly visible for at least 3 seconds',
-    videoLength: '15-60 seconds',
-    guidelines: [
-      'Wear Nike apparel or shoes throughout the video',
-      'Show yourself actively working out',
-      'Include the hashtag #JustDoIt',
-      'No competitor brands visible'
-    ],
-    tiers: [
-      { minViews: 0, maxViews: 10000, rate: 50 },
-      { minViews: 10000, maxViews: 100000, rate: 40 },
-      { minViews: 100000, maxViews: null, rate: 30 }
-    ],
-    exampleImages: [nikeExample1, nikeExample2, nikeExample3]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000002', 
     brand: 'Spotify', 
-    description: 'Share your favorite playlist moment', 
+    description: 'We want to see how you discover new music on Spotify. Film yourself scrolling through your Discover Weekly or Release Radar, find a song you genuinely like, and show your authentic reaction when you hear it for the first time. This works best when you\'re doing something casual - cooking, getting ready, or just chilling at home.', 
     ratePerThousand: 35, 
     maxEarnings: 600, 
     logo: spotifyLogo,
     image: musicLifestyle,
-    contentType: 'Music/Lifestyle video',
-    productVisibility: 'Show Spotify app on screen for at least 2 seconds',
-    videoLength: '10-30 seconds',
+    contentType: 'Music Discovery/Reaction',
+    productVisibility: 'Spotify app interface must be visible for at least 3 seconds',
+    videoLength: '15-45 seconds',
     guidelines: [
-      'Play music through Spotify app visibly',
-      'Show genuine reaction to the music',
-      'Mention discovering new music',
-      'Use trending sounds when possible'
+      'Show the Spotify app clearly on your phone screen',
+      'React genuinely to discovering a new song',
+      'Mention "Discover Weekly" or "Release Radar" in your caption',
+      'No skip - let the song play for at least 10 seconds'
     ],
     tiers: [
       { minViews: 0, maxViews: 5000, rate: 35 },
@@ -115,117 +91,117 @@ const campaigns = [
     exampleImages: [spotifyExample1]
   },
   { 
-    id: '00000000-0000-0000-0000-000000000003', 
-    brand: 'Samsung', 
-    description: 'Unbox and review the new Galaxy phone', 
-    ratePerThousand: 72, 
-    maxEarnings: 2500,
-    logo: samsungLogo,
-    image: techUnboxing,
-    contentType: 'Unboxing/Tech Review',
-    productVisibility: 'Product must be the main focus throughout',
-    videoLength: '30-90 seconds',
+    id: '00000000-0000-0000-0000-000000000002', 
+    brand: 'Starbucks', 
+    description: 'Show us your morning Starbucks run. We\'re looking for authentic "day in my life" style content where you pick up your usual order, customize it if you do, and enjoy your first sip. Works great if you film the walk to the store, ordering process, or the moment you get your drink. No scripts needed - just your real morning routine.', 
+    ratePerThousand: 32, 
+    maxEarnings: 500, 
+    logo: nikeLogo,
+    image: coffeeMoment,
+    contentType: 'Lifestyle/Morning Routine',
+    productVisibility: 'Starbucks cup with logo clearly visible',
+    videoLength: '15-30 seconds',
     guidelines: [
-      'Show complete unboxing experience',
-      'Highlight at least 3 key features',
-      'Share your genuine first impressions',
-      'Include the phone in good lighting'
+      'Cup must be recognizable as Starbucks',
+      'Show your drink order or mention what you got',
+      'Authentic morning vibes - no heavy makeup or staging',
+      'First sip reaction is a plus'
     ],
     tiers: [
-      { minViews: 0, maxViews: 20000, rate: 72 },
-      { minViews: 20000, maxViews: 200000, rate: 55 },
-      { minViews: 200000, maxViews: null, rate: 40 }
+      { minViews: 0, maxViews: 5000, rate: 32 },
+      { minViews: 5000, maxViews: 50000, rate: 24 },
+      { minViews: 50000, maxViews: null, rate: 18 }
     ],
-    exampleImages: [samsungExample1]
+    exampleImages: [starbucksExample1]
+  },
+  { 
+    id: '00000000-0000-0000-0000-000000000003', 
+    brand: 'McDonald\'s', 
+    description: 'We\'re promoting our new menu items and want real customers showing their genuine reactions. Visit any McDonald\'s, order something from the menu (we\'ll reimburse up to 150 SEK), and film yourself trying it. Focus on the unwrapping, the first bite, and your honest reaction. This isn\'t about perfection - we want authentic "I just got McDonald\'s" energy.', 
+    ratePerThousand: 38, 
+    maxEarnings: 550,
+    logo: nikeLogo,
+    image: fastFood,
+    contentType: 'Food Review/Reaction',
+    productVisibility: 'McDonald\'s packaging and food clearly visible',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Show the McDonald\'s bag or packaging',
+      'Include unwrapping/unboxing the food',
+      'Give your honest first-bite reaction',
+      'Mention what you ordered in caption or voiceover'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 8000, rate: 38 },
+      { minViews: 8000, maxViews: 80000, rate: 28 },
+      { minViews: 80000, maxViews: null, rate: 20 }
+    ],
+    exampleImages: [cocacolaExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000004', 
     brand: 'Red Bull', 
-    description: 'Capture your most extreme moment', 
-    ratePerThousand: 45, 
-    maxEarnings: 850, 
+    description: 'Film yourself cracking open a Red Bull before doing something that requires energy - gym session, late night study grind, gaming marathon, early morning, whatever fits your life. We want the can crack sound, the first sip, and then you getting into your activity. Keep it natural and show us what gives you wings.', 
+    ratePerThousand: 42, 
+    maxEarnings: 750, 
     logo: redbullLogo,
     image: extremeSports,
-    contentType: 'Extreme Sports/Adventure',
-    productVisibility: 'Red Bull can visible at start or end',
-    videoLength: '15-45 seconds',
+    contentType: 'Energy/Lifestyle',
+    productVisibility: 'Red Bull can visible for at least 3 seconds',
+    videoLength: '15-30 seconds',
     guidelines: [
-      'Feature an adrenaline-pumping activity',
-      'Keep it safe but exciting',
-      'Show the Red Bull can naturally',
-      'High energy editing preferred'
+      'Capture the can crack sound if possible',
+      'Show yourself drinking before an activity',
+      'Keep it natural - gym, gaming, studying all work',
+      'High energy edit style preferred'
     ],
     tiers: [
-      { minViews: 0, maxViews: 15000, rate: 45 },
-      { minViews: 15000, maxViews: 150000, rate: 35 },
-      { minViews: 150000, maxViews: null, rate: 25 }
+      { minViews: 0, maxViews: 10000, rate: 42 },
+      { minViews: 10000, maxViews: 100000, rate: 32 },
+      { minViews: 100000, maxViews: null, rate: 24 }
     ],
     exampleImages: [redbullExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000005', 
     brand: 'Adobe', 
-    description: 'Create something amazing with our tools', 
-    ratePerThousand: 60, 
-    maxEarnings: 950, 
+    description: 'Show your creative process using any Adobe app - Lightroom, Photoshop, Premiere, whatever you actually use. We want to see a quick before/after transformation or a sped-up edit session. This is perfect for creators who already edit their content. Show us a 10-second edit that took you 30 minutes and let people see the magic.', 
+    ratePerThousand: 55, 
+    maxEarnings: 900, 
     logo: adobeLogo,
     image: creativeDesign,
     contentType: 'Creative Process/Tutorial',
-    productVisibility: 'Show Adobe software interface clearly',
-    videoLength: '20-60 seconds',
-    guidelines: [
-      'Demonstrate a creative workflow',
-      'Show before/after if applicable',
-      'Mention which Adobe tool you\'re using',
-      'Make it inspirational for other creators'
-    ],
-    tiers: [
-      { minViews: 0, maxViews: 10000, rate: 60 },
-      { minViews: 10000, maxViews: 100000, rate: 45 },
-      { minViews: 100000, maxViews: null, rate: 35 }
-    ],
-    exampleImages: [adobeExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000006', 
-    brand: 'Apple', 
-    description: 'Show how you use your iPhone creatively', 
-    ratePerThousand: 55, 
-    maxEarnings: 1800, 
-    logo: nikeLogo,
-    image: mobileCreative,
-    contentType: 'Creative/Lifestyle',
-    productVisibility: 'iPhone must be visible throughout',
+    productVisibility: 'Adobe software interface visible during edit',
     videoLength: '15-45 seconds',
     guidelines: [
-      'Showcase a unique way you use your iPhone',
-      'Keep it authentic and relatable',
-      'Good lighting is essential',
-      'No competitor devices visible'
+      'Show the Adobe app interface clearly',
+      'Include a before/after or transformation',
+      'Mention which Adobe tool you\'re using',
+      'Sped-up editing works great'
     ],
     tiers: [
       { minViews: 0, maxViews: 10000, rate: 55 },
       { minViews: 10000, maxViews: 100000, rate: 42 },
-      { minViews: 100000, maxViews: null, rate: 30 }
+      { minViews: 100000, maxViews: null, rate: 32 }
     ],
-    exampleImages: [appleExample1]
+    exampleImages: [adobeLogo]
   },
   { 
-    id: '00000000-0000-0000-0000-000000000007', 
-    brand: 'Coca-Cola', 
-    description: 'Share your refreshing summer moment', 
+    id: '00000000-0000-0000-0000-000000000006', 
+    brand: 'Uber Eats', 
+    description: 'Film your next Uber Eats order from start to finish. We want to see you scrolling through the app, deciding what to get, placing the order, and then the satisfying moment when the food arrives. The food reveal and first bite are key - that\'s what makes people want to order. Works especially well for late night cravings or lazy Sunday content.', 
     ratePerThousand: 40, 
-    maxEarnings: 550, 
+    maxEarnings: 650, 
     logo: spotifyLogo,
-    image: summerDrink,
-    contentType: 'Lifestyle/Summer vibes',
-    productVisibility: 'Coca-Cola product visible for 3+ seconds',
-    videoLength: '10-30 seconds',
+    image: foodDelivery,
+    contentType: 'Food Delivery/Lifestyle',
+    productVisibility: 'Show Uber Eats app and delivered food',
+    videoLength: '20-45 seconds',
     guidelines: [
-      'Capture a fun summer moment',
-      'Show the product naturally',
-      'Include friends or family if possible',
-      'Upbeat music encouraged'
+      'Show the ordering process in the app',
+      'Capture the delivery arrival moment',
+      'Include the food reveal and first bite',
+      'Mention what you ordered'
     ],
     tiers: [
       { minViews: 0, maxViews: 8000, rate: 40 },
@@ -235,144 +211,168 @@ const campaigns = [
     exampleImages: [cocacolaExample1]
   },
   { 
+    id: '00000000-0000-0000-0000-000000000007', 
+    brand: 'Coca-Cola', 
+    description: 'Grab a Coke and film a chill moment - could be at a restaurant, at home watching something, hanging with friends, or just taking a break from your day. We\'re not looking for anything over-produced, just that satisfying first sip and the sound of the fizz. Summer vibes, hangout vibes, any vibe works as long as it feels real.', 
+    ratePerThousand: 36, 
+    maxEarnings: 500, 
+    logo: spotifyLogo,
+    image: summerDrink,
+    contentType: 'Lifestyle/Refreshment',
+    productVisibility: 'Coca-Cola bottle or can clearly visible',
+    videoLength: '10-25 seconds',
+    guidelines: [
+      'Show the Coca-Cola product clearly',
+      'Capture the fizz or first sip',
+      'Keep it casual and authentic',
+      'Friends, food, or chill moments work great'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 8000, rate: 36 },
+      { minViews: 8000, maxViews: 80000, rate: 28 },
+      { minViews: 80000, maxViews: null, rate: 20 }
+    ],
+    exampleImages: [cocacolaExample1]
+  },
+  { 
     id: '00000000-0000-0000-0000-000000000008', 
     brand: 'Netflix', 
-    description: 'React to your favorite new show', 
-    ratePerThousand: 48, 
+    description: 'We want genuine show reactions - find a new series on Netflix, film yourself watching a key moment (no spoilers!), and show your real reaction. This works best with trending shows or new releases. The setup is simple: show yourself settling in to watch, then cut to your reaction. "Can\'t believe that just happened" energy is what we\'re after.', 
+    ratePerThousand: 44, 
     maxEarnings: 700, 
     logo: samsungLogo,
     image: entertainment,
     contentType: 'Entertainment/Reaction',
-    productVisibility: 'Show Netflix interface or content',
-    videoLength: '15-60 seconds',
+    productVisibility: 'Netflix interface or TV showing Netflix content',
+    videoLength: '15-45 seconds',
     guidelines: [
-      'Share genuine reactions to a show',
-      'No major spoilers',
-      'Mention the show name clearly',
-      'Encourage others to watch'
+      'Show Netflix interface briefly',
+      'React genuinely to a moment (no fake reactions)',
+      'No major spoilers - keep it vague',
+      'Mention the show name in caption'
     ],
     tiers: [
-      { minViews: 0, maxViews: 12000, rate: 48 },
-      { minViews: 12000, maxViews: 120000, rate: 36 },
-      { minViews: 120000, maxViews: null, rate: 26 }
+      { minViews: 0, maxViews: 10000, rate: 44 },
+      { minViews: 10000, maxViews: 100000, rate: 34 },
+      { minViews: 100000, maxViews: null, rate: 24 }
     ],
     exampleImages: [netflixExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000009', 
-    brand: 'Adidas', 
-    description: 'Show your street style', 
-    ratePerThousand: 52, 
-    maxEarnings: 800, 
+    brand: 'Duolingo', 
+    description: 'Show your Duolingo streak or a study session. We love content about maintaining streaks, learning new words, or the panic of almost losing your streak. Film yourself doing a quick lesson, reacting to getting something wrong, or celebrating a milestone. The owl memes are encouraged - lean into the Duolingo humor.', 
+    ratePerThousand: 38, 
+    maxEarnings: 550, 
     logo: redbullLogo,
-    image: streetStyle,
-    contentType: 'Fashion/Street Style',
-    productVisibility: 'Adidas products must be the focus',
-    videoLength: '15-45 seconds',
+    image: mobileCreative,
+    contentType: 'Education/Lifestyle',
+    productVisibility: 'Duolingo app visible on screen',
+    videoLength: '15-30 seconds',
     guidelines: [
-      'Showcase your unique style',
-      'Urban setting preferred',
-      'Include outfit details',
-      'No competitor brands visible'
+      'Show the Duolingo app interface',
+      'Streak content or lesson reactions work great',
+      'Lean into the Duolingo owl humor',
+      'Mention what language you\'re learning'
     ],
     tiers: [
-      { minViews: 0, maxViews: 10000, rate: 52 },
-      { minViews: 10000, maxViews: 100000, rate: 40 },
-      { minViews: 100000, maxViews: null, rate: 28 }
+      { minViews: 0, maxViews: 8000, rate: 38 },
+      { minViews: 8000, maxViews: 80000, rate: 28 },
+      { minViews: 80000, maxViews: null, rate: 20 }
     ],
-    exampleImages: [adidasExample1]
+    exampleImages: [adobeExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000010', 
-    brand: 'GoPro', 
-    description: 'Capture your adventure', 
-    ratePerThousand: 65, 
-    maxEarnings: 1500, 
+    brand: 'IKEA', 
+    description: 'Film your IKEA trip or show off a recent IKEA haul. We want the full experience - navigating the store, finding your items, the checkout line, loading the car, and ideally a quick assembly montage. Or just film a room tour featuring IKEA furniture you already own. Swedish meatball content is also welcome.', 
+    ratePerThousand: 45, 
+    maxEarnings: 800, 
     logo: adobeLogo,
-    image: adventurePov,
-    contentType: 'Adventure/Action',
-    productVisibility: 'Filmed with GoPro',
-    videoLength: '15-60 seconds',
+    image: homeInterior,
+    contentType: 'Home/Shopping',
+    productVisibility: 'IKEA store, products, or furniture visible',
+    videoLength: '20-60 seconds',
     guidelines: [
-      'Must be filmed with a GoPro',
-      'Show exciting activities',
-      'Use unique angles',
-      'High quality footage required'
+      'Show IKEA store visit or products at home',
+      'Assembly content is a plus',
+      'Room tours featuring IKEA items work',
+      'Tag specific product names if known'
     ],
     tiers: [
-      { minViews: 0, maxViews: 15000, rate: 65 },
-      { minViews: 15000, maxViews: 150000, rate: 50 },
-      { minViews: 150000, maxViews: null, rate: 38 }
+      { minViews: 0, maxViews: 10000, rate: 45 },
+      { minViews: 10000, maxViews: 100000, rate: 35 },
+      { minViews: 100000, maxViews: null, rate: 26 }
     ],
     exampleImages: [goproExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000011', 
-    brand: 'Starbucks', 
-    description: 'Share your coffee ritual', 
-    ratePerThousand: 35, 
-    maxEarnings: 500, 
+    brand: 'Chipotle', 
+    description: 'Show us your Chipotle order - whether you\'re eating in, getting takeout, or ordering ahead on the app. We want to see your customization process (the bowl assembly is satisfying content), and your first bite reaction. Bonus points for showing portion sizes, secret menu items, or your go-to order combination.', 
+    ratePerThousand: 34, 
+    maxEarnings: 480, 
     logo: nikeLogo,
-    image: coffeeMoment,
-    contentType: 'Lifestyle/Food & Drink',
-    productVisibility: 'Starbucks cup clearly visible',
-    videoLength: '10-30 seconds',
+    image: fastFood,
+    contentType: 'Food/Restaurant',
+    productVisibility: 'Chipotle food and branding visible',
+    videoLength: '15-40 seconds',
     guidelines: [
-      'Show your morning coffee routine',
-      'Cup must be recognizable',
-      'Cozy vibes encouraged',
-      'Mention your favorite drink'
+      'Show your order being made or the final bowl',
+      'Include what you customized',
+      'First bite reaction is key',
+      'Mobile order content works too'
     ],
     tiers: [
-      { minViews: 0, maxViews: 5000, rate: 35 },
-      { minViews: 5000, maxViews: 50000, rate: 26 },
-      { minViews: 50000, maxViews: null, rate: 18 }
+      { minViews: 0, maxViews: 6000, rate: 34 },
+      { minViews: 6000, maxViews: 60000, rate: 26 },
+      { minViews: 60000, maxViews: null, rate: 18 }
     ],
     exampleImages: [starbucksExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000012', 
-    brand: 'PlayStation', 
-    description: 'Share your gaming highlights', 
-    ratePerThousand: 58, 
-    maxEarnings: 2000, 
+    brand: 'Notion', 
+    description: 'Show us how you organize your life with Notion. Whether it\'s a productivity setup, habit tracker, content calendar, or just your daily to-do list - we want to see your system. Quick screenshare walkthroughs or "how I plan my week" content performs great. The aesthetic template tours are especially popular.', 
+    ratePerThousand: 48, 
+    maxEarnings: 750, 
     logo: spotifyLogo,
-    image: gaming,
-    contentType: 'Gaming/Entertainment',
-    productVisibility: 'PlayStation gameplay or console visible',
-    videoLength: '20-60 seconds',
+    image: mobileCreative,
+    contentType: 'Productivity/Tech',
+    productVisibility: 'Notion interface visible throughout',
+    videoLength: '20-45 seconds',
     guidelines: [
-      'Show exciting gameplay moments',
-      'Include your reactions',
-      'Mention the game title',
-      'High quality capture required'
+      'Show your actual Notion setup (or a demo)',
+      'Walk through your workflow or system',
+      'Mention what you use Notion for',
+      'Aesthetic templates get extra engagement'
     ],
     tiers: [
-      { minViews: 0, maxViews: 18000, rate: 58 },
-      { minViews: 18000, maxViews: 180000, rate: 44 },
-      { minViews: 180000, maxViews: null, rate: 32 }
+      { minViews: 0, maxViews: 10000, rate: 48 },
+      { minViews: 10000, maxViews: 100000, rate: 36 },
+      { minViews: 100000, maxViews: null, rate: 28 }
     ],
     exampleImages: [playstationExample1]
   },
   { 
     id: '00000000-0000-0000-0000-000000000013', 
     brand: 'H&M', 
-    description: 'Style your favorite outfit', 
-    ratePerThousand: 38, 
-    maxEarnings: 650, 
+    description: 'Film a haul video from your recent H&M shopping trip or show us how you style H&M pieces you already own. We\'re looking for affordable fashion content - the kind where you share prices and help people recreate looks without breaking the bank. Try-on content, outfit checks, or "building an outfit for under 500 SEK" style videos work great.', 
+    ratePerThousand: 36, 
+    maxEarnings: 600, 
     logo: samsungLogo,
     image: fashionStyle,
-    contentType: 'Fashion/Styling',
-    productVisibility: 'H&M clothing featured',
-    videoLength: '15-45 seconds',
+    contentType: 'Fashion/Haul',
+    productVisibility: 'H&M tags or store branding visible',
+    videoLength: '20-45 seconds',
     guidelines: [
-      'Create a stylish outfit',
-      'Show how to style the pieces',
-      'Tag the collection if applicable',
-      'Good lighting essential'
+      'Show H&M items with tags or receipts',
+      'Include prices if possible',
+      'Try-on content performs best',
+      'Share your honest opinions on quality'
     ],
     tiers: [
-      { minViews: 0, maxViews: 7000, rate: 38 },
+      { minViews: 0, maxViews: 7000, rate: 36 },
       { minViews: 7000, maxViews: 70000, rate: 28 },
       { minViews: 70000, maxViews: null, rate: 20 }
     ],
@@ -380,117 +380,117 @@ const campaigns = [
   },
   { 
     id: '00000000-0000-0000-0000-000000000014', 
-    brand: 'Amazon', 
-    description: 'Unbox your latest finds', 
-    ratePerThousand: 42, 
-    maxEarnings: 900, 
+    brand: 'Amazon Prime', 
+    description: 'Show us the Prime delivery experience or react to something you ordered arriving faster than expected. Same-day and next-day delivery reactions perform really well. Film the notification, the doorbell moment, and the unboxing. "I literally just ordered this yesterday" content is what we\'re looking for.', 
+    ratePerThousand: 40, 
+    maxEarnings: 650, 
     logo: redbullLogo,
     image: unboxingHaul,
-    contentType: 'Unboxing/Haul',
-    productVisibility: 'Amazon packaging visible',
-    videoLength: '20-60 seconds',
+    contentType: 'Delivery/Unboxing',
+    productVisibility: 'Amazon Prime packaging visible',
+    videoLength: '15-40 seconds',
     guidelines: [
-      'Show the unboxing experience',
-      'Share genuine reactions',
-      'Mention product names',
-      'Good production quality'
+      'Show Amazon Prime packaging or app',
+      'React to fast delivery times',
+      'Include the unboxing moment',
+      'Genuine surprise reactions work best'
     ],
     tiers: [
-      { minViews: 0, maxViews: 10000, rate: 42 },
-      { minViews: 10000, maxViews: 100000, rate: 32 },
-      { minViews: 100000, maxViews: null, rate: 24 }
+      { minViews: 0, maxViews: 8000, rate: 40 },
+      { minViews: 8000, maxViews: 80000, rate: 30 },
+      { minViews: 80000, maxViews: null, rate: 22 }
     ]
   },
   { 
     id: '00000000-0000-0000-0000-000000000015', 
-    brand: 'IKEA', 
-    description: 'Show your room transformation', 
-    ratePerThousand: 55, 
-    maxEarnings: 1200, 
+    brand: 'Subway', 
+    description: 'Film your Subway order - the sandwich building process is oddly satisfying content. We want to see your customization choices, the assembly line, and your first bite. "My $100 Subway order" content that shows multiple sandwiches also performs well. Show us your go-to combination or try something new.', 
+    ratePerThousand: 30, 
+    maxEarnings: 420, 
     logo: adobeLogo,
-    image: homeInterior,
-    contentType: 'Home/DIY',
-    productVisibility: 'IKEA products featured',
-    videoLength: '30-90 seconds',
-    guidelines: [
-      'Show before and after',
-      'Include assembly if possible',
-      'Mention product names',
-      'Inspire others to decorate'
-    ],
-    tiers: [
-      { minViews: 0, maxViews: 12000, rate: 55 },
-      { minViews: 12000, maxViews: 120000, rate: 42 },
-      { minViews: 120000, maxViews: null, rate: 30 }
-    ]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000016', 
-    brand: 'McDonalds', 
-    description: 'Share your go-to order', 
-    ratePerThousand: 32, 
-    maxEarnings: 450,
-    logo: nikeLogo,
     image: fastFood,
-    contentType: 'Food/Lifestyle',
-    productVisibility: 'McDonalds food clearly visible',
-    videoLength: '10-30 seconds',
+    contentType: 'Food/Restaurant',
+    productVisibility: 'Subway branding and food visible',
+    videoLength: '15-35 seconds',
     guidelines: [
-      'Show your favorite meal',
-      'Make it look delicious',
-      'Include taste reaction',
-      'Fun and casual vibe'
+      'Film the sandwich assembly process',
+      'Show your customization choices',
+      'Include the first bite reaction',
+      'Mention your order in the caption'
     ],
     tiers: [
-      { minViews: 0, maxViews: 5000, rate: 32 },
-      { minViews: 5000, maxViews: 50000, rate: 24 },
+      { minViews: 0, maxViews: 5000, rate: 30 },
+      { minViews: 5000, maxViews: 50000, rate: 22 },
       { minViews: 50000, maxViews: null, rate: 16 }
     ]
   },
   { 
-    id: '00000000-0000-0000-0000-000000000017', 
-    brand: 'Uber Eats', 
-    description: 'Film your food delivery moment', 
-    ratePerThousand: 44, 
-    maxEarnings: 700, 
-    logo: spotifyLogo,
-    image: foodDelivery,
-    contentType: 'Food/Delivery',
-    productVisibility: 'Show Uber Eats app or delivery',
+    id: '00000000-0000-0000-0000-000000000016', 
+    brand: 'Canva', 
+    description: 'Show how you use Canva to create something - Instagram posts, thumbnails, presentations, whatever you actually use it for. Quick design tutorials or "watch me make this in 60 seconds" content performs great. The before/after transformations and template customizations are especially popular.', 
+    ratePerThousand: 42, 
+    maxEarnings: 680, 
+    logo: nikeLogo,
+    image: creativeDesign,
+    contentType: 'Design/Tutorial',
+    productVisibility: 'Canva interface visible during design',
     videoLength: '15-45 seconds',
     guidelines: [
-      'Show the ordering process or delivery',
-      'Capture the excitement',
-      'Show the food reveal',
-      'Mention convenience factor'
+      'Show the Canva interface',
+      'Create something useful or aesthetic',
+      'Speed up the process if needed',
+      'Share tips or tricks you use'
     ],
     tiers: [
-      { minViews: 0, maxViews: 8000, rate: 44 },
-      { minViews: 8000, maxViews: 80000, rate: 34 },
+      { minViews: 0, maxViews: 8000, rate: 42 },
+      { minViews: 8000, maxViews: 80000, rate: 32 },
       { minViews: 80000, maxViews: null, rate: 24 }
     ]
   },
   { 
-    id: '00000000-0000-0000-0000-000000000018', 
-    brand: 'Tesla', 
-    description: 'Show off your Tesla experience', 
-    ratePerThousand: 70, 
-    maxEarnings: 3000,
-    logo: samsungLogo,
-    image: electricCar,
-    contentType: 'Automotive/Tech',
-    productVisibility: 'Tesla vehicle clearly featured',
-    videoLength: '20-60 seconds',
+    id: '00000000-0000-0000-0000-000000000017', 
+    brand: 'Taco Bell', 
+    description: 'Late night Taco Bell runs are iconic - film yours. Whether it\'s the drive-through at 2am, a Crunchwrap review, or trying every item on the menu, we want authentic fast food content. The messier and more real, the better. Mukbang style or quick taste tests both work.', 
+    ratePerThousand: 32, 
+    maxEarnings: 450, 
+    logo: spotifyLogo,
+    image: fastFood,
+    contentType: 'Food/Late Night',
+    productVisibility: 'Taco Bell food and packaging visible',
+    videoLength: '15-40 seconds',
     guidelines: [
-      'Showcase unique Tesla features',
-      'Include driving footage if safe',
-      'Show the interior tech',
-      'High production quality required'
+      'Show Taco Bell food and branding',
+      'Include taste reactions',
+      'Late night vibes are encouraged',
+      'Honest reviews perform best'
     ],
     tiers: [
-      { minViews: 0, maxViews: 20000, rate: 70 },
-      { minViews: 20000, maxViews: 200000, rate: 55 },
-      { minViews: 200000, maxViews: null, rate: 40 }
+      { minViews: 0, maxViews: 6000, rate: 32 },
+      { minViews: 6000, maxViews: 60000, rate: 24 },
+      { minViews: 60000, maxViews: null, rate: 18 }
+    ]
+  },
+  { 
+    id: '00000000-0000-0000-0000-000000000018', 
+    brand: 'ChatGPT', 
+    description: 'Show us how you use ChatGPT in your daily life or work. This could be anything from asking weird questions, using it for studying, getting it to help with writing, or testing its limits with creative prompts. Screen recordings of conversations that are funny, useful, or surprising perform best.', 
+    ratePerThousand: 50, 
+    maxEarnings: 850, 
+    logo: samsungLogo,
+    image: techUnboxing,
+    contentType: 'AI/Tech',
+    productVisibility: 'ChatGPT interface visible',
+    videoLength: '15-45 seconds',
+    guidelines: [
+      'Show the ChatGPT interface clearly',
+      'Use an interesting or funny prompt',
+      'React to the AI\'s response',
+      'Useful tips content works well too'
+    ],
+    tiers: [
+      { minViews: 0, maxViews: 12000, rate: 50 },
+      { minViews: 12000, maxViews: 120000, rate: 38 },
+      { minViews: 120000, maxViews: null, rate: 28 }
     ]
   },
 ];
