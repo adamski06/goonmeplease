@@ -840,14 +840,14 @@ const Campaigns: React.FC = () => {
                     <div className="flex-1 p-4 pt-3 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-white/10 backdrop-blur-md">
                       <div className="relative z-10">
                         <div className="mb-1">
-                          <span className="text-xs font-medium text-muted-foreground">{campaign.brand}</span>
+                          <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                         </div>
                         <p className="text-sm font-bold text-foreground">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
                         <div className="inline-flex items-baseline gap-0.5">
-                          <span className="text-2xl font-bold text-foreground">{campaign.maxEarnings.toLocaleString()}</span>
-                          <span className="text-xs font-semibold text-foreground">sek</span>
+                          <span className="text-2xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                          <span className="text-xs font-semibold text-foreground font-montserrat">sek</span>
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
