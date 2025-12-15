@@ -823,8 +823,21 @@ const Campaigns: React.FC = () => {
                     onClick={() => setSelectedCampaign(campaign)}
                     className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-white/20 max-w-[280px]"
                   >
-                    {/* Left side - Campaign info */}
-                    <div className="flex-1 p-4 pt-3 pr-2 pb-3 flex flex-col justify-between relative bg-white/60 dark:bg-white/10 backdrop-blur-md">
+                    {/* Left side - Image */}
+                    <div className="relative w-20 md:w-24 flex-shrink-0 overflow-hidden">
+                      <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                      <div 
+                        className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                        }}
+                      />
+                      {/* Bottom fade */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                    
+                    {/* Right side - Campaign info */}
+                    <div className="flex-1 p-4 pt-3 pl-3 pb-3 flex flex-col justify-between relative bg-white/60 dark:bg-white/10 backdrop-blur-md">
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-3">
                           <div className="h-6 w-6 rounded-full overflow-hidden">
@@ -849,19 +862,6 @@ const Campaigns: React.FC = () => {
                           />
                         </button>
                       </div>
-                    </div>
-                    
-                    {/* Right side - Image fits to content height */}
-                    <div className="relative w-20 md:w-24 flex-shrink-0 overflow-hidden">
-                      <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-                      <div 
-                        className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
-                        style={{
-                          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                        }}
-                      />
-                      {/* Bottom fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                     </div>
                   </div>
                 );
