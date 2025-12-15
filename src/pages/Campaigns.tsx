@@ -761,7 +761,7 @@ const Campaigns: React.FC = () => {
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always p-8 gap-8">
+              <div key={campaign.id} className="h-screen flex items-center justify-start snap-center snap-always p-8 pl-16 gap-8">
                 {/* Left side - Full vertical photo (standalone) */}
                 <div 
                   onClick={() => setSelectedCampaign(campaign)}
