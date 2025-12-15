@@ -853,7 +853,7 @@ const Campaigns: React.FC = () => {
                           className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
                           <Heart 
-                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black'}`}
+                            className={`h-7 w-7 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black'}`}
                             strokeWidth={1.5}
                           />
                         </button>
