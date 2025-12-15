@@ -23,7 +23,7 @@ import spotifyLogo from '@/assets/logos/spotify.png';
 import samsungLogo from '@/assets/logos/samsung.png';
 import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
-import CampaignDetailModal from '@/components/CampaignDetailModal';
+import CampaignDetailView from '@/components/CampaignDetailView';
 
 // Campaign images
 import fitnessWorkout from '@/assets/campaigns/fitness-workout.jpg';
@@ -724,6 +724,18 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
+        {selectedCampaign ? (
+          /* Campaign Detail View */
+          <div className="flex-1 overflow-y-auto px-8 py-8">
+            <CampaignDetailView
+              campaign={selectedCampaign}
+              onBack={() => setSelectedCampaign(null)}
+              isSaved={favorites.includes(selectedCampaign.id)}
+              onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
+            />
+          </div>
+        ) : (
+          <>
         {/* Fixed overlay filter buttons */}
         <div className="absolute top-6 left-8 right-8 z-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -959,14 +971,9 @@ const Campaigns: React.FC = () => {
           </div>
           </div>
         )}
+          </>
+        )}
       </main>
-
-      {/* Campaign Detail Modal */}
-      <CampaignDetailModal 
-        campaign={selectedCampaign}
-        isOpen={!!selectedCampaign}
-        onClose={() => setSelectedCampaign(null)}
-      />
     </div>
   );
 };
