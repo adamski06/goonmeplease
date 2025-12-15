@@ -45,6 +45,8 @@ import fastFood from '@/assets/campaigns/fast-food.jpg';
 import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
 import electricCar from '@/assets/campaigns/electric-car.jpg';
 
+type FilterType = 'foryou' | 'featured' | 'beauty' | 'fashion' | 'tech' | 'food';
+
 // Extended mock campaign data
 const campaigns = [
   { 
@@ -552,6 +554,79 @@ const Campaigns: React.FC = () => {
     setScrollOpacity(Math.max(0, opacity));
   };
 
+  // Helper to check if a filter is active (avoids TypeScript narrowing issues)
+  const isFilterActive = (filter: FilterType) => activeFilter === filter;
+
+  const renderFilterButtons = (includeSort = false) => (
+    <div className="flex items-center gap-3 font-jakarta flex-wrap">
+      <button 
+        onClick={() => setActiveFilter('foryou')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('foryou') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        For you
+      </button>
+      <button 
+        onClick={() => setActiveFilter('featured')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('featured') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        Featured
+      </button>
+      <button 
+        onClick={() => setActiveFilter('beauty')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('beauty') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        Beauty
+      </button>
+      <button 
+        onClick={() => setActiveFilter('fashion')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('fashion') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        Fashion
+      </button>
+      <button 
+        onClick={() => setActiveFilter('tech')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('tech') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        Tech
+      </button>
+      <button 
+        onClick={() => setActiveFilter('food')}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('food') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+      >
+        Food
+      </button>
+      {includeSort && (
+        <div className="ml-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors flex items-center gap-1">
+                Sort by
+                <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
+                </svg>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 bg-background border-border">
+              <DropdownMenuItem className="cursor-pointer">
+                Price: Low to High
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                Price: High to Low
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                Newest First
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                Deadline Soon
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+    </div>
+  );
+
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
   const currentCampaign = campaigns[currentIndex];
 
@@ -669,73 +744,7 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 relative z-10 flex flex-col">
-        {/* Top Filter Bar */}
-        <div className="h-14 flex items-center px-6 gap-3 shrink-0 font-jakarta">
-          <button 
-            onClick={() => setActiveFilter('foryou')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'foryou' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            For you
-          </button>
-          <button 
-            onClick={() => setActiveFilter('featured')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'featured' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            Featured
-          </button>
-          <button 
-            onClick={() => setActiveFilter('beauty')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'beauty' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            Beauty
-          </button>
-          <button 
-            onClick={() => setActiveFilter('fashion')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'fashion' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            Fashion
-          </button>
-          <button 
-            onClick={() => setActiveFilter('tech')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'tech' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            Tech
-          </button>
-          <button 
-            onClick={() => setActiveFilter('food')}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === 'food' ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
-          >
-            Food
-          </button>
-          <div className="ml-auto flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 text-foreground text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors flex items-center gap-1">
-                  Sort by
-                  <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
-                  </svg>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-background border-border">
-                <DropdownMenuItem className="cursor-pointer">
-                  Price: Low to High
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Price: High to Low
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  Newest First
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Deadline Soon
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+      <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
 
         {activeFilter === 'foryou' ? (
           /* For You - Large single ad with photo left, info right */
@@ -744,8 +753,12 @@ const Campaigns: React.FC = () => {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
+            {/* Filter buttons at top */}
+            <div className="pt-6 px-8 pb-4">
+              {renderFilterButtons()}
+            </div>
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-[calc(100vh-3.5rem)] flex items-center justify-center snap-center snap-always p-8 gap-8">
+              <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always p-8 gap-8">
                 {/* Left side - Full vertical photo (standalone) */}
                 <div 
                   onClick={() => setSelectedCampaign(campaign)}
@@ -862,8 +875,12 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div className="relative flex-1 overflow-hidden">
-            <div className="pt-8 pb-8 pl-8 pr-32 overflow-y-auto h-full">
+          <div className="relative flex-1 overflow-y-auto">
+            <div className="pt-6 pb-8 pl-8 pr-32">
+              {/* Filter buttons inside scroll area */}
+              <div className="mb-8">
+                {renderFilterButtons(true)}
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-20 justify-items-start">
               {campaigns.map((campaign, index) => {
                 const gradientColors = [
