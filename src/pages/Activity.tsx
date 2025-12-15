@@ -228,15 +228,15 @@ const Activity: React.FC = () => {
         {favoriteCampaigns.length === 0 ? (
           <p className="text-muted-foreground">No favorites yet. Heart some campaigns to see them here!</p>
         ) : (
-          <div className="flex gap-4 overflow-x-auto pb-4">
+          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
             {favoriteCampaigns.map((campaign) => (
               <div 
                 key={campaign.id}
-                className="flex-shrink-0 w-32 cursor-pointer group"
+                className="flex-shrink-0 w-24 cursor-pointer group"
                 onClick={() => navigate('/campaigns')}
               >
                 {/* Image */}
-                <div className="relative aspect-[9/16] rounded-xl overflow-hidden mb-2">
+                <div className="relative aspect-[9/16] rounded overflow-hidden mb-1">
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                   {/* Remove button */}
@@ -245,14 +245,10 @@ const Activity: React.FC = () => {
                       e.stopPropagation();
                       removeFavorite(campaign.id);
                     }}
-                    className="absolute top-2 right-2 h-7 w-7 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors opacity-0 group-hover:opacity-100"
+                    className="absolute top-1 right-1 h-5 w-5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors opacity-0 group-hover:opacity-100"
                   >
-                    <Heart className="h-4 w-4 fill-red-500 text-red-500" />
+                    <Heart className="h-3 w-3 fill-red-500 text-red-500" />
                   </button>
-                  {/* Logo */}
-                  <div className="absolute bottom-2 left-2 h-5 w-5 rounded-full overflow-hidden">
-                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-                  </div>
                 </div>
                 {/* Brand name */}
                 <p className="text-xs font-semibold text-foreground truncate">{campaign.brand}</p>
