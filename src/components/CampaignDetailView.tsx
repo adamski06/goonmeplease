@@ -47,9 +47,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         <span className="text-base font-medium">Back to ads</span>
       </button>
 
-      <div className="flex gap-16 justify-center">
+      <div className="flex gap-16">
         {/* Left side - Campaign info */}
-        <div className="flex-1 max-w-lg">
+        <div className="flex-1">
           {/* Header - Logo and company name */}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
