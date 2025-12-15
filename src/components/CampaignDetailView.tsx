@@ -82,7 +82,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               {/* Bullet points */}
               <ul className="space-y-2 flex-1">
                 {campaign.guidelines.map((guideline, idx) => (
-                  <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
+                  <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
                     <span className="text-foreground">•</span>
                     {guideline}
                   </li>
