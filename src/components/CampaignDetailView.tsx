@@ -90,12 +90,12 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </ul>
 
               {/* Example pictures */}
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="flex gap-2 lg:gap-3 flex-shrink-0">
                 {(campaign.exampleImages || []).length > 0 ? (
                   campaign.exampleImages?.map((img, i) => (
                     <div 
                       key={i}
-                      className="w-36 h-36 rounded-lg overflow-hidden border border-border/50"
+                      className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg overflow-hidden border border-border/50"
                     >
                       <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                     </div>
@@ -104,9 +104,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   [1, 2, 3].map((i) => (
                     <div 
                       key={i}
-                      className="w-36 h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                      className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
                     >
-                      <span className="text-sm text-muted-foreground">Example {i}</span>
+                      <span className="text-xs lg:text-sm text-muted-foreground">Example {i}</span>
                     </div>
                   ))
                 )}
