@@ -147,7 +147,7 @@ const Activity: React.FC = () => {
         <nav className="flex flex-col px-3 gap-4 mt-8">
           <button 
             onClick={() => navigate('/campaigns')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-colors flex items-center gap-2"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-colors flex items-center gap-3"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
               <path
@@ -158,7 +158,7 @@ const Activity: React.FC = () => {
             </svg>
             Home
           </button>
-          <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-2">
+          <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-3">
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
               <path fillRule="evenodd" clipRule="evenodd" d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V4ZM10.5 8.5C10 8.2 9.5 8.5 9.5 9V15C9.5 15.5 10 15.8 10.5 15.5L15.5 12.5C16 12.2 16 11.8 15.5 11.5L10.5 8.5Z" />
             </svg>
@@ -166,7 +166,7 @@ const Activity: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
+            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
@@ -182,7 +182,7 @@ const Activity: React.FC = () => {
         <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2">
+              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
                 <Menu className="h-6 w-6" />
                 More
               </button>
