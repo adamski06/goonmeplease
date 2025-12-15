@@ -561,13 +561,13 @@ const Campaigns: React.FC = () => {
     <div className="flex items-center gap-3 font-jakarta">
       <button 
         onClick={() => setActiveFilter('foryou')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('foryou') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors backdrop-blur-md ${isFilterActive('foryou') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
       >
         For you
       </button>
       <button 
         onClick={() => setActiveFilter('featured')}
-        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${isFilterActive('featured') ? 'bg-black text-white' : 'border border-black/10 dark:border-white/20 text-foreground hover:bg-black/5 dark:hover:bg-white/10'}`}
+        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors backdrop-blur-md ${isFilterActive('featured') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
       >
         Featured
       </button>
