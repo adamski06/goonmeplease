@@ -745,44 +745,42 @@ const Campaigns: React.FC = () => {
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-[calc(100vh-3.5rem)] flex items-center justify-center snap-center snap-always p-8">
+              <div key={campaign.id} className="h-[calc(100vh-3.5rem)] flex items-center justify-center snap-center snap-always p-8 gap-8">
+                {/* Left side - Full vertical photo (standalone) */}
                 <div 
                   onClick={() => setSelectedCampaign(campaign)}
-                  className="h-full max-h-[600px] rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.005] transition-all relative flex flex-row bg-white/60 dark:bg-dark-surface border border-white/40 dark:border-transparent"
+                  className="relative h-full max-h-[600px] aspect-[9/16] overflow-hidden flex-shrink-0 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all"
                 >
-                  {/* Left side - Full vertical photo */}
-                  <div className="relative h-full aspect-[9/16] overflow-hidden flex-shrink-0">
-                    <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-                    <div 
-                      className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                      }}
-                    />
+                  <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                  <div 
+                    className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                    }}
+                  />
+                </div>
+                
+                {/* Right side - Campaign info (standalone) */}
+                <div className="h-full max-h-[600px] flex flex-col justify-between min-w-[280px] py-4">
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
+                    <p className="text-2xl font-bold text-foreground mt-2 font-jakarta">{campaign.description}</p>
                   </div>
                   
-                  {/* Right side - Campaign info */}
-                  <div className="flex-1 p-8 flex flex-col justify-between min-w-[280px]">
-                    <div>
-                      <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
-                      <p className="text-2xl font-bold text-foreground mt-2 font-jakarta">{campaign.description}</p>
+                  <div className="flex items-end justify-between">
+                    <div className="inline-flex items-baseline gap-1">
+                      <span className="text-5xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                      <span className="text-xl font-semibold text-foreground font-montserrat">sek</span>
                     </div>
-                    
-                    <div className="flex items-end justify-between">
-                      <div className="inline-flex items-baseline gap-1">
-                        <span className="text-5xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                        <span className="text-xl font-semibold text-foreground font-montserrat">sek</span>
-                      </div>
-                      <button
-                        onClick={(e) => toggleFavorite(campaign.id, e)}
-                        className="flex items-center justify-center hover:scale-110 transition-transform p-2"
-                      >
-                        <Heart 
-                          className={`h-8 w-8 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
-                          strokeWidth={1.5}
-                        />
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => toggleFavorite(campaign.id, e)}
+                      className="flex items-center justify-center hover:scale-110 transition-transform p-2"
+                    >
+                      <Heart 
+                        className={`h-8 w-8 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+                        strokeWidth={1.5}
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
