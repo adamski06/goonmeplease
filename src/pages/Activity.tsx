@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { backgroundDelay } from '@/lib/backgroundDelay';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity as ActivityIcon, Menu, User, Settings, Moon, LogOut } from 'lucide-react';
+import { Menu, User, Settings, Moon, LogOut, Heart } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import {
   DropdownMenu,
@@ -15,12 +15,62 @@ import {
 } from '@/components/ui/dropdown-menu';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
+import { supabase } from '@/integrations/supabase/client';
+
+// Import campaign images for displaying favorites
+import fitnessWorkout from '@/assets/campaigns/fitness-workout.jpg';
+import musicLifestyle from '@/assets/campaigns/music-lifestyle.jpg';
+import techUnboxing from '@/assets/campaigns/tech-unboxing.jpg';
+import extremeSports from '@/assets/campaigns/extreme-sports.jpg';
+import creativeDesign from '@/assets/campaigns/creative-design.jpg';
+import mobileCreative from '@/assets/campaigns/mobile-creative.jpg';
+import summerDrink from '@/assets/campaigns/summer-drink.jpg';
+import entertainment from '@/assets/campaigns/entertainment.jpg';
+import streetStyle from '@/assets/campaigns/street-style.jpg';
+import adventurePov from '@/assets/campaigns/adventure-pov.jpg';
+import coffeeMoment from '@/assets/campaigns/coffee-moment.jpg';
+import gaming from '@/assets/campaigns/gaming.jpg';
+import fashionStyle from '@/assets/campaigns/fashion-style.jpg';
+import unboxingHaul from '@/assets/campaigns/unboxing-haul.jpg';
+import homeInterior from '@/assets/campaigns/home-interior.jpg';
+import fastFood from '@/assets/campaigns/fast-food.jpg';
+import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
+import electricCar from '@/assets/campaigns/electric-car.jpg';
+
+import nikeLogo from '@/assets/logos/nike.png';
+import spotifyLogo from '@/assets/logos/spotify.png';
+import samsungLogo from '@/assets/logos/samsung.png';
+import redbullLogo from '@/assets/logos/redbull.png';
+import adobeLogo from '@/assets/logos/adobe.png';
+
+// Mock campaigns data (should match Campaigns.tsx)
+const allCampaigns = [
+  { id: 1, brand: 'Nike', description: 'Show your workout routine', maxEarnings: 500, logo: nikeLogo, image: fitnessWorkout },
+  { id: 2, brand: 'Spotify', description: 'Share your music moments', maxEarnings: 350, logo: spotifyLogo, image: musicLifestyle },
+  { id: 3, brand: 'Samsung', description: 'Unbox the new Galaxy', maxEarnings: 800, logo: samsungLogo, image: techUnboxing },
+  { id: 4, brand: 'Red Bull', description: 'Capture extreme moments', maxEarnings: 600, logo: redbullLogo, image: extremeSports },
+  { id: 5, brand: 'Adobe', description: 'Show your creative process', maxEarnings: 450, logo: adobeLogo, image: creativeDesign },
+  { id: 6, brand: 'Samsung', description: 'Mobile photography tips', maxEarnings: 400, logo: samsungLogo, image: mobileCreative },
+  { id: 7, brand: 'Red Bull', description: 'Summer energy vibes', maxEarnings: 300, logo: redbullLogo, image: summerDrink },
+  { id: 8, brand: 'Spotify', description: 'Concert experience', maxEarnings: 550, logo: spotifyLogo, image: entertainment },
+  { id: 9, brand: 'Nike', description: 'Street style showcase', maxEarnings: 420, logo: nikeLogo, image: streetStyle },
+  { id: 10, brand: 'Red Bull', description: 'Adventure POV shots', maxEarnings: 700, logo: redbullLogo, image: adventurePov },
+  { id: 11, brand: 'Spotify', description: 'Morning coffee playlist', maxEarnings: 280, logo: spotifyLogo, image: coffeeMoment },
+  { id: 12, brand: 'Samsung', description: 'Gaming setup tour', maxEarnings: 650, logo: samsungLogo, image: gaming },
+  { id: 13, brand: 'Nike', description: 'Fashion forward looks', maxEarnings: 480, logo: nikeLogo, image: fashionStyle },
+  { id: 14, brand: 'Samsung', description: 'Tech unboxing haul', maxEarnings: 520, logo: samsungLogo, image: unboxingHaul },
+  { id: 15, brand: 'Adobe', description: 'Home office setup', maxEarnings: 380, logo: adobeLogo, image: homeInterior },
+  { id: 16, brand: 'Red Bull', description: 'Quick meal energy', maxEarnings: 250, logo: redbullLogo, image: fastFood },
+  { id: 17, brand: 'Spotify', description: 'Food delivery unboxing', maxEarnings: 320, logo: spotifyLogo, image: foodDelivery },
+  { id: 18, brand: 'Samsung', description: 'Electric car review', maxEarnings: 900, logo: samsungLogo, image: electricCar },
+];
 
 const Activity: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -28,7 +78,35 @@ const Activity: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
+  // Fetch user favorites
+  useEffect(() => {
+    if (user) {
+      const fetchFavorites = async () => {
+        const { data } = await supabase
+          .from('favorites')
+          .select('campaign_id')
+          .eq('user_id', user.id);
+        if (data) {
+          setFavorites(data.map(f => parseInt(f.campaign_id.split('-')[0]) || 0));
+        }
+      };
+      fetchFavorites();
+    }
+  }, [user]);
+
+  const removeFavorite = async (campaignId: number) => {
+    if (!user) return;
+    const campaignUuid = `${campaignId}-0000-0000-0000-000000000000`;
+    await supabase
+      .from('favorites')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('campaign_id', campaignUuid);
+    setFavorites(favorites.filter(id => id !== campaignId));
+  };
+
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  const favoriteCampaigns = allCampaigns.filter(c => favorites.includes(c.id));
 
   if (loading) {
     return (
@@ -147,9 +225,56 @@ const Activity: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 px-6 py-8 relative z-10">
-        <h1 className="text-3xl font-bold text-foreground mb-6">Activity</h1>
-        <p className="text-muted-foreground">Your recent activity will appear here.</p>
+      <main className="flex-1 px-6 py-8 relative z-10 overflow-y-auto">
+        <h1 className="text-3xl font-bold text-foreground mb-6">Favorites</h1>
+        
+        {favoriteCampaigns.length === 0 ? (
+          <p className="text-muted-foreground">No favorites yet. Heart some campaigns to see them here!</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {favoriteCampaigns.map((campaign) => (
+              <div 
+                key={campaign.id}
+                className="flex bg-black/5 dark:bg-white/10 backdrop-blur-md border border-black/10 dark:border-white/20 rounded-xl overflow-hidden hover:bg-black/10 dark:hover:bg-white/15 transition-colors cursor-pointer"
+                onClick={() => navigate('/campaigns')}
+              >
+                {/* Left side - Campaign info */}
+                <div className="flex-1 p-4 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-6 w-6 rounded-full overflow-hidden">
+                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <span className="text-base font-bold text-foreground">{campaign.brand}</span>
+                    </div>
+                    <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
+                  </div>
+                  <div className="mt-auto flex items-center gap-2">
+                    <div className="bg-black text-white font-semibold px-3 py-1 rounded inline-flex items-baseline gap-0.5">
+                      <span className="text-xl">{campaign.maxEarnings.toLocaleString()}</span>
+                      <span className="text-xs">sek</span>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFavorite(campaign.id);
+                      }}
+                      className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors"
+                    >
+                      <Heart className="h-4 w-4 fill-red-500 text-red-500" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Right side - Image */}
+                <div className="relative w-24 aspect-[9/16] flex-shrink-0 m-3 rounded-sm overflow-hidden">
+                  <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

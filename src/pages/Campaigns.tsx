@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon } from 'lucide-react';
+import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Heart } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import { useTheme } from 'next-themes';
 import {
   DropdownMenu,
@@ -471,6 +472,47 @@ const Campaigns: React.FC = () => {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
+  const [favorites, setFavorites] = useState<number[]>([]);
+
+  // Fetch user favorites
+  useEffect(() => {
+    if (user) {
+      const fetchFavorites = async () => {
+        const { data } = await supabase
+          .from('favorites')
+          .select('campaign_id')
+          .eq('user_id', user.id);
+        if (data) {
+          // Extract campaign IDs (we're using mock data with number IDs, so we need to handle this)
+          setFavorites(data.map(f => parseInt(f.campaign_id.split('-')[0]) || 0));
+        }
+      };
+      fetchFavorites();
+    }
+  }, [user]);
+
+  const toggleFavorite = async (campaignId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) return;
+    
+    const campaignUuid = `${campaignId}-0000-0000-0000-000000000000`;
+    
+    if (favorites.includes(campaignId)) {
+      // Remove favorite
+      await supabase
+        .from('favorites')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('campaign_id', campaignUuid);
+      setFavorites(favorites.filter(id => id !== campaignId));
+    } else {
+      // Add favorite
+      await supabase
+        .from('favorites')
+        .insert({ user_id: user.id, campaign_id: campaignUuid });
+      setFavorites([...favorites, campaignId]);
+    }
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -801,11 +843,19 @@ const Campaigns: React.FC = () => {
                         </div>
                         <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
                       </div>
-                      <div className="relative z-10 mt-auto">
+                      <div className="relative z-10 mt-auto flex items-center gap-2">
                         <div className="bg-black text-white font-semibold px-3 py-1 rounded inline-flex items-baseline gap-0.5">
                           <span className="text-xl">{campaign.maxEarnings.toLocaleString()}</span>
                           <span className="text-xs">sek</span>
                         </div>
+                        <button
+                          onClick={(e) => toggleFavorite(campaign.id, e)}
+                          className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors"
+                        >
+                          <Heart 
+                            className={`h-4 w-4 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-foreground'}`} 
+                          />
+                        </button>
                       </div>
                     </div>
                     
