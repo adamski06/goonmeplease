@@ -123,7 +123,7 @@ const Activity: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10 font-jakarta">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">

@@ -17,6 +17,7 @@ export default {
         sans: ['Roboto', 'system-ui', 'sans-serif'],
         display: ['Montserrat', 'system-ui', 'sans-serif'],
         montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
+        jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
