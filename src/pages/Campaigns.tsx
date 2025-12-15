@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Heart } from 'lucide-react';
+import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Bookmark } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTheme } from 'next-themes';
 import {
@@ -797,8 +797,8 @@ const Campaigns: React.FC = () => {
                       onClick={(e) => toggleFavorite(campaign.id, e)}
                       className="flex items-center justify-center hover:scale-110 transition-transform p-2"
                     >
-                      <Heart 
-                        className={`h-8 w-8 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+                      <Bookmark 
+                        className={`h-8 w-8 ${favorites.includes(campaign.id) ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
                         strokeWidth={1.5}
                       />
                     </button>
@@ -945,10 +945,10 @@ const Campaigns: React.FC = () => {
                           onClick={(e) => toggleFavorite(campaign.id, e)}
                           className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
-                          <Heart 
-                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black/25'}`}
-                            strokeWidth={1.5}
-                          />
+                        <Bookmark 
+                          className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-foreground text-foreground' : 'text-black/25'}`}
+                          strokeWidth={1.5}
+                        />
                         </button>
                       </div>
                     </div>

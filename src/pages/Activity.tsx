@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Menu, User, Settings, Moon, LogOut, Heart } from 'lucide-react';
+import { Menu, User, Settings, Moon, LogOut, Bookmark } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import {
   DropdownMenu,
@@ -222,10 +222,10 @@ const Activity: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 px-6 py-8 relative z-10 overflow-y-auto">
-        <h1 className="text-3xl font-bold text-foreground mb-6">Favorites</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-6">Saved</h1>
         
         {favoriteCampaigns.length === 0 ? (
-          <p className="text-muted-foreground">No favorites yet. Heart some campaigns to see them here!</p>
+          <p className="text-muted-foreground">No saved campaigns yet. Save some campaigns to see them here!</p>
         ) : (
           <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
             {favoriteCampaigns.map((campaign) => (
@@ -246,7 +246,7 @@ const Activity: React.FC = () => {
                     }}
                     className="absolute top-1 right-1 h-5 w-5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors opacity-0 group-hover:opacity-100"
                   >
-                    <Heart className="h-3 w-3 fill-red-500 text-red-500" />
+                    <Bookmark className="h-3 w-3 fill-foreground text-foreground" />
                   </button>
                 </div>
                 {/* Brand name */}
