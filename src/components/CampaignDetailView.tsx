@@ -77,8 +77,17 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <div className="mb-6">
             <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
             
+            <ul className="space-y-2 mb-4">
+              {campaign.guidelines.map((guideline, idx) => (
+                <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
+                  <span className="text-foreground">•</span>
+                  {guideline}
+                </li>
+              ))}
+            </ul>
+
             {/* Example pictures row */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2">
               {[1, 2, 3].map((i) => (
                 <div 
                   key={i}
@@ -88,15 +97,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 </div>
               ))}
             </div>
-
-            <ul className="space-y-2">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-muted-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Price */}
