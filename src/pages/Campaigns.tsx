@@ -569,7 +569,7 @@ const Campaigns: React.FC = () => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md border-r border-white/40 dark:border-white/20 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10 font-jakarta">
         {/* Logo */}
         <div className="px-6 py-4">
           <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
@@ -670,7 +670,7 @@ const Campaigns: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col">
         {/* Top Filter Bar */}
-        <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/20 flex items-center px-6 gap-3 shrink-0 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10">
+        <div className="h-14 backdrop-blur-md border-b border-white/40 dark:border-white/20 flex items-center px-6 gap-3 shrink-0 bg-gradient-to-b from-white/95 to-white/40 dark:from-white/10 dark:to-white/10 font-jakarta">
           <button className="px-4 py-1.5 rounded-full bg-black text-white text-sm font-medium">
             Featured
           </button>
@@ -842,7 +842,7 @@ const Campaigns: React.FC = () => {
                         <div className="mb-1">
                           <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                         </div>
-                        <p className="text-sm font-bold text-foreground">{campaign.description}</p>
+                        <p className="text-sm font-bold text-foreground font-jakarta">{campaign.description}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
                         <div className="inline-flex items-baseline gap-0.5">
