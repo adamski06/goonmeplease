@@ -843,7 +843,7 @@ const Campaigns: React.FC = () => {
                         </div>
                         <p className="text-sm font-semibold text-black dark:text-white">{campaign.description}</p>
                       </div>
-                      <div className="relative z-10 mt-auto flex flex-col items-start gap-2">
+                      <div className="relative z-10 mt-auto flex flex-row items-center gap-2">
                         <div className="bg-black text-white font-semibold px-3 py-1 rounded inline-flex items-baseline gap-0.5">
                           <span className="text-xl">{campaign.maxEarnings.toLocaleString()}</span>
                           <span className="text-xs">sek</span>
