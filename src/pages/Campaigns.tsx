@@ -850,7 +850,7 @@ const Campaigns: React.FC = () => {
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
-                          className="px-3 py-1 rounded bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-black/30 transition-colors"
+                          className="h-[34px] w-[34px] rounded bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-black/30 transition-colors"
                         >
                           <Heart 
                             className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-white/70'}`} 
