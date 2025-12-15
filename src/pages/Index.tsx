@@ -24,8 +24,8 @@ const Index = () => {
         onClick={() => handleTabChange('creator')}
         className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
           activeTab === 'creator'
-            ? 'bg-white text-black rounded-full'
-            : 'text-white group-hover:text-black hover:text-black'
+            ? 'bg-background text-foreground rounded-full'
+            : 'text-foreground/60 group-hover:text-background hover:text-background'
         }`}
       >
         Creator
@@ -34,8 +34,8 @@ const Index = () => {
         onClick={() => handleTabChange('business')}
         className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
           activeTab === 'business'
-            ? 'bg-white text-black rounded-full'
-            : 'text-white group-hover:text-black hover:text-black'
+            ? 'bg-background text-foreground rounded-full'
+            : 'text-foreground/60 group-hover:text-background hover:text-background'
         }`}
       >
         Business
@@ -43,33 +43,18 @@ const Index = () => {
     </>
   );
 
-  return <div className="overflow-x-hidden relative bg-white">
-      {/* Aurora gradients - both always mounted, toggle opacity */}
-      <div className={`aurora-gradient-creator transition-opacity duration-500 ${activeTab === 'creator' ? 'opacity-100' : 'opacity-0'}`} />
-      <div className={`aurora-gradient-business transition-opacity duration-500 ${activeTab === 'business' ? 'opacity-100' : 'opacity-0'}`} />
-      
-      {/* Subtle noise texture */}
-      <div className="noise-layer" />
+  return <div className="overflow-x-hidden relative">
+      {/* Static Grainy Background */}
+      <div className="fixed inset-0 grainy-background" />
+      <div className="noise-layer fixed" />
       
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
-        {/* Backdrop blur and shadow - fades in after delay */}
-        <div 
-          className={`absolute inset-x-0 top-0 h-24 -z-10 pointer-events-none transition-opacity duration-[2000ms] ${showBackdrop ? 'opacity-100' : 'opacity-0'}`}
-          style={{
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.2), transparent)',
-            backdropFilter: 'blur(4px)',
-            WebkitBackdropFilter: 'blur(4px)',
-            maskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)'
-          }}
-        />
-        
         {/* Constrained content container */}
         <div className="max-w-7xl mx-auto flex items-end gap-4">
           <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
             <div 
-              className="absolute inset-0 bg-white"
+              className="absolute inset-0 bg-foreground"
               style={{
                 WebkitMaskImage: `url(${jarlaLogo})`,
                 maskImage: `url(${jarlaLogo})`,
@@ -84,18 +69,18 @@ const Index = () => {
           </div>
           
           {/* Tabs next to logo */}
-          <div className="group flex bg-white/20 hover:bg-white rounded-full overflow-hidden ml-8 transition-colors">
+          <div className="group flex bg-black/10 hover:bg-foreground rounded-full overflow-hidden ml-8 transition-colors">
             <TabButtons />
           </div>
           
           {/* Nav buttons */}
-          <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+          <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
             {activeTab === 'creator' ? 'How do I earn money?' : 'Pricing'}
           </button>
-          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
             About us
           </button>
-          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity">
+          <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
             Careers
           </button>
           
@@ -103,13 +88,13 @@ const Index = () => {
           <div className="ml-auto flex items-center gap-2">
             <button 
               onClick={() => navigate('/auth')}
-              className="px-4 py-1.5 text-sm font-bold font-montserrat text-white hover:opacity-80 transition-opacity"
+              className="px-4 py-1.5 text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
             >
               Log in
             </button>
             <button 
               onClick={() => navigate('/auth')}
-              className="signup-button px-6 py-2 text-base font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300"
+              className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
             >
               <span className="relative z-10">Sign up</span>
             </button>
@@ -121,14 +106,14 @@ const Index = () => {
       <section className="min-h-screen px-6 flex flex-col relative">
         <div className={`flex-1 flex items-center max-w-7xl mx-auto w-full ${activeTab === 'business' ? 'justify-center' : 'justify-center gap-16'}`}>
           <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : ''}`}>
-            <h1 className={`animate-fade-in-delayed font-bold text-white font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
+            <h1 className={`animate-fade-in-delayed font-bold text-foreground font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
               {activeTab === 'creator' ? (
                 <div className="mt-16 text-center">
                   <span className="block text-6xl md:text-8xl">Earn money</span>
                   <span className="block text-6xl md:text-8xl">
                     per{' '}
                     <span className="inline-block">
-                      <span className="inline-block text-white">
+                      <span className="inline-block text-foreground">
                         view
                       </span>
                     </span>
@@ -136,7 +121,7 @@ const Index = () => {
                   <div className="flex justify-center mt-8">
                     <button 
                       onClick={() => navigate('/auth')}
-                      className="signup-button px-12 py-4 text-xl font-bold font-montserrat bg-aurora-sync text-white rounded-full transition-all duration-300"
+                      className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
                     >
                       <span className="relative z-10">Sign up</span>
                     </button>
@@ -153,8 +138,8 @@ const Index = () => {
           {/* Vertical video placeholder - right side (only for creator) */}
           {activeTab === 'creator' && (
             <div className="flex items-center justify-center">
-              <div className="w-56 h-[400px] bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 flex items-center justify-center">
-                <span className="text-white/50 text-sm font-montserrat">Video</span>
+              <div className="w-56 h-[400px] bg-black/5 dark:bg-white/10 backdrop-blur-sm rounded-3xl border border-black/10 dark:border-white/20 flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-montserrat">Video</span>
               </div>
             </div>
           )}
