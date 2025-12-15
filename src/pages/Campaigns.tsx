@@ -1014,7 +1014,7 @@ const Campaigns: React.FC = () => {
                         <div className="mb-1">
                           <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                         </div>
-                        <p className="text-base font-bold text-foreground font-jakarta leading-tight">{campaign.title}</p>
+                        <p className="text-base font-bold text-black font-jakarta leading-tight">{campaign.title}</p>
                       </div>
                       <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
                         <div className="inline-flex items-baseline gap-0.5">
