@@ -821,7 +821,7 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => setSelectedCampaign(campaign)}
-                    className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white/60 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20"
+                    className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative bg-white/60 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20"
                   >
                     {/* Left side - Campaign info */}
                     <div className="flex-1 p-4 pt-3 pr-2 pb-3 flex flex-col justify-between relative">
@@ -852,7 +852,7 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Right side - Image fits to content height */}
-                    <div className="relative w-20 md:w-24 flex-shrink-0 m-2 rounded-sm overflow-hidden">
+                    <div className="relative w-20 md:w-24 flex-shrink-0 m-2 rounded overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
