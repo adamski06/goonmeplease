@@ -791,13 +791,7 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div 
-            className="relative flex-1 overflow-hidden"
-            style={{ 
-              maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)'
-            }}
-          >
+          <div className="relative flex-1 overflow-hidden">
             <div className="pt-8 pb-8 px-8 overflow-y-auto h-full">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-12 max-w-[1200px] justify-start">
               {campaigns.map((campaign, index) => {
@@ -850,7 +844,7 @@ const Campaigns: React.FC = () => {
                           className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
                           <Heart 
-                            className={`h-7 w-7 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black/25'}`}
+                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-red-500 text-red-500' : 'text-black/25'}`}
                             strokeWidth={1.5}
                           />
                         </button>
