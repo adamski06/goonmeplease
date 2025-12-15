@@ -566,7 +566,10 @@ const Campaigns: React.FC = () => {
             onClick={() => navigate('/activity')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-2"
           >
-            <Activity className="h-6 w-6" />
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+              <polygon points="10,8 10,16 16,12" fill="currentColor" />
+            </svg>
             Action
           </button>
           <button 
