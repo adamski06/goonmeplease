@@ -48,19 +48,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       </button>
 
       <div className="flex gap-8">
-        {/* Left side - Campaign image */}
-        <div className="flex-shrink-0">
-          <div className="relative w-64 aspect-[9/16] rounded-2xl overflow-hidden">
-            <img 
-              src={campaign.image} 
-              alt={campaign.brand} 
-              className="w-full h-full object-cover" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-          </div>
-        </div>
-
-        {/* Right side - Campaign info */}
+        {/* Left side - Campaign info */}
         <div className="flex-1 max-w-xl">
           {/* Header */}
           <div className="flex items-start gap-4 mb-6">
@@ -160,6 +148,18 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           >
             Submit Content
           </Button>
+        </div>
+
+        {/* Right side - Campaign image */}
+        <div className="flex-shrink-0">
+          <div className="relative w-64 aspect-[9/16] rounded-2xl overflow-hidden">
+            <img 
+              src={campaign.image} 
+              alt={campaign.brand} 
+              className="w-full h-full object-cover" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          </div>
         </div>
       </div>
     </div>
