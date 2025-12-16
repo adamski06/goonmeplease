@@ -90,18 +90,18 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
       {/* Earnings Display - Full width */}
       <div className="mb-6 mt-6 max-w-[calc(36rem+2.5rem+11rem)]">
-        <div className="flex flex-col items-start gap-1">
-            {/* Rate per view - on top */}
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-              <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-              <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
-            </div>
-            {/* Max earnings bubble - below */}
-            <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
-              <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-              <span className="text-lg text-white font-montserrat">sek</span>
-            </div>
+        <div className="flex items-end justify-between">
+          {/* Rate per view - left */}
+          <div className="flex items-baseline gap-1">
+            <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
+            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
+          </div>
+          {/* Max earnings bubble - right */}
+          <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
+            <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+            <span className="text-lg text-white font-montserrat">sek</span>
+          </div>
         </div>
         {/* Black line */}
         <div className="h-[2px] bg-black mt-2 mb-2" />
