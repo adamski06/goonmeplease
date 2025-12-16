@@ -113,7 +113,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   </div>
                 ))
               ) : (
-                [1, 2, 3].map((i) => (
+                [1, 2, 3, 4].map((i) => (
                   <div 
                     key={i}
                     className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg bg-muted/50 flex items-center justify-center"
