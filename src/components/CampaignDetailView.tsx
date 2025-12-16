@@ -118,8 +118,10 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <div className="mb-6">
             <div className="flex items-end justify-between">
               {/* Left side - rate per view */}
-              <div className="bg-black rounded-full px-4 py-2">
-                <span className="text-sm text-white font-jakarta">{campaign.ratePerThousand} sek / 1000 views</span>
+              <div className="bg-black rounded-full px-4 py-2 flex items-baseline gap-1">
+                <span className="text-sm text-white font-jakarta">{campaign.ratePerThousand}</span>
+                <span className="text-xs text-white font-jakarta">sek</span>
+                <span className="text-sm text-white font-jakarta">/ 1000 views</span>
               </div>
               {/* Right side - max earnings with pointer */}
               <div className="flex flex-col items-end">
@@ -128,7 +130,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
                 {/* Pointer triangle */}
-                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-6 mb-[-2px]" />
+                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-6 mt-2" />
               </div>
             </div>
             {/* Black line - shorter to end at pointer */}
