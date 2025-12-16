@@ -132,7 +132,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                     fill="black"
                   />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center pr-5">
+                <div className="absolute inset-0 flex items-center justify-center pb-2">
                   <div className="flex items-baseline gap-1">
                     <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                     <span className="text-sm text-white font-montserrat">sek</span>
