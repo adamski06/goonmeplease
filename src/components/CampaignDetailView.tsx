@@ -86,7 +86,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         {/* Fixed video peek at top - tap to go back */}
         <button 
           onClick={onBack}
-          className="fixed top-2 left-3 right-3 h-14 z-50 overflow-hidden rounded-2xl"
+          className="fixed top-0 left-3 right-3 h-14 z-50 overflow-hidden rounded-b-2xl"
         >
           {/* Video positioned so only bottom ~10% shows */}
           <div className="absolute bottom-0 left-0 right-0 h-[60vh] w-full">
