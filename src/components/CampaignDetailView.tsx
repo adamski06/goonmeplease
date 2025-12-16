@@ -107,7 +107,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto px-4 pt-4 pb-32">
+        <div className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
 
         {/* Description */}
         <p className="text-base text-foreground font-jakarta leading-relaxed mb-6">{campaign.description}</p>
@@ -191,7 +191,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Fixed CTA */}
-        <div className="fixed bottom-20 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent">
+        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-background via-background to-transparent">
           <Button 
             size="lg" 
             className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
