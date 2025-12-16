@@ -83,10 +83,10 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Layout */}
-      <div className="md:hidden h-full flex flex-col relative overflow-hidden">
+      <div className="md:hidden h-full flex flex-col relative overflow-hidden bg-background">
         {/* Full video layer - slides down when expanded */}
         <div 
-          className={`absolute inset-x-3 top-0 z-50 transition-transform duration-300 ease-out ${
+          className={`absolute inset-x-3 -top-1 z-50 transition-transform duration-300 ease-out ${
             isVideoExpanded ? 'translate-y-0' : '-translate-y-[calc(100%-3.5rem)]'
           }`}
           style={{ height: 'calc(100vh - 5rem)' }}
@@ -114,22 +114,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               onClick={() => setIsVideoExpanded(!isVideoExpanded)}
               className="absolute bottom-0 left-0 right-0 h-20 flex items-end justify-center pb-3"
             >
-              <div className={`w-10 h-1 bg-white/60 rounded-full transition-transform duration-300 ${isVideoExpanded ? 'rotate-0' : 'rotate-0'}`} />
+              <div className="w-10 h-1 bg-white/60 rounded-full" />
             </button>
           </div>
         </div>
 
         {/* Scrollable content below the peek */}
         <div className="flex-1 overflow-y-auto pt-20 px-4 pb-32">
-          {/* Header - Logo, company name, content type */}
+          {/* Header - Logo and company name */}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
             </div>
-            <div className="flex items-baseline gap-2 flex-1 min-w-0">
-              <h1 className="text-lg font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-              <p className="text-sm text-foreground font-montserrat truncate">- {campaign.contentType}</p>
-            </div>
+            <h1 className="text-lg font-bold text-foreground font-montserrat flex-1">{campaign.brand}</h1>
             <button
               onClick={onToggleSave}
               className="flex items-center justify-center p-1"
