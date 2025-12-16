@@ -974,7 +974,7 @@ const Campaigns: React.FC = () => {
                     className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-[200px]"
                   >
                     {/* Top - Vertical Image */}
-                    <div className="relative w-full aspect-[9/16] overflow-hidden rounded-t-xl">
+                    <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-xl">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
