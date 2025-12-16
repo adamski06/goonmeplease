@@ -86,28 +86,18 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </div>
         </div>
 
-        {/* Requirements - separate section */}
-        <div className="border border-border rounded-xl p-6">
-          <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+        {/* Requirements - card style */}
+        <div className="bg-white dark:bg-dark-surface rounded-2xl p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
           
-          <div className="flex gap-8">
-            {/* Bullet points */}
-            <ul className="space-y-2 flex-1">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
-
-            {/* Example pictures */}
-            <div className="flex gap-2 lg:gap-3 flex-shrink-0">
+          <div className="flex gap-6">
+            {/* Example pictures - left aligned */}
+            <div className="flex gap-2 flex-shrink-0">
               {(campaign.exampleImages || []).length > 0 ? (
                 campaign.exampleImages?.map((img, i) => (
                   <div 
                     key={i}
-                    className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg overflow-hidden border border-border/50"
+                    className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg overflow-hidden"
                   >
                     <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                   </div>
@@ -116,13 +106,23 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 [1, 2, 3].map((i) => (
                   <div 
                     key={i}
-                    className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                    className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg bg-muted/50 flex items-center justify-center"
                   >
-                    <span className="text-xs lg:text-sm text-muted-foreground">Example {i}</span>
+                    <span className="text-xs text-muted-foreground">Example {i}</span>
                   </div>
                 ))
               )}
             </div>
+
+            {/* Bullet points */}
+            <ul className="space-y-2 flex-1">
+              {campaign.guidelines.map((guideline, idx) => (
+                <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
+                  <span className="text-foreground">•</span>
+                  {guideline}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
