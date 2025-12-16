@@ -87,7 +87,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Requirements - separate section */}
-        <div>
+        <div className="border border-border rounded-xl p-6">
           <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
           
           <div className="flex gap-8">
