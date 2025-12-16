@@ -130,7 +130,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
                 {/* Triangle tail pointing down */}
-                <div className="absolute -bottom-[8px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-black" />
+                <div className="absolute -bottom-[7px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-black" />
               </div>
             </div>
             {/* Black line */}
@@ -139,7 +139,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <div className="flex flex-col items-end">
               <div className="relative">
                 {/* Triangle tail pointing up */}
-                <div className="absolute -top-[8px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-b-[8px] border-b-white" />
+                <div className="absolute -top-[7px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-b-[8px] border-b-white" />
                 <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
                   <span className="text-sm text-black font-jakarta">
                     {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
