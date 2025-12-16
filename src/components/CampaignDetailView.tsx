@@ -81,8 +81,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Mobile Layout */}
-      <div className="md:hidden h-full flex flex-col bg-white">
+      {/* Mobile Layout - slides in from right */}
+      <div className="md:hidden h-full flex flex-col bg-white animate-slide-in-right">
         {/* White top bar with back button - thick for notch */}
         <div className="flex items-center gap-3 px-4 pt-12 pb-3 bg-white border-b border-black/5">
           <button 
