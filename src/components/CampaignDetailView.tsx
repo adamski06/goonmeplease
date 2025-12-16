@@ -136,10 +136,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Black line - shorter to end at pointer */}
             <div className="h-[2px] bg-black mt-3 mb-3 mr-[16px]" />
             {/* Views needed */}
-            <div className="text-right">
-              <span className="text-sm text-muted-foreground font-jakarta">
-                {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()} views to reach max
-              </span>
+            <div className="flex flex-col items-end">
+              {/* Pointer triangle pointing up */}
+              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-black mr-6" />
+              <div className="bg-black rounded-full px-4 py-2">
+                <span className="text-sm text-white font-jakarta">
+                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()} views to reach max
+                </span>
+              </div>
             </div>
           </div>
 
