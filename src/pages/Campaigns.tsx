@@ -792,7 +792,7 @@ const Campaigns: React.FC = () => {
 
       {/* Mobile Bottom Navigation Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 pt-2 pb-2 h-20 safe-area-bottom">
-        <div className="flex items-start justify-between h-full px-8">
+        <div className="flex items-start justify-evenly h-full">
           <button 
             onClick={() => setActiveFilter('foryou')}
             className="flex flex-col items-center gap-1 pt-1 w-14"
