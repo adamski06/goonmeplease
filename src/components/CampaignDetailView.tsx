@@ -120,7 +120,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               {/* Left side - rate per view */}
               <div className="bg-black rounded-full px-4 py-2 flex items-baseline gap-1">
                 <span className="text-xl font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
-                <span className="text-xs text-white font-jakarta">sek</span>
+                <span className="text-sm text-white font-jakarta">sek</span>
                 <span className="text-sm text-white font-jakarta">/ 1000 views</span>
               </div>
               {/* Right side - max earnings with pointer */}
