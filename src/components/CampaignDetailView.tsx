@@ -124,20 +124,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <span className="text-xs text-white font-jakarta">/ 1000 views</span>
               </div>
               {/* Right side - max earnings bubble with tail */}
-              <div className="relative">
-                <svg className="block h-[58px] w-auto" viewBox="0 0 150 58" fill="none">
-                  {/* Bubble with integrated small 90° tail */}
-                  <path
-                    d="M24 0H126C139.255 0 150 10.745 150 24V48H140L150 58V48H24C10.745 48 0 37.255 0 24C0 10.745 10.745 0 24 0Z"
-                    fill="black"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center pb-2">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                    <span className="text-sm text-white font-montserrat">sek</span>
-                  </div>
+              <div className="flex items-end">
+                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                  <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
+                <svg className="block h-[10px] w-[10px] -ml-[1px]" viewBox="0 0 10 10" fill="none">
+                  <path d="M0 0H10V10L0 0Z" fill="black" />
+                </svg>
               </div>
             </div>
             {/* Black line */}
