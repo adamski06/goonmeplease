@@ -98,7 +98,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             </div>
 
             {/* Description */}
-            <p className="text-base text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
+            <p className="text-lg text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
           </div>
             
           {/* Campaign image */}
