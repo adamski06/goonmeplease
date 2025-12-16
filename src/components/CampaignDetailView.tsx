@@ -118,12 +118,12 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <div className="mb-6">
             <div className="flex items-end justify-between">
               {/* Left side - rate per view */}
-              <div>
-                <span className="text-sm text-muted-foreground font-jakarta">{campaign.ratePerThousand} sek / 1000 views</span>
+              <div className="bg-black rounded-full px-4 py-2">
+                <span className="text-sm text-white font-jakarta">{campaign.ratePerThousand} sek / 1000 views</span>
               </div>
               {/* Right side - max earnings */}
-              <div className="text-right">
-                <span className="text-3xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
+              <div className="bg-black rounded-full px-5 py-2">
+                <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
               </div>
             </div>
             {/* Black line */}
