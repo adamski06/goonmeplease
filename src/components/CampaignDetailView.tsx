@@ -120,9 +120,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <div className="w-[2px] h-[12px] bg-black mx-auto" />
                 {/* Min bubble above with triangle */}
                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out overflow-hidden">
+                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
                     <span>min</span>
-                    <span className="inline-block max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
+                    <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
                       <span className="pl-1">= {minEarnings} sek</span>
                     </span>
                   </div>
