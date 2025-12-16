@@ -67,14 +67,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Video type / Creative freedom description with image */}
-        <div className="flex gap-8">
+        <div className="flex gap-8 items-stretch">
           <div className="flex-1">
             <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
             <p className="text-base text-black mt-1">{campaign.description}</p>
           </div>
           
-          {/* Campaign image */}
-          <div className="relative w-48 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
+          {/* Campaign image - height matches text */}
+          <div className="relative w-48 rounded-xl overflow-hidden flex-shrink-0">
             <img 
               src={campaign.image} 
               alt={campaign.brand} 
