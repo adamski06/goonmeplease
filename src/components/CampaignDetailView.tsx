@@ -154,7 +154,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {/* Interactive line */}
           <div 
             ref={lineRef}
-            className="relative py-8 -my-8 cursor-crosshair"
+            className="relative py-8 -my-8 cursor-pointer"
             onMouseMove={handleLineMouseMove}
             onMouseLeave={handleLineMouseLeave}
           >
