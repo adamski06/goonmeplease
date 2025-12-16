@@ -849,7 +849,7 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {selectedCampaign ? (
           /* Campaign Detail View */
-          <div className="flex-1 overflow-y-auto px-4 md:px-8 py-8 pb-24 md:pb-8">
+          <div className="flex-1 overflow-hidden md:overflow-y-auto md:px-8 md:py-8 md:pb-8 p-0">
             <CampaignDetailView
               campaign={selectedCampaign}
               onBack={handleBackFromDetail}

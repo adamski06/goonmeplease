@@ -78,7 +78,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
   return (
     <div 
-      className="h-full overflow-y-auto"
+      className="h-full overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
