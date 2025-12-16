@@ -91,7 +91,17 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
           
           <div className="flex gap-6">
-            {/* Example pictures - left aligned */}
+            {/* Bullet points */}
+            <ul className="space-y-2">
+              {campaign.guidelines.map((guideline, idx) => (
+                <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
+                  <span className="text-foreground">•</span>
+                  {guideline}
+                </li>
+              ))}
+            </ul>
+
+            {/* Example pictures - right of text but aligned left */}
             <div className="flex gap-2 flex-shrink-0">
               {(campaign.exampleImages || []).length > 0 ? (
                 campaign.exampleImages?.map((img, i) => (
@@ -113,16 +123,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 ))
               )}
             </div>
-
-            {/* Bullet points */}
-            <ul className="space-y-2 flex-1">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </div>
