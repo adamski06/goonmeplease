@@ -83,8 +83,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
     >
       {/* Mobile Layout */}
       <div className="md:hidden h-full flex flex-col bg-background">
-        {/* White top bar with back button */}
-        <div className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-dark-surface border-b border-black/5 dark:border-white/10">
+        {/* White top bar with back button - thick for notch */}
+        <div className="flex items-center gap-3 px-4 pt-12 pb-3 bg-white dark:bg-dark-surface border-b border-black/5 dark:border-white/10">
           <button 
             onClick={onBack}
             className="p-1 -ml-1"
