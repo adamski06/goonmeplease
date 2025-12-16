@@ -121,22 +121,17 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
         </div>
 
-        {/* Interactive line container */}
-        <div 
-          ref={lineRef}
-          className="relative cursor-crosshair"
-          onMouseMove={handleLineMouseMove}
-          onMouseLeave={handleLineMouseLeave}
-        >
-          {/* Invisible expanded hover area */}
-          <div className="absolute inset-x-0 -top-16 -bottom-16 z-10" />
-          
-          {/* Earnings bubble - above line */}
+        {/* Line and bubbles container */}
+        <div className="relative">
+          {/* Earnings bubble - above line, right side when not hovering */}
           <div 
             className="absolute -top-14 pointer-events-none transition-all duration-100 ease-out z-20"
-            style={{ 
-              left: hoverPosition !== null ? `${hoverPosition}%` : '100%',
+            style={hoverPosition !== null ? { 
+              left: `${hoverPosition}%`,
               transform: 'translateX(-50%)'
+            } : {
+              right: 0,
+              transform: 'translateX(0)'
             }}
           >
             <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
@@ -149,55 +144,66 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             </div>
           </div>
 
-          {/* The actual line */}
-          <div className="h-[2px] bg-black w-full relative z-0" />
-          
-          {/* Hover indicator tick */}
-          {hoverPosition !== null && (
-            <div 
-              className="absolute top-[-4px] pointer-events-none z-20"
-              style={{ left: `${hoverPosition}%` }}
-            >
-              <div className="w-[2px] h-[12px] bg-black mx-auto" />
-            </div>
-          )}
-
-          {/* Min marker */}
-          {(() => {
-            const minViews = Math.round(totalViews * 0.125);
-            const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
-            const minPosition = 12.5;
-            return (
-              <div className="absolute group cursor-pointer z-20" style={{ left: `${minPosition}%`, top: '-4px' }}>
-                {/* Hover area */}
-                <div className="absolute -inset-4" />
-                {/* Vertical tick */}
-                <div className="w-[2px] h-[12px] bg-black mx-auto" />
-                {/* Min bubble above with triangle */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
-                    <span>min</span>
-                    <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
-                      <span className="pl-1 relative top-[1px]">= {minEarnings} sek</span>
-                    </span>
-                  </div>
-                  <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
-                </div>
-                {/* Views count below - hidden by default, shows on hover */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out pointer-events-none">
-                  <span>{minViews.toLocaleString()}</span>
-                  <span className="text-xs">views</span>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Views bubble - below line */}
+          {/* Interactive line */}
           <div 
-            className="absolute top-4 pointer-events-none transition-all duration-100 ease-out z-20"
-            style={{ 
-              left: hoverPosition !== null ? `${hoverPosition}%` : '100%',
+            ref={lineRef}
+            className="relative py-8 -my-8 cursor-crosshair"
+            onMouseMove={handleLineMouseMove}
+            onMouseLeave={handleLineMouseLeave}
+          >
+            {/* The actual line */}
+            <div className="h-[2px] bg-black w-full" />
+            
+            {/* Hover indicator tick */}
+            {hoverPosition !== null && (
+              <div 
+                className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
+                style={{ left: `${hoverPosition}%` }}
+              >
+                <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
+              </div>
+            )}
+
+            {/* Min marker */}
+            {(() => {
+              const minViews = Math.round(totalViews * 0.125);
+              const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
+              const minPosition = 12.5;
+              return (
+                <div className="absolute group cursor-pointer z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
+                  {/* Hover area */}
+                  <div className="absolute -inset-4" />
+                  {/* Vertical tick */}
+                  <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
+                  {/* Min bubble above with triangle */}
+                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+                    <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
+                      <span>min</span>
+                      <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
+                        <span className="pl-1 relative top-[1px]">= {minEarnings} sek</span>
+                      </span>
+                    </div>
+                    <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
+                  </div>
+                  {/* Views count below */}
+                  <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out pointer-events-none">
+                    <span>{minViews.toLocaleString()}</span>
+                    <span className="text-xs">views</span>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Views bubble - below line, right side when not hovering */}
+          <div 
+            className="absolute top-12 pointer-events-none transition-all duration-100 ease-out z-20"
+            style={hoverPosition !== null ? { 
+              left: `${hoverPosition}%`,
               transform: 'translateX(-50%)'
+            } : {
+              right: 0,
+              transform: 'translateX(0)'
             }}
           >
             <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
@@ -212,7 +218,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Spacer for the bubbles */}
-        <div className="h-20" />
+        <div className="h-24" />
       </div>
 
       {/* Requirements - card style */}
