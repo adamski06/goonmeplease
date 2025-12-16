@@ -130,9 +130,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
             </div>
             {/* Black line */}
-            <div className="h-[2px] bg-black mt-2 mb-2 mr-0" />
+            <div className="h-[2px] bg-black mt-2 mb-2" />
             {/* Views needed bubble */}
-            <div className="flex flex-col items-end">
+            <div className="flex justify-end">
               <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-4 py-1.5 flex items-baseline gap-1">
                 <span className="text-sm text-black font-jakarta">
                   {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
