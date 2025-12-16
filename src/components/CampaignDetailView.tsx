@@ -113,41 +113,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
             </div>
           </div>
-
-          {/* Earnings Display */}
-          <div className="mb-6">
-            <div className="flex items-end justify-between">
-              {/* Left side - rate per view */}
-              <div className="bg-black rounded-full px-4 py-2 flex items-baseline gap-1">
-                <span className="text-xl font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
-                <span className="text-sm text-white font-jakarta">sek</span>
-                <span className="text-xs text-white font-jakarta">/ 1000 views</span>
-              </div>
-              {/* Right side - max earnings bubble */}
-              <div className="bg-black rounded-full rounded-br-none px-5 py-2 flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                <span className="text-sm text-white font-montserrat">sek</span>
-              </div>
-            </div>
-            {/* Black line */}
-            <div className="h-[2px] bg-black mt-2 mb-2" />
-            {/* Views needed bubble */}
-            <div className="flex justify-end">
-              <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-4 py-1.5 flex items-baseline gap-1">
-                <span className="text-sm text-black font-jakarta">
-                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                <span className="text-xs text-black font-jakarta">views</span>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <Button 
-            size="lg" 
-            className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
-          >
-            Submit Content
-          </Button>
         </div>
 
         {/* Right side - Campaign image */}
@@ -162,6 +127,41 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Earnings Display - Full width */}
+      <div className="mb-6 mt-6">
+        <div className="flex items-end justify-between">
+          {/* Left side - rate per view */}
+          <div className="bg-black rounded-full px-4 py-2 flex items-baseline gap-1">
+            <span className="text-xl font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
+            <span className="text-sm text-white font-jakarta">sek</span>
+            <span className="text-xs text-white font-jakarta">/ 1000 views</span>
+          </div>
+          {/* Right side - max earnings bubble */}
+          <div className="bg-black rounded-full rounded-br-none px-5 py-2 flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+            <span className="text-sm text-white font-montserrat">sek</span>
+          </div>
+        </div>
+        {/* Black line */}
+        <div className="h-[2px] bg-black mt-2 mb-2" />
+        {/* Views needed bubble */}
+        <div className="flex justify-end">
+          <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-4 py-1.5 flex items-baseline gap-1">
+            <span className="text-sm text-black font-jakarta">
+              {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+            <span className="text-xs text-black font-jakarta">views</span>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <Button 
+        size="lg" 
+        className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
+      >
+        Submit Content
+      </Button>
     </div>
   );
 };
