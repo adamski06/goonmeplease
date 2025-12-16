@@ -213,7 +213,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Spacer for the bubbles */}
-        <div className="h-24" />
+        <div className="h-16" />
       </div>
 
       {/* Requirements - card style */}
