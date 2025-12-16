@@ -112,7 +112,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             const minViews = Math.round(totalViews * 0.125);
             const minPosition = 12.5;
             return (
-              <div className="absolute" style={{ left: `${minPosition}%`, top: '-4px' }}>
+              <div className="absolute group cursor-pointer" style={{ left: `${minPosition}%`, top: '-4px' }}>
+                {/* Hover area */}
+                <div className="absolute -inset-4" />
                 {/* Vertical tick */}
                 <div className="w-[2px] h-[12px] bg-black mx-auto" />
                 {/* Min bubble above with triangle */}
@@ -122,8 +124,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   </div>
                   <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
                 </div>
-                {/* Views count below in white bubble */}
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1">
+                {/* Views count below - hidden by default, shows on hover */}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out pointer-events-none">
                   <span>{minViews.toLocaleString()}</span>
                   <span className="text-xs">views</span>
                 </div>
