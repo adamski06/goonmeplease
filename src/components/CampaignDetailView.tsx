@@ -113,45 +113,49 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       </div>
 
       {/* Earnings Display - Full width */}
-      <div className="mb-6 mt-6 max-w-[calc(36rem+2.5rem+11rem)]">
-        <div className="flex items-start justify-between">
-          {/* Rate per view - left */}
-          <div className="flex items-baseline gap-1 -mt-6">
-            <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
-          </div>
-          {/* Max earnings bubble - moves with hover */}
-          <div 
-            className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5 transition-all duration-150 ease-out"
-            style={hoverPosition !== null ? {
-              position: 'absolute',
-              left: `${hoverPosition}%`,
-              transform: 'translateX(-50%)',
-              top: '-12px'
-            } : {}}
-          >
-            <span className="text-4xl font-bold text-white font-montserrat">
-              {hoverPosition !== null 
-                ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                : campaign.maxEarnings.toLocaleString()}
-            </span>
-            <span className="text-lg text-white font-montserrat">sek</span>
-          </div>
+      <div className="mb-6 mt-6 max-w-[calc(36rem+2.5rem+11rem)] relative">
+        {/* Rate per view - left */}
+        <div className="flex items-baseline gap-1 mb-4">
+          <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
+          <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+          <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
         </div>
-        {/* Black line with min marker and interactive hover */}
+
+        {/* Interactive line container */}
         <div 
           ref={lineRef}
-          className="relative mt-2 mb-2 cursor-crosshair py-6 -my-6"
+          className="relative cursor-crosshair"
           onMouseMove={handleLineMouseMove}
           onMouseLeave={handleLineMouseLeave}
         >
-          <div className="h-[2px] bg-black w-full" />
+          {/* Invisible expanded hover area */}
+          <div className="absolute inset-x-0 -top-16 -bottom-16 z-10" />
+          
+          {/* Earnings bubble - above line */}
+          <div 
+            className="absolute -top-14 pointer-events-none transition-all duration-100 ease-out z-20"
+            style={{ 
+              left: hoverPosition !== null ? `${hoverPosition}%` : '100%',
+              transform: 'translateX(-50%)'
+            }}
+          >
+            <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
+              <span className="text-4xl font-bold text-white font-montserrat">
+                {hoverPosition !== null 
+                  ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                  : campaign.maxEarnings.toLocaleString()}
+              </span>
+              <span className="text-lg text-white font-montserrat">sek</span>
+            </div>
+          </div>
+
+          {/* The actual line */}
+          <div className="h-[2px] bg-black w-full relative z-0" />
           
           {/* Hover indicator tick */}
           {hoverPosition !== null && (
             <div 
-              className="absolute top-[-4px]"
+              className="absolute top-[-4px] pointer-events-none z-20"
               style={{ left: `${hoverPosition}%` }}
             >
               <div className="w-[2px] h-[12px] bg-black mx-auto" />
@@ -164,13 +168,13 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
             const minPosition = 12.5;
             return (
-              <div className="absolute group cursor-pointer" style={{ left: `${minPosition}%`, top: '-4px' }}>
+              <div className="absolute group cursor-pointer z-20" style={{ left: `${minPosition}%`, top: '-4px' }}>
                 {/* Hover area */}
                 <div className="absolute -inset-4" />
                 {/* Vertical tick */}
                 <div className="w-[2px] h-[12px] bg-black mx-auto" />
                 {/* Min bubble above with triangle */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
                   <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
                     <span>min</span>
                     <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
@@ -187,26 +191,28 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
             );
           })()}
-        </div>
-        {/* Views needed bubble - moves with hover */}
-        <div 
-          className="flex transition-all duration-150 ease-out"
-          style={hoverPosition !== null ? {
-            justifyContent: 'flex-start',
-            paddingLeft: `calc(${hoverPosition}% - 60px)`
-          } : {
-            justifyContent: 'flex-end'
-          }}
-        >
-          <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
-            <span className="text-xl font-normal text-black font-jakarta">
-              {hoverPosition !== null 
-                ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                : totalViews.toLocaleString()}
-            </span>
-            <span className="text-sm text-black font-jakarta">views</span>
+
+          {/* Views bubble - below line */}
+          <div 
+            className="absolute top-4 pointer-events-none transition-all duration-100 ease-out z-20"
+            style={{ 
+              left: hoverPosition !== null ? `${hoverPosition}%` : '100%',
+              transform: 'translateX(-50%)'
+            }}
+          >
+            <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
+              <span className="text-xl font-normal text-black font-jakarta">
+                {hoverPosition !== null 
+                  ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                  : totalViews.toLocaleString()}
+              </span>
+              <span className="text-sm text-black font-jakarta">views</span>
+            </div>
           </div>
         </div>
+
+        {/* Spacer for the bubbles */}
+        <div className="h-20" />
       </div>
 
       {/* Requirements - card style */}
