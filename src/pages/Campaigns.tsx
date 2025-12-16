@@ -791,7 +791,7 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 pt-1 pb-2 safe-area-bottom">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 pt-2 pb-6 safe-area-bottom">
         <div className="flex items-center justify-around">
           <button className="flex flex-col items-center gap-0.5 py-1 px-3">
             <svg className="h-6 w-6 text-foreground" viewBox="0 0 24 24" fill="currentColor">
