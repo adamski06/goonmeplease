@@ -131,7 +131,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             
             return (
               <div 
-                className="absolute -top-14 pointer-events-none z-20"
+                className="absolute -top-12 pointer-events-none z-20"
                 style={pillPosition !== null ? { 
                   left: `${pillPosition}%`,
                   transform: 'translateX(-50%)'
