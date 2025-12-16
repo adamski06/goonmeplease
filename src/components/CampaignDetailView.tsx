@@ -90,8 +90,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
       {/* Earnings Display - Full width */}
       <div className="mb-6 mt-6 max-w-[calc(36rem+2.5rem+11rem)]">
-        <div className="flex justify-end">
-          <div className="flex flex-col items-end gap-1">
+        <div className="flex justify-start">
+          <div className="flex flex-col items-start gap-1">
             {/* Rate per view - on top */}
             <div className="flex items-baseline gap-1">
               <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
@@ -99,7 +99,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
             </div>
             {/* Max earnings bubble - below */}
-            <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
+            <div className="bg-black rounded-full rounded-bl-none px-6 py-3 flex items-baseline gap-1.5">
               <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
               <span className="text-lg text-white font-montserrat">sek</span>
             </div>
