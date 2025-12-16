@@ -148,7 +148,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         {/* Views needed bubble */}
         <div className="flex justify-end">
           <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
-            <span className="text-xl font-semibold text-black font-jakarta">
+            <span className="text-xl font-normal text-black font-jakarta">
               {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
             <span className="text-sm text-black font-jakarta">views</span>
           </div>
