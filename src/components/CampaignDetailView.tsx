@@ -130,8 +130,10 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                     <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                     <span className="text-sm text-white font-montserrat">sek</span>
                   </div>
-                  {/* Pointer triangle attached to bubble */}
-                  <div className="absolute -bottom-[7px] right-[4px] w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black" />
+                  {/* Curved tail like iMessage */}
+                  <svg className="absolute -bottom-[10px] right-[2px] w-[20px] h-[12px]" viewBox="0 0 20 12" fill="none">
+                    <path d="M20 0C20 0 16 0 12 4C8 8 4 12 0 12C4 12 8 10 12 8C16 6 20 4 20 0Z" fill="black"/>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -140,8 +142,10 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed */}
             <div className="flex flex-col items-end">
               <div className="relative">
-                {/* Pointer triangle attached to bubble */}
-                <div className="absolute -top-[7px] right-[4px] w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white" />
+                {/* Curved tail like iMessage - pointing up */}
+                <svg className="absolute -top-[10px] right-[2px] w-[20px] h-[12px]" viewBox="0 0 20 12" fill="none">
+                  <path d="M20 12C20 12 16 12 12 8C8 4 4 0 0 0C4 0 8 2 12 4C16 6 20 8 20 12Z" fill="white"/>
+                </svg>
                 <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
                   <span className="text-sm text-black font-jakarta">
                     {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
