@@ -853,9 +853,9 @@ const Campaigns: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {selectedCampaign ? (
-          /* Campaign Detail View */
-          <div className="flex-1 overflow-hidden md:overflow-y-auto md:px-8 md:py-8 md:pb-8 p-0">
+        {/* Desktop: conditional render */}
+        {selectedCampaign && (
+          <div className="hidden md:block flex-1 overflow-y-auto px-8 py-8 pb-8">
             <CampaignDetailView
               campaign={selectedCampaign}
               onBack={handleBackFromDetail}
@@ -863,8 +863,22 @@ const Campaigns: React.FC = () => {
               onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
             />
           </div>
-        ) : (
-          <>
+        )}
+        
+        {/* Mobile: Campaign detail slides over as overlay */}
+        {selectedCampaign && (
+          <div className="md:hidden fixed inset-0 z-50">
+            <CampaignDetailView
+              campaign={selectedCampaign}
+              onBack={handleBackFromDetail}
+              isSaved={favorites.includes(selectedCampaign.id)}
+              onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
+            />
+          </div>
+        )}
+        
+        {/* Feed content - stays visible on mobile (overlay covers it), hidden on desktop when detail selected */}
+        <div className={`flex-1 flex flex-col overflow-hidden ${selectedCampaign ? 'md:hidden' : ''}`}>
         {/* Fixed overlay filter buttons */}
         <div className="hidden md:flex absolute top-6 left-4 right-4 md:left-8 md:right-8 z-20 justify-between items-center">
           <div className="flex items-center gap-4">
@@ -1121,8 +1135,7 @@ const Campaigns: React.FC = () => {
           </div>
           </div>
         )}
-          </>
-        )}
+        </div>
       </main>
     </div>
   );
