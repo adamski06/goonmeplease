@@ -38,6 +38,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   onToggleSave 
 }) => {
   const [hoverPosition, setHoverPosition] = useState<number | null>(null);
+  const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const lineRef = useRef<HTMLDivElement>(null);
 
   const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
@@ -82,26 +83,41 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Layout */}
-      <div className="md:hidden h-full flex flex-col">
-        {/* Fixed video peek at top - tap to go back */}
-        <button 
-          onClick={onBack}
-          className="fixed top-0 left-3 right-3 h-14 z-50 overflow-hidden rounded-b-2xl"
+      <div className="md:hidden h-full flex flex-col relative overflow-hidden">
+        {/* Full video layer - slides down when expanded */}
+        <div 
+          className={`absolute inset-x-3 top-0 z-50 transition-transform duration-300 ease-out ${
+            isVideoExpanded ? 'translate-y-0' : '-translate-y-[calc(100%-3.5rem)]'
+          }`}
+          style={{ height: 'calc(100vh - 5rem)' }}
         >
-          {/* Video positioned so only bottom ~10% shows */}
-          <div className="absolute bottom-0 left-0 right-0 h-[60vh] w-full">
+          <div className="relative w-full h-full rounded-b-2xl overflow-hidden">
             <img 
               src={campaign.image} 
               alt={campaign.brand} 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Back button when expanded */}
+            {isVideoExpanded && (
+              <button 
+                onClick={onBack}
+                className="absolute top-4 left-4 p-2 rounded-full bg-black/30 backdrop-blur-sm"
+              >
+                <ChevronLeft className="h-6 w-6 text-white" />
+              </button>
+            )}
+            
+            {/* Tap area to collapse/expand */}
+            <button 
+              onClick={() => setIsVideoExpanded(!isVideoExpanded)}
+              className="absolute bottom-0 left-0 right-0 h-20 flex items-end justify-center pb-3"
+            >
+              <div className={`w-10 h-1 bg-white/60 rounded-full transition-transform duration-300 ${isVideoExpanded ? 'rotate-0' : 'rotate-0'}`} />
+            </button>
           </div>
-          {/* Subtle indicator */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-            <div className="w-10 h-1 bg-white/60 rounded-full" />
-          </div>
-        </button>
+        </div>
 
         {/* Scrollable content below the peek */}
         <div className="flex-1 overflow-y-auto pt-20 px-4 pb-32">
