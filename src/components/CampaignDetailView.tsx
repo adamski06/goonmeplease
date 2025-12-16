@@ -50,20 +50,20 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
       <div className="flex flex-col gap-6">
         {/* Main info block - Logo, description, and image together */}
-        <div className="flex gap-8 items-start">
-          <div className="max-w-md">
+        <div className="flex gap-12 items-start">
+          <div className="flex-1">
             {/* Header - Logo and company name */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0">
                 <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+              <h1 className="text-3xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
               <button
                 onClick={onToggleSave}
-                className="ml-auto flex items-center justify-center hover:scale-110 transition-transform"
+                className="flex items-center justify-center hover:scale-110 transition-transform"
               >
                 <Bookmark 
-                  className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
+                  className={`h-6 w-6 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
                   strokeWidth={1.5}
                 />
               </button>
@@ -71,19 +71,18 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
             {/* Video type / Creative freedom description */}
             <div>
-              <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
-              <p className="text-base text-black mt-1">{campaign.description}</p>
+              <p className="text-2xl text-foreground font-jakarta mb-2">{campaign.contentType}</p>
+              <p className="text-xl text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
             </div>
           </div>
             
           {/* Campaign image */}
-          <div className="relative w-56 aspect-[9/16] rounded-xl overflow-hidden">
+          <div className="relative w-52 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
             <img 
               src={campaign.image} 
               alt={campaign.brand} 
               className="w-full h-full object-cover" 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
         </div>
 
