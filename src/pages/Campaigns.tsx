@@ -793,18 +793,24 @@ const Campaigns: React.FC = () => {
       {/* Mobile Bottom Navigation Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 pt-2 pb-2 h-20 safe-area-bottom">
         <div className="flex items-start justify-around h-full">
-          <button className="flex flex-col items-center gap-1 px-3 pt-1 h-full">
-            <svg className="h-6 w-6 text-foreground" viewBox="0 0 24 24" fill="currentColor">
+          <button 
+            onClick={() => setActiveFilter('foryou')}
+            className="flex flex-col items-center gap-1 px-3 pt-1 h-full"
+          >
+            <svg className={`h-6 w-6 ${activeFilter === 'foryou' ? 'text-foreground' : 'text-muted-foreground'}`} viewBox="0 0 24 24" fill="currentColor">
               <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" />
             </svg>
-            <span className="text-[10px] font-semibold text-foreground">Home</span>
+            <span className={`text-[10px] ${activeFilter === 'foryou' ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>Home</span>
           </button>
-          <button className="flex flex-col items-center gap-1 px-3 pt-1 h-full">
-            <svg className="h-6 w-6 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button 
+            onClick={() => setActiveFilter('featured')}
+            className="flex flex-col items-center gap-1 px-3 pt-1 h-full"
+          >
+            <svg className={`h-6 w-6 ${activeFilter === 'featured' ? 'text-foreground' : 'text-muted-foreground'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none" />
             </svg>
-            <span className="text-[10px] text-muted-foreground">Discover</span>
+            <span className={`text-[10px] ${activeFilter === 'featured' ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>Discover</span>
           </button>
           <button 
             onClick={() => navigate('/activity')}
