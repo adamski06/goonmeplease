@@ -47,7 +47,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       const rect = lineRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      setHoverPosition(percentage);
+      // Lock to minimum of 12.5%
+      setHoverPosition(Math.max(percentage, 12.5));
     }
   };
 
@@ -163,29 +164,16 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
             {/* Min marker */}
             {(() => {
-              const minViews = Math.round(totalViews * 0.125);
-              const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
+              const minEarnings = Math.round((totalViews * 0.125 / 1000) * campaign.ratePerThousand);
               const minPosition = 12.5;
               return (
-                <div className="absolute group cursor-pointer z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
-                  {/* Hover area */}
-                  <div className="absolute -inset-4" />
+                <div className="absolute z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
                   {/* Vertical tick */}
                   <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
-                  {/* Min bubble above with triangle */}
-                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                    <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
-                      <span>min</span>
-                      <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
-                        <span className="pl-1 relative top-[1px]">= {minEarnings} sek</span>
-                      </span>
-                    </div>
-                    <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
-                  </div>
-                  {/* Views count below */}
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out pointer-events-none">
-                    <span>{minViews.toLocaleString()}</span>
-                    <span className="text-xs">views</span>
+                  {/* Min text above */}
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+                    <span className="text-sm text-black font-jakarta">min</span>
+                    <span className="text-base font-semibold text-black font-montserrat">{minEarnings}</span>
                   </div>
                 </div>
               );
