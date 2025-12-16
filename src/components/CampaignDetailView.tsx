@@ -66,20 +66,22 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </button>
         </div>
 
-        {/* Video type / Creative freedom description */}
-        <div>
-          <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
-          <p className="text-base text-black mt-1">{campaign.description}</p>
-        </div>
-
-        {/* Campaign image - inline with content */}
-        <div className="relative w-72 aspect-[9/16] rounded-xl overflow-hidden">
-          <img 
-            src={campaign.image} 
-            alt={campaign.brand} 
-            className="w-full h-full object-cover" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+        {/* Video type / Creative freedom description with image */}
+        <div className="flex gap-8">
+          <div className="flex-1">
+            <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
+            <p className="text-base text-black mt-1">{campaign.description}</p>
+          </div>
+          
+          {/* Campaign image */}
+          <div className="relative w-48 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
+            <img 
+              src={campaign.image} 
+              alt={campaign.brand} 
+              className="w-full h-full object-cover" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          </div>
         </div>
 
         {/* Requirements */}
