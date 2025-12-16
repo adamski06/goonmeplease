@@ -982,11 +982,12 @@ const Campaigns: React.FC = () => {
                           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                         }}
                       />
+                      {/* Brand name overlay */}
+                      <span className="absolute top-3 left-3 text-xs font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                     </div>
                     
                     {/* Bottom - White info section */}
                     <div className="w-full bg-white dark:bg-dark-surface p-4 flex flex-col gap-2 rounded-b-xl">
-                      <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                       <p className="text-sm font-bold text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
                       <div className="flex items-center justify-between mt-1">
                         <div className="inline-flex items-baseline gap-0.5">
