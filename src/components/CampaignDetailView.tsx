@@ -143,7 +143,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 }}
               >
                 <div className="flex flex-col items-center relative">
-                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
+                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
                     <span className="text-4xl font-bold text-white font-montserrat">
                       {hoverPosition !== null 
                         ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
@@ -231,7 +231,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                       style={{ transform: `translateX(${triangleOffset}px)` }}
                     />
                   )}
-                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
+                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
                     <span className="text-xl font-normal text-black font-jakarta">
                       {hoverPosition !== null 
                         ? getValuesAtPosition(hoverPosition).views.toLocaleString()
