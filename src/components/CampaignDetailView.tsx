@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ArrowLeft, Bookmark } from 'lucide-react';
+import { ArrowLeft, Bookmark, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface CampaignTier {
@@ -42,12 +42,25 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
   const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
 
+  // Swipe back handling for mobile
+  let touchStartX = 0;
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const swipeDistance = touchEndX - touchStartX;
+    // Swipe right to go back
+    if (swipeDistance > 100) {
+      onBack();
+    }
+  };
+
   const handleLineMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (lineRef.current) {
       const rect = lineRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      // Lock to minimum of 12.5%
       setHoverPosition(Math.max(percentage, 12.5));
     }
   };
@@ -63,220 +76,331 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   };
 
   return (
-    <div className="h-full overflow-y-auto px-8">
-      {/* Back button */}
-      <button 
-        onClick={onBack}
-        className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-jakarta"
-      >
-        <ArrowLeft className="h-5 w-5" />
-        <span className="text-base font-medium">Back to ads</span>
-      </button>
-
-      <div className="flex flex-col gap-6">
-        {/* Main info block - Logo, description, and image together */}
-        <div className="flex gap-10 items-start">
-          <div className="max-w-xl">
-            {/* Header - Logo, company name, and content type */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0">
+    <div 
+      className="h-full overflow-y-auto"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* Hero image with overlay */}
+        <div className="relative h-[50vh] w-full">
+          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+          
+          {/* Back button */}
+          <button 
+            onClick={onBack}
+            className="absolute top-4 left-4 p-2 rounded-full bg-black/30 backdrop-blur-sm"
+          >
+            <ChevronLeft className="h-6 w-6 text-white" />
+          </button>
+          
+          {/* Save button */}
+          <button
+            onClick={onToggleSave}
+            className="absolute top-4 right-4 p-2 rounded-full bg-black/30 backdrop-blur-sm"
+          >
+            <Bookmark 
+              className={`h-6 w-6 ${isSaved ? 'fill-white text-white' : 'text-white'}`}
+              strokeWidth={1.5}
+            />
+          </button>
+          
+          {/* Overlay content */}
+          <div className="absolute bottom-0 left-0 right-0 p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center p-1.5">
                 <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
               </div>
-              <div className="flex items-baseline gap-3">
-                <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-                <p className="text-lg text-foreground font-montserrat">- {campaign.contentType}</p>
+              <div>
+                <h1 className="text-xl font-bold text-white font-montserrat">{campaign.brand}</h1>
+                <p className="text-sm text-white/70 font-jakarta">{campaign.contentType}</p>
               </div>
-              <button
-                onClick={onToggleSave}
-                className="flex items-center justify-center hover:scale-110 transition-transform ml-auto"
-              >
-                <Bookmark 
-                  className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
-                  strokeWidth={1.5}
-                />
-              </button>
             </div>
-
-            {/* Description */}
-            <p className="text-xl text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
-          </div>
-            
-          {/* Campaign image */}
-          <div className="relative w-44 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
-            <img 
-              src={campaign.image} 
-              alt={campaign.brand} 
-              className="w-full h-full object-cover" 
-            />
           </div>
         </div>
-
-      </div>
-
-      {/* Earnings Display - Full width */}
-      <div className="mb-6 mt-16 max-w-[calc(36rem+2.5rem+11rem)] relative">
-        {/* Rate per view - left */}
-        <div className="relative flex items-baseline gap-1 mb-2 -translate-y-14">
-          <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-          <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-          <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
-        </div>
-
-        {/* Line and bubbles container */}
-        <div className="relative mt-6">
-          {/* Earnings bubble - above line, right side when not hovering */}
-          {(() => {
-            const maxPillPosition = 85; // Pill stops here to stay on screen
-            const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-            
-            return (
-              <div 
-                className="absolute -top-12 pointer-events-none z-20"
-                style={pillPosition !== null ? { 
-                  left: `${pillPosition}%`,
-                  transform: 'translateX(-50%)'
-                } : {
-                  right: 0,
-                  transform: 'translateX(0)'
-                }}
-              >
-                <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
-                  <span className="text-4xl font-bold text-white font-montserrat">
-                    {hoverPosition !== null 
-                      ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                      : campaign.maxEarnings.toLocaleString()}
-                  </span>
+        
+        {/* Content */}
+        <div className="p-4 pb-32 bg-background">
+          {/* Description */}
+          <p className="text-base text-foreground font-jakarta mb-6">{campaign.description}</p>
+          
+          {/* Earnings */}
+          <div className="bg-black rounded-2xl p-4 mb-6">
+            <div className="flex items-baseline justify-between">
+              <div>
+                <span className="text-sm text-white/60 font-jakarta">Earn up to</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                   <span className="text-lg text-white font-montserrat">sek</span>
                 </div>
               </div>
-            );
-          })()}
-
-          {/* Interactive line */}
-          <div 
-            ref={lineRef}
-            className="relative py-8 -my-8 cursor-pointer"
-            onMouseMove={handleLineMouseMove}
-            onMouseLeave={handleLineMouseLeave}
-          >
-            {/* The actual line */}
-            <div className="h-[2px] bg-black w-full" />
-
-            {/* Min marker */}
-            {(() => {
-              const minViews = Math.round(totalViews * 0.125);
-              const minPosition = 12.5;
-              return (
-                <div className="absolute z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
-                  {/* Vertical tick */}
-                  <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
-                  {/* Minimum text above */}
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none">
-                    <span className="text-sm text-black font-jakarta">minimum</span>
+              <div className="text-right">
+                <span className="text-sm text-white/60 font-jakarta">Rate</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xl font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
+                  <span className="text-xs text-white/80 font-jakarta">/ 1k views</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Requirements */}
+          <div className="mb-6">
+            <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+            <ul className="space-y-2">
+              {campaign.guidelines.map((guideline, idx) => (
+                <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
+                  <span className="text-foreground mt-0.5">•</span>
+                  {guideline}
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Example images */}
+          {campaign.exampleImages && campaign.exampleImages.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Examples</h3>
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {campaign.exampleImages.map((img, i) => (
+                  <div key={i} className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                   </div>
-                  {/* Views text below */}
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
-                    <span className="text-sm text-black font-jakarta">{minViews.toLocaleString()} views</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Fixed CTA */}
+        <div className="fixed bottom-20 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent">
+          <Button 
+            size="lg" 
+            className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
+          >
+            Submit Content
+          </Button>
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:block px-8">
+        {/* Back button */}
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-jakarta"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          <span className="text-base font-medium">Back to ads</span>
+        </button>
+
+        <div className="flex flex-col gap-6">
+          {/* Main info block - Logo, description, and image together */}
+          <div className="flex gap-10 items-start">
+            <div className="max-w-xl">
+              {/* Header - Logo, company name, and content type */}
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0">
+                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+                  <p className="text-lg text-foreground font-montserrat">- {campaign.contentType}</p>
+                </div>
+                <button
+                  onClick={onToggleSave}
+                  className="flex items-center justify-center hover:scale-110 transition-transform ml-auto"
+                >
+                  <Bookmark 
+                    className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
+                    strokeWidth={1.5}
+                  />
+                </button>
+              </div>
+
+              {/* Description */}
+              <p className="text-xl text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
+            </div>
+              
+            {/* Campaign image */}
+            <div className="relative w-44 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
+              <img 
+                src={campaign.image} 
+                alt={campaign.brand} 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+          </div>
+
+        </div>
+
+        {/* Earnings Display - Full width */}
+        <div className="mb-6 mt-16 max-w-[calc(36rem+2.5rem+11rem)] relative">
+          {/* Rate per view - left */}
+          <div className="relative flex items-baseline gap-1 mb-2 -translate-y-14">
+            <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
+            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
+          </div>
+
+          {/* Line and bubbles container */}
+          <div className="relative mt-6">
+            {/* Earnings bubble - above line, right side when not hovering */}
+            {(() => {
+              const maxPillPosition = 85;
+              const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
+              
+              return (
+                <div 
+                  className="absolute -top-12 pointer-events-none z-20"
+                  style={pillPosition !== null ? { 
+                    left: `${pillPosition}%`,
+                    transform: 'translateX(-50%)'
+                  } : {
+                    right: 0,
+                    transform: 'translateX(0)'
+                  }}
+                >
+                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
+                    <span className="text-4xl font-bold text-white font-montserrat">
+                      {hoverPosition !== null 
+                        ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                        : campaign.maxEarnings.toLocaleString()}
+                    </span>
+                    <span className="text-lg text-white font-montserrat">sek</span>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Interactive line */}
+            <div 
+              ref={lineRef}
+              className="relative py-8 -my-8 cursor-pointer"
+              onMouseMove={handleLineMouseMove}
+              onMouseLeave={handleLineMouseLeave}
+            >
+              {/* The actual line */}
+              <div className="h-[2px] bg-black w-full" />
+
+              {/* Min marker */}
+              {(() => {
+                const minViews = Math.round(totalViews * 0.125);
+                const minPosition = 12.5;
+                return (
+                  <div className="absolute z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
+                    {/* Vertical tick */}
+                    <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
+                    {/* Minimum text above */}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none">
+                      <span className="text-sm text-black font-jakarta">minimum</span>
+                    </div>
+                    {/* Views text below */}
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+                      <span className="text-sm text-black font-jakarta">{minViews.toLocaleString()} views</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Views bubble - below line, right side when not hovering */}
+            {(() => {
+              const maxPillPosition = 85;
+              const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
+              
+              return (
+                <div 
+                  className="absolute top-12 pointer-events-none z-20"
+                  style={pillPosition !== null ? { 
+                    left: `${pillPosition}%`,
+                    transform: 'translateX(-50%)'
+                  } : {
+                    right: 0,
+                    transform: 'translateX(0)'
+                  }}
+                >
+                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
+                    <span className="text-xl font-normal text-black font-jakarta">
+                      {hoverPosition !== null 
+                        ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                        : totalViews.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-black font-jakarta">views</span>
                   </div>
                 </div>
               );
             })()}
           </div>
 
-          {/* Views bubble - below line, right side when not hovering */}
-          {(() => {
-            const maxPillPosition = 85;
-            const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-            
-            return (
-              <div 
-                className="absolute top-12 pointer-events-none z-20"
-                style={pillPosition !== null ? { 
-                  left: `${pillPosition}%`,
-                  transform: 'translateX(-50%)'
-                } : {
-                  right: 0,
-                  transform: 'translateX(0)'
-                }}
-              >
-                <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
-                  <span className="text-xl font-normal text-black font-jakarta">
-                    {hoverPosition !== null 
-                      ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                      : totalViews.toLocaleString()}
-                  </span>
-                  <span className="text-sm text-black font-jakarta">views</span>
-                </div>
-              </div>
-            );
-          })()}
+          {/* Spacer for the bubbles */}
+          <div className="h-16" />
         </div>
 
-        {/* Spacer for the bubbles */}
-        <div className="h-16" />
-      </div>
+        {/* Requirements - card style */}
+        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6 -ml-6 max-w-[calc(36rem+2.5rem+11rem+1.5rem)] mb-6">
+          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
+          
+          <div className="flex gap-6">
+            {/* Bullet points */}
+            <ul className="space-y-2">
+              {campaign.guidelines.map((guideline, idx) => (
+                <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
+                  <span className="text-foreground">•</span>
+                  {guideline}
+                </li>
+              ))}
+            </ul>
 
-      {/* Requirements - card style */}
-      <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6 -ml-6 max-w-[calc(36rem+2.5rem+11rem+1.5rem)] mb-6">
-        <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
-        
-        <div className="flex gap-6">
-          {/* Bullet points */}
-          <ul className="space-y-2">
-            {campaign.guidelines.map((guideline, idx) => (
-              <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
-                <span className="text-foreground">•</span>
-                {guideline}
-              </li>
-            ))}
-          </ul>
-
-          {/* Example pictures - always show 2 slots */}
-          <div className="flex gap-2 flex-shrink-0">
-            {[0, 1].map((i) => {
-              const img = campaign.exampleImages?.[i];
-              return img ? (
-                <div 
-                  key={i}
-                  className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
-                >
-                  <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ) : (
-                <div 
-                  key={i}
-                  className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
-                >
-                  <span className="text-sm text-foreground/60">Example {i + 1}</span>
-                </div>
-              );
-            })}
-          </div>
-      </div>
-      </div>
-
-      {/* Inspiration TikTok Videos */}
-      <div className="mt-6 mb-6">
-        <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Inspiration</h3>
-        <div className="flex gap-3">
-          {[0, 1, 2].map((i) => (
-            <div 
-              key={i}
-              className="w-24 aspect-[9/16] rounded-lg bg-muted/50 flex items-center justify-center border border-border/50"
-            >
-              <span className="text-xs text-foreground/60 text-center px-1">TikTok {i + 1}</span>
+            {/* Example pictures - always show 2 slots */}
+            <div className="flex gap-2 flex-shrink-0">
+              {[0, 1].map((i) => {
+                const img = campaign.exampleImages?.[i];
+                return img ? (
+                  <div 
+                    key={i}
+                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
+                  >
+                    <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div 
+                    key={i}
+                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
+                  >
+                    <span className="text-sm text-foreground/60">Example {i + 1}</span>
+                  </div>
+                );
+              })}
             </div>
-          ))}
         </div>
-      </div>
+        </div>
 
-      {/* CTA */}
-      <Button 
-        size="lg" 
-        className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
-      >
-        Submit Content
-      </Button>
+        {/* Inspiration TikTok Videos */}
+        <div className="mt-6 mb-6">
+          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Inspiration</h3>
+          <div className="flex gap-3">
+            {[0, 1, 2].map((i) => (
+              <div 
+                key={i}
+                className="w-24 aspect-[9/16] rounded-lg bg-muted/50 flex items-center justify-center border border-border/50"
+              >
+                <span className="text-xs text-foreground/60 text-center px-1">TikTok {i + 1}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <Button 
+          size="lg" 
+          className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
+        >
+          Submit Content
+        </Button>
+      </div>
     </div>
   );
 };
