@@ -151,6 +151,21 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               );
             })}
           </div>
+      </div>
+      </div>
+
+      {/* Inspiration TikTok Videos */}
+      <div className="mt-6 mb-6">
+        <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Inspiration</h3>
+        <div className="flex gap-3">
+          {[0, 1, 2].map((i) => (
+            <div 
+              key={i}
+              className="w-24 aspect-[9/16] rounded-lg bg-muted/50 flex items-center justify-center border border-border/50"
+            >
+              <span className="text-xs text-foreground/60 text-center px-1">TikTok {i + 1}</span>
+            </div>
+          ))}
         </div>
       </div>
 
