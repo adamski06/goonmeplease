@@ -125,10 +125,10 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings bubble with tail */}
               <div className="relative">
-                <svg className="block h-[68px] w-auto" viewBox="0 0 150 68" fill="none">
-                  {/* Bubble with integrated 90° tail (attached on bottom, points down) */}
+                <svg className="block h-[58px] w-auto" viewBox="0 0 150 58" fill="none">
+                  {/* Bubble with integrated small 90° tail */}
                   <path
-                    d="M24 0H126C139.255 0 150 10.745 150 24V48H130L150 68V48H24C10.745 48 0 37.255 0 24C0 10.745 10.745 0 24 0Z"
+                    d="M24 0H126C139.255 0 150 10.745 150 24V48H140L150 58V48H24C10.745 48 0 37.255 0 24C0 10.745 10.745 0 24 0Z"
                     fill="black"
                   />
                 </svg>
@@ -145,14 +145,13 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed bubble with tail pointing up */}
             <div className="flex flex-col items-end">
               <div className="relative">
-                <svg className="block h-[60px] w-auto" viewBox="0 0 135 60" fill="none">
-                  {/* Bubble with integrated 90° tail (attached on top, points up) */}
+                <svg className="block h-[50px] w-auto" viewBox="0 0 135 50" fill="none">
+                  {/* Bubble with integrated small 90° tail */}
                   <path
-                    d="M115 20H135V0L115 20H20C8.954 20 0 28.954 0 40C0 51.046 8.954 60 20 60H115C126.046 60 135 51.046 135 40V20H115Z"
+                    d="M125 10H135V0L125 10H20C8.954 10 0 18.954 0 30C0 41.046 8.954 50 20 50H115C126.046 50 135 41.046 135 30V10H125Z"
                     fill="white"
                     stroke="rgb(0 0 0 / 0.1)"
                     strokeWidth="1"
-                    strokeLinejoin="round"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pr-4">
