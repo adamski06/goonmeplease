@@ -113,7 +113,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       </div>
 
       {/* Earnings Display - Full width */}
-      <div className="mb-6 mt-8 max-w-[calc(36rem+2.5rem+11rem)] relative">
+      <div className="mb-6 mt-2 max-w-[calc(36rem+2.5rem+11rem)] relative">
         {/* Rate per view - left */}
         <div className="flex items-baseline gap-1 mb-8">
           <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
