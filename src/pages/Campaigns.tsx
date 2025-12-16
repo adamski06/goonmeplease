@@ -916,9 +916,8 @@ const Campaigns: React.FC = () => {
                   />
                   {/* Mobile overlay info */}
                   <div className="md:hidden absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                    <span className="text-sm font-medium text-white/70 font-montserrat">{campaign.brand}</span>
-                    <p className="text-lg font-bold text-white mt-1 font-jakarta">{campaign.description}</p>
-                    <div className="flex items-center justify-between mt-3">
+                    <div className="text-lg font-bold text-white font-jakarta">{campaign.brand}</div>
+                    <div className="flex items-center justify-between mt-2">
                       <div className="inline-flex items-baseline gap-1">
                         <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                         <span className="text-base font-semibold text-white/80 font-montserrat">sek</span>
