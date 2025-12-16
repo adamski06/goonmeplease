@@ -103,7 +103,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
             {/* Example pictures - always show 4 slots */}
             <div className="flex gap-2 flex-shrink-0">
-              {[0, 1, 2, 3].map((i) => {
+              {[0, 1].map((i) => {
                 const img = campaign.exampleImages?.[i];
                 return img ? (
                   <div 
