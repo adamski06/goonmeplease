@@ -121,9 +121,21 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
             <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
           </div>
-          {/* Max earnings bubble - right */}
-          <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
-            <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+          {/* Max earnings bubble - moves with hover */}
+          <div 
+            className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5 transition-all duration-150 ease-out"
+            style={hoverPosition !== null ? {
+              position: 'absolute',
+              left: `${hoverPosition}%`,
+              transform: 'translateX(-50%)',
+              top: '-12px'
+            } : {}}
+          >
+            <span className="text-4xl font-bold text-white font-montserrat">
+              {hoverPosition !== null 
+                ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                : campaign.maxEarnings.toLocaleString()}
+            </span>
             <span className="text-lg text-white font-montserrat">sek</span>
           </div>
         </div>
@@ -136,27 +148,13 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         >
           <div className="h-[2px] bg-black w-full" />
           
-          {/* Interactive hover indicator */}
+          {/* Hover indicator tick */}
           {hoverPosition !== null && (
             <div 
-              className="absolute top-[-4px] transition-none"
+              className="absolute top-[-4px]"
               style={{ left: `${hoverPosition}%` }}
             >
-              {/* Vertical tick */}
-              <div className="w-[2px] h-[12px] bg-black/50 mx-auto" />
-              {/* Earnings bubble above */}
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-fade-in">
-                <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap flex items-baseline gap-1">
-                  <span className="font-semibold">{getValuesAtPosition(hoverPosition).earnings.toLocaleString()}</span>
-                  <span className="text-xs">sek</span>
-                </div>
-                <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
-              </div>
-              {/* Views bubble below */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 animate-fade-in">
-                <span>{getValuesAtPosition(hoverPosition).views.toLocaleString()}</span>
-                <span className="text-xs">views</span>
-              </div>
+              <div className="w-[2px] h-[12px] bg-black mx-auto" />
             </div>
           )}
 
@@ -190,11 +188,22 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             );
           })()}
         </div>
-        {/* Views needed bubble */}
-        <div className="flex justify-end">
+        {/* Views needed bubble - moves with hover */}
+        <div 
+          className="flex transition-all duration-150 ease-out"
+          style={hoverPosition !== null ? {
+            justifyContent: 'flex-start',
+            paddingLeft: `calc(${hoverPosition}% - 60px)`
+          } : {
+            justifyContent: 'flex-end'
+          }}
+        >
           <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
             <span className="text-xl font-normal text-black font-jakarta">
-              {totalViews.toLocaleString()}</span>
+              {hoverPosition !== null 
+                ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                : totalViews.toLocaleString()}
+            </span>
             <span className="text-sm text-black font-jakarta">views</span>
           </div>
         </div>
