@@ -130,7 +130,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
                 {/* Pointer triangle */}
-                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-[8px]" />
+                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-[8px] -mt-[1px]" />
               </div>
             </div>
             {/* Black line - shorter to end at pointer */}
@@ -138,7 +138,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed */}
             <div className="flex flex-col items-end">
               {/* Pointer triangle pointing up */}
-              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white mr-[8px]" />
+              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white mr-[8px] -mb-[1px] relative z-10" />
               <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
                 <span className="text-sm text-black font-jakarta">
                   {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
