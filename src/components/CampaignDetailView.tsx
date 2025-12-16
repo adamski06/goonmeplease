@@ -142,7 +142,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         {/* Black line with min marker and interactive hover */}
         <div 
           ref={lineRef}
-          className="relative mt-2 mb-2 cursor-crosshair"
+          className="relative mt-2 mb-2 cursor-crosshair py-6 -my-6"
           onMouseMove={handleLineMouseMove}
           onMouseLeave={handleLineMouseLeave}
         >
