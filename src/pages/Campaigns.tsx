@@ -686,7 +686,7 @@ const Campaigns: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex relative overflow-hidden">
+    <div className="h-screen flex relative overflow-hidden dark">
       {/* Static Grainy Background */}
       <div className="absolute inset-0 pointer-events-none grainy-background" />
       <div className="noise-layer absolute inset-0 pointer-events-none" />
