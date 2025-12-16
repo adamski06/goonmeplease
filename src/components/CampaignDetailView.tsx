@@ -114,15 +114,25 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             </div>
           </div>
 
-          {/* Price */}
-          <div className="bg-black text-white rounded-xl p-5 mb-6">
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold font-montserrat">{campaign.ratePerThousand} sek</span>
-              <span className="text-white/60 text-sm">/ 1000 views</span>
+          {/* Earnings Display */}
+          <div className="mb-6">
+            <div className="flex items-end justify-between">
+              {/* Left side - rate per view */}
+              <div>
+                <span className="text-sm text-muted-foreground font-jakarta">{campaign.ratePerThousand} sek / 1000 views</span>
+              </div>
+              {/* Right side - max earnings */}
+              <div className="text-right">
+                <span className="text-3xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
+              </div>
             </div>
-            <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-base text-white/60">up to</span>
-              <span className="text-xl font-semibold">{campaign.maxEarnings.toLocaleString()} sek</span>
+            {/* Line */}
+            <div className="h-px bg-border mt-2 mb-2" />
+            {/* Views needed */}
+            <div className="text-right">
+              <span className="text-sm text-muted-foreground font-jakarta">
+                {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()} views to reach max
+              </span>
             </div>
           </div>
 
