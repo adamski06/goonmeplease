@@ -115,9 +115,12 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               <div className="absolute" style={{ left: `${minPosition}%`, top: '-4px' }}>
                 {/* Vertical tick */}
                 <div className="w-[2px] h-[12px] bg-black mx-auto" />
-                {/* Min bubble above */}
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-sm px-3 py-1 rounded-full whitespace-nowrap font-semibold">
-                  min
+                {/* Min bubble above with triangle */}
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap">
+                    min
+                  </div>
+                  <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
                 </div>
                 {/* Views count below in white bubble */}
                 <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1">
