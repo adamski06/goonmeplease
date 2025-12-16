@@ -124,31 +124,44 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         {/* Line and bubbles container */}
         <div className="relative mt-16">
           {/* Earnings bubble - above line, right side when not hovering */}
-          <div 
-            className="absolute -top-14 pointer-events-none transition-all duration-100 ease-out z-20"
-            style={hoverPosition !== null ? { 
-              left: `${hoverPosition}%`,
-              transform: 'translateX(-50%)'
-            } : {
-              right: 0,
-              transform: 'translateX(0)'
-            }}
-          >
-            <div className="flex flex-col items-center">
-              <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
-                <span className="text-4xl font-bold text-white font-montserrat">
-                  {hoverPosition !== null 
-                    ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                    : campaign.maxEarnings.toLocaleString()}
-                </span>
-                <span className="text-lg text-white font-montserrat">sek</span>
+          {(() => {
+            const maxPillPosition = 85; // Pill stops here to stay on screen
+            const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
+            const triangleOffset = hoverPosition !== null && hoverPosition > maxPillPosition 
+              ? ((hoverPosition - maxPillPosition) / (100 - maxPillPosition)) * 60 // 60px max offset
+              : 0;
+            
+            return (
+              <div 
+                className="absolute -top-14 pointer-events-none transition-all duration-100 ease-out z-20"
+                style={pillPosition !== null ? { 
+                  left: `${pillPosition}%`,
+                  transform: 'translateX(-50%)'
+                } : {
+                  right: 0,
+                  transform: 'translateX(0)'
+                }}
+              >
+                <div className="flex flex-col items-center relative">
+                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
+                    <span className="text-4xl font-bold text-white font-montserrat">
+                      {hoverPosition !== null 
+                        ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                        : campaign.maxEarnings.toLocaleString()}
+                    </span>
+                    <span className="text-lg text-white font-montserrat">sek</span>
+                  </div>
+                  {/* Triangle pointing down */}
+                  {hoverPosition !== null && (
+                    <div 
+                      className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black transition-all duration-100 ease-out"
+                      style={{ transform: `translateX(${triangleOffset}px)` }}
+                    />
+                  )}
+                </div>
               </div>
-              {/* Triangle pointing down */}
-              {hoverPosition !== null && (
-                <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black" />
-              )}
-            </div>
-          </div>
+            );
+          })()}
 
           {/* Interactive line */}
           <div 
@@ -192,31 +205,44 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </div>
 
           {/* Views bubble - below line, right side when not hovering */}
-          <div 
-            className="absolute top-12 pointer-events-none transition-all duration-100 ease-out z-20"
-            style={hoverPosition !== null ? { 
-              left: `${hoverPosition}%`,
-              transform: 'translateX(-50%)'
-            } : {
-              right: 0,
-              transform: 'translateX(0)'
-            }}
-          >
-            <div className="flex flex-col items-center">
-              {/* Triangle pointing up */}
-              {hoverPosition !== null && (
-                <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10" />
-              )}
-              <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
-                <span className="text-xl font-normal text-black font-jakarta">
-                  {hoverPosition !== null 
-                    ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                    : totalViews.toLocaleString()}
-                </span>
-                <span className="text-sm text-black font-jakarta">views</span>
+          {(() => {
+            const maxPillPosition = 85;
+            const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
+            const triangleOffset = hoverPosition !== null && hoverPosition > maxPillPosition 
+              ? ((hoverPosition - maxPillPosition) / (100 - maxPillPosition)) * 60
+              : 0;
+            
+            return (
+              <div 
+                className="absolute top-12 pointer-events-none transition-all duration-100 ease-out z-20"
+                style={pillPosition !== null ? { 
+                  left: `${pillPosition}%`,
+                  transform: 'translateX(-50%)'
+                } : {
+                  right: 0,
+                  transform: 'translateX(0)'
+                }}
+              >
+                <div className="flex flex-col items-center relative">
+                  {/* Triangle pointing up */}
+                  {hoverPosition !== null && (
+                    <div 
+                      className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10 transition-all duration-100 ease-out"
+                      style={{ transform: `translateX(${triangleOffset}px)` }}
+                    />
+                  )}
+                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
+                    <span className="text-xl font-normal text-black font-jakarta">
+                      {hoverPosition !== null 
+                        ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                        : totalViews.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-black font-jakarta">views</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })()}
         </div>
 
         {/* Spacer for the bubbles */}
