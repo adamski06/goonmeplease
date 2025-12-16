@@ -164,16 +164,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
             {/* Min marker */}
             {(() => {
-              const minEarnings = Math.round((totalViews * 0.125 / 1000) * campaign.ratePerThousand);
+              const minViews = Math.round(totalViews * 0.125);
               const minPosition = 12.5;
               return (
                 <div className="absolute z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
                   {/* Vertical tick */}
                   <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
-                  {/* Min text above */}
-                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                    <span className="text-sm text-black font-jakarta">min</span>
-                    <span className="text-base font-semibold text-black font-montserrat">{minEarnings}</span>
+                  {/* Minimum text above */}
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none">
+                    <span className="text-sm text-black font-jakarta">minimum</span>
+                  </div>
+                  {/* Views text below */}
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+                    <span className="text-sm text-black font-jakarta">{minViews.toLocaleString()} views</span>
                   </div>
                 </div>
               );
