@@ -125,12 +125,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings bubble with tail */}
               <div className="relative">
-                <div className="bg-black rounded-full px-5 py-3 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                  <span className="text-sm text-white font-montserrat">sek</span>
+                <svg className="block h-[58px] w-auto" viewBox="0 0 150 58" fill="none">
+                  {/* Bubble with integrated small 90° tail */}
+                  <path
+                    d="M24 0H126C139.255 0 150 10.745 150 24V48H140L150 58V48H24C10.745 48 0 37.255 0 24C0 10.745 10.745 0 24 0Z"
+                    fill="black"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center pb-2">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                    <span className="text-sm text-white font-montserrat">sek</span>
+                  </div>
                 </div>
-                {/* Triangle tail pointing down */}
-                <div className="absolute -bottom-[7px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-black" />
               </div>
             </div>
             {/* Black line */}
@@ -138,12 +145,21 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed bubble with tail pointing up */}
             <div className="flex flex-col items-end">
               <div className="relative">
-                {/* Triangle tail pointing up */}
-                <div className="absolute -top-[7px] right-0 w-0 h-0 border-l-[8px] border-l-transparent border-b-[8px] border-b-white" />
-                <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
-                  <span className="text-sm text-black font-jakarta">
-                    {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                  <span className="text-xs text-black font-jakarta">views</span>
+                <svg className="block h-[50px] w-auto" viewBox="0 0 135 50" fill="none">
+                  {/* Bubble with integrated small 90° tail */}
+                  <path
+                    d="M125 10H135V0L125 10H20C8.954 10 0 18.954 0 30C0 41.046 8.954 50 20 50H115C126.046 50 135 41.046 135 30V10H125Z"
+                    fill="white"
+                    stroke="rgb(0 0 0 / 0.1)"
+                    strokeWidth="1"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center pr-4">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm text-black font-jakarta">
+                      {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+                    <span className="text-xs text-black font-jakarta">views</span>
+                  </div>
                 </div>
               </div>
             </div>
