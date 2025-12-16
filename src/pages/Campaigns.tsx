@@ -692,7 +692,7 @@ const Campaigns: React.FC = () => {
       {/* Mobile-only black background - only for Home/For you mode */}
       {isMobileHomeMode && <div className="md:hidden absolute inset-0 bg-black" />}
       {/* White background for mobile when not in Home mode */}
-      {!isMobileHomeMode && <div className="md:hidden absolute inset-0 bg-background" />}
+      {!isMobileHomeMode && <div className="md:hidden absolute inset-0 bg-white" />}
       {/* Static Grainy Background - desktop only */}
       <div className="hidden md:block absolute inset-0 pointer-events-none grainy-background" />
       <div className="hidden md:block noise-layer absolute inset-0 pointer-events-none" />
