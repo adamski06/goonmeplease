@@ -123,7 +123,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Line and bubbles container */}
-        <div className="relative mt-16">
+        <div className="relative mt-10">
           {/* Earnings bubble - above line, right side when not hovering */}
           {(() => {
             const maxPillPosition = 85; // Pill stops here to stay on screen
