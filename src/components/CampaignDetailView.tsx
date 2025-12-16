@@ -123,7 +123,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out flex items-center">
                     <span>min</span>
                     <span className="max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
-                      <span className="pl-1">= {minEarnings} sek</span>
+                      <span className="pl-1 relative top-[1px]">= {minEarnings} sek</span>
                     </span>
                   </div>
                   <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
