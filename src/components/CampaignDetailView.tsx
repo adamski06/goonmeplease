@@ -103,8 +103,30 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <span className="text-lg text-white font-montserrat">sek</span>
           </div>
         </div>
-        {/* Black line */}
-        <div className="h-[2px] bg-black mt-2 mb-2" />
+        {/* Black line with min marker */}
+        <div className="relative mt-2 mb-2">
+          <div className="h-[2px] bg-black w-full" />
+          {/* Min marker */}
+          {(() => {
+            const minViews = 3000;
+            const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
+            const minPosition = (minViews / totalViews) * 100;
+            return (
+              <div className="absolute" style={{ left: `${minPosition}%`, top: '-4px' }}>
+                {/* Vertical tick */}
+                <div className="w-[2px] h-[10px] bg-black mx-auto" />
+                {/* Min bubble above */}
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                  min
+                </div>
+                {/* Views count below */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 text-[10px] text-foreground font-jakarta whitespace-nowrap">
+                  {minViews.toLocaleString()}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
         {/* Views needed bubble */}
         <div className="flex justify-end">
           <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
