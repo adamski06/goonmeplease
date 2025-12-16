@@ -130,11 +130,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
                 {/* Pointer triangle */}
-                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-6 mt-2" />
+                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-6" />
               </div>
             </div>
             {/* Black line - shorter to end at pointer */}
-            <div className="h-[2px] bg-black mb-3 mr-[16px]" />
+            <div className="h-[2px] bg-black mt-3 mb-3 mr-[16px]" />
             {/* Views needed */}
             <div className="text-right">
               <span className="text-sm text-muted-foreground font-jakarta">
