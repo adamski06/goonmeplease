@@ -115,14 +115,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       {/* Earnings Display - Full width */}
       <div className="mb-6 mt-2 max-w-[calc(36rem+2.5rem+11rem)] relative">
         {/* Rate per view - left */}
-        <div className="flex items-baseline gap-1 mb-8">
+        <div className="relative -mt-8 flex items-baseline gap-1 mb-2">
           <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
           <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
           <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
         </div>
 
         {/* Line and bubbles container */}
-        <div className="relative">
+        <div className="relative mt-10">
           {/* Earnings bubble - above line, right side when not hovering */}
           <div 
             className="absolute -top-14 pointer-events-none transition-all duration-100 ease-out z-20"
