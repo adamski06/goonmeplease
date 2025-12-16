@@ -34,7 +34,7 @@ const campaignsData = [
       { minViews: 10000, maxViews: 100000, rate: 40 },
       { minViews: 100000, maxViews: null, rate: 30 }
     ],
-    maxEarnings: 1000
+    maxEarnings: 875
   },
   { 
     id: 2, 
@@ -55,7 +55,7 @@ const campaignsData = [
       { minViews: 5000, maxViews: 50000, rate: 28 },
       { minViews: 50000, maxViews: null, rate: 20 }
     ],
-    maxEarnings: 1000
+    maxEarnings: 875
   },
   { 
     id: 3, 
@@ -76,7 +76,7 @@ const campaignsData = [
       { minViews: 20000, maxViews: 200000, rate: 55 },
       { minViews: 200000, maxViews: null, rate: 40 }
     ],
-    maxEarnings: 1000
+    maxEarnings: 875
   },
   { 
     id: 4, 
@@ -97,7 +97,7 @@ const campaignsData = [
       { minViews: 15000, maxViews: 150000, rate: 35 },
       { minViews: 150000, maxViews: null, rate: 25 }
     ],
-    maxEarnings: 1000
+    maxEarnings: 875
   },
   { 
     id: 5, 
@@ -118,7 +118,7 @@ const campaignsData = [
       { minViews: 10000, maxViews: 100000, rate: 45 },
       { minViews: 100000, maxViews: null, rate: 35 }
     ],
-    maxEarnings: 1000
+    maxEarnings: 875
   },
 ];
 

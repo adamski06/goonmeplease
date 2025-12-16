@@ -119,8 +119,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 rounded-full whitespace-nowrap">
                   min
                 </div>
-                {/* Views count below */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 text-[10px] text-foreground font-jakarta whitespace-nowrap">
+                {/* Views count below in white bubble */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-[10px] text-black font-jakarta px-1.5 py-0.5 rounded-full whitespace-nowrap">
                   {minViews.toLocaleString()}
                 </div>
               </div>
