@@ -900,8 +900,30 @@ const Campaigns: React.FC = () => {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
-            {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-[calc(100dvh-80px)] md:h-screen flex items-stretch justify-stretch md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
+            {campaigns.map((campaign, idx) => {
+              let touchStartX = 0;
+              let touchEndX = 0;
+              
+              const handleTouchStart = (e: React.TouchEvent) => {
+                touchStartX = e.touches[0].clientX;
+              };
+              
+              const handleTouchEnd = (e: React.TouchEvent) => {
+                touchEndX = e.changedTouches[0].clientX;
+                const swipeDistance = touchStartX - touchEndX;
+                // Swipe left (finger moves right to left) to open details
+                if (swipeDistance > 80) {
+                  handleSelectCampaign(campaign);
+                }
+              };
+              
+              return (
+              <div 
+                key={campaign.id} 
+                className="h-[calc(100dvh-80px)] md:h-screen flex items-stretch justify-stretch md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
@@ -914,6 +936,12 @@ const Campaigns: React.FC = () => {
                       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     }}
                   />
+                  {/* Swipe hint */}
+                  <div className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-white/50">
+                    <svg className="h-5 w-5 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </div>
                   {/* Mobile overlay info */}
                   <div className="md:hidden absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                     <div className="text-lg font-bold text-white font-jakarta line-clamp-1">{campaign.description}</div>
@@ -959,7 +987,8 @@ const Campaigns: React.FC = () => {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : viewMode === 'scroll' ? (
           <>
