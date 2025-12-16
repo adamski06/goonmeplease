@@ -82,37 +82,48 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Layout */}
-      <div className="md:hidden px-4 pt-4 pb-32">
-        {/* Tappable image thumbnail to go back */}
+      <div className="md:hidden h-full flex flex-col">
+        {/* Fixed video peek at top - tap to go back */}
         <button 
           onClick={onBack}
-          className="w-20 h-32 rounded-xl overflow-hidden mb-4 relative"
+          className="fixed top-0 left-0 right-0 h-16 z-50 overflow-hidden"
         >
-          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-            <ChevronLeft className="h-6 w-6 text-white" />
+          {/* Video positioned so only bottom ~10% shows */}
+          <div className="absolute bottom-0 left-0 right-0 h-[60vh] w-full">
+            <img 
+              src={campaign.image} 
+              alt={campaign.brand} 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
+          </div>
+          {/* Subtle indicator */}
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+            <div className="w-10 h-1 bg-white/60 rounded-full" />
           </div>
         </button>
 
-        {/* Header - Logo, company name, content type */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
-            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+        {/* Scrollable content below the peek */}
+        <div className="flex-1 overflow-y-auto pt-20 px-4 pb-32">
+          {/* Header - Logo, company name, content type */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+            </div>
+            <div className="flex items-baseline gap-2 flex-1 min-w-0">
+              <h1 className="text-lg font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+              <p className="text-sm text-foreground font-montserrat truncate">- {campaign.contentType}</p>
+            </div>
+            <button
+              onClick={onToggleSave}
+              className="flex items-center justify-center p-1"
+            >
+              <Bookmark 
+                className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
+                strokeWidth={1.5}
+              />
+            </button>
           </div>
-          <div className="flex items-baseline gap-2 flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-            <p className="text-sm text-foreground font-montserrat truncate">- {campaign.contentType}</p>
-          </div>
-          <button
-            onClick={onToggleSave}
-            className="flex items-center justify-center p-1"
-          >
-            <Bookmark 
-              className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
-              strokeWidth={1.5}
-            />
-          </button>
-        </div>
 
         {/* Description */}
         <p className="text-base text-foreground font-jakarta leading-relaxed mb-6">{campaign.description}</p>
@@ -192,6 +203,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               ))}
             </div>
           )}
+        </div>
         </div>
 
         {/* Fixed CTA */}
