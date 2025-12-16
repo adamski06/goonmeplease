@@ -110,6 +110,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {(() => {
             const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
             const minViews = Math.round(totalViews * 0.125);
+            const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
             const minPosition = 12.5;
             return (
               <div className="absolute group cursor-pointer" style={{ left: `${minPosition}%`, top: '-4px' }}>
@@ -119,8 +120,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <div className="w-[2px] h-[12px] bg-black mx-auto" />
                 {/* Min bubble above with triangle */}
                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap">
-                    min
+                  <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap transition-all duration-300 ease-out overflow-hidden">
+                    <span>min</span>
+                    <span className="inline-block max-w-0 group-hover:max-w-[100px] overflow-hidden transition-all duration-300 ease-out">
+                      <span className="pl-1">= {minEarnings} sek</span>
+                    </span>
                   </div>
                   <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
                 </div>
