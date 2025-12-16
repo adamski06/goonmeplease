@@ -135,7 +135,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             }}
           >
             <div className="flex flex-col items-center">
-              <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
+              <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
                 <span className="text-4xl font-bold text-white font-montserrat">
                   {hoverPosition !== null 
                     ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
@@ -207,7 +207,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               {hoverPosition !== null && (
                 <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10" />
               )}
-              <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
+              <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
                 <span className="text-xl font-normal text-black font-jakarta">
                   {hoverPosition !== null 
                     ? getValuesAtPosition(hoverPosition).views.toLocaleString()
