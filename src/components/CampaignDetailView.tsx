@@ -59,11 +59,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               <div className="flex items-baseline gap-3">
                 <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-                <p className="text-lg text-muted-foreground font-jakarta">{campaign.contentType}</p>
+                <p className="text-lg text-muted-foreground font-montserrat">- {campaign.contentType}</p>
               </div>
               <button
                 onClick={onToggleSave}
-                className="flex items-center justify-center hover:scale-110 transition-transform"
+                className="flex items-center justify-center hover:scale-110 transition-transform ml-auto"
               >
                 <Bookmark 
                   className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
