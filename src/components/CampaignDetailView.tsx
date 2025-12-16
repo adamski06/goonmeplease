@@ -87,7 +87,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Requirements - card style */}
-        <div className="bg-black/5 dark:bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6">
           <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
           
           <div className="flex gap-6">
