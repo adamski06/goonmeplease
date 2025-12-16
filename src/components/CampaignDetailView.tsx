@@ -123,38 +123,20 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <span className="text-sm text-white font-jakarta">sek</span>
                 <span className="text-xs text-white font-jakarta">/ 1000 views</span>
               </div>
-              {/* Right side - max earnings bubble with tail */}
-              <div className="flex items-end">
-                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                  <span className="text-sm text-white font-montserrat">sek</span>
-                </div>
-                <svg className="block h-[10px] w-[10px] -ml-[1px]" viewBox="0 0 10 10" fill="none">
-                  <path d="M0 0H10V10L0 0Z" fill="black" />
-                </svg>
+              {/* Right side - max earnings bubble */}
+              <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                <span className="text-sm text-white font-montserrat">sek</span>
               </div>
             </div>
             {/* Black line */}
             <div className="h-[2px] bg-black mt-2 mb-2 mr-0" />
-            {/* Views needed bubble with tail pointing up */}
+            {/* Views needed bubble */}
             <div className="flex flex-col items-end">
-              <div className="relative">
-                <svg className="block h-[50px] w-auto" viewBox="0 0 135 50" fill="none">
-                  {/* Bubble with integrated small 90° tail */}
-                  <path
-                    d="M125 10H135V0L125 10H20C8.954 10 0 18.954 0 30C0 41.046 8.954 50 20 50H115C126.046 50 135 41.046 135 30V10H125Z"
-                    fill="white"
-                    stroke="rgb(0 0 0 / 0.1)"
-                    strokeWidth="1"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center pr-4">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm text-black font-jakarta">
-                      {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                    <span className="text-xs text-black font-jakarta">views</span>
-                  </div>
-                </div>
+              <div className="bg-white border border-black/10 rounded-full px-4 py-1.5 flex items-baseline gap-1">
+                <span className="text-sm text-black font-jakarta">
+                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+                <span className="text-xs text-black font-jakarta">views</span>
               </div>
             </div>
           </div>
