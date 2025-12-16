@@ -101,27 +101,26 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               ))}
             </ul>
 
-            {/* Example pictures - right of text but aligned left */}
+            {/* Example pictures - always show 4 slots */}
             <div className="flex gap-2 flex-shrink-0">
-              {(campaign.exampleImages || []).length > 0 ? (
-                campaign.exampleImages?.map((img, i) => (
+              {[0, 1, 2, 3].map((i) => {
+                const img = campaign.exampleImages?.[i];
+                return img ? (
                   <div 
                     key={i}
                     className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg overflow-hidden"
                   >
                     <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                   </div>
-                ))
-              ) : (
-                [1, 2, 3, 4].map((i) => (
+                ) : (
                   <div 
                     key={i}
                     className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg bg-muted/50 flex items-center justify-center"
                   >
-                    <span className="text-xs text-muted-foreground">Example {i}</span>
+                    <span className="text-xs text-muted-foreground">Example {i + 1}</span>
                   </div>
-                ))
-              )}
+                );
+              })}
             </div>
           </div>
         </div>
