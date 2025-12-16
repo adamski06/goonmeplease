@@ -896,12 +896,12 @@ const Campaigns: React.FC = () => {
         {activeFilter === 'foryou' ? (
           /* For You - Full screen on mobile, photo left + info right on desktop */
           <div 
-            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40"
+            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40 h-[calc(100dvh-80px)] md:h-auto"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-[calc(100vh-80px)] md:h-screen flex items-center justify-center md:justify-start snap-center snap-always md:py-6 md:pl-16 md:gap-8">
+              <div key={campaign.id} className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:justify-start snap-center snap-always md:py-6 md:pl-16 md:gap-8">
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
