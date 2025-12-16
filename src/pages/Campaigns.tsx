@@ -965,38 +965,16 @@ const Campaigns: React.FC = () => {
           /* Browse Mode - Horizontal List Layout */
           <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24">
             <div className="pb-8 pl-8 pr-8">
-              <div className="flex flex-wrap gap-x-4 gap-y-20">
+              <div className="flex flex-wrap gap-x-6 gap-y-8">
               {campaigns.map((campaign, index) => {
-                const gradientColors = [
-                  'rgba(34, 139, 34, 0.9)',    // Forest green (dark)
-                  'rgba(97, 188, 70, 0.85)',   // Apple green (light)
-                  'rgba(255, 140, 0, 0.9)',    // Dark orange
-                  'rgba(251, 186, 0, 0.85)',   // Apple yellow
-                  'rgba(220, 20, 60, 0.9)',    // Crimson red (dark)
-                  'rgba(247, 148, 30, 0.85)',  // Apple orange (light)
-                  'rgba(75, 0, 130, 0.9)',     // Indigo (dark purple)
-                  'rgba(148, 103, 189, 0.85)', // Apple purple (light)
-                  'rgba(0, 100, 180, 0.9)',    // Dark blue
-                  'rgba(0, 168, 225, 0.85)',   // Apple blue (light)
-                  'rgba(139, 69, 19, 0.9)',    // Saddle brown
-                  'rgba(199, 21, 133, 0.9)',   // Medium violet red
-                  'rgba(46, 139, 87, 0.9)',    // Sea green
-                  'rgba(255, 69, 0, 0.9)',     // Red-orange
-                  'rgba(106, 90, 205, 0.9)',   // Slate blue
-                  'rgba(0, 139, 139, 0.9)',    // Dark cyan
-                  'rgba(178, 34, 34, 0.9)',    // Firebrick
-                  'rgba(72, 61, 139, 0.9)',    // Dark slate blue
-                ];
-                const gradientColor = gradientColors[index % gradientColors.length];
-                
                 return (
                   <div
                     key={campaign.id}
                     onClick={() => handleSelectCampaign(campaign)}
-                    className="rounded overflow-hidden cursor-pointer hover:scale-[1.01] transition-all group flex flex-row relative border border-white/40 dark:border-transparent w-[280px] h-[170px]"
+                    className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-[200px]"
                   >
-                    {/* Left side - Image */}
-                    <div className="relative w-24 h-full flex-shrink-0 overflow-hidden">
+                    {/* Top - Vertical Image */}
+                    <div className="relative w-full aspect-[9/16] overflow-hidden rounded-t-xl">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
@@ -1004,31 +982,25 @@ const Campaigns: React.FC = () => {
                           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                         }}
                       />
-                      {/* Bottom fade */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                     </div>
                     
-                    {/* Right side - Campaign info */}
-                    <div className="flex-1 h-full p-4 pt-2 pl-3 pb-2 flex flex-col justify-between relative bg-white/60 dark:bg-dark-surface backdrop-blur-md">
-                      <div className="relative z-10">
-                        <div className="mb-1">
-                          <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
-                        </div>
-                        <p className="text-base font-bold text-black font-jakarta leading-tight">{campaign.title}</p>
-                      </div>
-                      <div className="relative z-10 mt-auto flex flex-row items-center justify-between">
+                    {/* Bottom - White info section */}
+                    <div className="w-full bg-white dark:bg-dark-surface p-4 flex flex-col gap-2 rounded-b-xl">
+                      <span className="text-xs font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
+                      <p className="text-sm font-bold text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
+                      <div className="flex items-center justify-between mt-1">
                         <div className="inline-flex items-baseline gap-0.5">
-                          <span className="text-2xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                          <span className="text-xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                           <span className="text-xs font-semibold text-foreground font-montserrat">sek</span>
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
                           className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
-                        <Bookmark 
-                          className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-foreground text-foreground' : 'text-black/25'}`}
-                          strokeWidth={1.5}
-                        />
+                          <Bookmark 
+                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-foreground text-foreground' : 'text-black/25'}`}
+                            strokeWidth={1.5}
+                          />
                         </button>
                       </div>
                     </div>
