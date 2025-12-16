@@ -134,13 +134,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               transform: 'translateX(0)'
             }}
           >
-            <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
-              <span className="text-4xl font-bold text-white font-montserrat">
-                {hoverPosition !== null 
-                  ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                  : campaign.maxEarnings.toLocaleString()}
-              </span>
-              <span className="text-lg text-white font-montserrat">sek</span>
+            <div className="flex flex-col items-center">
+              <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
+                <span className="text-4xl font-bold text-white font-montserrat">
+                  {hoverPosition !== null 
+                    ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                    : campaign.maxEarnings.toLocaleString()}
+                </span>
+                <span className="text-lg text-white font-montserrat">sek</span>
+              </div>
+              {/* Triangle pointing down */}
+              {hoverPosition !== null && (
+                <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black" />
+              )}
             </div>
           </div>
 
@@ -153,16 +159,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           >
             {/* The actual line */}
             <div className="h-[2px] bg-black w-full" />
-            
-            {/* Hover indicator tick */}
-            {hoverPosition !== null && (
-              <div 
-                className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
-                style={{ left: `${hoverPosition}%` }}
-              >
-                <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
-              </div>
-            )}
 
             {/* Min marker */}
             {(() => {
@@ -206,13 +202,19 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               transform: 'translateX(0)'
             }}
           >
-            <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
-              <span className="text-xl font-normal text-black font-jakarta">
-                {hoverPosition !== null 
-                  ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                  : totalViews.toLocaleString()}
-              </span>
-              <span className="text-sm text-black font-jakarta">views</span>
+            <div className="flex flex-col items-center">
+              {/* Triangle pointing up */}
+              {hoverPosition !== null && (
+                <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10" />
+              )}
+              <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
+                <span className="text-xl font-normal text-black font-jakarta">
+                  {hoverPosition !== null 
+                    ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                    : totalViews.toLocaleString()}
+                </span>
+                <span className="text-sm text-black font-jakarta">views</span>
+              </div>
             </div>
           </div>
         </div>
