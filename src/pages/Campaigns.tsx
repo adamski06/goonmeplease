@@ -860,7 +860,7 @@ const Campaigns: React.FC = () => {
         ) : (
           <>
         {/* Fixed overlay filter buttons */}
-        <div className="absolute top-6 left-4 right-4 md:left-8 md:right-8 z-20 flex justify-between items-center">
+        <div className="hidden md:flex absolute top-6 left-4 right-4 md:left-8 md:right-8 z-20 justify-between items-center">
           <div className="flex items-center gap-4">
             {renderFilterButtons(false)}
           </div>
