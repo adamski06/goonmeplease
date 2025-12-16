@@ -121,14 +121,18 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               <div className="bg-black rounded-full px-4 py-2">
                 <span className="text-sm text-white font-jakarta">{campaign.ratePerThousand} sek / 1000 views</span>
               </div>
-              {/* Right side - max earnings */}
-              <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                <span className="text-sm text-white font-montserrat">sek</span>
+              {/* Right side - max earnings with pointer */}
+              <div className="flex flex-col items-end">
+                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                  <span className="text-sm text-white font-montserrat">sek</span>
+                </div>
+                {/* Pointer triangle */}
+                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-6" />
               </div>
             </div>
             {/* Black line */}
-            <div className="h-px bg-black mt-3 mb-3" />
+            <div className="h-[2px] bg-black mb-3" />
             {/* Views needed */}
             <div className="text-right">
               <span className="text-sm text-muted-foreground font-jakarta">
