@@ -125,11 +125,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings bubble with tail */}
               <div className="relative">
-                <svg className="block h-[60px] w-auto" viewBox="0 0 175 60" fill="none">
+                <svg className="block h-[68px] w-auto" viewBox="0 0 170 68" fill="none">
                   {/* Rounded rectangle with square bottom-right corner */}
                   <path d="M24 0H126C139.255 0 150 10.745 150 24V48H24C10.745 48 0 37.255 0 24C0 10.745 10.745 0 24 0Z" fill="black"/>
-                  {/* Triangle tail pointing down from right edge */}
-                  <polygon points="130,48 150,48 160,60" fill="black"/>
+                  {/* 90-degree triangle tail pointing down */}
+                  <polygon points="150,48 150,68 170,68" fill="black"/>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pr-5">
                   <div className="flex items-baseline gap-1">
@@ -144,11 +144,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed bubble with tail pointing up */}
             <div className="flex flex-col items-end">
               <div className="relative">
-                <svg className="block h-[52px] w-auto" viewBox="0 0 150 52" fill="none">
-                  {/* Triangle tail pointing up from right edge */}
-                  <polygon points="115,12 135,12 150,0" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1"/>
+                <svg className="block h-[60px] w-auto" viewBox="0 0 155 60" fill="none">
+                  {/* 90-degree triangle tail pointing up */}
+                  <polygon points="135,20 135,0 155,0" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1"/>
                   {/* Rounded rectangle with square top-right corner */}
-                  <path d="M135 12H20C8.954 12 0 20.954 0 32C0 43.046 8.954 52 20 52H115C126.046 52 135 43.046 135 32V12Z" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1"/>
+                  <path d="M135 20H20C8.954 20 0 28.954 0 40C0 51.046 8.954 60 20 60H115C126.046 60 135 51.046 135 40V20Z" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1"/>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pr-4">
                   <div className="flex items-baseline gap-1">
