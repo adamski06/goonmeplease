@@ -73,16 +73,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <p className="text-base text-black mt-1">{campaign.description}</p>
           </div>
           
-          {/* Campaign image - centered on page */}
-          <div className="flex-1 flex justify-center">
-            <div className="relative w-56 aspect-[9/16] rounded-xl overflow-hidden">
-              <img 
-                src={campaign.image} 
-                alt={campaign.brand} 
-                className="w-full h-full object-cover" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-            </div>
+          {/* Campaign image */}
+          <div className="relative w-56 aspect-[9/16] rounded-xl overflow-hidden">
+            <img 
+              src={campaign.image} 
+              alt={campaign.brand} 
+              className="w-full h-full object-cover" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
           </div>
         </div>
 
