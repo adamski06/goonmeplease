@@ -123,25 +123,34 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <span className="text-sm text-white font-jakarta">sek</span>
                 <span className="text-xs text-white font-jakarta">/ 1000 views</span>
               </div>
-              {/* Right side - max earnings with pointer */}
-              <div className="flex flex-col items-end">
-                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                  <span className="text-sm text-white font-montserrat">sek</span>
+              {/* Right side - max earnings bubble with tail */}
+              <div className="relative">
+                <svg className="h-[52px] w-auto" viewBox="0 0 180 52" fill="none" preserveAspectRatio="xMaxYMid meet">
+                  <path d="M0 20C0 8.954 8.954 0 20 0H140C151.046 0 160 8.954 160 20V32C160 43.046 151.046 52 140 52H20C8.954 52 0 43.046 0 32V20Z M160 32L180 52V32H160Z" fill="black"/>
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center pr-5">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                    <span className="text-sm text-white font-montserrat">sek</span>
+                  </div>
                 </div>
-                {/* Pointer triangle */}
-                <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-black mr-[6px] -mt-[2px]" />
               </div>
             </div>
             {/* Black line */}
-            <div className="h-[2px] bg-black mt-2 mb-2 mr-[16px]" />
-            {/* Views needed */}
+            <div className="h-[2px] bg-black mt-2 mb-2 mr-0" />
+            {/* Views needed bubble with tail pointing up */}
             <div className="flex flex-col items-end">
-              <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-white mr-[6px] -mb-[2px]" />
-              <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
-                <span className="text-sm text-black font-jakarta">
-                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                <span className="text-xs text-black font-jakarta">views</span>
+              <div className="relative">
+                <svg className="h-[40px] w-auto" viewBox="0 0 140 40" fill="none" preserveAspectRatio="xMaxYMid meet">
+                  <path d="M0 16C0 7.163 7.163 0 16 0H108C116.837 0 124 7.163 124 16V24C124 32.837 116.837 40 108 40H16C7.163 40 0 32.837 0 24V16Z M124 8L140 0H124V8Z" fill="white" stroke="rgba(0,0,0,0.1)" strokeWidth="1"/>
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center pr-4">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm text-black font-jakarta">
+                      {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+                    <span className="text-xs text-black font-jakarta">views</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
