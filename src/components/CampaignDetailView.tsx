@@ -86,44 +86,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           </div>
         </div>
 
-        {/* Requirements - card style */}
-        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6 -ml-6 max-w-[calc(36rem+2.5rem+11rem+1.5rem)]">
-          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
-          
-          <div className="flex gap-6">
-            {/* Bullet points */}
-            <ul className="space-y-2">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
-
-            {/* Example pictures - always show 4 slots */}
-            <div className="flex gap-2 flex-shrink-0">
-              {[0, 1].map((i) => {
-                const img = campaign.exampleImages?.[i];
-                return img ? (
-                  <div 
-                    key={i}
-                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
-                  >
-                    <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div 
-                    key={i}
-                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
-                  >
-                    <span className="text-sm text-foreground/60">Example {i + 1}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Earnings Display - Full width */}
@@ -149,6 +111,45 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <span className="text-xl font-normal text-black font-jakarta">
               {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
             <span className="text-sm text-black font-jakarta">views</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Requirements - card style */}
+      <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6 -ml-6 max-w-[calc(36rem+2.5rem+11rem+1.5rem)] mb-6">
+        <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
+        
+        <div className="flex gap-6">
+          {/* Bullet points */}
+          <ul className="space-y-2">
+            {campaign.guidelines.map((guideline, idx) => (
+              <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
+                <span className="text-foreground">•</span>
+                {guideline}
+              </li>
+            ))}
+          </ul>
+
+          {/* Example pictures - always show 2 slots */}
+          <div className="flex gap-2 flex-shrink-0">
+            {[0, 1].map((i) => {
+              const img = campaign.exampleImages?.[i];
+              return img ? (
+                <div 
+                  key={i}
+                  className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
+                >
+                  <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div 
+                  key={i}
+                  className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
+                >
+                  <span className="text-sm text-foreground/60">Example {i + 1}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
