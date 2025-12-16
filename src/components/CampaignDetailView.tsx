@@ -48,80 +48,81 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         <span className="text-base font-medium">Back to ads</span>
       </button>
 
-      <div className="flex flex-col gap-6">
-        {/* Header - Logo and company name */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
-            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+      <div className="flex gap-8 items-start">
+        {/* Left side - all content */}
+        <div className="flex flex-col gap-6 max-w-md">
+          {/* Header - Logo and company name */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+            <button
+              onClick={onToggleSave}
+              className="ml-auto flex items-center justify-center hover:scale-110 transition-transform"
+            >
+              <Bookmark 
+                className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
+                strokeWidth={1.5}
+              />
+            </button>
           </div>
-          <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-          <button
-            onClick={onToggleSave}
-            className="ml-auto flex items-center justify-center hover:scale-110 transition-transform"
-          >
-            <Bookmark 
-              className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
-              strokeWidth={1.5}
-            />
-          </button>
-        </div>
 
-        {/* Video type / Creative freedom description with image */}
-        <div className="flex gap-8 items-start">
-          <div className="max-w-md">
+          {/* Video type / Creative freedom description */}
+          <div>
             <p className="text-lg text-foreground font-jakarta">{campaign.contentType}</p>
             <p className="text-base text-black mt-1">{campaign.description}</p>
           </div>
-          
-          {/* Campaign image */}
-          <div className="relative w-56 aspect-[9/16] rounded-xl overflow-hidden">
-            <img 
-              src={campaign.image} 
-              alt={campaign.brand} 
-              className="w-full h-full object-cover" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-          </div>
-        </div>
 
-        {/* Requirements */}
-        <div>
-          <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
-          
-          <div className="flex gap-8">
-            {/* Bullet points */}
-            <ul className="space-y-2 flex-1">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
+          {/* Requirements */}
+          <div>
+            <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+            
+            <div className="flex gap-8">
+              {/* Bullet points */}
+              <ul className="space-y-2 flex-1">
+                {campaign.guidelines.map((guideline, idx) => (
+                  <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
+                    <span className="text-foreground">•</span>
+                    {guideline}
+                  </li>
+                ))}
+              </ul>
 
-            {/* Example pictures */}
-            <div className="flex gap-2 lg:gap-3 flex-shrink-0">
-              {(campaign.exampleImages || []).length > 0 ? (
-                campaign.exampleImages?.map((img, i) => (
-                  <div 
-                    key={i}
-                    className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg overflow-hidden border border-border/50"
-                  >
-                    <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))
-              ) : (
-                [1, 2, 3].map((i) => (
-                  <div 
-                    key={i}
-                    className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
-                  >
-                    <span className="text-xs lg:text-sm text-muted-foreground">Example {i}</span>
-                  </div>
-                ))
-              )}
+              {/* Example pictures */}
+              <div className="flex gap-2 lg:gap-3 flex-shrink-0">
+                {(campaign.exampleImages || []).length > 0 ? (
+                  campaign.exampleImages?.map((img, i) => (
+                    <div 
+                      key={i}
+                      className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg overflow-hidden border border-border/50"
+                    >
+                      <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))
+                ) : (
+                  [1, 2, 3].map((i) => (
+                    <div 
+                      key={i}
+                      className="w-24 h-24 lg:w-36 lg:h-36 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center"
+                    >
+                      <span className="text-xs lg:text-sm text-muted-foreground">Example {i}</span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
+        </div>
+          
+        {/* Campaign image - aligned with top */}
+        <div className="relative w-56 aspect-[9/16] rounded-xl overflow-hidden">
+          <img 
+            src={campaign.image} 
+            alt={campaign.brand} 
+            className="w-full h-full object-cover" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
         </div>
       </div>
 
