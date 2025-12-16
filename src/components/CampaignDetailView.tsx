@@ -125,8 +125,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings bubble with tail */}
               <div className="relative">
-                <svg className="block h-[52px] w-auto" viewBox="0 0 180 52" fill="none" preserveAspectRatio="xMaxYMid meet">
-                  <path d="M20 0H140C151.046 0 160 8.954 160 20V32L180 52L160 52H20C8.954 52 0 43.046 0 32V20C0 8.954 8.954 0 20 0Z" fill="black" />
+                <svg className="block h-[60px] w-auto" viewBox="0 0 160 60" fill="none" preserveAspectRatio="xMaxYMid meet">
+                  <path d="M20 0H140C151.046 0 160 8.954 160 20V28C160 39.046 151.046 48 140 48H145L130 60L130 48H20C8.954 48 0 39.046 0 28V20C0 8.954 8.954 0 20 0Z" fill="black" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pr-5">
                   <div className="flex items-baseline gap-1">
@@ -141,8 +141,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             {/* Views needed bubble with tail pointing up */}
             <div className="flex flex-col items-end">
               <div className="relative">
-                <svg className="block h-[40px] w-auto" viewBox="0 0 140 48" fill="none" preserveAspectRatio="xMaxYMid meet">
-                  <path d="M16 8H124L140 0L124 24V32C124 40.837 116.837 48 108 48H16C7.163 48 0 40.837 0 32V24C0 15.163 7.163 8 16 8Z" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1" />
+                <svg className="block h-[52px] w-auto" viewBox="0 0 140 52" fill="none" preserveAspectRatio="xMaxYMid meet">
+                  <path d="M110 0L125 12H108C116.837 12 124 19.163 124 28V36C124 44.837 116.837 52 108 52H16C7.163 52 0 44.837 0 36V28C0 19.163 7.163 12 16 12H110V0Z" fill="white" stroke="rgb(0 0 0 / 0.1)" strokeWidth="1" />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pr-4">
                   <div className="flex items-baseline gap-1">
