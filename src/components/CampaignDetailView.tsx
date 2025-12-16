@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { ArrowLeft, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -37,6 +37,30 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   isSaved, 
   onToggleSave 
 }) => {
+  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
+
+  const handleLineMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (lineRef.current) {
+      const rect = lineRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      setHoverPosition(percentage);
+    }
+  };
+
+  const handleLineMouseLeave = () => {
+    setHoverPosition(null);
+  };
+
+  const getValuesAtPosition = (percentage: number) => {
+    const views = Math.round((percentage / 100) * totalViews);
+    const earnings = Math.round((views / 1000) * campaign.ratePerThousand);
+    return { views, earnings };
+  };
+
   return (
     <div className="h-full overflow-y-auto px-8">
       {/* Back button */}
@@ -103,12 +127,41 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <span className="text-lg text-white font-montserrat">sek</span>
           </div>
         </div>
-        {/* Black line with min marker */}
-        <div className="relative mt-2 mb-2">
+        {/* Black line with min marker and interactive hover */}
+        <div 
+          ref={lineRef}
+          className="relative mt-2 mb-2 cursor-crosshair"
+          onMouseMove={handleLineMouseMove}
+          onMouseLeave={handleLineMouseLeave}
+        >
           <div className="h-[2px] bg-black w-full" />
+          
+          {/* Interactive hover indicator */}
+          {hoverPosition !== null && (
+            <div 
+              className="absolute top-[-4px] transition-none"
+              style={{ left: `${hoverPosition}%` }}
+            >
+              {/* Vertical tick */}
+              <div className="w-[2px] h-[12px] bg-black/50 mx-auto" />
+              {/* Earnings bubble above */}
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-fade-in">
+                <div className="bg-black text-white text-sm px-3 py-1 rounded-md whitespace-nowrap flex items-baseline gap-1">
+                  <span className="font-semibold">{getValuesAtPosition(hoverPosition).earnings.toLocaleString()}</span>
+                  <span className="text-xs">sek</span>
+                </div>
+                <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-black" />
+              </div>
+              {/* Views bubble below */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1 animate-fade-in">
+                <span>{getValuesAtPosition(hoverPosition).views.toLocaleString()}</span>
+                <span className="text-xs">views</span>
+              </div>
+            </div>
+          )}
+
           {/* Min marker */}
           {(() => {
-            const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
             const minViews = Math.round(totalViews * 0.125);
             const minEarnings = Math.round((minViews / 1000) * campaign.ratePerThousand);
             const minPosition = 12.5;
@@ -141,7 +194,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         <div className="flex justify-end">
           <div className="bg-white border border-black/10 rounded-full rounded-tr-none px-5 py-2 flex items-baseline gap-1.5">
             <span className="text-xl font-normal text-black font-jakarta">
-              {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+              {totalViews.toLocaleString()}</span>
             <span className="text-sm text-black font-jakarta">views</span>
           </div>
         </div>
