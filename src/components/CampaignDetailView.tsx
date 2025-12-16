@@ -126,8 +126,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 <span className="text-3xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
               </div>
             </div>
-            {/* Line */}
-            <div className="h-px bg-border mt-2 mb-2" />
+            {/* Black line */}
+            <div className="h-px bg-black mt-3 mb-3" />
             {/* Views needed */}
             <div className="text-right">
               <span className="text-sm text-muted-foreground font-jakarta">
