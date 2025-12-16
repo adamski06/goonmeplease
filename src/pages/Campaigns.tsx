@@ -988,7 +988,7 @@ const Campaigns: React.FC = () => {
                     
                     {/* Bottom - White info section */}
                     <div className="w-full bg-white dark:bg-dark-surface p-4 flex flex-col justify-between rounded-b-xl h-[100px]">
-                      <p className="text-sm font-bold text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
+                      <p className="text-base font-bold text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
                       <div className="flex items-center justify-between mt-1">
                         <div className="inline-flex items-baseline gap-0.5">
                           <span className="text-xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
