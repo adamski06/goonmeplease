@@ -94,8 +94,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {/* Left side - rate per view */}
           <div className="flex items-baseline gap-1 pt-1">
             <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-            <span className="text-sm text-foreground font-jakarta">sek</span>
-            <span className="text-xs text-foreground font-jakarta">/ 1000 views</span>
+            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
           </div>
           {/* Right side - max earnings bubble */}
           <div className="bg-black rounded-full rounded-br-none px-6 py-3 flex items-baseline gap-1.5">
