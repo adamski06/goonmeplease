@@ -82,98 +82,118 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Layout */}
-      <div className="md:hidden">
-        {/* Hero image with overlay */}
-        <div className="relative h-[50vh] w-full">
+      <div className="md:hidden px-4 pt-4 pb-32">
+        {/* Tappable image thumbnail to go back */}
+        <button 
+          onClick={onBack}
+          className="w-20 h-32 rounded-xl overflow-hidden mb-4 relative"
+        >
           <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-          
-          {/* Back button */}
-          <button 
-            onClick={onBack}
-            className="absolute top-4 left-4 p-2 rounded-full bg-black/30 backdrop-blur-sm"
-          >
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
             <ChevronLeft className="h-6 w-6 text-white" />
-          </button>
-          
-          {/* Save button */}
+          </div>
+        </button>
+
+        {/* Header - Logo, company name, content type */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center p-1.5 flex-shrink-0">
+            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+          </div>
+          <div className="flex items-baseline gap-2 flex-1 min-w-0">
+            <h1 className="text-lg font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+            <p className="text-sm text-foreground font-montserrat truncate">- {campaign.contentType}</p>
+          </div>
           <button
             onClick={onToggleSave}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/30 backdrop-blur-sm"
+            className="flex items-center justify-center p-1"
           >
             <Bookmark 
-              className={`h-6 w-6 ${isSaved ? 'fill-white text-white' : 'text-white'}`}
+              className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
               strokeWidth={1.5}
             />
           </button>
-          
-          {/* Overlay content */}
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center p-1.5">
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white font-montserrat">{campaign.brand}</h1>
-                <p className="text-sm text-white/70 font-jakarta">{campaign.contentType}</p>
-              </div>
-            </div>
-          </div>
         </div>
-        
-        {/* Content */}
-        <div className="p-4 pb-32 bg-background">
-          {/* Description */}
-          <p className="text-base text-foreground font-jakarta mb-6">{campaign.description}</p>
-          
-          {/* Earnings */}
-          <div className="bg-black rounded-2xl p-4 mb-6">
-            <div className="flex items-baseline justify-between">
-              <div>
-                <span className="text-sm text-white/60 font-jakarta">Earn up to</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                  <span className="text-lg text-white font-montserrat">sek</span>
-                </div>
+
+        {/* Description */}
+        <p className="text-base text-foreground font-jakarta leading-relaxed mb-6">{campaign.description}</p>
+
+        {/* Earnings Display - Monet style scaled for mobile */}
+        <div className="mb-6 relative">
+          {/* Rate per view */}
+          <div className="flex items-baseline gap-1 mb-2">
+            <span className="text-lg font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
+            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
+          </div>
+
+          {/* Line and bubbles */}
+          <div className="relative mt-4">
+            {/* Earnings bubble - above line */}
+            <div className="absolute -top-10 right-0 pointer-events-none z-20">
+              <div className="bg-black px-4 py-2 flex items-baseline gap-1 rounded-full rounded-br-none">
+                <span className="text-2xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                <span className="text-sm text-white font-montserrat">sek</span>
               </div>
-              <div className="text-right">
-                <span className="text-sm text-white/60 font-jakarta">Rate</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
-                  <span className="text-xs text-white/80 font-jakarta">/ 1k views</span>
-                </div>
+            </div>
+
+            {/* The line */}
+            <div className="relative py-4">
+              <div className="h-[2px] bg-black w-full" />
+              
+              {/* Min marker */}
+              {(() => {
+                const minViews = Math.round(totalViews * 0.125);
+                return (
+                  <div className="absolute z-20" style={{ left: '12.5%', top: '50%', transform: 'translateY(-50%)' }}>
+                    <div className="w-[2px] h-[10px] bg-black -translate-x-1/2" />
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 pointer-events-none">
+                      <span className="text-xs text-black font-jakarta">min</span>
+                    </div>
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+                      <span className="text-xs text-black font-jakarta">{minViews.toLocaleString()}</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Views bubble - below line */}
+            <div className="absolute top-10 right-0 pointer-events-none z-20">
+              <div className="bg-white border border-black/10 px-3 py-1.5 flex items-baseline gap-1 rounded-full rounded-tr-none">
+                <span className="text-base font-normal text-black font-jakarta">{totalViews.toLocaleString()}</span>
+                <span className="text-xs text-black font-jakarta">views</span>
               </div>
             </div>
           </div>
+
+          {/* Spacer for bubbles */}
+          <div className="h-12" />
+        </div>
+
+        {/* Requirements */}
+        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-xl p-4 mb-6 -mx-2">
+          <h3 className="text-sm font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+          <ul className="space-y-2 mb-4">
+            {campaign.guidelines.map((guideline, idx) => (
+              <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
+                <span className="text-foreground">•</span>
+                {guideline}
+              </li>
+            ))}
+          </ul>
           
-          {/* Requirements */}
-          <div className="mb-6">
-            <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
-            <ul className="space-y-2">
-              {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground mt-0.5">•</span>
-                  {guideline}
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Example images */}
+          {/* Example images inline */}
           {campaign.exampleImages && campaign.exampleImages.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-base font-semibold text-foreground mb-3 font-montserrat">Examples</h3>
-              <div className="flex gap-2 overflow-x-auto pb-2">
-                {campaign.exampleImages.map((img, i) => (
-                  <div key={i} className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
+            <div className="flex gap-2">
+              {campaign.exampleImages.slice(0, 2).map((img, i) => (
+                <div key={i} className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                  <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
             </div>
           )}
         </div>
-        
+
         {/* Fixed CTA */}
         <div className="fixed bottom-20 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent">
           <Button 
