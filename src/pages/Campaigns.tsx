@@ -691,8 +691,8 @@ const Campaigns: React.FC = () => {
       <div className="absolute inset-0 pointer-events-none grainy-background" />
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
-      {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
+      {/* Left Sidebar - Hidden on mobile */}
+      <aside className="hidden md:flex w-56 lg:w-52 flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
         {/* Logo */}
         <div className="px-6 pt-6 pb-4">
           <button onClick={() => navigate('/')} className="relative h-10 w-[120px]">
@@ -790,11 +790,44 @@ const Campaigns: React.FC = () => {
         </div>
       </aside>
 
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 py-2 safe-area-bottom">
+        <div className="flex items-center justify-around">
+          <button className="flex flex-col items-center gap-1 py-2 px-4">
+            <svg className="h-6 w-6 text-foreground" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" />
+            </svg>
+            <span className="text-xs font-semibold text-foreground">Home</span>
+          </button>
+          <button 
+            onClick={() => navigate('/activity')}
+            className="flex flex-col items-center gap-1 py-2 px-4"
+          >
+            <svg className="h-6 w-6 text-muted-foreground" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" clipRule="evenodd" d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V4ZM10.5 8.5C10 8.2 9.5 8.5 9.5 9V15C9.5 15.5 10 15.8 10.5 15.5L15.5 12.5C16 12.2 16 11.8 15.5 11.5L10.5 8.5Z" />
+            </svg>
+            <span className="text-xs text-muted-foreground">Action</span>
+          </button>
+          <button 
+            onClick={() => navigate('/profile')}
+            className="flex flex-col items-center gap-1 py-2 px-4"
+          >
+            <Avatar className="h-6 w-6">
+              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+              <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
+                {firstName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-xs text-muted-foreground">Profile</span>
+          </button>
+        </div>
+      </nav>
+
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {selectedCampaign ? (
           /* Campaign Detail View */
-          <div className="flex-1 overflow-y-auto px-8 py-8">
+          <div className="flex-1 overflow-y-auto px-4 md:px-8 py-8 pb-24 md:pb-8">
             <CampaignDetailView
               campaign={selectedCampaign}
               onBack={handleBackFromDetail}
@@ -805,7 +838,7 @@ const Campaigns: React.FC = () => {
         ) : (
           <>
         {/* Fixed overlay filter buttons */}
-        <div className="absolute top-6 left-8 right-8 z-20 flex justify-between items-center">
+        <div className="absolute top-6 left-4 right-4 md:left-8 md:right-8 z-20 flex justify-between items-center">
           <div className="flex items-center gap-4">
             {renderFilterButtons(false)}
           </div>
@@ -963,15 +996,15 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24">
-            <div className="pb-8 pl-8 pr-8">
-              <div className="flex flex-wrap gap-x-6 gap-y-8">
+          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24 pb-24 md:pb-8">
+            <div className="px-4 md:pl-8 md:pr-8">
+              <div className="grid grid-cols-2 md:flex md:flex-wrap gap-3 md:gap-x-6 md:gap-y-8">
               {campaigns.map((campaign, index) => {
                 return (
                   <div
                     key={campaign.id}
                     onClick={() => handleSelectCampaign(campaign)}
-                    className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-[200px]"
+                    className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px]"
                   >
                     {/* Top - Vertical Image */}
                     <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-xl">

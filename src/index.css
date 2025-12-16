@@ -452,3 +452,8 @@
 .dark .dashboard-gradient-bg {
   background: radial-gradient(ellipse 180% 150% at 50% 130%, hsl(220, 90%, 12%) 0%, hsl(215, 80%, 22%) 35%, transparent 65%);
 }
+
+/* Safe area for mobile devices with notch/home indicator */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
