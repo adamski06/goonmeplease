@@ -151,16 +151,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             );
           })()}
 
-          {/* Triangle pointing down from earnings - follows exact mouse position */}
-          {hoverPosition !== null && (
-            <div 
-              className="absolute -top-2 pointer-events-none z-20"
-              style={{ left: `${hoverPosition}%`, transform: 'translateX(-50%)' }}
-            >
-              <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black" />
-            </div>
-          )}
-
           {/* Interactive line */}
           <div 
             ref={lineRef}
@@ -201,16 +191,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               );
             })()}
           </div>
-
-          {/* Triangle pointing up to views - follows exact mouse position */}
-          {hoverPosition !== null && (
-            <div 
-              className="absolute top-2 pointer-events-none z-20"
-              style={{ left: `${hoverPosition}%`, transform: 'translateX(-50%)' }}
-            >
-              <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10" />
-            </div>
-          )}
 
           {/* Views bubble - below line, right side when not hovering */}
           {(() => {
