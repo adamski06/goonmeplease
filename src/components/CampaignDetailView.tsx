@@ -52,12 +52,15 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         {/* Main info block - Logo, description, and image together */}
         <div className="flex gap-10 items-start">
           <div className="max-w-xl">
-            {/* Header - Logo and company name */}
+            {/* Header - Logo, company name, and content type */}
             <div className="flex items-center gap-3 mb-5">
               <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0">
                 <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
+                <p className="text-lg text-muted-foreground font-jakarta">{campaign.contentType}</p>
+              </div>
               <button
                 onClick={onToggleSave}
                 className="flex items-center justify-center hover:scale-110 transition-transform"
@@ -69,11 +72,8 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </button>
             </div>
 
-            {/* Video type / Creative freedom description */}
-            <div>
-              <p className="text-xl text-foreground font-jakarta mb-1">{campaign.contentType}</p>
-              <p className="text-base text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
-            </div>
+            {/* Description */}
+            <p className="text-base text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
           </div>
             
           {/* Campaign image */}
