@@ -108,14 +108,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                 return img ? (
                   <div 
                     key={i}
-                    className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg overflow-hidden"
+                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
                   >
                     <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ) : (
                   <div 
                     key={i}
-                    className="w-20 h-20 lg:w-28 lg:h-28 rounded-lg bg-muted/50 flex items-center justify-center"
+                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
                   >
                     <span className="text-xs text-muted-foreground">Example {i + 1}</span>
                   </div>
