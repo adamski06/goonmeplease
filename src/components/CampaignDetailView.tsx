@@ -125,32 +125,23 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings with pointer */}
               <div className="flex flex-col items-end">
-                <div className="relative">
-                  <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                    <span className="text-sm text-white font-montserrat">sek</span>
-                  </div>
-                  {/* Curved tail like iMessage */}
-                  <svg className="absolute -bottom-[10px] right-[2px] w-[20px] h-[12px]" viewBox="0 0 20 12" fill="none">
-                    <path d="M20 0C20 0 16 0 12 4C8 8 4 12 0 12C4 12 8 10 12 8C16 6 20 4 20 0Z" fill="black"/>
-                  </svg>
+                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                  <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
+                {/* Pointer triangle */}
+                <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-black mr-[6px] -mt-[2px]" />
               </div>
             </div>
-            {/* Black line - shorter to end at pointer */}
-            <div className="h-[2px] bg-black mt-3 mb-3 mr-[16px]" />
+            {/* Black line */}
+            <div className="h-[2px] bg-black mt-2 mb-2 mr-[16px]" />
             {/* Views needed */}
             <div className="flex flex-col items-end">
-              <div className="relative">
-                {/* Curved tail like iMessage - pointing up */}
-                <svg className="absolute -top-[10px] right-[2px] w-[20px] h-[12px]" viewBox="0 0 20 12" fill="none">
-                  <path d="M20 12C20 12 16 12 12 8C8 4 4 0 0 0C4 0 8 2 12 4C16 6 20 8 20 12Z" fill="white"/>
-                </svg>
-                <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
-                  <span className="text-sm text-black font-jakarta">
-                    {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                  <span className="text-xs text-black font-jakarta">views</span>
-                </div>
+              <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-white mr-[6px] -mb-[2px]" />
+              <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
+                <span className="text-sm text-black font-jakarta">
+                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+                <span className="text-xs text-black font-jakarta">views</span>
               </div>
             </div>
           </div>
