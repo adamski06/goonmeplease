@@ -790,8 +790,8 @@ const Campaigns: React.FC = () => {
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
+      {/* Mobile Bottom Navigation Bar - hidden when in ad detail */}
+      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-4 pt-2 pb-2 h-20 safe-area-bottom ${selectedCampaign ? 'hidden' : ''}`}>
         <div className="flex items-start justify-between h-full">
           <button 
             onClick={() => setActiveFilter('foryou')}
