@@ -108,20 +108,21 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           <div className="h-[2px] bg-black w-full" />
           {/* Min marker */}
           {(() => {
-            const minViews = 3000;
             const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
-            const minPosition = (minViews / totalViews) * 100;
+            const minViews = Math.round(totalViews * 0.125);
+            const minPosition = 12.5;
             return (
               <div className="absolute" style={{ left: `${minPosition}%`, top: '-4px' }}>
                 {/* Vertical tick */}
-                <div className="w-[2px] h-[10px] bg-black mx-auto" />
+                <div className="w-[2px] h-[12px] bg-black mx-auto" />
                 {/* Min bubble above */}
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-sm px-3 py-1 rounded-full whitespace-nowrap font-semibold">
                   min
                 </div>
                 {/* Views count below in white bubble */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-[10px] text-black font-jakarta px-1.5 py-0.5 rounded-full whitespace-nowrap">
-                  {minViews.toLocaleString()}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white border border-black/10 text-sm text-black font-jakarta px-3 py-1 rounded-full whitespace-nowrap flex items-baseline gap-1">
+                  <span>{minViews.toLocaleString()}</span>
+                  <span className="text-xs">views</span>
                 </div>
               </div>
             );
