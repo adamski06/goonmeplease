@@ -125,25 +125,28 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               </div>
               {/* Right side - max earnings with pointer */}
               <div className="flex flex-col items-end">
-                <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                  <span className="text-sm text-white font-montserrat">sek</span>
+                <div className="relative">
+                  <div className="bg-black rounded-full px-5 py-2 flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                    <span className="text-sm text-white font-montserrat">sek</span>
+                  </div>
+                  {/* Pointer triangle attached to bubble */}
+                  <div className="absolute -bottom-[7px] right-[4px] w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black" />
                 </div>
-                {/* Pointer triangle */}
-                <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-black mr-[8px] -mt-[1px]" />
               </div>
             </div>
             {/* Black line - shorter to end at pointer */}
             <div className="h-[2px] bg-black mt-3 mb-3 mr-[16px]" />
             {/* Views needed */}
             <div className="flex flex-col items-end">
-              {/* Pointer triangle pointing up */}
-              <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white mr-[8px] -mb-[1px] relative z-10" />
-              <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
-                <span className="text-sm text-black font-jakarta">
-                  {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
-                <span className="text-xs text-black font-jakarta">views
-                </span>
+              <div className="relative">
+                {/* Pointer triangle attached to bubble */}
+                <div className="absolute -top-[7px] right-[4px] w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white" />
+                <div className="bg-white rounded-full px-4 py-2 flex items-baseline gap-1 border border-black/10">
+                  <span className="text-sm text-black font-jakarta">
+                    {((campaign.maxEarnings / campaign.ratePerThousand) * 1000).toLocaleString()}</span>
+                  <span className="text-xs text-black font-jakarta">views</span>
+                </div>
               </div>
             </div>
           </div>
