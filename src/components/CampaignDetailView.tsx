@@ -127,9 +127,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           {(() => {
             const maxPillPosition = 85; // Pill stops here to stay on screen
             const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-            const triangleOffset = hoverPosition !== null && hoverPosition > maxPillPosition 
-              ? ((hoverPosition - maxPillPosition) / (100 - maxPillPosition)) * 60 // 60px max offset
-              : 0;
             
             return (
               <div 
@@ -142,26 +139,27 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   transform: 'translateX(0)'
                 }}
               >
-                <div className="flex flex-col items-center relative">
-                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
-                    <span className="text-4xl font-bold text-white font-montserrat">
-                      {hoverPosition !== null 
-                        ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                        : campaign.maxEarnings.toLocaleString()}
-                    </span>
-                    <span className="text-lg text-white font-montserrat">sek</span>
-                  </div>
-                  {/* Triangle pointing down */}
-                  {hoverPosition !== null && (
-                    <div 
-                      className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black transition-all duration-100 ease-out"
-                      style={{ transform: `translateX(${triangleOffset}px)` }}
-                    />
-                  )}
+                <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
+                  <span className="text-4xl font-bold text-white font-montserrat">
+                    {hoverPosition !== null 
+                      ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
+                      : campaign.maxEarnings.toLocaleString()}
+                  </span>
+                  <span className="text-lg text-white font-montserrat">sek</span>
                 </div>
               </div>
             );
           })()}
+
+          {/* Triangle pointing down from earnings - follows exact mouse position */}
+          {hoverPosition !== null && (
+            <div 
+              className="absolute -top-2 pointer-events-none z-20"
+              style={{ left: `${hoverPosition}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-black" />
+            </div>
+          )}
 
           {/* Interactive line */}
           <div 
@@ -204,13 +202,20 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             })()}
           </div>
 
+          {/* Triangle pointing up to views - follows exact mouse position */}
+          {hoverPosition !== null && (
+            <div 
+              className="absolute top-2 pointer-events-none z-20"
+              style={{ left: `${hoverPosition}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10" />
+            </div>
+          )}
+
           {/* Views bubble - below line, right side when not hovering */}
           {(() => {
             const maxPillPosition = 85;
             const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-            const triangleOffset = hoverPosition !== null && hoverPosition > maxPillPosition 
-              ? ((hoverPosition - maxPillPosition) / (100 - maxPillPosition)) * 60
-              : 0;
             
             return (
               <div 
@@ -223,22 +228,13 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                   transform: 'translateX(0)'
                 }}
               >
-                <div className="flex flex-col items-center relative">
-                  {/* Triangle pointing up */}
-                  {hoverPosition !== null && (
-                    <div 
-                      className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-black/10 transition-all duration-100 ease-out"
-                      style={{ transform: `translateX(${triangleOffset}px)` }}
-                    />
-                  )}
-                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
-                    <span className="text-xl font-normal text-black font-jakarta">
-                      {hoverPosition !== null 
-                        ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                        : totalViews.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-black font-jakarta">views</span>
-                  </div>
+                <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
+                  <span className="text-xl font-normal text-black font-jakarta">
+                    {hoverPosition !== null 
+                      ? getValuesAtPosition(hoverPosition).views.toLocaleString()
+                      : totalViews.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-black font-jakarta">views</span>
                 </div>
               </div>
             );
