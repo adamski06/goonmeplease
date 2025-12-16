@@ -115,7 +115,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       {/* Earnings Display - Full width */}
       <div className="mb-6 mt-16 max-w-[calc(36rem+2.5rem+11rem)] relative">
         {/* Rate per view - left */}
-        <div className="relative -mt-8 flex items-baseline gap-1 mb-2">
+        <div className="relative -mt-14 flex items-baseline gap-1 mb-2">
           <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
           <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
           <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
