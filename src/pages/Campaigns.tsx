@@ -894,18 +894,18 @@ const Campaigns: React.FC = () => {
         </div>
 
         {activeFilter === 'foryou' ? (
-          /* For You - Large single ad with photo left, info right */
+          /* For You - Full screen on mobile, photo left + info right on desktop */
           <div 
-            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide pt-40"
+            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-screen flex items-center justify-start snap-center snap-always py-6 pl-16 gap-8">
-                {/* Left side - Full vertical photo (standalone) */}
+              <div key={campaign.id} className="h-[calc(100vh-80px)] md:h-screen flex items-center justify-center md:justify-start snap-center snap-always md:py-6 md:pl-16 md:gap-8">
+                {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative h-[calc(100vh-48px)] aspect-[9/16] overflow-hidden flex-shrink-0 rounded-2xl cursor-pointer hover:scale-[1.01] transition-all"
+                  className="relative w-full h-full md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden md:rounded-2xl cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div 
@@ -914,10 +914,30 @@ const Campaigns: React.FC = () => {
                       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     }}
                   />
+                  {/* Mobile overlay info */}
+                  <div className="md:hidden absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                    <span className="text-sm font-medium text-white/70 font-montserrat">{campaign.brand}</span>
+                    <p className="text-lg font-bold text-white mt-1 font-jakarta">{campaign.description}</p>
+                    <div className="flex items-center justify-between mt-3">
+                      <div className="inline-flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                        <span className="text-base font-semibold text-white/80 font-montserrat">sek</span>
+                      </div>
+                      <button
+                        onClick={(e) => toggleFavorite(campaign.id, e)}
+                        className="flex items-center justify-center hover:scale-110 transition-transform p-2"
+                      >
+                        <Bookmark 
+                          className={`h-7 w-7 ${favorites.includes(campaign.id) ? 'fill-white text-white' : 'text-white/70'}`}
+                          strokeWidth={1.5}
+                        />
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Right side - Campaign info (standalone) */}
-                <div className="h-[calc(100vh-48px)] flex flex-col justify-between min-w-[280px] py-4">
+                {/* Right side - Campaign info (desktop only) */}
+                <div className="hidden md:flex h-[calc(100vh-48px)] flex-col justify-between min-w-[280px] py-4">
                   <div>
                     <span className="text-sm font-medium text-muted-foreground font-montserrat">{campaign.brand}</span>
                     <p className="text-2xl font-bold text-foreground mt-2 font-jakarta">{campaign.description}</p>
