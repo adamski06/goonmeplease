@@ -791,15 +791,15 @@ const Campaigns: React.FC = () => {
       </aside>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 py-2 safe-area-bottom">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-dark-surface border-t border-black/10 dark:border-white/10 px-2 pt-1 pb-2 safe-area-bottom">
         <div className="flex items-center justify-around">
-          <button className="flex flex-col items-center gap-1 py-2 px-3">
+          <button className="flex flex-col items-center gap-0.5 py-1 px-3">
             <svg className="h-6 w-6 text-foreground" viewBox="0 0 24 24" fill="currentColor">
               <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" />
             </svg>
             <span className="text-[10px] font-semibold text-foreground">Home</span>
           </button>
-          <button className="flex flex-col items-center gap-1 py-2 px-3">
+          <button className="flex flex-col items-center gap-0.5 py-1 px-3">
             <svg className="h-6 w-6 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none" />
@@ -808,7 +808,7 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/activity')}
-            className="flex flex-col items-center gap-1 py-2 px-3"
+            className="flex flex-col items-center gap-0.5 py-1 px-3"
           >
             <svg className="h-6 w-6 text-muted-foreground" viewBox="0 0 24 24" fill="currentColor">
               <path fillRule="evenodd" clipRule="evenodd" d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V4ZM10.5 8.5C10 8.2 9.5 8.5 9.5 9V15C9.5 15.5 10 15.8 10.5 15.5L15.5 12.5C16 12.2 16 11.8 15.5 11.5L10.5 8.5Z" />
@@ -817,7 +817,7 @@ const Campaigns: React.FC = () => {
           </button>
           <button 
             onClick={() => navigate('/profile')}
-            className="flex flex-col items-center gap-1 py-2 px-3"
+            className="flex flex-col items-center gap-0.5 py-1 px-3"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
