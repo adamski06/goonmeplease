@@ -82,25 +82,25 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Layout */}
-      <div className="md:hidden h-full flex flex-col bg-background">
+      <div className="md:hidden h-full flex flex-col bg-white">
         {/* White top bar with back button - thick for notch */}
-        <div className="flex items-center gap-3 px-4 pt-12 pb-3 bg-white dark:bg-dark-surface border-b border-black/5 dark:border-white/10">
+        <div className="flex items-center gap-3 px-4 pt-12 pb-3 bg-white border-b border-black/5">
           <button 
             onClick={onBack}
             className="p-1 -ml-1"
           >
-            <ChevronLeft className="h-6 w-6 text-foreground" />
+            <ChevronLeft className="h-6 w-6 text-black" />
           </button>
           <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center p-1 flex-shrink-0 border border-black/5">
             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-base font-bold text-foreground font-montserrat flex-1">{campaign.brand}</h1>
+          <h1 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h1>
           <button
             onClick={onToggleSave}
             className="flex items-center justify-center p-1"
           >
             <Bookmark 
-              className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
+              className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/40'}`}
               strokeWidth={1.5}
             />
           </button>
@@ -110,15 +110,15 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         <div className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
 
         {/* Description */}
-        <p className="text-base text-foreground font-jakarta leading-relaxed mb-6">{campaign.description}</p>
+        <p className="text-base text-black font-jakarta leading-relaxed mb-6">{campaign.description}</p>
 
         {/* Earnings Display - Monet style scaled for mobile */}
         <div className="mb-6 relative">
           {/* Rate per view */}
           <div className="flex items-baseline gap-1 mb-2">
-            <span className="text-lg font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
+            <span className="text-lg font-bold text-black font-montserrat">{campaign.ratePerThousand}</span>
+            <span className="text-sm font-bold text-black font-jakarta">sek</span>
+            <span className="text-xs font-bold text-black font-jakarta">/ 1000 views</span>
           </div>
 
           {/* Line and bubbles */}
@@ -166,12 +166,12 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Requirements */}
-        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-xl p-4 mb-6 -mx-2">
-          <h3 className="text-sm font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 rounded-xl p-4 mb-6 -mx-2">
+          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Requirements</h3>
           <ul className="space-y-2 mb-4">
             {campaign.guidelines.map((guideline, idx) => (
-              <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
-                <span className="text-foreground">•</span>
+              <li key={idx} className="text-sm text-black font-jakarta flex items-start gap-2">
+                <span className="text-black">•</span>
                 {guideline}
               </li>
             ))}
@@ -191,7 +191,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
         </div>
 
         {/* Fixed CTA */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-background via-background to-transparent">
+        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-white via-white to-transparent">
           <Button 
             size="lg" 
             className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"

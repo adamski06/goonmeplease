@@ -1096,19 +1096,19 @@ const Campaigns: React.FC = () => {
                     </div>
                     
                     {/* Bottom - White info section */}
-                    <div className="w-full bg-white dark:bg-dark-surface p-4 flex flex-col justify-between rounded-b-xl h-[100px]">
-                      <p className="text-sm font-bold text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
+                    <div className="w-full bg-white md:dark:bg-dark-surface p-4 flex flex-col justify-between rounded-b-xl h-[100px]">
+                      <p className="text-sm font-bold text-black md:text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
                       <div className="flex items-center justify-between mt-1">
                         <div className="inline-flex items-baseline gap-0.5">
-                          <span className="text-xl font-bold text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                          <span className="text-xs font-semibold text-foreground font-montserrat">sek</span>
+                          <span className="text-xl font-bold text-black md:text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                          <span className="text-xs font-semibold text-black md:text-foreground font-montserrat">sek</span>
                         </div>
                         <button
                           onClick={(e) => toggleFavorite(campaign.id, e)}
                           className="flex items-center justify-center hover:scale-110 transition-transform"
                         >
                           <Bookmark 
-                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-foreground text-foreground' : 'text-black/25'}`}
+                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-black md:fill-foreground text-black md:text-foreground' : 'text-black/25'}`}
                             strokeWidth={1.5}
                           />
                         </button>
