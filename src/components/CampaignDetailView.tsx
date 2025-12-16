@@ -117,7 +117,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
                     key={i}
                     className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
                   >
-                    <span className="text-sm text-muted-foreground">Example {i + 1}</span>
+                    <span className="text-sm text-foreground/60">Example {i + 1}</span>
                   </div>
                 );
               })}
