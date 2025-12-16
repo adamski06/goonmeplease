@@ -901,7 +901,7 @@ const Campaigns: React.FC = () => {
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => (
-              <div key={campaign.id} className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:justify-start snap-center snap-always md:py-6 md:pl-16 md:gap-8">
+              <div key={campaign.id} className="h-[calc(100dvh-80px)] md:h-screen flex items-stretch justify-stretch md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
