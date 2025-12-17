@@ -241,7 +241,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             </div>
               
             {/* Campaign image */}
-            <div className="relative w-44 aspect-[9/16] rounded-xl overflow-hidden flex-shrink-0">
+            <div className="relative w-44 aspect-[9/16] overflow-hidden flex-shrink-0">
               <img 
                 src={campaign.image} 
                 alt={campaign.brand} 
