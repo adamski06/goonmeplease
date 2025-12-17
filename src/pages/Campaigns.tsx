@@ -947,7 +947,7 @@ const Campaigns: React.FC = () => {
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative w-full h-full md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden md:rounded-2xl cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
+                  className="relative w-full h-full md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div 
@@ -1023,7 +1023,7 @@ const Campaigns: React.FC = () => {
                   {/* Video Placeholder - 9:16 aspect ratio */}
                   <div 
                     onClick={() => handleSelectCampaign(campaign)}
-                    className="aspect-[9/16] h-[calc(100vh-48px)] rounded-2xl border border-white/25 flex items-center justify-center relative overflow-hidden cursor-pointer transition-colors"
+                    className="aspect-[9/16] h-[calc(100vh-48px)] border border-white/25 flex items-center justify-center relative overflow-hidden cursor-pointer transition-colors"
                     style={{ backgroundColor: 'hsla(220, 70%, 55%, 0.18)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
                   >
                     {idx === 0 ? (
@@ -1094,10 +1094,10 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => handleSelectCampaign(campaign)}
-                    className="rounded-xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px]"
+                    className="overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px]"
                   >
                     {/* Top - Vertical Image */}
-                    <div className="relative w-full aspect-[3/4] overflow-hidden rounded-t-xl">
+                    <div className="relative w-full aspect-[3/4] overflow-hidden">
                       <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                       <div 
                         className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
