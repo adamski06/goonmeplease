@@ -1062,7 +1062,7 @@ const Campaigns: React.FC = () => {
                 {/* Company Logo centered above first pill */}
                 <div 
                   onClick={() => setSelectedCampaign(currentCampaign)}
-                  className="absolute -top-32 w-40 h-40 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
+                  className="absolute -top-32 w-40 h-40 bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
                 >
                   <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
                 </div>
