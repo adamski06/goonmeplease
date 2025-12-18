@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
-import { Eye, DollarSign, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
@@ -51,13 +51,10 @@ const BusinessDashboard: React.FC = () => {
               <div className="flex items-center">
                 {/* Budget - Left */}
                 <div className="flex-1 text-center">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Money Spent</p>
-                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
                   <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {formatExact(stats.totalBudget - stats.totalSpent)} SEK remaining
+                  <p className="text-sm text-muted-foreground mt-1">
+                    / {formatExact(stats.totalBudget)} SEK
                   </p>
                 </div>
 
@@ -65,11 +62,8 @@ const BusinessDashboard: React.FC = () => {
 
                 {/* Traction - Right */}
                 <div className="flex-1 text-center">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Eye className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Total Views</p>
-                  </div>
-                  <p className="text-3xl font-bold">{formatExact(stats.totalViews)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">Views</p>
+                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)}</p>
                   <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
                 </div>
               </div>
