@@ -65,7 +65,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
               }} 
             />
           </button>
-          <span className="text-xs font-bold text-black dark:text-white mt-1 block">Business</span>
+          <span className="text-sm font-bold text-black dark:text-white mt-1 block">Business</span>
         </div>
 
         {/* Navigation */}
