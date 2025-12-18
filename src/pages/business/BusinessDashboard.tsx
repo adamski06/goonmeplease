@@ -1,20 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
 
 import defaultAvatar from '@/assets/default-avatar.png';
 
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [totalViews, setTotalViews] = useState<number>(0);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
+
+  // Fetch total views across all campaigns
+  useEffect(() => {
+    const fetchTotalViews = async () => {
+      if (!user) return;
+      
+      try {
+        // Get all campaigns for this business
+        const { data: campaigns } = await supabase
+          .from('campaigns')
+          .select('id')
+          .eq('business_id', user.id);
+        
+        if (!campaigns || campaigns.length === 0) {
+          setTotalViews(0);
+          setLoadingStats(false);
+          return;
+        }
+
+        const campaignIds = campaigns.map(c => c.id);
+        
+        // Get all submissions for these campaigns and sum up views
+        const { data: submissions } = await supabase
+          .from('content_submissions')
+          .select('current_views')
+          .in('campaign_id', campaignIds);
+        
+        const total = submissions?.reduce((sum, sub) => sum + (sub.current_views || 0), 0) || 0;
+        setTotalViews(total);
+      } catch (error) {
+        console.error('Error fetching total views:', error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
+    if (user) {
+      fetchTotalViews();
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -23,13 +66,6 @@ const BusinessDashboard: React.FC = () => {
       </div>
     );
   }
-
-  // Mock stats - will be replaced with real data
-  const stats = {
-    totalSpent: 47823,
-    totalBudget: 100000,
-    totalViews: 1284739,
-  };
 
   const formatExact = (num: number) => {
     return num.toLocaleString('sv-SE');
@@ -54,7 +90,9 @@ const BusinessDashboard: React.FC = () => {
           <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] inline-block mt-8 opacity-0 animate-fade-in" style={{ animationDelay: '50ms', animationFillMode: 'forwards' }}>
             <CardContent className="px-8 py-3">
               <div className="flex items-center gap-3">
-                <span className="text-6xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
+                <span className="text-6xl font-normal font-montserrat">
+                  {loadingStats ? '...' : formatExact(totalViews)}
+                </span>
                 <span className="text-6xl font-normal font-montserrat">views</span>
               </div>
             </CardContent>
