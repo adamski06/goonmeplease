@@ -1094,7 +1094,7 @@ const Campaigns: React.FC = () => {
                   <div
                     key={campaign.id}
                     onClick={() => handleSelectCampaign(campaign)}
-                    className="overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px] border border-black/20 md:border-0"
+                    className="overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px] border border-black/20"
                   >
                     {/* Top - Vertical Image */}
                     <div className="relative w-full aspect-[3/4] overflow-hidden">
