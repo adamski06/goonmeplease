@@ -46,28 +46,19 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex items-stretch gap-4">
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none flex">
-              <CardContent className="py-8 px-8 flex flex-col justify-end">
+          <div className="flex items-center gap-4">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+              <CardContent className="py-8 px-8">
                 <p className="text-4xl font-bold leading-none">{formatExact(stats.totalSpent)} SEK</p>
                 <p className="text-xl font-bold mt-2">/ {formatExact(stats.totalBudget)} SEK</p>
               </CardContent>
             </Card>
 
-            <div className="flex flex-col justify-end py-8">
-              <p className="text-4xl font-bold leading-none">=</p>
-              <p aria-hidden className="text-xl font-bold mt-2 opacity-0 select-none">/</p>
-            </div>
+            <p className="text-4xl font-bold">=</p>
 
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none flex">
-              <CardContent className="py-8 px-8 flex flex-col justify-end">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+              <CardContent className="py-8 px-8">
                 <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
-                <p
-                  aria-hidden
-                  className="text-xl font-bold mt-2 opacity-0 select-none"
-                >
-                  / {formatExact(stats.totalBudget)} SEK
-                </p>
               </CardContent>
             </Card>
           </div>
