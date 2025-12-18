@@ -770,10 +770,10 @@ const Campaigns: React.FC = () => {
         </nav>
 
         {/* What is Jarla link */}
-        <div className="mt-auto px-3 pb-4">
+        <div className="mt-auto px-3 pb-2">
           <button 
             onClick={() => navigate('/landing')}
-            className="text-lg lg:text-base font-medium text-muted-foreground hover:text-foreground px-3 py-1.5 text-left transition-all"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-1 text-left transition-all"
           >
             What is Jarla?
           </button>
