@@ -114,10 +114,10 @@ const Index = () => {
                   </span>
                   <div className="flex justify-center mt-8">
                     <button 
-                      onClick={() => navigate('/auth')}
+                      onClick={() => navigate('/')}
                       className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
                     >
-                      <span className="relative z-10">Sign up</span>
+                      Start earning
                     </button>
                   </div>
                 </div>
