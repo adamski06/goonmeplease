@@ -1,82 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Eye, Users, MoreHorizontal, Pencil, Pause, Play, Trash2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
-interface Campaign {
-  id: string;
-  title: string;
-  brand_name: string;
-  brand_logo_url: string | null;
-  description: string | null;
-  status: string;
-  is_active: boolean;
-  created_at: string;
-  deadline: string | null;
-  total_budget: number;
-}
 
 const BusinessCampaigns: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [loadingCampaigns, setLoadingCampaigns] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'active' | 'paused' | 'ended'>('all');
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
-
-  useEffect(() => {
-    if (user) {
-      fetchCampaigns();
-    }
-  }, [user]);
-
-  const fetchCampaigns = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('campaigns')
-        .select('*')
-        .eq('business_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setCampaigns(data || []);
-    } catch (err) {
-      console.error('Error fetching campaigns:', err);
-    } finally {
-      setLoadingCampaigns(false);
-    }
-  };
-
-  const toggleCampaignStatus = async (campaignId: string, newStatus: string) => {
-    try {
-      const { error } = await supabase
-        .from('campaigns')
-        .update({ status: newStatus, is_active: newStatus === 'active' })
-        .eq('id', campaignId);
-
-      if (error) throw error;
-      fetchCampaigns();
-    } catch (err) {
-      console.error('Error updating campaign:', err);
-    }
-  };
 
   if (loading) {
     return (
@@ -86,22 +22,13 @@ const BusinessCampaigns: React.FC = () => {
     );
   }
 
-  const filteredCampaigns = campaigns.filter(c => {
-    if (filter === 'all') return true;
-    return c.status === filter;
-  });
+  const formatExact = (num: number) => {
+    return num.toLocaleString('sv-SE');
+  };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'active':
-        return <Badge className="bg-green-500/20 text-green-600 border-green-500/30">Active</Badge>;
-      case 'paused':
-        return <Badge className="bg-yellow-500/20 text-yellow-600 border-yellow-500/30">Paused</Badge>;
-      case 'ended':
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">Ended</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
+  // Mock stats - will be replaced with real data
+  const stats = {
+    totalViews: 1284739,
   };
 
   return (
@@ -109,151 +36,204 @@ const BusinessCampaigns: React.FC = () => {
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
-              <p className="text-muted-foreground mt-1">Manage your advertising campaigns</p>
-            </div>
-            <Button 
-              onClick={() => navigate('/business/campaigns/new')}
-              className="gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Create Campaign
-            </Button>
-          </div>
+          <h1 className="text-3xl font-bold text-foreground mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>Campaigns</h1>
 
-          {/* Filters */}
-          <div className="flex gap-2 mb-6">
-            {(['all', 'active', 'paused', 'ended'] as const).map((f) => (
-              <Button
-                key={f}
-                variant={filter === f ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilter(f)}
-                className="capitalize"
-              >
-                {f}
-              </Button>
-            ))}
-          </div>
-
-          {/* Campaigns List */}
-          {loadingCampaigns ? (
-            <div className="text-center py-12 text-muted-foreground">Loading campaigns...</div>
-          ) : filteredCampaigns.length === 0 ? (
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground mb-4">
-                  {campaigns.length === 0 
-                    ? "You haven't created any campaigns yet" 
-                    : "No campaigns match the selected filter"}
-                </p>
-                {campaigns.length === 0 && (
-                  <Button onClick={() => navigate('/business/campaigns/new')}>
-                    Create your first campaign
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {filteredCampaigns.map((campaign) => (
-                <Card 
-                  key={campaign.id} 
-                  className="bg-card/50 backdrop-blur-sm border-border hover:bg-card/70 transition-colors cursor-pointer rounded-none"
-                  onClick={() => navigate(`/business/campaigns/${campaign.id}`)}
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      {/* Logo */}
-                      <div className="h-14 w-14 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                        {campaign.brand_logo_url ? (
-                          <img src={campaign.brand_logo_url} alt={campaign.brand_name} className="h-full w-full object-cover" />
-                        ) : (
-                          <span className="text-xl font-bold text-muted-foreground">
-                            {campaign.brand_name.charAt(0)}
-                          </span>
-                        )}
+          <div className="space-y-16">
+            {/* Campaign 1 - Summer Vibes */}
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+              <h2 className="text-2xl font-semibold mt-2 mb-3">Summer Vibes</h2>
+              <div className="flex items-stretch gap-3">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
                       </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-foreground truncate">{campaign.title}</h3>
-                          {getStatusBadge(campaign.status || 'active')}
-                        </div>
-                        <p className="text-sm text-muted-foreground truncate">{campaign.brand_name}</p>
-                        {campaign.deadline && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Deadline: {new Date(campaign.deadline).toLocaleDateString()}
-                          </p>
-                        )}
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
+                        <span className="text-3xl font-bold font-montserrat">/</span>
+                        <span className="text-3xl font-bold font-montserrat">100 000 sek</span>
                       </div>
-
-                      {/* Stats */}
-                      <div className="hidden md:flex items-center gap-6 text-sm">
-                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                          <Eye className="h-4 w-4" />
-                          <span>0 views</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                          <Users className="h-4 w-4" />
-                          <span>0 submissions</span>
-                        </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                          <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                        ))}
                       </div>
-
-                      {/* Actions */}
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/business/campaigns/${campaign.id}/edit`);
-                          }}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit
-                          </DropdownMenuItem>
-                          {campaign.status === 'active' ? (
-                            <DropdownMenuItem onClick={(e) => {
-                              e.stopPropagation();
-                              toggleCampaignStatus(campaign.id, 'paused');
-                            }}>
-                              <Pause className="mr-2 h-4 w-4" />
-                              Pause
-                            </DropdownMenuItem>
-                          ) : campaign.status === 'paused' ? (
-                            <DropdownMenuItem onClick={(e) => {
-                              e.stopPropagation();
-                              toggleCampaignStatus(campaign.id, 'active');
-                            }}>
-                              <Play className="mr-2 h-4 w-4" />
-                              Resume
-                            </DropdownMenuItem>
-                          ) : null}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem 
-                            className="text-red-500 focus:text-red-500"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleCampaignStatus(campaign.id, 'ended');
-                            }}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            End Campaign
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                  <CardContent className="px-8 py-6 h-full">
+                    <div className="flex h-full flex-col justify-between">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Budget</span>
+                        <span className="text-lg font-semibold">100k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Left</span>
+                        <span className="text-lg font-semibold">52k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Pending</span>
+                        <span className="text-lg font-semibold">12</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Approved</span>
+                        <span className="text-lg font-semibold">38</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Creators</span>
+                        <span className="text-lg font-semibold">24</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">CPV</span>
+                        <span className="text-lg font-semibold">0.037</span>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          )}
+              </div>
+            </Card>
+
+            {/* Campaign 2 - Coffee Culture */}
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+              <h2 className="text-2xl font-semibold mt-2 mb-3">Coffee Culture</h2>
+              <div className="flex items-stretch gap-3">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-6xl font-bold font-montserrat">618 234</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
+                        <span className="text-3xl font-bold font-montserrat">/</span>
+                        <span className="text-3xl font-bold font-montserrat">50 000 sek</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                          <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                  <CardContent className="px-8 py-6 h-full">
+                    <div className="flex h-full flex-col justify-between">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Budget</span>
+                        <span className="text-lg font-semibold">50k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Left</span>
+                        <span className="text-lg font-semibold">27k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Pending</span>
+                        <span className="text-lg font-semibold">4</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Approved</span>
+                        <span className="text-lg font-semibold">15</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Creators</span>
+                        <span className="text-lg font-semibold">11</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">CPV</span>
+                        <span className="text-lg font-semibold">0.037</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </Card>
+
+            {/* Campaign 3 - Street Style */}
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+              <h2 className="text-2xl font-semibold mt-2 mb-3">Street Style</h2>
+              <div className="flex items-stretch gap-3">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-6xl font-bold font-montserrat">241 567</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
+                        <span className="text-3xl font-bold font-montserrat">/</span>
+                        <span className="text-3xl font-bold font-montserrat">25 000 sek</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                          <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                  <CardContent className="px-8 py-6 h-full">
+                    <div className="flex h-full flex-col justify-between">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Budget</span>
+                        <span className="text-lg font-semibold">25k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Left</span>
+                        <span className="text-lg font-semibold">16k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Pending</span>
+                        <span className="text-lg font-semibold">7</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Approved</span>
+                        <span className="text-lg font-semibold">9</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">Creators</span>
+                        <span className="text-lg font-semibold">8</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-base text-muted-foreground font-bold">CPV</span>
+                        <span className="text-lg font-semibold">0.037</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
     </BusinessLayout>
