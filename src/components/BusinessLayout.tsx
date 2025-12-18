@@ -29,7 +29,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
   const firstName = profile?.full_name?.split(' ')[0] || 'Business';
 
   const navItems = [
-    { path: '/business', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/business', label: 'Home', icon: LayoutDashboard },
     { path: '/business/campaigns', label: 'Campaigns', icon: Megaphone },
     { path: '/business/submissions', label: 'Submissions', icon: Inbox },
     { path: '/business/analytics', label: 'Analytics', icon: BarChart3 },
