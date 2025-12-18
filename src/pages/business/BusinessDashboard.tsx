@@ -74,18 +74,18 @@ const BusinessDashboard: React.FC = () => {
               </CardContent>
             </Card>
             <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl inline-block shadow-sm">
-              <CardContent className="px-8 py-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl font-normal">UGC:</span>
+              <CardContent className="px-6 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-normal">UGC:</span>
                   <div className="flex items-center gap-1">
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
-                        className="w-5 h-8 bg-white/10 backdrop-blur-sm border border-white/15 rounded-sm"
+                        className="w-4 h-5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-sm"
                       />
                     ))}
-                    <button className="w-5 h-8 border border-dashed border-white/20 rounded-sm flex items-center justify-center hover:bg-white/10 transition-colors">
-                      <Plus className="h-3 w-3 text-muted-foreground" />
+                    <button className="w-4 h-5 border border-dashed border-white/20 rounded-sm flex items-center justify-center hover:bg-white/10 transition-colors">
+                      <Plus className="h-2 w-2 text-muted-foreground" />
                     </button>
                   </div>
                 </div>
