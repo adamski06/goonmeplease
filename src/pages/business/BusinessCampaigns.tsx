@@ -46,7 +46,7 @@ const BusinessCampaigns: React.FC = () => {
             </Button>
           </div>
 
-          <div className="space-y-16">
+          <div className="space-y-24">
             {/* Campaign 1 - Summer Vibes */}
             <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-[4px] pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
               <h2 className="text-2xl font-bold font-geist mt-2 mb-3">Summer Vibes</h2>
