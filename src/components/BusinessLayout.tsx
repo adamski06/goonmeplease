@@ -84,7 +84,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
+      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist">
         {/* Logo */}
         <div className="px-6 pt-6 pb-4">
           <button onClick={() => navigate('/business')} className="relative h-10 w-[120px]">
