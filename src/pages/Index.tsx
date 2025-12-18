@@ -84,19 +84,13 @@ const Index = () => {
             Careers
           </button>
           
-          {/* Right side auth buttons */}
-          <div className="ml-auto flex items-center gap-2">
+          {/* Right side button */}
+          <div className="ml-auto">
             <button 
-              onClick={() => navigate('/auth')}
-              className="px-4 py-1.5 text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
-            >
-              Log in
-            </button>
-            <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/')}
               className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
             >
-              <span className="relative z-10">Sign up</span>
+              Start earning
             </button>
           </div>
         </div>
