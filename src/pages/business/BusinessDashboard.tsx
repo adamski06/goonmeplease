@@ -64,7 +64,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex flex-col gap-4 items-start ml-8">
+          <div className="flex flex-col gap-4 ml-8">
             <Card className="bg-black text-white rounded-2xl inline-block shadow-sm">
               <CardContent className="px-8 py-3">
                 <div className="flex items-baseline gap-3">
@@ -74,11 +74,11 @@ const BusinessDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl inline-block shadow-sm">
+            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
               <CardContent className="px-6 py-2">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">User Generated Videos:</span>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 flex-1 justify-end">
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
