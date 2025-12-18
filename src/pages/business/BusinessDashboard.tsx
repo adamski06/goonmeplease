@@ -66,8 +66,8 @@ const BusinessDashboard: React.FC = () => {
           {/* Stats Cards */}
           <Card className="bg-card border-border rounded-none inline-block">
             <CardContent className="p-0">
-              <div className="px-8 py-6 border-b border-border">
-                <div className="flex items-baseline gap-3">
+              <div className="px-8 py-3 border-b border-border">
+                <div className="flex items-center gap-3">
                   <span className="text-3xl font-normal">{formatExact(stats.totalSpent)} =</span>
                   <span className="text-6xl font-normal">{formatExact(stats.totalViews)}</span>
                 </div>
