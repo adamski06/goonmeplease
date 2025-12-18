@@ -55,7 +55,7 @@ const BusinessCampaigns: React.FC = () => {
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-6xl font-normal font-geist">{formatExact(stats.totalViews)}</span>
+                        <span className="text-6xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
                         <span className="text-6xl font-normal font-geist">views</span>
                       </div>
                     </CardContent>
@@ -122,7 +122,7 @@ const BusinessCampaigns: React.FC = () => {
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-6xl font-normal font-geist">618 234</span>
+                        <span className="text-6xl font-normal font-montserrat">618 234</span>
                         <span className="text-6xl font-normal font-geist">views</span>
                       </div>
                     </CardContent>
@@ -189,7 +189,7 @@ const BusinessCampaigns: React.FC = () => {
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-6xl font-normal font-geist">241 567</span>
+                        <span className="text-6xl font-normal font-montserrat">241 567</span>
                         <span className="text-6xl font-normal font-geist">views</span>
                       </div>
                     </CardContent>
