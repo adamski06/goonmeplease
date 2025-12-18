@@ -571,7 +571,10 @@ const Campaigns: React.FC = () => {
 
   const toggleFavorite = async (campaignId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!user) return;
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
     
     if (favorites.includes(campaignId)) {
       // Remove favorite
@@ -590,11 +593,7 @@ const Campaigns: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/auth');
-    }
-  }, [user, loading, navigate]);
+  // No longer redirect - allow browsing without login
 
   // Preload all campaign logos
   useEffect(() => {
@@ -731,7 +730,7 @@ const Campaigns: React.FC = () => {
             Home
           </button>
           <button 
-            onClick={() => navigate('/activity')}
+            onClick={() => user ? navigate('/activity') : navigate('/auth')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -739,60 +738,87 @@ const Campaigns: React.FC = () => {
             </svg>
             Action
           </button>
-          <button 
-            onClick={() => navigate('/profile')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
-          >
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            Profile
-          </button>
+          {user ? (
+            <button 
+              onClick={() => navigate('/profile')}
+              className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
+            >
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+                <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
+                  {firstName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              Profile
+            </button>
+          ) : (
+            <button 
+              onClick={() => navigate('/auth')}
+              className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
+            >
+              <User className="h-6 w-6" />
+              Profile
+            </button>
+          )}
         </nav>
 
-        {/* More Menu at bottom */}
+        {/* Bottom section */}
         <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
-                <Menu className="h-6 w-6" />
-                More
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              side="top" 
-              align="start" 
-              className="w-48 bg-background border-border"
-            >
-              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
-                <User className="mr-2 h-4 w-4" />
-                My Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onSelect={(e) => {
-                  e.preventDefault();
-                  setTheme(theme === 'dark' ? 'light' : 'dark');
-                }} 
-                className="cursor-pointer"
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
+                  <Menu className="h-6 w-6" />
+                  More
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                side="top" 
+                align="start" 
+                className="w-48 bg-background border-border"
               >
-                <Moon className="mr-2 h-4 w-4" />
-                <span className="flex-1">Theme</span>
-                <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  My Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setTheme(theme === 'dark' ? 'light' : 'dark');
+                  }} 
+                  className="cursor-pointer"
+                >
+                  <Moon className="mr-2 h-4 w-4" />
+                  <span className="flex-1">Theme</span>
+                  <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="flex flex-col gap-2 px-3">
+              <button 
+                onClick={() => navigate('/auth')}
+                className="w-full py-2 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+              >
+                Create account
+              </button>
+              <button 
+                onClick={() => navigate('/auth')}
+                className="w-full py-2 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
+              >
+                Log in
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
@@ -819,7 +845,7 @@ const Campaigns: React.FC = () => {
             <span className={`text-[10px] ${activeFilter === 'featured' ? (isMobileHomeMode ? 'font-semibold text-white' : 'font-semibold text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`}>Discover</span>
           </button>
           <button 
-            onClick={() => navigate('/activity')}
+            onClick={() => user ? navigate('/activity') : navigate('/auth')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} viewBox="0 0 24 24" fill="currentColor">
@@ -837,15 +863,19 @@ const Campaigns: React.FC = () => {
             <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Alerts</span>
           </button>
           <button 
-            onClick={() => navigate('/profile')}
+            onClick={() => user ? navigate('/profile') : navigate('/auth')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className={`text-[10px] font-medium ${isMobileHomeMode ? 'bg-white/20 text-white' : 'bg-black/10 text-black'}`}>
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            {user ? (
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+                <AvatarFallback className={`text-[10px] font-medium ${isMobileHomeMode ? 'bg-white/20 text-white' : 'bg-black/10 text-black'}`}>
+                  {firstName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <User className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} />
+            )}
             <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Profile</span>
           </button>
         </div>
