@@ -58,7 +58,7 @@ const BusinessDashboard: React.FC = () => {
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
               <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">Summer Vibes</h2>
+              <h2 className="text-xl font-semibold mb-1.5 ml-8">Summer Vibes</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
@@ -131,7 +131,7 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 2 - Coffee Culture */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">Coffee Culture</h2>
+              <h2 className="text-xl font-semibold mb-1.5 ml-8">Coffee Culture</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
@@ -204,7 +204,7 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 3 - Street Style */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">Street Style</h2>
+              <h2 className="text-xl font-semibold mb-1.5 ml-8">Street Style</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
