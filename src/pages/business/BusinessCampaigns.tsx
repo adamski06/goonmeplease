@@ -81,7 +81,7 @@ const BusinessCampaigns: React.FC = () => {
                 </div>
                 <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                   <CardContent className="px-8 py-6 h-full">
-                    <div className="flex h-full flex-col justify-between">
+                    <div className="flex h-full flex-col justify-between font-geist">
                       <div className="flex justify-between items-baseline gap-4">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
                         <span className="text-lg font-semibold">100k</span>
@@ -148,7 +148,7 @@ const BusinessCampaigns: React.FC = () => {
                 </div>
                 <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                   <CardContent className="px-8 py-6 h-full">
-                    <div className="flex h-full flex-col justify-between">
+                    <div className="flex h-full flex-col justify-between font-geist">
                       <div className="flex justify-between items-baseline gap-4">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
                         <span className="text-lg font-semibold">50k</span>
@@ -215,7 +215,7 @@ const BusinessCampaigns: React.FC = () => {
                 </div>
                 <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                   <CardContent className="px-8 py-6 h-full">
-                    <div className="flex h-full flex-col justify-between">
+                    <div className="flex h-full flex-col justify-between font-geist">
                       <div className="flex justify-between items-baseline gap-4">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
                         <span className="text-lg font-semibold">25k</span>
