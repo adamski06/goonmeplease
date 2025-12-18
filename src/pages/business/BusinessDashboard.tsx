@@ -64,7 +64,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex items-end gap-4">
+          <div className="flex items-center gap-4">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="p-0 relative">
                 <div className="py-8 px-8">
