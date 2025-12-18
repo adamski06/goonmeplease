@@ -53,7 +53,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Campaigns Section */}
-          <div className="mt-32">
+          <div className="mt-[500px]">
             <h2 className="text-2xl font-bold mb-8 ml-8">Campaigns</h2>
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
