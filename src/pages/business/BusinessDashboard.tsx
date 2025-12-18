@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
@@ -8,12 +8,31 @@ import { Plus } from 'lucide-react';
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const placeholderContainerRef = useRef<HTMLDivElement>(null);
+  const [placeholderCount, setPlaceholderCount] = useState(6);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
+
+  useEffect(() => {
+    const updatePlaceholderCount = () => {
+      if (placeholderContainerRef.current) {
+        const containerWidth = placeholderContainerRef.current.offsetWidth;
+        const placeholderWidth = 24 + 4; // w-6 (24px) + gap (4px)
+        const plusButtonWidth = 24 + 4;
+        const availableWidth = containerWidth - plusButtonWidth;
+        const count = Math.floor(availableWidth / placeholderWidth);
+        setPlaceholderCount(Math.max(1, count));
+      }
+    };
+
+    updatePlaceholderCount();
+    window.addEventListener('resize', updatePlaceholderCount);
+    return () => window.removeEventListener('resize', updatePlaceholderCount);
+  }, []);
 
   if (loading) {
     return (
@@ -28,15 +47,11 @@ const BusinessDashboard: React.FC = () => {
     totalSpent: 45600,
     totalBudget: 100000,
     totalViews: 1250000,
-    totalVideos: 48,
   };
 
   const formatExact = (num: number) => {
     return num.toLocaleString('sv-SE');
   };
-
-  // Mock video placeholders - more to fill the space
-  const videoPlaceholders = Array(12).fill(null);
 
   return (
     <BusinessLayout>
@@ -67,8 +82,8 @@ const BusinessDashboard: React.FC = () => {
                   <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
                   <div className="flex items-center gap-1 mt-4">
                     <p className="text-xl font-bold mr-3 whitespace-nowrap">Amount of videos:</p>
-                    <div className="flex items-center gap-1 flex-1 justify-end">
-                      {videoPlaceholders.map((_, index) => (
+                    <div ref={placeholderContainerRef} className="flex items-center gap-1 flex-1">
+                      {Array(placeholderCount).fill(null).map((_, index) => (
                         <div
                           key={index}
                           className="w-6 h-10 bg-muted/50 border border-border rounded-sm flex-shrink-0"
