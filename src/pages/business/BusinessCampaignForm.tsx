@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, X, Upload, Image, Video } from 'lucide-react';
 
 interface Tier {
   min_views: number;
@@ -34,12 +34,12 @@ const BusinessCampaignForm: React.FC = () => {
     deadline: '',
     total_budget: 0,
   });
-  const [guidelines, setGuidelines] = useState<string[]>(['']);
-  const [tiers, setTiers] = useState<Tier[]>([
-    { min_views: 0, max_views: 1000, rate_per_view: 0.02 },
-    { min_views: 1001, max_views: 10000, rate_per_view: 0.015 },
-    { min_views: 10001, max_views: null, rate_per_view: 0.01 },
-  ]);
+  const [requirements, setRequirements] = useState<string[]>(['']);
+  const [requirementImages, setRequirementImages] = useState<File[]>([]);
+  const [requirementImagePreviews, setRequirementImagePreviews] = useState<string[]>([]);
+  const [campaignVideo, setCampaignVideo] = useState<File | null>(null);
+  const [campaignVideoPreview, setCampaignVideoPreview] = useState<string>('');
+  const [tiers, setTiers] = useState<Tier[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -78,10 +78,10 @@ const BusinessCampaignForm: React.FC = () => {
         total_budget: campaign.total_budget || 0,
       });
 
-      // Parse guidelines from newline-separated string to array
+      // Parse requirements from newline-separated string to array
       if (campaign.guidelines) {
-        const guidelinesArray = campaign.guidelines.split('\n').filter((g: string) => g.trim());
-        setGuidelines(guidelinesArray.length > 0 ? guidelinesArray : ['']);
+        const requirementsArray = campaign.guidelines.split('\n').filter((g: string) => g.trim());
+        setRequirements(requirementsArray.length > 0 ? requirementsArray : ['']);
       }
 
       // Fetch tiers
@@ -110,15 +110,15 @@ const BusinessCampaignForm: React.FC = () => {
 
     setSaving(true);
     try {
-      // Convert guidelines array to newline-separated string
-      const guidelinesString = guidelines.filter(g => g.trim()).join('\n');
+      // Convert requirements array to newline-separated string
+      const requirementsString = requirements.filter(g => g.trim()).join('\n');
 
       const campaignData = {
         business_id: user.id,
         brand_name: formData.brand_name,
         title: formData.title,
         description: formData.description,
-        guidelines: guidelinesString,
+        guidelines: requirementsString,
         deadline: formData.deadline ? new Date(formData.deadline).toISOString() : null,
         total_budget: formData.total_budget,
         is_active: true,
@@ -148,16 +148,18 @@ const BusinessCampaignForm: React.FC = () => {
         campaignId = data.id;
       }
 
-      // Insert tiers
-      const tierData = tiers.map(tier => ({
-        campaign_id: campaignId,
-        min_views: tier.min_views,
-        max_views: tier.max_views,
-        rate_per_view: tier.rate_per_view,
-      }));
+      // Insert tiers only if there are any
+      if (tiers.length > 0) {
+        const tierData = tiers.map(tier => ({
+          campaign_id: campaignId,
+          min_views: tier.min_views,
+          max_views: tier.max_views,
+          rate_per_view: tier.rate_per_view,
+        }));
 
-      const { error: tierError } = await supabase.from('campaign_tiers').insert(tierData);
-      if (tierError) throw tierError;
+        const { error: tierError } = await supabase.from('campaign_tiers').insert(tierData);
+        if (tierError) throw tierError;
+      }
 
       toast({ title: isEditing ? 'Campaign updated!' : 'Campaign created!' });
       navigate('/business/campaigns');
@@ -169,22 +171,58 @@ const BusinessCampaignForm: React.FC = () => {
     }
   };
 
-  const addGuideline = () => {
-    setGuidelines([...guidelines, '']);
+  const addRequirement = () => {
+    setRequirements([...requirements, '']);
   };
 
-  const removeGuideline = (index: number) => {
-    if (guidelines.length > 1) {
-      setGuidelines(guidelines.filter((_, i) => i !== index));
+  const removeRequirement = (index: number) => {
+    if (requirements.length > 1) {
+      setRequirements(requirements.filter((_, i) => i !== index));
     } else {
-      setGuidelines(['']);
+      setRequirements(['']);
     }
   };
 
-  const updateGuideline = (index: number, value: string) => {
-    const newGuidelines = [...guidelines];
-    newGuidelines[index] = value;
-    setGuidelines(newGuidelines);
+  const updateRequirement = (index: number, value: string) => {
+    const newRequirements = [...requirements];
+    newRequirements[index] = value;
+    setRequirements(newRequirements);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const newFiles = Array.from(files);
+      setRequirementImages([...requirementImages, ...newFiles]);
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setRequirementImagePreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setRequirementImages(requirementImages.filter((_, i) => i !== index));
+    setRequirementImagePreviews(requirementImagePreviews.filter((_, i) => i !== index));
+  };
+
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCampaignVideo(file);
+      const url = URL.createObjectURL(file);
+      setCampaignVideoPreview(url);
+    }
+  };
+
+  const removeVideo = () => {
+    setCampaignVideo(null);
+    setCampaignVideoPreview('');
   };
 
   const addTier = () => {
@@ -271,37 +309,107 @@ const BusinessCampaignForm: React.FC = () => {
                     rows={3}
                   />
                 </div>
+
+                {/* Video Upload */}
+                <div className="space-y-2">
+                  <Label>Campaign Video</Label>
+                  {campaignVideoPreview ? (
+                    <div className="relative w-full max-w-md">
+                      <video 
+                        src={campaignVideoPreview} 
+                        controls 
+                        className="w-full rounded-lg border border-border"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={removeVideo}
+                        className="absolute top-2 right-2 bg-background/80 hover:bg-destructive hover:text-destructive-foreground"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                      <Video className="h-8 w-8 text-muted-foreground mb-2" />
+                      <span className="text-sm text-muted-foreground">Click to upload video</span>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        onChange={handleVideoUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
                 
-                {/* Guidelines as list */}
+                {/* Requirements as list */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label>Guidelines</Label>
-                    <Button type="button" variant="ghost" size="sm" onClick={addGuideline} className="h-7 px-2">
+                    <Label>Requirements</Label>
+                    <Button type="button" variant="ghost" size="sm" onClick={addRequirement} className="h-7 px-2">
                       <Plus className="h-4 w-4 mr-1" />
                       Add
                     </Button>
                   </div>
                   <div className="space-y-2">
-                    {guidelines.map((guideline, index) => (
+                    {requirements.map((requirement, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <span className="text-muted-foreground text-sm w-4">•</span>
                         <Input
-                          value={guideline}
-                          onChange={(e) => updateGuideline(index, e.target.value)}
-                          placeholder="Enter a guideline..."
+                          value={requirement}
+                          onChange={(e) => updateRequirement(index, e.target.value)}
+                          placeholder="Enter a requirement..."
                           className="flex-1"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          onClick={() => removeGuideline(index)}
+                          onClick={() => removeRequirement(index)}
                           className="h-8 w-8 text-muted-foreground hover:text-red-500"
                         >
                           <X className="h-4 w-4" />
                         </Button>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Requirement Images */}
+                <div className="space-y-2">
+                  <Label>Reference Images</Label>
+                  <div className="flex flex-wrap gap-3">
+                    {requirementImagePreviews.map((preview, index) => (
+                      <div key={index} className="relative w-24 h-24">
+                        <img 
+                          src={preview} 
+                          alt={`Reference ${index + 1}`} 
+                          className="w-full h-full object-cover rounded-lg border border-border"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 h-6 w-6 bg-background border border-border rounded-full hover:bg-destructive hover:text-destructive-foreground"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                    <label className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                      <Image className="h-6 w-6 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground mt-1">Add</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 </div>
               </CardContent>
@@ -317,37 +425,42 @@ const BusinessCampaignForm: React.FC = () => {
                 </Button>
               </CardHeader>
               <CardContent className="space-y-4">
-                {tiers.map((tier, index) => (
-                  <div key={index} className="flex items-end gap-3 p-3 bg-muted/50 rounded-lg">
-                    <div className="flex-1 space-y-2">
-                      <Label className="text-xs">Min Views</Label>
-                      <Input
-                        type="number"
-                        value={tier.min_views}
-                        onChange={(e) => updateTier(index, 'min_views', parseInt(e.target.value) || 0)}
-                        min={0}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <Label className="text-xs">Max Views (empty = unlimited)</Label>
-                      <Input
-                        type="number"
-                        value={tier.max_views ?? ''}
-                        onChange={(e) => updateTier(index, 'max_views', e.target.value ? parseInt(e.target.value) : null)}
-                        placeholder="Unlimited"
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <Label className="text-xs">Rate per View (SEK)</Label>
-                      <Input
-                        type="number"
-                        step="0.001"
-                        value={tier.rate_per_view}
-                        onChange={(e) => updateTier(index, 'rate_per_view', parseFloat(e.target.value) || 0)}
-                        min={0}
-                      />
-                    </div>
-                    {tiers.length > 1 && (
+                {tiers.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <p className="text-sm">No payment tiers added yet.</p>
+                    <p className="text-xs mt-1">Click "Add Tier" to create payment tiers based on views.</p>
+                  </div>
+                ) : (
+                  tiers.map((tier, index) => (
+                    <div key={index} className="flex items-end gap-3 p-3 bg-muted/50 rounded-lg">
+                      <div className="flex-1 space-y-2">
+                        <Label className="text-xs">Min Views</Label>
+                        <Input
+                          type="number"
+                          value={tier.min_views}
+                          onChange={(e) => updateTier(index, 'min_views', parseInt(e.target.value) || 0)}
+                          min={0}
+                        />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <Label className="text-xs">Max Views (empty = unlimited)</Label>
+                        <Input
+                          type="number"
+                          value={tier.max_views ?? ''}
+                          onChange={(e) => updateTier(index, 'max_views', e.target.value ? parseInt(e.target.value) : null)}
+                          placeholder="Unlimited"
+                        />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <Label className="text-xs">Rate per View (SEK)</Label>
+                        <Input
+                          type="number"
+                          step="0.001"
+                          value={tier.rate_per_view}
+                          onChange={(e) => updateTier(index, 'rate_per_view', parseFloat(e.target.value) || 0)}
+                          min={0}
+                        />
+                      </div>
                       <Button
                         type="button"
                         variant="ghost"
@@ -357,9 +470,9 @@ const BusinessCampaignForm: React.FC = () => {
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
 
