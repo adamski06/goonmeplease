@@ -44,9 +44,9 @@ const BusinessDashboard: React.FC = () => {
 
   // Mock stats - will be replaced with real data
   const stats = {
-    totalSpent: 45600,
+    totalSpent: 47823,
     totalBudget: 100000,
-    totalViews: 1250000,
+    totalViews: 1284739,
   };
 
   const formatExact = (num: number) => {
