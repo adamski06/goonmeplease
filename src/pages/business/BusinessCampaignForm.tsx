@@ -314,26 +314,26 @@ const BusinessCampaignForm: React.FC = () => {
                 <div className="space-y-2">
                   <Label>Campaign Video</Label>
                   {campaignVideoPreview ? (
-                    <div className="relative w-full max-w-md">
+                    <div className="relative w-32 aspect-[9/16]">
                       <video 
                         src={campaignVideoPreview} 
                         controls 
-                        className="w-full rounded-lg border border-border"
+                        className="w-full h-full object-cover rounded-lg border border-border"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
                         onClick={removeVideo}
-                        className="absolute top-2 right-2 bg-background/80 hover:bg-destructive hover:text-destructive-foreground"
+                        className="absolute top-2 right-2 h-6 w-6 bg-background/80 hover:bg-destructive hover:text-destructive-foreground"
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-3 w-3" />
                       </Button>
                     </div>
                   ) : (
-                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                    <label className="flex flex-col items-center justify-center w-32 aspect-[9/16] border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
                       <Video className="h-8 w-8 text-muted-foreground mb-2" />
-                      <span className="text-sm text-muted-foreground">Click to upload video</span>
+                      <span className="text-xs text-muted-foreground text-center px-2">Upload video</span>
                       <input
                         type="file"
                         accept="video/*"
