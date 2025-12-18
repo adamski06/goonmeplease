@@ -64,24 +64,22 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex items-stretch gap-4">
+          <div className="flex items-end gap-4">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="p-0 h-full relative">
-                <div className="py-8 px-8 h-full flex items-center">
+              <CardContent className="p-0 relative">
+                <div className="py-8 px-8">
                   <p className="text-4xl font-bold leading-none">{formatExact(stats.totalSpent)} SEK</p>
+                  <p className="text-xl font-bold mt-2">/ {formatExact(stats.totalBudget)} SEK</p>
                 </div>
-                <p className="text-xl font-bold absolute left-8 bottom-10">/ {formatExact(stats.totalBudget)} SEK</p>
               </CardContent>
             </Card>
 
             <p className="text-4xl font-bold self-center">=</p>
 
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="p-0 h-full">
-                <div className="py-8 px-8 h-full flex flex-col">
-                  <div className="flex-1 flex items-center">
-                    <p className="text-7xl font-bold leading-none translate-y-1">{formatExact(stats.totalViews)} views</p>
-                  </div>
+              <CardContent className="p-0">
+                <div className="py-8 px-8">
+                  <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
                   <div className="flex items-center gap-1 mt-4 ml-8">
                     <p className="text-xl font-bold mr-3 whitespace-nowrap">UGC:</p>
                     <div className="flex items-center gap-1">
