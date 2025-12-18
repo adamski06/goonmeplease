@@ -10,6 +10,7 @@ import ugc3 from '@/assets/ugc/ugc-placeholder-3.jpg';
 import ugc4 from '@/assets/ugc/ugc-placeholder-4.jpg';
 import ugc5 from '@/assets/ugc/ugc-placeholder-5.jpg';
 import ugc6 from '@/assets/ugc/ugc-placeholder-6.jpg';
+import jarlaLogo from '@/assets/jarla-logo.png';
 
 const ugcImages = [ugc1, ugc2, ugc3, ugc4, ugc5, ugc6];
 
@@ -47,9 +48,12 @@ const BusinessDashboard: React.FC = () => {
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground">Home</h1>
-            <p className="text-muted-foreground mt-1">Overview of your performance</p>
+          <div className="mb-8 flex items-center gap-4">
+            <img src={jarlaLogo} alt="Company logo" className="h-12 w-12 object-contain" />
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Jarla</h1>
+              <p className="text-muted-foreground">Overview of your performance</p>
+            </div>
           </div>
 
           {/* Campaigns Section */}
