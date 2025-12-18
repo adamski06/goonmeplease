@@ -48,9 +48,9 @@ const BusinessDashboard: React.FC = () => {
           {/* Total Views Card */}
           <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] inline-block mt-8 opacity-0 animate-fade-in" style={{ animationDelay: '50ms', animationFillMode: 'forwards' }}>
             <CardContent className="px-8 py-3">
-              <div className="flex items-center gap-4">
-                <span className="text-9xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
-                <span className="text-9xl font-normal font-montserrat">views</span>
+              <div className="flex items-center gap-3">
+                <span className="text-6xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
+                <span className="text-6xl font-normal font-montserrat">views</span>
               </div>
             </CardContent>
           </Card>
