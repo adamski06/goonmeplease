@@ -64,39 +64,29 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex items-center gap-4">
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="p-0 relative">
-                <div className="py-8 px-8">
-                  <p className="text-4xl font-bold leading-none">{formatExact(stats.totalSpent)} SEK</p>
-                  <p className="text-xl font-bold mt-2">/ {formatExact(stats.totalBudget)} SEK</p>
+          <div className="inline-flex flex-col">
+            <div className="border border-border px-8 py-6">
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-normal">{formatExact(stats.totalSpent)} =</span>
+                <span className="text-6xl font-normal">{formatExact(stats.totalViews)}</span>
+              </div>
+            </div>
+            <div className="border border-t-0 border-border px-8 py-4">
+              <div className="flex items-center gap-3">
+                <span className="text-xl font-normal">UGC:</span>
+                <div className="flex items-center gap-1">
+                  {Array(12).fill(null).map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-5 h-8 bg-muted/50 border border-border"
+                    />
+                  ))}
+                  <button className="w-5 h-8 border border-dashed border-border flex items-center justify-center hover:bg-muted/30 transition-colors">
+                    <Plus className="h-3 w-3 text-muted-foreground" />
+                  </button>
                 </div>
-              </CardContent>
-            </Card>
-
-            <p className="text-4xl font-bold self-center">=</p>
-
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="p-0">
-                <div className="py-8 px-8">
-                  <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
-                  <div className="flex items-center gap-1 mt-4 ml-8">
-                    <p className="text-xl font-bold mr-3 whitespace-nowrap">UGC:</p>
-                    <div className="flex items-center gap-1">
-                      {Array(8).fill(null).map((_, index) => (
-                        <div
-                          key={index}
-                          className="w-6 h-10 bg-muted/50 border border-border rounded-sm"
-                        />
-                      ))}
-                      <button className="w-6 h-10 bg-muted/30 border border-dashed border-border rounded-sm flex items-center justify-center hover:bg-muted/50 transition-colors">
-                        <Plus className="h-4 w-4 text-muted-foreground" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
