@@ -277,7 +277,7 @@ const Auth: React.FC = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       autoComplete="name"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
                     />
                   </div>
                   <div className="space-y-2">
@@ -290,7 +290,7 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
                     />
                   </div>
                   <div className="space-y-2">
@@ -303,7 +303,7 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="new-password"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
                     />
                   </div>
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
@@ -335,7 +335,7 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
                     />
                   </div>
                   <div className="space-y-2">
@@ -348,7 +348,7 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="current-password"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
                     />
                   </div>
                   <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
