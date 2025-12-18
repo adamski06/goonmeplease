@@ -61,19 +61,14 @@ const BusinessDashboard: React.FC = () => {
 
                 <div className="h-16 w-px bg-border" />
 
-                {/* Traction - Right (Stacked) */}
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <Eye className="h-4 w-4 text-muted-foreground" />
+                {/* Traction - Right */}
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Eye className="h-5 w-5 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Total Views</p>
-                    <p className="text-lg font-bold">{formatNumber(stats.totalViews)}</p>
                   </div>
-
-                  <div className="flex items-center gap-3">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Creators</p>
-                    <p className="text-lg font-bold">{stats.totalCreators}</p>
-                  </div>
+                  <p className="text-6xl font-bold">{formatNumber(stats.totalViews)}</p>
+                  <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
                 </div>
               </div>
             </CardContent>
