@@ -64,30 +64,32 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="inline-flex flex-col">
-            <div className="border border-border px-8 py-6">
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-normal">{formatExact(stats.totalSpent)} =</span>
-                <span className="text-6xl font-normal">{formatExact(stats.totalViews)}</span>
-              </div>
-            </div>
-            <div className="border border-t-0 border-border px-8 py-4">
-              <div className="flex items-center gap-3">
-                <span className="text-xl font-normal">UGC:</span>
-                <div className="flex items-center gap-1">
-                  {Array(12).fill(null).map((_, index) => (
-                    <div
-                      key={index}
-                      className="w-5 h-8 bg-muted/50 border border-border"
-                    />
-                  ))}
-                  <button className="w-5 h-8 border border-dashed border-border flex items-center justify-center hover:bg-muted/30 transition-colors">
-                    <Plus className="h-3 w-3 text-muted-foreground" />
-                  </button>
+          <Card className="bg-card border-border rounded-none inline-block">
+            <CardContent className="p-0">
+              <div className="px-8 py-6 border-b border-border">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-normal">{formatExact(stats.totalSpent)} =</span>
+                  <span className="text-6xl font-normal">{formatExact(stats.totalViews)}</span>
                 </div>
               </div>
-            </div>
-          </div>
+              <div className="px-8 py-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-xl font-normal">UGC:</span>
+                  <div className="flex items-center gap-1">
+                    {Array(12).fill(null).map((_, index) => (
+                      <div
+                        key={index}
+                        className="w-5 h-8 bg-muted/50 border border-border"
+                      />
+                    ))}
+                    <button className="w-5 h-8 border border-dashed border-border flex items-center justify-center hover:bg-muted/30 transition-colors">
+                      <Plus className="h-3 w-3 text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </BusinessLayout>
