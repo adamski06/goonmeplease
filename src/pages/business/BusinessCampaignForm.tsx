@@ -199,7 +199,7 @@ const BusinessCampaignForm: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
               </CardHeader>
@@ -250,7 +250,7 @@ const BusinessCampaignForm: React.FC = () => {
             </Card>
 
             {/* Payment Tiers */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Payment Tiers</CardTitle>
                 <Button type="button" variant="outline" size="sm" onClick={addTier}>
@@ -306,7 +306,7 @@ const BusinessCampaignForm: React.FC = () => {
             </Card>
 
             {/* Budget & Deadline */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardHeader>
                 <CardTitle>Budget & Deadline</CardTitle>
               </CardHeader>

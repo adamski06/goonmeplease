@@ -142,7 +142,7 @@ const BusinessCampaigns: React.FC = () => {
           {loadingCampaigns ? (
             <div className="text-center py-12 text-muted-foreground">Loading campaigns...</div>
           ) : filteredCampaigns.length === 0 ? (
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="py-12 text-center">
                 <p className="text-muted-foreground mb-4">
                   {campaigns.length === 0 
@@ -161,7 +161,7 @@ const BusinessCampaigns: React.FC = () => {
               {filteredCampaigns.map((campaign) => (
                 <Card 
                   key={campaign.id} 
-                  className="bg-card/50 backdrop-blur-sm border-border hover:bg-card/70 transition-colors cursor-pointer"
+                  className="bg-card/50 backdrop-blur-sm border-border hover:bg-card/70 transition-colors cursor-pointer rounded-none"
                   onClick={() => navigate(`/business/campaigns/${campaign.id}`)}
                 >
                   <CardContent className="p-4">

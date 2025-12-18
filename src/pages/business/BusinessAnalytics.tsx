@@ -113,7 +113,7 @@ const BusinessAnalytics: React.FC = () => {
 
           {/* Overview Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Eye className="h-4 w-4" />
@@ -122,7 +122,7 @@ const BusinessAnalytics: React.FC = () => {
                 <p className="text-3xl font-bold mt-2">{formatNumber(totals.views)}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Users className="h-4 w-4" />
@@ -131,7 +131,7 @@ const BusinessAnalytics: React.FC = () => {
                 <p className="text-3xl font-bold mt-2">{totals.submissions}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <TrendingUp className="h-4 w-4" />
@@ -140,7 +140,7 @@ const BusinessAnalytics: React.FC = () => {
                 <p className="text-3xl font-bold mt-2">{totals.approved}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <DollarSign className="h-4 w-4" />
@@ -156,7 +156,7 @@ const BusinessAnalytics: React.FC = () => {
           </div>
 
           {/* Campaign Breakdown */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border">
+          <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
             <CardHeader>
               <CardTitle>Campaign Performance</CardTitle>
             </CardHeader>
