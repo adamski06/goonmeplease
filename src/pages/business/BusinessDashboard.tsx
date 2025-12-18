@@ -81,7 +81,7 @@ const BusinessDashboard: React.FC = () => {
                 <div className="py-8 px-8 h-full flex flex-col justify-center">
                   <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
                   <div className="flex items-center gap-1 mt-4">
-                    <p className="text-xl font-bold mr-3 whitespace-nowrap">Amount of videos:</p>
+                    <p className="text-xl font-bold mr-3 whitespace-nowrap">UGC:</p>
                     <div ref={placeholderContainerRef} className="flex items-center gap-1 flex-1">
                       {Array(placeholderCount).fill(null).map((_, index) => (
                         <div
