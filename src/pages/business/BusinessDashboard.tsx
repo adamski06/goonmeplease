@@ -53,9 +53,9 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex gap-3 ml-8">
+          <div className="flex items-stretch gap-3 ml-8">
             {/* Left column - stacked cards */}
-            <div className="inline-flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <Card className="bg-black text-white rounded-2xl shadow-sm">
                 <CardContent className="px-8 py-3">
                   <div className="flex items-baseline gap-3">
@@ -85,7 +85,7 @@ const BusinessDashboard: React.FC = () => {
             </div>
 
             {/* Right column - tall card with stats */}
-            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm self-stretch">
+            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
               <CardContent className="px-5 py-3 h-full flex flex-col justify-between">
                 <div className="space-y-2">
                   <div className="flex justify-between items-baseline">
