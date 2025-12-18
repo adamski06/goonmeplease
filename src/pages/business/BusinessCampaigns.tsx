@@ -79,8 +79,8 @@ const BusinessCampaigns: React.FC = () => {
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
-                  <CardContent className="px-8 py-6 h-full">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[140px]">
+                  <CardContent className="px-6 py-4 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
@@ -109,6 +109,8 @@ const BusinessCampaigns: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
+                {/* iPhone aspect ratio placeholder (9:19.5) */}
+                <div className="bg-muted rounded-[4px] flex-1 min-w-[100px]" style={{ aspectRatio: '9/19.5' }} />
               </div>
             </Card>
 
@@ -144,8 +146,8 @@ const BusinessCampaigns: React.FC = () => {
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
-                  <CardContent className="px-8 py-6 h-full">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[140px]">
+                  <CardContent className="px-6 py-4 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
@@ -174,6 +176,8 @@ const BusinessCampaigns: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
+                {/* iPhone aspect ratio placeholder (9:19.5) */}
+                <div className="bg-muted rounded-[4px] flex-1 min-w-[100px]" style={{ aspectRatio: '9/19.5' }} />
               </div>
             </Card>
 
@@ -209,8 +213,8 @@ const BusinessCampaigns: React.FC = () => {
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
-                  <CardContent className="px-8 py-6 h-full">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[140px]">
+                  <CardContent className="px-6 py-4 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
                         <span className="text-base text-muted-foreground font-bold">Budget</span>
@@ -239,6 +243,8 @@ const BusinessCampaigns: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
+                {/* iPhone aspect ratio placeholder (9:19.5) */}
+                <div className="bg-muted rounded-[4px] flex-1 min-w-[100px]" style={{ aspectRatio: '9/19.5' }} />
               </div>
             </Card>
           </div>
