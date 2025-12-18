@@ -51,8 +51,8 @@ const BusinessDashboard: React.FC = () => {
             <CardContent className="py-6 px-8">
               <div className="flex items-center justify-between gap-12">
                 {/* Budget - Left */}
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Money Spent</p>
                   </div>
@@ -62,8 +62,8 @@ const BusinessDashboard: React.FC = () => {
                 <div className="h-16 w-px bg-border" />
 
                 {/* Traction - Right */}
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-2 mb-1">
                     <Eye className="h-5 w-5 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Total Views</p>
                   </div>
