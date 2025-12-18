@@ -84,25 +84,25 @@ const BusinessDashboard: React.FC = () => {
               </Card>
             </div>
 
-            {/* Right column - tall card with stats */}
+            {/* Right column - stats */}
             <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
-              <CardContent className="px-5 py-3 h-full flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-baseline">
+              <CardContent className="px-4 py-2 h-full flex flex-col justify-center">
+                <div className="space-y-1">
+                  <div className="flex justify-between items-baseline gap-4">
                     <span className="text-xs text-muted-foreground">Active campaigns</span>
-                    <span className="text-lg font-bold font-montserrat">4</span>
+                    <span className="text-sm font-semibold">4</span>
                   </div>
-                  <div className="flex justify-between items-baseline">
+                  <div className="flex justify-between items-baseline gap-4">
                     <span className="text-xs text-muted-foreground">Pending review</span>
-                    <span className="text-lg font-bold font-montserrat">12</span>
+                    <span className="text-sm font-semibold">12</span>
                   </div>
-                  <div className="flex justify-between items-baseline">
+                  <div className="flex justify-between items-baseline gap-4">
                     <span className="text-xs text-muted-foreground">Approved</span>
-                    <span className="text-lg font-bold font-montserrat">38</span>
+                    <span className="text-sm font-semibold">38</span>
                   </div>
-                  <div className="flex justify-between items-baseline">
+                  <div className="flex justify-between items-baseline gap-4">
                     <span className="text-xs text-muted-foreground">Avg. CPV</span>
-                    <span className="text-lg font-bold font-montserrat">0.037 sek</span>
+                    <span className="text-sm font-semibold">0.037 sek</span>
                   </div>
                 </div>
               </CardContent>
