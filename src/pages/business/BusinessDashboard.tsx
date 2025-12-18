@@ -52,10 +52,12 @@ const BusinessDashboard: React.FC = () => {
             <p className="text-muted-foreground mt-1">Overview of your performance</p>
           </div>
 
-          {/* Dashboard Sections */}
-          <div className="space-y-16 mt-12">
-            {/* Campaign 1 - Summer Vibes */}
-            <div>
+          {/* Campaigns Section */}
+          <div className="mt-32">
+            <h2 className="text-2xl font-bold mb-8 ml-8">Campaigns</h2>
+            <div className="space-y-16">
+              {/* Campaign 1 - Summer Vibes */}
+              <div>
               <h2 className="text-xl font-semibold mb-4 ml-8">Summer Vibes</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
@@ -271,6 +273,7 @@ const BusinessDashboard: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
+            </div>
             </div>
           </div>
         </div>
