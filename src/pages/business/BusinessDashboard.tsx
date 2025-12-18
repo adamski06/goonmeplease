@@ -4,15 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
 
-import ugc1 from '@/assets/ugc/ugc-placeholder-1.jpg';
-import ugc2 from '@/assets/ugc/ugc-placeholder-2.jpg';
-import ugc3 from '@/assets/ugc/ugc-placeholder-3.jpg';
-import ugc4 from '@/assets/ugc/ugc-placeholder-4.jpg';
-import ugc5 from '@/assets/ugc/ugc-placeholder-5.jpg';
-import ugc6 from '@/assets/ugc/ugc-placeholder-6.jpg';
 import defaultAvatar from '@/assets/default-avatar.png';
-
-const ugcImages = [ugc1, ugc2, ugc3, ugc4, ugc5, ugc6];
 
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
@@ -73,17 +65,9 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">User Generated Videos:</span>
-                          <div className="flex items-center gap-1">
-                            {ugcImages.map((img, index) => (
-                              <img
-                                key={index}
-                                src={img}
-                                alt={`UGC video ${index + 1}`}
-                                className="w-5 h-8 object-cover rounded-none"
-                              />
-                            ))}
-                          </div>
+                          <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">100 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -145,17 +129,9 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">User Generated Videos:</span>
-                          <div className="flex items-center gap-1">
-                            {ugcImages.map((img, index) => (
-                              <img
-                                key={index}
-                                src={img}
-                                alt={`UGC video ${index + 1}`}
-                                className="w-5 h-8 object-cover rounded-none"
-                              />
-                            ))}
-                          </div>
+                          <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">50 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -217,17 +193,9 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">User Generated Videos:</span>
-                          <div className="flex items-center gap-1">
-                            {ugcImages.map((img, index) => (
-                              <img
-                                key={index}
-                                src={img}
-                                alt={`UGC video ${index + 1}`}
-                                className="w-5 h-8 object-cover rounded-none"
-                              />
-                            ))}
-                          </div>
+                          <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">25 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
