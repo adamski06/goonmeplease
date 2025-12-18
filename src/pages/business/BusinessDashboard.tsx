@@ -46,7 +46,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Card */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border max-w-2xl rounded-none">
+          <Card className="bg-card/50 backdrop-blur-sm border-border max-w-4xl rounded-none">
             <CardContent className="py-6 px-8">
               <div className="flex items-center">
                 {/* Budget - Left */}
