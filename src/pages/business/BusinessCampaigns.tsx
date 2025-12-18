@@ -48,11 +48,11 @@ const BusinessCampaigns: React.FC = () => {
 
           <div className="space-y-16">
             {/* Campaign 1 - Summer Vibes */}
-            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-sm pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-[2px] pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
               <h2 className="text-2xl font-semibold mt-2 mb-3">Summer Vibes</h2>
               <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
                         <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
@@ -60,7 +60,7 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
@@ -69,17 +69,17 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
-                          <div key={i} className="w-8 h-14 bg-muted rounded-sm" />
+                          <div key={i} className="w-8 h-14 bg-muted rounded-[2px]" />
                         ))}
                       </div>
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
                   <CardContent className="px-8 py-6 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
@@ -113,11 +113,11 @@ const BusinessCampaigns: React.FC = () => {
             </Card>
 
             {/* Campaign 2 - Coffee Culture */}
-            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-sm pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-[2px] pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
               <h2 className="text-2xl font-semibold mt-2 mb-3">Coffee Culture</h2>
               <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
                         <span className="text-6xl font-bold font-montserrat">618 234</span>
@@ -125,7 +125,7 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
@@ -134,17 +134,17 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
-                          <div key={i} className="w-8 h-14 bg-muted rounded-sm" />
+                          <div key={i} className="w-8 h-14 bg-muted rounded-[2px]" />
                         ))}
                       </div>
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
                   <CardContent className="px-8 py-6 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
@@ -178,11 +178,11 @@ const BusinessCampaigns: React.FC = () => {
             </Card>
 
             {/* Campaign 3 - Street Style */}
-            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-sm pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+            <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-[2px] pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)] opacity-0 animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
               <h2 className="text-2xl font-semibold mt-2 mb-3">Street Style</h2>
               <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-center gap-3">
                         <span className="text-6xl font-bold font-montserrat">241 567</span>
@@ -190,7 +190,7 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
@@ -199,17 +199,17 @@ const BusinessCampaigns: React.FC = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-6 py-2">
                       <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
-                          <div key={i} className="w-8 h-14 bg-muted rounded-sm" />
+                          <div key={i} className="w-8 h-14 bg-muted rounded-[2px]" />
                         ))}
                       </div>
                     </CardContent>
                   </Card>
                 </div>
-                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-sm shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-[2px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
                   <CardContent className="px-8 py-6 h-full">
                     <div className="flex h-full flex-col justify-between">
                       <div className="flex justify-between items-baseline">
