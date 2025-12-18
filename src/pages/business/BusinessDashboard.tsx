@@ -53,29 +53,56 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="inline-flex flex-col gap-2 ml-8">
-            <Card className="bg-black text-white rounded-2xl shadow-sm">
-              <CardContent className="px-8 py-3">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
-                  <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
-                  <span className="text-6xl font-bold font-montserrat">views</span>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
-              <CardContent className="px-6 py-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">User Generated Videos:</span>
-                  <div className="flex items-center gap-1">
-                    {ugcImages.map((img, index) => (
-                      <img
-                        key={index}
-                        src={img}
-                        alt={`UGC video ${index + 1}`}
-                        className="w-5 h-8 object-cover rounded-sm"
-                      />
-                    ))}
+          <div className="flex gap-3 ml-8">
+            {/* Left column - stacked cards */}
+            <div className="inline-flex flex-col gap-2">
+              <Card className="bg-black text-white rounded-2xl shadow-sm">
+                <CardContent className="px-8 py-3">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
+                    <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
+                    <span className="text-6xl font-bold font-montserrat">views</span>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                <CardContent className="px-6 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">User Generated Videos:</span>
+                    <div className="flex items-center gap-1">
+                      {ugcImages.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`UGC video ${index + 1}`}
+                          className="w-5 h-8 object-cover rounded-sm"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right column - tall card with stats */}
+            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm self-stretch">
+              <CardContent className="px-5 py-3 h-full flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Active campaigns</span>
+                    <span className="text-lg font-bold font-montserrat">4</span>
+                  </div>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Pending review</span>
+                    <span className="text-lg font-bold font-montserrat">12</span>
+                  </div>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Approved</span>
+                    <span className="text-lg font-bold font-montserrat">38</span>
+                  </div>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Avg. CPV</span>
+                    <span className="text-lg font-bold font-montserrat">0.037 sek</span>
                   </div>
                 </div>
               </CardContent>
