@@ -773,7 +773,7 @@ const Campaigns: React.FC = () => {
         <div className="mt-auto px-3 pb-2">
           <button 
             onClick={() => navigate('/landing')}
-            className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-1 text-left transition-all"
+            className="text-base lg:text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-1 text-left transition-all"
           >
             What is Jarla?
           </button>
