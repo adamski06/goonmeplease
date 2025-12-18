@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,11 +45,12 @@ const TikTokColoredIcon = ({ className = "w-12 h-12" }: { className?: string }) 
 );
 
 const Auth: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(searchParams.get('mode') !== 'login');
   const [signUpStep, setSignUpStep] = useState(1);
   const [devMode, setDevMode] = useState(false);
   const { signIn, signUp, user, loading } = useAuth();

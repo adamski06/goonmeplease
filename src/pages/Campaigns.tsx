@@ -813,13 +813,13 @@ const Campaigns: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-2 px-3">
               <button 
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/auth?mode=signup')}
                 className="w-full py-2 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Create account
               </button>
               <button 
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/auth?mode=login')}
                 className="w-full py-2 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
               >
                 Log in
@@ -1188,7 +1188,7 @@ const Campaigns: React.FC = () => {
             <button 
               onClick={() => {
                 setShowAuthPrompt(false);
-                navigate('/auth');
+                navigate('/auth?mode=signup');
               }}
               className="w-full py-3 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
             >
@@ -1197,7 +1197,7 @@ const Campaigns: React.FC = () => {
             <button 
               onClick={() => {
                 setShowAuthPrompt(false);
-                navigate('/auth');
+                navigate('/auth?mode=login');
               }}
               className="w-full py-3 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
             >
