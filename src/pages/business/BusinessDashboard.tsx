@@ -77,7 +77,7 @@ const BusinessDashboard: React.FC = () => {
             <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl inline-block shadow-sm">
               <CardContent className="px-6 py-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-normal">UGC:</span>
+                  <span className="text-sm font-medium">User Generated Videos:</span>
                   <div className="flex items-center gap-1">
                     {Array(12).fill(null).map((_, index) => (
                       <div
