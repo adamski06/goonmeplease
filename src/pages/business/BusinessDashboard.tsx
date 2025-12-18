@@ -54,9 +54,9 @@ const BusinessDashboard: React.FC = () => {
 
           {/* Dashboard Sections */}
           <div className="space-y-16 mt-12">
-            {/* Section 1 - Overall Performance */}
+            {/* Campaign 1 - Summer Vibes */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">Overall Performance</h2>
+              <h2 className="text-xl font-semibold mb-4 ml-8">Summer Vibes</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm">
@@ -127,16 +127,16 @@ const BusinessDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 2 - This Month */}
+            {/* Campaign 2 - Coffee Culture */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">This Month</h2>
+              <h2 className="text-xl font-semibold mb-4 ml-8">Coffee Culture</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-baseline gap-3">
-                        <span className="text-3xl font-normal font-montserrat">12 340 sek =</span>
-                        <span className="text-6xl font-bold font-montserrat">328 412</span>
+                        <span className="text-3xl font-normal font-montserrat">23 156 sek =</span>
+                        <span className="text-6xl font-bold font-montserrat">618 234</span>
                         <span className="text-6xl font-bold font-montserrat">views</span>
                       </div>
                     </CardContent>
@@ -146,7 +146,7 @@ const BusinessDashboard: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">User Generated Videos:</span>
                         <div className="flex items-center gap-1">
-                          {ugcImages.slice(0, 3).map((img, index) => (
+                          {ugcImages.map((img, index) => (
                             <img
                               key={index}
                               src={img}
@@ -164,35 +164,35 @@ const BusinessDashboard: React.FC = () => {
                     <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Campaigns</span>
-                        <span className="text-sm font-semibold">2</span>
+                        <span className="text-sm font-semibold">1</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Budget</span>
-                        <span className="text-sm font-semibold">25k</span>
+                        <span className="text-sm font-semibold">50k</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Pending</span>
-                        <span className="text-sm font-semibold">5</span>
+                        <span className="text-sm font-semibold">4</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Left</span>
-                        <span className="text-sm font-semibold">13k</span>
+                        <span className="text-sm font-semibold">27k</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Approved</span>
-                        <span className="text-sm font-semibold">8</span>
+                        <span className="text-sm font-semibold">15</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">CPV</span>
-                        <span className="text-sm font-semibold">0.038</span>
+                        <span className="text-sm font-semibold">0.037</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Creators</span>
-                        <span className="text-sm font-semibold">6</span>
+                        <span className="text-sm font-semibold">11</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Eng.</span>
-                        <span className="text-sm font-semibold">5.1%</span>
+                        <span className="text-sm font-semibold">5.8%</span>
                       </div>
                     </div>
                   </CardContent>
@@ -200,16 +200,16 @@ const BusinessDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 3 - Top Campaign */}
+            {/* Campaign 3 - Street Style */}
             <div>
-              <h2 className="text-xl font-semibold mb-4 ml-8">Top Campaign: Summer Vibes</h2>
+              <h2 className="text-xl font-semibold mb-4 ml-8">Street Style</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-baseline gap-3">
-                        <span className="text-3xl font-normal font-montserrat">18 750 sek =</span>
-                        <span className="text-6xl font-bold font-montserrat">512 893</span>
+                        <span className="text-3xl font-normal font-montserrat">8 943 sek =</span>
+                        <span className="text-6xl font-bold font-montserrat">241 567</span>
                         <span className="text-6xl font-bold font-montserrat">views</span>
                       </div>
                     </CardContent>
@@ -219,7 +219,7 @@ const BusinessDashboard: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">User Generated Videos:</span>
                         <div className="flex items-center gap-1">
-                          {ugcImages.slice(0, 4).map((img, index) => (
+                          {ugcImages.map((img, index) => (
                             <img
                               key={index}
                               src={img}
@@ -236,36 +236,36 @@ const BusinessDashboard: React.FC = () => {
                   <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
                     <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                       <div className="flex justify-between items-baseline gap-3">
-                        <span className="text-xs text-muted-foreground">Creators</span>
-                        <span className="text-sm font-semibold">12</span>
+                        <span className="text-xs text-muted-foreground">Campaigns</span>
+                        <span className="text-sm font-semibold">1</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Budget</span>
-                        <span className="text-sm font-semibold">30k</span>
+                        <span className="text-sm font-semibold">25k</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Pending</span>
-                        <span className="text-sm font-semibold">3</span>
+                        <span className="text-sm font-semibold">7</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Left</span>
-                        <span className="text-sm font-semibold">11k</span>
+                        <span className="text-sm font-semibold">16k</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Approved</span>
-                        <span className="text-sm font-semibold">18</span>
+                        <span className="text-sm font-semibold">9</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">CPV</span>
-                        <span className="text-sm font-semibold">0.036</span>
+                        <span className="text-sm font-semibold">0.037</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
-                        <span className="text-xs text-muted-foreground">Reach</span>
-                        <span className="text-sm font-semibold">89k</span>
+                        <span className="text-xs text-muted-foreground">Creators</span>
+                        <span className="text-sm font-semibold">8</span>
                       </div>
                       <div className="flex justify-between items-baseline gap-3">
                         <span className="text-xs text-muted-foreground">Eng.</span>
-                        <span className="text-sm font-semibold">6.3%</span>
+                        <span className="text-sm font-semibold">3.9%</span>
                       </div>
                     </div>
                   </CardContent>
