@@ -70,7 +70,7 @@ const BusinessDashboard: React.FC = () => {
                 <div className="py-8 px-8 h-full flex items-center">
                   <p className="text-4xl font-bold leading-none">{formatExact(stats.totalSpent)} SEK</p>
                 </div>
-                <p className="text-xl font-bold absolute left-8 bottom-6">/ {formatExact(stats.totalBudget)} SEK</p>
+                <p className="text-xl font-bold absolute left-8 bottom-10">/ {formatExact(stats.totalBudget)} SEK</p>
               </CardContent>
             </Card>
 
