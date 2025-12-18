@@ -40,9 +40,14 @@ const BusinessDashboard: React.FC = () => {
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="mb-8 flex items-center gap-4 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-            <img src={defaultAvatar} alt="Company logo" className="h-14 w-14 object-cover rounded-none" />
-            <h1 className="text-3xl font-bold text-foreground">Acme Inc.</h1>
+          <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
+            <div className="flex items-center gap-4">
+              <img src={defaultAvatar} alt="Company logo" className="h-14 w-14 object-cover rounded-none" />
+              <h1 className="text-3xl font-bold text-foreground">Acme Inc.</h1>
+            </div>
+            <p className="mt-3 text-muted-foreground max-w-xl">
+              Leading innovator in sustainable technology solutions, empowering businesses to build a greener future.
+            </p>
           </div>
 
           {/* Total Views Card */}
