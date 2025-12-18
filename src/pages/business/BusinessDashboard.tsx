@@ -59,10 +59,11 @@ const BusinessDashboard: React.FC = () => {
             <p className="text-4xl font-bold self-center">=</p>
 
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="p-0 h-full">
+              <CardContent className="p-0 h-full relative">
                 <div className="py-8 px-8 h-full flex items-center">
                   <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
                 </div>
+                <p className="text-xl font-bold absolute left-8 bottom-6">Amount of videos: {formatExact(stats.totalCreators)}</p>
               </CardContent>
             </Card>
           </div>
