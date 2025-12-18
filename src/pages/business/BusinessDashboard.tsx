@@ -86,7 +86,7 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Right column - stats */}
             <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
-              <CardContent className="px-4 py-2 h-full flex flex-col justify-center">
+              <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                   <div className="flex justify-between items-baseline gap-3">
                     <span className="text-xs text-muted-foreground">Campaigns</span>
