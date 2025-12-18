@@ -52,77 +52,226 @@ const BusinessDashboard: React.FC = () => {
             <p className="text-muted-foreground mt-1">Overview of your performance</p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="flex items-stretch gap-3 ml-8">
-            {/* Left column - stacked cards */}
-            <div className="flex flex-col gap-2">
-              <Card className="bg-black text-white rounded-2xl shadow-sm">
-                <CardContent className="px-8 py-3">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
-                    <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
-                    <span className="text-6xl font-bold font-montserrat">views</span>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
-                <CardContent className="px-6 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">User Generated Videos:</span>
-                    <div className="flex items-center gap-1">
-                      {ugcImages.map((img, index) => (
-                        <img
-                          key={index}
-                          src={img}
-                          alt={`UGC video ${index + 1}`}
-                          className="w-5 h-8 object-cover rounded-sm"
-                        />
-                      ))}
+          {/* Dashboard Sections */}
+          <div className="space-y-16 mt-12">
+            {/* Section 1 - Overall Performance */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4 ml-8">Overall Performance</h2>
+              <div className="flex items-stretch gap-3 ml-8">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
+                        <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">User Generated Videos:</span>
+                        <div className="flex items-center gap-1">
+                          {ugcImages.map((img, index) => (
+                            <img
+                              key={index}
+                              src={img}
+                              alt={`UGC video ${index + 1}`}
+                              className="w-5 h-8 object-cover rounded-sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                  <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Campaigns</span>
+                        <span className="text-sm font-semibold">4</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Budget</span>
+                        <span className="text-sm font-semibold">100k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Pending</span>
+                        <span className="text-sm font-semibold">12</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Left</span>
+                        <span className="text-sm font-semibold">52k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Approved</span>
+                        <span className="text-sm font-semibold">38</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">CPV</span>
+                        <span className="text-sm font-semibold">0.037</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Creators</span>
+                        <span className="text-sm font-semibold">24</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Eng.</span>
+                        <span className="text-sm font-semibold">4.2%</span>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
-            {/* Right column - stats */}
-            <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
-              <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
-                <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Campaigns</span>
-                    <span className="text-sm font-semibold">4</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Budget</span>
-                    <span className="text-sm font-semibold">100k</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Pending</span>
-                    <span className="text-sm font-semibold">12</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Left</span>
-                    <span className="text-sm font-semibold">52k</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Approved</span>
-                    <span className="text-sm font-semibold">38</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">CPV</span>
-                    <span className="text-sm font-semibold">0.037</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Creators</span>
-                    <span className="text-sm font-semibold">24</span>
-                  </div>
-                  <div className="flex justify-between items-baseline gap-3">
-                    <span className="text-xs text-muted-foreground">Eng.</span>
-                    <span className="text-sm font-semibold">4.2%</span>
-                  </div>
+            {/* Section 2 - This Month */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4 ml-8">This Month</h2>
+              <div className="flex items-stretch gap-3 ml-8">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl font-normal font-montserrat">12 340 sek =</span>
+                        <span className="text-6xl font-bold font-montserrat">328 412</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">User Generated Videos:</span>
+                        <div className="flex items-center gap-1">
+                          {ugcImages.slice(0, 3).map((img, index) => (
+                            <img
+                              key={index}
+                              src={img}
+                              alt={`UGC video ${index + 1}`}
+                              className="w-5 h-8 object-cover rounded-sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
+                <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                  <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Campaigns</span>
+                        <span className="text-sm font-semibold">2</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Budget</span>
+                        <span className="text-sm font-semibold">25k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Pending</span>
+                        <span className="text-sm font-semibold">5</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Left</span>
+                        <span className="text-sm font-semibold">13k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Approved</span>
+                        <span className="text-sm font-semibold">8</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">CPV</span>
+                        <span className="text-sm font-semibold">0.038</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Creators</span>
+                        <span className="text-sm font-semibold">6</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Eng.</span>
+                        <span className="text-sm font-semibold">5.1%</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Section 3 - Top Campaign */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4 ml-8">Top Campaign: Summer Vibes</h2>
+              <div className="flex items-stretch gap-3 ml-8">
+                <div className="flex flex-col gap-2">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm">
+                    <CardContent className="px-8 py-3">
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-3xl font-normal font-montserrat">18 750 sek =</span>
+                        <span className="text-6xl font-bold font-montserrat">512 893</span>
+                        <span className="text-6xl font-bold font-montserrat">views</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                    <CardContent className="px-6 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">User Generated Videos:</span>
+                        <div className="flex items-center gap-1">
+                          {ugcImages.slice(0, 4).map((img, index) => (
+                            <img
+                              key={index}
+                              src={img}
+                              alt={`UGC video ${index + 1}`}
+                              className="w-5 h-8 object-cover rounded-sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
+                  <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Creators</span>
+                        <span className="text-sm font-semibold">12</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Budget</span>
+                        <span className="text-sm font-semibold">30k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Pending</span>
+                        <span className="text-sm font-semibold">3</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Left</span>
+                        <span className="text-sm font-semibold">11k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Approved</span>
+                        <span className="text-sm font-semibold">18</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">CPV</span>
+                        <span className="text-sm font-semibold">0.036</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Reach</span>
+                        <span className="text-sm font-semibold">89k</span>
+                      </div>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-muted-foreground">Eng.</span>
+                        <span className="text-sm font-semibold">6.3%</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
