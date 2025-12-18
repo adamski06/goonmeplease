@@ -48,23 +48,21 @@ const BusinessDashboard: React.FC = () => {
           {/* Stats Card */}
           <Card className="bg-card/50 backdrop-blur-sm border-border max-w-4xl rounded-none">
             <CardContent className="py-8 px-8">
-              <div className="flex flex-col gap-6">
-                {/* Top row - Money and Views aligned */}
-                <div className="flex items-baseline gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
-                    <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK =</p>
-                  </div>
-                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} views</p>
+              {/* Top row - Money and Views aligned */}
+              <div className="flex items-baseline gap-6">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
+                  <p className="text-2xl font-bold">{formatExact(stats.totalSpent)} SEK =</p>
                 </div>
+                <p className="text-7xl font-bold">{formatExact(stats.totalViews)} views</p>
+              </div>
 
-                {/* Bottom row - Budget and Creators */}
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-foreground">
-                    / {formatExact(stats.totalBudget)} SEK
-                  </p>
-                  <p className="text-sm text-muted-foreground">{stats.totalCreators} creators</p>
-                </div>
+              {/* Bottom row - Budget and Creators */}
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-sm text-muted-foreground">
+                  / {formatExact(stats.totalBudget)} SEK
+                </p>
+                <p className="text-sm text-muted-foreground">{stats.totalCreators} creators</p>
               </div>
             </CardContent>
           </Card>
