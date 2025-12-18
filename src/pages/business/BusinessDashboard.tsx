@@ -47,42 +47,32 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Card */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border">
-            <CardContent className="py-8 px-10">
-              <div className="flex items-center justify-between">
+          <Card className="bg-card/50 backdrop-blur-sm border-border max-w-xl">
+            <CardContent className="py-6 px-8">
+              <div className="flex items-center justify-between gap-12">
                 {/* Budget - Left */}
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary/10">
-                    <DollarSign className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Money Spent</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.totalSpent)} SEK</p>
                   </div>
+                  <p className="text-3xl font-bold">{formatNumber(stats.totalSpent)} SEK</p>
                 </div>
 
-                <div className="h-12 w-px bg-border" />
+                <div className="h-16 w-px bg-border" />
 
                 {/* Traction - Right (Stacked) */}
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-primary/10">
-                      <Eye className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Total Views</p>
-                      <p className="text-2xl font-bold">{formatNumber(stats.totalViews)}</p>
-                    </div>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3">
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">Total Views</p>
+                    <p className="text-lg font-bold">{formatNumber(stats.totalViews)}</p>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-primary/10">
-                      <Users className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Creators</p>
-                      <p className="text-2xl font-bold">{stats.totalCreators}</p>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">Creators</p>
+                    <p className="text-lg font-bold">{stats.totalCreators}</p>
                   </div>
                 </div>
               </div>
