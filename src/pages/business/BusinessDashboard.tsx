@@ -57,11 +57,11 @@ const BusinessDashboard: React.FC = () => {
             <h2 className="text-2xl font-bold mb-8">Campaigns</h2>
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
-              <Card className="bg-white/40 dark:bg-white/5 backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
+              <Card className="bg-white/40 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
                 <h2 className="text-xl font-semibold mb-3">Summer Vibes</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm w-[780px]">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm w-[780px]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-baseline gap-3">
                           <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
@@ -70,7 +70,7 @@ const BusinessDashboard: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium">User Generated Videos:</span>
@@ -88,7 +88,7 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                  <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                     <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
                       <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                         <div className="flex justify-between items-baseline gap-3">
@@ -130,11 +130,11 @@ const BusinessDashboard: React.FC = () => {
               </Card>
 
             {/* Campaign 2 - Coffee Culture */}
-              <Card className="bg-white/40 dark:bg-white/5 backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
+              <Card className="bg-white/40 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
                 <h2 className="text-xl font-semibold mb-3">Coffee Culture</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm w-[780px]">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm w-[780px]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-baseline gap-3">
                           <span className="text-3xl font-normal font-montserrat">23 156 sek =</span>
@@ -143,7 +143,7 @@ const BusinessDashboard: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium">User Generated Videos:</span>
@@ -161,7 +161,7 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                  <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                     <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
                       <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                         <div className="flex justify-between items-baseline gap-3">
@@ -203,11 +203,11 @@ const BusinessDashboard: React.FC = () => {
               </Card>
 
             {/* Campaign 3 - Street Style */}
-              <Card className="bg-white/40 dark:bg-white/5 backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
+              <Card className="bg-white/40 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none p-6">
                 <h2 className="text-xl font-semibold mb-3">Street Style</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm w-[780px]">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm w-[780px]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-baseline gap-3">
                           <span className="text-3xl font-normal font-montserrat">8 943 sek =</span>
@@ -216,7 +216,7 @@ const BusinessDashboard: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
-                    <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                    <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium">User Generated Videos:</span>
@@ -234,7 +234,7 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-none shadow-sm">
+                  <Card className="bg-white/60 dark:bg-dark-surface backdrop-blur-md border-white/40 dark:border-white/10 rounded-none shadow-sm">
                     <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
                       <div className="grid grid-cols-2 gap-x-6 gap-y-1">
                         <div className="flex justify-between items-baseline gap-3">
