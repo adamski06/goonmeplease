@@ -87,22 +87,38 @@ const BusinessDashboard: React.FC = () => {
             {/* Right column - stats */}
             <Card className="bg-white/60 dark:bg-white/10 backdrop-blur-md border-white/40 rounded-2xl shadow-sm">
               <CardContent className="px-4 py-2 h-full flex flex-col justify-center">
-                <div className="space-y-1">
-                  <div className="flex justify-between items-baseline gap-4">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                  <div className="flex justify-between items-baseline gap-3">
                     <span className="text-xs text-muted-foreground">Active campaigns</span>
                     <span className="text-sm font-semibold">4</span>
                   </div>
-                  <div className="flex justify-between items-baseline gap-4">
+                  <div className="flex justify-between items-baseline gap-3">
+                    <span className="text-xs text-muted-foreground">Total budget</span>
+                    <span className="text-sm font-semibold">100k</span>
+                  </div>
+                  <div className="flex justify-between items-baseline gap-3">
                     <span className="text-xs text-muted-foreground">Pending review</span>
                     <span className="text-sm font-semibold">12</span>
                   </div>
-                  <div className="flex justify-between items-baseline gap-4">
+                  <div className="flex justify-between items-baseline gap-3">
+                    <span className="text-xs text-muted-foreground">Remaining</span>
+                    <span className="text-sm font-semibold">52k</span>
+                  </div>
+                  <div className="flex justify-between items-baseline gap-3">
                     <span className="text-xs text-muted-foreground">Approved</span>
                     <span className="text-sm font-semibold">38</span>
                   </div>
-                  <div className="flex justify-between items-baseline gap-4">
+                  <div className="flex justify-between items-baseline gap-3">
                     <span className="text-xs text-muted-foreground">Avg. CPV</span>
-                    <span className="text-sm font-semibold">0.037 sek</span>
+                    <span className="text-sm font-semibold">0.037</span>
+                  </div>
+                  <div className="flex justify-between items-baseline gap-3">
+                    <span className="text-xs text-muted-foreground">Creators</span>
+                    <span className="text-sm font-semibold">24</span>
+                  </div>
+                  <div className="flex justify-between items-baseline gap-3">
+                    <span className="text-xs text-muted-foreground">Engagement</span>
+                    <span className="text-sm font-semibold">4.2%</span>
                   </div>
                 </div>
               </CardContent>
