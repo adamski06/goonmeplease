@@ -78,8 +78,8 @@ const BusinessDashboard: React.FC = () => {
 
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="p-0 h-full">
-                <div className="py-8 px-8 h-full flex flex-col justify-center">
-                  <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
+                <div className="py-8 px-8 h-full flex flex-col">
+                  <p className="text-7xl font-bold leading-none mt-auto">{formatExact(stats.totalViews)} views</p>
                   <div className="flex items-center gap-1 mt-4 ml-8">
                     <p className="text-xl font-bold mr-3 whitespace-nowrap">UGC:</p>
                     <div className="flex items-center gap-1">
