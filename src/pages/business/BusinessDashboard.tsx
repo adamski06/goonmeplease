@@ -83,7 +83,7 @@ const BusinessDashboard: React.FC = () => {
                   <div className="flex items-center gap-1 mt-4 ml-8">
                     <p className="text-xl font-bold mr-3 whitespace-nowrap">UGC:</p>
                     <div className="flex items-center gap-1">
-                      {Array(4).fill(null).map((_, index) => (
+                      {Array(8).fill(null).map((_, index) => (
                         <div
                           key={index}
                           className="w-6 h-10 bg-muted/50 border border-border rounded-sm"
