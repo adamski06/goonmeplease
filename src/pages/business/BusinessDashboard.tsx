@@ -64,15 +64,17 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <Card className="bg-card border-foreground rounded-none inline-block">
-            <CardContent className="p-0">
-              <div className="px-8 py-3 border-b border-foreground">
+          <div className="flex flex-col gap-4">
+            <Card className="bg-card border-foreground rounded-lg inline-block">
+              <CardContent className="px-8 py-3">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} =</span>
                   <span className="text-6xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
                 </div>
-              </div>
-              <div className="px-8 py-4">
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-foreground rounded-lg inline-block">
+              <CardContent className="px-8 py-4">
                 <div className="flex items-center gap-3">
                   <span className="text-xl font-normal">UGC:</span>
                   <div className="flex items-center gap-1">
@@ -87,9 +89,9 @@ const BusinessDashboard: React.FC = () => {
                     </button>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </BusinessLayout>
