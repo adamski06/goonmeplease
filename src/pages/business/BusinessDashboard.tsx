@@ -50,6 +50,7 @@ const BusinessDashboard: React.FC = () => {
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="py-8 px-8">
                 <p className="text-4xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
+                <p className="text-sm text-muted-foreground mt-1">/ {formatExact(stats.totalBudget)} SEK</p>
               </CardContent>
             </Card>
             
