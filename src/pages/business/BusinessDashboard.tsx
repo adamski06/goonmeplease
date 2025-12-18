@@ -50,10 +50,10 @@ const BusinessDashboard: React.FC = () => {
             <CardContent className="py-6 px-8">
               <div className="flex items-center">
                 {/* Budget - Left */}
-                <div className="flex-1 text-center">
+                <div className="flex-1">
                   <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
                   <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-sm text-foreground mt-1">
                     / {formatExact(stats.totalBudget)} SEK
                   </p>
                 </div>
@@ -62,7 +62,7 @@ const BusinessDashboard: React.FC = () => {
 
                 {/* Traction - Right */}
                 <div className="flex-1 text-center">
-                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} <span className="text-3xl">views</span></p>
+                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} views</p>
                   <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
                 </div>
               </div>
