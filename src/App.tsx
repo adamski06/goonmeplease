@@ -26,9 +26,9 @@ const App = () => (
           <AuthProvider>
             <ProfileProvider>
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Campaigns />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/campaigns" element={<Campaigns />} />
+                <Route path="/landing" element={<Index />} />
                 <Route path="/campaigns/:id" element={<CampaignDetail />} />
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/profile" element={<Profile />} />
