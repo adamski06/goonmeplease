@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
       
       {/* Left Sidebar - Desktop only */}
       <aside className="hidden md:flex w-56 lg:w-52 flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
-        {/* Logo and Creator/Business Toggle */}
+        {/* Logo */}
         <div className="px-6 pt-6 pb-4">
           <button onClick={() => navigate('/')} className="relative h-10 w-[120px]">
             <div 
@@ -65,17 +65,6 @@ const ProfilePage: React.FC = () => {
               }} 
             />
           </button>
-          <div className="mt-3 inline-flex bg-black/10 rounded-full overflow-hidden">
-            <span className="px-4 py-1 text-xs font-bold font-montserrat bg-background text-foreground rounded-full">
-              Creator
-            </span>
-            <button 
-              onClick={() => navigate('/business')}
-              className="px-4 py-1 text-xs font-bold font-montserrat text-foreground/60 hover:text-foreground transition-colors"
-            >
-              Business
-            </button>
-          </div>
         </div>
 
         {/* Navigation */}
