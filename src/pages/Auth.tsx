@@ -210,7 +210,7 @@ const Auth: React.FC = () => {
         </div>
       </div>
       
-      <Card className="w-full max-w-md bg-black/5 dark:bg-white/10 backdrop-blur-md border-black/10 dark:border-white/20 shadow-lg relative z-10">
+      <Card className="w-full max-w-md bg-black/5 dark:bg-white/10 backdrop-blur-md border-black/10 dark:border-white/20 shadow-lg relative z-10 rounded-none">
         {signUpStep === 2 ? (
           // Step 2: Connect TikTok - no header title
           <CardContent className="pt-12 pb-8">
