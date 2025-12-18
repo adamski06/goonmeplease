@@ -64,12 +64,12 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <Card className="bg-card border-border rounded-none inline-block">
+          <Card className="bg-card border-black rounded-none inline-block">
             <CardContent className="p-0">
-              <div className="px-8 py-3 border-b border-border">
+              <div className="px-8 py-3 border-b border-black">
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl font-normal">{formatExact(stats.totalSpent)} =</span>
-                  <span className="text-6xl font-normal">{formatExact(stats.totalViews)}</span>
+                  <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} =</span>
+                  <span className="text-6xl font-normal font-montserrat">{formatExact(stats.totalViews)}</span>
                 </div>
               </div>
               <div className="px-8 py-4">
@@ -79,10 +79,10 @@ const BusinessDashboard: React.FC = () => {
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
-                        className="w-5 h-8 bg-muted/50 border border-border"
+                        className="w-5 h-8 bg-muted/50 border border-black"
                       />
                     ))}
-                    <button className="w-5 h-8 border border-dashed border-border flex items-center justify-center hover:bg-muted/30 transition-colors">
+                    <button className="w-5 h-8 border border-dashed border-black flex items-center justify-center hover:bg-muted/30 transition-colors">
                       <Plus className="h-3 w-3 text-muted-foreground" />
                     </button>
                   </div>
