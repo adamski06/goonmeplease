@@ -62,8 +62,7 @@ const BusinessDashboard: React.FC = () => {
 
                 {/* Traction - Right */}
                 <div className="flex-1 text-center">
-                  <p className="text-sm text-muted-foreground mb-1">Views</p>
-                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)}</p>
+                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} <span className="text-3xl">views</span></p>
                   <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
                 </div>
               </div>
