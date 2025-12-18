@@ -65,7 +65,6 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-center gap-3">
-                          <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
                           <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
                           <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
@@ -138,7 +137,6 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-center gap-3">
-                          <span className="text-3xl font-normal font-montserrat">23 156 sek =</span>
                           <span className="text-6xl font-bold font-montserrat">618 234</span>
                           <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
@@ -211,7 +209,6 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
                         <div className="flex items-center gap-3">
-                          <span className="text-3xl font-normal font-montserrat">8 943 sek =</span>
                           <span className="text-6xl font-bold font-montserrat">241 567</span>
                           <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
