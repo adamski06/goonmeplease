@@ -160,7 +160,7 @@ const BusinessCampaignDetail: React.FC = () => {
         return <Badge className="bg-green-500/20 text-green-600 border-green-500/30">Approved</Badge>;
       case 'pending_review':
         return <Badge className="bg-yellow-500/20 text-yellow-600 border-yellow-500/30">Pending</Badge>;
-      case 'rejected':
+      case 'denied':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
@@ -299,7 +299,7 @@ const BusinessCampaignDetail: React.FC = () => {
                                 size="sm"
                                 variant="outline"
                                 className="text-red-600 border-red-600 hover:bg-red-50"
-                                onClick={() => updateSubmissionStatus(submission.id, 'rejected')}
+                                onClick={() => updateSubmissionStatus(submission.id, 'denied')}
                               >
                                 <X className="h-4 w-4" />
                               </Button>
