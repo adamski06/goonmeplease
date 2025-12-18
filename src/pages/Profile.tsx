@@ -65,6 +65,7 @@ const ProfilePage: React.FC = () => {
               }} 
             />
           </button>
+          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">Creator</span>
         </div>
 
         {/* Navigation */}
