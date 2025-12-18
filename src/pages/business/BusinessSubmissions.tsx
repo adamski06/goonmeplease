@@ -194,7 +194,7 @@ const BusinessSubmissions: React.FC = () => {
           </div>
 
           {/* Submissions List */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border">
+          <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
             <CardHeader>
               <CardTitle>
                 {statusFilter === 'pending_review' ? 'Pending Review' : 'All Submissions'}

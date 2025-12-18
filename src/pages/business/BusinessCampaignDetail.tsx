@@ -193,7 +193,7 @@ const BusinessCampaignDetail: React.FC = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Eye className="h-4 w-4" />
@@ -202,7 +202,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{totalViews.toLocaleString()}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Users className="h-4 w-4" />
@@ -211,7 +211,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{submissions.length}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Check className="h-4 w-4" />
@@ -220,7 +220,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{approvedSubmissions}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <DollarSign className="h-4 w-4" />
@@ -242,7 +242,7 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsList>
 
             <TabsContent value="submissions">
-              <Card className="bg-card/50 backdrop-blur-sm border-border">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
                 <CardHeader>
                   <CardTitle>Content Submissions</CardTitle>
                 </CardHeader>
@@ -314,7 +314,7 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="details">
-              <Card className="bg-card/50 backdrop-blur-sm border-border">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
                 <CardHeader>
                   <CardTitle>Campaign Details</CardTitle>
                 </CardHeader>
@@ -340,7 +340,7 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="tiers">
-              <Card className="bg-card/50 backdrop-blur-sm border-border">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
                 <CardHeader>
                   <CardTitle>Payment Tiers</CardTitle>
                 </CardHeader>
