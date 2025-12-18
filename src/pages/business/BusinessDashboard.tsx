@@ -35,8 +35,8 @@ const BusinessDashboard: React.FC = () => {
     return num.toLocaleString('sv-SE');
   };
 
-  // Mock video placeholders
-  const videoPlaceholders = Array(6).fill(null);
+  // Mock video placeholders - more to fill the space
+  const videoPlaceholders = Array(12).fill(null);
 
   return (
     <BusinessLayout>
@@ -66,16 +66,18 @@ const BusinessDashboard: React.FC = () => {
                 <div className="py-8 px-8 h-full flex flex-col justify-center">
                   <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
                   <div className="flex items-center gap-1 mt-4">
-                    <p className="text-xl font-bold mr-3">Amount of videos:</p>
-                    {videoPlaceholders.map((_, index) => (
-                      <div
-                        key={index}
-                        className="w-6 h-10 bg-muted/50 border border-border rounded-sm"
-                      />
-                    ))}
-                    <button className="w-6 h-10 bg-muted/30 border border-dashed border-border rounded-sm flex items-center justify-center hover:bg-muted/50 transition-colors">
-                      <Plus className="h-4 w-4 text-muted-foreground" />
-                    </button>
+                    <p className="text-xl font-bold mr-3 whitespace-nowrap">Amount of videos:</p>
+                    <div className="flex items-center gap-1 flex-1 justify-end">
+                      {videoPlaceholders.map((_, index) => (
+                        <div
+                          key={index}
+                          className="w-6 h-10 bg-muted/50 border border-border rounded-sm flex-shrink-0"
+                        />
+                      ))}
+                      <button className="w-6 h-10 bg-muted/30 border border-dashed border-border rounded-sm flex items-center justify-center hover:bg-muted/50 transition-colors flex-shrink-0">
+                        <Plus className="h-4 w-4 text-muted-foreground" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
