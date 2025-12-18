@@ -73,7 +73,7 @@ const BusinessDashboard: React.FC = () => {
                         key={index}
                         src={img}
                         alt={`UGC video ${index + 1}`}
-                        className="w-6 h-10 object-cover rounded-none"
+                        className="w-5 h-8 object-cover rounded-sm"
                       />
                     ))}
                   </div>
