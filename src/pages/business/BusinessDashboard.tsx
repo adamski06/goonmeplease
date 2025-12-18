@@ -46,10 +46,11 @@ const BusinessDashboard: React.FC = () => {
             <p className="text-muted-foreground mt-1">Overview of your performance</p>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
-              <CardContent className="pt-6">
+          {/* Stats Card */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border">
+            <CardContent className="py-8 px-10">
+              <div className="flex items-center justify-between">
+                {/* Budget - Left */}
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-lg bg-primary/10">
                     <DollarSign className="h-6 w-6 text-primary" />
@@ -59,37 +60,34 @@ const BusinessDashboard: React.FC = () => {
                     <p className="text-2xl font-bold">{formatNumber(stats.totalSpent)} SEK</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Eye className="h-6 w-6 text-primary" />
+                <div className="h-12 w-px bg-border" />
+
+                {/* Traction - Right */}
+                <div className="flex items-center gap-12">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                      <Eye className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Views</p>
+                      <p className="text-2xl font-bold">{formatNumber(stats.totalViews)}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Views</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.totalViews)}</p>
+
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                      <Users className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Creators</p>
+                      <p className="text-2xl font-bold">{stats.totalCreators}</p>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50 backdrop-blur-sm border-border">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <Users className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Creators</p>
-                    <p className="text-2xl font-bold">{stats.totalCreators}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </BusinessLayout>

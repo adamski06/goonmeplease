@@ -86,15 +86,6 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
           ))}
         </nav>
 
-        {/* Creator Mode Link */}
-        <div className="px-3 mt-8">
-          <button 
-            onClick={() => navigate('/')}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3"
-          >
-            Switch to Creator
-          </button>
-        </div>
 
         {/* More Menu at bottom */}
         <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
