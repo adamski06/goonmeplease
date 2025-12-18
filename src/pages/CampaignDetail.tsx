@@ -189,7 +189,7 @@ const CampaignDetail: React.FC = () => {
         {/* Navigation */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
           <button 
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/')}
             className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
             <svg className="h-6 w-6 group-hover:text-blue-800" viewBox="0 0 24 24" fill="none">
@@ -241,7 +241,7 @@ const CampaignDetail: React.FC = () => {
         <div className="max-w-4xl mx-auto px-8 py-8">
           {/* Back Button */}
           <button 
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/')}
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="h-5 w-5" />

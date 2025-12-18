@@ -147,7 +147,7 @@ const Activity: React.FC = () => {
         {/* Navigation */}
         <nav className="flex flex-col px-3 gap-4 mt-8">
           <button 
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/')}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-colors flex items-center gap-3"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
@@ -226,7 +226,7 @@ const Activity: React.FC = () => {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
         <div className="flex items-start justify-between h-full">
           <button 
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className="h-6 w-6 text-black/40" viewBox="0 0 24 24" fill="currentColor">
@@ -235,7 +235,7 @@ const Activity: React.FC = () => {
             <span className="text-[10px] text-black/40">Home</span>
           </button>
           <button 
-            onClick={() => navigate('/campaigns')}
+            onClick={() => navigate('/')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className="h-6 w-6 text-black/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -284,7 +284,7 @@ const Activity: React.FC = () => {
               <div 
                 key={campaign.id}
                 className="flex-shrink-0 w-24 cursor-pointer group"
-                onClick={() => navigate('/campaigns')}
+                onClick={() => navigate('/')}
               >
                 {/* Image */}
                 <div className="relative aspect-[9/16] rounded overflow-hidden mb-1">
