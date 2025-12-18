@@ -54,12 +54,12 @@ const BusinessDashboard: React.FC = () => {
 
           {/* Campaigns Section */}
           <div className="mt-[500px]">
-            <h2 className="text-2xl font-bold mb-8 ml-8">Campaigns</h2>
+            <h2 className="text-2xl font-bold mb-8">Campaigns</h2>
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
               <div>
-              <h2 className="text-xl font-semibold mb-1.5 ml-8">Summer Vibes</h2>
-              <div className="flex items-stretch gap-3 ml-8">
+              <h2 className="text-xl font-semibold mb-1.5">Summer Vibes</h2>
+              <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
                     <CardContent className="px-8 py-3">
@@ -131,8 +131,8 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 2 - Coffee Culture */}
             <div>
-              <h2 className="text-xl font-semibold mb-1.5 ml-8">Coffee Culture</h2>
-              <div className="flex items-stretch gap-3 ml-8">
+              <h2 className="text-xl font-semibold mb-1.5">Coffee Culture</h2>
+              <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
                     <CardContent className="px-8 py-3">
@@ -204,8 +204,8 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 3 - Street Style */}
             <div>
-              <h2 className="text-xl font-semibold mb-1.5 ml-8">Street Style</h2>
-              <div className="flex items-stretch gap-3 ml-8">
+              <h2 className="text-xl font-semibold mb-1.5">Street Style</h2>
+              <div className="flex items-stretch gap-3">
                 <div className="flex flex-col gap-2">
                   <Card className="bg-black text-white rounded-2xl shadow-sm w-[780px]">
                     <CardContent className="px-8 py-3">
