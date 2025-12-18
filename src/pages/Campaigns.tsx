@@ -722,7 +722,7 @@ const Campaigns: React.FC = () => {
               }} 
             />
           </button>
-          <span className="text-sm font-bold text-black dark:text-white translate-y-0.5">Creator</span>
+          <span className="text-sm font-bold text-black dark:text-white">Creator</span>
         </div>
 
         {/* Navigation */}
