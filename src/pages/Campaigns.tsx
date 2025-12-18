@@ -830,7 +830,7 @@ const Campaigns: React.FC = () => {
               </button>
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="w-full py-2 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
+                className="w-full py-2 text-sm font-medium hover:opacity-70 transition-opacity"
               >
                 Log in
               </button>
