@@ -78,16 +78,13 @@ const BusinessDashboard: React.FC = () => {
               <CardContent className="px-6 py-2">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">User Generated Videos:</span>
-                  <div className="flex items-center gap-1 flex-1 justify-end">
+                  <div className="flex items-center gap-1">
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
                         className="w-4 h-7 bg-black/30 border border-black/20 rounded-none"
                       />
                     ))}
-                    <button className="w-4 h-7 border border-dashed border-black/30 rounded-none flex items-center justify-center hover:bg-black/10 transition-colors">
-                      <Plus className="h-2 w-2 text-muted-foreground" />
-                    </button>
                   </div>
                 </div>
               </CardContent>
