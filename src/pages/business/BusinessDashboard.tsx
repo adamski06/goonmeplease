@@ -82,10 +82,10 @@ const BusinessDashboard: React.FC = () => {
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
-                        className="w-4 h-7 bg-black/30 border border-black/20"
+                        className="w-4 h-7 bg-black/30 border border-black/20 rounded-none"
                       />
                     ))}
-                    <button className="w-4 h-7 border border-dashed border-black/30 flex items-center justify-center hover:bg-black/10 transition-colors">
+                    <button className="w-4 h-7 border border-dashed border-black/30 rounded-none flex items-center justify-center hover:bg-black/10 transition-colors">
                       <Plus className="h-2 w-2 text-muted-foreground" />
                     </button>
                   </div>
