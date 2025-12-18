@@ -10,6 +10,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Pencil, Eye, DollarSign, Users, Check, X, ExternalLink } from 'lucide-react';
 
+import defaultAvatar from '@/assets/default-avatar.png';
+
 interface Campaign {
   id: string;
   title: string;
@@ -154,6 +156,11 @@ const BusinessCampaignDetail: React.FC = () => {
   const approvedSubmissions = submissions.filter(s => s.status === 'approved').length;
   const pendingSubmissions = submissions.filter(s => s.status === 'pending_review').length;
 
+  // Calculate max earnings based on tiers or a default rate
+  const defaultRate = tiers.length > 0 ? tiers[0].rate_per_view : 0.04;
+  const maxEarnings = campaign.total_budget || 0;
+  const ratePerThousand = defaultRate * 1000;
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
@@ -166,6 +173,11 @@ const BusinessCampaignDetail: React.FC = () => {
         return <Badge variant="outline">{status}</Badge>;
     }
   };
+
+  // Parse guidelines into array
+  const guidelinesArray = campaign.guidelines 
+    ? campaign.guidelines.split('\n').filter(g => g.trim())
+    : [];
 
   return (
     <BusinessLayout>
@@ -193,7 +205,7 @@ const BusinessCampaignDetail: React.FC = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Eye className="h-4 w-4" />
@@ -202,7 +214,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{totalViews.toLocaleString()}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Users className="h-4 w-4" />
@@ -211,7 +223,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{submissions.length}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Check className="h-4 w-4" />
@@ -220,7 +232,7 @@ const BusinessCampaignDetail: React.FC = () => {
                 <p className="text-2xl font-bold mt-1">{approvedSubmissions}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <DollarSign className="h-4 w-4" />
@@ -232,8 +244,9 @@ const BusinessCampaignDetail: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="submissions" className="space-y-4">
+          <Tabs defaultValue="preview" className="space-y-4">
             <TabsList>
+              <TabsTrigger value="preview">Creator Preview</TabsTrigger>
               <TabsTrigger value="submissions">
                 Submissions {pendingSubmissions > 0 && `(${pendingSubmissions})`}
               </TabsTrigger>
@@ -241,8 +254,78 @@ const BusinessCampaignDetail: React.FC = () => {
               <TabsTrigger value="tiers">Payment Tiers</TabsTrigger>
             </TabsList>
 
+            <TabsContent value="preview">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
+                <CardHeader>
+                  <CardTitle>How Creators See Your Campaign</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {/* Creator Preview - mimics what creators see */}
+                  <div className="max-w-2xl">
+                    {/* Header - Logo and brand */}
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0 border border-border">
+                        {campaign.brand_logo_url ? (
+                          <img src={campaign.brand_logo_url} alt={campaign.brand_name} className="w-full h-full object-contain" />
+                        ) : (
+                          <img src={defaultAvatar} alt={campaign.brand_name} className="w-full h-full object-contain" />
+                        )}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand_name}</h2>
+                        <p className="text-sm text-muted-foreground">{campaign.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-lg text-foreground font-jakarta leading-relaxed mb-6">
+                      {campaign.description || 'No description provided.'}
+                    </p>
+
+                    {/* Earnings Display */}
+                    <div className="mb-6 p-4 bg-muted/30 rounded-lg">
+                      <div className="flex items-baseline gap-1 mb-2">
+                        <span className="text-xl font-bold text-foreground font-montserrat">{ratePerThousand.toFixed(0)}</span>
+                        <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
+                        <span className="text-xs font-bold text-muted-foreground font-jakarta">/ 1000 views</span>
+                      </div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-sm text-muted-foreground">Up to</span>
+                        <span className="text-2xl font-bold text-foreground font-montserrat">{maxEarnings.toLocaleString()}</span>
+                        <span className="text-sm text-foreground font-montserrat">sek</span>
+                      </div>
+                    </div>
+
+                    {/* Requirements */}
+                    {guidelinesArray.length > 0 && (
+                      <div className="backdrop-blur-md bg-muted/20 rounded-xl p-4 mb-6">
+                        <h3 className="text-sm font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
+                        <ul className="space-y-2">
+                          {guidelinesArray.map((guideline, idx) => (
+                            <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
+                              <span className="text-foreground">•</span>
+                              {guideline}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* CTA Preview */}
+                    <Button 
+                      size="lg" 
+                      className="w-full py-5 text-base font-bold rounded-full"
+                      disabled
+                    >
+                      Submit Content (Preview)
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="submissions">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
                 <CardHeader>
                   <CardTitle>Content Submissions</CardTitle>
                 </CardHeader>
@@ -314,7 +397,7 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="details">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
                 <CardHeader>
                   <CardTitle>Campaign Details</CardTitle>
                 </CardHeader>
@@ -340,7 +423,7 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="tiers">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
                 <CardHeader>
                   <CardTitle>Payment Tiers</CardTitle>
                 </CardHeader>
