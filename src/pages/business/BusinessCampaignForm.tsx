@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/contexts/ProfileContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, X } from 'lucide-react';
 
 interface Tier {
   min_views: number;
@@ -19,6 +20,7 @@ interface Tier {
 
 const BusinessCampaignForm: React.FC = () => {
   const { user, loading } = useAuth();
+  const { profile } = useProfile();
   const navigate = useNavigate();
   const { id } = useParams();
   const { toast } = useToast();
@@ -29,10 +31,10 @@ const BusinessCampaignForm: React.FC = () => {
     brand_name: '',
     title: '',
     description: '',
-    guidelines: '',
     deadline: '',
     total_budget: 0,
   });
+  const [guidelines, setGuidelines] = useState<string[]>(['']);
   const [tiers, setTiers] = useState<Tier[]>([
     { min_views: 0, max_views: 1000, rate_per_view: 0.02 },
     { min_views: 1001, max_views: 10000, rate_per_view: 0.015 },
@@ -44,6 +46,13 @@ const BusinessCampaignForm: React.FC = () => {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
+
+  // Auto-fill brand name from profile
+  useEffect(() => {
+    if (!isEditing && profile?.full_name) {
+      setFormData(prev => ({ ...prev, brand_name: profile.full_name || '' }));
+    }
+  }, [profile, isEditing]);
 
   useEffect(() => {
     if (isEditing && user) {
@@ -65,10 +74,15 @@ const BusinessCampaignForm: React.FC = () => {
         brand_name: campaign.brand_name || '',
         title: campaign.title || '',
         description: campaign.description || '',
-        guidelines: campaign.guidelines || '',
         deadline: campaign.deadline ? campaign.deadline.split('T')[0] : '',
         total_budget: campaign.total_budget || 0,
       });
+
+      // Parse guidelines from newline-separated string to array
+      if (campaign.guidelines) {
+        const guidelinesArray = campaign.guidelines.split('\n').filter((g: string) => g.trim());
+        setGuidelines(guidelinesArray.length > 0 ? guidelinesArray : ['']);
+      }
 
       // Fetch tiers
       const { data: tierData } = await supabase
@@ -96,12 +110,15 @@ const BusinessCampaignForm: React.FC = () => {
 
     setSaving(true);
     try {
+      // Convert guidelines array to newline-separated string
+      const guidelinesString = guidelines.filter(g => g.trim()).join('\n');
+
       const campaignData = {
         business_id: user.id,
         brand_name: formData.brand_name,
         title: formData.title,
         description: formData.description,
-        guidelines: formData.guidelines,
+        guidelines: guidelinesString,
         deadline: formData.deadline ? new Date(formData.deadline).toISOString() : null,
         total_budget: formData.total_budget,
         is_active: true,
@@ -152,6 +169,24 @@ const BusinessCampaignForm: React.FC = () => {
     }
   };
 
+  const addGuideline = () => {
+    setGuidelines([...guidelines, '']);
+  };
+
+  const removeGuideline = (index: number) => {
+    if (guidelines.length > 1) {
+      setGuidelines(guidelines.filter((_, i) => i !== index));
+    } else {
+      setGuidelines(['']);
+    }
+  };
+
+  const updateGuideline = (index: number, value: string) => {
+    const newGuidelines = [...guidelines];
+    newGuidelines[index] = value;
+    setGuidelines(newGuidelines);
+  };
+
   const addTier = () => {
     const lastTier = tiers[tiers.length - 1];
     const newMinViews = lastTier?.max_views ? lastTier.max_views + 1 : 0;
@@ -199,7 +234,7 @@ const BusinessCampaignForm: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
               </CardHeader>
@@ -236,21 +271,44 @@ const BusinessCampaignForm: React.FC = () => {
                     rows={3}
                   />
                 </div>
+                
+                {/* Guidelines as list */}
                 <div className="space-y-2">
-                  <Label htmlFor="guidelines">Guidelines</Label>
-                  <Textarea
-                    id="guidelines"
-                    value={formData.guidelines}
-                    onChange={(e) => setFormData({ ...formData, guidelines: e.target.value })}
-                    placeholder="Do's and don'ts for creators..."
-                    rows={4}
-                  />
+                  <div className="flex items-center justify-between">
+                    <Label>Guidelines</Label>
+                    <Button type="button" variant="ghost" size="sm" onClick={addGuideline} className="h-7 px-2">
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {guidelines.map((guideline, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm w-4">•</span>
+                        <Input
+                          value={guideline}
+                          onChange={(e) => updateGuideline(index, e.target.value)}
+                          placeholder="Enter a guideline..."
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeGuideline(index)}
+                          className="h-8 w-8 text-muted-foreground hover:text-red-500"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Payment Tiers */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Payment Tiers</CardTitle>
                 <Button type="button" variant="outline" size="sm" onClick={addTier}>
@@ -306,7 +364,7 @@ const BusinessCampaignForm: React.FC = () => {
             </Card>
 
             {/* Budget & Deadline */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader>
                 <CardTitle>Budget & Deadline</CardTitle>
               </CardHeader>
