@@ -14,6 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
@@ -524,6 +530,7 @@ const Campaigns: React.FC = () => {
   const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
   const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const savedScrollPosition = useRef<number>(0);
 
@@ -572,7 +579,7 @@ const Campaigns: React.FC = () => {
   const toggleFavorite = async (campaignId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) {
-      navigate('/auth');
+      setShowAuthPrompt(true);
       return;
     }
     
@@ -730,7 +737,7 @@ const Campaigns: React.FC = () => {
             Home
           </button>
           <button 
-            onClick={() => user ? navigate('/activity') : navigate('/auth')}
+            onClick={() => user ? navigate('/activity') : setShowAuthPrompt(true)}
             className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -753,7 +760,7 @@ const Campaigns: React.FC = () => {
             </button>
           ) : (
             <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => setShowAuthPrompt(true)}
               className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
             >
               <User className="h-6 w-6" />
@@ -845,7 +852,7 @@ const Campaigns: React.FC = () => {
             <span className={`text-[10px] ${activeFilter === 'featured' ? (isMobileHomeMode ? 'font-semibold text-white' : 'font-semibold text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`}>Discover</span>
           </button>
           <button 
-            onClick={() => user ? navigate('/activity') : navigate('/auth')}
+            onClick={() => user ? navigate('/activity') : setShowAuthPrompt(true)}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} viewBox="0 0 24 24" fill="currentColor">
@@ -863,7 +870,7 @@ const Campaigns: React.FC = () => {
             <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Alerts</span>
           </button>
           <button 
-            onClick={() => user ? navigate('/profile') : navigate('/auth')}
+            onClick={() => user ? navigate('/profile') : setShowAuthPrompt(true)}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             {user ? (
@@ -1167,6 +1174,38 @@ const Campaigns: React.FC = () => {
         )}
         </div>
       </main>
+
+      {/* Auth Prompt Dialog */}
+      <Dialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">Join Jarla</DialogTitle>
+          </DialogHeader>
+          <p className="text-center text-muted-foreground mb-6">
+            Create an account to save campaigns, track your submissions, and start earning.
+          </p>
+          <div className="flex flex-col gap-3">
+            <button 
+              onClick={() => {
+                setShowAuthPrompt(false);
+                navigate('/auth');
+              }}
+              className="w-full py-3 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+            >
+              Create account
+            </button>
+            <button 
+              onClick={() => {
+                setShowAuthPrompt(false);
+                navigate('/auth');
+              }}
+              className="w-full py-3 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
+            >
+              Log in
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
