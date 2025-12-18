@@ -48,17 +48,18 @@ const BusinessDashboard: React.FC = () => {
           {/* Stats Cards */}
           <div className="flex items-stretch gap-4">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none flex">
-              <CardContent className="py-8 px-8 flex flex-col justify-end">
-                <p className="text-4xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
-                <p className="text-xl font-bold mt-1">/ {formatExact(stats.totalBudget)} SEK</p>
+              <CardContent className="py-8 px-8 flex flex-col">
+                <div className="flex-1" />
+                <p className="text-4xl font-bold leading-none">{formatExact(stats.totalSpent)} SEK</p>
+                <p className="text-xl font-bold mt-2">/ {formatExact(stats.totalBudget)} SEK</p>
               </CardContent>
             </Card>
             
-            <p className="text-4xl font-bold self-end pb-8">=</p>
+            <p className="text-4xl font-bold self-center">=</p>
             
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none flex">
-              <CardContent className="py-8 px-8 flex flex-col justify-end">
-                <p className="text-7xl font-bold">{formatExact(stats.totalViews)} views</p>
+              <CardContent className="py-8 px-8 flex items-center">
+                <p className="text-7xl font-bold leading-none">{formatExact(stats.totalViews)} views</p>
               </CardContent>
             </Card>
           </div>
