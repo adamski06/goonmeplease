@@ -64,8 +64,8 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex flex-col gap-4 ml-8">
-            <Card className="bg-black text-white rounded-2xl inline-block shadow-sm">
+          <div className="inline-flex flex-col gap-4 ml-8">
+            <Card className="bg-black text-white rounded-2xl shadow-sm">
               <CardContent className="px-8 py-3">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
