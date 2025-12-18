@@ -64,9 +64,9 @@ const BusinessDashboard: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
-                        <div className="flex items-center">
-                          <span className="text-6xl font-bold font-montserrat w-3/4">{formatExact(stats.totalViews)}</span>
-                          <span className="text-6xl font-bold font-montserrat w-1/4 text-right">views</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-6xl font-bold font-montserrat">{formatExact(stats.totalViews)}</span>
+                          <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -136,9 +136,9 @@ const BusinessDashboard: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
-                        <div className="flex items-center">
-                          <span className="text-6xl font-bold font-montserrat w-3/4">618 234</span>
-                          <span className="text-6xl font-bold font-montserrat w-1/4 text-right">views</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-6xl font-bold font-montserrat">618 234</span>
+                          <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -208,9 +208,9 @@ const BusinessDashboard: React.FC = () => {
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-8 py-3">
-                        <div className="flex items-center">
-                          <span className="text-6xl font-bold font-montserrat w-3/4">241 567</span>
-                          <span className="text-6xl font-bold font-montserrat w-1/4 text-right">views</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-6xl font-bold font-montserrat">241 567</span>
+                          <span className="text-6xl font-bold font-montserrat">views</span>
                         </div>
                       </CardContent>
                     </Card>
