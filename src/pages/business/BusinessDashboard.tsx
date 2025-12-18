@@ -52,7 +52,7 @@ const BusinessDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 {/* Budget - Left */}
                 <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
+                  <div className="p-3 bg-primary/10">
                     <DollarSign className="h-6 w-6 text-primary" />
                   </div>
                   <div>
@@ -63,10 +63,10 @@ const BusinessDashboard: React.FC = () => {
 
                 <div className="h-12 w-px bg-border" />
 
-                {/* Traction - Right */}
-                <div className="flex items-center gap-12">
+                {/* Traction - Right (Stacked) */}
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10">
+                    <div className="p-3 bg-primary/10">
                       <Eye className="h-6 w-6 text-primary" />
                     </div>
                     <div>
@@ -76,7 +76,7 @@ const BusinessDashboard: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10">
+                    <div className="p-3 bg-primary/10">
                       <Users className="h-6 w-6 text-primary" />
                     </div>
                     <div>
