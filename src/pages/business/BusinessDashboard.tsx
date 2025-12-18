@@ -71,6 +71,15 @@ const BusinessDashboard: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
+                    <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                      <CardContent className="px-6 py-2">
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
@@ -135,6 +144,15 @@ const BusinessDashboard: React.FC = () => {
                         </div>
                       </CardContent>
                     </Card>
+                    <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                      <CardContent className="px-6 py-2">
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     <CardContent className="px-4 py-1 h-full flex flex-col justify-center">
@@ -196,6 +214,15 @@ const BusinessDashboard: React.FC = () => {
                           <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
                           <span className="text-3xl font-bold font-montserrat">/</span>
                           <span className="text-3xl font-bold font-montserrat">25 000 sek</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+                      <CardContent className="px-6 py-2">
+                        <div className="flex items-center gap-2">
+                          {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="w-8 h-14 bg-muted rounded-none" />
+                          ))}
                         </div>
                       </CardContent>
                     </Card>
