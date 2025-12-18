@@ -81,9 +81,9 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
-                      <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-6 h-full">
+                      <div className="flex h-full flex-col justify-between">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
                           <span className="text-lg font-semibold">100k</span>
@@ -146,9 +146,9 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
-                      <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-6 h-full">
+                      <div className="flex h-full flex-col justify-between">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
                           <span className="text-lg font-semibold">50k</span>
@@ -211,9 +211,9 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
-                      <div className="flex flex-col gap-2">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-6 h-full">
+                      <div className="flex h-full flex-col justify-between">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
                           <span className="text-lg font-semibold">25k</span>
