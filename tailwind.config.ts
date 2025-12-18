@@ -19,6 +19,7 @@ export default {
         montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
         jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         outfit: ['Outfit', 'system-ui', 'sans-serif'],
+        geist: ['Geist Sans', 'system-ui', 'sans-serif'],
       },
       colors: {
         'dark-surface': '#1c1c1c',
