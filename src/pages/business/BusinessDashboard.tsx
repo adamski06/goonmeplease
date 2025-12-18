@@ -81,32 +81,32 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] min-w-[140px]">
-                    <CardContent className="px-6 py-3 h-full flex flex-col justify-center">
-                      <div className="flex flex-col gap-1">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                      <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Budget</span>
-                          <span className="text-base font-semibold">100k</span>
+                          <span className="text-base text-muted-foreground font-bold">Budget</span>
+                          <span className="text-lg font-semibold">100k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Left</span>
-                          <span className="text-base font-semibold">52k</span>
+                          <span className="text-base text-muted-foreground font-bold">Left</span>
+                          <span className="text-lg font-semibold">52k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Pending</span>
-                          <span className="text-base font-semibold">12</span>
+                          <span className="text-base text-muted-foreground font-bold">Pending</span>
+                          <span className="text-lg font-semibold">12</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Approved</span>
-                          <span className="text-base font-semibold">38</span>
+                          <span className="text-base text-muted-foreground font-bold">Approved</span>
+                          <span className="text-lg font-semibold">38</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Creators</span>
-                          <span className="text-base font-semibold">24</span>
+                          <span className="text-base text-muted-foreground font-bold">Creators</span>
+                          <span className="text-lg font-semibold">24</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">CPV</span>
-                          <span className="text-base font-semibold">0.037</span>
+                          <span className="text-base text-muted-foreground font-bold">CPV</span>
+                          <span className="text-lg font-semibold">0.037</span>
                         </div>
                       </div>
                     </CardContent>
@@ -146,32 +146,32 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] min-w-[140px]">
-                    <CardContent className="px-6 py-3 h-full flex flex-col justify-center">
-                      <div className="flex flex-col gap-1">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                      <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Budget</span>
-                          <span className="text-base font-semibold">50k</span>
+                          <span className="text-base text-muted-foreground font-bold">Budget</span>
+                          <span className="text-lg font-semibold">50k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Left</span>
-                          <span className="text-base font-semibold">27k</span>
+                          <span className="text-base text-muted-foreground font-bold">Left</span>
+                          <span className="text-lg font-semibold">27k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Pending</span>
-                          <span className="text-base font-semibold">4</span>
+                          <span className="text-base text-muted-foreground font-bold">Pending</span>
+                          <span className="text-lg font-semibold">4</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Approved</span>
-                          <span className="text-base font-semibold">15</span>
+                          <span className="text-base text-muted-foreground font-bold">Approved</span>
+                          <span className="text-lg font-semibold">15</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Creators</span>
-                          <span className="text-base font-semibold">11</span>
+                          <span className="text-base text-muted-foreground font-bold">Creators</span>
+                          <span className="text-lg font-semibold">11</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">CPV</span>
-                          <span className="text-base font-semibold">0.037</span>
+                          <span className="text-base text-muted-foreground font-bold">CPV</span>
+                          <span className="text-lg font-semibold">0.037</span>
                         </div>
                       </div>
                     </CardContent>
@@ -211,32 +211,32 @@ const BusinessDashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   </div>
-                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] min-w-[140px]">
-                    <CardContent className="px-6 py-3 h-full flex flex-col justify-center">
-                      <div className="flex flex-col gap-1">
+                  <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] flex-1">
+                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                      <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Budget</span>
-                          <span className="text-base font-semibold">25k</span>
+                          <span className="text-base text-muted-foreground font-bold">Budget</span>
+                          <span className="text-lg font-semibold">25k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Left</span>
-                          <span className="text-base font-semibold">16k</span>
+                          <span className="text-base text-muted-foreground font-bold">Left</span>
+                          <span className="text-lg font-semibold">16k</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Pending</span>
-                          <span className="text-base font-semibold">7</span>
+                          <span className="text-base text-muted-foreground font-bold">Pending</span>
+                          <span className="text-lg font-semibold">7</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Approved</span>
-                          <span className="text-base font-semibold">9</span>
+                          <span className="text-base text-muted-foreground font-bold">Approved</span>
+                          <span className="text-lg font-semibold">9</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">Creators</span>
-                          <span className="text-base font-semibold">8</span>
+                          <span className="text-base text-muted-foreground font-bold">Creators</span>
+                          <span className="text-lg font-semibold">8</span>
                         </div>
                         <div className="flex justify-between items-baseline">
-                          <span className="text-sm text-muted-foreground font-bold">CPV</span>
-                          <span className="text-base font-semibold">0.037</span>
+                          <span className="text-base text-muted-foreground font-bold">CPV</span>
+                          <span className="text-lg font-semibold">0.037</span>
                         </div>
                       </div>
                     </CardContent>
