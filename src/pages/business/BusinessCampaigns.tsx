@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 const BusinessCampaigns: React.FC = () => {
   const { user, loading } = useAuth();
@@ -36,7 +38,13 @@ const BusinessCampaigns: React.FC = () => {
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <h1 className="text-3xl font-bold text-foreground mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>Campaigns</h1>
+          <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
+            <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
+            <Button onClick={() => navigate('/business/campaigns/new')} className="gap-2">
+              <Plus className="h-4 w-4" />
+              New Campaign
+            </Button>
+          </div>
 
           <div className="space-y-16">
             {/* Campaign 1 - Summer Vibes */}
@@ -233,6 +241,14 @@ const BusinessCampaigns: React.FC = () => {
                 </Card>
               </div>
             </Card>
+          </div>
+
+          {/* Bottom New Campaign Button */}
+          <div className="mt-16 flex justify-center opacity-0 animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+            <Button onClick={() => navigate('/business/campaigns/new')} variant="outline" className="gap-2">
+              <Plus className="h-4 w-4" />
+              New Campaign
+            </Button>
           </div>
         </div>
       </div>
