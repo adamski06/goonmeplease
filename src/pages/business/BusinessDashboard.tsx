@@ -47,21 +47,23 @@ const BusinessDashboard: React.FC = () => {
 
           {/* Stats Card */}
           <Card className="bg-card/50 backdrop-blur-sm border-border max-w-4xl rounded-none">
-            <CardContent className="py-6 px-8">
-              <div className="flex items-center gap-4">
-                {/* Budget - Left */}
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
-                  <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK =</p>
-                  <p className="text-sm text-foreground mt-1">
-                    / {formatExact(stats.totalBudget)} SEK
-                  </p>
+            <CardContent className="py-8 px-8">
+              <div className="flex flex-col gap-6">
+                {/* Top row - Money and Views aligned */}
+                <div className="flex items-baseline gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Money Spent</p>
+                    <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK =</p>
+                  </div>
+                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} views</p>
                 </div>
 
-                {/* Traction - Right */}
-                <div>
-                  <p className="text-6xl font-bold">{formatExact(stats.totalViews)} views</p>
-                  <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
+                {/* Bottom row - Budget and Creators */}
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-foreground">
+                    / {formatExact(stats.totalBudget)} SEK
+                  </p>
+                  <p className="text-sm text-muted-foreground">{stats.totalCreators} creators</p>
                 </div>
               </div>
             </CardContent>
