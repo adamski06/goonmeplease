@@ -65,7 +65,7 @@ const BusinessDashboard: React.FC = () => {
 
           {/* Stats Cards */}
           <div className="flex flex-col gap-4">
-            <Card className="bg-white/10 dark:bg-white/5 backdrop-blur-md border-white/20 rounded-2xl inline-block shadow-lg">
+            <Card className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-md border-white/10 rounded-2xl inline-block shadow-sm">
               <CardContent className="px-8 py-3">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} =</span>
@@ -73,7 +73,7 @@ const BusinessDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white/10 dark:bg-white/5 backdrop-blur-md border-white/20 rounded-2xl inline-block shadow-lg">
+            <Card className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-md border-white/10 rounded-2xl inline-block shadow-sm">
               <CardContent className="px-8 py-4">
                 <div className="flex items-center gap-3">
                   <span className="text-xl font-normal">UGC:</span>
@@ -81,10 +81,10 @@ const BusinessDashboard: React.FC = () => {
                     {Array(12).fill(null).map((_, index) => (
                       <div
                         key={index}
-                        className="w-5 h-8 bg-white/20 backdrop-blur-sm border border-white/30 rounded-sm"
+                        className="w-5 h-8 bg-white/10 backdrop-blur-sm border border-white/15 rounded-sm"
                       />
                     ))}
-                    <button className="w-5 h-8 border border-dashed border-white/40 rounded-sm flex items-center justify-center hover:bg-white/20 transition-colors">
+                    <button className="w-5 h-8 border border-dashed border-white/20 rounded-sm flex items-center justify-center hover:bg-white/10 transition-colors">
                       <Plus className="h-3 w-3 text-muted-foreground" />
                     </button>
                   </div>
