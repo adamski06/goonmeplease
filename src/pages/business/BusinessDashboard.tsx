@@ -1,38 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus } from 'lucide-react';
+
+import ugc1 from '@/assets/ugc/ugc-placeholder-1.jpg';
+import ugc2 from '@/assets/ugc/ugc-placeholder-2.jpg';
+import ugc3 from '@/assets/ugc/ugc-placeholder-3.jpg';
+import ugc4 from '@/assets/ugc/ugc-placeholder-4.jpg';
+import ugc5 from '@/assets/ugc/ugc-placeholder-5.jpg';
+import ugc6 from '@/assets/ugc/ugc-placeholder-6.jpg';
+
+const ugcImages = [ugc1, ugc2, ugc3, ugc4, ugc5, ugc6];
 
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const placeholderContainerRef = useRef<HTMLDivElement>(null);
-  const [placeholderCount, setPlaceholderCount] = useState(6);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
-
-  useEffect(() => {
-    const updatePlaceholderCount = () => {
-      if (placeholderContainerRef.current) {
-        const containerWidth = placeholderContainerRef.current.offsetWidth;
-        const placeholderWidth = 24 + 4; // w-6 (24px) + gap (4px)
-        const plusButtonWidth = 24 + 4;
-        const availableWidth = containerWidth - plusButtonWidth;
-        const count = Math.floor(availableWidth / placeholderWidth);
-        setPlaceholderCount(Math.max(1, count));
-      }
-    };
-
-    updatePlaceholderCount();
-    window.addEventListener('resize', updatePlaceholderCount);
-    return () => window.removeEventListener('resize', updatePlaceholderCount);
-  }, []);
 
   if (loading) {
     return (
@@ -79,10 +68,12 @@ const BusinessDashboard: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">User Generated Videos:</span>
                   <div className="flex items-center gap-1">
-                    {Array(12).fill(null).map((_, index) => (
-                      <div
+                    {ugcImages.map((img, index) => (
+                      <img
                         key={index}
-                        className="w-4 h-7 bg-black/30 border border-black/20 rounded-none"
+                        src={img}
+                        alt={`UGC video ${index + 1}`}
+                        className="w-6 h-10 object-cover rounded-none"
                       />
                     ))}
                   </div>
