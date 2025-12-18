@@ -70,7 +70,7 @@ const BusinessDashboard: React.FC = () => {
                             <span className="text-3xl font-bold font-montserrat">likes</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
+                            <span className="text-3xl font-bold font-montserrat text-muted-foreground">47 823 sek</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">100 000 sek</span>
                           </div>
@@ -140,7 +140,7 @@ const BusinessDashboard: React.FC = () => {
                             <span className="text-3xl font-bold font-montserrat">likes</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
+                            <span className="text-3xl font-bold font-montserrat text-muted-foreground">23 412 sek</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">50 000 sek</span>
                           </div>
@@ -210,7 +210,7 @@ const BusinessDashboard: React.FC = () => {
                             <span className="text-3xl font-bold font-montserrat">likes</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
+                            <span className="text-3xl font-bold font-montserrat text-muted-foreground">9 234 sek</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
                             <span className="text-3xl font-bold font-montserrat text-muted-foreground">25 000 sek</span>
                           </div>
