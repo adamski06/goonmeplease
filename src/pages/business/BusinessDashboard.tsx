@@ -58,7 +58,7 @@ const BusinessDashboard: React.FC = () => {
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
               <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)]">
-                <h2 className="text-xl font-semibold mt-2 mb-3">Summer Vibes</h2>
+                <h2 className="text-2xl font-semibold mt-2 mb-3">Summer Vibes</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
@@ -131,7 +131,7 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 2 - Coffee Culture */}
               <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)]">
-                <h2 className="text-xl font-semibold mt-2 mb-3">Coffee Culture</h2>
+                <h2 className="text-2xl font-semibold mt-2 mb-3">Coffee Culture</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
@@ -204,7 +204,7 @@ const BusinessDashboard: React.FC = () => {
 
             {/* Campaign 3 - Street Style */}
               <Card className="bg-white/40 dark:bg-dark-surface border-0 rounded-none pt-3 pb-6 px-6 shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:shadow-[0_0_20px_rgba(0,0,0,0.4)]">
-                <h2 className="text-xl font-semibold mt-2 mb-3">Street Style</h2>
+                <h2 className="text-2xl font-semibold mt-2 mb-3">Street Style</h2>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col gap-2">
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none w-[780px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
