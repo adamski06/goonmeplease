@@ -821,16 +821,16 @@ const Campaigns: React.FC = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex flex-col gap-2 px-3">
+            <div className="flex flex-col gap-1 px-3">
               <button 
                 onClick={() => navigate('/auth?mode=signup')}
-                className="w-full py-2 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="w-full py-1.5 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Create account
               </button>
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="w-full py-2 text-sm font-medium hover:opacity-70 transition-opacity"
+                className="w-full py-1 text-sm font-medium hover:opacity-70 transition-opacity"
               >
                 Log in
               </button>
