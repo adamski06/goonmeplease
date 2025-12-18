@@ -56,7 +56,7 @@ const BusinessDashboard: React.FC = () => {
           </Card>
 
           {/* Campaigns Section */}
-          <div className="mt-16">
+          <div className="mt-32">
             <h2 className="text-2xl font-bold mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>Campaigns</h2>
             <div className="space-y-16">
               {/* Campaign 1 - Summer Vibes */}
