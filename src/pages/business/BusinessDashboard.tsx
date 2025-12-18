@@ -46,7 +46,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-start gap-4">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
               <CardContent className="py-8 px-8">
                 <p className="text-4xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
