@@ -60,7 +60,7 @@ const Auth: React.FC = () => {
   useEffect(() => {
     // Only auto-redirect if user is logged in AND we're not in the TikTok connect step AND not in dev mode
     if (!loading && user && signUpStep !== 2 && !devMode) {
-      navigate('/campaigns');
+      navigate('/');
     }
   }, [user, loading, navigate, signUpStep, devMode]);
 
@@ -98,7 +98,7 @@ const Auth: React.FC = () => {
         variant: 'destructive',
       });
     } else {
-      navigate('/campaigns');
+      navigate('/');
     }
   };
 
@@ -136,11 +136,11 @@ const Auth: React.FC = () => {
       title: 'Coming soon',
       description: 'TikTok connection will be available soon.',
     });
-    navigate('/campaigns');
+    navigate('/');
   };
 
   const handleSkipTikTok = () => {
-    navigate('/campaigns');
+    navigate('/');
   };
 
   if (loading) {
