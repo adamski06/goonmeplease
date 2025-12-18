@@ -84,15 +84,17 @@ const Index = () => {
             Careers
           </button>
           
-          {/* Right side button */}
-          <div className="ml-auto">
-            <button 
-              onClick={() => navigate('/')}
-              className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
-            >
-              Start earning
-            </button>
-          </div>
+          {/* Right side button - only show in creator mode */}
+          {activeTab === 'creator' && (
+            <div className="ml-auto">
+              <button 
+                onClick={() => navigate('/')}
+                className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+              >
+                Start earning
+              </button>
+            </div>
+          )}
         </div>
       </nav>
       
