@@ -26,14 +26,13 @@ const BusinessDashboard: React.FC = () => {
   // Mock stats - will be replaced with real data
   const stats = {
     totalSpent: 45600,
+    totalBudget: 100000,
     totalViews: 1250000,
     totalCreators: 48,
   };
 
-  const formatNumber = (num: number) => {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
+  const formatExact = (num: number) => {
+    return num.toLocaleString('sv-SE');
   };
 
   return (
@@ -47,7 +46,7 @@ const BusinessDashboard: React.FC = () => {
           </div>
 
           {/* Stats Card */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border max-w-xl rounded-none">
+          <Card className="bg-card/50 backdrop-blur-sm border-border max-w-2xl rounded-none">
             <CardContent className="py-6 px-8">
               <div className="flex items-center">
                 {/* Budget - Left */}
@@ -56,18 +55,21 @@ const BusinessDashboard: React.FC = () => {
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Money Spent</p>
                   </div>
-                  <p className="text-3xl font-bold">{formatNumber(stats.totalSpent)} SEK</p>
+                  <p className="text-3xl font-bold">{formatExact(stats.totalSpent)} SEK</p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {formatExact(stats.totalBudget - stats.totalSpent)} SEK remaining
+                  </p>
                 </div>
 
-                <div className="h-16 w-px bg-border" />
+                <div className="h-20 w-px bg-border" />
 
                 {/* Traction - Right */}
                 <div className="flex-1 text-center">
                   <div className="flex items-center justify-center gap-2 mb-1">
-                    <Eye className="h-5 w-5 text-muted-foreground" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">Total Views</p>
                   </div>
-                  <p className="text-6xl font-bold">{formatNumber(stats.totalViews)}</p>
+                  <p className="text-3xl font-bold">{formatExact(stats.totalViews)}</p>
                   <p className="text-sm text-muted-foreground mt-2">{stats.totalCreators} creators</p>
                 </div>
               </div>
