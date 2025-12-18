@@ -58,8 +58,6 @@ const BusinessDashboard: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="h-20 w-px bg-border" />
-
                 {/* Traction - Right */}
                 <div className="flex-1 text-center">
                   <p className="text-6xl font-bold">{formatExact(stats.totalViews)} views</p>
