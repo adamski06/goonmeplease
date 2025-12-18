@@ -6,25 +6,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 40 33% 98%;
     --foreground: 220 20% 10%;
 
-    --card: 0 0% 100%;
+    --card: 40 33% 98%;
     --card-foreground: 220 20% 10%;
 
-    --popover: 0 0% 100%;
+    --popover: 40 33% 98%;
     --popover-foreground: 220 20% 10%;
 
     --primary: 220 20% 10%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 40 33% 98%;
 
-    --secondary: 220 10% 96%;
+    --secondary: 40 20% 94%;
     --secondary-foreground: 220 20% 10%;
 
-    --muted: 220 10% 96%;
+    --muted: 40 20% 94%;
     --muted-foreground: 220 10% 45%;
 
-    --accent: 220 10% 94%;
+    --accent: 40 15% 92%;
     --accent-foreground: 220 20% 10%;
 
     --destructive: 0 84% 60%;
@@ -43,11 +43,11 @@
     --gradient-pink: 326 100% 80%;
     --gradient-orange: 30 100% 73%;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 40 25% 96%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-primary-foreground: 40 33% 98%;
+    --sidebar-accent: 40 20% 94%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
@@ -263,7 +263,7 @@
 
 /* Static grainy background - no animated colors */
 .grainy-background {
-  background: hsl(220, 10%, 96%);
+  background: hsl(40, 33%, 98%);
 }
 
 .dark .grainy-background {
