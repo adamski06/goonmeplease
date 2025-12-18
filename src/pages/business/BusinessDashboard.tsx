@@ -65,17 +65,17 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">100 000 sek</span>
+                          <span className="text-3xl font-bold font-montserrat">89 432</span>
+                          <span className="text-3xl font-bold font-montserrat">likes</span>
                         </div>
                       </CardContent>
                     </Card>
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">89 432</span>
-                          <span className="text-3xl font-bold font-montserrat">likes</span>
+                          <span className="text-3xl font-bold font-montserrat">47 823 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">100 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -137,17 +137,17 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">50 000 sek</span>
+                          <span className="text-3xl font-bold font-montserrat">42 156</span>
+                          <span className="text-3xl font-bold font-montserrat">likes</span>
                         </div>
                       </CardContent>
                     </Card>
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">42 156</span>
-                          <span className="text-3xl font-bold font-montserrat">likes</span>
+                          <span className="text-3xl font-bold font-montserrat">23 412 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">50 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -209,17 +209,17 @@ const BusinessDashboard: React.FC = () => {
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
-                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">25 000 sek</span>
+                          <span className="text-3xl font-bold font-montserrat">18 723</span>
+                          <span className="text-3xl font-bold font-montserrat">likes</span>
                         </div>
                       </CardContent>
                     </Card>
                     <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                       <CardContent className="px-6 py-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-3xl font-bold font-montserrat">18 723</span>
-                          <span className="text-3xl font-bold font-montserrat">likes</span>
+                          <span className="text-3xl font-bold font-montserrat">9 234 sek</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">/</span>
+                          <span className="text-3xl font-bold font-montserrat text-muted-foreground">25 000 sek</span>
                         </div>
                       </CardContent>
                     </Card>
