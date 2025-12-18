@@ -706,7 +706,7 @@ const Campaigns: React.FC = () => {
       {/* Left Sidebar - Hidden on mobile */}
       <aside className="hidden md:flex w-56 lg:w-52 flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
         {/* Logo */}
-        <div className="px-6 pt-6 pb-4">
+        <div className="px-6 pt-6 pb-4 flex items-center gap-3">
           <button onClick={() => navigate('/')} className="relative h-10 w-[120px]">
             <div 
               className="absolute inset-0 bg-foreground"
@@ -722,7 +722,7 @@ const Campaigns: React.FC = () => {
               }} 
             />
           </button>
-          <span className="text-sm font-bold text-black dark:text-white mt-1 block">Creator</span>
+          <span className="text-sm font-bold text-black dark:text-white">Creator</span>
         </div>
 
         {/* Navigation */}
