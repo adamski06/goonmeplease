@@ -59,7 +59,7 @@ const BusinessDashboard: React.FC = () => {
               <h2 className="text-xl font-semibold mb-4 ml-8">Summer Vibes</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-black text-white rounded-2xl shadow-sm w-[540px]">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm min-w-[660px]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-baseline gap-3">
                         <span className="text-3xl font-normal font-montserrat">{formatExact(stats.totalSpent)} sek =</span>
@@ -132,7 +132,7 @@ const BusinessDashboard: React.FC = () => {
               <h2 className="text-xl font-semibold mb-4 ml-8">Coffee Culture</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-black text-white rounded-2xl shadow-sm w-[540px]">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm min-w-[660px]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-baseline gap-3">
                         <span className="text-3xl font-normal font-montserrat">23 156 sek =</span>
@@ -205,7 +205,7 @@ const BusinessDashboard: React.FC = () => {
               <h2 className="text-xl font-semibold mb-4 ml-8">Street Style</h2>
               <div className="flex items-stretch gap-3 ml-8">
                 <div className="flex flex-col gap-2">
-                  <Card className="bg-black text-white rounded-2xl shadow-sm w-[540px]">
+                  <Card className="bg-black text-white rounded-2xl shadow-sm min-w-[660px]">
                     <CardContent className="px-8 py-3">
                       <div className="flex items-baseline gap-3">
                         <span className="text-3xl font-normal font-montserrat">8 943 sek =</span>
