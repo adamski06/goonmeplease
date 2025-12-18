@@ -82,7 +82,7 @@ const BusinessDashboard: React.FC = () => {
                     </Card>
                   </div>
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
@@ -147,7 +147,7 @@ const BusinessDashboard: React.FC = () => {
                     </Card>
                   </div>
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
@@ -212,7 +212,7 @@ const BusinessDashboard: React.FC = () => {
                     </Card>
                   </div>
                   <Card className="bg-white/70 dark:bg-white/10 border-0 rounded-none shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] w-[200px]">
-                    <CardContent className="px-8 py-4 h-full flex flex-col justify-center">
+                    <CardContent className="px-8 pt-12 pb-4 h-full flex flex-col justify-start">
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-baseline">
                           <span className="text-base text-muted-foreground font-bold">Budget</span>
