@@ -4,7 +4,7 @@ import BusinessLayout from "@/components/BusinessLayout";
 const BusinessCampaignTypeSelect = () => {
   const navigate = useNavigate();
 
-  const handleSelectType = (type: "open" | "selected") => {
+  const handleSelectType = (type: "simple" | "guided") => {
     navigate(`/business/campaigns/new/form?type=${type}`);
   };
 
@@ -15,29 +15,29 @@ const BusinessCampaignTypeSelect = () => {
         <p className="text-muted-foreground mb-12">Choose your campaign type</p>
         
         <div className="flex gap-8 md:gap-12">
-          {/* Open Campaign */}
+          {/* Simple Campaign */}
           <button
-            onClick={() => handleSelectType("open")}
+            onClick={() => handleSelectType("simple")}
             className="group flex flex-col items-center"
           >
             <div className="w-48 md:w-56 aspect-[9/16] bg-muted border-2 border-border rounded-2xl flex items-center justify-center transition-all group-hover:border-primary group-hover:bg-muted/80 group-hover:scale-[1.02]">
               <span className="text-6xl text-muted-foreground/50 group-hover:text-primary/50 transition-colors">▶</span>
             </div>
-            <h2 className="mt-4 text-xl font-semibold group-hover:text-primary transition-colors">Open</h2>
+            <h2 className="mt-4 text-xl font-semibold group-hover:text-primary transition-colors">Simple</h2>
             <p className="text-sm text-muted-foreground mt-1 text-center max-w-[180px]">
               Any creator can participate
             </p>
           </button>
 
-          {/* Selected Campaign */}
+          {/* Guided Campaign */}
           <button
-            onClick={() => handleSelectType("selected")}
+            onClick={() => handleSelectType("guided")}
             className="group flex flex-col items-center"
           >
             <div className="w-48 md:w-56 aspect-[9/16] bg-muted border-2 border-border rounded-2xl flex items-center justify-center transition-all group-hover:border-primary group-hover:bg-muted/80 group-hover:scale-[1.02]">
               <span className="text-6xl text-muted-foreground/50 group-hover:text-primary/50 transition-colors">▶</span>
             </div>
-            <h2 className="mt-4 text-xl font-semibold group-hover:text-primary transition-colors">Selected</h2>
+            <h2 className="mt-4 text-xl font-semibold group-hover:text-primary transition-colors">Guided</h2>
             <p className="text-sm text-muted-foreground mt-1 text-center max-w-[180px]">
               Invite specific creators
             </p>
