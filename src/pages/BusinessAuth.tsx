@@ -364,14 +364,17 @@ const BusinessAuth: React.FC = () => {
               </h2>
               
               <div className="w-full space-y-6">
-                <Textarea
-                  placeholder="We're a company that..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={5}
-                  className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg font-montserrat"
-                  autoFocus
-                />
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground text-sm font-montserrat">Short description</Label>
+                  <Textarea
+                    placeholder="We're a company that..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={2}
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-base font-montserrat"
+                    autoFocus
+                  />
+                </div>
                 
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">Website (optional)</Label>
