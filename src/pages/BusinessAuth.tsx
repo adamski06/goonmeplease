@@ -60,22 +60,39 @@ const BusinessAuth: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showNameInput, setShowNameInput] = useState(false);
+  const [typewriterText, setTypewriterText] = useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Animate name input after 1 second on company-name step
+  // Animate name input after 1 second on company-name step with typewriter effect
   useEffect(() => {
     if (step === 'company-name') {
       setShowNameInput(false);
-      const timer = setTimeout(() => {
+      setTypewriterText('');
+      
+      const showTimer = setTimeout(() => {
         setShowNameInput(true);
-        // Focus the input after animation starts
         setTimeout(() => inputRef.current?.focus(), 100);
+        
+        // Typewriter effect for placeholder
+        const text = 'company name';
+        let index = 0;
+        const typeTimer = setInterval(() => {
+          if (index <= text.length) {
+            setTypewriterText(text.slice(0, index));
+            index++;
+          } else {
+            clearInterval(typeTimer);
+          }
+        }, 80);
+        
+        return () => clearInterval(typeTimer);
       }, 1000);
-      return () => clearTimeout(timer);
+      
+      return () => clearTimeout(showTimer);
     }
   }, [step]);
 
@@ -288,36 +305,41 @@ const BusinessAuth: React.FC = () => {
       case 'company-name':
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
-            <div className="space-y-8">
-              <div className="flex items-baseline gap-4">
+            <div className="flex flex-col items-center space-y-8">
+              <div className="flex items-end gap-3">
                 <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
-                {showNameInput && (
-                  <div className="relative inline-block animate-fade-in">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      onKeyDown={handleCompanyNameKeyDown}
-                      placeholder="company name"
-                      className="bg-transparent border-none outline-none text-5xl md:text-7xl font-light placeholder:text-muted-foreground/40 text-foreground min-w-[200px]"
-                      style={{ width: companyName ? `${Math.max(companyName.length, 12)}ch` : '12ch' }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/30" />
-                  </div>
-                )}
+                <div className="relative min-w-[280px] md:min-w-[350px]">
+                  {showNameInput && (
+                    <>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        onKeyDown={handleCompanyNameKeyDown}
+                        className="bg-transparent border-none outline-none text-5xl md:text-7xl font-light text-foreground w-full"
+                      />
+                      {!companyName && (
+                        <span className="absolute left-0 top-0 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none" style={{ top: '50%', transform: 'translateY(-50%)' }}>
+                          {typewriterText}
+                          <span className="animate-pulse">|</span>
+                        </span>
+                      )}
+                      <div 
+                        className="absolute bottom-0 left-0 h-px bg-foreground/30 transition-all duration-200"
+                        style={{ width: companyName ? `${Math.max(companyName.length + 1, 1)}ch` : '100%' }}
+                      />
+                    </>
+                  )}
+                </div>
               </div>
               
-              {companyName.trim() && (
-                <div className="flex justify-center animate-fade-in">
-                  <Button 
-                    onClick={goNext} 
-                    className="rounded-full px-8"
-                  >
-                    Continue
-                  </Button>
-                </div>
-              )}
+              <Button 
+                onClick={goNext} 
+                className={`rounded-full px-8 transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+              >
+                Continue
+              </Button>
             </div>
           </div>
         );
