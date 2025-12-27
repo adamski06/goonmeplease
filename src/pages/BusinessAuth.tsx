@@ -308,30 +308,30 @@ const BusinessAuth: React.FC = () => {
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
                 <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
-                <div className="relative min-w-[280px] md:min-w-[350px]">
-                  {showNameInput && (
-                    <>
-                      <input
-                        ref={inputRef}
-                        type="text"
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        onKeyDown={handleCompanyNameKeyDown}
-                        className="bg-transparent border-none outline-none text-5xl md:text-7xl font-light text-foreground w-full"
-                      />
-                      {!companyName && (
-                        <span className="absolute left-0 top-0 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none" style={{ top: '50%', transform: 'translateY(-50%)' }}>
-                          {typewriterText}
-                          <span className="animate-pulse">|</span>
-                        </span>
-                      )}
-                      <div 
-                        className="absolute bottom-0 left-0 h-px bg-foreground/30 transition-all duration-200"
-                        style={{ width: companyName ? `${Math.max(companyName.length + 1, 1)}ch` : '100%' }}
-                      />
-                    </>
-                  )}
-                </div>
+                {showNameInput && (
+                  <div className="relative inline-flex flex-col">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      onKeyDown={handleCompanyNameKeyDown}
+                      placeholder=""
+                      className="bg-transparent border-none outline-none text-2xl md:text-3xl font-light text-foreground pb-1"
+                      style={{ width: `${Math.max(companyName.length || 12, 12)}ch` }}
+                    />
+                    {!companyName && (
+                      <span className="absolute left-0 bottom-1 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none">
+                        {typewriterText}
+                        <span className="animate-pulse">|</span>
+                      </span>
+                    )}
+                    <div 
+                      className="h-px bg-foreground/30 transition-all duration-200"
+                      style={{ width: `${Math.max(companyName.length || 12, 12)}ch` }}
+                    />
+                  </div>
+                )}
               </div>
               
               <Button 
