@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Upload, X, Building2, ArrowRight, ArrowLeft, Globe, Users, Package, MapPin } from 'lucide-react';
+import { Building2, ArrowRight, ArrowLeft, Globe, Users, Package, MapPin } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
@@ -63,8 +63,6 @@ const BusinessAuth: React.FC = () => {
   
   // Final data
   const [website, setWebsite] = useState('');
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [devMode, setDevMode] = useState(false);
   
@@ -165,30 +163,6 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast({
-          title: 'File too large',
-          description: 'Logo must be less than 5MB',
-          variant: 'destructive',
-        });
-        return;
-      }
-      setLogoFile(file);
-      setLogoPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const removeLogo = () => {
-    setLogoFile(null);
-    if (logoPreview) {
-      URL.revokeObjectURL(logoPreview);
-      setLogoPreview(null);
-    }
-  };
-
   const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateCredentials()) return;
@@ -224,26 +198,7 @@ const BusinessAuth: React.FC = () => {
         throw new Error('Not authenticated');
       }
 
-      const userId = session.session.user.id;
-      let logoUrl = null;
-
-      // Upload logo if provided
-      if (logoFile) {
-        const fileExt = logoFile.name.split('.').pop();
-        const filePath = `${userId}/${Date.now()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('business-logos')
-          .upload(filePath, logoFile);
-
-        if (uploadError) throw uploadError;
-
-        const { data: urlData } = supabase.storage
-          .from('business-logos')
-          .getPublicUrl(filePath);
-
-        logoUrl = urlData.publicUrl;
-      }
+      const currentUserId = session.session.user.id;
 
       // Build full description with all collected data
       const fullDescription = [
@@ -258,9 +213,8 @@ const BusinessAuth: React.FC = () => {
       const { error: profileError } = await supabase
         .from('business_profiles')
         .insert({
-          user_id: userId,
+          user_id: currentUserId,
           company_name: companyName,
-          logo_url: logoUrl,
           description: fullDescription || null,
           website: website || null,
         });
@@ -271,7 +225,7 @@ const BusinessAuth: React.FC = () => {
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({
-          user_id: userId,
+          user_id: currentUserId,
           role: 'business',
         });
 
@@ -334,38 +288,6 @@ const BusinessAuth: React.FC = () => {
                   className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none text-lg py-6"
                   autoFocus
                 />
-              </div>
-              
-              {/* Logo Upload */}
-              <div className="space-y-2">
-                <Label className="text-foreground">Company Logo (optional)</Label>
-                {logoPreview ? (
-                  <div className="relative w-24 h-24 mx-auto">
-                    <img 
-                      src={logoPreview} 
-                      alt="Logo preview" 
-                      className="w-full h-full object-cover rounded-lg border border-border"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeLogo}
-                      className="absolute -top-2 -right-2 p-1 bg-destructive text-destructive-foreground rounded-full"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-foreground/50 transition-colors">
-                    <Upload className="w-6 h-6 text-muted-foreground mb-1" />
-                    <span className="text-sm text-muted-foreground">Upload logo</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleLogoChange}
-                      className="hidden"
-                    />
-                  </label>
-                )}
               </div>
 
               <Button 
