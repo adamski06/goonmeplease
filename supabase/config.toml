@@ -1,1 +1,4 @@
 project_id = "jerctgkoqyhyvrpdmtfo"
+
+[functions.analyze-business-website]
+verify_jwt = false

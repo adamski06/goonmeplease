@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { Sparkles, Loader2 } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -75,6 +76,7 @@ const BusinessAuth: React.FC = () => {
   // Final data
   const [website, setWebsite] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
@@ -315,6 +317,68 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
+  const handleAnalyzeWebsite = async () => {
+    if (!website.trim()) {
+      toast({
+        title: 'Website required',
+        description: 'Please enter a website URL first.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsAnalyzing(true);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-business-website`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: website }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Analysis failed');
+      }
+
+      const data = result.data;
+
+      // Auto-fill form fields
+      if (data.description) {
+        setDescription(data.description);
+      }
+      if (data.productsServices) {
+        setProductsServices(data.productsServices);
+      }
+      if (data.country && COUNTRIES.includes(data.country)) {
+        setCountry(data.country);
+      }
+      if (data.audienceTypes && Array.isArray(data.audienceTypes)) {
+        const validTypes = data.audienceTypes.filter((t: string) => AUDIENCE_TYPES.includes(t));
+        if (validTypes.length > 0) {
+          setAudienceTypes(validTypes);
+        }
+      }
+
+      toast({
+        title: 'Website analyzed!',
+        description: 'Form fields have been auto-filled. Review and adjust as needed.',
+      });
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast({
+        title: 'Analysis failed',
+        description: error instanceof Error ? error.message : 'Could not analyze website',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -395,13 +459,34 @@ const BusinessAuth: React.FC = () => {
                 
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">Website (optional)</Label>
-                  <Input
-                    type="url"
-                    placeholder="https://yourcompany.com"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
-                  />
+                  <div className="flex gap-2">
+                    <Input
+                      type="url"
+                      placeholder="https://yourcompany.com"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleAnalyzeWebsite}
+                      disabled={isAnalyzing || !website.trim()}
+                      className="border-foreground/20 hover:bg-foreground/10 font-montserrat gap-2 whitespace-nowrap"
+                    >
+                      {isAnalyzing ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Analyzing...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4" />
+                          Automate
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Location */}
