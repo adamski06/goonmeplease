@@ -430,10 +430,10 @@ const BusinessAuth: React.FC = () => {
         const underlineWidth = Math.max(textToMeasure.length * 2, 26);
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
-            <div className="flex flex-col items-center space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">Hello</h1>
-              <div className="relative overflow-visible" style={{ minWidth: '280px' }}>
-                <div className="relative flex justify-center">
+            <div className="flex flex-col items-center space-y-8">
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">Hello</h1>
+                <div className="relative" style={{ width: '220px' }}>
                   <input
                     ref={inputRef}
                     type="text"
@@ -441,11 +441,10 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setCompanyName(e.target.value)}
                     onKeyDown={handleCompanyNameKeyDown}
                     placeholder=""
-                    className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-medium font-montserrat text-foreground text-center pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ width: `${Math.max(textToMeasure.length + 1, 13)}ch` }}
+                    className={`w-full bg-transparent border-none outline-none text-2xl md:text-3xl font-medium font-montserrat text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
                   />
                   {!companyName && showNameInput && (
-                    <span className="absolute left-1/2 -translate-x-1/2 top-0 text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                    <span className="absolute left-0 top-0 text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
                       {typewriterText}
                     </span>
                   )}
@@ -454,7 +453,7 @@ const BusinessAuth: React.FC = () => {
               
               <Button 
                 onClick={goNext} 
-                className={`rounded-full px-8 font-montserrat transition-opacity duration-300 mt-4 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`rounded-full px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
                 Continue
               </Button>
