@@ -471,18 +471,7 @@ const BusinessAuth: React.FC = () => {
               </h2>
               
               <div className="w-full space-y-6">
-                <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Short description</Label>
-                  <Textarea
-                    placeholder="We're a company that..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={2}
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm resize-none text-base font-sans"
-                    autoFocus
-                  />
-                </div>
-                
+                {/* Website - moved to top */}
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">Website (optional)</Label>
                   <div className="flex gap-2">
@@ -491,7 +480,7 @@ const BusinessAuth: React.FC = () => {
                       placeholder="https://yourcompany.com"
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                      className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans flex-1"
+                      className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans flex-1 text-base"
                     />
                     <Button
                       type="button"
@@ -513,6 +502,18 @@ const BusinessAuth: React.FC = () => {
                       )}
                     </Button>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground text-sm font-montserrat">Short description</Label>
+                  <Textarea
+                    placeholder="We're a company that..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={2}
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm resize-none text-base font-sans"
+                    autoFocus
+                  />
                 </div>
 
                 {/* Location */}
@@ -559,7 +560,7 @@ const BusinessAuth: React.FC = () => {
                   value={productsServices}
                   onChange={(e) => setProductsServices(e.target.value)}
                   rows={5}
-                  className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm resize-none text-lg font-sans"
+                  className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm resize-none text-base font-sans"
                   autoFocus
                 />
               </div>
@@ -591,7 +592,7 @@ const BusinessAuth: React.FC = () => {
                   placeholder="E.g., Health-conscious millennials interested in sustainable living, busy professionals looking for quick meal solutions..."
                   value={audienceDescription}
                   onChange={(e) => setAudienceDescription(e.target.value)}
-                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans min-h-[80px] resize-none"
+                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans min-h-[80px] resize-none text-base"
                 />
               </div>
 
@@ -715,7 +716,7 @@ const BusinessAuth: React.FC = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans text-base"
                   />
                 </div>
                 <div className="space-y-2">
@@ -727,7 +728,7 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans text-base"
                   />
                 </div>
                 <div className="space-y-2">
@@ -739,7 +740,7 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans text-base"
                   />
                 </div>
                 
@@ -774,7 +775,7 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans text-base"
                   />
                 </div>
                 <div className="space-y-2">
@@ -786,7 +787,7 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-sm font-sans text-base"
                   />
                 </div>
                 <Button type="submit" className="w-full rounded-full font-montserrat" disabled={isLoading}>
