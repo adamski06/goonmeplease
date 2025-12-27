@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import jarlaLogo from "@/assets/jarla-logo.png";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Index = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
 
@@ -23,7 +26,7 @@ const Index = () => {
             : 'text-foreground/60 group-hover:text-background hover:text-background'
         }`}
       >
-        Creator
+        {t('nav.creator')}
       </button>
       <button
         onClick={() => handleTabChange('business')}
@@ -33,7 +36,7 @@ const Index = () => {
             : 'text-foreground/60 group-hover:text-background hover:text-background'
         }`}
       >
-        Business
+        {t('nav.business')}
       </button>
     </>
   );
@@ -70,26 +73,28 @@ const Index = () => {
           
           {/* Nav buttons */}
           <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
-            {activeTab === 'creator' ? 'How do I earn money?' : 'Pricing'}
+            {activeTab === 'creator' ? t('nav.howToEarn') : t('nav.pricing')}
           </button>
           <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
-            About us
+            {t('nav.aboutUs')}
           </button>
           <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
-            Careers
+            {t('nav.careers')}
           </button>
           
-          {/* Right side button - only show in creator mode */}
-          {activeTab === 'creator' && (
-            <div className="ml-auto">
+          {/* Language Switcher */}
+          <div className="ml-auto flex items-center gap-4">
+            <LanguageSwitcher variant="minimal" />
+            {/* Right side button - only show in creator mode */}
+            {activeTab === 'creator' && (
               <button 
                 onClick={() => navigate('/')}
                 className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
               >
-                Start earning
+                {t('nav.startEarning')}
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </nav>
       
@@ -100,12 +105,12 @@ const Index = () => {
             <h1 className={`animate-fade-in-delayed font-bold text-foreground font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
               {activeTab === 'creator' ? (
                 <div className="mt-16 text-center">
-                  <span className="block text-6xl md:text-8xl">Earn money</span>
+                  <span className="block text-6xl md:text-8xl">{t('landing.creatorHero.title1')}</span>
                   <span className="block text-6xl md:text-8xl">
-                    per{' '}
+                    {t('landing.creatorHero.title2')}{' '}
                     <span className="inline-block">
                       <span className="inline-block text-foreground">
-                        view
+                        {t('landing.creatorHero.title3')}
                       </span>
                     </span>
                   </span>
@@ -114,20 +119,20 @@ const Index = () => {
                       onClick={() => navigate('/')}
                       className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
                     >
-                      Start earning
+                      {t('nav.startEarning')}
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="mt-80">
-                  <span className="block text-4xl md:text-6xl">Human network</span>
-                  <span className="block text-4xl md:text-6xl">is the new distribution</span>
+                  <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title1')}</span>
+                  <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title2')}</span>
                   <div className="flex justify-center mt-8">
                     <button 
                       onClick={() => navigate('/business/auth')}
                       className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
                     >
-                      Get started
+                      {t('landing.getStarted')}
                     </button>
                   </div>
                 </div>
@@ -138,7 +143,7 @@ const Index = () => {
           {activeTab === 'creator' && (
             <div className="flex items-center justify-center">
               <div className="w-56 h-[400px] bg-black/5 dark:bg-white/10 backdrop-blur-sm rounded-[4px] flex items-center justify-center">
-                <span className="text-muted-foreground text-sm font-montserrat">Video</span>
+                <span className="text-muted-foreground text-sm font-montserrat">{t('landing.video')}</span>
               </div>
             </div>
           )}
@@ -149,10 +154,10 @@ const Index = () => {
       <section className="min-h-screen flex flex-col items-center justify-center px-6 relative z-10">
         <div className="max-w-2xl text-center">
           <h2 className="text-4xl md:text-6xl font-semibold text-foreground mb-6">
-            Section Two
+            {t('landing.sectionTwo')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            Add your content here.
+            {t('landing.addContent')}
           </p>
         </div>
       </section>
@@ -161,10 +166,10 @@ const Index = () => {
       <section className="min-h-screen flex flex-col items-center justify-center px-6 relative z-10">
         <div className="max-w-2xl text-center">
           <h2 className="text-4xl md:text-6xl font-semibold text-foreground mb-6">
-            Section Three
+            {t('landing.sectionThree')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            Add your content here.
+            {t('landing.addContent')}
           </p>
         </div>
       </section>
