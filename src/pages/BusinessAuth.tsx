@@ -419,10 +419,6 @@ const BusinessAuth: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <div 
-                    className={`h-px bg-foreground/30 transition-all duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ width: `${underlineWidth}ch` }}
-                  />
                 </div>
               </div>
               
