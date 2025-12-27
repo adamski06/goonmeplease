@@ -826,7 +826,7 @@ const BusinessAuth: React.FC = () => {
         </div>
       )}
       
-      <div className="relative z-10">
+      <div className="relative z-10" key={step}>
         {renderStepContent()}
       </div>
     </div>
