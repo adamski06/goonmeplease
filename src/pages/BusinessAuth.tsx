@@ -741,7 +741,7 @@ const BusinessAuth: React.FC = () => {
       {/* Company name header - shown after first step */}
       {showCompanyHeader && (
         <div className="fixed top-8 left-1/2 -translate-x-1/2 z-40">
-          <h1 className="text-2xl font-light text-foreground">{companyName}</h1>
+          <h1 className="text-2xl font-bold font-montserrat text-foreground">{companyName}</h1>
         </div>
       )}
 
