@@ -467,7 +467,7 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
-                Tell us about <span className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 bg-clip-text text-transparent">{companyName}</span>
+                Tell us about {companyName}
               </h2>
               
               <div className="w-full space-y-6">
