@@ -15,11 +15,11 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import BusinessDashboard from "./pages/business/BusinessDashboard";
 import BusinessCampaigns from "./pages/business/BusinessCampaigns";
-
 import BusinessCampaignForm from "./pages/business/BusinessCampaignForm";
 import BusinessCampaignDetail from "./pages/business/BusinessCampaignDetail";
 import BusinessSubmissions from "./pages/business/BusinessSubmissions";
 import BusinessAnalytics from "./pages/business/BusinessAnalytics";
+import BusinessAuth from "./pages/BusinessAuth";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +40,7 @@ const App = () => (
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/profile" element={<Profile />} />
                 {/* Business Routes */}
+                <Route path="/business/auth" element={<BusinessAuth />} />
                 <Route path="/business" element={<BusinessDashboard />} />
                 <Route path="/business/campaigns" element={<BusinessCampaigns />} />
                 <Route path="/business/campaigns/new" element={<BusinessCampaignForm />} />
