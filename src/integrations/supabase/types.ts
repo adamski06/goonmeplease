@@ -164,6 +164,13 @@ export type Database = {
             referencedRelation: "tiktok_accounts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "content_submissions_tiktok_account_id_fkey"
+            columns: ["tiktok_account_id"]
+            isOneToOne: false
+            referencedRelation: "tiktok_accounts_safe"
+            referencedColumns: ["id"]
+          },
         ]
       }
       earnings: {
@@ -329,7 +336,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      tiktok_accounts_safe: {
+        Row: {
+          created_at: string | null
+          follower_count: number | null
+          id: string | null
+          is_active: boolean | null
+          tiktok_user_id: string | null
+          tiktok_username: string | null
+          token_expires_at: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          follower_count?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          tiktok_user_id?: string | null
+          tiktok_username?: string | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          follower_count?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          tiktok_user_id?: string | null
+          tiktok_username?: string | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_tiktok_tokens: {
@@ -337,6 +379,20 @@ export type Database = {
         Returns: {
           access_token: string
           refresh_token: string
+        }[]
+      }
+      get_user_tiktok_accounts: {
+        Args: { p_user_id: string }
+        Returns: {
+          created_at: string
+          follower_count: number
+          id: string
+          is_active: boolean
+          tiktok_user_id: string
+          tiktok_username: string
+          token_expires_at: string
+          updated_at: string
+          user_id: string
         }[]
       }
       has_role: {
