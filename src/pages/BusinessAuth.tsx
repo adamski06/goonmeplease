@@ -306,7 +306,7 @@ const BusinessAuth: React.FC = () => {
         const textToMeasure = companyName || typewriterText || 'company name';
         const underlineWidth = Math.max(textToMeasure.length * 2, 26);
         return (
-          <div className="flex flex-col items-center justify-center min-h-screen px-6">
+          <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
                 <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap">Hello</h1>
@@ -337,7 +337,7 @@ const BusinessAuth: React.FC = () => {
               
               <Button 
                 onClick={goNext} 
-                className={`rounded-full px-8 transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`rounded-full px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
                 Continue
               </Button>
@@ -678,6 +678,24 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
+  const STEP_LABELS: Record<Step, string> = {
+    'company-name': 'Company Name',
+    'company-description': 'Description',
+    'location': 'Location',
+    'products': 'Products',
+    'audience': 'Audience',
+    'credentials': 'Account',
+    'login': 'Login'
+  };
+
+  const canNavigateToStep = (targetStep: Step) => {
+    if (step === 'login') return false;
+    const targetIndex = ALL_STEPS.indexOf(targetStep);
+    const currentIndex = getCurrentStepIndex();
+    // Can navigate to completed steps or current step
+    return targetIndex <= currentIndex;
+  };
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Dev mode toggle - top right */}
@@ -738,6 +756,47 @@ const BusinessAuth: React.FC = () => {
         </div>
       </div>
 
+      {/* Left sidebar - step navigation */}
+      {step !== 'login' && (
+        <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:block">
+          <div className="flex flex-col gap-3">
+            {ALL_STEPS.map((s, i) => {
+              const isCurrent = step === s;
+              const isCompleted = i < getCurrentStepIndex();
+              const canClick = canNavigateToStep(s);
+              
+              return (
+                <button
+                  key={s}
+                  onClick={() => canClick && setStep(s)}
+                  disabled={!canClick}
+                  className={`flex items-center gap-3 text-left transition-all group ${
+                    canClick ? 'cursor-pointer' : 'cursor-default'
+                  }`}
+                >
+                  <div className={`w-2 h-2 rounded-full transition-all ${
+                    isCurrent 
+                      ? 'bg-foreground scale-125' 
+                      : isCompleted 
+                        ? 'bg-foreground/60' 
+                        : 'bg-foreground/20'
+                  }`} />
+                  <span className={`text-sm font-montserrat transition-all ${
+                    isCurrent 
+                      ? 'text-foreground font-medium' 
+                      : isCompleted 
+                        ? 'text-foreground/60 group-hover:text-foreground/80' 
+                        : 'text-foreground/30'
+                  }`}>
+                    {STEP_LABELS[s]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Company name header - shown after first step */}
       {showCompanyHeader && (
         <div className="fixed top-8 left-1/2 -translate-x-1/2 z-40">
@@ -745,9 +804,9 @@ const BusinessAuth: React.FC = () => {
         </div>
       )}
 
-      {/* Progress indicator */}
+      {/* Progress indicator - mobile only */}
       {step !== 'login' && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 md:hidden">
           <div className="flex gap-1.5">
             {ALL_STEPS.map((s, i) => (
               <div 
