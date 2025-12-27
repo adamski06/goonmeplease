@@ -68,6 +68,7 @@ const BusinessAuth: React.FC = () => {
   const [productsServices, setProductsServices] = useState('');
   
   // Step 5: Target Audience
+  const [audienceDescription, setAudienceDescription] = useState('');
   const [ageRanges, setAgeRanges] = useState<string[]>([]);
   const [globalReach, setGlobalReach] = useState<'worldwide' | 'specific'>('worldwide');
   const [targetCountries, setTargetCountries] = useState<string[]>([]);
@@ -553,11 +554,43 @@ const BusinessAuth: React.FC = () => {
       case 'audience':
         return (
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8 overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-6 overflow-y-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Who's your audience?
               </h2>
               
+              {/* Audience Description Textbox */}
+              <div className="w-full space-y-2">
+                <Label className="text-muted-foreground text-sm font-montserrat">Describe your target audience</Label>
+                <Textarea
+                  placeholder="E.g., Health-conscious millennials interested in sustainable living, busy professionals looking for quick meal solutions..."
+                  value={audienceDescription}
+                  onChange={(e) => setAudienceDescription(e.target.value)}
+                  className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat min-h-[80px] resize-none"
+                />
+              </div>
+
+              {/* Audience Types */}
+              <div className="w-full space-y-3">
+                <Label className="text-muted-foreground text-sm font-montserrat">Audience Types</Label>
+                <div className="flex flex-wrap gap-2">
+                  {AUDIENCE_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
+                      className={`px-3 py-1.5 text-xs font-montserrat transition-all ${
+                        audienceTypes.includes(type)
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Age Ranges */}
               <div className="w-full space-y-3">
                 <Label className="text-muted-foreground text-sm font-montserrat">Target Age Range</Label>
@@ -625,27 +658,6 @@ const BusinessAuth: React.FC = () => {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Audience Types */}
-              <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm font-montserrat">Audience Types</Label>
-                <div className="flex flex-wrap gap-2">
-                  {AUDIENCE_TYPES.map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                      className={`px-3 py-1.5 text-xs font-montserrat transition-all ${
-                        audienceTypes.includes(type)
-                          ? 'bg-foreground text-background'
-                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               <div className="flex gap-4 w-full pt-4">
