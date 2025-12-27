@@ -6,18 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Building2, ArrowRight, ArrowLeft, Globe, Users, Package, MapPin } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
-const companyNameSchema = z.string().min(1, 'Company name is required').max(100, 'Company name too long');
-const websiteSchema = z.string().url('Please enter a valid URL').optional().or(z.literal(''));
-const descriptionSchema = z.string().max(500, 'Description too long').optional();
 
 type Step = 'company-name' | 'company-description' | 'location' | 'products' | 'audience' | 'credentials' | 'login';
 
@@ -256,6 +250,13 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
+  const handleCompanyNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && companyName.trim()) {
+      e.preventDefault();
+      goNext();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -264,120 +265,105 @@ const BusinessAuth: React.FC = () => {
     );
   }
 
+  // Check if we should show the company name header (after first step)
+  const showCompanyHeader = step !== 'company-name' && step !== 'login' && companyName;
+
   const renderStepContent = () => {
     switch (step) {
       case 'company-name':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <div className="flex justify-center mb-4">
-                <Building2 className="w-12 h-12 text-foreground" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-foreground">What's your company name?</CardTitle>
-              <p className="text-muted-foreground mt-2">Let's start with the basics</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="company-name" className="text-foreground">Company Name</Label>
-                <Input
-                  id="company-name"
-                  type="text"
-                  placeholder="Acme Inc."
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none text-lg py-6"
-                  autoFocus
-                />
-              </div>
-
-              <Button 
-                onClick={goNext} 
-                className="w-full rounded-full" 
-                disabled={!companyName.trim()}
-              >
-                Continue <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+          <div className="flex flex-col items-center justify-center min-h-screen px-6">
+            <div className="text-center space-y-8 w-full max-w-lg">
+              <h1 className="text-4xl md:text-5xl font-light text-foreground">
+                Hello{' '}
+                <span className="relative inline-block min-w-[200px]">
+                  <input
+                    type="text"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    onKeyDown={handleCompanyNameKeyDown}
+                    placeholder="............"
+                    className="bg-transparent border-none outline-none text-center text-4xl md:text-5xl font-light w-full placeholder:text-muted-foreground/50"
+                    autoFocus
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/30" />
+                </span>
+                {' '}!
+              </h1>
               
-              <p className="text-center text-muted-foreground text-sm">
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => setStep('login')}
-                  className="text-foreground underline hover:text-foreground/80"
+              {companyName.trim() && (
+                <Button 
+                  onClick={goNext} 
+                  className="rounded-full px-8"
                 >
-                  Sign in
-                </button>
-              </p>
-            </CardContent>
-          </>
+                  Continue
+                </Button>
+              )}
+            </div>
+          </div>
         );
 
       case 'company-description':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <CardTitle className="text-3xl font-bold text-foreground">Describe your company</CardTitle>
-              <p className="text-muted-foreground mt-2">Help creators understand what you do</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-foreground">About {companyName}</Label>
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                Describe your company
+              </h2>
+              <p className="text-muted-foreground text-center">Help creators understand what you do</p>
+              
+              <div className="w-full space-y-6">
                 <Textarea
-                  id="description"
                   placeholder="We're a company that..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={5}
-                  className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none resize-none"
+                  className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg"
                   autoFocus
                 />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="website" className="text-foreground">Website (optional)</Label>
-                <Input
-                  id="website"
-                  type="url"
-                  placeholder="https://yourcompany.com"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
-                />
+                
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground text-sm">Website (optional)</Label>
+                  <Input
+                    type="url"
+                    placeholder="https://yourcompany.com"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                  />
+                </div>
               </div>
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={goBack} className="flex-1 rounded-full">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex gap-4 w-full">
+                <Button variant="ghost" onClick={goBack} className="flex-1">
+                  Back
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full">
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
+                  Continue
                 </Button>
               </div>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
 
       case 'location':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <div className="flex justify-center mb-4">
-                <MapPin className="w-12 h-12 text-foreground" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-foreground">Where are you based?</CardTitle>
-              <p className="text-muted-foreground mt-2">Select your company's country</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                Where are you based?
+              </h2>
+              
+              <div className="w-full grid grid-cols-2 gap-2 max-h-80 overflow-y-auto">
                 {COUNTRIES.map((c) => (
                   <button
                     key={c}
                     type="button"
                     onClick={() => setCountry(c)}
-                    className={`p-3 text-left text-sm border rounded-lg transition-all ${
+                    className={`p-3 text-left text-sm transition-all ${
                       country === c 
-                        ? 'bg-foreground text-background border-foreground' 
-                        : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                        ? 'bg-foreground text-background' 
+                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
                     {c}
@@ -385,78 +371,69 @@ const BusinessAuth: React.FC = () => {
                 ))}
               </div>
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={goBack} className="flex-1 rounded-full">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex gap-4 w-full">
+                <Button variant="ghost" onClick={goBack} className="flex-1">
+                  Back
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full" disabled={!country}>
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
+                  Continue
                 </Button>
               </div>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
 
       case 'products':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <div className="flex justify-center mb-4">
-                <Package className="w-12 h-12 text-foreground" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-foreground">What do you sell?</CardTitle>
-              <p className="text-muted-foreground mt-2">Describe your products or services</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="products" className="text-foreground">Products / Services</Label>
-                <Textarea
-                  id="products"
-                  placeholder="We offer premium fitness apparel, supplements, and workout programs..."
-                  value={productsServices}
-                  onChange={(e) => setProductsServices(e.target.value)}
-                  rows={5}
-                  className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none resize-none"
-                  autoFocus
-                />
-              </div>
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                What do you sell?
+              </h2>
+              <p className="text-muted-foreground text-center">Describe your products or services</p>
+              
+              <Textarea
+                placeholder="We offer premium fitness apparel, supplements, and workout programs..."
+                value={productsServices}
+                onChange={(e) => setProductsServices(e.target.value)}
+                rows={5}
+                className="w-full bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg"
+                autoFocus
+              />
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={goBack} className="flex-1 rounded-full">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex gap-4 w-full">
+                <Button variant="ghost" onClick={goBack} className="flex-1">
+                  Back
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full">
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
+                  Continue
                 </Button>
               </div>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
 
       case 'audience':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <div className="flex justify-center mb-4">
-                <Users className="w-12 h-12 text-foreground" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-foreground">Who's your audience?</CardTitle>
-              <p className="text-muted-foreground mt-2">Help us match you with the right creators</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8 overflow-y-auto">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                Who's your audience?
+              </h2>
+              
               {/* Age Ranges */}
-              <div className="space-y-3">
-                <Label className="text-foreground">Target Age Range</Label>
+              <div className="w-full space-y-3">
+                <Label className="text-muted-foreground text-sm">Target Age Range</Label>
                 <div className="flex flex-wrap gap-2">
                   {AGE_RANGES.map((age) => (
                     <button
                       key={age}
                       type="button"
                       onClick={() => toggleArrayItem(ageRanges, setAgeRanges, age)}
-                      className={`px-4 py-2 text-sm border rounded-full transition-all ${
+                      className={`px-4 py-2 text-sm transition-all ${
                         ageRanges.includes(age)
-                          ? 'bg-foreground text-background border-foreground'
-                          : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                       }`}
                     >
                       {age}
@@ -466,27 +443,27 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               {/* Geographic Reach */}
-              <div className="space-y-3">
-                <Label className="text-foreground">Geographic Reach</Label>
+              <div className="w-full space-y-3">
+                <Label className="text-muted-foreground text-sm">Geographic Reach</Label>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setGlobalReach('worldwide')}
-                    className={`flex-1 p-3 text-sm border rounded-lg transition-all flex items-center justify-center gap-2 ${
+                    className={`flex-1 p-3 text-sm transition-all ${
                       globalReach === 'worldwide'
-                        ? 'bg-foreground text-background border-foreground'
-                        : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                        ? 'bg-foreground text-background'
+                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
-                    <Globe className="w-4 h-4" /> Worldwide
+                    Worldwide
                   </button>
                   <button
                     type="button"
                     onClick={() => setGlobalReach('specific')}
-                    className={`flex-1 p-3 text-sm border rounded-lg transition-all ${
+                    className={`flex-1 p-3 text-sm transition-all ${
                       globalReach === 'specific'
-                        ? 'bg-foreground text-background border-foreground'
-                        : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                        ? 'bg-foreground text-background'
+                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
                     Specific Countries
@@ -500,10 +477,10 @@ const BusinessAuth: React.FC = () => {
                         key={c}
                         type="button"
                         onClick={() => toggleArrayItem(targetCountries, setTargetCountries, c)}
-                        className={`p-2 text-left text-xs border rounded transition-all ${
+                        className={`p-2 text-left text-xs transition-all ${
                           targetCountries.includes(c)
-                            ? 'bg-foreground text-background border-foreground'
-                            : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                            ? 'bg-foreground text-background'
+                            : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                         }`}
                       >
                         {c}
@@ -514,18 +491,18 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               {/* Audience Types */}
-              <div className="space-y-3">
-                <Label className="text-foreground">Audience Types</Label>
+              <div className="w-full space-y-3">
+                <Label className="text-muted-foreground text-sm">Audience Types</Label>
                 <div className="flex flex-wrap gap-2">
                   {AUDIENCE_TYPES.map((type) => (
                     <button
                       key={type}
                       type="button"
                       onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                      className={`px-3 py-1.5 text-xs border rounded-full transition-all ${
+                      className={`px-3 py-1.5 text-xs transition-all ${
                         audienceTypes.includes(type)
-                          ? 'bg-foreground text-background border-foreground'
-                          : 'bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 hover:border-foreground/50'
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
                       }`}
                     >
                       {type}
@@ -534,114 +511,108 @@ const BusinessAuth: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={goBack} className="flex-1 rounded-full">
-                  <ArrowLeft className="mr-2 w-4 h-4" /> Back
+              <div className="flex gap-4 w-full pt-4">
+                <Button variant="ghost" onClick={goBack} className="flex-1">
+                  Back
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full">
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
+                  Continue
                 </Button>
               </div>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
 
       case 'credentials':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <CardTitle className="text-3xl font-bold text-foreground">Create your account</CardTitle>
-              <p className="text-muted-foreground mt-2">Almost done! Set up your login credentials</p>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleFinalSubmit} className="space-y-4">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                Create your account
+              </h2>
+              <p className="text-muted-foreground text-center">Almost done! Set up your login credentials</p>
+              
+              <form onSubmit={handleFinalSubmit} className="w-full space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-foreground">Your Name</Label>
+                  <Label className="text-muted-foreground text-sm">Your Name</Label>
                   <Input
-                    id="signup-name"
                     type="text"
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
-                    className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-foreground">Work Email</Label>
+                  <Label className="text-muted-foreground text-sm">Work Email</Label>
                   <Input
-                    id="signup-email"
                     type="email"
                     placeholder="you@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-foreground">Password</Label>
+                  <Label className="text-muted-foreground text-sm">Password</Label>
                   <Input
-                    id="signup-password"
                     type="password"
                     placeholder="At least 6 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
-                    className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
                   />
                 </div>
                 
-                <div className="flex gap-3">
-                  <Button type="button" variant="outline" onClick={goBack} className="flex-1 rounded-full">
-                    <ArrowLeft className="mr-2 w-4 h-4" /> Back
+                <div className="flex gap-4 w-full pt-4">
+                  <Button type="button" variant="ghost" onClick={goBack} className="flex-1">
+                    Back
                   </Button>
                   <Button type="submit" className="flex-1 rounded-full" disabled={isLoading}>
                     {isLoading ? 'Creating...' : 'Complete Setup'}
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
 
       case 'login':
         return (
-          <>
-            <CardHeader className="text-center py-8">
-              <div className="flex justify-center mb-4">
-                <Building2 className="w-12 h-12 text-foreground" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-foreground">Business Login</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleLogin} className="space-y-4">
+          <div className="flex flex-col items-center justify-center min-h-screen px-6">
+            <div className="w-full max-w-md space-y-8">
+              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+                Business Login
+              </h2>
+              
+              <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email" className="text-foreground">Email</Label>
+                  <Label className="text-muted-foreground text-sm">Email</Label>
                   <Input
-                    id="login-email"
                     type="email"
                     placeholder="you@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password" className="text-foreground">Password</Label>
+                  <Label className="text-muted-foreground text-sm">Password</Label>
                   <Input
-                    id="login-password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
-                    className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
                   />
                 </div>
                 <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
@@ -658,16 +629,16 @@ const BusinessAuth: React.FC = () => {
                   </button>
                 </p>
               </form>
-            </CardContent>
-          </>
+            </div>
+          </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Dev mode toggle - top right */}
-      <div className="absolute top-6 right-6 z-20 flex items-center gap-2 flex-wrap justify-end">
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-2 flex-wrap justify-end">
         <button
           onClick={() => setDevMode(!devMode)}
           className={`px-3 py-1 text-xs rounded-full transition-all ${
@@ -706,7 +677,7 @@ const BusinessAuth: React.FC = () => {
       <div className="noise-layer" />
       
       {/* Logo in top left corner */}
-      <div className="absolute top-6 left-6 z-20">
+      <div className="fixed top-6 left-6 z-50">
         <div className="relative h-10 w-[130px]">
           <div 
             className="absolute inset-0 bg-foreground"
@@ -724,14 +695,21 @@ const BusinessAuth: React.FC = () => {
         </div>
       </div>
 
+      {/* Company name header - shown after first step */}
+      {showCompanyHeader && (
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-40">
+          <h1 className="text-2xl font-light text-foreground">{companyName}</h1>
+        </div>
+      )}
+
       {/* Progress indicator */}
       {step !== 'login' && (
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
           <div className="flex gap-1.5">
             {ALL_STEPS.map((s, i) => (
               <div 
                 key={s}
-                className={`h-1.5 w-8 rounded-full transition-all ${
+                className={`h-1 w-6 transition-all ${
                   i <= getCurrentStepIndex() ? 'bg-foreground' : 'bg-foreground/20'
                 }`}
               />
@@ -740,15 +718,9 @@ const BusinessAuth: React.FC = () => {
         </div>
       )}
       
-      <Card className="w-full max-w-md bg-black/5 dark:bg-white/10 backdrop-blur-md border-black/10 dark:border-white/20 shadow-lg relative z-10 rounded-none">
+      <div className="relative z-10">
         {renderStepContent()}
-        
-        {step !== 'login' && (
-          <div className="text-center pb-6">
-            <p className="text-muted-foreground text-sm">{getCurrentStepIndex() + 1}/{getTotalSteps()}</p>
-          </div>
-        )}
-      </Card>
+      </div>
     </div>
   );
 };
