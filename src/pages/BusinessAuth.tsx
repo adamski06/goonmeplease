@@ -303,8 +303,8 @@ const BusinessAuth: React.FC = () => {
   const renderStepContent = () => {
     switch (step) {
       case 'company-name': {
-        const displayWidth = companyName ? companyName.length + 1 : (typewriterText.length || 12) + 1;
-        const underlineWidth = Math.max(displayWidth * 2, 26);
+        const textToMeasure = companyName || typewriterText || 'company name';
+        const underlineWidth = Math.max(textToMeasure.length * 2, 26);
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
             <div className="flex flex-col items-center space-y-8">
@@ -320,12 +320,11 @@ const BusinessAuth: React.FC = () => {
                       onKeyDown={handleCompanyNameKeyDown}
                       placeholder=""
                       className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-medium font-montserrat text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                      style={{ width: `${Math.max(displayWidth, 13)}ch` }}
+                      style={{ width: `${Math.max(textToMeasure.length + 1, 13)}ch` }}
                     />
                     {!companyName && showNameInput && (
                       <span className="absolute left-0 top-0 text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
                         {typewriterText}
-                        <span className="animate-pulse">|</span>
                       </span>
                     )}
                   </div>
