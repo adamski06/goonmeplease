@@ -16,9 +16,26 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 type Step = 'company-name' | 'company-description' | 'products' | 'audience' | 'credentials' | 'login';
 
 const COUNTRIES = [
-  'United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 
-  'Spain', 'Italy', 'Netherlands', 'Sweden', 'Norway', 'Denmark', 'Finland',
-  'Japan', 'South Korea', 'Singapore', 'India', 'Brazil', 'Mexico', 'Other'
+  'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
+  'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan',
+  'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia',
+  'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica',
+  'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt',
+  'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon',
+  'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana',
+  'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel',
+  'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos',
+  'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi',
+  'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova',
+  'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands',
+  'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau',
+  'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania',
+  'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal',
+  'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea',
+  'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan',
+  'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu',
+  'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela',
+  'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
 ];
 
 const AGE_RANGES = ['13-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
@@ -390,22 +407,18 @@ const BusinessAuth: React.FC = () => {
                 {/* Location */}
                 <div className="space-y-3">
                   <Label className="text-muted-foreground text-sm font-montserrat">Where are you based?</Label>
-                  <div className="w-full grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                  <select
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    className="w-full p-3 bg-transparent border border-foreground/20 text-foreground font-montserrat text-sm focus:outline-none focus:border-foreground/50"
+                  >
+                    <option value="" className="bg-background text-foreground">Select a country</option>
                     {COUNTRIES.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        onClick={() => setCountry(c)}
-                        className={`p-3 text-left text-sm font-montserrat transition-all ${
-                          country === c 
-                            ? 'bg-foreground text-background' 
-                            : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
-                        }`}
-                      >
+                      <option key={c} value={c} className="bg-background text-foreground">
                         {c}
-                      </button>
+                      </option>
                     ))}
-                  </div>
+                  </select>
                 </div>
               </div>
 
@@ -423,21 +436,22 @@ const BusinessAuth: React.FC = () => {
 
       case 'products':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                What do you sell?
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
+                Tell us more about your product/service
               </h2>
-              <p className="text-muted-foreground text-center font-montserrat">Describe your products or services</p>
               
-              <Textarea
-                placeholder="We offer premium fitness apparel, supplements, and workout programs..."
-                value={productsServices}
-                onChange={(e) => setProductsServices(e.target.value)}
-                rows={5}
-                className="w-full bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg font-montserrat"
-                autoFocus
-              />
+              <div className="w-full space-y-6">
+                <Textarea
+                  placeholder="We offer premium fitness apparel, supplements, and workout programs..."
+                  value={productsServices}
+                  onChange={(e) => setProductsServices(e.target.value)}
+                  rows={5}
+                  className="w-full bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg font-montserrat"
+                  autoFocus
+                />
+              </div>
 
               <div className="flex gap-4 w-full">
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
