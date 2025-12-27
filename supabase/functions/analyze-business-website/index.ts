@@ -82,6 +82,12 @@ serve(async (req) => {
     }
 
     // Step 2: Analyze with AI using tool calling for structured output
+    const validAudienceTypes = [
+      'Students', 'Young Professionals', 'Parents', 'Gamers', 'Fitness Enthusiasts',
+      'Tech Enthusiasts', 'Fashion Lovers', 'Foodies', 'Travelers', 'Entrepreneurs',
+      'Artists/Creatives', 'Music Lovers', 'Sports Fans', 'Eco-Conscious', 'Luxury Seekers'
+    ];
+
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -93,7 +99,17 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are a business analyst. Analyze the website content and extract key business information. Be concise and accurate. If you cannot determine something, leave it empty.`
+            content: `You are a business analyst. Analyze website content and extract business information. 
+
+IMPORTANT for audienceTypes: You MUST select 2-5 relevant audience types from EXACTLY these options (use exact spelling):
+${validAudienceTypes.join(', ')}
+
+Think about who would use the product/service. For example:
+- A digital bank → Young Professionals, Tech Enthusiasts, Entrepreneurs
+- A fitness app → Fitness Enthusiasts, Young Professionals
+- A gaming company → Gamers, Tech Enthusiasts
+
+Always include at least 2 audience types that make sense for the business.`
           },
           {
             role: 'user',
