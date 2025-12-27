@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -85,6 +86,7 @@ const BusinessAuth: React.FC = () => {
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   // Animate name input after 1 second on company-name step with cycling typewriter effect
   useEffect(() => {
@@ -200,7 +202,7 @@ const BusinessAuth: React.FC = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast({
-          title: 'Validation Error',
+          title: t('auth.validationError'),
           description: error.errors[0].message,
           variant: 'destructive',
         });
@@ -219,9 +221,9 @@ const BusinessAuth: React.FC = () => {
 
     if (error) {
       toast({
-        title: 'Sign in failed',
+        title: t('auth.signInFailed'),
         description: error.message === 'Invalid login credentials' 
-          ? 'Invalid email or password.'
+          ? t('auth.invalidCredentials')
           : error.message,
         variant: 'destructive',
       });
@@ -238,8 +240,8 @@ const BusinessAuth: React.FC = () => {
           navigate('/business');
         } else {
           toast({
-            title: 'Not a business account',
-            description: 'This account is not registered as a business.',
+            title: t('businessAuth.notBusinessAccount'),
+            description: t('businessAuth.notBusinessAccountDesc'),
             variant: 'destructive',
           });
           await supabase.auth.signOut();
@@ -260,13 +262,13 @@ const BusinessAuth: React.FC = () => {
       if (signUpError) {
         if (signUpError.message.includes('already registered')) {
           toast({
-            title: 'Account exists',
-            description: 'This email is already registered. Please sign in.',
+            title: t('auth.accountExists'),
+            description: t('auth.accountExistsDesc'),
             variant: 'destructive',
           });
         } else {
           toast({
-            title: 'Sign up failed',
+            title: t('auth.signUpFailed'),
             description: signUpError.message,
             variant: 'destructive',
           });
@@ -317,14 +319,14 @@ const BusinessAuth: React.FC = () => {
       if (roleError) throw roleError;
 
       toast({
-        title: 'Business account created!',
-        description: 'Welcome to your business dashboard.',
+        title: t('businessAuth.accountCreated'),
+        description: t('businessAuth.welcomeToDashboard'),
       });
 
       navigate('/business');
     } catch (error: any) {
       toast({
-        title: 'Setup failed',
+        title: t('businessAuth.setupFailed'),
         description: error.message,
         variant: 'destructive',
       });
@@ -351,8 +353,8 @@ const BusinessAuth: React.FC = () => {
   const handleAnalyzeWebsite = async () => {
     if (!website.trim()) {
       toast({
-        title: 'Website required',
-        description: 'Please enter a website URL first.',
+        title: t('businessAuth.websiteRequired'),
+        description: t('businessAuth.enterWebsiteFirst'),
         variant: 'destructive',
       });
       return;
@@ -404,14 +406,14 @@ const BusinessAuth: React.FC = () => {
       }
 
       toast({
-        title: 'Website analyzed!',
-        description: 'Form fields have been auto-filled. Review and adjust as needed.',
+        title: t('businessAuth.websiteAnalyzed'),
+        description: t('businessAuth.formAutoFilled'),
       });
     } catch (error) {
       console.error('Analysis error:', error);
       toast({
-        title: 'Analysis failed',
-        description: error instanceof Error ? error.message : 'Could not analyze website',
+        title: t('businessAuth.analysisFailed'),
+        description: error instanceof Error ? error.message : t('businessAuth.couldNotAnalyze'),
         variant: 'destructive',
       });
     } finally {
@@ -422,7 +424,7 @@ const BusinessAuth: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">{t('common.loading')}</div>
       </div>
     );
   }
@@ -439,7 +441,7 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-baseline gap-3">
-                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">Hello</h1>
+                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">{t('businessAuth.hello')}</h1>
                 <div className="relative" style={{ width: '220px' }}>
                   <input
                     ref={inputRef}
@@ -462,7 +464,7 @@ const BusinessAuth: React.FC = () => {
                 onClick={goNext} 
                 className={`rounded-full px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
-                Continue
+                {t('common.continue')}
               </Button>
             </div>
           </div>
@@ -474,17 +476,17 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
-                Tell us about {companyName}
+                {t('businessAuth.tellUsAbout')} {companyName}
               </h2>
               
               <div className="w-full space-y-6">
                 {/* Website - moved to top */}
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Website (optional)</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.websiteOptional')}</Label>
                   <div className="flex gap-2">
                     <Input
                       type="url"
-                      placeholder="https://yourcompany.com"
+                      placeholder={t('businessAuth.websitePlaceholder')}
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                       className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
@@ -499,12 +501,12 @@ const BusinessAuth: React.FC = () => {
                       {isAnalyzing ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Analyzing...
+                          {t('businessAuth.analyzing')}
                         </>
                       ) : (
                         <>
                           <Sparkles className="h-4 w-4" />
-                          Automate
+                          {t('businessAuth.automate')}
                         </>
                       )}
                     </Button>
@@ -512,9 +514,9 @@ const BusinessAuth: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Short description</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
                   <Textarea
-                    placeholder="We're a company that..."
+                    placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
@@ -525,13 +527,13 @@ const BusinessAuth: React.FC = () => {
 
                 {/* Location */}
                 <div className="space-y-3">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Where are you based?</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.whereAreYouBased')}</Label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground"
                   >
-                    <option value="" className="bg-white dark:bg-background text-foreground">Select a country</option>
+                    <option value="" className="bg-white dark:bg-background text-foreground">{t('businessAuth.selectCountry')}</option>
                     {COUNTRIES.map((c) => (
                       <option key={c} value={c} className="bg-white dark:bg-background text-foreground">
                         {c}
@@ -543,10 +545,10 @@ const BusinessAuth: React.FC = () => {
 
               <div className="flex gap-4 w-full">
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
-                  Back
+                  {t('common.back')}
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
-                  Continue
+                  {t('common.continue')}
                 </Button>
               </div>
             </div>
@@ -558,12 +560,12 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
-                Tell us more about your product/service
+                {t('businessAuth.productsServicesTitle')}
               </h2>
               
               <div className="w-full space-y-6">
                 <Textarea
-                  placeholder="We offer premium fitness apparel, supplements, and workout programs..."
+                  placeholder={t('businessAuth.productsServicesPlaceholder')}
                   value={productsServices}
                   onChange={(e) => setProductsServices(e.target.value)}
                   rows={5}
@@ -574,10 +576,10 @@ const BusinessAuth: React.FC = () => {
 
               <div className="flex gap-4 w-full">
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
-                  Back
+                  {t('common.back')}
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
-                  Continue
+                  {t('common.continue')}
                 </Button>
               </div>
             </div>
@@ -589,14 +591,14 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-6 overflow-y-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                Who's your audience?
+                {t('businessAuth.whosYourAudience')}
               </h2>
               
               {/* Audience Description Textbox */}
               <div className="w-full space-y-2">
-                <Label className="text-muted-foreground text-sm font-montserrat">Describe your target audience</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.describeAudience')}</Label>
                 <Textarea
-                  placeholder="E.g., Health-conscious millennials interested in sustainable living, busy professionals looking for quick meal solutions..."
+                  placeholder={t('businessAuth.audienceDescriptionPlaceholder')}
                   value={audienceDescription}
                   onChange={(e) => setAudienceDescription(e.target.value)}
                   className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist min-h-[80px] resize-none"
@@ -605,7 +607,7 @@ const BusinessAuth: React.FC = () => {
 
               {/* Audience Types */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm font-montserrat">Audience Types</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.audienceTypes')}</Label>
                 
                 {/* Selected Types */}
                 <div className="flex flex-wrap gap-2">
@@ -625,7 +627,7 @@ const BusinessAuth: React.FC = () => {
                     onClick={() => setShowAudienceBrowser(true)}
                     className="px-3 py-2 text-sm font-geist transition-all rounded-[3px] bg-white dark:bg-white/10 border border-dashed border-foreground/30 hover:border-foreground/50 text-foreground"
                   >
-                    + Browse
+                    {t('businessAuth.browseAudience')}
                   </button>
                 </div>
 
@@ -638,7 +640,7 @@ const BusinessAuth: React.FC = () => {
                     >
                       <div className="p-4 border-b border-foreground/10">
                         <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-montserrat font-semibold text-foreground">Browse Audience Types</h3>
+                          <h3 className="font-montserrat font-semibold text-foreground">{t('businessAuth.browseAudienceTypes')}</h3>
                           <button 
                             onClick={() => setShowAudienceBrowser(false)}
                             className="text-muted-foreground hover:text-foreground"
@@ -648,7 +650,7 @@ const BusinessAuth: React.FC = () => {
                         </div>
                         <Input
                           type="text"
-                          placeholder="Search audience types..."
+                          placeholder={t('businessAuth.searchAudienceTypes')}
                           value={audienceSearch}
                           onChange={(e) => setAudienceSearch(e.target.value)}
                           className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
@@ -679,7 +681,7 @@ const BusinessAuth: React.FC = () => {
                       </div>
                       <div className="p-4 border-t border-foreground/10">
                         <Button onClick={() => setShowAudienceBrowser(false)} className="w-full rounded-full font-montserrat">
-                          Done ({audienceTypes.length} selected)
+                          {t('businessAuth.doneSelected', { count: audienceTypes.length })}
                         </Button>
                       </div>
                     </div>
@@ -689,7 +691,7 @@ const BusinessAuth: React.FC = () => {
 
               {/* Age Ranges */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm font-montserrat">Target Age Range</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.targetAgeRange')}</Label>
                 <div className="flex flex-wrap gap-2">
                   {AGE_RANGES.map((age) => (
                     <button
@@ -710,7 +712,7 @@ const BusinessAuth: React.FC = () => {
 
               {/* Geographic Reach */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm font-montserrat">Geographic Reach</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.geographicReach')}</Label>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -721,7 +723,7 @@ const BusinessAuth: React.FC = () => {
                         : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
-                    Worldwide
+                    {t('businessAuth.worldwide')}
                   </button>
                   <button
                     type="button"
@@ -732,7 +734,7 @@ const BusinessAuth: React.FC = () => {
                         : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
-                    Specific Countries
+                    {t('businessAuth.specificCountries')}
                   </button>
                 </div>
                 
@@ -758,10 +760,10 @@ const BusinessAuth: React.FC = () => {
 
               <div className="flex gap-4 w-full pt-4">
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
-                  Back
+                  {t('common.back')}
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
-                  Continue
+                  {t('common.continue')}
                 </Button>
               </div>
             </div>
@@ -773,16 +775,16 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                Create your account
+                {t('businessAuth.createAccountTitle')}
               </h2>
-              <p className="text-muted-foreground text-center font-montserrat">Almost done! Set up your login credentials</p>
+              <p className="text-muted-foreground text-center font-montserrat">{t('businessAuth.almostDone')}</p>
               
               <form onSubmit={handleFinalSubmit} className="w-full space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Your Name</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.yourName')}</Label>
                   <Input
                     type="text"
-                    placeholder="John Doe"
+                    placeholder={t('businessAuth.yourNamePlaceholder')}
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
@@ -790,10 +792,10 @@ const BusinessAuth: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Work Email</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.workEmail')}</Label>
                   <Input
                     type="email"
-                    placeholder="you@company.com"
+                    placeholder={t('businessAuth.workEmailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -802,10 +804,10 @@ const BusinessAuth: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Password</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.password')}</Label>
                   <Input
                     type="password"
-                    placeholder="At least 6 characters"
+                    placeholder={t('auth.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -816,10 +818,10 @@ const BusinessAuth: React.FC = () => {
                 
                 <div className="flex gap-4 w-full pt-4">
                   <Button type="button" variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
-                    Back
+                    {t('common.back')}
                   </Button>
                   <Button type="submit" className="flex-1 rounded-full font-montserrat" disabled={isLoading}>
-                    {isLoading ? 'Creating...' : 'Complete Setup'}
+                    {isLoading ? t('businessAuth.creating') : t('businessAuth.completeSetup')}
                   </Button>
                 </div>
               </form>
@@ -832,15 +834,15 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
             <div className="w-full max-w-md space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                Business Login
+                {t('businessAuth.businessLogin')}
               </h2>
               
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Email</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.email')}</Label>
                   <Input
                     type="email"
-                    placeholder="you@company.com"
+                    placeholder={t('businessAuth.workEmailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -849,10 +851,10 @@ const BusinessAuth: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">Password</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.password')}</Label>
                   <Input
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={t('auth.passwordPlaceholderLogin')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -861,16 +863,16 @@ const BusinessAuth: React.FC = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full rounded-full font-montserrat" disabled={isLoading}>
-                  {isLoading ? 'Signing in...' : 'Sign In'}
+                  {isLoading ? t('auth.signingIn') : t('auth.signIn')}
                 </Button>
                 <p className="text-center text-muted-foreground text-sm mt-4 font-montserrat">
-                  Don't have a business account?{' '}
+                  {t('businessAuth.dontHaveBusinessAccount')}{' '}
                   <button
                     type="button"
                     onClick={() => setStep('company-name')}
                     className="text-foreground underline hover:text-foreground/80 font-montserrat"
                   >
-                    Create one
+                    {t('businessAuth.createOne')}
                   </button>
                 </p>
               </form>
@@ -880,13 +882,16 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
-  const STEP_LABELS: Record<Step, string> = {
-    'company-name': 'Company Name',
-    'company-description': 'Description',
-    'products': 'Products',
-    'audience': 'Audience',
-    'credentials': 'Account',
-    'login': 'Login'
+  const getStepLabel = (s: Step) => {
+    const labels: Record<Step, string> = {
+      'company-name': t('businessAuth.stepCompanyName'),
+      'company-description': t('businessAuth.stepDescription'),
+      'products': t('businessAuth.stepProducts'),
+      'audience': t('businessAuth.stepAudience'),
+      'credentials': t('businessAuth.stepAccount'),
+      'login': t('businessAuth.stepLogin')
+    };
+    return labels[s];
   };
 
   const canNavigateToStep = (targetStep: Step) => {
@@ -906,7 +911,7 @@ const BusinessAuth: React.FC = () => {
             devMode ? 'bg-green-500 text-white' : 'bg-foreground/20 text-foreground/60 hover:bg-foreground/30'
           }`}
         >
-          Dev Mode
+          {t('businessAuth.devMode')}
         </button>
         {devMode && (
           <div className="flex gap-1 flex-wrap">
@@ -986,7 +991,7 @@ const BusinessAuth: React.FC = () => {
                         ? 'text-foreground/60 group-hover:text-foreground/80' 
                         : 'text-foreground/30'
                   }`}>
-                    {STEP_LABELS[s]}
+                    {getStepLabel(s)}
                   </span>
                 </button>
               );
