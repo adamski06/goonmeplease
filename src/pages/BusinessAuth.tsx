@@ -13,7 +13,7 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
-type Step = 'company-name' | 'company-description' | 'location' | 'products' | 'audience' | 'credentials' | 'login';
+type Step = 'company-name' | 'company-description' | 'products' | 'audience' | 'credentials' | 'login';
 
 const COUNTRIES = [
   'United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 
@@ -29,7 +29,7 @@ const AUDIENCE_TYPES = [
   'Artists/Creatives', 'Music Lovers', 'Sports Fans', 'Eco-Conscious', 'Luxury Seekers'
 ];
 
-const ALL_STEPS: Step[] = ['company-name', 'company-description', 'location', 'products', 'audience', 'credentials'];
+const ALL_STEPS: Step[] = ['company-name', 'company-description', 'products', 'audience', 'credentials'];
 
 const BusinessAuth: React.FC = () => {
   const [step, setStep] = useState<Step>('company-name');
@@ -357,12 +357,11 @@ const BusinessAuth: React.FC = () => {
 
       case 'company-description':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                Describe your company
+                Tell us about {companyName}
               </h2>
-              <p className="text-muted-foreground text-center font-montserrat">Help creators understand what you do</p>
               
               <div className="w-full space-y-6">
                 <Textarea
@@ -384,6 +383,27 @@ const BusinessAuth: React.FC = () => {
                     className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
+
+                {/* Location */}
+                <div className="space-y-3">
+                  <Label className="text-muted-foreground text-sm font-montserrat">Where are you based?</Label>
+                  <div className="w-full grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                    {COUNTRIES.map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setCountry(c)}
+                        className={`p-3 text-left text-sm font-montserrat transition-all ${
+                          country === c 
+                            ? 'bg-foreground text-background' 
+                            : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="flex gap-4 w-full">
@@ -391,43 +411,6 @@ const BusinessAuth: React.FC = () => {
                   Back
                 </Button>
                 <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
-                  Continue
-                </Button>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'location':
-        return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
-                Where are you based?
-              </h2>
-              
-              <div className="w-full grid grid-cols-2 gap-2 max-h-80 overflow-y-auto">
-                {COUNTRIES.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setCountry(c)}
-                    className={`p-3 text-left text-sm font-montserrat transition-all ${
-                      country === c 
-                        ? 'bg-foreground text-background' 
-                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex gap-4 w-full">
-                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
-                  Back
-                </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat" disabled={!country}>
                   Continue
                 </Button>
               </div>
@@ -690,7 +673,6 @@ const BusinessAuth: React.FC = () => {
   const STEP_LABELS: Record<Step, string> = {
     'company-name': 'Company Name',
     'company-description': 'Description',
-    'location': 'Location',
     'products': 'Products',
     'audience': 'Audience',
     'credentials': 'Account',
