@@ -302,14 +302,15 @@ const BusinessAuth: React.FC = () => {
 
   const renderStepContent = () => {
     switch (step) {
-      case 'company-name':
-        const displayWidth = companyName ? companyName.length + 1 : typewriterText.length + 1 || 13;
+      case 'company-name': {
+        const displayWidth = companyName ? companyName.length + 1 : (typewriterText.length || 12) + 1;
+        const underlineWidth = Math.max(displayWidth * 2, 26);
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
                 <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
-                <div className="relative" style={{ minWidth: '180px' }}>
+                <div className="relative overflow-visible" style={{ minWidth: '180px' }}>
                   <div className="relative inline-block">
                     <input
                       ref={inputRef}
@@ -330,7 +331,7 @@ const BusinessAuth: React.FC = () => {
                   </div>
                   <div 
                     className={`h-px bg-foreground/30 transition-all duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ width: `${Math.max(displayWidth, 13)}ch` }}
+                    style={{ width: `${underlineWidth}ch` }}
                   />
                 </div>
               </div>
@@ -344,6 +345,7 @@ const BusinessAuth: React.FC = () => {
             </div>
           </div>
         );
+      }
 
       case 'company-description':
         return (
