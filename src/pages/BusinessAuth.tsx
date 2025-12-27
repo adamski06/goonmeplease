@@ -88,32 +88,64 @@ const BusinessAuth: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Animate name input after 1 second on company-name step with typewriter effect
+  // Animate name input after 1 second on company-name step with cycling typewriter effect
   useEffect(() => {
     if (step === 'company-name') {
       setShowNameInput(false);
       setTypewriterText('');
       
+      const companyNames = [
+        'Acme Corp',
+        'TechFlow',
+        'Bright Ideas',
+        'Nova Labs',
+        'Spark Studio',
+        'Blue Horizon',
+        'Pixel Perfect',
+        'Swift Solutions'
+      ];
+      
+      let nameIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typeTimer: ReturnType<typeof setInterval>;
+      
       const showTimer = setTimeout(() => {
         setShowNameInput(true);
         setTimeout(() => inputRef.current?.focus(), 100);
         
-        // Typewriter effect for placeholder
-        const text = 'company name';
-        let index = 0;
-        const typeTimer = setInterval(() => {
-          if (index <= text.length) {
-            setTypewriterText(text.slice(0, index));
-            index++;
+        typeTimer = setInterval(() => {
+          const currentName = companyNames[nameIndex];
+          
+          if (!isDeleting) {
+            // Typing
+            if (charIndex <= currentName.length) {
+              setTypewriterText(currentName.slice(0, charIndex));
+              charIndex++;
+            } else {
+              // Pause at end before deleting
+              setTimeout(() => {
+                isDeleting = true;
+              }, 1500);
+            }
           } else {
-            clearInterval(typeTimer);
+            // Deleting
+            if (charIndex > 0) {
+              charIndex--;
+              setTypewriterText(currentName.slice(0, charIndex));
+            } else {
+              // Move to next name
+              isDeleting = false;
+              nameIndex = (nameIndex + 1) % companyNames.length;
+            }
           }
-        }, 80);
-        
-        return () => clearInterval(typeTimer);
+        }, 100);
       }, 1000);
       
-      return () => clearTimeout(showTimer);
+      return () => {
+        clearTimeout(showTimer);
+        if (typeTimer) clearInterval(typeTimer);
+      };
     }
   }, [step]);
 
