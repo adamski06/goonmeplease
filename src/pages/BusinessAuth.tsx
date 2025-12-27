@@ -309,7 +309,7 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
-                <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
+                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap">Hello</h1>
                 <div className="relative overflow-visible" style={{ minWidth: '180px' }}>
                   <div className="relative inline-block">
                     <input
@@ -319,11 +319,11 @@ const BusinessAuth: React.FC = () => {
                       onChange={(e) => setCompanyName(e.target.value)}
                       onKeyDown={handleCompanyNameKeyDown}
                       placeholder=""
-                      className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-light text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
+                      className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-medium font-montserrat text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
                       style={{ width: `${Math.max(displayWidth, 13)}ch` }}
                     />
                     {!companyName && showNameInput && (
-                      <span className="absolute left-0 top-0 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                      <span className="absolute left-0 top-0 text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
                         {typewriterText}
                         <span className="animate-pulse">|</span>
                       </span>
