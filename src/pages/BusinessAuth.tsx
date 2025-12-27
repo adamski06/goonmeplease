@@ -59,10 +59,25 @@ const BusinessAuth: React.FC = () => {
   const [website, setWebsite] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [devMode, setDevMode] = useState(false);
+  const [showNameInput, setShowNameInput] = useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Animate name input after 1 second on company-name step
+  useEffect(() => {
+    if (step === 'company-name') {
+      setShowNameInput(false);
+      const timer = setTimeout(() => {
+        setShowNameInput(true);
+        // Focus the input after animation starts
+        setTimeout(() => inputRef.current?.focus(), 100);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
 
   useEffect(() => {
     if (!loading && user && !devMode) {
@@ -273,31 +288,35 @@ const BusinessAuth: React.FC = () => {
       case 'company-name':
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
-            <div className="space-y-8 w-full max-w-2xl">
+            <div className="space-y-8">
               <div className="flex items-baseline gap-4">
-                <h1 className="text-4xl md:text-5xl font-light text-foreground whitespace-nowrap">Hello</h1>
-                <div className="flex-1 relative">
-                  <input
-                    type="text"
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    onKeyDown={handleCompanyNameKeyDown}
-                    placeholder="company name"
-                    className="bg-transparent border-none outline-none text-4xl md:text-5xl font-light w-full placeholder:text-muted-foreground/40 text-foreground"
-                    autoFocus
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/30" />
-                </div>
-                <span className="text-4xl md:text-5xl font-light text-foreground">!</span>
+                <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
+                {showNameInput && (
+                  <div className="relative inline-block animate-fade-in">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      onKeyDown={handleCompanyNameKeyDown}
+                      placeholder="company name"
+                      className="bg-transparent border-none outline-none text-5xl md:text-7xl font-light placeholder:text-muted-foreground/40 text-foreground min-w-[200px]"
+                      style={{ width: companyName ? `${Math.max(companyName.length, 12)}ch` : '12ch' }}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/30" />
+                  </div>
+                )}
               </div>
               
               {companyName.trim() && (
-                <Button 
-                  onClick={goNext} 
-                  className="rounded-full px-8"
-                >
-                  Continue
-                </Button>
+                <div className="flex justify-center animate-fade-in">
+                  <Button 
+                    onClick={goNext} 
+                    className="rounded-full px-8"
+                  >
+                    Continue
+                  </Button>
+                </div>
               )}
             </div>
           </div>
