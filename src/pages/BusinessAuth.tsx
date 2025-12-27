@@ -764,8 +764,8 @@ const BusinessAuth: React.FC = () => {
         </div>
       </div>
 
-      {/* Left sidebar - step navigation */}
-      {step !== 'login' && (
+      {/* Left sidebar - step navigation (hidden on login and first hello page) */}
+      {step !== 'login' && step !== 'company-name' && (
         <div className="fixed left-[15%] top-1/2 -translate-y-1/2 z-40 hidden md:block">
           <div className="flex flex-col gap-4">
             {ALL_STEPS.map((s, i) => {
