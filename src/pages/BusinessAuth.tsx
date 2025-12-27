@@ -522,11 +522,11 @@ const BusinessAuth: React.FC = () => {
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full p-3 bg-transparent border border-foreground/20 text-foreground font-montserrat text-sm focus:outline-none focus:border-foreground/50"
+                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground"
                   >
-                    <option value="" className="bg-background text-foreground">Select a country</option>
+                    <option value="" className="bg-white dark:bg-background text-foreground">Select a country</option>
                     {COUNTRIES.map((c) => (
-                      <option key={c} value={c} className="bg-background text-foreground">
+                      <option key={c} value={c} className="bg-white dark:bg-background text-foreground">
                         {c}
                       </option>
                     ))}
@@ -605,10 +605,10 @@ const BusinessAuth: React.FC = () => {
                       key={type}
                       type="button"
                       onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                      className={`px-3 py-1.5 text-xs font-montserrat transition-all ${
+                      className={`px-3 py-2 text-sm font-geist transition-all rounded-[3px] ${
                         audienceTypes.includes(type)
                           ? 'bg-foreground text-background'
-                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                          : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                       }`}
                     >
                       {type}
@@ -626,10 +626,10 @@ const BusinessAuth: React.FC = () => {
                       key={age}
                       type="button"
                       onClick={() => toggleArrayItem(ageRanges, setAgeRanges, age)}
-                      className={`px-4 py-2 text-sm font-montserrat transition-all ${
+                      className={`px-4 py-2 text-sm font-geist transition-all rounded-[3px] ${
                         ageRanges.includes(age)
                           ? 'bg-foreground text-background'
-                          : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                          : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                       }`}
                     >
                       {age}
@@ -645,10 +645,10 @@ const BusinessAuth: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setGlobalReach('worldwide')}
-                    className={`flex-1 p-3 text-sm font-montserrat transition-all ${
+                    className={`flex-1 p-3 text-sm font-geist transition-all rounded-[3px] ${
                       globalReach === 'worldwide'
                         ? 'bg-foreground text-background'
-                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                        : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
                     Worldwide
@@ -656,10 +656,10 @@ const BusinessAuth: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setGlobalReach('specific')}
-                    className={`flex-1 p-3 text-sm font-montserrat transition-all ${
+                    className={`flex-1 p-3 text-sm font-geist transition-all rounded-[3px] ${
                       globalReach === 'specific'
                         ? 'bg-foreground text-background'
-                        : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                        : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                     }`}
                   >
                     Specific Countries
@@ -673,10 +673,10 @@ const BusinessAuth: React.FC = () => {
                         key={c}
                         type="button"
                         onClick={() => toggleArrayItem(targetCountries, setTargetCountries, c)}
-                        className={`p-2 text-left text-xs font-montserrat transition-all ${
+                        className={`p-2 text-left text-sm font-geist transition-all rounded-[3px] ${
                           targetCountries.includes(c)
                             ? 'bg-foreground text-background'
-                            : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
+                            : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
                         }`}
                       >
                         {c}
