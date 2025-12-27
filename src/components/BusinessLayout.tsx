@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useTheme } from 'next-themes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Menu, Settings, Moon, LogOut } from 'lucide-react';
+import { Menu, Settings, Moon, LogOut, Globe } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,24 +21,30 @@ interface BusinessLayoutProps {
 }
 
 const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
+  const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
 
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('language', lng);
+  };
+
   const firstName = profile?.full_name?.split(' ')[0] || 'Business';
 
   const navItems = [
-    { path: '/business', label: 'Home' },
-    { path: '/business/campaigns', label: 'Campaigns' },
-    { path: '/business/submissions', label: 'Submissions' },
-    { path: '/business/analytics', label: 'Analytics' },
+    { path: '/business', label: t('nav.home'), icon: 'home' },
+    { path: '/business/campaigns', label: t('nav.campaigns'), icon: 'campaigns' },
+    { path: '/business/submissions', label: t('nav.submissions'), icon: 'submissions' },
+    { path: '/business/analytics', label: t('nav.analytics'), icon: 'analytics' },
   ];
 
-  const getIcon = (label: string) => {
-    switch (label) {
-      case 'Home':
+  const getIcon = (iconKey: string) => {
+    switch (iconKey) {
+      case 'home':
         return (
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
             <path
@@ -47,19 +54,19 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
             <rect x="10.5" y="15" width="3" height="6" rx="0.5" fill="hsl(210, 30%, 88%)" />
           </svg>
         );
-      case 'Campaigns':
+      case 'campaigns':
         return (
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 12L5 10V20C5 20.5523 5.44772 21 6 21H7C7.55228 21 8 20.5523 8 20V8L12 4L16 8V20C16 20.5523 16.4477 21 17 21H18C18.5523 21 19 20.5523 19 20V10L21 12L12 3L3 12Z" />
           </svg>
         );
-      case 'Submissions':
+      case 'submissions':
         return (
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path fillRule="evenodd" clipRule="evenodd" d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V4ZM10.5 8.5C10 8.2 9.5 8.5 9.5 9V15C9.5 15.5 10 15.8 10.5 15.5L15.5 12.5C16 12.2 16 11.8 15.5 11.5L10.5 8.5Z" />
           </svg>
         );
-      case 'Analytics':
+      case 'analytics':
         return (
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <rect x="3" y="14" width="4" height="7" rx="1" />
@@ -102,7 +109,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
               }} 
             />
           </button>
-          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">Business</span>
+          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">{t('nav.business')}</span>
         </div>
 
         {/* Navigation */}
@@ -117,7 +124,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
                   : 'font-medium text-foreground hover:font-semibold'
               }`}
             >
-              {getIcon(item.label)}
+              {getIcon(item.icon)}
               {item.label}
             </button>
           ))}
@@ -130,7 +137,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
             <DropdownMenuTrigger asChild>
               <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
                 <Menu className="h-6 w-6" />
-                More
+                {t('common.more')}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent 
@@ -147,7 +154,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <Settings className="mr-2 h-4 w-4" />
-                Settings
+                {t('common.settings')}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onSelect={(e) => {
@@ -157,13 +164,24 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
                 className="cursor-pointer"
               >
                 <Moon className="mr-2 h-4 w-4" />
-                <span className="flex-1">Theme</span>
+                <span className="flex-1">{t('common.theme')}</span>
                 <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onSelect={(e) => {
+                  e.preventDefault();
+                  changeLanguage(i18n.language === 'sv' ? 'en' : 'sv');
+                }} 
+                className="cursor-pointer"
+              >
+                <Globe className="mr-2 h-4 w-4" />
+                <span className="flex-1">{t('common.language')}</span>
+                <span className="text-muted-foreground text-xs">{i18n.language === 'sv' ? 'SV' : 'EN'}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
                 <LogOut className="mr-2 h-4 w-4" />
-                Log out
+                {t('common.logout')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
