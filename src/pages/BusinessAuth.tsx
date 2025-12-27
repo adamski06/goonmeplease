@@ -41,11 +41,7 @@ const COUNTRIES = [
 
 const AGE_RANGES = ['13-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
 
-const AUDIENCE_TYPES = [
-  'Students', 'Young Professionals', 'Parents', 'Gamers', 'Fitness Enthusiasts',
-  'Tech Enthusiasts', 'Fashion Lovers', 'Foodies', 'Travelers', 'Entrepreneurs',
-  'Artists/Creatives', 'Music Lovers', 'Sports Fans', 'Eco-Conscious', 'Luxury Seekers'
-];
+import { AUDIENCE_TYPES } from '@/data/audienceTypes';
 
 const ALL_STEPS: Step[] = ['company-name', 'company-description', 'products', 'audience', 'credentials'];
 
@@ -393,6 +389,15 @@ const BusinessAuth: React.FC = () => {
         const validTypes = data.audienceTypes.filter((t: string) => AUDIENCE_TYPES.includes(t));
         if (validTypes.length > 0) {
           setAudienceTypes(validTypes);
+        }
+      }
+      if (data.audienceDescription) {
+        setAudienceDescription(data.audienceDescription);
+      }
+      if (data.ageRanges && Array.isArray(data.ageRanges)) {
+        const validAges = data.ageRanges.filter((a: string) => AGE_RANGES.includes(a));
+        if (validAges.length > 0) {
+          setAgeRanges(validAges);
         }
       }
 
