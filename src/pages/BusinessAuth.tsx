@@ -303,31 +303,34 @@ const BusinessAuth: React.FC = () => {
   const renderStepContent = () => {
     switch (step) {
       case 'company-name':
+        const displayWidth = companyName ? companyName.length + 1 : typewriterText.length + 1 || 13;
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
                 <h1 className="text-5xl md:text-7xl font-light text-foreground whitespace-nowrap">Hello</h1>
-                <div className="relative inline-flex flex-col" style={{ minWidth: '180px' }}>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    onKeyDown={handleCompanyNameKeyDown}
-                    placeholder=""
-                    className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-light text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ width: `${Math.max(companyName.length || 12, 12)}ch` }}
-                  />
-                  {!companyName && showNameInput && (
-                    <span className="absolute left-0 bottom-1 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none whitespace-nowrap">
-                      {typewriterText}
-                      <span className="animate-pulse">|</span>
-                    </span>
-                  )}
+                <div className="relative" style={{ minWidth: '180px' }}>
+                  <div className="relative inline-block">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      onKeyDown={handleCompanyNameKeyDown}
+                      placeholder=""
+                      className={`bg-transparent border-none outline-none text-2xl md:text-3xl font-light text-foreground pb-1 whitespace-nowrap transition-opacity duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
+                      style={{ width: `${Math.max(displayWidth, 13)}ch` }}
+                    />
+                    {!companyName && showNameInput && (
+                      <span className="absolute left-0 top-0 text-2xl md:text-3xl font-light text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                        {typewriterText}
+                        <span className="animate-pulse">|</span>
+                      </span>
+                    )}
+                  </div>
                   <div 
                     className={`h-px bg-foreground/30 transition-all duration-300 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}
-                    style={{ width: `${Math.max(companyName.length || 12, 12)}ch` }}
+                    style={{ width: `${Math.max(displayWidth, 13)}ch` }}
                   />
                 </div>
               </div>
