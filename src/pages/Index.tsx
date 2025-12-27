@@ -1,15 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import jarlaLogo from "@/assets/jarla-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
-  const [showBackdrop, setShowBackdrop] = useState(false);
-
-  useEffect(() => {
-    setShowBackdrop(true);
-  }, []);
 
   const handleTabChange = (tab: 'creator' | 'business') => {
     if (tab !== activeTab) {
@@ -127,6 +122,14 @@ const Index = () => {
                 <div className="mt-80">
                   <span className="block text-4xl md:text-6xl">Human network</span>
                   <span className="block text-4xl md:text-6xl">is the new distribution</span>
+                  <div className="flex justify-center mt-8">
+                    <button 
+                      onClick={() => navigate('/business/auth')}
+                      className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+                    >
+                      Get started
+                    </button>
+                  </div>
                 </div>
               )}
             </h1>
