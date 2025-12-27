@@ -32,16 +32,17 @@ const BusinessAuth: React.FC = () => {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [devMode, setDevMode] = useState(false);
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // If user is already logged in and has business role, go to dashboard
-    if (!loading && user) {
+    // If user is already logged in and has business role, go to dashboard (skip in dev mode)
+    if (!loading && user && !devMode) {
       checkBusinessRole();
     }
-  }, [user, loading]);
+  }, [user, loading, devMode]);
 
   const checkBusinessRole = async () => {
     if (!user) return;
@@ -266,6 +267,40 @@ const BusinessAuth: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Dev mode toggle - top right */}
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+        <button
+          onClick={() => setDevMode(!devMode)}
+          className={`px-3 py-1 text-xs rounded-full transition-all ${
+            devMode ? 'bg-green-500 text-white' : 'bg-foreground/20 text-foreground/60 hover:bg-foreground/30'
+          }`}
+        >
+          Dev Mode
+        </button>
+        {devMode && (
+          <div className="flex gap-1">
+            <button
+              onClick={() => { setStep('credentials'); setIsLogin(false); }}
+              className={`px-2 py-1 text-xs rounded ${step === 'credentials' && !isLogin ? 'bg-foreground text-background' : 'bg-foreground/20 text-foreground'}`}
+            >
+              Sign Up
+            </button>
+            <button
+              onClick={() => { setStep('credentials'); setIsLogin(true); }}
+              className={`px-2 py-1 text-xs rounded ${step === 'credentials' && isLogin ? 'bg-foreground text-background' : 'bg-foreground/20 text-foreground'}`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setStep('company-info')}
+              className={`px-2 py-1 text-xs rounded ${step === 'company-info' ? 'bg-foreground text-background' : 'bg-foreground/20 text-foreground'}`}
+            >
+              Company
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Static Grainy Background */}
       <div className="absolute inset-0 grainy-background" />
       <div className="noise-layer" />
