@@ -348,12 +348,12 @@ const BusinessAuth: React.FC = () => {
 
       case 'company-description':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Describe your company
               </h2>
-              <p className="text-muted-foreground text-center">Help creators understand what you do</p>
+              <p className="text-muted-foreground text-center font-montserrat">Help creators understand what you do</p>
               
               <div className="w-full space-y-6">
                 <Textarea
@@ -361,27 +361,27 @@ const BusinessAuth: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={5}
-                  className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg"
+                  className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg font-montserrat"
                   autoFocus
                 />
                 
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Website (optional)</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Website (optional)</Label>
                   <Input
                     type="url"
                     placeholder="https://yourcompany.com"
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
               </div>
 
               <div className="flex gap-4 w-full">
-                <Button variant="ghost" onClick={goBack} className="flex-1">
+                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   Back
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full">
+                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
                   Continue
                 </Button>
               </div>
@@ -391,9 +391,9 @@ const BusinessAuth: React.FC = () => {
 
       case 'location':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Where are you based?
               </h2>
               
@@ -403,7 +403,7 @@ const BusinessAuth: React.FC = () => {
                     key={c}
                     type="button"
                     onClick={() => setCountry(c)}
-                    className={`p-3 text-left text-sm transition-all ${
+                    className={`p-3 text-left text-sm font-montserrat transition-all ${
                       country === c 
                         ? 'bg-foreground text-background' 
                         : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -415,10 +415,10 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               <div className="flex gap-4 w-full">
-                <Button variant="ghost" onClick={goBack} className="flex-1">
+                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   Back
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full" disabled={!country}>
+                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat" disabled={!country}>
                   Continue
                 </Button>
               </div>
@@ -428,27 +428,27 @@ const BusinessAuth: React.FC = () => {
 
       case 'products':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 What do you sell?
               </h2>
-              <p className="text-muted-foreground text-center">Describe your products or services</p>
+              <p className="text-muted-foreground text-center font-montserrat">Describe your products or services</p>
               
               <Textarea
                 placeholder="We offer premium fitness apparel, supplements, and workout programs..."
                 value={productsServices}
                 onChange={(e) => setProductsServices(e.target.value)}
                 rows={5}
-                className="w-full bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg"
+                className="w-full bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none resize-none text-lg font-montserrat"
                 autoFocus
               />
 
               <div className="flex gap-4 w-full">
-                <Button variant="ghost" onClick={goBack} className="flex-1">
+                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   Back
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full">
+                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
                   Continue
                 </Button>
               </div>
@@ -458,22 +458,22 @@ const BusinessAuth: React.FC = () => {
 
       case 'audience':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8 overflow-y-auto">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Who's your audience?
               </h2>
               
               {/* Age Ranges */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm">Target Age Range</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">Target Age Range</Label>
                 <div className="flex flex-wrap gap-2">
                   {AGE_RANGES.map((age) => (
                     <button
                       key={age}
                       type="button"
                       onClick={() => toggleArrayItem(ageRanges, setAgeRanges, age)}
-                      className={`px-4 py-2 text-sm transition-all ${
+                      className={`px-4 py-2 text-sm font-montserrat transition-all ${
                         ageRanges.includes(age)
                           ? 'bg-foreground text-background'
                           : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -487,12 +487,12 @@ const BusinessAuth: React.FC = () => {
 
               {/* Geographic Reach */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm">Geographic Reach</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">Geographic Reach</Label>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setGlobalReach('worldwide')}
-                    className={`flex-1 p-3 text-sm transition-all ${
+                    className={`flex-1 p-3 text-sm font-montserrat transition-all ${
                       globalReach === 'worldwide'
                         ? 'bg-foreground text-background'
                         : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -503,7 +503,7 @@ const BusinessAuth: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setGlobalReach('specific')}
-                    className={`flex-1 p-3 text-sm transition-all ${
+                    className={`flex-1 p-3 text-sm font-montserrat transition-all ${
                       globalReach === 'specific'
                         ? 'bg-foreground text-background'
                         : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -520,7 +520,7 @@ const BusinessAuth: React.FC = () => {
                         key={c}
                         type="button"
                         onClick={() => toggleArrayItem(targetCountries, setTargetCountries, c)}
-                        className={`p-2 text-left text-xs transition-all ${
+                        className={`p-2 text-left text-xs font-montserrat transition-all ${
                           targetCountries.includes(c)
                             ? 'bg-foreground text-background'
                             : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -535,14 +535,14 @@ const BusinessAuth: React.FC = () => {
 
               {/* Audience Types */}
               <div className="w-full space-y-3">
-                <Label className="text-muted-foreground text-sm">Audience Types</Label>
+                <Label className="text-muted-foreground text-sm font-montserrat">Audience Types</Label>
                 <div className="flex flex-wrap gap-2">
                   {AUDIENCE_TYPES.map((type) => (
                     <button
                       key={type}
                       type="button"
                       onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                      className={`px-3 py-1.5 text-xs transition-all ${
+                      className={`px-3 py-1.5 text-xs font-montserrat transition-all ${
                         audienceTypes.includes(type)
                           ? 'bg-foreground text-background'
                           : 'bg-transparent border border-foreground/20 hover:border-foreground/50 text-foreground'
@@ -555,10 +555,10 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               <div className="flex gap-4 w-full pt-4">
-                <Button variant="ghost" onClick={goBack} className="flex-1">
+                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   Back
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full">
+                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
                   Continue
                 </Button>
               </div>
@@ -568,27 +568,27 @@ const BusinessAuth: React.FC = () => {
 
       case 'credentials':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12">
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
             <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Create your account
               </h2>
-              <p className="text-muted-foreground text-center">Almost done! Set up your login credentials</p>
+              <p className="text-muted-foreground text-center font-montserrat">Almost done! Set up your login credentials</p>
               
               <form onSubmit={handleFinalSubmit} className="w-full space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Your Name</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Your Name</Label>
                   <Input
                     type="text"
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     autoComplete="name"
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Work Email</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Work Email</Label>
                   <Input
                     type="email"
                     placeholder="you@company.com"
@@ -596,11 +596,11 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Password</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Password</Label>
                   <Input
                     type="password"
                     placeholder="At least 6 characters"
@@ -608,15 +608,15 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
                 
                 <div className="flex gap-4 w-full pt-4">
-                  <Button type="button" variant="ghost" onClick={goBack} className="flex-1">
+                  <Button type="button" variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                     Back
                   </Button>
-                  <Button type="submit" className="flex-1 rounded-full" disabled={isLoading}>
+                  <Button type="submit" className="flex-1 rounded-full font-montserrat" disabled={isLoading}>
                     {isLoading ? 'Creating...' : 'Complete Setup'}
                   </Button>
                 </div>
@@ -627,15 +627,15 @@ const BusinessAuth: React.FC = () => {
 
       case 'login':
         return (
-          <div className="flex flex-col items-center justify-center min-h-screen px-6">
+          <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
             <div className="w-full max-w-md space-y-8">
-              <h2 className="text-3xl md:text-4xl font-light text-foreground text-center">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 Business Login
               </h2>
               
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Email</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Email</Label>
                   <Input
                     type="email"
                     placeholder="you@company.com"
@@ -643,11 +643,11 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm">Password</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">Password</Label>
                   <Input
                     type="password"
                     placeholder="••••••••"
@@ -655,18 +655,18 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
-                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none"
+                    className="bg-transparent border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-none font-montserrat"
                   />
                 </div>
-                <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
+                <Button type="submit" className="w-full rounded-full font-montserrat" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
-                <p className="text-center text-muted-foreground text-sm mt-4">
+                <p className="text-center text-muted-foreground text-sm mt-4 font-montserrat">
                   Don't have a business account?{' '}
                   <button
                     type="button"
                     onClick={() => setStep('company-name')}
-                    className="text-foreground underline hover:text-foreground/80"
+                    className="text-foreground underline hover:text-foreground/80 font-montserrat"
                   >
                     Create one
                   </button>
