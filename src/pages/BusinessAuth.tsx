@@ -273,23 +273,23 @@ const BusinessAuth: React.FC = () => {
       case 'company-name':
         return (
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
-            <div className="text-center space-y-8 w-full max-w-lg">
-              <h1 className="text-4xl md:text-5xl font-light text-foreground">
-                Hello{' '}
-                <span className="relative inline-block min-w-[200px]">
+            <div className="space-y-8 w-full max-w-2xl">
+              <div className="flex items-baseline gap-4">
+                <h1 className="text-4xl md:text-5xl font-light text-foreground whitespace-nowrap">Hello</h1>
+                <div className="flex-1 relative">
                   <input
                     type="text"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     onKeyDown={handleCompanyNameKeyDown}
-                    placeholder="............"
-                    className="bg-transparent border-none outline-none text-center text-4xl md:text-5xl font-light w-full placeholder:text-muted-foreground/50"
+                    placeholder="company name"
+                    className="bg-transparent border-none outline-none text-4xl md:text-5xl font-light w-full placeholder:text-muted-foreground/40 text-foreground"
                     autoFocus
                   />
                   <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/30" />
-                </span>
-                {' '}!
-              </h1>
+                </div>
+                <span className="text-4xl md:text-5xl font-light text-foreground">!</span>
+              </div>
               
               {companyName.trim() && (
                 <Button 
