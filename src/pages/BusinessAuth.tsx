@@ -318,7 +318,7 @@ const BusinessAuth: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-end gap-3">
-                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap">Hello</h1>
+                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">Hello</h1>
                 <div className="relative overflow-visible" style={{ minWidth: '180px' }}>
                   <div className="relative inline-block">
                     <input
