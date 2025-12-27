@@ -61,6 +61,7 @@ const BusinessAuth: React.FC = () => {
   const [devMode, setDevMode] = useState(false);
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
+  const [highestStepReached, setHighestStepReached] = useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
@@ -95,6 +96,14 @@ const BusinessAuth: React.FC = () => {
       return () => clearTimeout(showTimer);
     }
   }, [step]);
+
+  // Track highest step reached
+  useEffect(() => {
+    const currentIndex = ALL_STEPS.indexOf(step as Step);
+    if (currentIndex > highestStepReached && step !== 'login') {
+      setHighestStepReached(currentIndex);
+    }
+  }, [step, highestStepReached]);
 
   useEffect(() => {
     if (!loading && user && !devMode) {
@@ -691,9 +700,8 @@ const BusinessAuth: React.FC = () => {
   const canNavigateToStep = (targetStep: Step) => {
     if (step === 'login') return false;
     const targetIndex = ALL_STEPS.indexOf(targetStep);
-    const currentIndex = getCurrentStepIndex();
-    // Can navigate to completed steps or current step
-    return targetIndex <= currentIndex;
+    // Can navigate to any step up to the highest reached
+    return targetIndex <= highestStepReached;
   };
 
   return (
@@ -758,11 +766,11 @@ const BusinessAuth: React.FC = () => {
 
       {/* Left sidebar - step navigation */}
       {step !== 'login' && (
-        <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:block">
-          <div className="flex flex-col gap-3">
+        <div className="fixed left-[15%] top-1/2 -translate-y-1/2 z-40 hidden md:block">
+          <div className="flex flex-col gap-4">
             {ALL_STEPS.map((s, i) => {
               const isCurrent = step === s;
-              const isCompleted = i < getCurrentStepIndex();
+              const isVisited = i <= highestStepReached;
               const canClick = canNavigateToStep(s);
               
               return (
@@ -774,17 +782,15 @@ const BusinessAuth: React.FC = () => {
                     canClick ? 'cursor-pointer' : 'cursor-default'
                   }`}
                 >
-                  <div className={`w-2 h-2 rounded-full transition-all ${
-                    isCurrent 
-                      ? 'bg-foreground scale-125' 
-                      : isCompleted 
-                        ? 'bg-foreground/60' 
-                        : 'bg-foreground/20'
-                  }`} />
+                  <div className={`w-3 h-3 transition-all ${
+                    isVisited 
+                      ? 'bg-foreground' 
+                      : 'border border-foreground/30 bg-transparent'
+                  } ${isCurrent ? 'scale-110' : ''}`} />
                   <span className={`text-sm font-montserrat transition-all ${
                     isCurrent 
                       ? 'text-foreground font-medium' 
-                      : isCompleted 
+                      : isVisited 
                         ? 'text-foreground/60 group-hover:text-foreground/80' 
                         : 'text-foreground/30'
                   }`}>
