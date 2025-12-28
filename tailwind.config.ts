@@ -20,6 +20,7 @@ export default {
         jakarta: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         outfit: ['Outfit', 'system-ui', 'sans-serif'],
         geist: ['Geist Sans', 'system-ui', 'sans-serif'],
+        sana: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         'dark-surface': '#1c1c1c',
