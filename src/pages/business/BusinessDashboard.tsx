@@ -120,11 +120,19 @@ const BusinessDashboard: React.FC = () => {
           {/* Header */}
           <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
             <div className="flex items-center gap-4">
-              <img 
-                src={businessProfile?.logo_url || defaultAvatar} 
-                alt="Company logo" 
-                className="h-14 w-14 object-cover rounded-none" 
-              />
+              {businessProfile?.logo_url ? (
+                <img 
+                  src={businessProfile.logo_url} 
+                  alt="Company logo" 
+                  className="h-14 w-14 object-cover rounded-sm" 
+                />
+              ) : (
+                <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center">
+                  <span className="text-2xl font-semibold text-muted-foreground">
+                    {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
+                  </span>
+                </div>
+              )}
               <h1 className="text-3xl font-bold text-foreground">
                 {businessProfile?.company_name || 'Your Business'}
               </h1>
