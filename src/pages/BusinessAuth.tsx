@@ -86,7 +86,7 @@ const BusinessAuth: React.FC = () => {
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Animate name input after 1 second on company-name step with cycling typewriter effect
   useEffect(() => {
@@ -394,7 +394,7 @@ const BusinessAuth: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url: website }),
+        body: JSON.stringify({ url: website, language: i18n.language }),
       });
 
       const result = await response.json();
