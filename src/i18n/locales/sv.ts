@@ -91,6 +91,10 @@ export default {
     comingSoon: 'Kommer snart',
     tiktokComingSoon: 'TikTok-anslutning kommer att vara tillgänglig snart.',
     devMode: 'Dev Mode',
+    notCreatorAccount: 'Inte ett skaparkonto',
+    notCreatorAccountDesc: 'Detta konto är registrerat som ett företag. Vänligen använd företagsinloggningen.',
+    notBusinessAccount: 'Inte ett företagskonto',
+    notBusinessAccountDesc: 'Detta konto är registrerat som en skapare. Vänligen använd skaparinloggningen.',
   },
 
   // Business Auth

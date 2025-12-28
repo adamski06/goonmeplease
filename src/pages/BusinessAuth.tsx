@@ -172,6 +172,19 @@ const BusinessAuth: React.FC = () => {
       .eq('user_id', user.id);
     
     const hasBusiness = roles?.some(r => r.role === 'business');
+    const hasCreator = roles?.some(r => r.role === 'creator');
+    
+    if (hasCreator && !hasBusiness) {
+      // Creator account - sign out and redirect to creator auth
+      toast({
+        title: t('auth.notBusinessAccount'),
+        description: t('auth.notBusinessAccountDesc'),
+        variant: 'destructive',
+      });
+      await supabase.auth.signOut();
+      return;
+    }
+    
     if (hasBusiness) {
       navigate('/business');
     }
@@ -236,6 +249,19 @@ const BusinessAuth: React.FC = () => {
           .eq('user_id', session.session.user.id);
         
         const hasBusiness = roles?.some(r => r.role === 'business');
+        const hasCreator = roles?.some(r => r.role === 'creator');
+        
+        if (hasCreator && !hasBusiness) {
+          // Creator account trying to access business - sign out and show error
+          toast({
+            title: t('auth.notBusinessAccount'),
+            description: t('auth.notBusinessAccountDesc'),
+            variant: 'destructive',
+          });
+          await supabase.auth.signOut();
+          return;
+        }
+        
         if (hasBusiness) {
           navigate('/business');
         } else {

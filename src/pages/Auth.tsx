@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import tiktokLogo from '@/assets/tiktok-logo.png';
@@ -56,13 +58,39 @@ const Auth: React.FC = () => {
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Only auto-redirect if user is logged in AND we're not in the TikTok connect step AND not in dev mode
     if (!loading && user && signUpStep !== 2 && !devMode) {
-      navigate('/');
+      checkCreatorRole();
     }
   }, [user, loading, navigate, signUpStep, devMode]);
+
+  const checkCreatorRole = async () => {
+    if (!user) return;
+    
+    const { data: roles } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id);
+    
+    const hasCreator = roles?.some(r => r.role === 'creator');
+    const hasBusiness = roles?.some(r => r.role === 'business');
+    
+    if (hasBusiness && !hasCreator) {
+      // Business account trying to access creator - sign out and show error
+      toast({
+        title: t('auth.notCreatorAccount'),
+        description: t('auth.notCreatorAccountDesc'),
+        variant: 'destructive',
+      });
+      await supabase.auth.signOut();
+      return;
+    }
+    
+    navigate('/');
+  };
 
   const validateForm = (isSignUp: boolean) => {
     try {
@@ -91,13 +119,34 @@ const Auth: React.FC = () => {
 
     if (error) {
       toast({
-        title: 'Sign in failed',
+        title: t('auth.signInFailed'),
         description: error.message === 'Invalid login credentials' 
-          ? 'Invalid email or password. Please try again.'
+          ? t('auth.invalidCredentials')
           : error.message,
         variant: 'destructive',
       });
     } else {
+      // Check if user has business role only (no creator role)
+      const { data: session } = await supabase.auth.getSession();
+      if (session?.session?.user) {
+        const { data: roles } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.session.user.id);
+        
+        const hasCreator = roles?.some(r => r.role === 'creator');
+        const hasBusiness = roles?.some(r => r.role === 'business');
+        
+        if (hasBusiness && !hasCreator) {
+          toast({
+            title: t('auth.notCreatorAccount'),
+            description: t('auth.notCreatorAccountDesc'),
+            variant: 'destructive',
+          });
+          await supabase.auth.signOut();
+          return;
+        }
+      }
       navigate('/');
     }
   };
@@ -107,26 +156,60 @@ const Auth: React.FC = () => {
     if (!validateForm(true)) return;
 
     setIsLoading(true);
-    const { error } = await signUp(email, password, fullName);
-    setIsLoading(false);
+    
+    try {
+      const { error } = await signUp(email, password, fullName);
 
-    if (error) {
-      if (error.message.includes('already registered')) {
-        toast({
-          title: 'Account exists',
-          description: 'This email is already registered. Please sign in instead.',
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Sign up failed',
-          description: error.message,
-          variant: 'destructive',
-        });
+      if (error) {
+        if (error.message.includes('already registered')) {
+          toast({
+            title: t('auth.accountExists'),
+            description: t('auth.accountExistsDesc'),
+            variant: 'destructive',
+          });
+        } else {
+          toast({
+            title: t('auth.signUpFailed'),
+            description: error.message,
+            variant: 'destructive',
+          });
+        }
+        setIsLoading(false);
+        return;
       }
-    } else {
-      // Move to step 2 instead of navigating away
+
+      // Wait for session
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.user) {
+        throw new Error('Not authenticated');
+      }
+
+      const currentUserId = session.session.user.id;
+
+      // Add creator role
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert({
+          user_id: currentUserId,
+          role: 'creator',
+        });
+
+      if (roleError && !roleError.message.includes('duplicate')) {
+        console.error('Error adding creator role:', roleError);
+      }
+
+      // Move to step 2 (TikTok connect)
       setSignUpStep(2);
+    } catch (error: any) {
+      toast({
+        title: t('auth.signUpFailed'),
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
