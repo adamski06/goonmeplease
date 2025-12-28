@@ -307,24 +307,16 @@ const BusinessCampaignDetail: React.FC = () => {
                         <div className="relative py-4">
                           <div className="h-[2px] bg-foreground w-full" />
                           
-                          {/* Min marker */}
-                          {(() => {
-                            const totalViews = maxEarnings > 0 && ratePerThousand > 0 
-                              ? (maxEarnings / ratePerThousand) * 1000 
-                              : 10000;
-                            const minViews = Math.round(totalViews * 0.125);
-                            return (
-                              <div className="absolute z-20" style={{ left: '12.5%', top: '50%', transform: 'translateY(-50%)' }}>
-                                <div className="w-[2px] h-[10px] bg-foreground -translate-x-1/2" />
-                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 pointer-events-none">
-                                  <span className="text-xs text-foreground font-jakarta">min</span>
-                                </div>
-                                <div className="absolute top-3 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
-                                  <span className="text-xs text-muted-foreground font-jakarta">{minViews.toLocaleString()}</span>
-                                </div>
-                              </div>
-                            );
-                          })()}
+                          {/* Min marker - always at left, always 1000 views */}
+                          <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
+                            <div className="w-[2px] h-[10px] bg-foreground" />
+                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 pointer-events-none">
+                              <span className="text-xs text-foreground font-jakarta">min</span>
+                            </div>
+                            <div className="absolute top-3 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+                              <span className="text-xs text-muted-foreground font-jakarta">1,000</span>
+                            </div>
+                          </div>
                         </div>
 
                         {/* Views bubble - below line */}
