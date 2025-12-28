@@ -7,17 +7,56 @@ import { supabase } from '@/integrations/supabase/client';
 
 import defaultAvatar from '@/assets/default-avatar.png';
 
+interface BusinessProfile {
+  id: string;
+  company_name: string;
+  description: string | null;
+  logo_url: string | null;
+  website: string | null;
+}
+
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [totalViews, setTotalViews] = useState<number>(0);
   const [loadingStats, setLoadingStats] = useState(true);
+  const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth?mode=login');
+      navigate('/business/auth');
     }
   }, [user, loading, navigate]);
+
+  // Fetch business profile
+  useEffect(() => {
+    const fetchBusinessProfile = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('business_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (error) {
+          console.error('Error fetching business profile:', error);
+        } else {
+          setBusinessProfile(data);
+        }
+      } catch (error) {
+        console.error('Error fetching business profile:', error);
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+
+    if (user) {
+      fetchBusinessProfile();
+    }
+  }, [user]);
 
   // Fetch total views across all campaigns
   useEffect(() => {
@@ -59,7 +98,7 @@ const BusinessDashboard: React.FC = () => {
     }
   }, [user]);
 
-  if (loading) {
+  if (loading || loadingProfile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-pulse text-muted-foreground">Loading...</div>
@@ -71,6 +110,9 @@ const BusinessDashboard: React.FC = () => {
     return num.toLocaleString('sv-SE');
   };
 
+  // Extract first paragraph of description for display
+  const shortDescription = businessProfile?.description?.split('\n\n')[0] || 'Welcome to your business dashboard';
+
   return (
     <BusinessLayout>
       <div className="p-8">
@@ -78,11 +120,17 @@ const BusinessDashboard: React.FC = () => {
           {/* Header */}
           <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
             <div className="flex items-center gap-4">
-              <img src={defaultAvatar} alt="Company logo" className="h-14 w-14 object-cover rounded-none" />
-              <h1 className="text-3xl font-bold text-foreground">Acme Inc.</h1>
+              <img 
+                src={businessProfile?.logo_url || defaultAvatar} 
+                alt="Company logo" 
+                className="h-14 w-14 object-cover rounded-none" 
+              />
+              <h1 className="text-3xl font-bold text-foreground">
+                {businessProfile?.company_name || 'Your Business'}
+              </h1>
             </div>
             <p className="mt-3 text-muted-foreground max-w-xl">
-              Leading innovator in sustainable technology solutions, empowering businesses to build a greener future.
+              {shortDescription}
             </p>
           </div>
 
