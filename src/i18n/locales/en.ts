@@ -91,6 +91,10 @@ export default {
     comingSoon: 'Coming soon',
     tiktokComingSoon: 'TikTok connection will be available soon.',
     devMode: 'Dev Mode',
+    notCreatorAccount: 'Not a creator account',
+    notCreatorAccountDesc: 'This account is registered as a business. Please use the business login.',
+    notBusinessAccount: 'Not a business account',
+    notBusinessAccountDesc: 'This account is registered as a creator. Please use the creator login.',
   },
 
   // Business Auth
