@@ -303,8 +303,8 @@ const BusinessCampaignDetail: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* The line */}
-                        <div className="relative py-4">
+                        {/* The line - with left margin to align with text */}
+                        <div className="relative py-4 ml-1">
                           <div className="h-[2px] bg-foreground w-full" />
                           
                           {/* Min marker - always at left, always 1000 views */}
