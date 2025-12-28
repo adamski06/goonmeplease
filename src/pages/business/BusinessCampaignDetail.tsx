@@ -264,11 +264,13 @@ const BusinessCampaignDetail: React.FC = () => {
                   <div className="max-w-2xl">
                     {/* Header - Logo and brand */}
                     <div className="flex items-center gap-3 mb-5">
-                      <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0 border border-border">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 shadow-sm flex items-center justify-center flex-shrink-0 border border-border overflow-hidden">
                         {campaign.brand_logo_url ? (
                           <img src={campaign.brand_logo_url} alt={campaign.brand_name} className="w-full h-full object-contain" />
                         ) : (
-                          <img src={defaultAvatar} alt={campaign.brand_name} className="w-full h-full object-contain" />
+                          <span className="text-xl font-bold text-primary">
+                            {campaign.brand_name.charAt(0).toUpperCase()}
+                          </span>
                         )}
                       </div>
                       <div>
