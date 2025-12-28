@@ -284,18 +284,64 @@ const BusinessCampaignDetail: React.FC = () => {
                       {campaign.description || 'No description provided.'}
                     </p>
 
-                    {/* Earnings Display */}
-                    <div className="mb-6 p-4 bg-muted/30 rounded-lg">
+                    {/* Earnings Display - matching creator view */}
+                    <div className="mb-6 relative">
+                      {/* Rate per view */}
                       <div className="flex items-baseline gap-1 mb-2">
                         <span className="text-xl font-bold text-foreground font-montserrat">{ratePerThousand.toFixed(0)}</span>
                         <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
                         <span className="text-xs font-bold text-muted-foreground font-jakarta">/ 1000 views</span>
                       </div>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-sm text-muted-foreground">Up to</span>
-                        <span className="text-2xl font-bold text-foreground font-montserrat">{maxEarnings.toLocaleString()}</span>
-                        <span className="text-sm text-foreground font-montserrat">sek</span>
+
+                      {/* Line and bubbles */}
+                      <div className="relative mt-4">
+                        {/* Earnings bubble - above line */}
+                        <div className="absolute -top-10 right-0 pointer-events-none z-20">
+                          <div className="bg-black px-4 py-2 flex items-baseline gap-1 rounded-full rounded-br-none">
+                            <span className="text-2xl font-bold text-white font-montserrat">{maxEarnings.toLocaleString()}</span>
+                            <span className="text-sm text-white font-montserrat">sek</span>
+                          </div>
+                        </div>
+
+                        {/* The line */}
+                        <div className="relative py-4">
+                          <div className="h-[2px] bg-foreground w-full" />
+                          
+                          {/* Min marker */}
+                          {(() => {
+                            const totalViews = maxEarnings > 0 && ratePerThousand > 0 
+                              ? (maxEarnings / ratePerThousand) * 1000 
+                              : 10000;
+                            const minViews = Math.round(totalViews * 0.125);
+                            return (
+                              <div className="absolute z-20" style={{ left: '12.5%', top: '50%', transform: 'translateY(-50%)' }}>
+                                <div className="w-[2px] h-[10px] bg-foreground -translate-x-1/2" />
+                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 pointer-events-none">
+                                  <span className="text-xs text-foreground font-jakarta">min</span>
+                                </div>
+                                <div className="absolute top-3 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
+                                  <span className="text-xs text-muted-foreground font-jakarta">{minViews.toLocaleString()}</span>
+                                </div>
+                              </div>
+                            );
+                          })()}
+                        </div>
+
+                        {/* Views bubble - below line */}
+                        <div className="absolute top-10 right-0 pointer-events-none z-20">
+                          <div className="bg-background border border-border px-3 py-1.5 flex items-baseline gap-1 rounded-full rounded-tr-none">
+                            <span className="text-base font-normal text-foreground font-jakarta">
+                              {maxEarnings > 0 && ratePerThousand > 0 
+                                ? ((maxEarnings / ratePerThousand) * 1000).toLocaleString() 
+                                : '0'}
+                            </span>
+                            <span className="text-xs text-foreground font-jakarta">views</span>
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Spacer for bubbles */}
+                      <div className="h-12" />
                     </div>
 
                     {/* Requirements */}
