@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { url } = await req.json();
+    const { url, language = 'en' } = await req.json();
 
     if (!url) {
       return new Response(
@@ -19,6 +19,8 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    const isSwedish = language === 'sv';
 
     const firecrawlApiKey = Deno.env.get('FIRECRAWL_API_KEY');
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
@@ -176,18 +178,7 @@ serve(async (req) => {
 
     const ageRanges = ['13-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'];
 
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a business analyst writing FROM THE COMPANY'S PERSPECTIVE. All descriptions must be written as if you work for the company, using "we", "our", and "us".
+    const systemPromptEnglish = `You are a business analyst writing FROM THE COMPANY'S PERSPECTIVE. All descriptions must be written as if you work for the company, using "we", "our", and "us".
 
 CRITICAL - ALL TEXT MUST BE FIRST-PERSON "WE" PERSPECTIVE:
 - description: Write as the company speaking about themselves. Example: "We are a sustainable fashion brand creating timeless pieces for the modern professional."
@@ -207,11 +198,53 @@ Examples:
 - Fashion retailer → "We offer a curated selection of contemporary and classic pieces for men and women. Our collection includes designer clothing, premium footwear, and carefully selected accessories. We pride ourselves on discovering emerging designers while maintaining relationships with established luxury brands."
 - Tech startup → "We build AI-powered productivity tools that help teams collaborate more effectively. Our platform includes smart document editing, automated meeting summaries, and intelligent task management. We integrate with over 50 popular workplace tools."
 
-Always write as if you ARE the company. Never use "they" or "the company".`
+Always write as if you ARE the company. Never use "they" or "the company".`;
+
+    const systemPromptSwedish = `Du är en affärsanalytiker som skriver FRÅN FÖRETAGETS PERSPEKTIV. Alla beskrivningar måste skrivas som om du arbetar för företaget, med "vi", "vår" och "oss".
+
+KRITISKT - ALL TEXT MÅSTE VARA I FÖRSTA PERSON "VI" PERSPEKTIV:
+- description: Skriv som företaget talar om sig själva. Exempel: "Vi är ett hållbart modemärke som skapar tidlösa plagg för den moderna yrkesmänniskan."
+- productsServices: Skriv i detalj om vad företaget erbjuder. Exempel: "Vi erbjuder en kurerad kollektion av premiumarbetskläder inklusive skräddarsydda kavajer, mångsidiga klänningar och accessoarer. Vår signaturlinje har hållbara tyger från etiska leverantörer, och vi erbjuder personliga stylingsessioner för att hjälpa kunder bygga sin perfekta garderob."
+- audienceDescription: Skriv från företagets perspektiv. Exempel: "Vi betjänar främst stilmedvetna yrkesmänniskor i åldern 25-45 som värdesätter kvalitet framför kvantitet och bryr sig om hållbara modeval."
+
+VIKTIGT för productsServices: Var detaljerad och specifik (3-4 meningar). Inkludera:
+- Huvudkategorier för produkter/tjänster
+- Nyckelfunktioner eller differentierare
+- Eventuella unika försäljningsargument
+
+VIKTIGT för audienceTypes: Välj 5-10 relevanta målgruppstyper från de tillhandahållna alternativen. Var grundlig - de flesta företag tilltalar flera målgruppssegment.
+
+VIKTIGT för ageRanges: Välj 2-4 mest relevanta åldersintervall från: ${ageRanges.join(', ')}
+
+Exempel:
+- Modeåterförsäljare → "Vi erbjuder ett kurerat urval av samtida och klassiska plagg för både män och kvinnor. Vår kollektion inkluderar designerkläder, premiumskor och noggrant utvalda accessoarer. Vi är stolta över att upptäcka nya designers samtidigt som vi upprätthåller relationer med etablerade lyxmärken."
+- Tech-startup → "Vi bygger AI-drivna produktivitetsverktyg som hjälper team att samarbeta mer effektivt. Vår plattform inkluderar smart dokumentredigering, automatiska mötessammanfattningar och intelligent uppgiftshantering. Vi integrerar med över 50 populära arbetsplatsverktyg."
+
+Skriv alltid som om du ÄR företaget. Använd aldrig "de" eller "företaget".
+
+VIKTIGT: ALL OUTPUT MÅSTE VARA PÅ SVENSKA.`;
+
+    const systemPrompt = isSwedish ? systemPromptSwedish : systemPromptEnglish;
+    const userPrompt = isSwedish 
+      ? `Analysera detta webbplatsinnehåll och skriv affärsinformation FRÅN FÖRETAGETS PERSPEKTIV (med "vi", "vår", "oss"). ALL OUTPUT MÅSTE VARA PÅ SVENSKA:\n\n${websiteContent.slice(0, 15000)}`
+      : `Analyze this website content and write business information FROM THE COMPANY'S PERSPECTIVE (using "we", "our", "us"):\n\n${websiteContent.slice(0, 15000)}`;
+
+    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${lovableApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt
           },
           {
             role: 'user',
-            content: `Analyze this website content and write business information FROM THE COMPANY'S PERSPECTIVE (using "we", "our", "us"):\n\n${websiteContent.slice(0, 15000)}`
+            content: userPrompt
           }
         ],
         tools: [
