@@ -77,6 +77,7 @@ const BusinessAuth: React.FC = () => {
   const [website, setWebsite] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
@@ -158,10 +159,10 @@ const BusinessAuth: React.FC = () => {
   }, [step, highestStepReached]);
 
   useEffect(() => {
-    if (!loading && user && !devMode) {
+    if (!loading && user && !devMode && !isSigningUp) {
       checkBusinessRole();
     }
-  }, [user, loading, devMode]);
+  }, [user, loading, devMode, isSigningUp]);
 
   const checkBusinessRole = async () => {
     if (!user) return;
@@ -281,6 +282,7 @@ const BusinessAuth: React.FC = () => {
     if (!validateCredentials()) return;
 
     setIsLoading(true);
+    setIsSigningUp(true);
 
     try {
       // First create the user account
@@ -358,6 +360,7 @@ const BusinessAuth: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+      setIsSigningUp(false);
     }
   };
 
