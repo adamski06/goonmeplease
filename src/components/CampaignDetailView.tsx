@@ -91,8 +91,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           >
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
-          <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center p-1 flex-shrink-0 border border-black/5">
-            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+          <div className="w-8 h-8 rounded-lg bg-primary/10 shadow-sm flex items-center justify-center flex-shrink-0 border border-black/5 overflow-hidden">
+            {campaign.logo ? (
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain p-1" />
+            ) : (
+              <span className="text-sm font-bold text-primary">
+                {campaign.brand.charAt(0).toUpperCase()}
+              </span>
+            )}
           </div>
           <h1 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h1>
           <button
@@ -218,8 +224,14 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <div className="max-w-xl">
               {/* Header - Logo, company name, and content type */}
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center p-2 flex-shrink-0">
-                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {campaign.logo ? (
+                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain p-2" />
+                  ) : (
+                    <span className="text-xl font-bold text-primary">
+                      {campaign.brand.charAt(0).toUpperCase()}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-baseline gap-3">
                   <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
