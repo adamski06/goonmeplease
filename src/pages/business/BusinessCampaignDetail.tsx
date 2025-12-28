@@ -308,10 +308,12 @@ const BusinessCampaignDetail: React.FC = () => {
                           <div className="h-[2px] bg-foreground w-full" />
                           
                           {/* Min marker - always at left, always 1000 views */}
-                          <div className="absolute z-20 flex flex-col items-center" style={{ left: '0%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-                            <span className="text-xs text-foreground font-jakarta mb-1 -mt-5">min</span>
-                            <div className="w-[2px] h-[10px] bg-foreground" />
-                            <span className="text-xs text-muted-foreground font-jakarta mt-1">1,000</span>
+                          <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
+                            <div className="relative">
+                              <div className="w-[2px] h-[10px] bg-foreground" />
+                              <span className="absolute -top-6 left-0 -translate-x-1/2 text-xs text-foreground font-jakarta pointer-events-none whitespace-nowrap">min</span>
+                              <span className="absolute top-3 left-0 -translate-x-1/2 text-xs text-muted-foreground font-jakarta pointer-events-none whitespace-nowrap">1,000</span>
+                            </div>
                           </div>
                         </div>
 
