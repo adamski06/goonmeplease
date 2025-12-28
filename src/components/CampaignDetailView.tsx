@@ -91,11 +91,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
           >
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
-          <div className="w-8 h-8 rounded-lg bg-primary/10 shadow-sm flex items-center justify-center flex-shrink-0 border border-black/5 overflow-hidden">
+          <div className="w-8 h-8 rounded-md bg-neutral-100 flex items-center justify-center flex-shrink-0 border border-black/10 overflow-hidden">
             {campaign.logo ? (
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain p-1" />
             ) : (
-              <span className="text-sm font-bold text-primary">
+              <span className="text-sm font-bold text-black">
                 {campaign.brand.charAt(0).toUpperCase()}
               </span>
             )}
@@ -224,11 +224,11 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <div className="max-w-xl">
               {/* Header - Logo, company name, and content type */}
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center flex-shrink-0 overflow-hidden border border-border">
                   {campaign.logo ? (
                     <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain p-2" />
                   ) : (
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-xl font-bold text-foreground">
                       {campaign.brand.charAt(0).toUpperCase()}
                     </span>
                   )}
