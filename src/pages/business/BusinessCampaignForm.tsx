@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useProfile } from '@/contexts/ProfileContext';
+
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,13 +20,13 @@ interface Tier {
 
 const BusinessCampaignForm: React.FC = () => {
   const { user, loading } = useAuth();
-  const { profile } = useProfile();
   const navigate = useNavigate();
   const { id } = useParams();
   const { toast } = useToast();
   const isEditing = Boolean(id);
 
   const [saving, setSaving] = useState(false);
+  const [businessProfile, setBusinessProfile] = useState<{ company_name: string; logo_url: string | null } | null>(null);
   const [formData, setFormData] = useState({
     brand_name: '',
     title: '',
@@ -47,12 +47,27 @@ const BusinessCampaignForm: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  // Auto-fill brand name from profile
+  // Fetch business profile
   useEffect(() => {
-    if (!isEditing && profile?.full_name) {
-      setFormData(prev => ({ ...prev, brand_name: profile.full_name || '' }));
-    }
-  }, [profile, isEditing]);
+    const fetchBusinessProfile = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('business_profiles')
+        .select('company_name, logo_url')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      if (data) {
+        setBusinessProfile(data);
+        if (!isEditing) {
+          setFormData(prev => ({ ...prev, brand_name: data.company_name }));
+        }
+      }
+    };
+    
+    fetchBusinessProfile();
+  }, [user, isEditing]);
 
   useEffect(() => {
     if (isEditing && user) {
@@ -116,6 +131,7 @@ const BusinessCampaignForm: React.FC = () => {
       const campaignData = {
         business_id: user.id,
         brand_name: formData.brand_name,
+        brand_logo_url: businessProfile?.logo_url || null,
         title: formData.title,
         description: formData.description,
         guidelines: requirementsString,
