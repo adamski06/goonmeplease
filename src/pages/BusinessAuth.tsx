@@ -81,6 +81,7 @@ const BusinessAuth: React.FC = () => {
   const [devMode, setDevMode] = useState(false);
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
+  const [descriptionTypewriter, setDescriptionTypewriter] = useState('');
   const [highestStepReached, setHighestStepReached] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -121,6 +122,26 @@ const BusinessAuth: React.FC = () => {
       };
     }
   }, [step, i18n.language]);
+
+  // Typewriter effect for "Tell us about" heading
+  useEffect(() => {
+    if (step === 'company-description') {
+      setDescriptionTypewriter('');
+      const headingText = i18n.language === 'sv' ? `Berätta om ${companyName}` : `Tell us about ${companyName}`;
+      
+      let charIndex = 0;
+      const typeTimer = setInterval(() => {
+        if (charIndex <= headingText.length) {
+          setDescriptionTypewriter(headingText.slice(0, charIndex));
+          charIndex++;
+        } else {
+          clearInterval(typeTimer);
+        }
+      }, 40);
+      
+      return () => clearInterval(typeTimer);
+    }
+  }, [step, i18n.language, companyName]);
 
   // Track highest step reached
   useEffect(() => {
@@ -494,8 +515,8 @@ const BusinessAuth: React.FC = () => {
         return (
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
-                {t('businessAuth.tellUsAbout')} {companyName}
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full min-h-[2.5rem] md:min-h-[3rem]">
+                {descriptionTypewriter}<span className="animate-pulse">|</span>
               </h2>
               
               <div className="w-full space-y-6">
