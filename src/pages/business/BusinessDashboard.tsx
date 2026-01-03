@@ -98,11 +98,21 @@ const BusinessDashboard: React.FC = () => {
     }
   }, [user]);
 
-  if (loading || loadingProfile) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-pulse text-muted-foreground">Loading...</div>
       </div>
+    );
+  }
+
+  if (loadingProfile) {
+    return (
+      <BusinessLayout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="animate-pulse text-muted-foreground">Loading...</div>
+        </div>
+      </BusinessLayout>
     );
   }
 
