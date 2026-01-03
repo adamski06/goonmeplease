@@ -1060,7 +1060,7 @@ const BusinessAuth: React.FC = () => {
 
       {/* AI Automate Dialog */}
       <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
-        <DialogContent className="sm:max-w-2xl min-h-[280px]">
+        <DialogContent className="sm:max-w-2xl min-h-[280px] rounded-[3px]">
           <DialogHeader>
             <DialogTitle className="font-montserrat text-xl">
               {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
