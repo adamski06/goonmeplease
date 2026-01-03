@@ -141,21 +141,21 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
             <div className="relative py-4">
               <div className="h-[2px] bg-black w-full" />
               
-              {/* Min marker */}
-              {(() => {
-                const minViews = Math.round(totalViews * 0.125);
-                return (
-                  <div className="absolute z-20" style={{ left: '12.5%', top: '50%', transform: 'translateY(-50%)' }}>
-                    <div className="w-[2px] h-[10px] bg-black -translate-x-1/2" />
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 pointer-events-none">
-                      <span className="text-xs text-black font-jakarta">min</span>
-                    </div>
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
-                      <span className="text-xs text-black font-jakarta">{minViews.toLocaleString()}</span>
-                    </div>
+            {/* Min marker */}
+            {(() => {
+              const minViews = Math.round(totalViews * 0.125);
+              return (
+                <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
+                  <div className="w-[2px] h-[10px] bg-black" />
+                  <div className="absolute -top-6 left-0 pointer-events-none">
+                    <span className="text-xs text-black font-jakarta">min</span>
                   </div>
-                );
-              })()}
+                  <div className="absolute top-3 left-0 pointer-events-none whitespace-nowrap">
+                    <span className="text-xs text-black font-jakarta">{minViews.toLocaleString()}</span>
+                  </div>
+                </div>
+              );
+            })()}
             </div>
 
             {/* Views bubble - below line */}
