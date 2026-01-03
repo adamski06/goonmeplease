@@ -558,14 +558,14 @@ const BusinessAuth: React.FC = () => {
                   aria-disabled={!website.trim()}
                 >
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
-                  <input
-                    type="text"
+                  <Textarea
                     placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     readOnly={!website.trim()}
                     tabIndex={!website.trim() ? -1 : 0}
-                    className="flex h-10 w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground"
+                    className="w-full min-h-[40px] p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground resize-none field-sizing-content"
+                    style={{ fieldSizing: 'content' } as React.CSSProperties}
                   />
                 </div>
 
@@ -620,8 +620,8 @@ const BusinessAuth: React.FC = () => {
                   placeholder={t('businessAuth.productsServicesPlaceholder')}
                   value={productsServices}
                   onChange={(e) => setProductsServices(e.target.value)}
-                  rows={5}
-                  className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] resize-none font-geist"
+                  className="w-full min-h-[120px] bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] resize-none font-geist"
+                  style={{ fieldSizing: 'content' } as React.CSSProperties}
                   autoFocus
                 />
               </div>
