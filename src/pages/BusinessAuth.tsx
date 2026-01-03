@@ -173,7 +173,7 @@ const BusinessAuth: React.FC = () => {
       setTimeout(() => {
         setStep(ALL_STEPS[currentIndex + 1]);
         setIsTransitioning(false);
-      }, 500);
+      }, 300);
     }
   };
 
