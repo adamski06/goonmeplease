@@ -82,6 +82,7 @@ const BusinessAuth: React.FC = () => {
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
   const [highestStepReached, setHighestStepReached] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
@@ -168,7 +169,11 @@ const BusinessAuth: React.FC = () => {
   const goNext = () => {
     const currentIndex = getCurrentStepIndex();
     if (currentIndex < ALL_STEPS.length - 1) {
-      setStep(ALL_STEPS[currentIndex + 1]);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setStep(ALL_STEPS[currentIndex + 1]);
+        setIsTransitioning(false);
+      }, 500);
     }
   };
 
@@ -433,6 +438,14 @@ const BusinessAuth: React.FC = () => {
   const showCompanyHeader = step !== 'company-name' && step !== 'login' && companyName;
 
   const renderStepContent = () => {
+    if (isTransitioning) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+        </div>
+      );
+    }
+
     switch (step) {
       case 'company-name': {
         const textToMeasure = companyName || typewriterText || 'company name';
