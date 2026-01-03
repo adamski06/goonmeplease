@@ -532,7 +532,7 @@ const BusinessAuth: React.FC = () => {
               <div className="w-full space-y-6">
                 {/* Website with Automate button */}
                 <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.websiteOptional')}</Label>
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.website')}</Label>
                   <div className="flex gap-2">
                     <Input
                       type="url"
