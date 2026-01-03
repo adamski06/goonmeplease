@@ -595,7 +595,11 @@ const BusinessAuth: React.FC = () => {
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   {t('common.back')}
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
+                <Button 
+                  onClick={goNext} 
+                  disabled={!website.trim() || !description.trim() || !country}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() || !description.trim() || !country ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                >
                   {t('common.continue')}
                 </Button>
               </div>
