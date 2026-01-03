@@ -38,7 +38,6 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
   const navItems = [
     { path: '/business', label: t('nav.home'), icon: 'home' },
     { path: '/business/campaigns', label: t('nav.campaigns'), icon: 'campaigns' },
-    { path: '/business/submissions', label: t('nav.submissions'), icon: 'submissions' },
     { path: '/business/analytics', label: t('nav.analytics'), icon: 'analytics' },
   ];
 

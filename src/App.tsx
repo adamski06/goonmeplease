@@ -18,7 +18,7 @@ import BusinessDashboard from "./pages/business/BusinessDashboard";
 import BusinessCampaigns from "./pages/business/BusinessCampaigns";
 import BusinessCampaignForm from "./pages/business/BusinessCampaignForm";
 import BusinessCampaignDetail from "./pages/business/BusinessCampaignDetail";
-import BusinessSubmissions from "./pages/business/BusinessSubmissions";
+
 import BusinessAnalytics from "./pages/business/BusinessAnalytics";
 import BusinessAuth from "./pages/BusinessAuth";
 
@@ -48,7 +48,7 @@ const App = () => (
                   <Route path="/business/campaigns/new" element={<BusinessCampaignForm />} />
                   <Route path="/business/campaigns/:id" element={<BusinessCampaignDetail />} />
                   <Route path="/business/campaigns/:id/edit" element={<BusinessCampaignForm />} />
-                  <Route path="/business/submissions" element={<BusinessSubmissions />} />
+                  
                   <Route path="/business/analytics" element={<BusinessAnalytics />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
