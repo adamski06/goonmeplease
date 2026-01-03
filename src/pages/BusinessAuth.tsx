@@ -89,26 +89,15 @@ const BusinessAuth: React.FC = () => {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
 
-  // Animate name input after 1 second on company-name step with cycling typewriter effect
+  // Animate name input after 1 second on company-name step with typewriter effect
   useEffect(() => {
     if (step === 'company-name') {
       setShowNameInput(false);
       setTypewriterText('');
       
-      const companyNames = [
-        'Acme Corp',
-        'TechFlow',
-        'Bright Ideas',
-        'Nova Labs',
-        'Spark Studio',
-        'Blue Horizon',
-        'Pixel Perfect',
-        'Swift Solutions'
-      ];
+      const placeholderText = i18n.language === 'sv' ? 'Företagsnamn' : 'Company name';
       
-      let nameIndex = 0;
       let charIndex = 0;
-      let isDeleting = false;
       let typeTimer: ReturnType<typeof setInterval>;
       
       const showTimer = setTimeout(() => {
@@ -116,29 +105,11 @@ const BusinessAuth: React.FC = () => {
         setTimeout(() => inputRef.current?.focus(), 100);
         
         typeTimer = setInterval(() => {
-          const currentName = companyNames[nameIndex];
-          
-          if (!isDeleting) {
-            // Typing
-            if (charIndex <= currentName.length) {
-              setTypewriterText(currentName.slice(0, charIndex));
-              charIndex++;
-            } else {
-              // Pause at end before deleting
-              setTimeout(() => {
-                isDeleting = true;
-              }, 1500);
-            }
+          if (charIndex <= placeholderText.length) {
+            setTypewriterText(placeholderText.slice(0, charIndex));
+            charIndex++;
           } else {
-            // Deleting
-            if (charIndex > 0) {
-              charIndex--;
-              setTypewriterText(currentName.slice(0, charIndex));
-            } else {
-              // Move to next name
-              isDeleting = false;
-              nameIndex = (nameIndex + 1) % companyNames.length;
-            }
+            clearInterval(typeTimer);
           }
         }, 100);
       }, 1000);
@@ -148,7 +119,7 @@ const BusinessAuth: React.FC = () => {
         if (typeTimer) clearInterval(typeTimer);
       };
     }
-  }, [step]);
+  }, [step, i18n.language]);
 
   // Track highest step reached
   useEffect(() => {
