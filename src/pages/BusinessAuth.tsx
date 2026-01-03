@@ -555,12 +555,13 @@ const BusinessAuth: React.FC = () => {
                 {/* Short description - faded until website is filled */}
                 <div className={`space-y-2 transition-opacity duration-300 ${!website.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
-                  <Input
+                  <input
+                    type="text"
                     placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     disabled={!website.trim()}
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:cursor-not-allowed disabled:opacity-100"
+                    className="flex h-10 w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground disabled:cursor-not-allowed"
                   />
                 </div>
 
