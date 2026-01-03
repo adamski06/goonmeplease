@@ -1074,42 +1074,7 @@ const BusinessAuth: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-6 pt-6">
-            <div className="space-y-3">
-              <Label className="text-muted-foreground text-base font-montserrat">
-                {t('businessAuth.websiteOptional')}
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder={t('businessAuth.websitePlaceholder')}
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1 h-12 text-base"
-                />
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setShowAiDialog(false);
-                    handleAnalyzeWebsite();
-                  }}
-                  disabled={isAnalyzing || !website.trim() || !dialogTermsAccepted}
-                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap h-12 text-base px-6"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      {t('businessAuth.analyzing')}
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4" />
-                      {t('businessAuth.automate')}
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 pt-2">
+            <div className="flex items-start gap-3">
               <Checkbox 
                 id="dialog-terms" 
                 checked={dialogTermsAccepted}
@@ -1124,6 +1089,41 @@ const BusinessAuth: React.FC = () => {
                   ? 'Jag godkänner användarvillkoren och integritetspolicyn' 
                   : 'I agree to the Terms of Service and Privacy Policy'}
               </Label>
+            </div>
+            <div className="space-y-3">
+              <Label className="text-muted-foreground text-base font-montserrat">
+                {t('businessAuth.websiteOptional')}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder={t('businessAuth.websitePlaceholder')}
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
+                />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowAiDialog(false);
+                    handleAnalyzeWebsite();
+                  }}
+                  disabled={isAnalyzing || !website.trim() || !dialogTermsAccepted}
+                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t('businessAuth.analyzing')}
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      {t('businessAuth.automate')}
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
