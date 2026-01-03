@@ -1062,7 +1062,7 @@ const BusinessAuth: React.FC = () => {
 
       {/* AI Automate Dialog */}
       <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
-        <DialogContent className="sm:max-w-2xl min-h-[380px] rounded-[3px] flex flex-col">
+        <DialogContent className="sm:max-w-2xl min-h-[380px] rounded-none flex flex-col">
           <DialogHeader>
             <DialogTitle className="font-montserrat text-2xl">
               {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
@@ -1073,17 +1073,17 @@ const BusinessAuth: React.FC = () => {
                 : 'Go through it to see if everything is correct.'}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-6 mt-auto pb-2">
-            <div className="flex items-start gap-3">
+          <div className="space-y-4 mt-auto pb-2">
+            <div className="flex items-center gap-2">
               <Checkbox 
                 id="dialog-terms" 
                 checked={dialogTermsAccepted}
                 onCheckedChange={(checked) => setDialogTermsAccepted(checked === true)}
-                className="mt-1 rounded-[3px]"
+                className="h-3 w-3 rounded-none"
               />
               <Label 
                 htmlFor="dialog-terms" 
-                className="text-sm text-muted-foreground font-geist cursor-pointer leading-relaxed"
+                className="text-xs text-muted-foreground font-geist cursor-pointer"
               >
                 {i18n.language === 'sv' 
                   ? 'Jag godkänner användarvillkoren och integritetspolicyn' 
