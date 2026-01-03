@@ -381,32 +381,40 @@ const BusinessCampaignForm: React.FC = () => {
             </Card>
 
 
-            {/* Budget & Deadline */}
+            {/* Budget */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader>
-                <CardTitle>Budget & Deadline</CardTitle>
+                <CardTitle>Budget</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="total_budget">Total Budget (SEK)</Label>
-                    <Input
-                      id="total_budget"
-                      type="number"
-                      value={formData.total_budget}
-                      onChange={(e) => setFormData({ ...formData, total_budget: parseFloat(e.target.value) || 0 })}
-                      placeholder="10000"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="deadline">Deadline</Label>
-                    <Input
-                      id="deadline"
-                      type="date"
-                      value={formData.deadline}
-                      onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                    />
-                  </div>
+              <CardContent>
+                <div className="space-y-2">
+                  <Label htmlFor="total_budget">Total Budget (SEK)</Label>
+                  <Input
+                    id="total_budget"
+                    type="number"
+                    value={formData.total_budget}
+                    onChange={(e) => setFormData({ ...formData, total_budget: parseFloat(e.target.value) || 0 })}
+                    placeholder="10000"
+                  />
+                  <p className="text-xs text-muted-foreground">We guarantee views based on your budget</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Deadline */}
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
+              <CardHeader>
+                <CardTitle>Deadline</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Label htmlFor="deadline">Campaign Deadline</Label>
+                  <Input
+                    id="deadline"
+                    type="date"
+                    value={formData.deadline}
+                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                  />
                 </div>
               </CardContent>
             </Card>
