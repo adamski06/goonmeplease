@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
+import DomainRouter from "@/components/DomainRouter";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Campaigns from "./pages/Campaigns";
@@ -32,24 +33,26 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <ProfileProvider>
-              <Routes>
-                <Route path="/" element={<Campaigns />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/landing" element={<Index />} />
-                <Route path="/campaigns/:id" element={<CampaignDetail />} />
-                <Route path="/activity" element={<Activity />} />
-                <Route path="/profile" element={<Profile />} />
-                {/* Business Routes */}
-                <Route path="/business/auth" element={<BusinessAuth />} />
-                <Route path="/business" element={<BusinessDashboard />} />
-                <Route path="/business/campaigns" element={<BusinessCampaigns />} />
-                <Route path="/business/campaigns/new" element={<BusinessCampaignForm />} />
-                <Route path="/business/campaigns/:id" element={<BusinessCampaignDetail />} />
-                <Route path="/business/campaigns/:id/edit" element={<BusinessCampaignForm />} />
-                <Route path="/business/submissions" element={<BusinessSubmissions />} />
-                <Route path="/business/analytics" element={<BusinessAnalytics />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <DomainRouter>
+                <Routes>
+                  <Route path="/" element={<Campaigns />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/landing" element={<Index />} />
+                  <Route path="/campaigns/:id" element={<CampaignDetail />} />
+                  <Route path="/activity" element={<Activity />} />
+                  <Route path="/profile" element={<Profile />} />
+                  {/* Business Routes */}
+                  <Route path="/business/auth" element={<BusinessAuth />} />
+                  <Route path="/business" element={<BusinessDashboard />} />
+                  <Route path="/business/campaigns" element={<BusinessCampaigns />} />
+                  <Route path="/business/campaigns/new" element={<BusinessCampaignForm />} />
+                  <Route path="/business/campaigns/:id" element={<BusinessCampaignDetail />} />
+                  <Route path="/business/campaigns/:id/edit" element={<BusinessCampaignForm />} />
+                  <Route path="/business/submissions" element={<BusinessSubmissions />} />
+                  <Route path="/business/analytics" element={<BusinessAnalytics />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </DomainRouter>
             </ProfileProvider>
           </AuthProvider>
         </BrowserRouter>
