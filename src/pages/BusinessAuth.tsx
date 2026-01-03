@@ -565,7 +565,7 @@ const BusinessAuth: React.FC = () => {
                 </div>
 
                 {/* Location - faded until description is filled */}
-                <div className={`space-y-3 transition-opacity duration-300 ${!description.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
+                <div className={`space-y-2 transition-opacity duration-300 ${!description.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.whereAreYouBased')}</Label>
                   <select
                     value={country}
