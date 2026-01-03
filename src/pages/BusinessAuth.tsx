@@ -553,26 +553,33 @@ const BusinessAuth: React.FC = () => {
                 </div>
 
                 {/* Short description - faded until website is filled */}
-                <div className={`space-y-2 transition-opacity duration-300 ${!website.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
+                <div
+                  className={`space-y-2 transition-opacity duration-300 ${!website.trim() ? 'opacity-40 pointer-events-none cursor-not-allowed' : 'opacity-100'}`}
+                  aria-disabled={!website.trim()}
+                >
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
                   <input
                     type="text"
                     placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    disabled={!website.trim()}
-                    className="flex h-10 w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground disabled:cursor-not-allowed"
+                    readOnly={!website.trim()}
+                    tabIndex={!website.trim() ? -1 : 0}
+                    className="flex h-10 w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground"
                   />
                 </div>
 
                 {/* Location - faded until description is filled */}
-                <div className={`space-y-2 transition-opacity duration-300 ${!description.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
+                <div
+                  className={`space-y-2 transition-opacity duration-300 ${!description.trim() ? 'opacity-40 pointer-events-none cursor-not-allowed' : 'opacity-100'}`}
+                  aria-disabled={!description.trim()}
+                >
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.whereAreYouBased')}</Label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    disabled={!description.trim()}
-                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground disabled:cursor-not-allowed"
+                    tabIndex={!description.trim() ? -1 : 0}
+                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground"
                   >
                     <option value="" className="bg-white dark:bg-background text-foreground">{t('businessAuth.selectCountry')}</option>
                     {COUNTRIES.map((c) => (
