@@ -109,7 +109,7 @@ const BusinessCampaigns: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-            <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
+            <h1 className="text-3xl font-bold text-foreground font-sana">Campaigns</h1>
             <Button onClick={() => navigate('/business/campaigns/new')} className="gap-2">
               <Plus className="h-4 w-4" />
               New Campaign
