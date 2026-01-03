@@ -251,11 +251,9 @@ const BusinessCampaignDetail: React.FC = () => {
             </TabsList>
 
             <TabsContent value="preview">
+              <h3 className="text-lg font-semibold text-foreground mb-4">How Creators See Your Campaign</h3>
               <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-                <CardHeader>
-                  <CardTitle>How Creators See Your Campaign</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   {/* Creator Preview - mimics what creators see */}
                   <div className="max-w-2xl">
                     {/* Header - Logo and brand */}
