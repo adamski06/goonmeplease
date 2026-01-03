@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Pencil, Eye, DollarSign, Users } from 'lucide-react';
+import { ArrowLeft, Pencil } from 'lucide-react';
 
 import defaultAvatar from '@/assets/default-avatar.png';
 
@@ -208,28 +208,19 @@ const BusinessCampaignDetail: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <Eye className="h-4 w-4" />
-                  Views
-                </div>
+                <div className="text-muted-foreground text-sm">Views</div>
                 <p className="text-2xl font-bold mt-1">{totalViews.toLocaleString()}</p>
               </CardContent>
             </Card>
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <Users className="h-4 w-4" />
-                  Creators
-                </div>
+                <div className="text-muted-foreground text-sm">Creators</div>
                 <p className="text-2xl font-bold mt-1">{uniqueCreators}</p>
               </CardContent>
             </Card>
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <DollarSign className="h-4 w-4" />
-                  Budget
-                </div>
+                <div className="text-muted-foreground text-sm">Budget</div>
                 <p className="text-2xl font-bold mt-1">
                   {Math.round(spentBudget).toLocaleString()}/{maxEarnings.toLocaleString()} SEK
                 </p>
