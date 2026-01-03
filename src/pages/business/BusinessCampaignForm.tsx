@@ -10,13 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, Trash2, X, Upload, Image, Video } from 'lucide-react';
-
-interface Tier {
-  min_views: number;
-  max_views: number | null;
-  rate_per_view: number;
-}
+import { ArrowLeft, Plus, X, Image, Video } from 'lucide-react';
 
 const BusinessCampaignForm: React.FC = () => {
   const { user, loading } = useAuth();
@@ -39,7 +33,7 @@ const BusinessCampaignForm: React.FC = () => {
   const [requirementImagePreviews, setRequirementImagePreviews] = useState<string[]>([]);
   const [campaignVideo, setCampaignVideo] = useState<File | null>(null);
   const [campaignVideoPreview, setCampaignVideoPreview] = useState<string>('');
-  const [tiers, setTiers] = useState<Tier[]>([]);
+  
 
   useEffect(() => {
     if (!loading && !user) {
@@ -99,20 +93,6 @@ const BusinessCampaignForm: React.FC = () => {
         setRequirements(requirementsArray.length > 0 ? requirementsArray : ['']);
       }
 
-      // Fetch tiers
-      const { data: tierData } = await supabase
-        .from('campaign_tiers')
-        .select('*')
-        .eq('campaign_id', id)
-        .order('min_views', { ascending: true });
-
-      if (tierData && tierData.length > 0) {
-        setTiers(tierData.map(t => ({
-          min_views: t.min_views,
-          max_views: t.max_views,
-          rate_per_view: Number(t.rate_per_view),
-        })));
-      }
     } catch (err) {
       console.error('Error fetching campaign:', err);
       toast({ title: 'Error loading campaign', variant: 'destructive' });
@@ -151,8 +131,6 @@ const BusinessCampaignForm: React.FC = () => {
 
         if (error) throw error;
 
-        // Delete existing tiers
-        await supabase.from('campaign_tiers').delete().eq('campaign_id', id);
       } else {
         const { data, error } = await supabase
           .from('campaigns')
@@ -164,18 +142,6 @@ const BusinessCampaignForm: React.FC = () => {
         campaignId = data.id;
       }
 
-      // Insert tiers only if there are any
-      if (tiers.length > 0) {
-        const tierData = tiers.map(tier => ({
-          campaign_id: campaignId,
-          min_views: tier.min_views,
-          max_views: tier.max_views,
-          rate_per_view: tier.rate_per_view,
-        }));
-
-        const { error: tierError } = await supabase.from('campaign_tiers').insert(tierData);
-        if (tierError) throw tierError;
-      }
 
       toast({ title: isEditing ? 'Campaign updated!' : 'Campaign created!' });
       navigate('/business/campaigns');
@@ -241,23 +207,6 @@ const BusinessCampaignForm: React.FC = () => {
     setCampaignVideoPreview('');
   };
 
-  const addTier = () => {
-    const lastTier = tiers[tiers.length - 1];
-    const newMinViews = lastTier?.max_views ? lastTier.max_views + 1 : 0;
-    setTiers([...tiers, { min_views: newMinViews, max_views: null, rate_per_view: 0.01 }]);
-  };
-
-  const removeTier = (index: number) => {
-    if (tiers.length > 1) {
-      setTiers(tiers.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateTier = (index: number, field: keyof Tier, value: number | null) => {
-    const newTiers = [...tiers];
-    newTiers[index] = { ...newTiers[index], [field]: value };
-    setTiers(newTiers);
-  };
 
   if (loading) {
     return (
@@ -431,66 +380,6 @@ const BusinessCampaignForm: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Payment Tiers */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Payment Tiers</CardTitle>
-                <Button type="button" variant="outline" size="sm" onClick={addTier}>
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add Tier
-                </Button>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {tiers.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p className="text-sm">No payment tiers added yet.</p>
-                    <p className="text-xs mt-1">Click "Add Tier" to create payment tiers based on views.</p>
-                  </div>
-                ) : (
-                  tiers.map((tier, index) => (
-                    <div key={index} className="flex items-end gap-3 p-3 bg-muted/50 rounded-lg">
-                      <div className="flex-1 space-y-2">
-                        <Label className="text-xs">Min Views</Label>
-                        <Input
-                          type="number"
-                          value={tier.min_views}
-                          onChange={(e) => updateTier(index, 'min_views', parseInt(e.target.value) || 0)}
-                          min={0}
-                        />
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <Label className="text-xs">Max Views (empty = unlimited)</Label>
-                        <Input
-                          type="number"
-                          value={tier.max_views ?? ''}
-                          onChange={(e) => updateTier(index, 'max_views', e.target.value ? parseInt(e.target.value) : null)}
-                          placeholder="Unlimited"
-                        />
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <Label className="text-xs">Rate per View (SEK)</Label>
-                        <Input
-                          type="number"
-                          step="0.001"
-                          value={tier.rate_per_view}
-                          onChange={(e) => updateTier(index, 'rate_per_view', parseFloat(e.target.value) || 0)}
-                          min={0}
-                        />
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeTier(index)}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
 
             {/* Budget & Deadline */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
