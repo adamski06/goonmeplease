@@ -9,7 +9,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, X } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -84,6 +91,7 @@ const BusinessAuth: React.FC = () => {
   const [descriptionTypewriter, setDescriptionTypewriter] = useState('');
   const [highestStepReached, setHighestStepReached] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showAiDialog, setShowAiDialog] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
@@ -520,38 +528,15 @@ const BusinessAuth: React.FC = () => {
               </h2>
               
               <div className="w-full space-y-6">
-                {/* Website - moved to top */}
-                <div className="space-y-2">
-                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.websiteOptional')}</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="url"
-                      placeholder={t('businessAuth.websitePlaceholder')}
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                      className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleAnalyzeWebsite}
-                      disabled={isAnalyzing || !website.trim()}
-                      className="border-foreground/20 hover:bg-foreground/10 font-montserrat gap-2 whitespace-nowrap"
-                    >
-                      {isAnalyzing ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          {t('businessAuth.analyzing')}
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-4 w-4" />
-                          {t('businessAuth.automate')}
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
+                {/* AI Automate Button */}
+                <Button
+                  type="button"
+                  onClick={() => setShowAiDialog(true)}
+                  className="w-full rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  {t('businessAuth.automate')}
+                </Button>
 
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
@@ -1060,6 +1045,59 @@ const BusinessAuth: React.FC = () => {
       <div className="relative z-10" key={step}>
         {renderStepContent()}
       </div>
+
+      {/* AI Automate Dialog */}
+      <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-montserrat text-xl">
+              {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              {i18n.language === 'sv' 
+                ? 'Gå igenom det efteråt för att se att allt stämmer.' 
+                : 'Go through it to see if everything is correct.'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label className="text-muted-foreground text-sm font-montserrat">
+                {t('businessAuth.websiteOptional')}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder={t('businessAuth.websitePlaceholder')}
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
+                />
+              </div>
+            </div>
+            <Button
+              type="button"
+              onClick={() => {
+                setShowAiDialog(false);
+                handleAnalyzeWebsite();
+              }}
+              disabled={isAnalyzing || !website.trim()}
+              className="w-full rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90"
+            >
+              {isAnalyzing ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t('businessAuth.analyzing')}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  {t('businessAuth.automate')}
+                </>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
