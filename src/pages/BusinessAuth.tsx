@@ -579,9 +579,9 @@ const BusinessAuth: React.FC = () => {
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     tabIndex={!description.trim() ? -1 : 0}
-                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground"
+                    className={`w-full h-10 px-3 bg-white dark:bg-white/10 border border-foreground/20 font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground ${!country ? 'text-muted-foreground/50' : 'text-foreground'}`}
                   >
-                    <option value="" className="bg-white dark:bg-background text-foreground">{t('businessAuth.selectCountry')}</option>
+                    <option value="" className="bg-white dark:bg-background text-muted-foreground/50">{t('businessAuth.selectCountry')}</option>
                     {COUNTRIES.map((c) => (
                       <option key={c} value={c} className="bg-white dark:bg-background text-foreground">
                         {c}
