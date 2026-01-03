@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
@@ -92,6 +93,7 @@ const BusinessAuth: React.FC = () => {
   const [highestStepReached, setHighestStepReached] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showAiDialog, setShowAiDialog] = useState(false);
+  const [dialogTermsAccepted, setDialogTermsAccepted] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
@@ -1060,20 +1062,20 @@ const BusinessAuth: React.FC = () => {
 
       {/* AI Automate Dialog */}
       <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
-        <DialogContent className="sm:max-w-2xl min-h-[280px] rounded-[3px]">
+        <DialogContent className="sm:max-w-2xl min-h-[380px] rounded-[3px]">
           <DialogHeader>
-            <DialogTitle className="font-montserrat text-xl">
+            <DialogTitle className="font-montserrat text-2xl">
               {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground">
+            <DialogDescription className="text-muted-foreground text-base">
               {i18n.language === 'sv' 
                 ? 'Gå igenom det efteråt för att se att allt stämmer.' 
                 : 'Go through it to see if everything is correct.'}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <div className="space-y-2">
-              <Label className="text-muted-foreground text-sm font-montserrat">
+          <div className="space-y-6 pt-6">
+            <div className="space-y-3">
+              <Label className="text-muted-foreground text-base font-montserrat">
                 {t('businessAuth.websiteOptional')}
               </Label>
               <div className="flex gap-2">
@@ -1082,7 +1084,7 @@ const BusinessAuth: React.FC = () => {
                   placeholder={t('businessAuth.websitePlaceholder')}
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
-                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
+                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1 h-12 text-base"
                 />
                 <Button
                   type="button"
@@ -1090,8 +1092,8 @@ const BusinessAuth: React.FC = () => {
                     setShowAiDialog(false);
                     handleAnalyzeWebsite();
                   }}
-                  disabled={isAnalyzing || !website.trim()}
-                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
+                  disabled={isAnalyzing || !website.trim() || !dialogTermsAccepted}
+                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap h-12 text-base px-6"
                 >
                   {isAnalyzing ? (
                     <>
@@ -1106,6 +1108,22 @@ const BusinessAuth: React.FC = () => {
                   )}
                 </Button>
               </div>
+            </div>
+            <div className="flex items-start gap-3 pt-2">
+              <Checkbox 
+                id="dialog-terms" 
+                checked={dialogTermsAccepted}
+                onCheckedChange={(checked) => setDialogTermsAccepted(checked === true)}
+                className="mt-1 rounded-[3px]"
+              />
+              <Label 
+                htmlFor="dialog-terms" 
+                className="text-sm text-muted-foreground font-geist cursor-pointer leading-relaxed"
+              >
+                {i18n.language === 'sv' 
+                  ? 'Jag godkänner användarvillkoren och integritetspolicyn' 
+                  : 'I agree to the Terms of Service and Privacy Policy'}
+              </Label>
             </div>
           </div>
         </DialogContent>
