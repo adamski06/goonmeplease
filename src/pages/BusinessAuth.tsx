@@ -554,23 +554,23 @@ const BusinessAuth: React.FC = () => {
 
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
-                  <Textarea
+                  <Input
                     placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    rows={2}
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] resize-none font-geist"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
                     autoFocus
                   />
                 </div>
 
-                {/* Location */}
-                <div className="space-y-3">
+                {/* Location - faded until description is filled */}
+                <div className={`space-y-3 transition-opacity duration-300 ${!description.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.whereAreYouBased')}</Label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground"
+                    disabled={!description.trim()}
+                    className="w-full p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground disabled:cursor-not-allowed"
                   >
                     <option value="" className="bg-white dark:bg-background text-foreground">{t('businessAuth.selectCountry')}</option>
                     {COUNTRIES.map((c) => (
