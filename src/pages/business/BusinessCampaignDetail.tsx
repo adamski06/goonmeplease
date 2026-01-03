@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Pencil, Eye, DollarSign, Users, Check, X, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Pencil, Eye, DollarSign, Users } from 'lucide-react';
 
 import defaultAvatar from '@/assets/default-avatar.png';
 
@@ -153,13 +153,15 @@ const BusinessCampaignDetail: React.FC = () => {
   }
 
   const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
-  const approvedSubmissions = submissions.filter(s => s.status === 'approved').length;
-  const pendingSubmissions = submissions.filter(s => s.status === 'pending_review').length;
+  const uniqueCreators = new Set(submissions.map(s => s.creator_id)).size;
 
   // Calculate max earnings based on tiers or a default rate
   const defaultRate = tiers.length > 0 ? tiers[0].rate_per_view : 0.04;
   const maxEarnings = campaign.total_budget || 0;
   const ratePerThousand = defaultRate * 1000;
+  
+  // Calculate spent budget (simplified - based on views * rate)
+  const spentBudget = Math.min(totalViews * defaultRate, maxEarnings);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -203,12 +205,12 @@ const BusinessCampaignDetail: React.FC = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Eye className="h-4 w-4" />
-                  Total Views
+                  Views
                 </div>
                 <p className="text-2xl font-bold mt-1">{totalViews.toLocaleString()}</p>
               </CardContent>
@@ -217,18 +219,9 @@ const BusinessCampaignDetail: React.FC = () => {
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Users className="h-4 w-4" />
-                  Submissions
+                  Creators
                 </div>
-                <p className="text-2xl font-bold mt-1">{submissions.length}</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <Check className="h-4 w-4" />
-                  Approved
-                </div>
-                <p className="text-2xl font-bold mt-1">{approvedSubmissions}</p>
+                <p className="text-2xl font-bold mt-1">{uniqueCreators}</p>
               </CardContent>
             </Card>
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
@@ -237,7 +230,9 @@ const BusinessCampaignDetail: React.FC = () => {
                   <DollarSign className="h-4 w-4" />
                   Budget
                 </div>
-                <p className="text-2xl font-bold mt-1">{campaign.total_budget?.toLocaleString()} SEK</p>
+                <p className="text-2xl font-bold mt-1">
+                  {Math.round(spentBudget).toLocaleString()}/{maxEarnings.toLocaleString()} SEK
+                </p>
               </CardContent>
             </Card>
           </div>
