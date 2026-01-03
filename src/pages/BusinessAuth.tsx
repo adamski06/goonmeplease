@@ -560,7 +560,7 @@ const BusinessAuth: React.FC = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     disabled={!website.trim()}
-                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:cursor-not-allowed"
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:cursor-not-allowed disabled:opacity-100"
                   />
                 </div>
 
