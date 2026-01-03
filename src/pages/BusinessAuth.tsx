@@ -542,7 +542,7 @@ const BusinessAuth: React.FC = () => {
                     <Button
                       type="button"
                       onClick={() => setShowAiDialog(true)}
-                      className="rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
+                      className="rounded-[3px] bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 bg-[length:200%_100%] animate-[gradient-shift_8s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
                     >
                       <Sparkles className="h-4 w-4" />
                       {t('businessAuth.automate')}
@@ -1093,7 +1093,7 @@ const BusinessAuth: React.FC = () => {
                 handleAnalyzeWebsite();
               }}
               disabled={isAnalyzing || !website.trim()}
-              className="w-full rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90"
+              className="w-full rounded-[3px] bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 bg-[length:200%_100%] animate-[gradient-shift_8s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90"
             >
               {isAnalyzing ? (
                 <>
