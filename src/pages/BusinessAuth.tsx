@@ -658,95 +658,12 @@ const BusinessAuth: React.FC = () => {
                   value={audienceDescription}
                   onChange={(e) => setAudienceDescription(e.target.value)}
                   className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist min-h-[80px] resize-none"
+                  style={{ fieldSizing: 'content' } as React.CSSProperties}
                 />
               </div>
 
-              {/* Audience Types - faded until description filled */}
+              {/* Age Ranges - faded until description filled */}
               <div className={`w-full space-y-3 transition-opacity duration-300 ${!audienceDescription.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
-                <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.audienceTypes')}</Label>
-                
-                {/* Selected Types */}
-                <div className="flex flex-wrap gap-2">
-                  {audienceTypes.map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                      className="px-3 py-2 text-sm font-geist transition-all rounded-[3px] bg-foreground text-background flex items-center gap-1"
-                    >
-                      {type}
-                      <span className="ml-1 opacity-70">×</span>
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => setShowAudienceBrowser(true)}
-                    className="px-3 py-2 text-sm font-geist transition-all rounded-[3px] bg-white dark:bg-white/10 border border-dashed border-foreground/30 hover:border-foreground/50 text-foreground"
-                  >
-                    {t('businessAuth.browseAudience')}
-                  </button>
-                </div>
-
-                {/* Audience Browser Modal */}
-                {showAudienceBrowser && (
-                  <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowAudienceBrowser(false)}>
-                    <div 
-                      className="bg-background border border-foreground/20 rounded-lg w-full max-w-lg max-h-[70vh] flex flex-col"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="p-4 border-b border-foreground/10">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-montserrat font-semibold text-foreground">{t('businessAuth.browseAudienceTypes')}</h3>
-                          <button 
-                            onClick={() => setShowAudienceBrowser(false)}
-                            className="text-muted-foreground hover:text-foreground"
-                          >
-                            ×
-                          </button>
-                        </div>
-                        <Input
-                          type="text"
-                          placeholder={t('businessAuth.searchAudienceTypes')}
-                          value={audienceSearch}
-                          onChange={(e) => setAudienceSearch(e.target.value)}
-                          className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-                          autoFocus
-                        />
-                      </div>
-                      <div className="flex-1 overflow-y-auto p-4">
-                        <div className="flex flex-wrap gap-2">
-                          {AUDIENCE_TYPES
-                            .filter((type) => 
-                              type.toLowerCase().includes(audienceSearch.toLowerCase())
-                            )
-                            .map((type) => (
-                              <button
-                                key={type}
-                                type="button"
-                                onClick={() => toggleArrayItem(audienceTypes, setAudienceTypes, type)}
-                                className={`px-3 py-2 text-sm font-geist transition-all rounded-[3px] ${
-                                  audienceTypes.includes(type)
-                                    ? 'bg-foreground text-background'
-                                    : 'bg-white dark:bg-white/10 border border-foreground/20 hover:border-foreground/50 text-foreground'
-                                }`}
-                              >
-                                {type}
-                              </button>
-                            ))}
-                        </div>
-                      </div>
-                      <div className="p-4 border-t border-foreground/10">
-                        <Button onClick={() => setShowAudienceBrowser(false)} className="w-full rounded-full font-montserrat">
-                          {t('businessAuth.doneSelected', { count: audienceTypes.length })}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Age Ranges - faded until audience types selected */}
-              <div className={`w-full space-y-3 transition-opacity duration-300 ${audienceTypes.length === 0 ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                 <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.targetAgeRange')}</Label>
                 <div className="flex flex-wrap gap-2">
                   {AGE_RANGES.map((age) => (
