@@ -528,15 +528,27 @@ const BusinessAuth: React.FC = () => {
               </h2>
               
               <div className="w-full space-y-6">
-                {/* AI Automate Button */}
-                <Button
-                  type="button"
-                  onClick={() => setShowAiDialog(true)}
-                  className="w-full rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {t('businessAuth.automate')}
-                </Button>
+                {/* Website with Automate button */}
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.websiteOptional')}</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="url"
+                      placeholder={t('businessAuth.websitePlaceholder')}
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => setShowAiDialog(true)}
+                      className="rounded-none bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-[length:200%_100%] animate-[gradient-shift_3s_ease_infinite] text-white font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      {t('businessAuth.automate')}
+                    </Button>
+                  </div>
+                </div>
 
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
