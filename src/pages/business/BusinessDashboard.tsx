@@ -80,27 +80,29 @@ const BusinessDashboard: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-            <div className="flex items-center gap-4">
-              {businessProfile?.logo_url ? (
-                <img 
-                  src={businessProfile.logo_url} 
-                  alt="Company logo" 
-                  className="h-14 w-14 object-cover rounded-sm" 
-                />
-              ) : (
-                <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center">
-                  <span className="text-2xl font-semibold text-muted-foreground">
-                    {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
-                  </span>
-                </div>
-              )}
-              <h1 className="text-3xl font-bold text-foreground">
-                {businessProfile?.company_name || 'Your Business'}
-              </h1>
+            <div className="bg-card border border-border rounded-[4px] p-6">
+              <div className="flex items-center gap-4">
+                {businessProfile?.logo_url ? (
+                  <img 
+                    src={businessProfile.logo_url} 
+                    alt="Company logo" 
+                    className="h-14 w-14 object-cover rounded-sm" 
+                  />
+                ) : (
+                  <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center">
+                    <span className="text-2xl font-semibold text-muted-foreground">
+                      {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
+                    </span>
+                  </div>
+                )}
+                <h1 className="text-3xl font-bold text-foreground">
+                  {businessProfile?.company_name || 'Your Business'}
+                </h1>
+              </div>
+              <p className="mt-4 text-muted-foreground max-w-xl">
+                {shortDescription}
+              </p>
             </div>
-            <p className="mt-3 text-muted-foreground max-w-xl">
-              {shortDescription}
-            </p>
           </div>
         </div>
       </div>
