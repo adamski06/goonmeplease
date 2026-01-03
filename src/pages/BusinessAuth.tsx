@@ -1060,7 +1060,7 @@ const BusinessAuth: React.FC = () => {
 
       {/* AI Automate Dialog */}
       <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-2xl min-h-[280px]">
           <DialogHeader>
             <DialogTitle className="font-montserrat text-xl">
               {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
@@ -1084,29 +1084,29 @@ const BusinessAuth: React.FC = () => {
                   onChange={(e) => setWebsite(e.target.value)}
                   className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
                 />
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowAiDialog(false);
+                    handleAnalyzeWebsite();
+                  }}
+                  disabled={isAnalyzing || !website.trim()}
+                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t('businessAuth.analyzing')}
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      {t('businessAuth.automate')}
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
-            <Button
-              type="button"
-              onClick={() => {
-                setShowAiDialog(false);
-                handleAnalyzeWebsite();
-              }}
-              disabled={isAnalyzing || !website.trim()}
-              className="w-full rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90"
-            >
-              {isAnalyzing ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t('businessAuth.analyzing')}
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-4 w-4" />
-                  {t('businessAuth.automate')}
-                </>
-              )}
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
