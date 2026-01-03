@@ -630,7 +630,11 @@ const BusinessAuth: React.FC = () => {
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   {t('common.back')}
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
+                <Button 
+                  onClick={goNext} 
+                  disabled={!productsServices.trim()}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!productsServices.trim() ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                >
                   {t('common.continue')}
                 </Button>
               </div>
@@ -657,8 +661,8 @@ const BusinessAuth: React.FC = () => {
                 />
               </div>
 
-              {/* Audience Types */}
-              <div className="w-full space-y-3">
+              {/* Audience Types - faded until description filled */}
+              <div className={`w-full space-y-3 transition-opacity duration-300 ${!audienceDescription.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                 <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.audienceTypes')}</Label>
                 
                 {/* Selected Types */}
@@ -741,8 +745,8 @@ const BusinessAuth: React.FC = () => {
                 )}
               </div>
 
-              {/* Age Ranges */}
-              <div className="w-full space-y-3">
+              {/* Age Ranges - faded until audience types selected */}
+              <div className={`w-full space-y-3 transition-opacity duration-300 ${audienceTypes.length === 0 ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                 <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.targetAgeRange')}</Label>
                 <div className="flex flex-wrap gap-2">
                   {AGE_RANGES.map((age) => (
@@ -762,8 +766,8 @@ const BusinessAuth: React.FC = () => {
                 </div>
               </div>
 
-              {/* Geographic Reach */}
-              <div className="w-full space-y-3">
+              {/* Geographic Reach - faded until age ranges selected */}
+              <div className={`w-full space-y-3 transition-opacity duration-300 ${ageRanges.length === 0 ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                 <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.geographicReach')}</Label>
                 <div className="flex gap-2">
                   <button
@@ -814,7 +818,11 @@ const BusinessAuth: React.FC = () => {
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   {t('common.back')}
                 </Button>
-                <Button onClick={goNext} className="flex-1 rounded-full font-montserrat">
+                <Button 
+                  onClick={goNext} 
+                  disabled={!audienceDescription.trim() || audienceTypes.length === 0 || ageRanges.length === 0}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!audienceDescription.trim() || audienceTypes.length === 0 || ageRanges.length === 0 ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                >
                   {t('common.continue')}
                 </Button>
               </div>
@@ -843,7 +851,8 @@ const BusinessAuth: React.FC = () => {
                     className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
                   />
                 </div>
-                <div className="space-y-2">
+                {/* Email - faded until name filled */}
+                <div className={`space-y-2 transition-opacity duration-300 ${!fullName.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.workEmail')}</Label>
                   <Input
                     type="email"
@@ -852,10 +861,12 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
+                    tabIndex={!fullName.trim() ? -1 : 0}
                     className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
                   />
                 </div>
-                <div className="space-y-2">
+                {/* Password - faded until email filled */}
+                <div className={`space-y-2 transition-opacity duration-300 ${!email.trim() ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.password')}</Label>
                   <Input
                     type="password"
@@ -864,6 +875,7 @@ const BusinessAuth: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="new-password"
+                    tabIndex={!email.trim() ? -1 : 0}
                     className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
                   />
                 </div>
@@ -872,7 +884,11 @@ const BusinessAuth: React.FC = () => {
                   <Button type="button" variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                     {t('common.back')}
                   </Button>
-                  <Button type="submit" className="flex-1 rounded-full font-montserrat" disabled={isLoading}>
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading || !fullName.trim() || !email.trim() || !password.trim()}
+                    className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!fullName.trim() || !email.trim() || !password.trim() ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                  >
                     {isLoading ? t('businessAuth.creating') : t('businessAuth.completeSetup')}
                   </Button>
                 </div>
