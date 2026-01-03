@@ -195,7 +195,6 @@ const BusinessCampaignDetail: React.FC = () => {
                   {campaign.status || 'active'}
                 </Badge>
               </div>
-              <p className="text-muted-foreground mt-1">{campaign.brand_name}</p>
             </div>
             <Button variant="outline" onClick={() => navigate(`/business/campaigns/${id}/edit`)}>
               <Pencil className="h-4 w-4 mr-2" />
@@ -268,8 +267,8 @@ const BusinessCampaignDetail: React.FC = () => {
                         )}
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand_name}</h2>
-                        <p className="text-sm text-muted-foreground">{campaign.title}</p>
+                        <h2 className="text-2xl font-bold text-foreground font-montserrat">{campaign.title}</h2>
+                        <p className="text-sm text-muted-foreground">{campaign.brand_name}</p>
                       </div>
                     </div>
 
