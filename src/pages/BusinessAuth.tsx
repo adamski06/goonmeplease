@@ -102,7 +102,7 @@ const BusinessAuth: React.FC = () => {
       
       const showTimer = setTimeout(() => {
         setShowNameInput(true);
-        setTimeout(() => inputRef.current?.focus(), 100);
+        setTimeout(() => inputRef.current?.focus(), 600);
         
         typeTimer = setInterval(() => {
           if (charIndex <= placeholderText.length) {
@@ -112,7 +112,7 @@ const BusinessAuth: React.FC = () => {
             clearInterval(typeTimer);
           }
         }, 100);
-      }, 1000);
+      }, 500);
       
       return () => {
         clearTimeout(showTimer);
@@ -438,7 +438,7 @@ const BusinessAuth: React.FC = () => {
         const textToMeasure = companyName || typewriterText || 'company name';
         const underlineWidth = Math.max(textToMeasure.length * 2, 26);
         return (
-          <div className="flex flex-col items-center justify-center min-h-screen px-6 animate-fade-in">
+          <div className={`flex flex-col items-center justify-center min-h-screen px-6 transition-opacity duration-500 ${showNameInput ? 'opacity-100' : 'opacity-0'}`}>
             <div className="flex flex-col items-center space-y-8">
               <div className="flex items-baseline gap-3">
                 <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap animate-fade-in">{t('businessAuth.hello')}</h1>
