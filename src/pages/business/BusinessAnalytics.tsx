@@ -4,15 +4,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
-import { Eye, DollarSign, TrendingUp, Users } from 'lucide-react';
 
 interface CampaignStats {
   id: string;
   title: string;
   brand_name: string;
   total_views: number;
-  submissions_count: number;
-  approved_count: number;
+  creators_count: number;
+  total_budget: number;
+  spent_budget: number;
 }
 
 const BusinessAnalytics: React.FC = () => {
@@ -23,9 +23,9 @@ const BusinessAnalytics: React.FC = () => {
   const [loadingData, setLoadingData] = useState(true);
   const [totals, setTotals] = useState({
     views: 0,
-    submissions: 0,
-    approved: 0,
-    spent: 0,
+    creators: 0,
+    totalBudget: 0,
+    spentBudget: 0,
   });
 
   useEffect(() => {
@@ -42,17 +42,21 @@ const BusinessAnalytics: React.FC = () => {
 
   const fetchAnalytics = async () => {
     try {
-      // Get campaigns with their submissions
+      // Get campaigns with their submissions and tiers
       const { data: campaigns } = await supabase
         .from('campaigns')
         .select(`
           id,
           title,
           brand_name,
+          total_budget,
           content_submissions (
             id,
-            status,
+            creator_id,
             current_views
+          ),
+          campaign_tiers (
+            rate_per_view
           )
         `)
         .eq('business_id', user?.id);
@@ -60,13 +64,21 @@ const BusinessAnalytics: React.FC = () => {
       if (campaigns) {
         const stats: CampaignStats[] = campaigns.map(c => {
           const submissions = c.content_submissions || [];
+          const tiers = c.campaign_tiers || [];
+          const defaultRate = tiers.length > 0 ? Number(tiers[0].rate_per_view) : 0.04;
+          const totalViews = submissions.reduce((sum: number, s: any) => sum + (s.current_views || 0), 0);
+          const uniqueCreators = new Set(submissions.map((s: any) => s.creator_id)).size;
+          const totalBudget = c.total_budget || 0;
+          const spentBudget = Math.min(totalViews * defaultRate, totalBudget);
+          
           return {
             id: c.id,
             title: c.title,
             brand_name: c.brand_name,
-            total_views: submissions.reduce((sum: number, s: any) => sum + (s.current_views || 0), 0),
-            submissions_count: submissions.length,
-            approved_count: submissions.filter((s: any) => s.status === 'approved').length,
+            total_views: totalViews,
+            creators_count: uniqueCreators,
+            total_budget: totalBudget,
+            spent_budget: spentBudget,
           };
         });
 
@@ -75,9 +87,9 @@ const BusinessAnalytics: React.FC = () => {
         // Calculate totals
         setTotals({
           views: stats.reduce((sum, s) => sum + s.total_views, 0),
-          submissions: stats.reduce((sum, s) => sum + s.submissions_count, 0),
-          approved: stats.reduce((sum, s) => sum + s.approved_count, 0),
-          spent: 0, // Would need earnings table to calculate
+          creators: stats.reduce((sum, s) => sum + s.creators_count, 0),
+          totalBudget: stats.reduce((sum, s) => sum + s.total_budget, 0),
+          spentBudget: stats.reduce((sum, s) => sum + s.spent_budget, 0),
         });
       }
     } catch (err) {
@@ -112,51 +124,31 @@ const BusinessAnalytics: React.FC = () => {
           </div>
 
           {/* Overview Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <Eye className="h-4 w-4" />
-                  Total Views
-                </div>
+                <div className="text-muted-foreground text-sm">Views</div>
                 <p className="text-3xl font-bold mt-2">{formatNumber(totals.views)}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <Users className="h-4 w-4" />
-                  Total Submissions
-                </div>
-                <p className="text-3xl font-bold mt-2">{totals.submissions}</p>
+                <div className="text-muted-foreground text-sm">Creators</div>
+                <p className="text-3xl font-bold mt-2">{totals.creators}</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <TrendingUp className="h-4 w-4" />
-                  Approved
-                </div>
-                <p className="text-3xl font-bold mt-2">{totals.approved}</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
-              <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                  <DollarSign className="h-4 w-4" />
-                  Approval Rate
-                </div>
+                <div className="text-muted-foreground text-sm">Budget</div>
                 <p className="text-3xl font-bold mt-2">
-                  {totals.submissions > 0 
-                    ? Math.round((totals.approved / totals.submissions) * 100) 
-                    : 0}%
+                  {Math.round(totals.spentBudget).toLocaleString()}/{totals.totalBudget.toLocaleString()} SEK
                 </p>
               </CardContent>
             </Card>
           </div>
 
           {/* Campaign Breakdown */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border rounded-none">
+          <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
             <CardHeader>
               <CardTitle>Campaign Performance</CardTitle>
             </CardHeader>
@@ -174,9 +166,8 @@ const BusinessAnalytics: React.FC = () => {
                       <tr className="border-b border-border">
                         <th className="text-left py-3 px-4 font-medium text-muted-foreground">Campaign</th>
                         <th className="text-right py-3 px-4 font-medium text-muted-foreground">Views</th>
-                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Submissions</th>
-                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Approved</th>
-                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Rate</th>
+                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Creators</th>
+                        <th className="text-right py-3 px-4 font-medium text-muted-foreground">Budget</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -196,15 +187,10 @@ const BusinessAnalytics: React.FC = () => {
                             {formatNumber(stat.total_views)}
                           </td>
                           <td className="text-right py-3 px-4">
-                            {stat.submissions_count}
+                            {stat.creators_count}
                           </td>
                           <td className="text-right py-3 px-4">
-                            {stat.approved_count}
-                          </td>
-                          <td className="text-right py-3 px-4">
-                            {stat.submissions_count > 0 
-                              ? Math.round((stat.approved_count / stat.submissions_count) * 100) 
-                              : 0}%
+                            {Math.round(stat.spent_budget).toLocaleString()}/{stat.total_budget.toLocaleString()} SEK
                           </td>
                         </tr>
                       ))}
