@@ -247,11 +247,7 @@ const BusinessCampaignDetail: React.FC = () => {
           <Tabs defaultValue="preview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="preview">Creator Preview</TabsTrigger>
-              <TabsTrigger value="submissions">
-                Submissions {pendingSubmissions > 0 && `(${pendingSubmissions})`}
-              </TabsTrigger>
               <TabsTrigger value="details">Campaign Details</TabsTrigger>
-              <TabsTrigger value="tiers">Payment Tiers</TabsTrigger>
             </TabsList>
 
             <TabsContent value="preview">
@@ -362,78 +358,6 @@ const BusinessCampaignDetail: React.FC = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="submissions">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-                <CardHeader>
-                  <CardTitle>Content Submissions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {submissions.length === 0 ? (
-                    <p className="text-center text-muted-foreground py-8">
-                      No submissions yet
-                    </p>
-                  ) : (
-                    <div className="space-y-4">
-                      {submissions.map((submission) => (
-                        <div 
-                          key={submission.id} 
-                          className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg"
-                        >
-                          {/* Creator Info */}
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium">
-                                {submission.profiles?.full_name || 'Unknown Creator'}
-                              </span>
-                              {getStatusBadge(submission.status)}
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              {submission.current_views?.toLocaleString() || 0} views
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Submitted {new Date(submission.created_at).toLocaleDateString()}
-                            </p>
-                          </div>
-
-                          {/* Video Link */}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => window.open(submission.tiktok_video_url, '_blank')}
-                          >
-                            <ExternalLink className="h-4 w-4 mr-1" />
-                            View Video
-                          </Button>
-
-                          {/* Actions */}
-                          {submission.status === 'pending_review' && (
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-green-600 border-green-600 hover:bg-green-50"
-                                onClick={() => updateSubmissionStatus(submission.id, 'approved')}
-                              >
-                                <Check className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-red-600 border-red-600 hover:bg-red-50"
-                                onClick={() => updateSubmissionStatus(submission.id, 'denied')}
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
             <TabsContent value="details">
               <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
                 <CardHeader>
@@ -454,37 +378,6 @@ const BusinessCampaignDetail: React.FC = () => {
                       <p className="text-muted-foreground">
                         {new Date(campaign.deadline).toLocaleDateString()}
                       </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tiers">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-                <CardHeader>
-                  <CardTitle>Payment Tiers</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {tiers.length === 0 ? (
-                    <p className="text-center text-muted-foreground py-8">
-                      No payment tiers configured
-                    </p>
-                  ) : (
-                    <div className="space-y-3">
-                      {tiers.map((tier, index) => (
-                        <div 
-                          key={index} 
-                          className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
-                        >
-                          <span className="font-medium">
-                            {tier.min_views.toLocaleString()} - {tier.max_views ? tier.max_views.toLocaleString() : '∞'} views
-                          </span>
-                          <span className="text-muted-foreground">
-                            {tier.rate_per_view} SEK/view
-                          </span>
-                        </div>
-                      ))}
                     </div>
                   )}
                 </CardContent>
