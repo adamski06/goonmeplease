@@ -981,10 +981,10 @@ const BusinessAuth: React.FC = () => {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] ${
+                      className={`${
                         msg.role === 'user'
-                          ? 'bg-foreground text-background rounded-[16px] rounded-br-[4px] px-4 py-3'
-                          : 'text-foreground'
+                          ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5 text-sm'
+                          : 'text-foreground max-w-[80%]'
                       }`}
                     >
                       {msg.role === 'jarla' && (
