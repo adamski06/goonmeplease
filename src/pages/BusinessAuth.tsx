@@ -564,24 +564,14 @@ const BusinessAuth: React.FC = () => {
                 {/* Website */}
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.website')}</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="url"
-                      placeholder={t('businessAuth.websitePlaceholder')}
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                      className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
-                      autoFocus
-                    />
-                    <Button
-                      type="button"
-                      onClick={() => setShowAiDialog(true)}
-                      className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
-                    >
-                      <Sparkles className="h-4 w-4" />
-                      {t('businessAuth.automate')}
-                    </Button>
-                  </div>
+                  <Input
+                    type="url"
+                    placeholder={t('businessAuth.websitePlaceholder')}
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+                    autoFocus
+                  />
                 </div>
 
                 {/* Social Media - faded until website filled */}
@@ -647,7 +637,7 @@ const BusinessAuth: React.FC = () => {
                   {t('common.back')}
                 </Button>
                 <Button 
-                  onClick={goNext} 
+                  onClick={() => setShowAiDialog(true)} 
                   disabled={!website.trim()}
                   className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
                 >
