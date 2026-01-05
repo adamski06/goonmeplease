@@ -149,24 +149,17 @@ const BusinessAuth: React.FC = () => {
     }
   }, [mode, i18n.language]);
 
-  // Typewriter effect for messages
-  const typeMessage = (messageId: string, fullContent: string, onComplete?: () => void) => {
-    let charIndex = 0;
-    const typeInterval = setInterval(() => {
-      charIndex++;
-      setMessages(prev => prev.map(msg => 
-        msg.id === messageId 
-          ? { ...msg, displayedContent: fullContent.slice(0, charIndex), isTyping: charIndex < fullContent.length }
-          : msg
-      ));
-      if (charIndex >= fullContent.length) {
-        clearInterval(typeInterval);
-        onComplete?.();
-      }
-    }, 30);
+  // Simple message add with smooth appearance
+  const showMessage = (messageId: string, onComplete?: () => void) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId 
+        ? { ...msg, displayedContent: msg.content, isTyping: false }
+        : msg
+    ));
+    setTimeout(() => onComplete?.(), 100);
   };
 
-  // Add Jarla message with typing effect
+  // Add Jarla message with smooth appearance
   const addJarlaMessage = (content: string, type: ChatMessage['type'] = 'text', onComplete?: () => void) => {
     setIsTyping(true);
     setTimeout(() => {
@@ -175,12 +168,12 @@ const BusinessAuth: React.FC = () => {
         id: messageId,
         role: 'jarla',
         content,
-        displayedContent: '',
-        isTyping: true,
+        displayedContent: content,
+        isTyping: false,
         type
       }]);
       setIsTyping(false);
-      typeMessage(messageId, content, onComplete);
+      setTimeout(() => onComplete?.(), 100);
     }, 400);
   };
 
@@ -193,14 +186,13 @@ const BusinessAuth: React.FC = () => {
         id: messageId,
         role: 'jarla',
         content,
-        displayedContent: '',
-        isTyping: true,
+        displayedContent: content,
+        isTyping: false,
         type: 'text-input',
         inputPlaceholder: placeholder,
         inputStep: step
       }]);
       setIsTyping(false);
-      typeMessage(messageId, content);
     }, 400);
   };
 
@@ -992,25 +984,7 @@ const BusinessAuth: React.FC = () => {
                         <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                       )}
                       <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-xl'}`}>
-                        {msg.role === 'jarla' ? (
-                          <>
-                            {(msg.displayedContent || msg.content).split('').map((char, i) => (
-                              <span 
-                                key={i} 
-                                className="inline animate-[fadeInChar_0.3s_ease-out_forwards]"
-                                style={{ 
-                                  opacity: msg.isTyping && i >= (msg.displayedContent?.length || 0) - 3 ? undefined : 1,
-                                  animationDelay: msg.isTyping && i >= (msg.displayedContent?.length || 0) - 3 ? `${(i % 3) * 30}ms` : '0ms'
-                                }}
-                              >
-                                {char}
-                              </span>
-                            ))}
-                            {msg.isTyping && (
-                              <span className="inline-block w-0.5 h-5 bg-foreground ml-0.5 animate-pulse align-middle" />
-                            )}
-                          </>
-                        ) : msg.content}
+                        {msg.content}
                       </p>
                       
                       {/* Render inline text input - only show when message is done typing */}
