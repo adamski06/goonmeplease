@@ -21,6 +21,7 @@ export default {
         outfit: ['Outfit', 'system-ui', 'sans-serif'],
         geist: ['Geist Sans', 'system-ui', 'sans-serif'],
         sana: ['Fraunces', 'Georgia', 'serif'],
+        inter: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         'dark-surface': '#1c1c1c',
