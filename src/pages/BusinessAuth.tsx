@@ -911,81 +911,90 @@ const BusinessAuth: React.FC = () => {
             )}
           </div>
         ) : (
-          // Chat interface - centered layout
-          <div className="flex flex-col min-h-screen items-center justify-center px-6">
-            <div className="w-full max-w-lg space-y-6 animate-fade-in">
-              {/* Current question - left aligned text in centered container */}
-              {messages.length > 0 && messages[messages.length - 1].role === 'jarla' && !isTyping && (
-                <div className="space-y-1">
-                  <div className="text-xs text-muted-foreground font-inter">Jarla</div>
-                  <p className="text-lg md:text-xl font-normal font-inter text-foreground leading-relaxed">
-                    {messages[messages.length - 1].content}
-                  </p>
-                </div>
-              )}
+          // Chat interface
+          <div className="flex flex-col h-screen">
+            {/* Chat messages area */}
+            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
+              <div className="max-w-2xl mx-auto space-y-4">
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] ${
+                        msg.role === 'user'
+                          ? 'bg-foreground text-background rounded-[16px] rounded-br-[4px] px-4 py-3'
+                          : 'text-foreground'
+                      }`}
+                    >
+                      {msg.role === 'jarla' && (
+                        <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
+                      )}
+                      <p className="font-geist text-sm">{msg.content}</p>
+                      
+                      {/* Render special UI elements */}
+                      {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && renderSocialPicker()}
+                      {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && renderCountryPicker()}
+                      {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && renderAgePicker()}
+                      {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && renderReachPicker()}
+                      {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && renderCredentialsForm()}
+                    </div>
+                  </div>
+                ))}
+                
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="text-foreground">
+                      <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
+                      <div className="flex gap-1">
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div ref={chatEndRef} />
+              </div>
+            </div>
 
-              {isTyping && (
-                <div className="space-y-2">
-                  <div className="text-xs text-muted-foreground font-inter">Jarla</div>
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            {/* Chat input - only show for text input steps */}
+            {['website', 'description', 'products', 'audience'].includes(chatStep) && (
+              <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t border-foreground/10 p-4">
+                <div className="max-w-2xl mx-auto">
+                  <div className="flex gap-2">
+                    <Input
+                      ref={chatInputRef}
+                      type="text"
+                      placeholder={
+                        chatStep === 'website' 
+                          ? 'https://yourcompany.com'
+                          : i18n.language === 'sv' ? 'Skriv ditt svar...' : 'Type your answer...'
+                      }
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && inputValue.trim()) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                      className="flex-1 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist px-4"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim()}
+                      size="icon"
+                      className="rounded-full"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-              )}
-
-              {/* Input area directly below */}
-              {!isTyping && messages.length > 0 && (
-                <div className="space-y-4">
-                  {/* Text input for website, description, products, audience */}
-                  {['website', 'description', 'products', 'audience'].includes(chatStep) && (
-                    <div className="space-y-4">
-                      <Input
-                        ref={chatInputRef}
-                        type={chatStep === 'website' ? 'url' : 'text'}
-                        placeholder={
-                          chatStep === 'website' 
-                            ? 'https://yourcompany.com'
-                            : i18n.language === 'sv' ? 'Skriv ditt svar...' : 'Type your answer...'
-                        }
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && inputValue.trim()) {
-                            e.preventDefault();
-                            handleSendMessage();
-                          }
-                        }}
-                        className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-                      />
-                      <Button
-                        onClick={handleSendMessage}
-                        disabled={!inputValue.trim()}
-                        className="w-full rounded-full font-montserrat"
-                      >
-                        {t('common.continue')}
-                      </Button>
-                    </div>
-                  )}
-
-                  {/* Social picker */}
-                  {chatStep === 'socials' && messages[messages.length - 1].type === 'social-picker' && renderSocialPicker()}
-
-                  {/* Country picker */}
-                  {chatStep === 'location' && messages[messages.length - 1].type === 'country-picker' && renderCountryPicker()}
-
-                  {/* Age picker */}
-                  {chatStep === 'age-range' && messages[messages.length - 1].type === 'age-picker' && renderAgePicker()}
-
-                  {/* Reach picker */}
-                  {chatStep === 'reach' && messages[messages.length - 1].type === 'reach-picker' && renderReachPicker()}
-
-                  {/* Credentials form */}
-                  {chatStep === 'credentials' && messages[messages.length - 1].type === 'credentials-form' && renderCredentialsForm()}
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
       </div>
