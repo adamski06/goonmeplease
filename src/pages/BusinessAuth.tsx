@@ -913,23 +913,21 @@ const BusinessAuth: React.FC = () => {
         ) : (
           // Chat interface - centered layout
           <div className="flex flex-col min-h-screen items-center justify-center px-6">
-            <div className="w-full max-w-lg space-y-8 animate-fade-in">
-              {/* Current question - big and centered */}
-              {messages.length > 0 && (
-                <div className="text-center space-y-2">
-                  {messages[messages.length - 1].role === 'jarla' && (
-                    <>
-                      <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground">
-                        {messages[messages.length - 1].content}
-                      </h2>
-                    </>
-                  )}
+            <div className="w-full max-w-lg space-y-6 animate-fade-in">
+              {/* Current question - centered */}
+              {messages.length > 0 && messages[messages.length - 1].role === 'jarla' && !isTyping && (
+                <div className="text-center space-y-1">
+                  <div className="text-xs text-muted-foreground font-montserrat">Jarla</div>
+                  <p className="text-xl md:text-2xl font-medium font-montserrat text-foreground">
+                    {messages[messages.length - 1].content}
+                  </p>
                 </div>
               )}
 
               {isTyping && (
-                <div className="flex justify-center">
-                  <div className="flex gap-1">
+                <div className="text-center space-y-2">
+                  <div className="text-xs text-muted-foreground font-montserrat">Jarla</div>
+                  <div className="flex justify-center gap-1">
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -959,7 +957,7 @@ const BusinessAuth: React.FC = () => {
                             handleSendMessage();
                           }
                         }}
-                        className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-center text-lg py-6"
+                        className="w-full bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
                       />
                       <Button
                         onClick={handleSendMessage}
