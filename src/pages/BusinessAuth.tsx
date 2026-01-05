@@ -991,11 +991,26 @@ const BusinessAuth: React.FC = () => {
                       {msg.role === 'jarla' && (
                         <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                       )}
-                      <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-lg'}`}>
-                        {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
-                        {msg.role === 'jarla' && msg.isTyping && (
-                          <span className="inline-block w-0.5 h-5 bg-foreground ml-0.5 animate-pulse" />
-                        )}
+                      <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-xl'}`}>
+                        {msg.role === 'jarla' ? (
+                          <>
+                            {(msg.displayedContent || msg.content).split('').map((char, i) => (
+                              <span 
+                                key={i} 
+                                className="inline animate-[fadeInChar_0.3s_ease-out_forwards]"
+                                style={{ 
+                                  opacity: msg.isTyping && i >= (msg.displayedContent?.length || 0) - 3 ? undefined : 1,
+                                  animationDelay: msg.isTyping && i >= (msg.displayedContent?.length || 0) - 3 ? `${(i % 3) * 30}ms` : '0ms'
+                                }}
+                              >
+                                {char}
+                              </span>
+                            ))}
+                            {msg.isTyping && (
+                              <span className="inline-block w-0.5 h-5 bg-foreground ml-0.5 animate-pulse align-middle" />
+                            )}
+                          </>
+                        ) : msg.content}
                       </p>
                       
                       {/* Render inline text input - only show when message is done typing */}
