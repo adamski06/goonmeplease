@@ -971,35 +971,36 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="flex flex-col h-screen">
+          <div className="flex flex-col h-screen justify-center">
             {/* Chat messages area */}
-            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-12">
-            <div className="max-w-2xl mx-auto space-y-6">
-                {messages.map((msg) => (
+            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 py-12">
+              <div className="max-w-2xl mx-auto w-full space-y-5">
+                {messages.map((msg, index) => (
                   <div
                     key={msg.id}
-                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <div
-                      className={`${
+                      className={`transition-all duration-300 ${
                         msg.role === 'user'
-                          ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5 text-sm'
-                          : 'text-foreground max-w-[80%]'
+                          ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
+                          : 'text-foreground max-w-[85%]'
                       }`}
                     >
                       {msg.role === 'jarla' && (
-                        <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
+                        <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                       )}
-                      <p className="font-geist text-base">
+                      <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-lg'}`}>
                         {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
                         {msg.role === 'jarla' && msg.isTyping && (
-                          <span className="inline-block w-0.5 h-4 bg-foreground ml-0.5 animate-pulse" />
+                          <span className="inline-block w-0.5 h-5 bg-foreground ml-0.5 animate-pulse" />
                         )}
                       </p>
                       
                       {/* Render inline text input - only show when message is done typing */}
                       {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && !msg.isTyping && (
-                        <div className="mt-3 flex gap-2 items-center">
+                        <div className="mt-4 animate-fade-in">
                           <Input
                             type="text"
                             placeholder={msg.inputPlaceholder}
@@ -1013,29 +1014,39 @@ const BusinessAuth: React.FC = () => {
                               }
                             }}
                             autoFocus
-                            className="flex-1 h-9 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-sm"
+                            className="w-full max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base transition-all duration-200 focus:scale-[1.01]"
                           />
                         </div>
                       )}
                       
                       {/* Render special UI elements */}
-                      {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && renderSocialPicker()}
-                      {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && renderCountryPicker()}
-                      {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && renderAgePicker()}
-                      {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && renderReachPicker()}
-                      {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && renderCredentialsForm()}
+                      {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
+                        <div className="animate-fade-in">{renderSocialPicker()}</div>
+                      )}
+                      {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
+                        <div className="animate-fade-in">{renderCountryPicker()}</div>
+                      )}
+                      {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && (
+                        <div className="animate-fade-in">{renderAgePicker()}</div>
+                      )}
+                      {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && (
+                        <div className="animate-fade-in">{renderReachPicker()}</div>
+                      )}
+                      {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
+                        <div className="animate-fade-in">{renderCredentialsForm()}</div>
+                      )}
                     </div>
                   </div>
                 ))}
                 
                 {isTyping && (
-                  <div className="flex justify-start">
+                  <div className="flex justify-start animate-fade-in">
                     <div className="text-foreground">
-                      <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
-                      <div className="flex gap-1">
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
+                      <div className="flex gap-1.5">
+                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
