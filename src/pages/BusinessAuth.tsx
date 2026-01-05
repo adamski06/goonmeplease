@@ -57,6 +57,8 @@ interface ChatMessage {
   id: string;
   role: 'jarla' | 'user';
   content: string;
+  displayedContent?: string;
+  isTyping?: boolean;
   type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
@@ -147,34 +149,59 @@ const BusinessAuth: React.FC = () => {
     }
   }, [mode, i18n.language]);
 
+  // Typewriter effect for messages
+  const typeMessage = (messageId: string, fullContent: string, onComplete?: () => void) => {
+    let charIndex = 0;
+    const typeInterval = setInterval(() => {
+      charIndex++;
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, displayedContent: fullContent.slice(0, charIndex), isTyping: charIndex < fullContent.length }
+          : msg
+      ));
+      if (charIndex >= fullContent.length) {
+        clearInterval(typeInterval);
+        onComplete?.();
+      }
+    }, 30);
+  };
+
   // Add Jarla message with typing effect
-  const addJarlaMessage = (content: string, type: ChatMessage['type'] = 'text') => {
+  const addJarlaMessage = (content: string, type: ChatMessage['type'] = 'text', onComplete?: () => void) => {
     setIsTyping(true);
     setTimeout(() => {
+      const messageId = Date.now().toString();
       setMessages(prev => [...prev, {
-        id: Date.now().toString(),
+        id: messageId,
         role: 'jarla',
         content,
+        displayedContent: '',
+        isTyping: true,
         type
       }]);
       setIsTyping(false);
-    }, 800);
+      typeMessage(messageId, content, onComplete);
+    }, 400);
   };
 
   // Add Jarla message with input field
   const addJarlaMessageWithInput = (content: string, placeholder: string, step: ChatStep) => {
     setIsTyping(true);
     setTimeout(() => {
+      const messageId = Date.now().toString();
       setMessages(prev => [...prev, {
-        id: Date.now().toString(),
+        id: messageId,
         role: 'jarla',
         content,
+        displayedContent: '',
+        isTyping: true,
         type: 'text-input',
         inputPlaceholder: placeholder,
         inputStep: step
       }]);
       setIsTyping(false);
-    }, 800);
+      typeMessage(messageId, content);
+    }, 400);
   };
 
   // Start chat after company name
@@ -182,12 +209,22 @@ const BusinessAuth: React.FC = () => {
     if (!companyName.trim()) return;
     setMode('chat');
     setTimeout(() => {
-      addJarlaMessageWithInput(
+      addJarlaMessage(
         i18n.language === 'sv' 
-          ? `Trevligt att träffas, ${companyName}! Vad är er webbadress?`
-          : `Nice to meet you, ${companyName}! What's your website?`,
-        'https://yourcompany.com',
-        'website'
+          ? `Trevligt att träffas, ${companyName}!`
+          : `Nice to meet you, ${companyName}!`,
+        'text',
+        () => {
+          setTimeout(() => {
+            addJarlaMessageWithInput(
+              i18n.language === 'sv' 
+                ? 'Vad är er webbadress?'
+                : "What's your website?",
+              'https://yourcompany.com',
+              'website'
+            );
+          }, 500);
+        }
       );
     }, 300);
   };
@@ -953,11 +990,16 @@ const BusinessAuth: React.FC = () => {
                       {msg.role === 'jarla' && (
                         <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                       )}
-                      <p className="font-geist text-base">{msg.content}</p>
+                      <p className="font-geist text-base">
+                        {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
+                        {msg.role === 'jarla' && msg.isTyping && (
+                          <span className="inline-block w-0.5 h-4 bg-foreground ml-0.5 animate-pulse" />
+                        )}
+                      </p>
                       
-                      {/* Render inline text input */}
-                      {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
-                        <div className="mt-3">
+                      {/* Render inline text input - only show when message is done typing */}
+                      {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && !msg.isTyping && (
+                        <div className="mt-3 flex gap-2 items-center">
                           <Input
                             type="text"
                             placeholder={msg.inputPlaceholder}
@@ -971,20 +1013,8 @@ const BusinessAuth: React.FC = () => {
                               }
                             }}
                             autoFocus
-                            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base"
+                            className="flex-1 h-9 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-sm"
                           />
-                          <Button
-                            onClick={() => {
-                              if (inputValue.trim() && msg.inputStep) {
-                                handleInlineSubmit(inputValue, msg.inputStep);
-                                setInputValue('');
-                              }
-                            }}
-                            disabled={!inputValue.trim()}
-                            className="w-full mt-2 rounded-[4px] font-montserrat"
-                          >
-                            {t('common.continue')}
-                          </Button>
                         </div>
                       )}
                       
