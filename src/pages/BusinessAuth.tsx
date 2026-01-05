@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X, Send } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -57,7 +57,9 @@ interface ChatMessage {
   id: string;
   role: 'jarla' | 'user';
   content: string;
-  type?: 'text' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form';
+  inputPlaceholder?: string;
+  inputStep?: ChatStep;
 }
 
 const BusinessAuth: React.FC = () => {
@@ -159,37 +161,51 @@ const BusinessAuth: React.FC = () => {
     }, 800);
   };
 
+  // Add Jarla message with input field
+  const addJarlaMessageWithInput = (content: string, placeholder: string, step: ChatStep) => {
+    setIsTyping(true);
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'jarla',
+        content,
+        type: 'text-input',
+        inputPlaceholder: placeholder,
+        inputStep: step
+      }]);
+      setIsTyping(false);
+    }, 800);
+  };
+
   // Start chat after company name
   const startChat = () => {
     if (!companyName.trim()) return;
     setMode('chat');
     setTimeout(() => {
-      addJarlaMessage(
+      addJarlaMessageWithInput(
         i18n.language === 'sv' 
           ? `Trevligt att träffas, ${companyName}! Vad är er webbadress?`
-          : `Nice to meet you, ${companyName}! What's your website?`
+          : `Nice to meet you, ${companyName}! What's your website?`,
+        'https://yourcompany.com',
+        'website'
       );
     }, 300);
   };
 
-  // Handle user sending a message
-  const handleSendMessage = () => {
-    if (!inputValue.trim() && chatStep !== 'socials') return;
+  // Handle inline input submit
+  const handleInlineSubmit = (value: string, step: ChatStep) => {
+    if (!value.trim()) return;
 
-    const userMessage = inputValue.trim();
+    const userMessage = value.trim();
     
-    if (userMessage) {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        role: 'user',
-        content: userMessage
-      }]);
-    }
-    
-    setInputValue('');
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: userMessage
+    }]);
 
     // Process based on current step
-    switch (chatStep) {
+    switch (step) {
       case 'website':
         setWebsite(userMessage);
         setChatStep('socials');
@@ -220,10 +236,12 @@ const BusinessAuth: React.FC = () => {
         setProductsServices(userMessage);
         setChatStep('audience');
         setTimeout(() => {
-          addJarlaMessage(
+          addJarlaMessageWithInput(
             i18n.language === 'sv'
               ? 'Beskriv er målgrupp - vilka är era kunder?'
-              : 'Describe your target audience - who are your customers?'
+              : 'Describe your target audience - who are your customers?',
+            i18n.language === 'sv' ? 'Beskriv din målgrupp...' : 'Describe your audience...',
+            'audience'
           );
         }, 500);
         break;
@@ -255,10 +273,12 @@ const BusinessAuth: React.FC = () => {
     }]);
     setChatStep('description');
     setTimeout(() => {
-      addJarlaMessage(
+      addJarlaMessageWithInput(
         i18n.language === 'sv'
           ? `Berätta kort om ${companyName} - vad gör ni?`
-          : `Tell me briefly about ${companyName} - what do you do?`
+          : `Tell me briefly about ${companyName} - what do you do?`,
+        i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
+        'description'
       );
     }, 500);
   };
@@ -273,10 +293,12 @@ const BusinessAuth: React.FC = () => {
     }]);
     setChatStep('products');
     setTimeout(() => {
-      addJarlaMessage(
+      addJarlaMessageWithInput(
         i18n.language === 'sv'
           ? 'Vilka produkter eller tjänster erbjuder ni?'
-          : 'What products or services do you offer?'
+          : 'What products or services do you offer?',
+        i18n.language === 'sv' ? 'Produkter eller tjänster...' : 'Products or services...',
+        'products'
       );
     }, 500);
   };
@@ -914,8 +936,8 @@ const BusinessAuth: React.FC = () => {
           // Chat interface
           <div className="flex flex-col h-screen">
             {/* Chat messages area */}
-            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
-              <div className="max-w-2xl mx-auto space-y-4">
+            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-12">
+            <div className="max-w-2xl mx-auto space-y-6">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -929,9 +951,42 @@ const BusinessAuth: React.FC = () => {
                       }`}
                     >
                       {msg.role === 'jarla' && (
-                        <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
+                        <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                       )}
-                      <p className="font-geist text-sm">{msg.content}</p>
+                      <p className="font-geist text-base">{msg.content}</p>
+                      
+                      {/* Render inline text input */}
+                      {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
+                        <div className="mt-3">
+                          <Input
+                            type="text"
+                            placeholder={msg.inputPlaceholder}
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && inputValue.trim() && msg.inputStep) {
+                                e.preventDefault();
+                                handleInlineSubmit(inputValue, msg.inputStep);
+                                setInputValue('');
+                              }
+                            }}
+                            autoFocus
+                            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base"
+                          />
+                          <Button
+                            onClick={() => {
+                              if (inputValue.trim() && msg.inputStep) {
+                                handleInlineSubmit(inputValue, msg.inputStep);
+                                setInputValue('');
+                              }
+                            }}
+                            disabled={!inputValue.trim()}
+                            className="w-full mt-2 rounded-[4px] font-montserrat"
+                          >
+                            {t('common.continue')}
+                          </Button>
+                        </div>
+                      )}
                       
                       {/* Render special UI elements */}
                       {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && renderSocialPicker()}
@@ -946,7 +1001,7 @@ const BusinessAuth: React.FC = () => {
                 {isTyping && (
                   <div className="flex justify-start">
                     <div className="text-foreground">
-                      <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
+                      <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -960,41 +1015,6 @@ const BusinessAuth: React.FC = () => {
               </div>
             </div>
 
-            {/* Chat input - only show for text input steps */}
-            {['website', 'description', 'products', 'audience'].includes(chatStep) && (
-              <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t border-foreground/10 p-4">
-                <div className="max-w-2xl mx-auto">
-                  <div className="flex gap-2">
-                    <Input
-                      ref={chatInputRef}
-                      type="text"
-                      placeholder={
-                        chatStep === 'website' 
-                          ? 'https://yourcompany.com'
-                          : i18n.language === 'sv' ? 'Skriv ditt svar...' : 'Type your answer...'
-                      }
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && inputValue.trim()) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
-                      className="flex-1 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist px-4"
-                    />
-                    <Button
-                      onClick={handleSendMessage}
-                      disabled={!inputValue.trim()}
-                      size="icon"
-                      className="rounded-full"
-                    >
-                      <Send className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>
