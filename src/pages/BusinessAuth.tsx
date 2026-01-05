@@ -23,7 +23,7 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
-type Step = 'company-name' | 'company-description' | 'products' | 'audience' | 'credentials' | 'login';
+type Step = 'company-name' | 'your-company' | 'company-description' | 'products' | 'audience' | 'credentials' | 'login';
 
 const COUNTRIES = [
   'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
@@ -52,7 +52,7 @@ const AGE_RANGES = ['13-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+']
 
 import { AUDIENCE_TYPES } from '@/data/audienceTypes';
 
-const ALL_STEPS: Step[] = ['company-name', 'company-description', 'products', 'audience', 'credentials'];
+const ALL_STEPS: Step[] = ['company-name', 'your-company', 'company-description', 'products', 'audience', 'credentials'];
 
 const BusinessAuth: React.FC = () => {
   const [step, setStep] = useState<Step>('company-name');
@@ -521,16 +521,15 @@ const BusinessAuth: React.FC = () => {
         );
       }
 
-      case 'company-description':
+      case 'your-company':
         return (
           <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
             <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full min-h-[2.5rem] md:min-h-[3rem]">
-                {descriptionTypewriter}
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
+                {t('businessAuth.yourCompanyTitle')}
               </h2>
               
               <div className="w-full space-y-6">
-                {/* Website with Automate button */}
                 <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.website')}</Label>
                   <div className="flex gap-2">
@@ -540,6 +539,7 @@ const BusinessAuth: React.FC = () => {
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                       className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
+                      autoFocus
                     />
                     <Button
                       type="button"
@@ -551,21 +551,43 @@ const BusinessAuth: React.FC = () => {
                     </Button>
                   </div>
                 </div>
+              </div>
 
-                {/* Short description - faded until website is filled */}
-                <div
-                  className={`space-y-2 transition-opacity duration-300 ${!website.trim() ? 'opacity-40 pointer-events-none cursor-not-allowed' : 'opacity-100'}`}
-                  aria-disabled={!website.trim()}
+              <div className="flex gap-4 w-full">
+                <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
+                  {t('common.back')}
+                </Button>
+                <Button 
+                  onClick={goNext} 
+                  disabled={!website.trim()}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
                 >
+                  {t('common.continue')}
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'company-description':
+        return (
+          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full min-h-[2.5rem] md:min-h-[3rem]">
+                {descriptionTypewriter}
+              </h2>
+              
+              <div className="w-full space-y-6">
+                {/* Short description */}
+                <div className="space-y-2">
                   <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.shortDescription')}</Label>
                   <Textarea
                     placeholder={t('businessAuth.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    readOnly={!website.trim()}
-                    tabIndex={!website.trim() ? -1 : 0}
                     className="w-full min-h-[40px] p-3 bg-white dark:bg-white/10 border border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm focus:outline-none focus:border-foreground resize-none field-sizing-content"
                     style={{ fieldSizing: 'content' } as React.CSSProperties}
+                    autoFocus
                   />
                 </div>
 
@@ -597,8 +619,8 @@ const BusinessAuth: React.FC = () => {
                 </Button>
                 <Button 
                   onClick={goNext} 
-                  disabled={!website.trim() || !description.trim() || !country}
-                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() || !description.trim() || !country ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                  disabled={!description.trim() || !country}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!description.trim() || !country ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
                 >
                   {t('common.continue')}
                 </Button>
@@ -870,6 +892,7 @@ const BusinessAuth: React.FC = () => {
   const getStepLabel = (s: Step) => {
     const labels: Record<Step, string> = {
       'company-name': t('businessAuth.stepCompanyName'),
+      'your-company': t('businessAuth.stepYourCompany'),
       'company-description': t('businessAuth.stepDescription'),
       'products': t('businessAuth.stepProducts'),
       'audience': t('businessAuth.stepAudience'),
