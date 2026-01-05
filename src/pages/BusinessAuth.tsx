@@ -914,20 +914,20 @@ const BusinessAuth: React.FC = () => {
           // Chat interface - centered layout
           <div className="flex flex-col min-h-screen items-center justify-center px-6">
             <div className="w-full max-w-lg space-y-6 animate-fade-in">
-              {/* Current question - centered */}
+              {/* Current question - left aligned text in centered container */}
               {messages.length > 0 && messages[messages.length - 1].role === 'jarla' && !isTyping && (
-                <div className="text-center space-y-1">
-                  <div className="text-xs text-muted-foreground font-montserrat">Jarla</div>
-                  <p className="text-xl md:text-2xl font-medium font-montserrat text-foreground">
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-inter">Jarla</div>
+                  <p className="text-lg md:text-xl font-normal font-inter text-foreground leading-relaxed">
                     {messages[messages.length - 1].content}
                   </p>
                 </div>
               )}
 
               {isTyping && (
-                <div className="text-center space-y-2">
-                  <div className="text-xs text-muted-foreground font-montserrat">Jarla</div>
-                  <div className="flex justify-center gap-1">
+                <div className="space-y-2">
+                  <div className="text-xs text-muted-foreground font-inter">Jarla</div>
+                  <div className="flex gap-1">
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                     <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
