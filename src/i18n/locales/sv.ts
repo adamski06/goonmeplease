@@ -165,6 +165,7 @@ export default {
     whoIs: 'Vem är',
     wereAlsoOn: 'Vi finns också på',
     addSocialPlatform: '+ Lägg till en social plattform',
+    agreeToTerms: 'Jag godkänner användarvillkoren och integritetspolicyn',
     stepDescription: 'Beskrivning',
     stepProducts: 'Produkter',
     stepAudience: 'Målgrupp',

@@ -165,6 +165,7 @@ export default {
     whoIs: 'Who is',
     wereAlsoOn: "We're also on",
     addSocialPlatform: '+ Add a social platform',
+    agreeToTerms: 'I agree to the Terms of Service and Privacy Policy',
     stepDescription: 'Description',
     stepProducts: 'Products',
     stepAudience: 'Audience',
