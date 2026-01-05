@@ -160,6 +160,8 @@ export default {
     dontHaveBusinessAccount: "Don't have a business account?",
     createOne: 'Create one',
     stepCompanyName: 'Company Name',
+    stepYourCompany: 'Your Company',
+    yourCompanyTitle: 'Your Company',
     stepDescription: 'Description',
     stepProducts: 'Products',
     stepAudience: 'Audience',

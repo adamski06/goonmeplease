@@ -160,6 +160,8 @@ export default {
     dontHaveBusinessAccount: 'Har du inget företagskonto?',
     createOne: 'Skapa ett',
     stepCompanyName: 'Företagsnamn',
+    stepYourCompany: 'Ditt företag',
+    yourCompanyTitle: 'Ditt företag',
     stepDescription: 'Beskrivning',
     stepProducts: 'Produkter',
     stepAudience: 'Målgrupp',
