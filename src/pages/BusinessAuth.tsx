@@ -10,14 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Sparkles, Loader2, X } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
+import { Loader2, X } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -84,6 +77,7 @@ const BusinessAuth: React.FC = () => {
   // Final data
   const [website, setWebsite] = useState('');
   const [socialMedia, setSocialMedia] = useState<Record<string, string>>({});
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -93,8 +87,6 @@ const BusinessAuth: React.FC = () => {
   const [descriptionTypewriter, setDescriptionTypewriter] = useState('');
   const [highestStepReached, setHighestStepReached] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showAiDialog, setShowAiDialog] = useState(false);
-  const [dialogTermsAccepted, setDialogTermsAccepted] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   
   const { signIn, signUp, user, loading } = useAuth();
@@ -554,9 +546,9 @@ const BusinessAuth: React.FC = () => {
         };
 
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
-            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
+          <div className="flex flex-col min-h-screen px-6 py-12 animate-fade-in overflow-y-auto justify-center">
+            <div className="flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center w-full">
                 {t('businessAuth.whoIs')} {companyName}?
               </h2>
               
@@ -632,14 +624,30 @@ const BusinessAuth: React.FC = () => {
                 </div>
               </div>
 
+              {/* Terms checkbox */}
+              <div className="flex items-center gap-2 w-full">
+                <Checkbox 
+                  id="terms-your-company" 
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                  className="h-4 w-4 rounded-none"
+                />
+                <Label 
+                  htmlFor="terms-your-company" 
+                  className="text-xs text-muted-foreground font-geist cursor-pointer"
+                >
+                  {t('businessAuth.agreeToTerms')}
+                </Label>
+              </div>
+
               <div className="flex gap-4 w-full">
                 <Button variant="ghost" onClick={goBack} className="flex-1 font-montserrat">
                   {t('common.back')}
                 </Button>
                 <Button 
-                  onClick={() => setShowAiDialog(true)} 
-                  disabled={!website.trim()}
-                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                  onClick={goNext} 
+                  disabled={!website.trim() || !termsAccepted}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!website.trim() || !termsAccepted ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
                 >
                   {t('common.continue')}
                 </Button>
@@ -651,9 +659,9 @@ const BusinessAuth: React.FC = () => {
 
       case 'company-description':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
-            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full min-h-[2.5rem] md:min-h-[3rem]">
+          <div className="flex flex-col min-h-screen px-6 py-12 animate-fade-in overflow-y-auto justify-center">
+            <div className="flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center w-full min-h-[2.5rem] md:min-h-[3rem]">
                 {descriptionTypewriter}
               </h2>
               
@@ -711,9 +719,9 @@ const BusinessAuth: React.FC = () => {
 
       case 'products':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in overflow-y-auto">
-            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-left w-full">
+          <div className="flex flex-col min-h-screen px-6 py-12 animate-fade-in overflow-y-auto justify-center">
+            <div className="flex flex-col items-center w-full max-w-lg mx-auto space-y-8">
+              <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center w-full">
                 {t('businessAuth.productsServicesTitle')}
               </h2>
               
@@ -746,8 +754,8 @@ const BusinessAuth: React.FC = () => {
 
       case 'audience':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center w-full max-w-lg mx-auto space-y-6 overflow-y-auto">
+          <div className="flex flex-col min-h-screen px-6 py-12 animate-fade-in justify-center overflow-y-auto">
+            <div className="flex flex-col items-center w-full max-w-lg mx-auto space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 {t('businessAuth.whosYourAudience')}
               </h2>
@@ -839,8 +847,8 @@ const BusinessAuth: React.FC = () => {
                 </Button>
                 <Button 
                   onClick={goNext} 
-                  disabled={!audienceDescription.trim() || audienceTypes.length === 0 || ageRanges.length === 0}
-                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!audienceDescription.trim() || audienceTypes.length === 0 || ageRanges.length === 0 ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
+                  disabled={!audienceDescription.trim() || ageRanges.length === 0}
+                  className={`flex-1 rounded-full font-montserrat transition-opacity duration-300 ${!audienceDescription.trim() || ageRanges.length === 0 ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}`}
                 >
                   {t('common.continue')}
                 </Button>
@@ -851,8 +859,8 @@ const BusinessAuth: React.FC = () => {
 
       case 'credentials':
         return (
-          <div className="flex flex-col min-h-screen px-6 pt-32 pb-12 animate-fade-in">
-            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md mx-auto space-y-8">
+          <div className="flex flex-col min-h-screen px-6 py-12 animate-fade-in justify-center">
+            <div className="flex flex-col items-center w-full max-w-md mx-auto space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-foreground text-center">
                 {t('businessAuth.createAccountTitle')}
               </h2>
@@ -1109,74 +1117,6 @@ const BusinessAuth: React.FC = () => {
         {renderStepContent()}
       </div>
 
-      {/* AI Automate Dialog */}
-      <Dialog open={showAiDialog} onOpenChange={setShowAiDialog}>
-        <DialogContent className="sm:max-w-2xl min-h-[380px] rounded-none flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="font-montserrat text-2xl">
-              {i18n.language === 'sv' ? 'Låt AI fylla i formuläret' : 'Let AI fill out this form'}
-            </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-base">
-              {i18n.language === 'sv' 
-                ? 'Gå igenom det efteråt för att se att allt stämmer.' 
-                : 'Go through it to see if everything is correct.'}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-auto pb-2">
-            <div className="flex items-center gap-2">
-              <Checkbox 
-                id="dialog-terms" 
-                checked={dialogTermsAccepted}
-                onCheckedChange={(checked) => setDialogTermsAccepted(checked === true)}
-                className="h-3 w-3 rounded-none"
-              />
-              <Label 
-                htmlFor="dialog-terms" 
-                className="text-xs text-muted-foreground font-geist cursor-pointer"
-              >
-                {i18n.language === 'sv' 
-                  ? 'Jag godkänner användarvillkoren och integritetspolicyn' 
-                  : 'I agree to the Terms of Service and Privacy Policy'}
-              </Label>
-            </div>
-            <div className="space-y-3">
-              <Label className="text-muted-foreground text-base font-montserrat">
-                {t('businessAuth.websiteOptional')}
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder={t('businessAuth.websitePlaceholder')}
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist flex-1"
-                />
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setShowAiDialog(false);
-                    handleAnalyzeWebsite();
-                  }}
-                  disabled={isAnalyzing || !website.trim() || !dialogTermsAccepted}
-                  className="rounded-[3px] bg-foreground text-background font-montserrat gap-2 border-0 hover:opacity-90 whitespace-nowrap"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      {t('businessAuth.analyzing')}
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4" />
-                      {t('businessAuth.automate')}
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
