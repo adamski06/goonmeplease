@@ -1143,7 +1143,7 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="flex flex-col h-screen">
+          <div className="flex flex-col h-screen bg-muted/50">
             {/* Chat messages area - scrollable container */}
             <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
               <div className="max-w-2xl mx-auto w-full space-y-3 transition-all duration-300">
@@ -1178,9 +1178,9 @@ const BusinessAuth: React.FC = () => {
                           )}
                           {msg.role === 'jarla' && msg.displayedContent && (
                             <div 
-                              className="font-geist text-base whitespace-pre-wrap" 
+                              className="font-geist text-base whitespace-pre-wrap [&_strong]:text-xl [&_strong]:font-montserrat [&_strong]:font-bold [&_strong]:block [&_strong]:mt-6 [&_strong]:mb-2" 
                               dangerouslySetInnerHTML={{ 
-                                __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold block mt-4 mb-1">$1</strong>') 
+                                __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
                               }} 
                             />
                           )}
