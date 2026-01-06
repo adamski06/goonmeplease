@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Message {
   id: string;
@@ -93,9 +92,12 @@ const CampaignChat: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-background">
-      {/* Messages */}
-      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
+    <div className="h-full flex flex-col backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
+      {/* Messages - flex-grow with justify-end to push content to bottom */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-6 flex flex-col justify-end"
+      >
         <div className="space-y-4">
           {messages.map((msg, index) => (
             <div key={msg.id}>
@@ -131,7 +133,7 @@ const CampaignChat: React.FC = () => {
             </div>
           )}
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Input - matching signup chat style */}
       <div className="p-6 pt-0">
