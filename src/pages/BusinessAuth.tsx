@@ -1143,7 +1143,7 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="flex flex-col h-screen bg-muted/50">
+          <div className="flex flex-col h-screen bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
             {/* Chat messages area - scrollable container */}
             <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
               <div className="max-w-2xl mx-auto w-full space-y-3 transition-all duration-300">
