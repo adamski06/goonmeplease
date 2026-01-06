@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
 
 interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -431,15 +431,15 @@ const BusinessAuth: React.FC = () => {
           delay += 300;
         });
 
-        // After all sections, continue to credentials
+        // After all sections, ask for confirmation
         setTimeout(() => {
           addJarlaMessage(
             i18n.language === 'sv'
-              ? 'Nu när jag känner ert företag bättre, låt oss skapa ditt konto!'
-              : "Now that I know your company better, let's create your account!",
-            'credentials-form'
+              ? 'Stämmer det här?'
+              : 'Was this correct?',
+            'confirm-buttons'
           );
-          setChatStep('credentials');
+          setChatStep('confirm-summary');
         }, delay + 500);
       } else {
         throw new Error('No summary returned');
@@ -506,6 +506,41 @@ const BusinessAuth: React.FC = () => {
         'reach-picker'
       );
     }, 500);
+  };
+
+  // Handle summary confirmation
+  const handleSummaryConfirm = (confirmed: boolean) => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: confirmed 
+        ? (i18n.language === 'sv' ? 'Ja, det stämmer!' : 'Yes, that\'s correct!')
+        : (i18n.language === 'sv' ? 'Nej, det stämmer inte' : 'No, that\'s not right')
+    }]);
+    
+    if (confirmed) {
+      setChatStep('credentials');
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
+            : "Perfect! Now we just need to create your account.",
+          'credentials-form'
+        );
+      }, 500);
+    } else {
+      // If not correct, go to manual description flow
+      setChatStep('description');
+      setTimeout(() => {
+        addJarlaMessageWithInput(
+          i18n.language === 'sv'
+            ? 'Inga problem! Berätta kort om ert företag - vad gör ni?'
+            : "No problem! Tell me briefly about your company - what do you do?",
+          i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
+          'description'
+        );
+      }, 500);
+    }
   };
 
   // Handle reach selection complete
@@ -1287,6 +1322,23 @@ const BusinessAuth: React.FC = () => {
                             <span className="text-sm text-muted-foreground font-geist">
                               {i18n.language === 'sv' ? 'Analyserar...' : 'Analyzing...'}
                             </span>
+                          </div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'confirm-buttons' && chatStep === 'confirm-summary' && (
+                          <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <Button
+                              onClick={() => handleSummaryConfirm(true)}
+                              className="rounded-[3px] font-montserrat"
+                            >
+                              {i18n.language === 'sv' ? 'Ja, det stämmer!' : "Yes, that's correct!"}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => handleSummaryConfirm(false)}
+                              className="rounded-[3px] font-montserrat"
+                            >
+                              {i18n.language === 'sv' ? 'Nej' : 'No'}
+                            </Button>
                           </div>
                         )}
                         {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
