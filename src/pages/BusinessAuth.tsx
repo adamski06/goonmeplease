@@ -107,6 +107,8 @@ const BusinessAuth: React.FC = () => {
   const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
+  const [profileTypedDescription, setProfileTypedDescription] = useState('');
+  const [profileTypingComplete, setProfileTypingComplete] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -592,21 +594,38 @@ const BusinessAuth: React.FC = () => {
       // First move chat to left
       setShowProfilePreview(true);
       setChatStep('creating-profile');
+      setProfileTypedDescription('');
+      setProfileTypingComplete(false);
       
-      // After chat has moved (700ms), fade in the profile
+      // After chat has moved (700ms), fade in the profile and start typing
       setTimeout(() => {
         setProfileVisible(true);
         
-        // After profile is visible, ask for feedback
-        setTimeout(() => {
-          setChatStep('profile-feedback');
-          addJarlaMessage(
-            i18n.language === 'sv'
-              ? 'Här är din företagsprofil! Ser det bra ut?'
-              : "Here's your company profile! Does it look good?",
-            'profile-feedback-buttons'
-          );
-        }, 600);
+        // Start typewriter effect for description
+        const text = companySummary.split('**')[2]?.trim() || companySummary;
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+        const fullDescription = sentences.slice(0, 2).join(' ').trim();
+        
+        let charIndex = 0;
+        const typeInterval = setInterval(() => {
+          charIndex += 2;
+          setProfileTypedDescription(fullDescription.slice(0, charIndex));
+          if (charIndex >= fullDescription.length) {
+            clearInterval(typeInterval);
+            setProfileTypingComplete(true);
+            
+            // After typing is complete, ask for feedback
+            setTimeout(() => {
+              setChatStep('profile-feedback');
+              addJarlaMessage(
+                i18n.language === 'sv'
+                  ? 'Här är din företagsprofil! Ser det bra ut?'
+                  : "Here's your company profile! Does it look good?",
+                'profile-feedback-buttons'
+              );
+            }, 400);
+          }
+        }, 20);
       }, 700);
     } else {
       // Skip profile preview, go directly to credentials
@@ -1575,85 +1594,83 @@ const BusinessAuth: React.FC = () => {
               {/* Company Profile Preview - fades in after chat moves */}
               <div className={`h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
                 showProfilePreview 
-                  ? 'w-[480px] p-4' 
+                  ? 'w-[620px] p-5' 
                   : 'w-0 p-0'
               } ${
                 profileVisible ? 'opacity-100' : 'opacity-0'
               }`}>
                 {showProfilePreview && (
-                  <div className="bg-background rounded-[3px] p-8 space-y-6 shadow-sm">
+                  <div className="bg-background rounded-[3px] p-10 space-y-8 shadow-sm">
                     {/* Logo and Company Name */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-5">
                       {companyLogo ? (
                         <img 
                           src={companyLogo} 
                           alt={companyName} 
-                          className="w-14 h-14 rounded-[3px] object-contain bg-muted/30"
+                          className="w-[72px] h-[72px] rounded-[3px] object-contain bg-muted/30"
                         />
                       ) : (
-                        <div className="w-14 h-14 rounded-[3px] bg-muted/50 flex items-center justify-center">
-                          <span className="text-2xl font-bold text-muted-foreground">
+                        <div className="w-[72px] h-[72px] rounded-[3px] bg-muted/50 flex items-center justify-center">
+                          <span className="text-3xl font-bold text-muted-foreground">
                             {companyName.charAt(0).toUpperCase()}
                           </span>
                         </div>
                       )}
-                      <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
+                      <h3 className="text-3xl font-montserrat font-bold">{companyName}</h3>
                     </div>
 
-                    {/* Description - simple 2 sentences */}
+                    {/* Description - typewriter effect */}
                     {companySummary && (
-                      <p className="text-sm text-foreground/80 font-geist leading-relaxed">
-                        {(() => {
-                          // Extract first 2 sentences from summary
-                          const text = companySummary.split('**')[2]?.trim() || companySummary;
-                          const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-                          return sentences.slice(0, 2).join(' ').trim();
-                        })()}
+                      <p className="text-base text-foreground/80 font-geist leading-relaxed min-h-[3rem]">
+                        {profileTypedDescription}
+                        {!profileTypingComplete && <span className="animate-pulse">|</span>}
                       </p>
                     )}
 
-                    {/* Social media icons */}
-                    {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
-                      <div className="flex gap-3">
-                        {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
-                          const IconComponent = {
-                            instagram: Instagram,
-                            facebook: Facebook,
-                            youtube: Youtube,
-                            twitter: Twitter,
-                            linkedin: Linkedin,
-                          }[platform];
-                          
-                          // For platforms without Lucide icons, use images
-                          if (!IconComponent) {
-                            const logoUrls: Record<string, string> = {
-                              tiktok: 'https://cdn.simpleicons.org/tiktok/000000',
-                              pinterest: 'https://cdn.simpleicons.org/pinterest/E60023',
-                              snapchat: 'https://cdn.simpleicons.org/snapchat/FFFC00'
-                            };
+                    {/* Social media icons - fade in after typing */}
+                    <div className={`flex gap-4 transition-opacity duration-300 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                      {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
+                        <>
+                          {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
+                            const IconComponent = {
+                              instagram: Instagram,
+                              facebook: Facebook,
+                              youtube: Youtube,
+                              twitter: Twitter,
+                              linkedin: Linkedin,
+                            }[platform];
+                            
+                            // For platforms without Lucide icons, use images
+                            if (!IconComponent) {
+                              const logoUrls: Record<string, string> = {
+                                tiktok: 'https://cdn.simpleicons.org/tiktok/000000',
+                                pinterest: 'https://cdn.simpleicons.org/pinterest/E60023',
+                                snapchat: 'https://cdn.simpleicons.org/snapchat/FFFC00'
+                              };
+                              return (
+                                <img 
+                                  key={platform} 
+                                  src={logoUrls[platform]} 
+                                  alt={platform}
+                                  className="w-6 h-6 dark:invert"
+                                />
+                              );
+                            }
+                            
                             return (
-                              <img 
-                                key={platform} 
-                                src={logoUrls[platform]} 
-                                alt={platform}
-                                className="w-5 h-5 dark:invert"
-                              />
+                              <IconComponent key={platform} className="w-6 h-6 text-foreground/70" />
                             );
-                          }
-                          
-                          return (
-                            <IconComponent key={platform} className="w-5 h-5 text-foreground/70" />
-                          );
-                        })}
-                      </div>
-                    )}
+                          })}
+                        </>
+                      )}
+                    </div>
 
-                    {/* Campaigns section */}
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-montserrat font-semibold">
+                    {/* Campaigns section - fade in after typing */}
+                    <div className={`space-y-2 transition-opacity duration-300 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                      <h4 className="text-base font-montserrat font-semibold">
                         {i18n.language === 'sv' ? 'Kampanjer' : 'Campaigns'}
                       </h4>
-                      <p className="text-sm text-muted-foreground font-geist">
+                      <p className="text-base text-muted-foreground font-geist">
                         {i18n.language === 'sv' ? 'Inga kampanjer ännu' : 'No campaigns yet'}
                       </p>
                     </div>
