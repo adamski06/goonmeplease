@@ -608,7 +608,7 @@ const BusinessAuth: React.FC = () => {
         // Start typewriter effect for description
         const text = companySummary.split('**')[2]?.trim() || companySummary;
         const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-        const fullDescription = sentences.slice(0, 2).join(' ').trim();
+        const fullDescription = sentences[0]?.trim() || text.slice(0, 100);
         
         let charIndex = 0;
         const typeInterval = setInterval(() => {
@@ -1646,7 +1646,7 @@ const BusinessAuth: React.FC = () => {
 
                     {/* Description - typewriter effect */}
                     {companySummary && (
-                      <p className="text-sm text-foreground/80 font-geist leading-relaxed min-h-[2.5rem] relative z-10">
+                      <p className="text-2xl text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] relative z-10">
                         {profileTypedDescription}
                         {!profileTypingComplete && <span className="animate-pulse">|</span>}
                       </p>
