@@ -107,9 +107,19 @@ const BusinessAuth: React.FC = () => {
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
 
-  // Scroll to bottom of chat
+  // Scroll to bottom of chat only when Jarla is typing
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isTyping) {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isTyping]);
+  
+  // Also scroll when new Jarla message appears
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.role === 'jarla') {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
 
   // Focus chat input when entering chat mode
@@ -683,15 +693,6 @@ const BusinessAuth: React.FC = () => {
           </div>
         )}
 
-        <Button 
-          onClick={() => {
-            setShowPlatformDropdown(false);
-            handleSocialsComplete();
-          }}
-          className="w-full rounded-full font-montserrat mt-2"
-        >
-          {t('common.continue')}
-        </Button>
       </div>
     );
   };
@@ -1170,22 +1171,30 @@ const BusinessAuth: React.FC = () => {
                   value={bottomInputValue}
                   onChange={(e) => setBottomInputValue(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && bottomInputValue.trim()) {
+                    if (e.key === 'Enter') {
                       e.preventDefault();
-                      const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                      if (currentInputMsg?.inputStep) {
-                        handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
-                      } else {
-                        handleChatMessage(bottomInputValue);
+                      if (chatStep === 'socials') {
+                        setShowPlatformDropdown(false);
+                        handleSocialsComplete();
+                      } else if (bottomInputValue.trim()) {
+                        const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                        if (currentInputMsg?.inputStep) {
+                          handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                        } else {
+                          handleChatMessage(bottomInputValue);
+                        }
+                        setBottomInputValue('');
                       }
-                      setBottomInputValue('');
                     }
                   }}
                   className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
                 />
                 <button
                   onClick={() => {
-                    if (bottomInputValue.trim()) {
+                    if (chatStep === 'socials') {
+                      setShowPlatformDropdown(false);
+                      handleSocialsComplete();
+                    } else if (bottomInputValue.trim()) {
                       const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
                       if (currentInputMsg?.inputStep) {
                         handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
@@ -1195,7 +1204,7 @@ const BusinessAuth: React.FC = () => {
                       setBottomInputValue('');
                     }
                   }}
-                  disabled={!bottomInputValue.trim()}
+                  disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
                   className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                 >
                   <Send className="h-4 w-4" />
