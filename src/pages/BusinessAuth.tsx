@@ -230,8 +230,8 @@ const BusinessAuth: React.FC = () => {
     }, 300);
   };
 
-  // Handle general chat message (questions, etc)
-  const handleChatMessage = (value: string) => {
+  // Handle general chat message (questions, etc) - now AI powered
+  const handleChatMessage = async (value: string) => {
     if (!value.trim()) return;
     
     const userMessage = value.trim();
@@ -243,22 +243,32 @@ const BusinessAuth: React.FC = () => {
       content: userMessage
     }]);
     
-    // Jarla responds to acknowledge
-    setTimeout(() => {
-      const responses = i18n.language === 'sv' 
-        ? [
-          'Bra fråga! Låt oss fortsätta med registreringen så kan vi prata mer efteråt.',
-          'Jag förstår. Vi kan diskutera det mer när vi är klara här.',
-          'Noterat! Fortsätt gärna med frågorna så återkommer jag.'
-        ]
-        : [
-          "Great question! Let's continue with the setup and we can chat more after.",
-          "I understand. We can discuss that more once we're done here.",
-          "Noted! Feel free to continue with the questions and I'll get back to you."
-        ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      addJarlaMessage(randomResponse);
-    }, 500);
+    // Show typing indicator
+    setIsTyping(true);
+    
+    try {
+      // Call Jarla AI
+      const { data, error } = await supabase.functions.invoke('jarla-chat', {
+        body: { message: userMessage, companyName }
+      });
+      
+      setIsTyping(false);
+      
+      if (error) throw error;
+      
+      const aiResponse = data?.response || "Let me help you with that!";
+      addJarlaMessage(aiResponse);
+      
+    } catch (error) {
+      console.error('Jarla chat error:', error);
+      setIsTyping(false);
+      
+      // Fallback response
+      const fallbackResponses = i18n.language === 'sv' 
+        ? ['Bra fråga! Låt oss fortsätta med registreringen.']
+        : ["Great question! Let's continue with your setup."];
+      addJarlaMessage(fallbackResponses[0]);
+    }
   };
 
   // Handle inline input submit - show noted confirmation
