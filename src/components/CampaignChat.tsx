@@ -168,7 +168,11 @@ const CampaignChat: React.FC = () => {
         className="flex-1 overflow-y-auto p-6 flex flex-col justify-end"
       >
         <div className="space-y-4">
-          {messages.map((msg, index) => (
+          {messages.map((msg, index) => {
+            // Don't render jarla messages until they have content to display
+            if (msg.role === 'jarla' && !msg.displayedContent) return null;
+            
+            return (
             <div key={msg.id}>
               {/* Show Jarla name for first message or after user message */}
               {msg.role === 'jarla' && (index === 0 || messages[index - 1]?.role === 'user') && (
@@ -190,7 +194,8 @@ const CampaignChat: React.FC = () => {
                 )}
               </div>
             </div>
-          ))}
+          );
+          })}
           {isTyping && messages[messages.length - 1]?.role === 'user' && (
             <div>
               <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
