@@ -149,17 +149,24 @@ const BusinessAuth: React.FC = () => {
     }
   }, [mode, i18n.language]);
 
-  // Simple message add with smooth appearance
-  const showMessage = (messageId: string, onComplete?: () => void) => {
-    setMessages(prev => prev.map(msg => 
-      msg.id === messageId 
-        ? { ...msg, displayedContent: msg.content, isTyping: false }
-        : msg
-    ));
-    setTimeout(() => onComplete?.(), 100);
+  // Typewriter effect for messages (no cursor)
+  const typeMessage = (messageId: string, fullContent: string, onComplete?: () => void) => {
+    let charIndex = 0;
+    const typeInterval = setInterval(() => {
+      charIndex += 2; // Type 2 chars at a time for speed
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, displayedContent: fullContent.slice(0, charIndex), isTyping: charIndex < fullContent.length }
+          : msg
+      ));
+      if (charIndex >= fullContent.length) {
+        clearInterval(typeInterval);
+        setTimeout(() => onComplete?.(), 100);
+      }
+    }, 25);
   };
 
-  // Add Jarla message with smooth appearance
+  // Add Jarla message with typewriter effect
   const addJarlaMessage = (content: string, type: ChatMessage['type'] = 'text', onComplete?: () => void) => {
     setIsTyping(true);
     setTimeout(() => {
@@ -168,13 +175,13 @@ const BusinessAuth: React.FC = () => {
         id: messageId,
         role: 'jarla',
         content,
-        displayedContent: content,
-        isTyping: false,
+        displayedContent: '',
+        isTyping: true,
         type
       }]);
       setIsTyping(false);
-      setTimeout(() => onComplete?.(), 100);
-    }, 400);
+      typeMessage(messageId, content, onComplete);
+    }, 300);
   };
 
   // Add Jarla message with input field
@@ -186,14 +193,15 @@ const BusinessAuth: React.FC = () => {
         id: messageId,
         role: 'jarla',
         content,
-        displayedContent: content,
-        isTyping: false,
+        displayedContent: '',
+        isTyping: true,
         type: 'text-input',
         inputPlaceholder: placeholder,
         inputStep: step
       }]);
       setIsTyping(false);
-    }, 400);
+      typeMessage(messageId, content);
+    }, 300);
   };
 
   // Start chat after company name
@@ -991,7 +999,7 @@ const BusinessAuth: React.FC = () => {
                           <div className="text-base text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                         )}
                         <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-2xl'}`}>
-                          {msg.content}
+                          {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
                         </p>
                         
                         {/* Render inline text input with send button */}
