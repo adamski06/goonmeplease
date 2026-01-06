@@ -1144,8 +1144,8 @@ const BusinessAuth: React.FC = () => {
         ) : (
           // Chat interface
           <div className="flex flex-col h-screen">
-            {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 pt-24 pb-32 scroll-smooth">
+            {/* Chat messages area - scrollable container */}
+            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
               <div className="max-w-2xl mx-auto w-full space-y-3 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
@@ -1177,9 +1177,12 @@ const BusinessAuth: React.FC = () => {
                             <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                           )}
                           {msg.role === 'jarla' && msg.displayedContent && (
-                            <p className="font-geist text-base">
-                              {msg.displayedContent}
-                            </p>
+                            <div 
+                              className="font-geist text-base whitespace-pre-wrap" 
+                              dangerouslySetInnerHTML={{ 
+                                __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold block mt-4 mb-1">$1</strong>') 
+                              }} 
+                            />
                           )}
                           {msg.role === 'user' && (
                             <p className="font-geist text-xs">

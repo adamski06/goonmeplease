@@ -129,33 +129,53 @@ serve(async (req) => {
     // Step 2: Analyze with heavy AI model (gpt-5 for comprehensive analysis)
     const systemPromptEnglish = `You are a senior business analyst. Your task is to write a comprehensive company profile for ${companyName} based on information gathered from their website and social media.
 
-Write a detailed, professional summary that covers:
+Format your response with clear sections using **Bold Headings** followed by 2-3 sentences each:
 
-1. **Company Overview** - What the company does, their mission, and core identity
-2. **Products & Services** - Detailed breakdown of what they offer
-3. **Target Audience** - Who their customers are, demographics, psychographics
-4. **Brand Voice & Personality** - How they communicate, their tone and style
-5. **Unique Value Proposition** - What sets them apart from competitors
-6. **Social Media Presence** - Their online activity and engagement style
-7. **Key Insights** - Notable observations about their business
+**Company Overview**
+[What the company does, their mission, and core identity]
 
-Write in a professional but engaging tone. Be specific and detailed. The summary should be 400-600 words.
+**Products & Services**
+[Detailed breakdown of what they offer]
+
+**Target Audience**
+[Who their customers are, demographics, psychographics]
+
+**Brand Voice & Personality**
+[How they communicate, their tone and style]
+
+**Unique Value Proposition**
+[What sets them apart from competitors]
+
+**Key Insights**
+[Notable observations about their business]
+
+Write in a professional but engaging tone. Be specific and detailed. Each section should be 2-3 sentences.
 
 IMPORTANT: Write FROM THE COMPANY'S PERSPECTIVE using "we", "our", "us" throughout.`;
 
     const systemPromptSwedish = `Du är en senior affärsanalytiker. Din uppgift är att skriva en omfattande företagsprofil för ${companyName} baserat på information från deras webbplats och sociala medier.
 
-Skriv en detaljerad, professionell sammanfattning som täcker:
+Formatera ditt svar med tydliga sektioner med **Feta Rubriker** följt av 2-3 meningar vardera:
 
-1. **Företagsöversikt** - Vad företaget gör, deras uppdrag och kärnidentitet
-2. **Produkter & Tjänster** - Detaljerad genomgång av vad de erbjuder
-3. **Målgrupp** - Vilka deras kunder är, demografi, psykografi
-4. **Varumärkesröst & Personlighet** - Hur de kommunicerar, deras ton och stil
-5. **Unik Värdeproposition** - Vad som skiljer dem från konkurrenter
-6. **Sociala Medier Närvaro** - Deras onlineaktivitet och engagemangsstil
-7. **Nyckelinsikter** - Anmärkningsvärda observationer om deras verksamhet
+**Företagsöversikt**
+[Vad företaget gör, deras uppdrag och kärnidentitet]
 
-Skriv i en professionell men engagerande ton. Var specifik och detaljerad. Sammanfattningen ska vara 400-600 ord.
+**Produkter & Tjänster**
+[Detaljerad genomgång av vad de erbjuder]
+
+**Målgrupp**
+[Vilka deras kunder är, demografi, psykografi]
+
+**Varumärkesröst & Personlighet**
+[Hur de kommunicerar, deras ton och stil]
+
+**Unik Värdeproposition**
+[Vad som skiljer dem från konkurrenter]
+
+**Nyckelinsikter**
+[Anmärkningsvärda observationer om deras verksamhet]
+
+Skriv i en professionell men engagerande ton. Var specifik och detaljerad. Varje sektion ska vara 2-3 meningar.
 
 VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående.`;
 
