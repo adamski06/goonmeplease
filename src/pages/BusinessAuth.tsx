@@ -1018,7 +1018,7 @@ const BusinessAuth: React.FC = () => {
                                 }
                               }}
                               autoFocus
-                              className="flex-1 max-w-sm h-9 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base"
+                              className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
                             />
                             <button
                               onClick={() => {
@@ -1028,7 +1028,7 @@ const BusinessAuth: React.FC = () => {
                                 }
                               }}
                               disabled={!inputValue.trim()}
-                              className="h-9 w-9 flex items-center justify-center rounded-[4px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                              className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                             >
                               <Send className="h-4 w-4" />
                             </button>
@@ -1073,7 +1073,7 @@ const BusinessAuth: React.FC = () => {
             </div>
 
             {/* Bottom chat input */}
-            <div className="fixed bottom-6 left-0 right-0 flex justify-center px-6">
+            <div className="fixed bottom-12 left-0 right-0 flex justify-center px-6">
               <div className="w-full max-w-md flex gap-2 items-center">
                 <Input
                   ref={chatInputRef}
