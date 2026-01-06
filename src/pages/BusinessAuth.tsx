@@ -1422,7 +1422,7 @@ const BusinessAuth: React.FC = () => {
                           
                           {/* Render inline text input with send button */}
                           {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
-                            <div className="mt-4 relative max-w-sm" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <div className="mt-4 relative max-w-lg w-full" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
                               <Input
                                 type="text"
                                 placeholder={msg.inputPlaceholder}
@@ -1552,7 +1552,7 @@ const BusinessAuth: React.FC = () => {
 
                 {/* Bottom chat input - attached to bottom of chat container */}
                 <div className="absolute bottom-4 left-4 right-4 flex justify-center">
-                  <div className="w-full max-w-md relative">
+                  <div className="w-full max-w-lg relative">
                     <Input
                       ref={chatInputRef}
                       type="text"
