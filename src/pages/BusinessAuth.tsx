@@ -212,15 +212,15 @@ const BusinessAuth: React.FC = () => {
     setTimeout(() => {
       addJarlaMessage(
         i18n.language === 'sv' 
-          ? `Trevligt att träffas, ${companyName}!`
-          : `Nice to meet you, ${companyName}!`,
+          ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
+          : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
         'text',
         () => {
           setTimeout(() => {
             addJarlaMessageWithInput(
               i18n.language === 'sv' 
-                ? 'Vad är er webbadress?'
-                : "What's your website?",
+                ? 'Har ni en webbplats?'
+                : "Does it have a website?",
               'https://yourcompany.com',
               'website'
             );
@@ -991,9 +991,9 @@ const BusinessAuth: React.FC = () => {
                         }`}
                       >
                         {showJarlaName && (
-                          <div className="text-base text-muted-foreground font-montserrat mb-1.5">Jarla</div>
+                          <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                         )}
-                        <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-2xl'}`}>
+                        <p className={`font-geist ${msg.role === 'user' ? 'text-xs' : 'text-base'}`}>
                           {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
                         </p>
                         
