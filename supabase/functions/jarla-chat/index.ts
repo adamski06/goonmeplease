@@ -35,7 +35,35 @@ To turn real human creativity into a measurable, fair, and trusted currency for 
 - Always emphasize: Human, Verified, Action, Fair, Real
 
 ## Your Role
-You're helping a business create a campaign. You already know their company details. Be helpful, concise, and friendly. Give specific, actionable advice for their campaign. Keep responses brief (2-4 sentences). Suggest concrete improvements based on their business.`;
+You're helping a business create a campaign. You already know their company details. Be helpful, concise, and friendly. Give specific, actionable advice for their campaign. Keep responses brief (2-4 sentences). Suggest concrete improvements based on their business.
+
+## IMPORTANT: Form Editing Capability
+You can directly edit the campaign form! When the user asks you to fill in, update, or suggest content for their campaign, you MUST respond with a JSON object containing both your message and form updates.
+
+The form has these fields:
+- title: Campaign title (string)
+- description: Campaign description (string)
+- total_budget: Budget in SEK, minimum 10000 (number)
+- deadline: Deadline date in YYYY-MM-DD format (string)
+- requirements: Array of requirement strings (string[])
+
+When you want to update the form, respond with ONLY a valid JSON object in this exact format:
+{
+  "message": "Your friendly response explaining what you did",
+  "formUpdates": {
+    "title": "New title here",
+    "description": "New description",
+    "total_budget": 15000,
+    "requirements": ["Requirement 1", "Requirement 2"]
+  }
+}
+
+Only include fields in formUpdates that you want to change. If the user is just chatting and not asking to edit the form, respond with just the message field:
+{
+  "message": "Your normal conversational response"
+}
+
+ALWAYS respond with valid JSON. No markdown, no extra text outside the JSON.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -43,14 +71,14 @@ serve(async (req) => {
   }
 
   try {
-    const { message, companyName, businessContext, conversationHistory } = await req.json();
+    const { message, companyName, businessContext, conversationHistory, currentFormData } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Jarla chat request:', { message, companyName, hasBusinessContext: !!businessContext });
+    console.log('Jarla chat request:', { message, companyName, hasBusinessContext: !!businessContext, hasFormData: !!currentFormData });
 
     // Build context about the business
     let contextAddition = '';
@@ -62,6 +90,17 @@ serve(async (req) => {
       contextAddition += `\nUse this knowledge to give personalized campaign advice. Reference their specific business when relevant.`;
     } else if (companyName) {
       contextAddition = `\n\nYou're currently helping ${companyName}.`;
+    }
+
+    // Add current form state
+    if (currentFormData) {
+      contextAddition += `\n\n## Current Campaign Form State\n`;
+      contextAddition += `- Title: ${currentFormData.title || '(empty)'}\n`;
+      contextAddition += `- Description: ${currentFormData.description || '(empty)'}\n`;
+      contextAddition += `- Budget: ${currentFormData.total_budget || 0} SEK\n`;
+      contextAddition += `- Deadline: ${currentFormData.deadline || '(not set)'}\n`;
+      contextAddition += `- Requirements: ${currentFormData.requirements?.filter((r: string) => r.trim()).join(', ') || '(none)'}\n`;
+      contextAddition += `\nThe user can see this form. When they ask you to fill it in or make changes, update the relevant fields.`;
     }
 
     // Build messages array with conversation history
@@ -91,21 +130,21 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages,
-        max_tokens: 200,
+        max_tokens: 500,
       }),
     });
 
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(JSON.stringify({ 
-          response: "I'm getting a lot of questions right now. Let me think for a moment..." 
+          response: '{"message": "I\'m getting a lot of questions right now. Let me think for a moment..."}' 
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ 
-          response: "Let's continue with your campaign - I can help you refine the details!" 
+          response: '{"message": "Let\'s continue with your campaign - I can help you refine the details!"}' 
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
@@ -116,18 +155,35 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || "Let me help you with that - can you rephrase your question?";
+    let aiResponse = data.choices?.[0]?.message?.content || '{"message": "Let me help you with that - can you rephrase your question?"}';
 
-    console.log('Jarla response:', aiResponse);
+    console.log('Jarla raw response:', aiResponse);
 
-    return new Response(JSON.stringify({ response: aiResponse }), {
+    // Try to parse the response as JSON
+    let parsedResponse;
+    try {
+      // Clean up potential markdown code blocks
+      aiResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsedResponse = JSON.parse(aiResponse);
+    } catch {
+      // If it's not valid JSON, wrap it as a message
+      parsedResponse = { message: aiResponse };
+    }
+
+    console.log('Jarla parsed response:', parsedResponse);
+
+    return new Response(JSON.stringify({ 
+      response: parsedResponse.message || aiResponse,
+      formUpdates: parsedResponse.formUpdates || null
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('Jarla chat error:', error);
     return new Response(JSON.stringify({ 
-      response: "I'd love to help with that! Could you tell me more about what you're looking for?" 
+      response: "I'd love to help with that! Could you tell me more about what you're looking for?",
+      formUpdates: null
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
