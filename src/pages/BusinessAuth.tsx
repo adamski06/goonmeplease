@@ -1343,9 +1343,13 @@ const BusinessAuth: React.FC = () => {
           // Chat interface with optional profile preview
           <div className="h-screen flex items-center justify-center p-2 overflow-hidden">
             {/* Main container that holds chat and profile side by side */}
-            <div className="flex gap-4 items-center ml-[160px]">
-              {/* Chat container - stays same size, doesn't move past logo */}
-              <div className={`w-[560px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out`}>
+            <div className={`flex gap-4 items-center transition-all duration-700 ease-out ${
+              showProfilePreview ? 'ml-[160px]' : 'ml-0'
+            }`}>
+              {/* Chat container - wider initially, narrows when profile appears */}
+              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
+                showProfilePreview ? 'w-[500px]' : 'w-[680px]'
+              }`}>
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   <div className="w-full space-y-6">
