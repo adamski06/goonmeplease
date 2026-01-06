@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'profile-feedback' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
 
 interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons' | 'profile-feedback-buttons';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -104,6 +104,7 @@ const BusinessAuth: React.FC = () => {
   const [devMode, setDevMode] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   const [showProfilePreview, setShowProfilePreview] = useState(false);
+  const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
 
@@ -588,18 +589,25 @@ const BusinessAuth: React.FC = () => {
     }]);
     
     if (confirmed) {
-      // Show profile preview and move chat to left
+      // First move chat to left
       setShowProfilePreview(true);
       setChatStep('creating-profile');
+      
+      // After chat has moved (700ms), fade in the profile
       setTimeout(() => {
-        addJarlaMessage(
-          i18n.language === 'sv'
-            ? 'Perfekt! Här är din företagsprofil. Nu behöver vi bara skapa ditt konto.'
-            : "Perfect! Here's your company profile. Now we just need to create your account.",
-          'credentials-form'
-        );
-        setChatStep('credentials');
-      }, 500);
+        setProfileVisible(true);
+        
+        // After profile is visible, ask for feedback
+        setTimeout(() => {
+          setChatStep('profile-feedback');
+          addJarlaMessage(
+            i18n.language === 'sv'
+              ? 'Här är din företagsprofil! Ser det bra ut?'
+              : "Here's your company profile! Does it look good?",
+            'profile-feedback-buttons'
+          );
+        }, 600);
+      }, 700);
     } else {
       // Skip profile preview, go directly to credentials
       setChatStep('credentials');
@@ -609,6 +617,40 @@ const BusinessAuth: React.FC = () => {
             ? 'Inga problem! Låt oss skapa ditt konto.'
             : "No problem! Let's create your account.",
           'credentials-form'
+        );
+      }, 500);
+    }
+  };
+
+  // Handle profile feedback
+  const handleProfileFeedback = (approved: boolean) => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: approved 
+        ? (i18n.language === 'sv' ? 'Ja, det ser bra ut!' : "Yes, looks great!")
+        : (i18n.language === 'sv' ? 'Jag vill ändra något' : "I'd like to change something")
+    }]);
+    
+    if (approved) {
+      setChatStep('credentials');
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
+            : "Perfect! Now we just need to create your account.",
+          'credentials-form'
+        );
+      }, 500);
+    } else {
+      // Let them edit via chat
+      setChatStep('edit-summary');
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Vad skulle du vilja ändra?'
+            : "What would you like to change?",
+          'text'
         );
       }, 500);
     }
@@ -1278,16 +1320,14 @@ const BusinessAuth: React.FC = () => {
           // Chat interface with optional profile preview
           <div className="h-screen flex items-center justify-center p-2">
             {/* Main container that holds chat and profile side by side */}
-            <div className={`flex gap-6 transition-all duration-700 ease-out ${
-              showProfilePreview ? 'w-full max-w-5xl' : 'w-full max-w-3xl'
+            <div className={`flex gap-6 items-center transition-all duration-700 ease-out ${
+              showProfilePreview ? 'translate-x-[-120px]' : 'translate-x-0'
             }`}>
-              {/* Chat container - shrinks and moves left when profile preview appears */}
-              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-700 ease-out ${
-                showProfilePreview ? 'flex-1' : 'w-full'
-              }`}>
+              {/* Chat container - stays same size, just moves left */}
+              <div className="w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col">
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
-                  <div className="w-full space-y-6 transition-all duration-300">
+                  <div className="w-full space-y-6">
                   {messages.map((msg, index) => {
                     const prevMsg = index > 0 ? messages[index - 1] : null;
                     const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
@@ -1419,6 +1459,23 @@ const BusinessAuth: React.FC = () => {
                               </Button>
                             </div>
                           )}
+                          {msg.role === 'jarla' && msg.type === 'profile-feedback-buttons' && chatStep === 'profile-feedback' && (
+                            <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Button
+                                onClick={() => handleProfileFeedback(true)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Ja, det ser bra ut!' : "Yes, looks great!"}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleProfileFeedback(false)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Jag vill ändra' : "I'd like to change"}
+                              </Button>
+                            </div>
+                          )}
                           {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
                             <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>
                           )}
@@ -1515,11 +1572,11 @@ const BusinessAuth: React.FC = () => {
               </div>
             </div>
 
-              {/* Company Profile Preview - slides in from right when confirmed */}
-              <div className={`h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-700 ease-out ${
-                showProfilePreview 
-                  ? 'w-[480px] opacity-100 translate-x-0 p-4' 
-                  : 'w-0 opacity-0 translate-x-8 p-0 overflow-hidden'
+              {/* Company Profile Preview - fades in after chat moves */}
+              <div className={`w-[480px] h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-4 transition-opacity duration-500 ease-out ${
+                profileVisible 
+                  ? 'opacity-100' 
+                  : 'opacity-0 pointer-events-none'
               }`}>
                 {showProfilePreview && (
                   <div className="bg-background rounded-[3px] p-8 space-y-6 shadow-sm">
