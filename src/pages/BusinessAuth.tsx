@@ -1143,10 +1143,11 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="flex flex-col h-screen bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
-            {/* Chat messages area - scrollable container */}
-            <div className="flex-1 overflow-y-auto px-6 pt-24 pb-32">
-              <div className="max-w-2xl mx-auto w-full space-y-3 transition-all duration-300">
+          <div className="flex flex-col h-screen items-center">
+            {/* Chat messages area - scrollable container with centered solid background */}
+            <div className="flex-1 overflow-y-auto w-full flex justify-center">
+              <div className="w-full max-w-2xl bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface px-6 pt-24 pb-32">
+                <div className="w-full space-y-3 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
                   const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
@@ -1268,6 +1269,7 @@ const BusinessAuth: React.FC = () => {
                 <div ref={chatEndRef} />
               </div>
             </div>
+          </div>
 
             {/* Bottom chat input */}
             <div className="fixed bottom-12 left-0 right-0 flex justify-center px-6">
