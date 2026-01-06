@@ -1646,7 +1646,7 @@ const BusinessAuth: React.FC = () => {
 
                     {/* Description - typewriter effect */}
                     {companySummary && (
-                      <p className="text-2xl text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] relative z-10">
+                      <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] relative z-10">
                         {profileTypedDescription}
                         {!profileTypingComplete && <span className="animate-pulse">|</span>}
                       </p>
