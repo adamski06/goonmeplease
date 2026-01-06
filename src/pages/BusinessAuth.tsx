@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin } from 'lucide-react';
+import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin, Pencil } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -1640,28 +1640,52 @@ const BusinessAuth: React.FC = () => {
                     )}
                     {/* Logo and Company Name */}
                     <div className="flex items-center gap-4 relative z-10">
-                      {companyLogo ? (
-                        <img 
-                          src={companyLogo} 
-                          alt={companyName} 
-                          className="w-14 h-14 rounded-[3px] object-contain bg-background/50"
-                        />
-                      ) : (
-                        <div className="w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center">
-                          <span className="text-2xl font-bold text-muted-foreground">
-                            {companyName.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                      )}
-                      <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
+                      <div className="relative group">
+                        {companyLogo ? (
+                          <img 
+                            src={companyLogo} 
+                            alt={companyName} 
+                            className="w-14 h-14 rounded-[3px] object-contain bg-background/50"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center">
+                            <span className="text-2xl font-bold text-muted-foreground">
+                              {companyName.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                        <button 
+                          className="absolute -top-1 -right-1 w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+                          onClick={() => {/* TODO: Edit logo */}}
+                        >
+                          <Pencil className="w-3 h-3 text-muted-foreground" />
+                        </button>
+                      </div>
+                      <div className="relative group flex items-center gap-2">
+                        <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
+                        <button 
+                          className="w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+                          onClick={() => {/* TODO: Edit company name */}}
+                        >
+                          <Pencil className="w-3 h-3 text-muted-foreground" />
+                        </button>
+                      </div>
                     </div>
 
                     {/* Description - typewriter effect */}
                     {companySummary && (
-                      <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] relative z-10">
-                        {profileTypedDescription}
-                        {!profileTypingComplete && <span className="animate-pulse">|</span>}
-                      </p>
+                      <div className="relative group z-10">
+                        <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] pr-6">
+                          {profileTypedDescription}
+                          {!profileTypingComplete && <span className="animate-pulse">|</span>}
+                        </p>
+                        <button 
+                          className="absolute top-0 right-0 w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+                          onClick={() => {/* TODO: Edit description */}}
+                        >
+                          <Pencil className="w-3 h-3 text-muted-foreground" />
+                        </button>
+                      </div>
                     )}
 
                     {/* Social media icons - fade in after typing */}
