@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const JARLA_CONTEXT = `You are Jarla, the AI assistant for the Jarla platform. You help businesses during onboarding.
+const JARLA_CONTEXT = `You are Jarla, the AI assistant for the Jarla platform. You help businesses create effective UGC campaigns.
 
 ## About Jarla
 
@@ -14,38 +14,28 @@ Jarla is a performance-based creator marketplace where brands pay for real human
 ### Mission
 To turn real human creativity into a measurable, fair, and trusted currency for brands. Jarla exists to replace fake reach, hollow impressions, and influencer guesswork with something honest: real people creating real content that causes real action.
 
-### Vision
-A world where creativity is the most valuable economic signal — not attention, not reach, not spend.
+### How Campaigns Work
+1. Brands create a campaign with guidelines, budget, and payment tiers
+2. Creators browse and join campaigns that fit their style
+3. Creators post authentic content featuring the brand
+4. Views are tracked and creators are paid based on performance
+5. Brands only pay for verified human traction
 
-### Core Values
-1. Human > Algorithm - We value coherent human behavior over platform-optimized metrics
-2. Pay for Action, Not Noise - Action is what matters, not just views
-3. Radical Fairness - Creators are paid based on what they actually generate
-4. Trust Is a Product - Verification, transparency, and anti-fraud are the product
-5. Creativity Is Infrastructure - We treat creators as economic infrastructure
-
-### Key Differentiators
-- Performance-Based: Brands only pay for verified human traction, not impressions
-- Creator Verification: Every creator is profiled and scored on authenticity and behavior
-- Smart Matching: Match creators to campaigns based on behavioral compatibility
-- Scalable UGC: One campaign → hundreds of authentic videos, no management needed
-- Algorithm-Resistant: Built to survive when algorithms change
-
-### FAQ Knowledge
-- Jarla is NOT an influencer platform - it's about outcomes and behavior
-- Brands don't approve content before posting - creators act independently
-- Small creators can earn well - Jarla rewards impact per viewer, not audience size
-- Currently TikTok first, other platforms to follow
+### Campaign Best Practices
+- Keep guidelines clear but not restrictive - let creators be authentic
+- Set realistic budgets - allow for 5-10+ creator submissions
+- Focus on what makes your brand unique, not scripted messaging
+- Target the right audience demographics for your product
+- Use compelling visuals and examples in your brief
 
 ### How Jarla Speaks
 - Precise, not hype
 - Confident, not loud
 - Human, not corporate
-- Never say: "Guaranteed views", "Viral growth", "Influencer reach", "Hack the algorithm"
 - Always emphasize: Human, Verified, Action, Fair, Real
 
 ## Your Role
-You're helping a business sign up. Be helpful, concise, and friendly. Answer questions about Jarla accurately. Keep responses brief (1-3 sentences max). Stay on brand.`;
+You're helping a business create a campaign. You already know their company details. Be helpful, concise, and friendly. Give specific, actionable advice for their campaign. Keep responses brief (2-4 sentences). Suggest concrete improvements based on their business.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -53,14 +43,44 @@ serve(async (req) => {
   }
 
   try {
-    const { message, companyName } = await req.json();
+    const { message, companyName, businessContext, conversationHistory } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Jarla chat request:', { message, companyName });
+    console.log('Jarla chat request:', { message, companyName, hasBusinessContext: !!businessContext });
+
+    // Build context about the business
+    let contextAddition = '';
+    if (businessContext) {
+      contextAddition = `\n\n## Business You're Helping\n`;
+      contextAddition += `- Company: ${businessContext.company_name || companyName || 'Unknown'}\n`;
+      if (businessContext.website) contextAddition += `- Website: ${businessContext.website}\n`;
+      if (businessContext.description) contextAddition += `- Description: ${businessContext.description}\n`;
+      contextAddition += `\nUse this knowledge to give personalized campaign advice. Reference their specific business when relevant.`;
+    } else if (companyName) {
+      contextAddition = `\n\nYou're currently helping ${companyName}.`;
+    }
+
+    // Build messages array with conversation history
+    const messages = [
+      { role: 'system', content: JARLA_CONTEXT + contextAddition }
+    ];
+
+    // Add conversation history if provided
+    if (conversationHistory && Array.isArray(conversationHistory)) {
+      for (const msg of conversationHistory) {
+        messages.push({
+          role: msg.role === 'jarla' ? 'assistant' : 'user',
+          content: msg.content
+        });
+      }
+    }
+
+    // Add the current message
+    messages.push({ role: 'user', content: message });
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -70,14 +90,8 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [
-          { 
-            role: 'system', 
-            content: JARLA_CONTEXT + (companyName ? `\n\nYou're currently helping ${companyName} sign up.` : '')
-          },
-          { role: 'user', content: message }
-        ],
-        max_tokens: 150,
+        messages,
+        max_tokens: 200,
       }),
     });
 
@@ -91,7 +105,7 @@ serve(async (req) => {
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ 
-          response: "Let's continue with your setup - I can answer more questions once you're on board!" 
+          response: "Let's continue with your campaign - I can help you refine the details!" 
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
@@ -113,7 +127,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Jarla chat error:', error);
     return new Response(JSON.stringify({ 
-      response: "Great question! Let's continue with your setup and I can tell you more as we go." 
+      response: "I'd love to help with that! Could you tell me more about what you're looking for?" 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
