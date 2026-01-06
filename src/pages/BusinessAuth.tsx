@@ -1342,7 +1342,7 @@ const BusinessAuth: React.FC = () => {
             <div className="flex gap-6 items-center">
               {/* Chat container - stays same size, moves via margin */}
               <div className={`w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
-                showProfilePreview ? '-ml-[330px]' : 'ml-0'
+                showProfilePreview ? '-ml-[160px]' : 'ml-0'
               }`}>
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
