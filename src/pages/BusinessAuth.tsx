@@ -59,9 +59,10 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
+  heading?: string;
 }
 
 const BusinessAuth: React.FC = () => {
@@ -399,21 +400,48 @@ const BusinessAuth: React.FC = () => {
       if (error) throw error;
 
       if (data?.success && data?.data?.summary) {
-        // Show the comprehensive summary
+        // Parse summary into sections and add each as separate message
+        const summary = data.data.summary;
+        const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
+        
+        // Group into heading + content pairs
+        const sectionPairs: { heading: string; content: string }[] = [];
+        for (let i = 0; i < sections.length; i += 2) {
+          if (sections[i] && sections[i + 1]) {
+            sectionPairs.push({
+              heading: sections[i].trim(),
+              content: sections[i + 1].trim()
+            });
+          }
+        }
+
+        // Add each section with delay
+        let delay = 500;
+        sectionPairs.forEach((section, index) => {
+          setTimeout(() => {
+            setMessages(prev => [...prev, {
+              id: `section-${Date.now()}-${index}`,
+              role: 'jarla',
+              content: section.content,
+              displayedContent: section.content,
+              type: 'summary-section',
+              heading: section.heading
+            }]);
+            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }, delay);
+          delay += 400;
+        });
+
+        // After all sections, continue to credentials
         setTimeout(() => {
-          addJarlaMessage(data.data.summary, 'text', () => {
-            // After showing summary, continue to credentials
-            setTimeout(() => {
-              addJarlaMessage(
-                i18n.language === 'sv'
-                  ? 'Nu när jag känner ert företag bättre, låt oss skapa ditt konto!'
-                  : "Now that I know your company better, let's create your account!",
-                'credentials-form'
-              );
-              setChatStep('credentials');
-            }, 800);
-          });
-        }, 1000);
+          addJarlaMessage(
+            i18n.language === 'sv'
+              ? 'Nu när jag känner ert företag bättre, låt oss skapa ditt konto!'
+              : "Now that I know your company better, let's create your account!",
+            'credentials-form'
+          );
+          setChatStep('credentials');
+        }, delay + 500);
       } else {
         throw new Error('No summary returned');
       }
@@ -1143,11 +1171,11 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="h-screen flex items-center justify-center p-8">
+          <div className="h-screen flex items-center justify-center p-4">
             {/* Chat container - fixed size with rounded edges */}
-            <div className="w-full max-w-3xl h-[calc(100vh-4rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl overflow-hidden flex flex-col">
+            <div className="w-full max-w-3xl h-[calc(100vh-2rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl overflow-hidden flex flex-col">
               {/* Scrollable chat messages area */}
-              <div className="flex-1 overflow-y-auto px-8 pt-16 pb-32">
+              <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
                 <div className="w-full space-y-3 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
@@ -1167,6 +1195,15 @@ const BusinessAuth: React.FC = () => {
                           <Check className="h-3.5 w-3.5" />
                           <span className="text-sm font-geist">{msg.content}</span>
                         </div>
+                      ) : msg.type === 'summary-section' ? (
+                        // Summary section - fade in animation, no typewriter
+                        <div 
+                          className="text-foreground max-w-[85%] animate-fade-in"
+                          style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
+                        >
+                          <h3 className="text-lg font-montserrat font-bold mb-1">{msg.heading}</h3>
+                          <p className="font-geist text-base text-foreground/80">{msg.content}</p>
+                        </div>
                       ) : (
                         <div
                           className={`transition-all duration-300 ${
@@ -1180,7 +1217,7 @@ const BusinessAuth: React.FC = () => {
                           )}
                           {msg.role === 'jarla' && msg.displayedContent && (
                             <div 
-                              className="font-geist text-base whitespace-pre-wrap [&_strong]:text-xl [&_strong]:font-montserrat [&_strong]:font-bold [&_strong]:block [&_strong]:mt-6 [&_strong]:mb-2" 
+                              className="font-geist text-base whitespace-pre-wrap [&_strong]:text-xl [&_strong]:font-montserrat [&_strong]:font-bold [&_strong]:block [&_strong]:mt-4 [&_strong]:mb-1" 
                               dangerouslySetInnerHTML={{ 
                                 __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
                               }} 
