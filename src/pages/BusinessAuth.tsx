@@ -761,7 +761,14 @@ const BusinessAuth: React.FC = () => {
 
       const currentUserId = session.session.user.id;
 
-      const fullDescription = [
+      // Get the edited summary sections from messages if available
+      const editedSummarySections = messages
+        .filter(msg => msg.type === 'summary-section')
+        .map(msg => `**${msg.heading}**\n${msg.content}`)
+        .join('\n\n');
+      
+      // Use AI-generated summary (potentially edited) or fall back to manual input
+      const fullDescription = editedSummarySections || companySummary || [
         description,
         productsServices ? `Products/Services: ${productsServices}` : '',
         ageRanges.length ? `Target Age: ${ageRanges.join(', ')}` : '',
