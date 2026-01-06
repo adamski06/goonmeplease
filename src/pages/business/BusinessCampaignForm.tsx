@@ -229,7 +229,7 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="p-8">
+      <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
