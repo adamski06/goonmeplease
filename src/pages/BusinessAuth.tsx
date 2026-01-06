@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X } from 'lucide-react';
+import { Loader2, X, Send } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -963,85 +963,142 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="flex flex-col h-screen justify-center">
+          <div className="flex flex-col h-screen">
             {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 py-12">
-              <div className="max-w-2xl mx-auto w-full space-y-5">
-                {messages.map((msg, index) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
+            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 pt-24 pb-32">
+              <div className="max-w-2xl mx-auto w-full space-y-3">
+                {messages.map((msg, index) => {
+                  const prevMsg = index > 0 ? messages[index - 1] : null;
+                  const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
+                  
+                  return (
                     <div
-                      className={`transition-all duration-300 ${
-                        msg.role === 'user'
-                          ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
-                          : 'text-foreground max-w-[85%]'
-                      }`}
+                      key={msg.id}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      style={{ 
+                        animation: 'smoothFadeIn 0.4s ease-out forwards',
+                        opacity: 0
+                      }}
                     >
-                      {msg.role === 'jarla' && (
-                        <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
-                      )}
-                      <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-xl'}`}>
-                        {msg.content}
-                      </p>
-                      
-                      {/* Render inline text input - only show when message is done typing */}
-                      {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && !msg.isTyping && (
-                        <div className="mt-4 animate-fade-in">
-                          <Input
-                            type="text"
-                            placeholder={msg.inputPlaceholder}
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' && inputValue.trim() && msg.inputStep) {
-                                e.preventDefault();
-                                handleInlineSubmit(inputValue, msg.inputStep);
-                                setInputValue('');
-                              }
-                            }}
-                            autoFocus
-                            className="w-full max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base transition-all duration-200 focus:scale-[1.01]"
-                          />
-                        </div>
-                      )}
-                      
-                      {/* Render special UI elements */}
-                      {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
-                        <div className="animate-fade-in">{renderSocialPicker()}</div>
-                      )}
-                      {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
-                        <div className="animate-fade-in">{renderCountryPicker()}</div>
-                      )}
-                      {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && (
-                        <div className="animate-fade-in">{renderAgePicker()}</div>
-                      )}
-                      {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && (
-                        <div className="animate-fade-in">{renderReachPicker()}</div>
-                      )}
-                      {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
-                        <div className="animate-fade-in">{renderCredentialsForm()}</div>
-                      )}
+                      <div
+                        className={`transition-all duration-300 ${
+                          msg.role === 'user'
+                            ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
+                            : 'text-foreground max-w-[85%]'
+                        }`}
+                      >
+                        {showJarlaName && (
+                          <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
+                        )}
+                        <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-xl'}`}>
+                          {msg.content}
+                        </p>
+                        
+                        {/* Render inline text input with send button */}
+                        {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
+                          <div className="mt-4 flex gap-2 items-center" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <Input
+                              type="text"
+                              placeholder={msg.inputPlaceholder}
+                              value={inputValue}
+                              onChange={(e) => setInputValue(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && inputValue.trim() && msg.inputStep) {
+                                  e.preventDefault();
+                                  handleInlineSubmit(inputValue, msg.inputStep);
+                                  setInputValue('');
+                                }
+                              }}
+                              autoFocus
+                              className="flex-1 max-w-sm h-9 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[4px] font-geist text-base"
+                            />
+                            <button
+                              onClick={() => {
+                                if (inputValue.trim() && msg.inputStep) {
+                                  handleInlineSubmit(inputValue, msg.inputStep);
+                                  setInputValue('');
+                                }
+                              }}
+                              disabled={!inputValue.trim()}
+                              className="h-9 w-9 flex items-center justify-center rounded-[4px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                            >
+                              <Send className="h-4 w-4" />
+                            </button>
+                          </div>
+                        )}
+                        
+                        {/* Render special UI elements */}
+                        {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
+                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderSocialPicker()}</div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
+                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && (
+                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderAgePicker()}</div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && (
+                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderReachPicker()}</div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
+                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCredentialsForm()}</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 
                 {isTyping && (
-                  <div className="flex justify-start animate-fade-in">
+                  <div className="flex justify-start" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
                     <div className="text-foreground">
-                      <div className="text-sm text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                       <div className="flex gap-1.5">
-                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2.5 h-2.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
                 )}
                 
                 <div ref={chatEndRef} />
+              </div>
+            </div>
+
+            {/* Bottom chat input */}
+            <div className="fixed bottom-6 left-0 right-0 flex justify-center px-6">
+              <div className="w-full max-w-md flex gap-2 items-center">
+                <Input
+                  ref={chatInputRef}
+                  type="text"
+                  placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && inputValue.trim()) {
+                      e.preventDefault();
+                      // Find current step's input handler
+                      const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                      if (currentInputMsg?.inputStep) {
+                        handleInlineSubmit(inputValue, currentInputMsg.inputStep);
+                        setInputValue('');
+                      }
+                    }
+                  }}
+                  className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
+                />
+                <button
+                  onClick={() => {
+                    const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                    if (inputValue.trim() && currentInputMsg?.inputStep) {
+                      handleInlineSubmit(inputValue, currentInputMsg.inputStep);
+                      setInputValue('');
+                    }
+                  }}
+                  disabled={!inputValue.trim()}
+                  className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
               </div>
             </div>
 
