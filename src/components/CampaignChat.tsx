@@ -176,17 +176,17 @@ const CampaignChat: React.FC = () => {
             <div key={msg.id}>
               {/* Show Jarla name for first message or after user message */}
               {msg.role === 'jarla' && (index === 0 || messages[index - 1]?.role === 'user') && (
-                <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
+                <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
               )}
               <div
                 className={`transition-all duration-300 ${
                   msg.role === 'user'
-                    ? 'bg-foreground text-background rounded-[3px] px-3 py-1.5 inline-block'
+                    ? 'bg-foreground text-background rounded-[3px] px-2 py-1 inline-block'
                     : 'text-foreground max-w-[85%]'
                 }`}
               >
                 {msg.role === 'jarla' ? (
-                  <p className="font-geist text-base whitespace-pre-wrap">
+                  <p className="font-geist text-sm whitespace-pre-wrap">
                     {msg.displayedContent || msg.content}
                   </p>
                 ) : (
@@ -198,7 +198,7 @@ const CampaignChat: React.FC = () => {
           })}
           {isTyping && messages[messages.length - 1]?.role === 'user' && (
             <div>
-              <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
+              <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
