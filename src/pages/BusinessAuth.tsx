@@ -408,27 +408,28 @@ const BusinessAuth: React.FC = () => {
         const summary = data.data.summary;
         const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
         
-        // Group into heading + content pairs, then flatten to separate messages
-        const allNodes: { type: 'heading' | 'paragraph'; content: string }[] = [];
+        // Group into heading + content pairs
+        const sectionPairs: { heading: string; content: string }[] = [];
         for (let i = 0; i < sections.length; i += 2) {
-          if (sections[i]) {
-            allNodes.push({ type: 'heading', content: sections[i].trim() });
-          }
-          if (sections[i + 1]) {
-            allNodes.push({ type: 'paragraph', content: sections[i + 1].trim() });
+          if (sections[i] && sections[i + 1]) {
+            sectionPairs.push({
+              heading: sections[i].trim(),
+              content: sections[i + 1].trim()
+            });
           }
         }
 
-        // Add each node with delay
+        // Add each section with delay (heading + paragraph together in one node)
         let delay = 500;
-        allNodes.forEach((node, index) => {
+        sectionPairs.forEach((section, index) => {
           setTimeout(() => {
             setMessages(prev => [...prev, {
               id: `section-${Date.now()}-${index}`,
               role: 'jarla',
-              content: node.content,
-              displayedContent: node.content,
-              type: node.type === 'heading' ? 'summary-heading' : 'summary-paragraph'
+              content: section.content,
+              displayedContent: section.content,
+              type: 'summary-section',
+              heading: section.heading
             }]);
             chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, delay);
@@ -533,15 +534,14 @@ const BusinessAuth: React.FC = () => {
         );
       }, 500);
     } else {
-      // Ask what was wrong
+      // Just show message, user types in bottom input
       setChatStep('edit-summary');
       setTimeout(() => {
-        addJarlaMessageWithInput(
+        addJarlaMessage(
           i18n.language === 'sv'
             ? 'Vad fick jag fel? Berätta så uppdaterar jag det.'
             : "What did I get wrong? Tell me and I'll update it.",
-          i18n.language === 'sv' ? 'Beskriv vad som var fel...' : 'Describe what was wrong...',
-          'edit-summary'
+          'text'
         );
       }, 500);
     }
@@ -1253,30 +1253,14 @@ const BusinessAuth: React.FC = () => {
                           <Check className="h-3.5 w-3.5" />
                           <span className="text-sm font-geist">{msg.content}</span>
                         </div>
-                      ) : msg.type === 'summary-heading' ? (
-                        // Summary heading - its own box with grey background
-                        <div 
-                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
-                          style={{ animation: 'smoothFadeIn 0.4s ease-out forwards' }}
-                        >
-                          <h3 className="text-lg font-montserrat font-bold text-foreground">{msg.content}</h3>
-                        </div>
-                      ) : msg.type === 'summary-paragraph' ? (
-                        // Summary paragraph - its own box with grey background
-                        <div 
-                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
-                          style={{ animation: 'smoothFadeIn 0.4s ease-out forwards' }}
-                        >
-                          <p className="font-geist text-base text-foreground/90">{msg.content}</p>
-                        </div>
                       ) : msg.type === 'summary-section' ? (
-                        // Legacy summary section - fade in animation
+                        // Summary section - heading + paragraph together, fade in animation
                         <div 
                           className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
                           style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
                         >
-                          <h3 className="text-lg font-montserrat font-bold mb-1">{msg.heading}</h3>
-                          <p className="font-geist text-base text-foreground/80">{msg.content}</p>
+                          <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
+                          <p className="font-geist text-base text-foreground/90">{msg.content}</p>
                         </div>
                       ) : (
                         <div
@@ -1415,13 +1399,18 @@ const BusinessAuth: React.FC = () => {
                         setShowPlatformDropdown(false);
                         handleSocialsComplete();
                       } else if (bottomInputValue.trim()) {
-                        const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                        if (currentInputMsg?.inputStep) {
-                          handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                        if (chatStep === 'edit-summary') {
+                          handleEditSummarySubmit(bottomInputValue);
+                          setBottomInputValue('');
                         } else {
-                          handleChatMessage(bottomInputValue);
+                          const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                          if (currentInputMsg?.inputStep) {
+                            handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                          } else {
+                            handleChatMessage(bottomInputValue);
+                          }
+                          setBottomInputValue('');
                         }
-                        setBottomInputValue('');
                       }
                     }
                   }}
@@ -1433,13 +1422,18 @@ const BusinessAuth: React.FC = () => {
                       setShowPlatformDropdown(false);
                       handleSocialsComplete();
                     } else if (bottomInputValue.trim()) {
-                      const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                      if (currentInputMsg?.inputStep) {
-                        handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                      if (chatStep === 'edit-summary') {
+                        handleEditSummarySubmit(bottomInputValue);
+                        setBottomInputValue('');
                       } else {
-                        handleChatMessage(bottomInputValue);
+                        const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                        if (currentInputMsg?.inputStep) {
+                          handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                        } else {
+                          handleChatMessage(bottomInputValue);
+                        }
+                        setBottomInputValue('');
                       }
-                      setBottomInputValue('');
                     }
                   }}
                   disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
