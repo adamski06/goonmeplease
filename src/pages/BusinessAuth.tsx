@@ -1307,6 +1307,13 @@ const BusinessAuth: React.FC = () => {
               <div className="animate-spin">
                 <Loader2 className="h-8 w-8 text-muted-foreground" />
               </div>
+            ) : isTyping ? (
+              // Loading dots after entering company name
+              <div className="flex items-center gap-1">
+                <span className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              </div>
             ) : (
               <div className="flex flex-col items-center space-y-8 animate-fade-in">
                 <div className="flex items-baseline gap-3">
