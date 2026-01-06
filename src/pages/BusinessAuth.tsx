@@ -975,8 +975,8 @@ const BusinessAuth: React.FC = () => {
           // Chat interface
           <div className="flex flex-col h-screen">
             {/* Chat messages area */}
-            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 pt-24 pb-32">
-              <div className="max-w-2xl mx-auto w-full space-y-3">
+            <div className="flex-1 flex flex-col justify-center overflow-y-auto px-6 pt-24 pb-32 scroll-smooth">
+              <div className="max-w-2xl mx-auto w-full space-y-3 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
                   const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
@@ -984,9 +984,9 @@ const BusinessAuth: React.FC = () => {
                   return (
                     <div
                       key={msg.id}
-                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} transition-all duration-500 ease-out`}
                       style={{ 
-                        animation: 'smoothFadeIn 0.4s ease-out forwards',
+                        animation: 'smoothFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
                         opacity: 0
                       }}
                     >
@@ -1006,9 +1006,16 @@ const BusinessAuth: React.FC = () => {
                           {showJarlaName && msg.role === 'jarla' && (
                             <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
                           )}
-                          <p className={`font-geist ${msg.role === 'user' ? 'text-xs' : 'text-base'}`}>
-                            {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
-                          </p>
+                          {msg.role === 'jarla' && msg.displayedContent && (
+                            <p className="font-geist text-base">
+                              {msg.displayedContent}
+                            </p>
+                          )}
+                          {msg.role === 'user' && (
+                            <p className="font-geist text-xs">
+                              {msg.content}
+                            </p>
+                          )}
                         
                         {/* Render inline text input with send button */}
                         {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
