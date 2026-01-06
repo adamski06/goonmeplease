@@ -1318,13 +1318,13 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface with optional profile preview
-          <div className="h-screen flex items-center justify-center p-2">
+          <div className="h-screen flex items-center justify-center p-2 overflow-hidden">
             {/* Main container that holds chat and profile side by side */}
-            <div className={`flex gap-6 items-center transition-all duration-700 ease-out ${
-              showProfilePreview ? 'translate-x-[-120px]' : 'translate-x-0'
-            }`}>
-              {/* Chat container - stays same size, just moves left */}
-              <div className="w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative">
+            <div className="flex gap-6 items-center">
+              {/* Chat container - stays same size, moves via margin */}
+              <div className={`w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
+                showProfilePreview ? '-ml-[260px]' : 'ml-0'
+              }`}>
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   <div className="w-full space-y-6">
@@ -1573,10 +1573,12 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               {/* Company Profile Preview - fades in after chat moves */}
-              <div className={`w-[480px] h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-4 transition-opacity duration-500 ease-out ${
-                profileVisible 
-                  ? 'opacity-100' 
-                  : 'opacity-0 pointer-events-none'
+              <div className={`h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
+                showProfilePreview 
+                  ? 'w-[480px] p-4' 
+                  : 'w-0 p-0'
+              } ${
+                profileVisible ? 'opacity-100' : 'opacity-0'
               }`}>
                 {showProfilePreview && (
                   <div className="bg-background rounded-[3px] p-8 space-y-6 shadow-sm">
