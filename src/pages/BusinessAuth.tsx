@@ -640,7 +640,7 @@ const BusinessAuth: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowPlatformDropdown(!showPlatformDropdown)}
-            className="w-full h-10 px-4 bg-background border border-foreground/20 rounded-full font-geist text-sm text-left flex items-center justify-between hover:border-foreground/40 transition-colors"
+            className="w-full h-10 px-4 bg-background border border-foreground/20 rounded-[3px] font-geist text-sm text-left flex items-center justify-between hover:border-foreground/40 transition-colors"
           >
             <span className="text-muted-foreground">
               {selectedPlatforms.length > 0 
@@ -660,7 +660,7 @@ const BusinessAuth: React.FC = () => {
                 className="fixed inset-0 z-40" 
                 onClick={() => setShowPlatformDropdown(false)}
               />
-              <div className="absolute top-full left-0 w-72 mt-1 bg-background border border-foreground/20 rounded-lg shadow-lg z-50 py-2 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 w-72 mt-1 bg-background border border-foreground/20 rounded-[3px] shadow-lg z-50 py-2 max-h-48 overflow-y-auto">
                 {SOCIAL_PLATFORMS.map(platform => {
                   const isSelected = selectedPlatforms.includes(platform.id);
                   return (
@@ -710,7 +710,7 @@ const BusinessAuth: React.FC = () => {
                     placeholder={platform.placeholder}
                     value={socialMedia[platformId] || ''}
                     onChange={(e) => setSocialMedia(prev => ({ ...prev, [platformId]: e.target.value }))}
-                    className="flex-1 h-9 bg-background border-foreground/20 text-foreground placeholder:text-muted-foreground/40 rounded-full font-geist text-sm px-4"
+                    className="flex-1 h-9 bg-background border-foreground/20 text-foreground placeholder:text-muted-foreground/40 rounded-[3px] font-geist text-sm px-4"
                   />
                 </div>
               );
@@ -1062,7 +1062,7 @@ const BusinessAuth: React.FC = () => {
                 
                 <Button 
                   onClick={startChat} 
-                  className={`rounded-full px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                  className={`rounded-[3px] px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
                   {t('common.continue')}
                 </Button>
@@ -1097,7 +1097,7 @@ const BusinessAuth: React.FC = () => {
                         <div
                           className={`transition-all duration-300 ${
                             msg.role === 'user'
-                              ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
+                              ? 'bg-foreground text-background rounded-[3px] px-3 py-1.5'
                               : 'text-foreground max-w-[85%]'
                           }`}
                         >
@@ -1131,7 +1131,7 @@ const BusinessAuth: React.FC = () => {
                                 }
                               }}
                               autoFocus
-                              className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
+                              className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
                             />
                             <button
                               onClick={() => {
@@ -1141,7 +1141,7 @@ const BusinessAuth: React.FC = () => {
                                 }
                               }}
                               disabled={!inlineInputValue.trim()}
-                              className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
+                              className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
                             >
                               <Send className="h-4 w-4" />
                             </button>
@@ -1212,7 +1212,7 @@ const BusinessAuth: React.FC = () => {
                       }
                     }
                   }}
-                  className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
+                  className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
                 />
                 <button
                   onClick={() => {
@@ -1230,7 +1230,7 @@ const BusinessAuth: React.FC = () => {
                     }
                   }}
                   disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
+                  className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
                 >
                   <Send className="h-4 w-4" />
                 </button>
