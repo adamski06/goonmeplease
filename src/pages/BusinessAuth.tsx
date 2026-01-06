@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
 
 interface ChatMessage {
   id: string;
@@ -360,6 +360,10 @@ const BusinessAuth: React.FC = () => {
           );
         }, 500);
         break;
+
+      case 'edit-summary':
+        handleEditSummarySubmit(userMessage);
+        break;
     }
   };
 
@@ -514,8 +518,8 @@ const BusinessAuth: React.FC = () => {
       id: Date.now().toString(),
       role: 'user',
       content: confirmed 
-        ? (i18n.language === 'sv' ? 'Ja, det stämmer!' : 'Yes, that\'s correct!')
-        : (i18n.language === 'sv' ? 'Nej, det stämmer inte' : 'No, that\'s not right')
+        ? (i18n.language === 'sv' ? 'Ja, det stämmer!' : "Yes, that's correct!")
+        : (i18n.language === 'sv' ? 'Nej, det stämmer inte' : "No, that's not right")
     }]);
     
     if (confirmed) {
@@ -529,18 +533,38 @@ const BusinessAuth: React.FC = () => {
         );
       }, 500);
     } else {
-      // If not correct, go to manual description flow
-      setChatStep('description');
+      // Ask what was wrong
+      setChatStep('edit-summary');
       setTimeout(() => {
         addJarlaMessageWithInput(
           i18n.language === 'sv'
-            ? 'Inga problem! Berätta kort om ert företag - vad gör ni?'
-            : "No problem! Tell me briefly about your company - what do you do?",
-          i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
-          'description'
+            ? 'Vad fick jag fel? Berätta så uppdaterar jag det.'
+            : "What did I get wrong? Tell me and I'll update it.",
+          i18n.language === 'sv' ? 'Beskriv vad som var fel...' : 'Describe what was wrong...',
+          'edit-summary'
         );
       }, 500);
     }
+  };
+
+  // Handle edit summary submission
+  const handleEditSummarySubmit = (correction: string) => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: correction
+    }]);
+    
+    // Acknowledge the correction and proceed to credentials
+    setChatStep('credentials');
+    setTimeout(() => {
+      addJarlaMessage(
+        i18n.language === 'sv'
+          ? 'Tack för förtydligandet! Nu när jag känner ert företag bättre, låt oss skapa ditt konto.'
+          : "Thanks for clarifying! Now that I know your company better, let's create your account.",
+        'credentials-form'
+      );
+    }, 500);
   };
 
   // Handle reach selection complete
