@@ -762,19 +762,31 @@ const BusinessAuth: React.FC = () => {
       const currentUserId = session.session.user.id;
 
       // Get the edited summary sections from messages if available
-      const editedSummarySections = messages
-        .filter(msg => msg.type === 'summary-section')
-        .map(msg => `**${msg.heading}**\n${msg.content}`)
-        .join('\n\n');
+      const summarySectionMessages = messages.filter(msg => msg.type === 'summary-section');
+      const editedSummarySections = summarySectionMessages.length > 0
+        ? summarySectionMessages
+            .map(msg => msg.heading ? `**${msg.heading}**\n${msg.content}` : msg.content)
+            .join('\n\n')
+        : '';
       
-      // Use AI-generated summary (potentially edited) or fall back to manual input
-      const fullDescription = editedSummarySections || companySummary || [
+      // Build manual description as fallback
+      const manualDescription = [
         description,
         productsServices ? `Products/Services: ${productsServices}` : '',
         ageRanges.length ? `Target Age: ${ageRanges.join(', ')}` : '',
         globalReach === 'worldwide' ? 'Reach: Worldwide' : `Reach: ${targetCountries.join(', ')}`,
         audienceDescription ? `Audience: ${audienceDescription}` : ''
       ].filter(Boolean).join('\n\n');
+      
+      // Priority: edited sections > original AI summary > manual input
+      const fullDescription = editedSummarySections || companySummary || manualDescription;
+      
+      console.log('Saving description:', { 
+        editedSectionsCount: summarySectionMessages.length,
+        hasCompanySummary: !!companySummary,
+        companySummaryLength: companySummary?.length,
+        fullDescriptionLength: fullDescription?.length 
+      });
 
       const { error: profileError } = await supabase
         .from('business_profiles')
