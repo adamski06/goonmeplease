@@ -254,7 +254,7 @@ const BusinessAuth: React.FC = () => {
           }
         );
       }, 300);
-    }, 800);
+    }, 300);
   };
 
   // Handle general chat message (questions, etc) - now AI powered
