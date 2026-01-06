@@ -1422,7 +1422,7 @@ const BusinessAuth: React.FC = () => {
                           
                           {/* Render inline text input with send button */}
                           {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
-                            <div className="mt-4 flex gap-2 items-center" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <div className="mt-4 relative max-w-sm" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
                               <Input
                                 type="text"
                                 placeholder={msg.inputPlaceholder}
@@ -1436,7 +1436,7 @@ const BusinessAuth: React.FC = () => {
                                   }
                                 }}
                                 autoFocus
-                                className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
+                                className="w-full h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm pl-4 pr-10"
                               />
                               <button
                                 onClick={() => {
@@ -1446,7 +1446,7 @@ const BusinessAuth: React.FC = () => {
                                   }
                                 }}
                                 disabled={!inlineInputValue.trim()}
-                                className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                               >
                                 <ArrowUp className="h-4 w-4" />
                               </button>
@@ -1552,7 +1552,7 @@ const BusinessAuth: React.FC = () => {
 
                 {/* Bottom chat input - attached to bottom of chat container */}
                 <div className="absolute bottom-4 left-4 right-4 flex justify-center">
-                  <div className="w-full max-w-md flex gap-2 items-center">
+                  <div className="w-full max-w-md relative">
                     <Input
                       ref={chatInputRef}
                       type="text"
@@ -1581,7 +1581,7 @@ const BusinessAuth: React.FC = () => {
                           }
                         }
                       }}
-                      className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
+                      className="w-full h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm pl-4 pr-10"
                     />
                     <button
                       onClick={() => {
@@ -1604,7 +1604,7 @@ const BusinessAuth: React.FC = () => {
                         }
                       }}
                       disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
-                      className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                     >
                       <ArrowUp className="h-4 w-4" />
                     </button>
