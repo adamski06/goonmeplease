@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
@@ -77,7 +77,6 @@ const BusinessDashboard: React.FC = () => {
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [logoBgColor, setLogoBgColor] = useState<'white' | 'black' | 'none'>('white');
-  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -170,15 +169,13 @@ const BusinessDashboard: React.FC = () => {
                 {businessProfile?.logo_url ? (
                   <div 
                     className={`h-14 w-14 rounded-sm flex items-center justify-center p-1 ${
-                      logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : ''
+                      logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
                     }`}
                   >
                     <img 
-                      ref={logoRef}
                       src={businessProfile.logo_url} 
                       alt="Company logo" 
                       className="max-h-full max-w-full object-contain" 
-                      crossOrigin="anonymous"
                     />
                   </div>
                 ) : (
