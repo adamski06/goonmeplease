@@ -1170,12 +1170,12 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface
-          <div className="h-screen flex items-center justify-center p-4">
-            {/* Chat container - fixed size with rounded edges */}
-            <div className="w-full max-w-3xl h-[calc(100vh-2rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl overflow-hidden flex flex-col">
+          <div className="h-screen flex items-center justify-center p-2">
+            {/* Chat container - fixed size with slightly rounded edges */}
+            <div className="w-full max-w-3xl h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-lg overflow-hidden flex flex-col">
               {/* Scrollable chat messages area */}
               <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
-                <div className="w-full space-y-4 transition-all duration-300">
+                <div className="w-full space-y-6 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
                   const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
