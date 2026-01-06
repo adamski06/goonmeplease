@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
 
 interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
 }
@@ -362,8 +362,8 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
-  // Handle social media step completion
-  const handleSocialsComplete = () => {
+  // Handle social media step completion - trigger company analysis
+  const handleSocialsComplete = async () => {
     const socialCount = Object.keys(socialMedia).filter(k => socialMedia[k]).length;
     setMessages(prev => [...prev, {
       id: Date.now().toString(),
@@ -372,16 +372,75 @@ const BusinessAuth: React.FC = () => {
         ? `${socialCount} ${i18n.language === 'sv' ? 'plattformar tillagda' : 'platforms added'}`
         : i18n.language === 'sv' ? 'Inga sociala medier' : 'No social media'
     }]);
-    setChatStep('description');
+    
+    setChatStep('analyzing');
+    
+    // Show analyzing message
     setTimeout(() => {
-      addJarlaMessageWithInput(
+      addJarlaMessage(
         i18n.language === 'sv'
-          ? `Berätta kort om ${companyName} - vad gör ni?`
-          : `Tell me briefly about ${companyName} - what do you do?`,
-        i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
-        'description'
+          ? `Perfekt! Låt mig skicka ut mina agenter för att lära känna ${companyName} bättre...`
+          : `Perfect! Let me send out my agents to learn more about ${companyName}...`,
+        'analyzing'
       );
     }, 500);
+
+    // Call the analysis edge function
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-company', {
+        body: {
+          website,
+          socialMedia,
+          companyName,
+          language: i18n.language
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.data?.summary) {
+        // Show the comprehensive summary
+        setTimeout(() => {
+          addJarlaMessage(data.data.summary, 'text', () => {
+            // After showing summary, continue to credentials
+            setTimeout(() => {
+              addJarlaMessage(
+                i18n.language === 'sv'
+                  ? 'Nu när jag känner ert företag bättre, låt oss skapa ditt konto!'
+                  : "Now that I know your company better, let's create your account!",
+                'credentials-form'
+              );
+              setChatStep('credentials');
+            }, 800);
+          });
+        }, 1000);
+      } else {
+        throw new Error('No summary returned');
+      }
+    } catch (error) {
+      console.error('Analysis error:', error);
+      // Fallback to manual flow if analysis fails
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Jag kunde inte analysera era sidor just nu. Låt oss fortsätta manuellt!'
+            : "I couldn't analyze your pages right now. Let's continue manually!",
+          'text',
+          () => {
+            setTimeout(() => {
+              addJarlaMessageWithInput(
+                i18n.language === 'sv'
+                  ? `Berätta kort om ${companyName} - vad gör ni?`
+                  : `Tell me briefly about ${companyName} - what do you do?`,
+                i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
+                'description'
+              );
+              setChatStep('description');
+            }, 500);
+          }
+        );
+      }, 1000);
+    }
   };
 
   // Handle country selection
@@ -687,9 +746,9 @@ const BusinessAuth: React.FC = () => {
           )}
         </div>
 
-        {/* Input fields for selected platforms */}
+        {/* Input fields for selected platforms with send button */}
         {hasSelectedPlatforms && (
-          <div className="space-y-2 w-full max-w-md">
+          <div className="space-y-3 w-full max-w-md">
             {selectedPlatforms.map(platformId => {
               const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
               if (!platform) return null;
@@ -706,7 +765,29 @@ const BusinessAuth: React.FC = () => {
                 </div>
               );
             })}
+            
+            {/* Send button - appears when at least one link is filled */}
+            {Object.values(socialMedia).some(url => url && url.trim()) && (
+              <Button
+                onClick={handleSocialsComplete}
+                className="w-full rounded-[3px] font-montserrat mt-2"
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {i18n.language === 'sv' ? 'Skicka' : 'Send'}
+              </Button>
+            )}
           </div>
+        )}
+        
+        {/* Skip button - only show if no platforms selected or no links filled */}
+        {(!hasSelectedPlatforms || !Object.values(socialMedia).some(url => url && url.trim())) && (
+          <Button
+            variant="ghost"
+            onClick={handleSocialsComplete}
+            className="mt-2 text-muted-foreground hover:text-foreground rounded-[3px] font-geist text-sm"
+          >
+            {i18n.language === 'sv' ? 'Hoppa över' : 'Skip'}
+          </Button>
         )}
 
       </div>
@@ -1142,6 +1223,14 @@ const BusinessAuth: React.FC = () => {
                         {/* Render special UI elements */}
                         {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
                           <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderSocialPicker()}</div>
+                        )}
+                        {msg.role === 'jarla' && msg.type === 'analyzing' && chatStep === 'analyzing' && (
+                          <div className="flex items-center gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+                            <span className="text-sm text-muted-foreground font-geist">
+                              {i18n.language === 'sv' ? 'Analyserar...' : 'Analyzing...'}
+                            </span>
+                          </div>
                         )}
                         {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
                           <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>

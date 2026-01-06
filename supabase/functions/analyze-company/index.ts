@@ -1,0 +1,236 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface AnalyzeRequest {
+  website: string;
+  socialMedia: Record<string, string>;
+  companyName: string;
+  language?: string;
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { website, socialMedia, companyName, language = 'en' }: AnalyzeRequest = await req.json();
+
+    if (!website && Object.keys(socialMedia || {}).length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Website or social media URLs are required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const isSwedish = language === 'sv';
+
+    const firecrawlApiKey = Deno.env.get('FIRECRAWL_API_KEY');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+
+    if (!firecrawlApiKey) {
+      console.error('FIRECRAWL_API_KEY not configured');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Firecrawl not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!lovableApiKey) {
+      console.error('LOVABLE_API_KEY not configured');
+      return new Response(
+        JSON.stringify({ success: false, error: 'AI service not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Format URL helper
+    const formatUrl = (url: string): string => {
+      let formatted = url.trim();
+      if (!formatted.startsWith('http://') && !formatted.startsWith('https://')) {
+        formatted = `https://${formatted}`;
+      }
+      return formatted;
+    };
+
+    // Scrape a URL with Firecrawl
+    const scrapeUrl = async (url: string): Promise<string> => {
+      try {
+        console.log('Scraping:', url);
+        const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${firecrawlApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url: formatUrl(url),
+            formats: ['markdown'],
+            onlyMainContent: true,
+          }),
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+          return data.data?.markdown || '';
+        }
+        console.error('Scrape failed for', url, data);
+        return '';
+      } catch (error) {
+        console.error('Error scraping', url, error);
+        return '';
+      }
+    };
+
+    // Collect all content from website and social media
+    const contentParts: { source: string; content: string }[] = [];
+
+    // Scrape main website
+    if (website) {
+      console.log('Scraping main website:', website);
+      const websiteContent = await scrapeUrl(website);
+      if (websiteContent) {
+        contentParts.push({ source: 'Website', content: websiteContent });
+      }
+    }
+
+    // Scrape social media pages
+    const socialEntries = Object.entries(socialMedia || {}).filter(([_, url]) => url);
+    console.log('Social media to scrape:', socialEntries.length);
+    
+    for (const [platform, url] of socialEntries) {
+      if (url) {
+        const socialContent = await scrapeUrl(url);
+        if (socialContent) {
+          contentParts.push({ source: platform, content: socialContent });
+        }
+      }
+    }
+
+    if (contentParts.length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Could not retrieve content from any source' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Combine all content
+    const combinedContent = contentParts.map(p => 
+      `=== ${p.source.toUpperCase()} ===\n${p.content.slice(0, 8000)}`
+    ).join('\n\n');
+
+    console.log('Total content parts:', contentParts.length);
+    console.log('Combined content length:', combinedContent.length);
+
+    // Step 2: Analyze with heavy AI model (gpt-5 for comprehensive analysis)
+    const systemPromptEnglish = `You are a senior business analyst. Your task is to write a comprehensive company profile for ${companyName} based on information gathered from their website and social media.
+
+Write a detailed, professional summary that covers:
+
+1. **Company Overview** - What the company does, their mission, and core identity
+2. **Products & Services** - Detailed breakdown of what they offer
+3. **Target Audience** - Who their customers are, demographics, psychographics
+4. **Brand Voice & Personality** - How they communicate, their tone and style
+5. **Unique Value Proposition** - What sets them apart from competitors
+6. **Social Media Presence** - Their online activity and engagement style
+7. **Key Insights** - Notable observations about their business
+
+Write in a professional but engaging tone. Be specific and detailed. The summary should be 400-600 words.
+
+IMPORTANT: Write FROM THE COMPANY'S PERSPECTIVE using "we", "our", "us" throughout.`;
+
+    const systemPromptSwedish = `Du är en senior affärsanalytiker. Din uppgift är att skriva en omfattande företagsprofil för ${companyName} baserat på information från deras webbplats och sociala medier.
+
+Skriv en detaljerad, professionell sammanfattning som täcker:
+
+1. **Företagsöversikt** - Vad företaget gör, deras uppdrag och kärnidentitet
+2. **Produkter & Tjänster** - Detaljerad genomgång av vad de erbjuder
+3. **Målgrupp** - Vilka deras kunder är, demografi, psykografi
+4. **Varumärkesröst & Personlighet** - Hur de kommunicerar, deras ton och stil
+5. **Unik Värdeproposition** - Vad som skiljer dem från konkurrenter
+6. **Sociala Medier Närvaro** - Deras onlineaktivitet och engagemangsstil
+7. **Nyckelinsikter** - Anmärkningsvärda observationer om deras verksamhet
+
+Skriv i en professionell men engagerande ton. Var specifik och detaljerad. Sammanfattningen ska vara 400-600 ord.
+
+VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående.`;
+
+    const systemPrompt = isSwedish ? systemPromptSwedish : systemPromptEnglish;
+    
+    const userPrompt = isSwedish 
+      ? `Analysera följande innehåll från ${companyName}s webbplats och sociala medier. Skriv en omfattande företagsprofil på svenska:\n\n${combinedContent.slice(0, 30000)}`
+      : `Analyze the following content from ${companyName}'s website and social media. Write a comprehensive company profile:\n\n${combinedContent.slice(0, 30000)}`;
+
+    console.log('Calling AI for analysis with gpt-5...');
+    
+    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${lovableApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-5',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000,
+      }),
+    });
+
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text();
+      console.error('AI error:', aiResponse.status, errorText);
+      
+      if (aiResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Rate limit exceeded, please try again later' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      return new Response(
+        JSON.stringify({ success: false, error: 'AI analysis failed' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const aiData = await aiResponse.json();
+    console.log('AI response received');
+
+    const summary = aiData.choices?.[0]?.message?.content || '';
+
+    if (!summary) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'AI did not return a summary' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Summary length:', summary.length);
+
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        data: {
+          summary,
+          sourcesAnalyzed: contentParts.map(p => p.source)
+        }
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Error analyzing company:', error);
+    return new Response(
+      JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Analysis failed' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+});
