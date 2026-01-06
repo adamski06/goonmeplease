@@ -83,6 +83,7 @@ const BusinessAuth: React.FC = () => {
   // Collected data
   const [website, setWebsite] = useState('');
   const [socialMedia, setSocialMedia] = useState<Record<string, string>>({});
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [description, setDescription] = useState('');
   const [country, setCountry] = useState('');
   const [productsServices, setProductsServices] = useState('');
@@ -598,66 +599,70 @@ const BusinessAuth: React.FC = () => {
     );
   }
 
-  // Render social media picker
+  // Render social media picker - checkboxes first, then inputs for selected
   const renderSocialPicker = () => {
-    const activePlatforms = Object.keys(socialMedia);
-    const availablePlatforms = SOCIAL_PLATFORMS.filter(p => !activePlatforms.includes(p.id));
-
+    const hasSelectedPlatforms = selectedPlatforms.length > 0;
+    
     return (
-      <div className="space-y-3 mt-2">
-        {activePlatforms.map(platformId => {
-          const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
-          if (!platform) return null;
-          return (
-            <div key={platformId} className="flex items-center gap-2">
-              <div className="w-24 text-sm font-geist text-foreground">{platform.label}</div>
-              <Input
-                type="url"
-                placeholder={platform.placeholder}
-                value={socialMedia[platformId]}
-                onChange={(e) => setSocialMedia(prev => ({ ...prev, [platformId]: e.target.value }))}
-                className="flex-1 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm"
-              />
+      <div className="space-y-4 mt-3">
+        {/* Platform checkboxes */}
+        <div className="flex flex-wrap gap-2">
+          {SOCIAL_PLATFORMS.map(platform => {
+            const isSelected = selectedPlatforms.includes(platform.id);
+            return (
               <button
+                key={platform.id}
                 type="button"
                 onClick={() => {
-                  setSocialMedia(prev => {
-                    const newState = { ...prev };
-                    delete newState[platformId];
-                    return newState;
-                  });
+                  if (isSelected) {
+                    setSelectedPlatforms(prev => prev.filter(p => p !== platform.id));
+                    setSocialMedia(prev => {
+                      const newState = { ...prev };
+                      delete newState[platform.id];
+                      return newState;
+                    });
+                  } else {
+                    setSelectedPlatforms(prev => [...prev, platform.id]);
+                    setSocialMedia(prev => ({ ...prev, [platform.id]: '' }));
+                  }
                 }}
-                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                className={`px-3 py-1.5 text-sm font-geist rounded-full transition-all ${
+                  isSelected
+                    ? 'bg-foreground text-background'
+                    : 'bg-background border border-foreground/20 text-foreground hover:border-foreground/40'
+                }`}
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          );
-        })}
-
-        {availablePlatforms.length > 0 && (
-          <select
-            onChange={(e) => {
-              if (e.target.value) {
-                setSocialMedia(prev => ({ ...prev, [e.target.value]: '' }));
-                e.target.value = '';
-              }
-            }}
-            className="w-full h-10 px-3 bg-white dark:bg-zinc-800 border border-foreground/20 font-geist text-sm rounded-[3px] focus:outline-none focus:border-foreground text-muted-foreground cursor-pointer"
-            defaultValue=""
-          >
-            <option value="" disabled className="bg-white dark:bg-zinc-800">{t('businessAuth.addSocialPlatform')}</option>
-            {availablePlatforms.map(platform => (
-              <option key={platform.id} value={platform.id} className="bg-white dark:bg-zinc-800 text-foreground">
                 {platform.label}
-              </option>
-            ))}
-          </select>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Input fields for selected platforms */}
+        {hasSelectedPlatforms && (
+          <div className="space-y-2 mt-3">
+            {selectedPlatforms.map(platformId => {
+              const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
+              if (!platform) return null;
+              return (
+                <div key={platformId} className="flex items-center gap-2">
+                  <div className="w-20 text-xs font-geist text-muted-foreground">{platform.label}</div>
+                  <Input
+                    type="url"
+                    placeholder={platform.placeholder}
+                    value={socialMedia[platformId] || ''}
+                    onChange={(e) => setSocialMedia(prev => ({ ...prev, [platformId]: e.target.value }))}
+                    className="flex-1 h-9 bg-background border-foreground/20 text-foreground placeholder:text-muted-foreground/40 rounded-full font-geist text-sm px-3"
+                  />
+                </div>
+              );
+            })}
+          </div>
         )}
 
         <Button 
           onClick={handleSocialsComplete}
-          className="w-full rounded-[3px] font-montserrat mt-2"
+          className="w-full rounded-full font-montserrat mt-2"
         >
           {t('common.continue')}
         </Button>
