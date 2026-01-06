@@ -230,6 +230,37 @@ const BusinessAuth: React.FC = () => {
     }, 300);
   };
 
+  // Handle general chat message (questions, etc)
+  const handleChatMessage = (value: string) => {
+    if (!value.trim()) return;
+    
+    const userMessage = value.trim();
+    
+    // Add user message
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: userMessage
+    }]);
+    
+    // Jarla responds to acknowledge
+    setTimeout(() => {
+      const responses = i18n.language === 'sv' 
+        ? [
+          'Bra fråga! Låt oss fortsätta med registreringen så kan vi prata mer efteråt.',
+          'Jag förstår. Vi kan diskutera det mer när vi är klara här.',
+          'Noterat! Fortsätt gärna med frågorna så återkommer jag.'
+        ]
+        : [
+          "Great question! Let's continue with the setup and we can chat more after.",
+          "I understand. We can discuss that more once we're done here.",
+          "Noted! Feel free to continue with the questions and I'll get back to you."
+        ];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      addJarlaMessage(randomResponse);
+    }, 500);
+  };
+
   // Handle inline input submit - show noted confirmation
   const handleInlineSubmit = (value: string, step: ChatStep) => {
     if (!value.trim()) return;
@@ -1103,17 +1134,23 @@ const BusinessAuth: React.FC = () => {
                       const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
                       if (currentInputMsg?.inputStep) {
                         handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
-                        setBottomInputValue('');
+                      } else {
+                        handleChatMessage(bottomInputValue);
                       }
+                      setBottomInputValue('');
                     }
                   }}
                   className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm px-4"
                 />
                 <button
                   onClick={() => {
-                    const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                    if (bottomInputValue.trim() && currentInputMsg?.inputStep) {
-                      handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                    if (bottomInputValue.trim()) {
+                      const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                      if (currentInputMsg?.inputStep) {
+                        handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                      } else {
+                        handleChatMessage(bottomInputValue);
+                      }
                       setBottomInputValue('');
                     }
                   }}
