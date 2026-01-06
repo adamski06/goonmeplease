@@ -57,7 +57,7 @@ serve(async (req) => {
       return formatted;
     };
 
-    // Scrape a URL with Firecrawl
+    // Scrape a URL with Firecrawl (returns markdown content)
     const scrapeUrl = async (url: string): Promise<string> => {
       try {
         console.log('Scraping:', url);
@@ -86,15 +86,54 @@ serve(async (req) => {
       }
     };
 
+    // Scrape a URL with branding to get logo
+    const scrapeUrlForBranding = async (url: string): Promise<string | null> => {
+      try {
+        console.log('Scraping for branding:', url);
+        const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${firecrawlApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url: formatUrl(url),
+            formats: ['branding'],
+          }),
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success && data.data?.branding) {
+          const branding = data.data.branding;
+          // Try to get logo from branding data
+          const logo = branding.logo || branding.images?.logo || branding.images?.favicon;
+          console.log('Found branding logo:', logo);
+          return logo || null;
+        }
+        console.error('Branding scrape failed for', url, data);
+        return null;
+      } catch (error) {
+        console.error('Error scraping branding', url, error);
+        return null;
+      }
+    };
+
     // Collect all content from website and social media
     const contentParts: { source: string; content: string }[] = [];
+    let companyLogo: string | null = null;
 
-    // Scrape main website
+    // Scrape main website and try to get logo
     if (website) {
       console.log('Scraping main website:', website);
-      const websiteContent = await scrapeUrl(website);
+      const [websiteContent, logoUrl] = await Promise.all([
+        scrapeUrl(website),
+        scrapeUrlForBranding(website)
+      ]);
       if (websiteContent) {
         contentParts.push({ source: 'Website', content: websiteContent });
+      }
+      if (logoUrl) {
+        companyLogo = logoUrl;
       }
     }
 
@@ -280,7 +319,8 @@ VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående
         success: true, 
         data: {
           summary,
-          sourcesAnalyzed: contentParts.map(p => p.source)
+          sourcesAnalyzed: contentParts.map(p => p.source),
+          logo: companyLogo
         }
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

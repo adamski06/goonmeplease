@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
 
 interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -103,6 +103,9 @@ const BusinessAuth: React.FC = () => {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
+  const [showProfilePreview, setShowProfilePreview] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+  const [companySummary, setCompanySummary] = useState('');
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -404,6 +407,12 @@ const BusinessAuth: React.FC = () => {
       if (error) throw error;
 
       if (data?.success && data?.data?.summary) {
+        // Store logo and summary for profile preview
+        if (data.data.logo) {
+          setCompanyLogo(data.data.logo);
+        }
+        setCompanySummary(data.data.summary);
+        
         // Parse summary into sections and add each as separate message
         const summary = data.data.summary;
         const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
@@ -524,13 +533,14 @@ const BusinessAuth: React.FC = () => {
     }]);
     
     if (confirmed) {
-      setChatStep('credentials');
+      // Ask if ready to create profile
+      setChatStep('confirm-profile');
       setTimeout(() => {
         addJarlaMessage(
           i18n.language === 'sv'
-            ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
-            : "Perfect! Now we just need to create your account.",
-          'credentials-form'
+            ? 'Är du redo att skapa en företagsprofil som kreatörer kan se?'
+            : 'Are you ready to create a company profile for creators to see?',
+          'profile-confirm-buttons'
         );
       }, 500);
     } else {
@@ -555,16 +565,53 @@ const BusinessAuth: React.FC = () => {
       content: correction
     }]);
     
-    // Acknowledge the correction and proceed to credentials
-    setChatStep('credentials');
+    // Acknowledge the correction and proceed to profile confirmation
+    setChatStep('confirm-profile');
     setTimeout(() => {
       addJarlaMessage(
         i18n.language === 'sv'
-          ? 'Tack för förtydligandet! Nu när jag känner ert företag bättre, låt oss skapa ditt konto.'
-          : "Thanks for clarifying! Now that I know your company better, let's create your account.",
-        'credentials-form'
+          ? 'Tack för förtydligandet! Är du redo att skapa en företagsprofil som kreatörer kan se?'
+          : "Thanks for clarifying! Are you ready to create a company profile for creators to see?",
+        'profile-confirm-buttons'
       );
     }, 500);
+  };
+
+  // Handle profile creation confirmation
+  const handleProfileConfirm = (confirmed: boolean) => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: confirmed 
+        ? (i18n.language === 'sv' ? 'Ja, skapa profilen!' : "Yes, create the profile!")
+        : (i18n.language === 'sv' ? 'Nej, inte nu' : "No, not now")
+    }]);
+    
+    if (confirmed) {
+      // Show profile preview and move chat to left
+      setShowProfilePreview(true);
+      setChatStep('creating-profile');
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Perfekt! Här är din företagsprofil. Nu behöver vi bara skapa ditt konto.'
+            : "Perfect! Here's your company profile. Now we just need to create your account.",
+          'credentials-form'
+        );
+        setChatStep('credentials');
+      }, 500);
+    } else {
+      // Skip profile preview, go directly to credentials
+      setChatStep('credentials');
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Inga problem! Låt oss skapa ditt konto.'
+            : "No problem! Let's create your account.",
+          'credentials-form'
+        );
+      }, 500);
+    }
   };
 
   // Handle reach selection complete
@@ -1228,10 +1275,12 @@ const BusinessAuth: React.FC = () => {
             )}
           </div>
         ) : (
-          // Chat interface
-          <div className="h-screen flex items-center justify-center p-2">
-            {/* Chat container - fixed size with slightly rounded edges */}
-            <div className="w-full max-w-3xl h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col">
+          // Chat interface with optional profile preview
+          <div className="h-screen flex items-center justify-center p-2 gap-4">
+            {/* Chat container - moves left when profile preview is shown */}
+            <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ${
+              showProfilePreview ? 'w-full max-w-xl' : 'w-full max-w-3xl'
+            }`}>
               {/* Scrollable chat messages area */}
               <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
                 <div className="w-full space-y-6 transition-all duration-300">
@@ -1349,6 +1398,23 @@ const BusinessAuth: React.FC = () => {
                             </Button>
                           </div>
                         )}
+                        {msg.role === 'jarla' && msg.type === 'profile-confirm-buttons' && chatStep === 'confirm-profile' && (
+                          <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                            <Button
+                              onClick={() => handleProfileConfirm(true)}
+                              className="rounded-[3px] font-montserrat"
+                            >
+                              {i18n.language === 'sv' ? 'Ja, skapa profilen!' : "Yes, create it!"}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => handleProfileConfirm(false)}
+                              className="rounded-[3px] font-montserrat"
+                            >
+                              {i18n.language === 'sv' ? 'Hoppa över' : 'Skip'}
+                            </Button>
+                          </div>
+                        )}
                         {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
                           <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>
                         )}
@@ -1382,8 +1448,87 @@ const BusinessAuth: React.FC = () => {
                 <div ref={chatEndRef} />
               </div>
             </div>
+
+            {/* Company Profile Preview - appears on right when confirmed */}
+            {showProfilePreview && (
+              <div 
+                className="w-full max-w-md h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-6 transition-all duration-500"
+                style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
+              >
+                <h2 className="text-sm font-montserrat font-medium text-muted-foreground mb-4">
+                  {i18n.language === 'sv' ? 'FÖRHANDSVISNING FÖR KREATÖRER' : 'CREATOR PREVIEW'}
+                </h2>
+                
+                {/* Profile Card */}
+                <div className="bg-background rounded-[3px] p-6 space-y-4 shadow-sm">
+                  {/* Logo and Company Name */}
+                  <div className="flex items-center gap-4">
+                    {companyLogo ? (
+                      <img 
+                        src={companyLogo} 
+                        alt={companyName} 
+                        className="w-16 h-16 rounded-[3px] object-contain bg-muted/30"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-[3px] bg-muted/50 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-muted-foreground">
+                          {companyName.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="text-xl font-montserrat font-bold">{companyName}</h3>
+                      {website && (
+                        <p className="text-sm text-muted-foreground font-geist">{website}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Short description */}
+                  {companySummary && (
+                    <div className="pt-2 border-t border-border">
+                      <p className="text-sm text-foreground/80 font-geist line-clamp-4">
+                        {companySummary.split('**')[2]?.trim().slice(0, 200) || companySummary.slice(0, 200)}...
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Social links */}
+                  {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
+                    <div className="pt-2 border-t border-border">
+                      <p className="text-xs text-muted-foreground font-geist mb-2">
+                        {i18n.language === 'sv' ? 'Sociala medier' : 'Social Media'}
+                      </p>
+                      <div className="flex gap-2 flex-wrap">
+                        {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => (
+                          <span key={platform} className="px-2 py-1 bg-muted/50 rounded-[3px] text-xs font-geist capitalize">
+                            {platform}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Location */}
+                  {country && (
+                    <div className="pt-2 border-t border-border">
+                      <p className="text-xs text-muted-foreground font-geist">
+                        📍 {country}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground font-geist mt-4 text-center">
+                  {i18n.language === 'sv' 
+                    ? 'Så här kommer kreatörer att se ert företag'
+                    : 'This is how creators will see your company'}
+                </p>
+              </div>
+            )}
           </div>
-            {/* Bottom chat input */}
+          
+          {/* Bottom chat input */}
             <div className="fixed bottom-12 left-0 right-0 flex justify-center px-6">
               <div className="w-full max-w-md flex gap-2 items-center">
                 <Input
