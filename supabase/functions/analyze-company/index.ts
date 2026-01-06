@@ -86,10 +86,10 @@ serve(async (req) => {
       }
     };
 
-    // Scrape a URL to get logo from multiple sources
-    const scrapeUrlForLogo = async (url: string): Promise<string | null> => {
+    // Scrape a URL to get logo and brand color from multiple sources
+    const scrapeUrlForBranding = async (url: string): Promise<{ logo: string | null; brandColor: string | null }> => {
       try {
-        console.log('Scraping for logo:', url);
+        console.log('Scraping for branding:', url);
         
         // Try branding format first
         const brandingResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
@@ -105,96 +105,126 @@ serve(async (req) => {
         });
 
         const data = await brandingResponse.json();
-        console.log('Logo scrape response success:', data.success);
+        console.log('Branding scrape response success:', data.success);
+        
+        let logo: string | null = null;
+        let brandColor: string | null = null;
         
         if (brandingResponse.ok && data.success) {
           // Try branding data first
           const branding = data.data?.branding;
           if (branding) {
-            const brandingLogo = branding.logo || branding.images?.logo;
-            if (brandingLogo) {
-              console.log('Found logo from branding:', brandingLogo);
-              return brandingLogo;
+            // Get logo
+            logo = branding.logo || branding.images?.logo || null;
+            if (logo) {
+              console.log('Found logo from branding:', logo);
+            }
+            
+            // Get primary brand color
+            if (branding.colors?.primary) {
+              brandColor = branding.colors.primary;
+              console.log('Found brand color from branding:', brandColor);
+            } else if (branding.colors?.accent) {
+              brandColor = branding.colors.accent;
+              console.log('Found accent color from branding:', brandColor);
             }
           }
           
-          // Fallback: Extract from HTML meta tags
-          const html = data.data?.html || '';
-          
-          // Look for Open Graph image
-          const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
-                              html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
-          if (ogImageMatch?.[1]) {
-            console.log('Found logo from og:image:', ogImageMatch[1]);
-            return ogImageMatch[1];
-          }
-          
-          // Look for apple-touch-icon (often a good logo)
-          const appleIconMatch = html.match(/<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/i);
-          if (appleIconMatch?.[1]) {
-            let iconUrl = appleIconMatch[1];
-            // Make absolute URL if relative
-            if (iconUrl.startsWith('/')) {
-              const baseUrl = new URL(formatUrl(url));
-              iconUrl = `${baseUrl.origin}${iconUrl}`;
+          // Fallback for logo: Extract from HTML meta tags
+          if (!logo) {
+            const html = data.data?.html || '';
+            
+            // Look for Open Graph image
+            const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+                                html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+            if (ogImageMatch?.[1]) {
+              console.log('Found logo from og:image:', ogImageMatch[1]);
+              logo = ogImageMatch[1];
             }
-            console.log('Found logo from apple-touch-icon:', iconUrl);
-            return iconUrl;
-          }
-          
-          // Look for favicon as last resort
-          const faviconMatch = html.match(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i);
-          if (faviconMatch?.[1]) {
-            let iconUrl = faviconMatch[1];
-            if (iconUrl.startsWith('/')) {
-              const baseUrl = new URL(formatUrl(url));
-              iconUrl = `${baseUrl.origin}${iconUrl}`;
+            
+            // Look for apple-touch-icon (often a good logo)
+            if (!logo) {
+              const appleIconMatch = html.match(/<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/i);
+              if (appleIconMatch?.[1]) {
+                let iconUrl = appleIconMatch[1];
+                if (iconUrl.startsWith('/')) {
+                  const baseUrl = new URL(formatUrl(url));
+                  iconUrl = `${baseUrl.origin}${iconUrl}`;
+                }
+                console.log('Found logo from apple-touch-icon:', iconUrl);
+                logo = iconUrl;
+              }
             }
-            // Only use favicon if it's not a generic .ico file
-            if (!iconUrl.endsWith('.ico')) {
-              console.log('Found logo from favicon:', iconUrl);
-              return iconUrl;
+            
+            // Look for favicon as last resort
+            if (!logo) {
+              const faviconMatch = html.match(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i);
+              if (faviconMatch?.[1]) {
+                let iconUrl = faviconMatch[1];
+                if (iconUrl.startsWith('/')) {
+                  const baseUrl = new URL(formatUrl(url));
+                  iconUrl = `${baseUrl.origin}${iconUrl}`;
+                }
+                if (!iconUrl.endsWith('.ico')) {
+                  console.log('Found logo from favicon:', iconUrl);
+                  logo = iconUrl;
+                }
+              }
             }
-          }
-          
-          // Try common logo image patterns in the HTML
-          const logoImgMatch = html.match(/<img[^>]*(?:class|id)=["'][^"']*logo[^"']*["'][^>]*src=["']([^"']+)["']/i) ||
-                              html.match(/<img[^>]*src=["']([^"']+logo[^"']+)["']/i);
-          if (logoImgMatch?.[1]) {
-            let logoUrl = logoImgMatch[1];
-            if (logoUrl.startsWith('/')) {
-              const baseUrl = new URL(formatUrl(url));
-              logoUrl = `${baseUrl.origin}${logoUrl}`;
+            
+            // Try common logo image patterns in the HTML
+            if (!logo) {
+              const logoImgMatch = html.match(/<img[^>]*(?:class|id)=["'][^"']*logo[^"']*["'][^>]*src=["']([^"']+)["']/i) ||
+                                  html.match(/<img[^>]*src=["']([^"']+logo[^"']+)["']/i);
+              if (logoImgMatch?.[1]) {
+                let logoUrl = logoImgMatch[1];
+                if (logoUrl.startsWith('/')) {
+                  const baseUrl = new URL(formatUrl(url));
+                  logoUrl = `${baseUrl.origin}${logoUrl}`;
+                }
+                console.log('Found logo from img tag:', logoUrl);
+                logo = logoUrl;
+              }
             }
-            console.log('Found logo from img tag:', logoUrl);
-            return logoUrl;
+            
+            // Fallback for brand color: extract from CSS or theme-color meta
+            if (!brandColor) {
+              const themeColorMatch = html.match(/<meta[^>]*name=["']theme-color["'][^>]*content=["']([^"']+)["']/i);
+              if (themeColorMatch?.[1]) {
+                brandColor = themeColorMatch[1];
+                console.log('Found brand color from theme-color:', brandColor);
+              }
+            }
           }
         }
         
-        console.log('No logo found for:', url);
-        return null;
+        return { logo, brandColor };
       } catch (error) {
-        console.error('Error scraping for logo:', url, error);
-        return null;
+        console.error('Error scraping for branding:', url, error);
+        return { logo: null, brandColor: null };
       }
     };
 
     // Collect all content from website and social media
     const contentParts: { source: string; content: string }[] = [];
     let companyLogo: string | null = null;
+    let companyBrandColor: string | null = null;
 
-    // Scrape main website and try to get logo
+    // Scrape main website and try to get logo and brand color
     if (website) {
       console.log('Scraping main website:', website);
-      const [websiteContent, logoUrl] = await Promise.all([
+      const [websiteContent, brandingData] = await Promise.all([
         scrapeUrl(website),
-        scrapeUrlForLogo(website)
+        scrapeUrlForBranding(website)
       ]);
       if (websiteContent) {
         contentParts.push({ source: 'Website', content: websiteContent });
       }
-      if (logoUrl) {
-        companyLogo = logoUrl;
+      if (brandingData.logo) {
+        companyLogo = brandingData.logo;
+      }
+      if (brandingData.brandColor) {
+        companyBrandColor = brandingData.brandColor;
       }
     }
 
@@ -381,7 +411,8 @@ VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående
         data: {
           summary,
           sourcesAnalyzed: contentParts.map(p => p.source),
-          logo: companyLogo
+          logo: companyLogo,
+          brandColor: companyBrandColor
         }
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

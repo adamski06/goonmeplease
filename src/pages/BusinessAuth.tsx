@@ -107,6 +107,7 @@ const BusinessAuth: React.FC = () => {
   const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
+  const [companyBrandColor, setCompanyBrandColor] = useState<string | null>(null);
   const [profileTypedDescription, setProfileTypedDescription] = useState('');
   const [profileTypingComplete, setProfileTypingComplete] = useState(false);
 
@@ -410,9 +411,12 @@ const BusinessAuth: React.FC = () => {
       if (error) throw error;
 
       if (data?.success && data?.data?.summary) {
-        // Store logo and summary for profile preview
+        // Store logo, brand color, and summary for profile preview
         if (data.data.logo) {
           setCompanyLogo(data.data.logo);
+        }
+        if (data.data.brandColor) {
+          setCompanyBrandColor(data.data.brandColor);
         }
         setCompanySummary(data.data.summary);
         
@@ -1592,15 +1596,27 @@ const BusinessAuth: React.FC = () => {
               </div>
 
               {/* Company Profile Preview - fades in after chat moves */}
-              <div className={`h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
-                showProfilePreview 
-                  ? 'w-[620px] p-5' 
-                  : 'w-0 p-0'
-              } ${
-                profileVisible ? 'opacity-100' : 'opacity-0'
-              }`}>
+              <div 
+                className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
+                  showProfilePreview 
+                    ? 'w-[620px] p-5' 
+                    : 'w-0 p-0'
+                } ${
+                  profileVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{
+                  background: companyBrandColor 
+                    ? `linear-gradient(135deg, ${companyBrandColor}15 0%, ${companyBrandColor}05 100%)`
+                    : 'linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.4))'
+                }}
+              >
                 {showProfilePreview && (
-                  <div className="bg-background rounded-[3px] p-10 space-y-8 shadow-sm">
+                  <div 
+                    className="bg-background/90 backdrop-blur-sm rounded-[3px] p-10 space-y-8 shadow-sm"
+                    style={{
+                      borderLeft: companyBrandColor ? `3px solid ${companyBrandColor}` : undefined
+                    }}
+                  >
                     {/* Logo and Company Name */}
                     <div className="flex items-center gap-5">
                       {companyLogo ? (
