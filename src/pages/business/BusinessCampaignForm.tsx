@@ -220,7 +220,7 @@ const BusinessCampaignForm: React.FC = () => {
   if (loading || initialLoading) {
     return (
       <BusinessLayout hideChat>
-        <div className="flex-1 flex items-center justify-center">
+        <div className="h-full flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       </BusinessLayout>
