@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X, Send, Check } from 'lucide-react';
+import { Loader2, X, Send, Check, Instagram, Facebook, Youtube, Twitter, Linkedin } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -1524,21 +1524,21 @@ const BusinessAuth: React.FC = () => {
                 {showProfilePreview && (
                   <div className="bg-background rounded-[3px] p-8 space-y-6 shadow-sm">
                     {/* Logo and Company Name */}
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-center gap-4">
                       {companyLogo ? (
                         <img 
                           src={companyLogo} 
                           alt={companyName} 
-                          className="w-20 h-20 rounded-[3px] object-contain bg-muted/30"
+                          className="w-14 h-14 rounded-[3px] object-contain bg-muted/30"
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-[3px] bg-muted/50 flex items-center justify-center">
-                          <span className="text-3xl font-bold text-muted-foreground">
+                        <div className="w-14 h-14 rounded-[3px] bg-muted/50 flex items-center justify-center">
+                          <span className="text-2xl font-bold text-muted-foreground">
                             {companyName.charAt(0).toUpperCase()}
                           </span>
                         </div>
                       )}
-                      <h3 className="text-2xl font-montserrat font-bold mt-1">{companyName}</h3>
+                      <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
                     </div>
 
                     {/* Description - simple 2 sentences */}
@@ -1557,20 +1557,33 @@ const BusinessAuth: React.FC = () => {
                     {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
                       <div className="flex gap-3">
                         {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
-                          const iconMap: Record<string, string> = {
-                            instagram: '📷',
-                            tiktok: '🎵',
-                            facebook: '📘',
-                            twitter: '𝕏',
-                            linkedin: '💼',
-                            youtube: '▶️',
-                            pinterest: '📌',
-                            snapchat: '👻'
-                          };
+                          const IconComponent = {
+                            instagram: Instagram,
+                            facebook: Facebook,
+                            youtube: Youtube,
+                            twitter: Twitter,
+                            linkedin: Linkedin,
+                          }[platform];
+                          
+                          // For platforms without Lucide icons, use images
+                          if (!IconComponent) {
+                            const logoUrls: Record<string, string> = {
+                              tiktok: 'https://cdn.simpleicons.org/tiktok/000000',
+                              pinterest: 'https://cdn.simpleicons.org/pinterest/E60023',
+                              snapchat: 'https://cdn.simpleicons.org/snapchat/FFFC00'
+                            };
+                            return (
+                              <img 
+                                key={platform} 
+                                src={logoUrls[platform]} 
+                                alt={platform}
+                                className="w-5 h-5 dark:invert"
+                              />
+                            );
+                          }
+                          
                           return (
-                            <span key={platform} className="text-xl">
-                              {iconMap[platform] || '🔗'}
-                            </span>
+                            <IconComponent key={platform} className="w-5 h-5 text-foreground/70" />
                           );
                         })}
                       </div>
