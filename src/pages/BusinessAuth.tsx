@@ -1352,15 +1352,18 @@ const BusinessAuth: React.FC = () => {
               }`}>
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
-                  <div className="w-full space-y-6">
+                  <div className="w-full">
                   {messages.map((msg, index) => {
                     const prevMsg = index > 0 ? messages[index - 1] : null;
                     const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
+                    const isConsecutiveJarla = msg.role === 'jarla' && prevMsg?.role === 'jarla';
                     
                     return (
                       <div
                         key={msg.id}
-                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} transition-all duration-500 ease-out`}
+                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} transition-all duration-500 ease-out ${
+                          index === 0 ? '' : isConsecutiveJarla ? 'mt-2' : 'mt-6'
+                        }`}
                         style={{ 
                           animation: 'smoothFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
                           opacity: 0
