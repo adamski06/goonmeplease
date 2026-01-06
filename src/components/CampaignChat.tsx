@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -9,18 +11,55 @@ interface Message {
   displayedContent?: string;
 }
 
+interface BusinessProfile {
+  company_name: string;
+  description: string | null;
+  website: string | null;
+}
+
 const CampaignChat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'jarla',
-      content: "Hi! I'm here to help you design your campaign. Tell me about your brand and what you're looking to achieve.",
-      displayedContent: "Hi! I'm here to help you design your campaign. Tell me about your brand and what you're looking to achieve."
-    }
-  ]);
+  const { user } = useAuth();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
+
+  // Fetch business profile on mount
+  useEffect(() => {
+    const fetchBusinessProfile = async () => {
+      if (!user || initializedRef.current) return;
+      initializedRef.current = true;
+
+      const { data } = await supabase
+        .from('business_profiles')
+        .select('company_name, description, website')
+        .eq('user_id', user.id)
+        .single();
+
+      if (data) {
+        setBusinessProfile(data);
+        // Add personalized greeting
+        const greeting = `Hi! I know ${data.company_name} well from when we set up your account. How can I help you design this campaign?`;
+        setMessages([{
+          id: '1',
+          role: 'jarla',
+          content: greeting,
+          displayedContent: greeting
+        }]);
+      } else {
+        setMessages([{
+          id: '1',
+          role: 'jarla',
+          content: "Hi! I'm here to help you design your campaign. Tell me what you're looking to achieve.",
+          displayedContent: "Hi! I'm here to help you design your campaign. Tell me what you're looking to achieve."
+        }]);
+      }
+    };
+
+    fetchBusinessProfile();
+  }, [user]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -38,12 +77,25 @@ const CampaignChat: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input.trim();
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI response with typewriter effect
-    setTimeout(() => {
-      const responseContent = getSimulatedResponse(userMessage.content);
+    try {
+      // Call the jarla-chat edge function with business context
+      const { data, error } = await supabase.functions.invoke('jarla-chat', {
+        body: { 
+          message: currentInput,
+          companyName: businessProfile?.company_name,
+          businessContext: businessProfile,
+          conversationHistory: messages.slice(-6) // Send last 6 messages for context
+        }
+      });
+
+      if (error) throw error;
+
+      const responseContent = data?.response || "I'd love to help with that! Could you tell me more?";
+      
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'jarla',
@@ -66,22 +118,18 @@ const CampaignChat: React.FC = () => {
           setIsTyping(false);
         }
       }, 15);
-    }, 500);
-  };
-
-  const getSimulatedResponse = (userInput: string): string => {
-    const lowerInput = userInput.toLowerCase();
-    
-    if (lowerInput.includes('budget') || lowerInput.includes('cost')) {
-      return "Great question! For UGC campaigns, I recommend starting with a budget that allows for at least 5-10 creator submissions. This gives you variety while keeping costs manageable. What's your rough budget range?";
+    } catch (error) {
+      console.error('Chat error:', error);
+      setIsTyping(false);
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'jarla',
+        content: "Sorry, I had trouble responding. Could you try again?",
+        displayedContent: "Sorry, I had trouble responding. Could you try again?"
+      };
+      setMessages(prev => [...prev, errorMessage]);
     }
-    if (lowerInput.includes('creator') || lowerInput.includes('influencer')) {
-      return "Creator selection is key! Think about your target audience - do you want micro-creators (1K-10K followers) for authentic engagement, or larger creators for broader reach?";
-    }
-    if (lowerInput.includes('content') || lowerInput.includes('video')) {
-      return "For content guidelines, be specific but not restrictive. Include: key messages to convey, any required hashtags or mentions, and example styles you like.";
-    }
-    return "That's helpful! Based on what you've shared, I'd suggest focusing on authentic, relatable content. Want me to help you write specific guidelines for creators?";
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
