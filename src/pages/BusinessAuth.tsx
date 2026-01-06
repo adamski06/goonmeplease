@@ -232,8 +232,8 @@ const BusinessAuth: React.FC = () => {
     
     // Brief loading delay before transitioning to chat
     setTimeout(() => {
-      setMode('chat');
       setIsTyping(false);
+      setMode('chat');
       
       setTimeout(() => {
         addJarlaMessage(
