@@ -179,7 +179,7 @@ VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        temperature: 0.7,
+        max_completion_tokens: 1500,
       }),
     });
 
