@@ -1516,83 +1516,70 @@ const BusinessAuth: React.FC = () => {
             </div>
 
               {/* Company Profile Preview - slides in from right when confirmed */}
-              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-6 transition-all duration-700 ease-out ${
+              <div className={`h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-6 transition-all duration-700 ease-out ${
                 showProfilePreview 
                   ? 'w-[400px] opacity-100 translate-x-0' 
                   : 'w-0 opacity-0 translate-x-8 p-0 overflow-hidden'
               }`}>
                 {showProfilePreview && (
-                  <>
-                    <h2 className="text-sm font-montserrat font-medium text-muted-foreground mb-4">
-                      {i18n.language === 'sv' ? 'FÖRHANDSVISNING FÖR KREATÖRER' : 'CREATOR PREVIEW'}
-                    </h2>
-                    
-                    {/* Profile Card */}
-                    <div className="bg-background rounded-[3px] p-6 space-y-4 shadow-sm">
-                      {/* Logo and Company Name */}
-                      <div className="flex items-center gap-4">
-                        {companyLogo ? (
-                          <img 
-                            src={companyLogo} 
-                            alt={companyName} 
-                            className="w-16 h-16 rounded-[3px] object-contain bg-muted/30"
-                          />
-                        ) : (
-                          <div className="w-16 h-16 rounded-[3px] bg-muted/50 flex items-center justify-center">
-                            <span className="text-2xl font-bold text-muted-foreground">
-                              {companyName.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
+                  <div className="bg-background rounded-[3px] p-6 space-y-4 shadow-sm">
+                    {/* Logo and Company Name */}
+                    <div className="flex items-center gap-4">
+                      {companyLogo ? (
+                        <img 
+                          src={companyLogo} 
+                          alt={companyName} 
+                          className="w-16 h-16 rounded-[3px] object-contain bg-muted/30"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-[3px] bg-muted/50 flex items-center justify-center">
+                          <span className="text-2xl font-bold text-muted-foreground">
+                            {companyName.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="text-xl font-montserrat font-bold">{companyName}</h3>
+                        {website && (
+                          <p className="text-sm text-muted-foreground font-geist">{website}</p>
                         )}
-                        <div>
-                          <h3 className="text-xl font-montserrat font-bold">{companyName}</h3>
-                          {website && (
-                            <p className="text-sm text-muted-foreground font-geist">{website}</p>
-                          )}
-                        </div>
                       </div>
-
-                      {/* Short description */}
-                      {companySummary && (
-                        <div className="pt-2 border-t border-border">
-                          <p className="text-sm text-foreground/80 font-geist line-clamp-4">
-                            {companySummary.split('**')[2]?.trim().slice(0, 200) || companySummary.slice(0, 200)}...
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Social links */}
-                      {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
-                        <div className="pt-2 border-t border-border">
-                          <p className="text-xs text-muted-foreground font-geist mb-2">
-                            {i18n.language === 'sv' ? 'Sociala medier' : 'Social Media'}
-                          </p>
-                          <div className="flex gap-2 flex-wrap">
-                            {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => (
-                              <span key={platform} className="px-2 py-1 bg-muted/50 rounded-[3px] text-xs font-geist capitalize">
-                                {platform}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Location */}
-                      {country && (
-                        <div className="pt-2 border-t border-border">
-                          <p className="text-xs text-muted-foreground font-geist">
-                            📍 {country}
-                          </p>
-                        </div>
-                      )}
                     </div>
 
-                    <p className="text-xs text-muted-foreground font-geist mt-4 text-center">
-                      {i18n.language === 'sv' 
-                        ? 'Så här kommer kreatörer att se ert företag'
-                        : 'This is how creators will see your company'}
-                    </p>
-                  </>
+                    {/* Short description */}
+                    {companySummary && (
+                      <div className="pt-2 border-t border-border">
+                        <p className="text-sm text-foreground/80 font-geist line-clamp-4">
+                          {companySummary.split('**')[2]?.trim().slice(0, 200) || companySummary.slice(0, 200)}...
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Social links */}
+                    {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
+                      <div className="pt-2 border-t border-border">
+                        <p className="text-xs text-muted-foreground font-geist mb-2">
+                          {i18n.language === 'sv' ? 'Sociala medier' : 'Social Media'}
+                        </p>
+                        <div className="flex gap-2 flex-wrap">
+                          {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => (
+                            <span key={platform} className="px-2 py-1 bg-muted/50 rounded-[3px] text-xs font-geist capitalize">
+                              {platform}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Location */}
+                    {country && (
+                      <div className="pt-2 border-t border-border">
+                        <p className="text-xs text-muted-foreground font-geist">
+                          📍 {country}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
