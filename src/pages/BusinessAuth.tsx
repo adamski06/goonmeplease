@@ -953,7 +953,7 @@ const BusinessAuth: React.FC = () => {
 
         {/* Input fields for selected platforms with send button */}
         {hasSelectedPlatforms && (
-          <div className="space-y-3 w-full max-w-md">
+          <div className="space-y-3 w-full max-w-xl">
             {selectedPlatforms.map(platformId => {
               const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
               if (!platform) return null;
