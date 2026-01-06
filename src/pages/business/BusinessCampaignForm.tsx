@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, X, Image, Video } from 'lucide-react';
+import { ArrowLeft, Plus, X, Image, Video, Loader2 } from 'lucide-react';
 
 const BusinessCampaignForm: React.FC = () => {
   const { user, loading } = useAuth();
@@ -20,6 +20,7 @@ const BusinessCampaignForm: React.FC = () => {
   const isEditing = Boolean(id);
 
   const [saving, setSaving] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [businessProfile, setBusinessProfile] = useState<{ company_name: string; logo_url: string | null } | null>(null);
   const [formData, setFormData] = useState({
     brand_name: '',
@@ -40,6 +41,14 @@ const BusinessCampaignForm: React.FC = () => {
       navigate('/auth?mode=login');
     }
   }, [user, loading, navigate]);
+
+  // Brief loading delay for smooth transition
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fetch business profile
   useEffect(() => {
@@ -208,11 +217,13 @@ const BusinessCampaignForm: React.FC = () => {
   };
 
 
-  if (loading) {
+  if (loading || initialLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
+      <BusinessLayout>
+        <div className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      </BusinessLayout>
     );
   }
 
