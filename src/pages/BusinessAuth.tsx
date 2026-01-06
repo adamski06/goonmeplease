@@ -1172,7 +1172,7 @@ const BusinessAuth: React.FC = () => {
           // Chat interface
           <div className="h-screen flex items-center justify-center p-2">
             {/* Chat container - fixed size with slightly rounded edges */}
-            <div className="w-full max-w-3xl h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-lg overflow-hidden flex flex-col">
+            <div className="w-full max-w-3xl h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col">
               {/* Scrollable chat messages area */}
               <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
                 <div className="w-full space-y-6 transition-all duration-300">
