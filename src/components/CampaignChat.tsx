@@ -41,7 +41,7 @@ const CampaignChat: React.FC = () => {
       if (data) {
         setBusinessProfile(data);
         // Add personalized greeting
-        const greeting = `Hi! I know ${data.company_name} well from when we set up your account. How can I help you design this campaign?`;
+        const greeting = `Hey! Ready to create a new campaign for ${data.company_name}? I can help with guidelines, budget, or anything else.`;
         setMessages([{
           id: '1',
           role: 'jarla',
