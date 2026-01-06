@@ -20,9 +20,10 @@ import CampaignChat from '@/components/CampaignChat';
 
 interface BusinessLayoutProps {
   children: React.ReactNode;
+  hideChat?: boolean;
 }
 
-const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
+const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children, hideChat = false }) => {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
   const { profile } = useProfile();
@@ -199,8 +200,8 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
         </div>
       </aside>
 
-      {/* Campaign Chat - visible on form routes */}
-      {isFormRoute && (
+      {/* Campaign Chat - visible on form routes when not hidden */}
+      {isFormRoute && !hideChat && (
         <>
           <div className="w-px bg-black/10 dark:bg-white/20 relative z-10" />
           <div className="w-64 flex-shrink-0 relative z-10">
