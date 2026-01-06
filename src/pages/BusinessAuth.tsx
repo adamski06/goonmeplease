@@ -1343,11 +1343,9 @@ const BusinessAuth: React.FC = () => {
           // Chat interface with optional profile preview
           <div className="h-screen flex items-center justify-center p-2 overflow-hidden">
             {/* Main container that holds chat and profile side by side */}
-            <div className="flex gap-6 items-center">
-              {/* Chat container - stays same size, moves via margin */}
-              <div className={`w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
-                showProfilePreview ? '-ml-[60px]' : 'ml-0'
-              }`}>
+            <div className="flex gap-4 items-center ml-[160px]">
+              {/* Chat container - stays same size, doesn't move past logo */}
+              <div className={`w-[560px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out`}>
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   <div className="w-full space-y-6">
@@ -1599,7 +1597,7 @@ const BusinessAuth: React.FC = () => {
               <div 
                 className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
                   showProfilePreview 
-                    ? 'w-[620px] p-5' 
+                    ? 'w-[420px] p-4' 
                     : 'w-0 p-0'
                 } ${
                   profileVisible ? 'opacity-100' : 'opacity-0'
@@ -1607,41 +1605,48 @@ const BusinessAuth: React.FC = () => {
               >
                 {showProfilePreview && (
                   <div 
-                    className="rounded-[3px] p-10 space-y-8 shadow-sm"
+                    className="rounded-[3px] p-8 space-y-6 shadow-sm relative overflow-hidden"
                     style={{
-                      background: companyBrandColor 
-                        ? `linear-gradient(135deg, ${companyBrandColor}20 0%, ${companyBrandColor}08 100%)`
-                        : 'hsl(var(--background))'
+                      background: 'hsl(var(--muted))'
                     }}
                   >
+                    {/* Brand color overlay from left side */}
+                    {companyBrandColor && (
+                      <div 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(90deg, ${companyBrandColor}30 0%, ${companyBrandColor}10 40%, transparent 100%)`
+                        }}
+                      />
+                    )}
                     {/* Logo and Company Name */}
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-4 relative z-10">
                       {companyLogo ? (
                         <img 
                           src={companyLogo} 
                           alt={companyName} 
-                          className="w-[72px] h-[72px] rounded-[3px] object-contain bg-muted/30"
+                          className="w-14 h-14 rounded-[3px] object-contain bg-background/50"
                         />
                       ) : (
-                        <div className="w-[72px] h-[72px] rounded-[3px] bg-muted/50 flex items-center justify-center">
-                          <span className="text-3xl font-bold text-muted-foreground">
+                        <div className="w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center">
+                          <span className="text-2xl font-bold text-muted-foreground">
                             {companyName.charAt(0).toUpperCase()}
                           </span>
                         </div>
                       )}
-                      <h3 className="text-3xl font-montserrat font-bold">{companyName}</h3>
+                      <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
                     </div>
 
                     {/* Description - typewriter effect */}
                     {companySummary && (
-                      <p className="text-base text-foreground/80 font-geist leading-relaxed min-h-[3rem]">
+                      <p className="text-sm text-foreground/80 font-geist leading-relaxed min-h-[2.5rem] relative z-10">
                         {profileTypedDescription}
                         {!profileTypingComplete && <span className="animate-pulse">|</span>}
                       </p>
                     )}
 
                     {/* Social media icons - fade in after typing */}
-                    <div className={`flex gap-4 transition-opacity duration-300 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`flex gap-3 transition-opacity duration-300 relative z-10 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
                       {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
                         <>
                           {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
@@ -1665,13 +1670,13 @@ const BusinessAuth: React.FC = () => {
                                   key={platform} 
                                   src={logoUrls[platform]} 
                                   alt={platform}
-                                  className="w-6 h-6 dark:invert"
+                                  className="w-5 h-5 dark:invert"
                                 />
                               );
                             }
                             
                             return (
-                              <IconComponent key={platform} className="w-6 h-6 text-foreground/70" />
+                              <IconComponent key={platform} className="w-5 h-5 text-foreground/70" />
                             );
                           })}
                         </>
@@ -1679,11 +1684,11 @@ const BusinessAuth: React.FC = () => {
                     </div>
 
                     {/* Campaigns section - fade in after typing */}
-                    <div className={`space-y-2 transition-opacity duration-300 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
-                      <h4 className="text-base font-montserrat font-semibold">
+                    <div className={`space-y-1 transition-opacity duration-300 relative z-10 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                      <h4 className="text-sm font-montserrat font-semibold">
                         {i18n.language === 'sv' ? 'Kampanjer' : 'Campaigns'}
                       </h4>
-                      <p className="text-base text-muted-foreground font-geist">
+                      <p className="text-sm text-muted-foreground font-geist">
                         {i18n.language === 'sv' ? 'Inga kampanjer ännu' : 'No campaigns yet'}
                       </p>
                     </div>
