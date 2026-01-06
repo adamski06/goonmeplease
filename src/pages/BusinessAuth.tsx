@@ -1276,270 +1276,218 @@ const BusinessAuth: React.FC = () => {
           </div>
         ) : (
           // Chat interface with optional profile preview
-          <div className="h-screen flex items-center justify-center p-2 gap-4">
-            {/* Chat container - moves left when profile preview is shown */}
-            <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ${
-              showProfilePreview ? 'w-full max-w-xl' : 'w-full max-w-3xl'
+          <div className="h-screen flex items-center justify-center p-2">
+            {/* Main container that holds chat and profile side by side */}
+            <div className={`flex gap-6 transition-all duration-700 ease-out ${
+              showProfilePreview ? 'w-full max-w-5xl' : 'w-full max-w-3xl'
             }`}>
-              {/* Scrollable chat messages area */}
-              <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
-                <div className="w-full space-y-6 transition-all duration-300">
-                {messages.map((msg, index) => {
-                  const prevMsg = index > 0 ? messages[index - 1] : null;
-                  const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
+              {/* Chat container - shrinks and moves left when profile preview appears */}
+              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col transition-all duration-700 ease-out ${
+                showProfilePreview ? 'flex-1' : 'w-full'
+              }`}>
+                {/* Scrollable chat messages area */}
+                <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
+                  <div className="w-full space-y-6 transition-all duration-300">
+                  {messages.map((msg, index) => {
+                    const prevMsg = index > 0 ? messages[index - 1] : null;
+                    const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
+                    
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} transition-all duration-500 ease-out`}
+                        style={{ 
+                          animation: 'smoothFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                          opacity: 0
+                        }}
+                      >
+                        {msg.role === 'noted' ? (
+                          <div className="flex items-center gap-1.5 text-muted-foreground">
+                            <Check className="h-3.5 w-3.5" />
+                            <span className="text-sm font-geist">{msg.content}</span>
+                          </div>
+                        ) : msg.type === 'summary-section' ? (
+                          // Summary section - heading + paragraph together, fade in animation
+                          <div 
+                            className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
+                            style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
+                          >
+                            <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
+                            <p className="font-geist text-base text-foreground/90">{msg.content}</p>
+                          </div>
+                        ) : (
+                          <div
+                            className={`transition-all duration-300 ${
+                              msg.role === 'user'
+                                ? 'bg-foreground text-background rounded-[3px] px-3 py-1.5'
+                                : 'text-foreground max-w-[85%]'
+                            }`}
+                          >
+                            {showJarlaName && msg.role === 'jarla' && (
+                              <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
+                            )}
+                            {msg.role === 'jarla' && msg.displayedContent && (
+                              <div 
+                                className="font-geist text-base whitespace-pre-wrap [&_strong]:text-xl [&_strong]:font-montserrat [&_strong]:font-bold [&_strong]:block [&_strong]:mt-4 [&_strong]:mb-1" 
+                                dangerouslySetInnerHTML={{ 
+                                  __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
+                                }} 
+                              />
+                            )}
+                            {msg.role === 'user' && (
+                              <p className="font-geist text-xs">
+                                {msg.content}
+                              </p>
+                            )}
+                          
+                          {/* Render inline text input with send button */}
+                          {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
+                            <div className="mt-4 flex gap-2 items-center" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Input
+                                type="text"
+                                placeholder={msg.inputPlaceholder}
+                                value={inlineInputValue}
+                                onChange={(e) => setInlineInputValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' && inlineInputValue.trim() && msg.inputStep) {
+                                    e.preventDefault();
+                                    handleInlineSubmit(inlineInputValue, msg.inputStep);
+                                    setInlineInputValue('');
+                                  }
+                                }}
+                                autoFocus
+                                className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
+                              />
+                              <button
+                                onClick={() => {
+                                  if (inlineInputValue.trim() && msg.inputStep) {
+                                    handleInlineSubmit(inlineInputValue, msg.inputStep);
+                                    setInlineInputValue('');
+                                  }
+                                }}
+                                disabled={!inlineInputValue.trim()}
+                                className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                              >
+                                <Send className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
+                          
+                          {/* Render special UI elements */}
+                          {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
+                            <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderSocialPicker()}</div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'analyzing' && chatStep === 'analyzing' && (
+                            <div className="flex items-center gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+                              <span className="text-sm text-muted-foreground font-geist">
+                                {i18n.language === 'sv' ? 'Analyserar...' : 'Analyzing...'}
+                              </span>
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'confirm-buttons' && chatStep === 'confirm-summary' && (
+                            <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Button
+                                onClick={() => handleSummaryConfirm(true)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Ja, det stämmer!' : "Yes, that's correct!"}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleSummaryConfirm(false)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Nej' : 'No'}
+                              </Button>
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'profile-confirm-buttons' && chatStep === 'confirm-profile' && (
+                            <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Button
+                                onClick={() => handleProfileConfirm(true)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Ja, skapa profilen!' : "Yes, create it!"}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={() => handleProfileConfirm(false)}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Hoppa över' : 'Skip'}
+                              </Button>
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
+                            <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && (
+                            <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderAgePicker()}</div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && (
+                            <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderReachPicker()}</div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
+                            <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCredentialsForm()}</div>
+                          )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                   
-                  return (
-                    <div
-                      key={msg.id}
-                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} transition-all duration-500 ease-out`}
-                      style={{ 
-                        animation: 'smoothFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
-                        opacity: 0
-                      }}
-                    >
-                      {msg.role === 'noted' ? (
-                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                          <Check className="h-3.5 w-3.5" />
-                          <span className="text-sm font-geist">{msg.content}</span>
+                  {isTyping && (
+                    <div className="flex justify-start" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                      <div className="text-foreground">
+                        <div className="flex gap-1.5">
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                         </div>
-                      ) : msg.type === 'summary-section' ? (
-                        // Summary section - heading + paragraph together, fade in animation
-                        <div 
-                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
-                          style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
-                        >
-                          <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
-                          <p className="font-geist text-base text-foreground/90">{msg.content}</p>
-                        </div>
-                      ) : (
-                        <div
-                          className={`transition-all duration-300 ${
-                            msg.role === 'user'
-                              ? 'bg-foreground text-background rounded-[3px] px-3 py-1.5'
-                              : 'text-foreground max-w-[85%]'
-                          }`}
-                        >
-                          {showJarlaName && msg.role === 'jarla' && (
-                            <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
-                          )}
-                          {msg.role === 'jarla' && msg.displayedContent && (
-                            <div 
-                              className="font-geist text-base whitespace-pre-wrap [&_strong]:text-xl [&_strong]:font-montserrat [&_strong]:font-bold [&_strong]:block [&_strong]:mt-4 [&_strong]:mb-1" 
-                              dangerouslySetInnerHTML={{ 
-                                __html: msg.displayedContent.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') 
-                              }} 
-                            />
-                          )}
-                          {msg.role === 'user' && (
-                            <p className="font-geist text-xs">
-                              {msg.content}
-                            </p>
-                          )}
-                        
-                        {/* Render inline text input with send button */}
-                        {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
-                          <div className="mt-4 flex gap-2 items-center" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                            <Input
-                              type="text"
-                              placeholder={msg.inputPlaceholder}
-                              value={inlineInputValue}
-                              onChange={(e) => setInlineInputValue(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' && inlineInputValue.trim() && msg.inputStep) {
-                                  e.preventDefault();
-                                  handleInlineSubmit(inlineInputValue, msg.inputStep);
-                                  setInlineInputValue('');
-                                }
-                              }}
-                              autoFocus
-                              className="flex-1 max-w-sm h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
-                            />
-                            <button
-                              onClick={() => {
-                                if (inlineInputValue.trim() && msg.inputStep) {
-                                  handleInlineSubmit(inlineInputValue, msg.inputStep);
-                                  setInlineInputValue('');
-                                }
-                              }}
-                              disabled={!inlineInputValue.trim()}
-                              className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
-                            >
-                              <Send className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
-                        
-                        {/* Render special UI elements */}
-                        {msg.role === 'jarla' && msg.type === 'social-picker' && chatStep === 'socials' && (
-                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderSocialPicker()}</div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'analyzing' && chatStep === 'analyzing' && (
-                          <div className="flex items-center gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-                            <span className="text-sm text-muted-foreground font-geist">
-                              {i18n.language === 'sv' ? 'Analyserar...' : 'Analyzing...'}
-                            </span>
-                          </div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'confirm-buttons' && chatStep === 'confirm-summary' && (
-                          <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                            <Button
-                              onClick={() => handleSummaryConfirm(true)}
-                              className="rounded-[3px] font-montserrat"
-                            >
-                              {i18n.language === 'sv' ? 'Ja, det stämmer!' : "Yes, that's correct!"}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              onClick={() => handleSummaryConfirm(false)}
-                              className="rounded-[3px] font-montserrat"
-                            >
-                              {i18n.language === 'sv' ? 'Nej' : 'No'}
-                            </Button>
-                          </div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'profile-confirm-buttons' && chatStep === 'confirm-profile' && (
-                          <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                            <Button
-                              onClick={() => handleProfileConfirm(true)}
-                              className="rounded-[3px] font-montserrat"
-                            >
-                              {i18n.language === 'sv' ? 'Ja, skapa profilen!' : "Yes, create it!"}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              onClick={() => handleProfileConfirm(false)}
-                              className="rounded-[3px] font-montserrat"
-                            >
-                              {i18n.language === 'sv' ? 'Hoppa över' : 'Skip'}
-                            </Button>
-                          </div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'country-picker' && chatStep === 'location' && (
-                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCountryPicker()}</div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'age-picker' && chatStep === 'age-range' && (
-                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderAgePicker()}</div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'reach-picker' && chatStep === 'reach' && (
-                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderReachPicker()}</div>
-                        )}
-                        {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
-                          <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCredentialsForm()}</div>
-                        )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-                
-                {isTyping && (
-                  <div className="flex justify-start" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                    <div className="text-foreground">
-                      <div className="flex gap-1.5">
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                <div ref={chatEndRef} />
-              </div>
-            </div>
-
-            {/* Company Profile Preview - appears on right when confirmed */}
-            {showProfilePreview && (
-              <div 
-                className="w-full max-w-md h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-6 transition-all duration-500"
-                style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
-              >
-                <h2 className="text-sm font-montserrat font-medium text-muted-foreground mb-4">
-                  {i18n.language === 'sv' ? 'FÖRHANDSVISNING FÖR KREATÖRER' : 'CREATOR PREVIEW'}
-                </h2>
-                
-                {/* Profile Card */}
-                <div className="bg-background rounded-[3px] p-6 space-y-4 shadow-sm">
-                  {/* Logo and Company Name */}
-                  <div className="flex items-center gap-4">
-                    {companyLogo ? (
-                      <img 
-                        src={companyLogo} 
-                        alt={companyName} 
-                        className="w-16 h-16 rounded-[3px] object-contain bg-muted/30"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-[3px] bg-muted/50 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-muted-foreground">
-                          {companyName.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="text-xl font-montserrat font-bold">{companyName}</h3>
-                      {website && (
-                        <p className="text-sm text-muted-foreground font-geist">{website}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Short description */}
-                  {companySummary && (
-                    <div className="pt-2 border-t border-border">
-                      <p className="text-sm text-foreground/80 font-geist line-clamp-4">
-                        {companySummary.split('**')[2]?.trim().slice(0, 200) || companySummary.slice(0, 200)}...
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Social links */}
-                  {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
-                    <div className="pt-2 border-t border-border">
-                      <p className="text-xs text-muted-foreground font-geist mb-2">
-                        {i18n.language === 'sv' ? 'Sociala medier' : 'Social Media'}
-                      </p>
-                      <div className="flex gap-2 flex-wrap">
-                        {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => (
-                          <span key={platform} className="px-2 py-1 bg-muted/50 rounded-[3px] text-xs font-geist capitalize">
-                            {platform}
-                          </span>
-                        ))}
                       </div>
                     </div>
                   )}
-
-                  {/* Location */}
-                  {country && (
-                    <div className="pt-2 border-t border-border">
-                      <p className="text-xs text-muted-foreground font-geist">
-                        📍 {country}
-                      </p>
-                    </div>
-                  )}
+                  
+                  <div ref={chatEndRef} />
                 </div>
-
-                <p className="text-xs text-muted-foreground font-geist mt-4 text-center">
-                  {i18n.language === 'sv' 
-                    ? 'Så här kommer kreatörer att se ert företag'
-                    : 'This is how creators will see your company'}
-                </p>
               </div>
-            )}
-          </div>
-          
-          {/* Bottom chat input */}
-            <div className="fixed bottom-12 left-0 right-0 flex justify-center px-6">
-              <div className="w-full max-w-md flex gap-2 items-center">
-                <Input
-                  ref={chatInputRef}
-                  type="text"
-                  placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
-                  value={bottomInputValue}
-                  onChange={(e) => setBottomInputValue(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
+
+              {/* Bottom chat input - positioned at bottom of chat container */}
+              <div className="absolute bottom-4 left-4 right-4 flex justify-center">
+                <div className="w-full max-w-md flex gap-2 items-center">
+                  <Input
+                    ref={chatInputRef}
+                    type="text"
+                    placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
+                    value={bottomInputValue}
+                    onChange={(e) => setBottomInputValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (chatStep === 'socials') {
+                          setShowPlatformDropdown(false);
+                          handleSocialsComplete();
+                        } else if (bottomInputValue.trim()) {
+                          if (chatStep === 'edit-summary') {
+                            handleEditSummarySubmit(bottomInputValue);
+                            setBottomInputValue('');
+                          } else {
+                            const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                            if (currentInputMsg?.inputStep) {
+                              handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                            } else {
+                              handleChatMessage(bottomInputValue);
+                            }
+                            setBottomInputValue('');
+                          }
+                        }
+                      }
+                    }}
+                    className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
+                  />
+                  <button
+                    onClick={() => {
                       if (chatStep === 'socials') {
                         setShowPlatformDropdown(false);
                         handleSocialsComplete();
@@ -1557,38 +1505,97 @@ const BusinessAuth: React.FC = () => {
                           setBottomInputValue('');
                         }
                       }
-                    }
-                  }}
-                  className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
-                />
-                <button
-                  onClick={() => {
-                    if (chatStep === 'socials') {
-                      setShowPlatformDropdown(false);
-                      handleSocialsComplete();
-                    } else if (bottomInputValue.trim()) {
-                      if (chatStep === 'edit-summary') {
-                        handleEditSummarySubmit(bottomInputValue);
-                        setBottomInputValue('');
-                      } else {
-                        const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                        if (currentInputMsg?.inputStep) {
-                          handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
-                        } else {
-                          handleChatMessage(bottomInputValue);
-                        }
-                        setBottomInputValue('');
-                      }
-                    }
-                  }}
-                  disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
-                  className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
+                    }}
+                    disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
+                    className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
+              {/* Company Profile Preview - slides in from right when confirmed */}
+              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-6 transition-all duration-700 ease-out ${
+                showProfilePreview 
+                  ? 'w-[400px] opacity-100 translate-x-0' 
+                  : 'w-0 opacity-0 translate-x-8 p-0 overflow-hidden'
+              }`}>
+                {showProfilePreview && (
+                  <>
+                    <h2 className="text-sm font-montserrat font-medium text-muted-foreground mb-4">
+                      {i18n.language === 'sv' ? 'FÖRHANDSVISNING FÖR KREATÖRER' : 'CREATOR PREVIEW'}
+                    </h2>
+                    
+                    {/* Profile Card */}
+                    <div className="bg-background rounded-[3px] p-6 space-y-4 shadow-sm">
+                      {/* Logo and Company Name */}
+                      <div className="flex items-center gap-4">
+                        {companyLogo ? (
+                          <img 
+                            src={companyLogo} 
+                            alt={companyName} 
+                            className="w-16 h-16 rounded-[3px] object-contain bg-muted/30"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-[3px] bg-muted/50 flex items-center justify-center">
+                            <span className="text-2xl font-bold text-muted-foreground">
+                              {companyName.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="text-xl font-montserrat font-bold">{companyName}</h3>
+                          {website && (
+                            <p className="text-sm text-muted-foreground font-geist">{website}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Short description */}
+                      {companySummary && (
+                        <div className="pt-2 border-t border-border">
+                          <p className="text-sm text-foreground/80 font-geist line-clamp-4">
+                            {companySummary.split('**')[2]?.trim().slice(0, 200) || companySummary.slice(0, 200)}...
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Social links */}
+                      {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
+                        <div className="pt-2 border-t border-border">
+                          <p className="text-xs text-muted-foreground font-geist mb-2">
+                            {i18n.language === 'sv' ? 'Sociala medier' : 'Social Media'}
+                          </p>
+                          <div className="flex gap-2 flex-wrap">
+                            {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => (
+                              <span key={platform} className="px-2 py-1 bg-muted/50 rounded-[3px] text-xs font-geist capitalize">
+                                {platform}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Location */}
+                      {country && (
+                        <div className="pt-2 border-t border-border">
+                          <p className="text-xs text-muted-foreground font-geist">
+                            📍 {country}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="text-xs text-muted-foreground font-geist mt-4 text-center">
+                      {i18n.language === 'sv' 
+                        ? 'Så här kommer kreatörer att se ert företag'
+                        : 'This is how creators will see your company'}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
