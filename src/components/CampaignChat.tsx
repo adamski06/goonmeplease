@@ -17,7 +17,35 @@ interface BusinessProfile {
   website: string | null;
 }
 
-const CampaignChat: React.FC = () => {
+interface FormData {
+  brand_name: string;
+  title: string;
+  description: string;
+  deadline: string;
+  total_budget: number;
+}
+
+interface FormUpdates {
+  title?: string;
+  description?: string;
+  total_budget?: number;
+  deadline?: string;
+  requirements?: string[];
+}
+
+interface CampaignChatProps {
+  formData?: FormData;
+  requirements?: string[];
+  onFormUpdate?: (updates: Partial<FormData>) => void;
+  onRequirementsUpdate?: (requirements: string[]) => void;
+}
+
+const CampaignChat: React.FC<CampaignChatProps> = ({ 
+  formData, 
+  requirements,
+  onFormUpdate, 
+  onRequirementsUpdate 
+}) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -26,7 +54,6 @@ const CampaignChat: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
 
-  // Fetch business profile on mount
   // Typewriter effect helper
   const typewriterEffect = (messageId: string, content: string) => {
     let charIndex = 0;
@@ -58,12 +85,11 @@ const CampaignChat: React.FC = () => {
       let greeting: string;
       if (data) {
         setBusinessProfile(data);
-        greeting = `Hey! Ready to create a new campaign for ${data.company_name}? I can help with guidelines, budget, or anything else.`;
+        greeting = `Hey! Ready to create a new campaign for ${data.company_name}? Tell me what you want and I'll fill in the form for you.`;
       } else {
-        greeting = "Hey! I can help you design your campaign. What are you looking to achieve?";
+        greeting = "Hey! I can help you design your campaign. Tell me what you're promoting and I'll set everything up.";
       }
 
-      // Add message with empty displayedContent, then typewriter it
       const messageId = '1';
       setMessages([{
         id: messageId,
@@ -73,7 +99,6 @@ const CampaignChat: React.FC = () => {
       }]);
       setIsTyping(true);
       
-      // Small delay before starting typewriter
       setTimeout(() => {
         typewriterEffect(messageId, greeting);
       }, 300);
@@ -87,6 +112,25 @@ const CampaignChat: React.FC = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const applyFormUpdates = (updates: FormUpdates) => {
+    if (!updates) return;
+    
+    const formUpdates: Partial<FormData> = {};
+    
+    if (updates.title !== undefined) formUpdates.title = updates.title;
+    if (updates.description !== undefined) formUpdates.description = updates.description;
+    if (updates.total_budget !== undefined) formUpdates.total_budget = updates.total_budget;
+    if (updates.deadline !== undefined) formUpdates.deadline = updates.deadline;
+    
+    if (Object.keys(formUpdates).length > 0 && onFormUpdate) {
+      onFormUpdate(formUpdates);
+    }
+    
+    if (updates.requirements && onRequirementsUpdate) {
+      onRequirementsUpdate(updates.requirements);
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
@@ -103,19 +147,27 @@ const CampaignChat: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Call the jarla-chat edge function with business context
       const { data, error } = await supabase.functions.invoke('jarla-chat', {
         body: { 
           message: currentInput,
           companyName: businessProfile?.company_name,
           businessContext: businessProfile,
-          conversationHistory: messages.slice(-6) // Send last 6 messages for context
+          conversationHistory: messages.slice(-6),
+          currentFormData: formData ? {
+            ...formData,
+            requirements: requirements?.filter(r => r.trim())
+          } : null
         }
       });
 
       if (error) throw error;
 
       const responseContent = data?.response || "I'd love to help with that! Could you tell me more?";
+      
+      // Apply any form updates from the AI
+      if (data?.formUpdates) {
+        applyFormUpdates(data.formUpdates);
+      }
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -125,7 +177,6 @@ const CampaignChat: React.FC = () => {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Typewriter effect
       let charIndex = 0;
       const typeInterval = setInterval(() => {
         charIndex++;
@@ -162,19 +213,17 @@ const CampaignChat: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
-      {/* Messages - flex-grow with justify-end to push content to bottom */}
+      {/* Messages */}
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-6 flex flex-col justify-end"
       >
         <div className="space-y-4">
           {messages.map((msg, index) => {
-            // Don't render jarla messages until they have content to display
             if (msg.role === 'jarla' && !msg.displayedContent) return null;
             
             return (
             <div key={msg.id}>
-              {/* Show Jarla name for first message or after user message */}
               {msg.role === 'jarla' && (index === 0 || messages[index - 1]?.role === 'user') && (
                 <div className="text-xs text-muted-foreground font-montserrat mb-1">Jarla</div>
               )}
@@ -209,14 +258,14 @@ const CampaignChat: React.FC = () => {
         </div>
       </div>
 
-      {/* Input - matching signup chat style */}
+      {/* Input */}
       <div className="p-6 pt-0">
         <div className="relative max-w-full">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask about your campaign..."
+            placeholder="Tell me about your campaign..."
             disabled={isTyping}
             className="w-full h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-full font-geist text-sm pl-4 pr-10"
           />

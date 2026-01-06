@@ -227,8 +227,21 @@ const BusinessCampaignForm: React.FC = () => {
     );
   }
 
+  const handleFormUpdate = (updates: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...updates }));
+  };
+
+  const handleRequirementsUpdate = (newRequirements: string[]) => {
+    setRequirements(newRequirements);
+  };
+
   return (
-    <BusinessLayout>
+    <BusinessLayout
+      formData={formData}
+      requirements={requirements}
+      onFormUpdate={handleFormUpdate}
+      onRequirementsUpdate={handleRequirementsUpdate}
+    >
       <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         <div className="max-w-3xl mx-auto">
           {/* Header */}

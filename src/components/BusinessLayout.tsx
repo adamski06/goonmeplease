@@ -18,12 +18,31 @@ import defaultAvatar from '@/assets/default-avatar.png';
 import CampaignChat from '@/components/CampaignChat';
 
 
+interface FormData {
+  brand_name: string;
+  title: string;
+  description: string;
+  deadline: string;
+  total_budget: number;
+}
+
 interface BusinessLayoutProps {
   children: React.ReactNode;
   hideChat?: boolean;
+  formData?: FormData;
+  requirements?: string[];
+  onFormUpdate?: (updates: Partial<FormData>) => void;
+  onRequirementsUpdate?: (requirements: string[]) => void;
 }
 
-const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children, hideChat = false }) => {
+const BusinessLayout: React.FC<BusinessLayoutProps> = ({ 
+  children, 
+  hideChat = false,
+  formData,
+  requirements,
+  onFormUpdate,
+  onRequirementsUpdate
+}) => {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
   const { profile } = useProfile();
@@ -205,7 +224,12 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children, hideChat = fa
         <>
           <div className="w-px bg-black/10 dark:bg-white/20 relative z-10" />
           <div className="w-64 flex-shrink-0 relative z-10">
-            <CampaignChat />
+            <CampaignChat 
+              formData={formData}
+              requirements={requirements}
+              onFormUpdate={onFormUpdate}
+              onRequirementsUpdate={onRequirementsUpdate}
+            />
           </div>
         </>
       )}
