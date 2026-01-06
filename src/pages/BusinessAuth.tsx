@@ -76,7 +76,8 @@ const BusinessAuth: React.FC = () => {
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [chatStep, setChatStep] = useState<ChatStep>('website');
-  const [inputValue, setInputValue] = useState('');
+  const [inlineInputValue, setInlineInputValue] = useState('');
+  const [bottomInputValue, setBottomInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   // Collected data
@@ -229,17 +230,11 @@ const BusinessAuth: React.FC = () => {
     }, 300);
   };
 
-  // Handle inline input submit
+  // Handle inline input submit - no user message bubble, just process silently
   const handleInlineSubmit = (value: string, step: ChatStep) => {
     if (!value.trim()) return;
 
     const userMessage = value.trim();
-    
-    setMessages(prev => [...prev, {
-      id: Date.now().toString(),
-      role: 'user',
-      content: userMessage
-    }]);
 
     // Process based on current step
     switch (step) {
@@ -1008,13 +1003,13 @@ const BusinessAuth: React.FC = () => {
                             <Input
                               type="text"
                               placeholder={msg.inputPlaceholder}
-                              value={inputValue}
-                              onChange={(e) => setInputValue(e.target.value)}
+                              value={inlineInputValue}
+                              onChange={(e) => setInlineInputValue(e.target.value)}
                               onKeyDown={(e) => {
-                                if (e.key === 'Enter' && inputValue.trim() && msg.inputStep) {
+                                if (e.key === 'Enter' && inlineInputValue.trim() && msg.inputStep) {
                                   e.preventDefault();
-                                  handleInlineSubmit(inputValue, msg.inputStep);
-                                  setInputValue('');
+                                  handleInlineSubmit(inlineInputValue, msg.inputStep);
+                                  setInlineInputValue('');
                                 }
                               }}
                               autoFocus
@@ -1022,12 +1017,12 @@ const BusinessAuth: React.FC = () => {
                             />
                             <button
                               onClick={() => {
-                                if (inputValue.trim() && msg.inputStep) {
-                                  handleInlineSubmit(inputValue, msg.inputStep);
-                                  setInputValue('');
+                                if (inlineInputValue.trim() && msg.inputStep) {
+                                  handleInlineSubmit(inlineInputValue, msg.inputStep);
+                                  setInlineInputValue('');
                                 }
                               }}
-                              disabled={!inputValue.trim()}
+                              disabled={!inlineInputValue.trim()}
                               className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                             >
                               <Send className="h-4 w-4" />
@@ -1079,16 +1074,15 @@ const BusinessAuth: React.FC = () => {
                   ref={chatInputRef}
                   type="text"
                   placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  value={bottomInputValue}
+                  onChange={(e) => setBottomInputValue(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && inputValue.trim()) {
+                    if (e.key === 'Enter' && bottomInputValue.trim()) {
                       e.preventDefault();
-                      // Find current step's input handler
                       const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
                       if (currentInputMsg?.inputStep) {
-                        handleInlineSubmit(inputValue, currentInputMsg.inputStep);
-                        setInputValue('');
+                        handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                        setBottomInputValue('');
                       }
                     }
                   }}
@@ -1097,12 +1091,12 @@ const BusinessAuth: React.FC = () => {
                 <button
                   onClick={() => {
                     const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                    if (inputValue.trim() && currentInputMsg?.inputStep) {
-                      handleInlineSubmit(inputValue, currentInputMsg.inputStep);
-                      setInputValue('');
+                    if (bottomInputValue.trim() && currentInputMsg?.inputStep) {
+                      handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                      setBottomInputValue('');
                     }
                   }}
-                  disabled={!inputValue.trim()}
+                  disabled={!bottomInputValue.trim()}
                   className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                 >
                   <Send className="h-4 w-4" />
