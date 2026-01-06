@@ -165,37 +165,78 @@ VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående
       ? `Analysera följande innehåll från ${companyName}s webbplats och sociala medier. Skriv en omfattande företagsprofil på svenska:\n\n${combinedContent.slice(0, 30000)}`
       : `Analyze the following content from ${companyName}'s website and social media. Write a comprehensive company profile:\n\n${combinedContent.slice(0, 30000)}`;
 
-    console.log('Calling AI for analysis with gpt-5...');
+    console.log('Calling AI for analysis...');
     
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_completion_tokens: 1500,
-      }),
-    });
+    // Helper function to call AI with retry
+    const callAI = async (model: string, retries = 2): Promise<Response> => {
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        console.log(`AI attempt ${attempt + 1} with model ${model}...`);
+        
+        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+          }),
+        });
 
-    if (!aiResponse.ok) {
-      const errorText = await aiResponse.text();
-      console.error('AI error:', aiResponse.status, errorText);
+        if (response.ok) {
+          return response;
+        }
+
+        const errorText = await response.text();
+        console.error(`AI error (attempt ${attempt + 1}):`, response.status, errorText);
+
+        if (response.status === 429) {
+          // Rate limited - wait and retry
+          if (attempt < retries) {
+            console.log('Rate limited, waiting 2 seconds...');
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
+          }
+        }
+        
+        if (response.status === 402) {
+          throw new Error('Payment required');
+        }
+
+        // For other errors, try next attempt
+        if (attempt < retries) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
+      }
       
-      if (aiResponse.status === 429) {
+      throw new Error('All AI attempts failed');
+    };
+
+    let aiResponse: Response;
+    try {
+      // Try GPT-5 first, fall back to Gemini if it fails
+      try {
+        aiResponse = await callAI('openai/gpt-5', 1);
+      } catch (e) {
+        console.log('GPT-5 failed, trying Gemini...');
+        aiResponse = await callAI('google/gemini-2.5-pro', 1);
+      }
+    } catch (error) {
+      console.error('All AI models failed:', error);
+      
+      if (error instanceof Error && error.message === 'Payment required') {
         return new Response(
-          JSON.stringify({ success: false, error: 'Rate limit exceeded, please try again later' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({ success: false, error: 'AI credits exhausted' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
       
       return new Response(
-        JSON.stringify({ success: false, error: 'AI analysis failed' }),
+        JSON.stringify({ success: false, error: 'AI analysis failed after retries' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
