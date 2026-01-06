@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -404,32 +404,31 @@ const BusinessAuth: React.FC = () => {
         const summary = data.data.summary;
         const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
         
-        // Group into heading + content pairs
-        const sectionPairs: { heading: string; content: string }[] = [];
+        // Group into heading + content pairs, then flatten to separate messages
+        const allNodes: { type: 'heading' | 'paragraph'; content: string }[] = [];
         for (let i = 0; i < sections.length; i += 2) {
-          if (sections[i] && sections[i + 1]) {
-            sectionPairs.push({
-              heading: sections[i].trim(),
-              content: sections[i + 1].trim()
-            });
+          if (sections[i]) {
+            allNodes.push({ type: 'heading', content: sections[i].trim() });
+          }
+          if (sections[i + 1]) {
+            allNodes.push({ type: 'paragraph', content: sections[i + 1].trim() });
           }
         }
 
-        // Add each section with delay
+        // Add each node with delay
         let delay = 500;
-        sectionPairs.forEach((section, index) => {
+        allNodes.forEach((node, index) => {
           setTimeout(() => {
             setMessages(prev => [...prev, {
               id: `section-${Date.now()}-${index}`,
               role: 'jarla',
-              content: section.content,
-              displayedContent: section.content,
-              type: 'summary-section',
-              heading: section.heading
+              content: node.content,
+              displayedContent: node.content,
+              type: node.type === 'heading' ? 'summary-heading' : 'summary-paragraph'
             }]);
             chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, delay);
-          delay += 400;
+          delay += 300;
         });
 
         // After all sections, continue to credentials
@@ -1176,7 +1175,7 @@ const BusinessAuth: React.FC = () => {
             <div className="w-full max-w-3xl h-[calc(100vh-2rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl overflow-hidden flex flex-col">
               {/* Scrollable chat messages area */}
               <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
-                <div className="w-full space-y-3 transition-all duration-300">
+                <div className="w-full space-y-4 transition-all duration-300">
                 {messages.map((msg, index) => {
                   const prevMsg = index > 0 ? messages[index - 1] : null;
                   const showJarlaName = msg.role === 'jarla' && (prevMsg?.role !== 'jarla');
@@ -1195,10 +1194,26 @@ const BusinessAuth: React.FC = () => {
                           <Check className="h-3.5 w-3.5" />
                           <span className="text-sm font-geist">{msg.content}</span>
                         </div>
-                      ) : msg.type === 'summary-section' ? (
-                        // Summary section - fade in animation, no typewriter
+                      ) : msg.type === 'summary-heading' ? (
+                        // Summary heading - its own box with grey background
                         <div 
-                          className="text-foreground max-w-[85%] animate-fade-in"
+                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
+                          style={{ animation: 'smoothFadeIn 0.4s ease-out forwards' }}
+                        >
+                          <h3 className="text-lg font-montserrat font-bold text-foreground">{msg.content}</h3>
+                        </div>
+                      ) : msg.type === 'summary-paragraph' ? (
+                        // Summary paragraph - its own box with grey background
+                        <div 
+                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
+                          style={{ animation: 'smoothFadeIn 0.4s ease-out forwards' }}
+                        >
+                          <p className="font-geist text-base text-foreground/90">{msg.content}</p>
+                        </div>
+                      ) : msg.type === 'summary-section' ? (
+                        // Legacy summary section - fade in animation
+                        <div 
+                          className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
                           style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
                         >
                           <h3 className="text-lg font-montserrat font-bold mb-1">{msg.heading}</h3>
