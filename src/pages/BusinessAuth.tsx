@@ -228,26 +228,33 @@ const BusinessAuth: React.FC = () => {
   // Start chat after company name
   const startChat = () => {
     if (!companyName.trim()) return;
-    setMode('chat');
+    setIsTyping(true); // Show loading dots
+    
+    // Brief loading delay before transitioning to chat
     setTimeout(() => {
-      addJarlaMessage(
-        i18n.language === 'sv' 
-          ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
-          : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
-        'text',
-        () => {
-          setTimeout(() => {
-            addJarlaMessageWithInput(
-              i18n.language === 'sv' 
-                ? 'Har ni en webbplats?'
-                : "Does it have a website?",
-              'https://yourcompany.com',
-              'website'
-            );
-          }, 500);
-        }
-      );
-    }, 300);
+      setMode('chat');
+      setIsTyping(false);
+      
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv' 
+            ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
+            : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
+          'text',
+          () => {
+            setTimeout(() => {
+              addJarlaMessageWithInput(
+                i18n.language === 'sv' 
+                  ? 'Har ni en webbplats?'
+                  : "Does it have a website?",
+                'https://yourcompany.com',
+                'website'
+              );
+            }, 500);
+          }
+        );
+      }, 300);
+    }, 800);
   };
 
   // Handle general chat message (questions, etc) - now AI powered
