@@ -15,6 +15,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
+import CampaignChat from '@/components/CampaignChat';
+
+// Simple J logo component for collapsed state
+const JLogo: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 40 40" className={className} fill="currentColor">
+    <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize="32" fontWeight="bold" fontFamily="system-ui, sans-serif">
+      J
+    </text>
+  </svg>
+);
 
 interface BusinessLayoutProps {
   children: React.ReactNode;
@@ -96,20 +106,25 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       <aside className={`${isFormRoute ? 'w-16' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-[width] duration-500 ease-in-out`}>
         {/* Logo */}
         <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
-          <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'} transition-[width] duration-500 ease-in-out`}>
-            <div 
-              className="absolute inset-0 bg-foreground transition-[mask-position] duration-500 ease-in-out"
-              style={{
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: isFormRoute ? 'center' : 'left center',
-                maskPosition: isFormRoute ? 'center' : 'left center'
-              }} 
-            />
+          <button onClick={() => navigate('/business')} className="relative h-10 w-10 flex items-center justify-center">
+            {isFormRoute ? (
+              <JLogo className="h-8 w-8 text-foreground" />
+            ) : (
+              <div 
+                className="absolute inset-0 bg-foreground"
+                style={{
+                  WebkitMaskImage: `url(${jarlaLogo})`,
+                  maskImage: `url(${jarlaLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'left center',
+                  maskPosition: 'left center',
+                  width: '120px'
+                }} 
+              />
+            )}
           </button>
           <span className={`text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 h-0 mt-0 overflow-hidden' : 'opacity-100'}`}>
             {t('nav.business')}
@@ -196,6 +211,13 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
           </DropdownMenu>
         </div>
       </aside>
+
+      {/* Campaign Chat - visible on form routes */}
+      {isFormRoute && (
+        <div className="w-80 flex-shrink-0 relative z-10">
+          <CampaignChat />
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto relative z-10">
