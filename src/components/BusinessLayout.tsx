@@ -201,9 +201,12 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
 
       {/* Campaign Chat - visible on form routes */}
       {isFormRoute && (
-        <div className="w-80 flex-shrink-0 relative z-10">
-          <CampaignChat />
-        </div>
+        <>
+          <div className="w-px bg-black/10 dark:bg-white/20 relative z-10" />
+          <div className="w-64 flex-shrink-0 relative z-10">
+            <CampaignChat />
+          </div>
+        </>
       )}
 
       {/* Main Content */}
