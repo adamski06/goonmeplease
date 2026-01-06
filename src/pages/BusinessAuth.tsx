@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X, Send, Check, Instagram, Facebook, Youtube, Twitter, Linkedin } from 'lucide-react';
+import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -977,7 +977,7 @@ const BusinessAuth: React.FC = () => {
                 onClick={handleSocialsComplete}
                 className="w-full rounded-[3px] font-montserrat mt-2"
               >
-                <Send className="w-4 h-4 mr-2" />
+                <ArrowUp className="w-4 h-4 mr-2" />
                 {i18n.language === 'sv' ? 'Skicka' : 'Send'}
               </Button>
             )}
@@ -1446,9 +1446,9 @@ const BusinessAuth: React.FC = () => {
                                   }
                                 }}
                                 disabled={!inlineInputValue.trim()}
-                                className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                                className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                               >
-                                <Send className="h-4 w-4" />
+                                <ArrowUp className="h-4 w-4" />
                               </button>
                             </div>
                           )}
@@ -1604,9 +1604,9 @@ const BusinessAuth: React.FC = () => {
                         }
                       }}
                       disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
-                      className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                      className="h-10 w-10 flex items-center justify-center rounded-full bg-foreground text-background disabled:opacity-30 transition-opacity"
                     >
-                      <Send className="h-4 w-4" />
+                      <ArrowUp className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
