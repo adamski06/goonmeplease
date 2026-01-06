@@ -1392,9 +1392,20 @@ const BusinessAuth: React.FC = () => {
                         ) : msg.type === 'summary-section' ? (
                           // Summary section - heading + paragraph together, fade in animation
                           <div 
-                            className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3"
+                            className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3 relative group"
                             style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
                           >
+                            <button
+                              onClick={() => {
+                                // Pre-fill the bottom input with the current content for editing
+                                setBottomInputValue(msg.content);
+                                setChatStep('edit-summary');
+                              }}
+                              className="absolute top-2 right-2 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity"
+                              title={i18n.language === 'sv' ? 'Redigera' : 'Edit'}
+                            >
+                              <Pencil className="h-3.5 w-3.5 text-foreground/70" />
+                            </button>
                             <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
                             <p className="font-geist text-base text-foreground/90">{msg.content}</p>
                           </div>
