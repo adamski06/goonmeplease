@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
-import { Loader2, X, Send } from 'lucide-react';
+import { Loader2, X, Send, Check } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -55,7 +55,7 @@ type ChatStep = 'website' | 'socials' | 'description' | 'location' | 'products' 
 
 interface ChatMessage {
   id: string;
-  role: 'jarla' | 'user';
+  role: 'jarla' | 'user' | 'noted';
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
@@ -230,11 +230,18 @@ const BusinessAuth: React.FC = () => {
     }, 300);
   };
 
-  // Handle inline input submit - no user message bubble, just process silently
+  // Handle inline input submit - show noted confirmation
   const handleInlineSubmit = (value: string, step: ChatStep) => {
     if (!value.trim()) return;
 
     const userMessage = value.trim();
+    
+    // Add a "noted" confirmation
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'noted',
+      content: userMessage
+    }]);
 
     // Process based on current step
     switch (step) {
@@ -983,19 +990,25 @@ const BusinessAuth: React.FC = () => {
                         opacity: 0
                       }}
                     >
-                      <div
-                        className={`transition-all duration-300 ${
-                          msg.role === 'user'
-                            ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
-                            : 'text-foreground max-w-[85%]'
-                        }`}
-                      >
-                        {showJarlaName && (
-                          <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
-                        )}
-                        <p className={`font-geist ${msg.role === 'user' ? 'text-xs' : 'text-base'}`}>
-                          {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
-                        </p>
+                      {msg.role === 'noted' ? (
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Check className="h-3.5 w-3.5" />
+                          <span className="text-sm font-geist">{msg.content}</span>
+                        </div>
+                      ) : (
+                        <div
+                          className={`transition-all duration-300 ${
+                            msg.role === 'user'
+                              ? 'bg-foreground text-background rounded-[12px] rounded-br-[3px] px-3 py-1.5'
+                              : 'text-foreground max-w-[85%]'
+                          }`}
+                        >
+                          {showJarlaName && msg.role === 'jarla' && (
+                            <div className="text-sm text-muted-foreground font-montserrat mb-1">Jarla</div>
+                          )}
+                          <p className={`font-geist ${msg.role === 'user' ? 'text-xs' : 'text-base'}`}>
+                            {msg.role === 'jarla' ? (msg.displayedContent || msg.content) : msg.content}
+                          </p>
                         
                         {/* Render inline text input with send button */}
                         {msg.role === 'jarla' && msg.type === 'text-input' && msg.inputStep === chatStep && (
@@ -1046,7 +1059,8 @@ const BusinessAuth: React.FC = () => {
                         {msg.role === 'jarla' && msg.type === 'credentials-form' && chatStep === 'credentials' && (
                           <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderCredentialsForm()}</div>
                         )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
