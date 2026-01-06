@@ -93,12 +93,12 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className={`${isFormRoute ? 'w-16' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-all duration-300`}>
+      <aside className={`${isFormRoute ? 'w-16' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-[width] duration-500 ease-in-out`}>
         {/* Logo */}
-        <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4`}>
-          <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'}`}>
+        <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
+          <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'} transition-[width] duration-500 ease-in-out`}>
             <div 
-              className="absolute inset-0 bg-foreground"
+              className="absolute inset-0 bg-foreground transition-[mask-position] duration-500 ease-in-out"
               style={{
                 WebkitMaskImage: `url(${jarlaLogo})`,
                 maskImage: `url(${jarlaLogo})`,
@@ -111,18 +111,18 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
               }} 
             />
           </button>
-          {!isFormRoute && (
-            <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">{t('nav.business')}</span>
-          )}
+          <span className={`text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 h-0 mt-0 overflow-hidden' : 'opacity-100'}`}>
+            {t('nav.business')}
+          </span>
         </div>
 
         {/* Navigation */}
-        <nav className={`flex flex-col ${isFormRoute ? 'px-2 items-center' : 'px-3'} gap-4 mt-8`}>
+        <nav className={`flex flex-col ${isFormRoute ? 'px-2 items-center' : 'px-3'} gap-4 mt-8 transition-[padding] duration-500 ease-in-out`}>
           {navItems.map((item) => (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`${isFormRoute ? 'p-2 justify-center' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all flex items-center gap-3 ${
+              className={`${isFormRoute ? 'p-2 justify-center' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3 ${
                 isActive(item.path) 
                   ? 'font-bold text-foreground' 
                   : 'font-medium text-foreground hover:font-semibold'
@@ -130,19 +130,23 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
               title={isFormRoute ? item.label : undefined}
             >
               {getIcon(item.icon)}
-              {!isFormRoute && item.label}
+              <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}`}>
+                {item.label}
+              </span>
             </button>
           ))}
         </nav>
 
 
         {/* More Menu at bottom */}
-        <div className={`mt-auto ${isFormRoute ? 'px-2' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20`}>
+        <div className={`mt-auto ${isFormRoute ? 'px-2' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20 transition-[padding] duration-500 ease-in-out`}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`${isFormRoute ? 'w-full justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all flex items-center gap-3`}>
+              <button className={`${isFormRoute ? 'w-full justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3`}>
                 <Menu className="h-6 w-6" />
-                {!isFormRoute && t('common.more')}
+                <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}`}>
+                  {t('common.more')}
+                </span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent 
