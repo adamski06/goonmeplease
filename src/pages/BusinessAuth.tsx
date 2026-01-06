@@ -301,13 +301,33 @@ const BusinessAuth: React.FC = () => {
       case 'website':
         setWebsite(userMessage);
         setChatStep('socials');
+        // First compliment the company name, then ask about social media
+        const compliments = i18n.language === 'sv'
+          ? [
+              `${companyName} är ett fantastiskt namn!`,
+              `Jag gillar namnet ${companyName}!`,
+              `${companyName} - det låter bra!`,
+              `Starkt namn, ${companyName}!`
+            ]
+          : [
+              `${companyName} is a great name!`,
+              `I love the name ${companyName}!`,
+              `${companyName} - that sounds awesome!`,
+              `Strong name, ${companyName}!`
+            ];
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        
         setTimeout(() => {
-          addJarlaMessage(
-            i18n.language === 'sv'
-              ? 'Finns ni på några sociala medier?'
-              : 'Are you on any social media?',
-            'social-picker'
-          );
+          addJarlaMessage(randomCompliment, 'text', () => {
+            setTimeout(() => {
+              addJarlaMessage(
+                i18n.language === 'sv'
+                  ? 'Finns ni på några sociala medier?'
+                  : 'Are you on any social media?',
+                'social-picker'
+              );
+            }, 400);
+          });
         }, 500);
         break;
 
