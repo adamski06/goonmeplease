@@ -389,18 +389,49 @@ const BusinessCampaignForm: React.FC = () => {
               <CardHeader>
                 <CardTitle>Budget</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="total_budget">Total Budget (SEK)</Label>
                   <Input
                     id="total_budget"
                     type="number"
-                    value={formData.total_budget}
-                    onChange={(e) => setFormData({ ...formData, total_budget: parseFloat(e.target.value) || 0 })}
+                    min={10000}
+                    value={formData.total_budget || ''}
+                    onChange={(e) => setFormData({ ...formData, total_budget: Math.max(0, parseFloat(e.target.value) || 0) })}
                     placeholder="10000"
                   />
-                  <p className="text-xs text-muted-foreground">We guarantee views based on your budget</p>
+                  <p className="text-xs text-muted-foreground">Minimum budget: 10,000 SEK</p>
                 </div>
+
+                {/* Budget Calculator */}
+                {formData.total_budget >= 10000 && (
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+                    <p className="text-sm font-medium text-foreground">Estimated reach</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <p className="text-2xl font-bold text-foreground">
+                          {Math.floor((formData.total_budget / 10000) * 100000).toLocaleString()}+
+                        </p>
+                        <p className="text-xs text-muted-foreground">Guaranteed views</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-2xl font-bold text-foreground">
+                          {Math.floor((formData.total_budget / 10000) * 10)}+
+                        </p>
+                        <p className="text-xs text-muted-foreground">Creators</p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground border-t border-border pt-3">
+                      10,000 SEK = 100,000+ views • 10+ creators
+                    </p>
+                  </div>
+                )}
+
+                {formData.total_budget > 0 && formData.total_budget < 10000 && (
+                  <p className="text-xs text-destructive">
+                    Budget must be at least 10,000 SEK
+                  </p>
+                )}
               </CardContent>
             </Card>
 
