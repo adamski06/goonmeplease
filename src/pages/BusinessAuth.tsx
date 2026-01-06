@@ -107,6 +107,7 @@ const BusinessAuth: React.FC = () => {
   const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
+  const [companyOneLiner, setCompanyOneLiner] = useState('');
   const [companyBrandColor, setCompanyBrandColor] = useState<string | null>(null);
   const [profileTypedDescription, setProfileTypedDescription] = useState('');
   const [profileTypingComplete, setProfileTypingComplete] = useState(false);
@@ -423,12 +424,15 @@ const BusinessAuth: React.FC = () => {
       if (error) throw error;
 
       if (data?.success && data?.data?.summary) {
-        // Store logo, brand color, and summary for profile preview
+        // Store logo, brand color, one-liner, and summary for profile preview
         if (data.data.logo) {
           setCompanyLogo(data.data.logo);
         }
         if (data.data.brandColor) {
           setCompanyBrandColor(data.data.brandColor);
+        }
+        if (data.data.oneLiner) {
+          setCompanyOneLiner(data.data.oneLiner);
         }
         setCompanySummary(data.data.summary);
         
@@ -778,13 +782,28 @@ const BusinessAuth: React.FC = () => {
         audienceDescription ? `Audience: ${audienceDescription}` : ''
       ].filter(Boolean).join('\n\n');
       
-      // Priority: edited sections > original AI summary > manual input
-      const fullDescription = editedSummarySections || companySummary || manualDescription;
+      // Get the one-liner from edited sections if available, or use the stored one
+      const oneLineSection = summarySectionMessages.find(msg => 
+        msg.heading === 'One-Liner' || msg.heading === 'Kortbeskrivning'
+      );
+      const finalOneLiner = oneLineSection?.content || companyOneLiner;
+      
+      // Build full description with one-liner at the start
+      const sectionsWithoutOneLiner = summarySectionMessages
+        .filter(msg => msg.heading !== 'One-Liner' && msg.heading !== 'Kortbeskrivning')
+        .map(msg => msg.heading ? `**${msg.heading}**\n${msg.content}` : msg.content)
+        .join('\n\n');
+      
+      // Priority: one-liner + sections > original AI summary > manual input
+      const fullDescription = finalOneLiner 
+        ? `${finalOneLiner}\n\n${sectionsWithoutOneLiner}`.trim()
+        : (sectionsWithoutOneLiner || companySummary || manualDescription);
       
       console.log('Saving description:', { 
+        hasOneLiner: !!finalOneLiner,
+        oneLiner: finalOneLiner,
         editedSectionsCount: summarySectionMessages.length,
         hasCompanySummary: !!companySummary,
-        companySummaryLength: companySummary?.length,
         fullDescriptionLength: fullDescription?.length 
       });
 
