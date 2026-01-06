@@ -988,9 +988,9 @@ const BusinessAuth: React.FC = () => {
                         }`}
                       >
                         {showJarlaName && (
-                          <div className="text-xl text-muted-foreground font-montserrat mb-2">Jarla</div>
+                          <div className="text-base text-muted-foreground font-montserrat mb-1.5">Jarla</div>
                         )}
-                        <p className={`font-geist ${msg.role === 'user' ? 'text-base' : 'text-4xl'}`}>
+                        <p className={`font-geist ${msg.role === 'user' ? 'text-sm' : 'text-2xl'}`}>
                           {msg.content}
                         </p>
                         
