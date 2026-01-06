@@ -17,13 +17,21 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 import CampaignChat from '@/components/CampaignChat';
 
-// Simple J logo component for collapsed state
-const JLogo: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 40 40" className={className} fill="currentColor">
-    <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize="32" fontWeight="bold" fontFamily="system-ui, sans-serif">
-      J
-    </text>
-  </svg>
+// Cropped J from the Jarla logo - showing just the first letter
+const JarlaJ: React.FC<{ className?: string }> = ({ className }) => (
+  <div 
+    className={`${className} bg-foreground`}
+    style={{
+      WebkitMaskImage: `url(${jarlaLogo})`,
+      maskImage: `url(${jarlaLogo})`,
+      WebkitMaskSize: '500% 100%',
+      maskSize: '500% 100%',
+      WebkitMaskPosition: 'left center',
+      maskPosition: 'left center',
+      WebkitMaskRepeat: 'no-repeat',
+      maskRepeat: 'no-repeat',
+    }}
+  />
 );
 
 interface BusinessLayoutProps {
@@ -108,7 +116,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
         <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
           <button onClick={() => navigate('/business')} className="relative h-10 w-10 flex items-center justify-center">
             {isFormRoute ? (
-              <JLogo className="h-8 w-8 text-foreground" />
+              <JarlaJ className="h-10 w-10" />
             ) : (
               <div 
                 className="absolute inset-0 bg-foreground"
