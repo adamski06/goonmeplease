@@ -86,11 +86,13 @@ serve(async (req) => {
       }
     };
 
-    // Scrape a URL with branding to get logo
-    const scrapeUrlForBranding = async (url: string): Promise<string | null> => {
+    // Scrape a URL to get logo from multiple sources
+    const scrapeUrlForLogo = async (url: string): Promise<string | null> => {
       try {
-        console.log('Scraping for branding:', url);
-        const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+        console.log('Scraping for logo:', url);
+        
+        // Try branding format first
+        const brandingResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${firecrawlApiKey}`,
@@ -98,22 +100,81 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             url: formatUrl(url),
-            formats: ['branding'],
+            formats: ['branding', 'html'],
           }),
         });
 
-        const data = await response.json();
-        if (response.ok && data.success && data.data?.branding) {
-          const branding = data.data.branding;
-          // Try to get logo from branding data
-          const logo = branding.logo || branding.images?.logo || branding.images?.favicon;
-          console.log('Found branding logo:', logo);
-          return logo || null;
+        const data = await brandingResponse.json();
+        console.log('Logo scrape response success:', data.success);
+        
+        if (brandingResponse.ok && data.success) {
+          // Try branding data first
+          const branding = data.data?.branding;
+          if (branding) {
+            const brandingLogo = branding.logo || branding.images?.logo;
+            if (brandingLogo) {
+              console.log('Found logo from branding:', brandingLogo);
+              return brandingLogo;
+            }
+          }
+          
+          // Fallback: Extract from HTML meta tags
+          const html = data.data?.html || '';
+          
+          // Look for Open Graph image
+          const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+                              html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+          if (ogImageMatch?.[1]) {
+            console.log('Found logo from og:image:', ogImageMatch[1]);
+            return ogImageMatch[1];
+          }
+          
+          // Look for apple-touch-icon (often a good logo)
+          const appleIconMatch = html.match(/<link[^>]*rel=["']apple-touch-icon["'][^>]*href=["']([^"']+)["']/i);
+          if (appleIconMatch?.[1]) {
+            let iconUrl = appleIconMatch[1];
+            // Make absolute URL if relative
+            if (iconUrl.startsWith('/')) {
+              const baseUrl = new URL(formatUrl(url));
+              iconUrl = `${baseUrl.origin}${iconUrl}`;
+            }
+            console.log('Found logo from apple-touch-icon:', iconUrl);
+            return iconUrl;
+          }
+          
+          // Look for favicon as last resort
+          const faviconMatch = html.match(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*href=["']([^"']+)["']/i);
+          if (faviconMatch?.[1]) {
+            let iconUrl = faviconMatch[1];
+            if (iconUrl.startsWith('/')) {
+              const baseUrl = new URL(formatUrl(url));
+              iconUrl = `${baseUrl.origin}${iconUrl}`;
+            }
+            // Only use favicon if it's not a generic .ico file
+            if (!iconUrl.endsWith('.ico')) {
+              console.log('Found logo from favicon:', iconUrl);
+              return iconUrl;
+            }
+          }
+          
+          // Try common logo image patterns in the HTML
+          const logoImgMatch = html.match(/<img[^>]*(?:class|id)=["'][^"']*logo[^"']*["'][^>]*src=["']([^"']+)["']/i) ||
+                              html.match(/<img[^>]*src=["']([^"']+logo[^"']+)["']/i);
+          if (logoImgMatch?.[1]) {
+            let logoUrl = logoImgMatch[1];
+            if (logoUrl.startsWith('/')) {
+              const baseUrl = new URL(formatUrl(url));
+              logoUrl = `${baseUrl.origin}${logoUrl}`;
+            }
+            console.log('Found logo from img tag:', logoUrl);
+            return logoUrl;
+          }
         }
-        console.error('Branding scrape failed for', url, data);
+        
+        console.log('No logo found for:', url);
         return null;
       } catch (error) {
-        console.error('Error scraping branding', url, error);
+        console.error('Error scraping for logo:', url, error);
         return null;
       }
     };
@@ -127,7 +188,7 @@ serve(async (req) => {
       console.log('Scraping main website:', website);
       const [websiteContent, logoUrl] = await Promise.all([
         scrapeUrl(website),
-        scrapeUrlForBranding(website)
+        scrapeUrlForLogo(website)
       ]);
       if (websiteContent) {
         contentParts.push({ source: 'Website', content: websiteContent });
