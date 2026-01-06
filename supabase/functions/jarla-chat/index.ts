@@ -163,17 +163,42 @@ serve(async (req) => {
     let parsedResponse;
     try {
       // Clean up potential markdown code blocks
-      aiResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      parsedResponse = JSON.parse(aiResponse);
+      let cleanedResponse = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      parsedResponse = JSON.parse(cleanedResponse);
+      
+      // Validate that we got a proper structure
+      if (typeof parsedResponse !== 'object' || parsedResponse === null) {
+        parsedResponse = { message: aiResponse };
+      }
     } catch {
-      // If it's not valid JSON, wrap it as a message
-      parsedResponse = { message: aiResponse };
+      // If it's not valid JSON, check if there's embedded JSON in the text
+      const jsonMatch = aiResponse.match(/\{[\s\S]*"message"[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          parsedResponse = JSON.parse(jsonMatch[0]);
+        } catch {
+          parsedResponse = { message: aiResponse };
+        }
+      } else {
+        parsedResponse = { message: aiResponse };
+      }
     }
 
-    console.log('Jarla parsed response:', parsedResponse);
+    // Extract just the message text - don't include raw JSON in the displayed message
+    let messageText = parsedResponse.message || '';
+    
+    // If the message still contains JSON, strip it out
+    if (messageText.includes('"formUpdates"') || messageText.includes('"message"')) {
+      const cleanMessage = messageText.replace(/\{[\s\S]*"formUpdates"[\s\S]*\}/g, '').trim();
+      if (cleanMessage) {
+        messageText = cleanMessage;
+      }
+    }
+
+    console.log('Jarla parsed response:', { message: messageText, formUpdates: parsedResponse.formUpdates });
 
     return new Response(JSON.stringify({ 
-      response: parsedResponse.message || aiResponse,
+      response: messageText || "I've updated the form for you!",
       formUpdates: parsedResponse.formUpdates || null
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
