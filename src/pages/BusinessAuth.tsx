@@ -110,6 +110,9 @@ const BusinessAuth: React.FC = () => {
   const [companyBrandColor, setCompanyBrandColor] = useState<string | null>(null);
   const [profileTypedDescription, setProfileTypedDescription] = useState('');
   const [profileTypingComplete, setProfileTypingComplete] = useState(false);
+  const [isProfileEditMode, setIsProfileEditMode] = useState(false);
+  const [editedCompanyName, setEditedCompanyName] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -1629,6 +1632,33 @@ const BusinessAuth: React.FC = () => {
                       background: 'hsl(var(--muted))'
                     }}
                   >
+                    {/* Edit button in top right corner */}
+                    <button 
+                      className={`absolute top-3 right-3 w-7 h-7 rounded-full shadow-sm flex items-center justify-center transition-all z-20 ${
+                        isProfileEditMode 
+                          ? 'bg-foreground text-background' 
+                          : 'bg-background hover:bg-muted text-muted-foreground'
+                      }`}
+                      onClick={() => {
+                        if (!isProfileEditMode) {
+                          setEditedCompanyName(companyName);
+                          setEditedDescription(companySummary);
+                        } else {
+                          // Save changes
+                          setCompanyName(editedCompanyName);
+                          setCompanySummary(editedDescription);
+                          setProfileTypedDescription(editedDescription);
+                        }
+                        setIsProfileEditMode(!isProfileEditMode);
+                      }}
+                    >
+                      {isProfileEditMode ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Pencil className="w-4 h-4" />
+                      )}
+                    </button>
+
                     {/* Brand color overlay from left side */}
                     {companyBrandColor && (
                       <div 
@@ -1640,56 +1670,52 @@ const BusinessAuth: React.FC = () => {
                     )}
                     {/* Logo and Company Name */}
                     <div className="flex items-center gap-4 relative z-10">
-                      <div className="relative group">
+                      <div className="relative">
                         {companyLogo ? (
                           <img 
                             src={companyLogo} 
-                            alt={companyName} 
-                            className="w-14 h-14 rounded-[3px] object-contain bg-background/50"
+                            alt={isProfileEditMode ? editedCompanyName : companyName} 
+                            className={`w-14 h-14 rounded-[3px] object-contain bg-background/50 ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}
                           />
                         ) : (
-                          <div className="w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center">
+                          <div className={`w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}>
                             <span className="text-2xl font-bold text-muted-foreground">
-                              {companyName.charAt(0).toUpperCase()}
+                              {(isProfileEditMode ? editedCompanyName : companyName).charAt(0).toUpperCase()}
                             </span>
                           </div>
                         )}
-                        <button 
-                          className="absolute -top-1 -right-1 w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
-                          onClick={() => {/* TODO: Edit logo */}}
-                        >
-                          <Pencil className="w-3 h-3 text-muted-foreground" />
-                        </button>
                       </div>
-                      <div className="relative group flex items-center gap-2">
+                      {isProfileEditMode ? (
+                        <Input
+                          value={editedCompanyName}
+                          onChange={(e) => setEditedCompanyName(e.target.value)}
+                          className="text-xl font-montserrat font-bold bg-background/50 border-foreground/20 h-10"
+                        />
+                      ) : (
                         <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
-                        <button 
-                          className="w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
-                          onClick={() => {/* TODO: Edit company name */}}
-                        >
-                          <Pencil className="w-3 h-3 text-muted-foreground" />
-                        </button>
-                      </div>
+                      )}
                     </div>
 
-                    {/* Description - typewriter effect */}
-                    {companySummary && (
-                      <div className="relative group z-10">
-                        <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem] pr-6">
-                          {profileTypedDescription}
-                          {!profileTypingComplete && <span className="animate-pulse">|</span>}
-                        </p>
-                        <button 
-                          className="absolute top-0 right-0 w-5 h-5 bg-background rounded-full shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
-                          onClick={() => {/* TODO: Edit description */}}
-                        >
-                          <Pencil className="w-3 h-3 text-muted-foreground" />
-                        </button>
+                    {/* Description - typewriter effect or editable */}
+                    {(companySummary || isProfileEditMode) && (
+                      <div className="relative z-10">
+                        {isProfileEditMode ? (
+                          <textarea
+                            value={editedDescription}
+                            onChange={(e) => setEditedDescription(e.target.value)}
+                            className="w-full text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[80px] p-2 bg-background/50 border border-foreground/20 rounded-[3px] resize-none focus:outline-none focus:ring-2 focus:ring-foreground/30"
+                          />
+                        ) : (
+                          <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem]">
+                            {profileTypedDescription}
+                            {!profileTypingComplete && <span className="animate-pulse">|</span>}
+                          </p>
+                        )}
                       </div>
                     )}
 
                     {/* Social media icons - fade in after typing */}
-                    <div className={`flex gap-3 transition-opacity duration-300 relative z-10 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`flex gap-3 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
                       {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
                         <>
                           {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
@@ -1727,7 +1753,7 @@ const BusinessAuth: React.FC = () => {
                     </div>
 
                     {/* Campaigns section - fade in after typing */}
-                    <div className={`space-y-1 transition-opacity duration-300 relative z-10 ${profileTypingComplete ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`space-y-1 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
                       <h4 className="text-sm font-montserrat font-semibold">
                         {i18n.language === 'sv' ? 'Kampanjer' : 'Campaigns'}
                       </h4>
