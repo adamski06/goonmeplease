@@ -618,7 +618,7 @@ const BusinessAuth: React.FC = () => {
     return (
       <div className="space-y-3 mt-3">
         {/* Dropdown to select platforms */}
-        <div className="relative">
+        <div className="relative w-72">
           <button
             type="button"
             onClick={() => setShowPlatformDropdown(!showPlatformDropdown)}
@@ -636,50 +636,57 @@ const BusinessAuth: React.FC = () => {
           </button>
           
           {showPlatformDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-foreground/20 rounded-lg shadow-lg z-50 py-2 max-h-48 overflow-y-auto">
-              {SOCIAL_PLATFORMS.map(platform => {
-                const isSelected = selectedPlatforms.includes(platform.id);
-                return (
-                  <button
-                    key={platform.id}
-                    type="button"
-                    onClick={() => {
-                      if (isSelected) {
-                        setSelectedPlatforms(prev => prev.filter(p => p !== platform.id));
-                        setSocialMedia(prev => {
-                          const newState = { ...prev };
-                          delete newState[platform.id];
-                          return newState;
-                        });
-                      } else {
-                        setSelectedPlatforms(prev => [...prev, platform.id]);
-                        setSocialMedia(prev => ({ ...prev, [platform.id]: '' }));
-                      }
-                    }}
-                    className="w-full px-4 py-2 text-left text-sm font-geist flex items-center gap-3 hover:bg-foreground/5 transition-colors"
-                  >
-                    <div className={`w-4 h-4 rounded border flex items-center justify-center ${
-                      isSelected ? 'bg-foreground border-foreground' : 'border-foreground/30'
-                    }`}>
-                      {isSelected && <Check className="w-3 h-3 text-background" />}
-                    </div>
-                    <span className="text-foreground">{platform.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              {/* Backdrop to close dropdown when clicking outside */}
+              <div 
+                className="fixed inset-0 z-40" 
+                onClick={() => setShowPlatformDropdown(false)}
+              />
+              <div className="absolute top-full left-0 w-72 mt-1 bg-background border border-foreground/20 rounded-lg shadow-lg z-50 py-2 max-h-48 overflow-y-auto">
+                {SOCIAL_PLATFORMS.map(platform => {
+                  const isSelected = selectedPlatforms.includes(platform.id);
+                  return (
+                    <button
+                      key={platform.id}
+                      type="button"
+                      onClick={() => {
+                        if (isSelected) {
+                          setSelectedPlatforms(prev => prev.filter(p => p !== platform.id));
+                          setSocialMedia(prev => {
+                            const newState = { ...prev };
+                            delete newState[platform.id];
+                            return newState;
+                          });
+                        } else {
+                          setSelectedPlatforms(prev => [...prev, platform.id]);
+                          setSocialMedia(prev => ({ ...prev, [platform.id]: '' }));
+                        }
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm font-geist flex items-center gap-3 hover:bg-foreground/5 transition-colors"
+                    >
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center ${
+                        isSelected ? 'bg-foreground border-foreground' : 'border-foreground/30'
+                      }`}>
+                        {isSelected && <Check className="w-3 h-3 text-background" />}
+                      </div>
+                      <span className="text-foreground">{platform.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
 
         {/* Input fields for selected platforms */}
         {hasSelectedPlatforms && (
-          <div className="space-y-2">
+          <div className="space-y-2 w-full max-w-md">
             {selectedPlatforms.map(platformId => {
               const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
               if (!platform) return null;
               return (
-                <div key={platformId} className="flex items-center gap-2">
-                  <div className="w-20 text-xs font-geist text-muted-foreground shrink-0">{platform.label}</div>
+                <div key={platformId} className="flex items-center gap-3">
+                  <div className="w-24 text-xs font-geist text-muted-foreground shrink-0">{platform.label}</div>
                   <Input
                     type="url"
                     placeholder={platform.placeholder}
