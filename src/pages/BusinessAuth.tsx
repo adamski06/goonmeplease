@@ -1324,9 +1324,9 @@ const BusinessAuth: React.FC = () => {
               showProfilePreview ? 'translate-x-[-120px]' : 'translate-x-0'
             }`}>
               {/* Chat container - stays same size, just moves left */}
-              <div className="w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col">
+              <div className="w-[600px] h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative">
                 {/* Scrollable chat messages area */}
-                <div className="flex-1 overflow-y-auto px-8 pt-12 pb-28">
+                <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   <div className="w-full space-y-6">
                   {messages.map((msg, index) => {
                     const prevMsg = index > 0 ? messages[index - 1] : null;
@@ -1510,18 +1510,41 @@ const BusinessAuth: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bottom chat input - positioned at bottom of chat container */}
-              <div className="absolute bottom-4 left-4 right-4 flex justify-center">
-                <div className="w-full max-w-md flex gap-2 items-center">
-                  <Input
-                    ref={chatInputRef}
-                    type="text"
-                    placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
-                    value={bottomInputValue}
-                    onChange={(e) => setBottomInputValue(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
+                {/* Bottom chat input - attached to bottom of chat container */}
+                <div className="absolute bottom-4 left-4 right-4 flex justify-center">
+                  <div className="w-full max-w-md flex gap-2 items-center">
+                    <Input
+                      ref={chatInputRef}
+                      type="text"
+                      placeholder={i18n.language === 'sv' ? 'Skriv ett meddelande...' : 'Type a message...'}
+                      value={bottomInputValue}
+                      onChange={(e) => setBottomInputValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (chatStep === 'socials') {
+                            setShowPlatformDropdown(false);
+                            handleSocialsComplete();
+                          } else if (bottomInputValue.trim()) {
+                            if (chatStep === 'edit-summary') {
+                              handleEditSummarySubmit(bottomInputValue);
+                              setBottomInputValue('');
+                            } else {
+                              const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
+                              if (currentInputMsg?.inputStep) {
+                                handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
+                              } else {
+                                handleChatMessage(bottomInputValue);
+                              }
+                              setBottomInputValue('');
+                            }
+                          }
+                        }
+                      }}
+                      className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
+                    />
+                    <button
+                      onClick={() => {
                         if (chatStep === 'socials') {
                           setShowPlatformDropdown(false);
                           handleSocialsComplete();
@@ -1539,38 +1562,15 @@ const BusinessAuth: React.FC = () => {
                             setBottomInputValue('');
                           }
                         }
-                      }
-                    }}
-                    className="flex-1 h-10 bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist text-sm px-4"
-                  />
-                  <button
-                    onClick={() => {
-                      if (chatStep === 'socials') {
-                        setShowPlatformDropdown(false);
-                        handleSocialsComplete();
-                      } else if (bottomInputValue.trim()) {
-                        if (chatStep === 'edit-summary') {
-                          handleEditSummarySubmit(bottomInputValue);
-                          setBottomInputValue('');
-                        } else {
-                          const currentInputMsg = messages.find(m => m.type === 'text-input' && m.inputStep === chatStep);
-                          if (currentInputMsg?.inputStep) {
-                            handleInlineSubmit(bottomInputValue, currentInputMsg.inputStep);
-                          } else {
-                            handleChatMessage(bottomInputValue);
-                          }
-                          setBottomInputValue('');
-                        }
-                      }
-                    }}
-                    disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
-                    className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
+                      }}
+                      disabled={chatStep !== 'socials' && !bottomInputValue.trim()}
+                      className="h-10 w-10 flex items-center justify-center rounded-[3px] bg-foreground text-background disabled:opacity-30 transition-opacity"
+                    >
+                      <Send className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
               {/* Company Profile Preview - fades in after chat moves */}
               <div className={`w-[480px] h-auto self-center bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col p-4 transition-opacity duration-500 ease-out ${
