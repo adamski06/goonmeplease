@@ -83,6 +83,9 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
     return location.pathname.startsWith(path);
   };
 
+  // Collapse sidebar on form routes (new/edit)
+  const isFormRoute = location.pathname.includes('/new') || location.pathname.includes('/edit');
+
   return (
     <div className="h-screen flex relative overflow-hidden">
       {/* Static Grainy Background */}
@@ -90,10 +93,10 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       <div className="noise-layer absolute inset-0 pointer-events-none" />
       
       {/* Left Sidebar */}
-      <aside className="w-56 lg:w-52 flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist">
+      <aside className={`${isFormRoute ? 'w-16' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-all duration-300`}>
         {/* Logo */}
-        <div className="px-6 pt-6 pb-4">
-          <button onClick={() => navigate('/business')} className="relative h-10 w-[120px]">
+        <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4`}>
+          <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'}`}>
             <div 
               className="absolute inset-0 bg-foreground"
               style={{
@@ -103,40 +106,43 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
                 maskSize: 'contain',
                 WebkitMaskRepeat: 'no-repeat',
                 maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'left center',
-                maskPosition: 'left center'
+                WebkitMaskPosition: isFormRoute ? 'center' : 'left center',
+                maskPosition: isFormRoute ? 'center' : 'left center'
               }} 
             />
           </button>
-          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">{t('nav.business')}</span>
+          {!isFormRoute && (
+            <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">{t('nav.business')}</span>
+          )}
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-col px-3 gap-4 mt-8">
+        <nav className={`flex flex-col ${isFormRoute ? 'px-2 items-center' : 'px-3'} gap-4 mt-8`}>
           {navItems.map((item) => (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`text-lg lg:text-base px-3 py-1.5 text-left transition-all flex items-center gap-3 ${
+              className={`${isFormRoute ? 'p-2 justify-center' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all flex items-center gap-3 ${
                 isActive(item.path) 
                   ? 'font-bold text-foreground' 
                   : 'font-medium text-foreground hover:font-semibold'
               }`}
+              title={isFormRoute ? item.label : undefined}
             >
               {getIcon(item.icon)}
-              {item.label}
+              {!isFormRoute && item.label}
             </button>
           ))}
         </nav>
 
 
         {/* More Menu at bottom */}
-        <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
+        <div className={`mt-auto ${isFormRoute ? 'px-2' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20`}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
+              <button className={`${isFormRoute ? 'w-full justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all flex items-center gap-3`}>
                 <Menu className="h-6 w-6" />
-                {t('common.more')}
+                {!isFormRoute && t('common.more')}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent 
