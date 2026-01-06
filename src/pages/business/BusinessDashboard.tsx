@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
@@ -12,11 +12,72 @@ interface BusinessProfile {
   website: string | null;
 }
 
+// Analyze image to determine if it needs a background and what color
+const analyzeLogoColors = (img: HTMLImageElement): 'white' | 'black' | 'none' => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return 'white';
+  
+  const size = 50; // Sample size
+  canvas.width = size;
+  canvas.height = size;
+  ctx.drawImage(img, 0, 0, size, size);
+  
+  try {
+    const imageData = ctx.getImageData(0, 0, size, size);
+    const data = imageData.data;
+    
+    let totalR = 0, totalG = 0, totalB = 0;
+    let transparentPixels = 0;
+    let pixelCount = 0;
+    
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const a = data[i + 3];
+      
+      if (a < 128) {
+        transparentPixels++;
+      } else {
+        totalR += r;
+        totalG += g;
+        totalB += b;
+        pixelCount++;
+      }
+    }
+    
+    // If image has transparency, it needs a background
+    const hasTransparency = transparentPixels > (size * size * 0.1);
+    
+    if (pixelCount === 0) return 'white';
+    
+    // Calculate average brightness
+    const avgR = totalR / pixelCount;
+    const avgG = totalG / pixelCount;
+    const avgB = totalB / pixelCount;
+    const brightness = (avgR * 0.299 + avgG * 0.587 + avgB * 0.114);
+    
+    // If the logo is mostly bright, use white background; if dark, use black
+    // We invert the logic - dark logos need light bg, light logos need dark bg
+    if (hasTransparency || true) { // Always add background for consistency
+      return brightness > 128 ? 'black' : 'white';
+    }
+    
+    return 'none';
+  } catch (e) {
+    console.error('Error analyzing logo:', e);
+    return 'white';
+  }
+};
+
 const BusinessDashboard: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [logoBgColor, setLogoBgColor] = useState<'white' | 'black' | 'none'>('white');
+  const logoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -52,6 +113,22 @@ const BusinessDashboard: React.FC = () => {
       fetchBusinessProfile();
     }
   }, [user]);
+
+  // Analyze logo colors when profile loads
+  useEffect(() => {
+    if (businessProfile?.logo_url) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const bgColor = analyzeLogoColors(img);
+        setLogoBgColor(bgColor);
+      };
+      img.onerror = () => {
+        setLogoBgColor('white'); // Default to white on error
+      };
+      img.src = businessProfile.logo_url;
+    }
+  }, [businessProfile?.logo_url]);
 
   if (loading) {
     return (
@@ -91,11 +168,19 @@ const BusinessDashboard: React.FC = () => {
             <div className="bg-card border border-border rounded-[4px] p-6">
               <div className="flex items-center gap-4">
                 {businessProfile?.logo_url ? (
-                  <img 
-                    src={businessProfile.logo_url} 
-                    alt="Company logo" 
-                    className="h-14 w-14 object-cover rounded-sm" 
-                  />
+                  <div 
+                    className={`h-14 w-14 rounded-sm flex items-center justify-center p-1 ${
+                      logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : ''
+                    }`}
+                  >
+                    <img 
+                      ref={logoRef}
+                      src={businessProfile.logo_url} 
+                      alt="Company logo" 
+                      className="max-h-full max-w-full object-contain" 
+                      crossOrigin="anonymous"
+                    />
+                  </div>
                 ) : (
                   <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center">
                     <span className="text-2xl font-semibold text-muted-foreground">
