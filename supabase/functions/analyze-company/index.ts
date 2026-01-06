@@ -259,7 +259,11 @@ serve(async (req) => {
     // Step 2: Analyze with heavy AI model (gpt-5 for comprehensive analysis)
     const systemPromptEnglish = `You are a senior business analyst. Your task is to write a comprehensive company profile for ${companyName} based on information gathered from their website and social media.
 
-Format your response with clear sections using **Bold Headings** followed by 2-3 sentences each:
+FIRST, provide a short one-sentence tagline/description (max 15 words) that captures the essence of the company. Format it as:
+**One-Liner**
+[Your short tagline here]
+
+Then format your response with clear sections using **Bold Headings** followed by 2-3 sentences each:
 
 **Company Overview**
 [What the company does, their mission, and core identity]
@@ -285,7 +289,11 @@ IMPORTANT: Write FROM THE COMPANY'S PERSPECTIVE using "we", "our", "us" througho
 
     const systemPromptSwedish = `Du är en senior affärsanalytiker. Din uppgift är att skriva en omfattande företagsprofil för ${companyName} baserat på information från deras webbplats och sociala medier.
 
-Formatera ditt svar med tydliga sektioner med **Feta Rubriker** följt av 2-3 meningar vardera:
+FÖRST, ge en kort en-menings tagline/beskrivning (max 15 ord) som fångar företagets essens. Formatera det som:
+**Kortbeskrivning**
+[Din korta tagline här]
+
+Formatera sedan ditt svar med tydliga sektioner med **Feta Rubriker** följt av 2-3 meningar vardera:
 
 **Företagsöversikt**
 [Vad företaget gör, deras uppdrag och kärnidentitet]
@@ -403,13 +411,22 @@ VIKTIGT: Skriv FRÅN FÖRETAGETS PERSPEKTIV med "vi", "vår", "oss" genomgående
       );
     }
 
+    // Extract the one-liner from the summary
+    let oneLiner = '';
+    const oneLineMatch = summary.match(/\*\*(?:One-Liner|Kortbeskrivning)\*\*\s*\n([^\n*]+)/);
+    if (oneLineMatch?.[1]) {
+      oneLiner = oneLineMatch[1].trim();
+    }
+
     console.log('Summary length:', summary.length);
+    console.log('One-liner:', oneLiner);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         data: {
           summary,
+          oneLiner,
           sourcesAnalyzed: contentParts.map(p => p.source),
           logo: companyLogo,
           brandColor: companyBrandColor

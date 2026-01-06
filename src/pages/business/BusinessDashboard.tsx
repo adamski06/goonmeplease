@@ -71,8 +71,16 @@ const BusinessDashboard: React.FC = () => {
     );
   }
 
-  // Extract first paragraph of description for display
-  const shortDescription = businessProfile?.description?.split('\n\n')[0] || 'Welcome to your business dashboard';
+  // Extract the one-liner (first line before any markdown or double newline)
+  const getShortDescription = () => {
+    if (!businessProfile?.description) return 'Welcome to your business dashboard';
+    const desc = businessProfile.description;
+    // Get first line, removing any markdown formatting
+    const firstLine = desc.split('\n')[0].replace(/\*\*/g, '').trim();
+    return firstLine || 'Welcome to your business dashboard';
+  };
+  
+  const shortDescription = getShortDescription();
 
   return (
     <BusinessLayout>
