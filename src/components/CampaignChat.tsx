@@ -27,6 +27,23 @@ const CampaignChat: React.FC = () => {
   const initializedRef = useRef(false);
 
   // Fetch business profile on mount
+  // Typewriter effect helper
+  const typewriterEffect = (messageId: string, content: string) => {
+    let charIndex = 0;
+    const typeInterval = setInterval(() => {
+      charIndex++;
+      setMessages(prev => prev.map(msg => 
+        msg.id === messageId 
+          ? { ...msg, displayedContent: content.slice(0, charIndex) }
+          : msg
+      ));
+      if (charIndex >= content.length) {
+        clearInterval(typeInterval);
+        setIsTyping(false);
+      }
+    }, 15);
+  };
+
   useEffect(() => {
     const fetchBusinessProfile = async () => {
       if (!user || initializedRef.current) return;
@@ -38,24 +55,28 @@ const CampaignChat: React.FC = () => {
         .eq('user_id', user.id)
         .single();
 
+      let greeting: string;
       if (data) {
         setBusinessProfile(data);
-        // Add personalized greeting
-        const greeting = `Hey! Ready to create a new campaign for ${data.company_name}? I can help with guidelines, budget, or anything else.`;
-        setMessages([{
-          id: '1',
-          role: 'jarla',
-          content: greeting,
-          displayedContent: greeting
-        }]);
+        greeting = `Hey! Ready to create a new campaign for ${data.company_name}? I can help with guidelines, budget, or anything else.`;
       } else {
-        setMessages([{
-          id: '1',
-          role: 'jarla',
-          content: "Hi! I'm here to help you design your campaign. Tell me what you're looking to achieve.",
-          displayedContent: "Hi! I'm here to help you design your campaign. Tell me what you're looking to achieve."
-        }]);
+        greeting = "Hey! I can help you design your campaign. What are you looking to achieve?";
       }
+
+      // Add message with empty displayedContent, then typewriter it
+      const messageId = '1';
+      setMessages([{
+        id: messageId,
+        role: 'jarla',
+        content: greeting,
+        displayedContent: ''
+      }]);
+      setIsTyping(true);
+      
+      // Small delay before starting typewriter
+      setTimeout(() => {
+        typewriterEffect(messageId, greeting);
+      }, 300);
     };
 
     fetchBusinessProfile();
