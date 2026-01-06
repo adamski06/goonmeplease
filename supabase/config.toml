@@ -2,3 +2,6 @@ project_id = "jerctgkoqyhyvrpdmtfo"
 
 [functions.analyze-business-website]
 verify_jwt = false
+
+[functions.jarla-chat]
+verify_jwt = false
