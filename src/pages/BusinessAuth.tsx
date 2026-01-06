@@ -605,10 +605,9 @@ const BusinessAuth: React.FC = () => {
       setTimeout(() => {
         setProfileVisible(true);
         
-        // Start typewriter effect for description
+        // Start typewriter effect for description - limit to ~100 characters
         const text = companySummary.split('**')[2]?.trim() || companySummary;
-        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-        const fullDescription = sentences[0]?.trim() || text.slice(0, 100);
+        const fullDescription = text.slice(0, 100).trim() + (text.length > 100 ? '...' : '');
         
         let charIndex = 0;
         const typeInterval = setInterval(() => {
