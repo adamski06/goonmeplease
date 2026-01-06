@@ -771,6 +771,7 @@ const BusinessAuth: React.FC = () => {
           company_name: companyName,
           description: fullDescription || null,
           website: website || null,
+          logo_url: companyLogo || null,
         });
 
       if (profileError) throw profileError;
