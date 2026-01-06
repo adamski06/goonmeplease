@@ -1604,17 +1604,14 @@ const BusinessAuth: React.FC = () => {
                 } ${
                   profileVisible ? 'opacity-100' : 'opacity-0'
                 }`}
-                style={{
-                  background: companyBrandColor 
-                    ? `linear-gradient(135deg, ${companyBrandColor}15 0%, ${companyBrandColor}05 100%)`
-                    : 'linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.4))'
-                }}
               >
                 {showProfilePreview && (
                   <div 
-                    className="bg-background/90 backdrop-blur-sm rounded-[3px] p-10 space-y-8 shadow-sm"
+                    className="rounded-[3px] p-10 space-y-8 shadow-sm"
                     style={{
-                      borderLeft: companyBrandColor ? `3px solid ${companyBrandColor}` : undefined
+                      background: companyBrandColor 
+                        ? `linear-gradient(135deg, ${companyBrandColor}20 0%, ${companyBrandColor}08 100%)`
+                        : 'hsl(var(--background))'
                     }}
                   >
                     {/* Logo and Company Name */}
