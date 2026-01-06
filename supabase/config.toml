@@ -3,5 +3,8 @@ project_id = "jerctgkoqyhyvrpdmtfo"
 [functions.analyze-business-website]
 verify_jwt = false
 
+[functions.analyze-company]
+verify_jwt = false
+
 [functions.jarla-chat]
 verify_jwt = false
