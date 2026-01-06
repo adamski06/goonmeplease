@@ -101,6 +101,7 @@ const BusinessAuth: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [devMode, setDevMode] = useState(false);
+  const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -610,7 +611,6 @@ const BusinessAuth: React.FC = () => {
   }
 
   // Render social media picker - dropdown with checkboxes, then inputs
-  const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   
   const renderSocialPicker = () => {
     const hasSelectedPlatforms = selectedPlatforms.length > 0;
