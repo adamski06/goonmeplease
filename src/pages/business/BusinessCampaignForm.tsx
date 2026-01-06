@@ -12,62 +12,21 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, X, Image, Video, Loader2 } from 'lucide-react';
 
-// Platform logos as SVG components with brand colors
-const TikTokLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-10 h-10">
-    <path fill="#25F4EE" d="M9.37 23.5a7.12 7.12 0 0 1-7.12-7.12 7.12 7.12 0 0 1 7.12-7.13c.39 0 .77.03 1.15.09v3.63a3.51 3.51 0 0 0-1.15-.2 3.52 3.52 0 0 0 0 7.03 3.52 3.52 0 0 0 3.52-3.52V0h3.5a5.63 5.63 0 0 0 5.62 5.62v3.5a9.11 9.11 0 0 1-5.62-1.93v9.19a7.12 7.12 0 0 1-7.02 7.12z"/>
-    <path fill="#FE2C55" d="M10.52 23.5a7.12 7.12 0 0 1-7.12-7.12 7.12 7.12 0 0 1 7.12-7.13c.39 0 .77.03 1.15.09v3.63a3.51 3.51 0 0 0-1.15-.2 3.52 3.52 0 0 0 0 7.03 3.52 3.52 0 0 0 3.52-3.52V0h3.5a5.63 5.63 0 0 0 5.62 5.62v3.5a9.11 9.11 0 0 1-5.62-1.93v9.19a7.12 7.12 0 0 1-7.02 7.12z" opacity="0.5"/>
-    <path fill="#000" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-  </svg>
-);
-
-const InstagramLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-10 h-10">
-    <defs>
-      <radialGradient id="ig-gradient" cx="30%" cy="107%" r="150%">
-        <stop offset="0%" stopColor="#fdf497"/>
-        <stop offset="5%" stopColor="#fdf497"/>
-        <stop offset="45%" stopColor="#fd5949"/>
-        <stop offset="60%" stopColor="#d6249f"/>
-        <stop offset="90%" stopColor="#285AEB"/>
-      </radialGradient>
-    </defs>
-    <rect width="24" height="24" rx="6" fill="url(#ig-gradient)"/>
-    <circle cx="12" cy="12" r="4" fill="none" stroke="#fff" strokeWidth="1.5"/>
-    <circle cx="17.5" cy="6.5" r="1.2" fill="#fff"/>
-    <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="1.5"/>
-  </svg>
-);
-
-const YouTubeLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-10 h-10">
-    <rect width="24" height="24" rx="6" fill="#FF0000"/>
-    <path fill="#fff" d="M9.5 16.5v-9l7 4.5-7 4.5z"/>
-  </svg>
-);
-
-const FacebookLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-10 h-10">
-    <rect width="24" height="24" rx="6" fill="#1877F2"/>
-    <path fill="#fff" d="M16.5 12.5h-2.5v8h-3v-8h-2v-2.5h2v-1.5c0-2.5 1-4 3.5-4h2.5v2.5h-1.5c-1 0-1.5.5-1.5 1.5v1.5h3l-.5 2.5z"/>
-  </svg>
-);
-
-const LinkedInLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-10 h-10">
-    <rect width="24" height="24" rx="6" fill="#0A66C2"/>
-    <path fill="#fff" d="M8 10h-2v8h2v-8zm-1-3.5a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5zm9 3.5h-2.5c0 0 0 3.5 0 5.5 0 1-.5 1.5-1.25 1.5s-1.25-.5-1.25-1.5v-5.5h-2v6c0 2 1 3 2.5 3s2-.5 2.5-1.5v1h2v-8.5z"/>
-  </svg>
-);
+// Platform logo imports
+import tiktokLogo from '@/assets/platforms/tiktok.png';
+import instagramLogo from '@/assets/platforms/instagram.png';
+import youtubeLogo from '@/assets/platforms/youtube.png';
+import facebookLogo from '@/assets/platforms/facebook.png';
+import linkedinLogo from '@/assets/platforms/linkedin.png';
 
 type Platform = 'tiktok' | 'instagram' | 'youtube' | 'facebook' | 'linkedin';
 
-const platforms: { id: Platform; name: string; Logo: React.FC }[] = [
-  { id: 'tiktok', name: 'TikTok', Logo: TikTokLogo },
-  { id: 'instagram', name: 'Instagram', Logo: InstagramLogo },
-  { id: 'youtube', name: 'YouTube', Logo: YouTubeLogo },
-  { id: 'facebook', name: 'Facebook', Logo: FacebookLogo },
-  { id: 'linkedin', name: 'LinkedIn', Logo: LinkedInLogo },
+const platforms: { id: Platform; name: string; logo: string }[] = [
+  { id: 'tiktok', name: 'TikTok', logo: tiktokLogo },
+  { id: 'instagram', name: 'Instagram', logo: instagramLogo },
+  { id: 'youtube', name: 'YouTube', logo: youtubeLogo },
+  { id: 'facebook', name: 'Facebook', logo: facebookLogo },
+  { id: 'linkedin', name: 'LinkedIn', logo: linkedinLogo },
 ];
 
 const BusinessCampaignForm: React.FC = () => {
@@ -351,7 +310,7 @@ const BusinessCampaignForm: React.FC = () => {
                 <div className="space-y-3">
                   <Label>Target Platforms</Label>
                   <div className="flex gap-6">
-                    {platforms.map(({ id, name, Logo }) => {
+                    {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
                         <button
@@ -362,7 +321,11 @@ const BusinessCampaignForm: React.FC = () => {
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <Logo />
+                          <img 
+                            src={logo} 
+                            alt={name} 
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
                           <span className="text-xs font-medium text-foreground">
                             {name}
                           </span>
