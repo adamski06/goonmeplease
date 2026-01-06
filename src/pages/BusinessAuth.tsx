@@ -113,6 +113,8 @@ const BusinessAuth: React.FC = () => {
   const [isProfileEditMode, setIsProfileEditMode] = useState(false);
   const [editedCompanyName, setEditedCompanyName] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
+  const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
+  const [editingSectionContent, setEditingSectionContent] = useState('');
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -1395,19 +1397,61 @@ const BusinessAuth: React.FC = () => {
                             className="bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3 relative group"
                             style={{ animation: 'smoothFadeIn 0.5s ease-out forwards' }}
                           >
-                            <button
-                              onClick={() => {
-                                // Pre-fill the bottom input with the current content for editing
-                                setBottomInputValue(msg.content);
-                                setChatStep('edit-summary');
-                              }}
-                              className="absolute top-2 right-2 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity"
-                              title={i18n.language === 'sv' ? 'Redigera' : 'Edit'}
-                            >
-                              <Pencil className="h-3.5 w-3.5 text-foreground/70" />
-                            </button>
+                            {editingSectionId !== msg.id && (
+                              <button
+                                onClick={() => {
+                                  setEditingSectionId(msg.id);
+                                  setEditingSectionContent(msg.content);
+                                }}
+                                className="absolute top-2 right-2 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity"
+                                title={i18n.language === 'sv' ? 'Redigera' : 'Edit'}
+                              >
+                                <Pencil className="h-3.5 w-3.5 text-foreground/70" />
+                              </button>
+                            )}
                             <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
-                            <p className="font-geist text-base text-foreground/90">{msg.content}</p>
+                            {editingSectionId === msg.id ? (
+                              <div className="space-y-2">
+                                <textarea
+                                  value={editingSectionContent}
+                                  onChange={(e) => setEditingSectionContent(e.target.value)}
+                                  autoFocus
+                                  className="w-full min-h-[80px] bg-white dark:bg-white/10 border border-foreground/20 text-foreground rounded-[3px] font-geist text-base p-2 resize-none focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                />
+                                <div className="flex gap-2 justify-end">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditingSectionId(null);
+                                      setEditingSectionContent('');
+                                    }}
+                                    className="text-xs h-7 px-2"
+                                  >
+                                    {i18n.language === 'sv' ? 'Avbryt' : 'Cancel'}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => {
+                                      // Update the message content
+                                      setMessages(prev => prev.map(m => 
+                                        m.id === msg.id 
+                                          ? { ...m, content: editingSectionContent, displayedContent: editingSectionContent }
+                                          : m
+                                      ));
+                                      setEditingSectionId(null);
+                                      setEditingSectionContent('');
+                                    }}
+                                    className="text-xs h-7 px-2"
+                                  >
+                                    <Check className="h-3 w-3 mr-1" />
+                                    {i18n.language === 'sv' ? 'Spara' : 'Save'}
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="font-geist text-base text-foreground/90">{msg.content}</p>
+                            )}
                           </div>
                         ) : (
                           <div
