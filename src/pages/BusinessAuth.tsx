@@ -203,7 +203,7 @@ const BusinessAuth: React.FC = () => {
         
         // Fade out "Hello!" (Apple style)
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise(r => setTimeout(r, 300));
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('welcome');
@@ -214,7 +214,7 @@ const BusinessAuth: React.FC = () => {
         
         // Fade out "Welcome to Jarla" (Apple style)
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise(r => setTimeout(r, 300));
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('setup');
@@ -229,7 +229,7 @@ const BusinessAuth: React.FC = () => {
         
         // Fade out setup text
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise(r => setTimeout(r, 300));
         setIsFadingOut(false);
         setSetupText('');
         setFreeText('');
