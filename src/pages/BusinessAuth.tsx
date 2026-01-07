@@ -74,6 +74,7 @@ const BusinessAuth: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
   const [setupText, setSetupText] = useState('');
   const [freeText, setFreeText] = useState('');
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -199,21 +200,25 @@ const BusinessAuth: React.FC = () => {
         await typeText(helloWord, setDisplayText, 140);
         await new Promise(r => setTimeout(r, 800));
         
-        // Fade out "Hello!" (Apple style)
-        setIntroStep('welcome');
+        // Fade out "Hello!" (Apple style) - set fading state, wait, then clear
+        setIsFadingOut(true);
         await new Promise(r => setTimeout(r, 500));
+        setIsFadingOut(false);
         setDisplayText('');
-        await new Promise(r => setTimeout(r, 300));
+        setIntroStep('welcome');
+        await new Promise(r => setTimeout(r, 100));
         
         // Step 2: Type "Welcome to Jarla"
         await typeText(welcomeText, setDisplayText, 100);
         await new Promise(r => setTimeout(r, 800));
         
         // Fade out "Welcome to Jarla" (Apple style)
-        setIntroStep('setup');
+        setIsFadingOut(true);
         await new Promise(r => setTimeout(r, 500));
+        setIsFadingOut(false);
         setDisplayText('');
-        await new Promise(r => setTimeout(r, 300));
+        setIntroStep('setup');
+        await new Promise(r => setTimeout(r, 100));
         
         // Step 3: Type "Let's setup your business account"
         await typeText(setupTextContent, setSetupText, 80);
@@ -222,6 +227,13 @@ const BusinessAuth: React.FC = () => {
         // Type "it's free" below
         await typeText(freeTextContent, setFreeText, 100);
         await new Promise(r => setTimeout(r, 1000));
+        
+        // Fade out setup text
+        setIsFadingOut(true);
+        await new Promise(r => setTimeout(r, 500));
+        setIsFadingOut(false);
+        setSetupText('');
+        setFreeText('');
         
         // Step 4: Show input
         setIntroStep('input');
@@ -1413,23 +1425,16 @@ const BusinessAuth: React.FC = () => {
               <div className="animate-spin">
                 <Loader2 className="h-8 w-8 text-muted-foreground" />
               </div>
-            ) : introStep === 'hello' ? (
-              // Step 1: Type "Hello!" then fade out
+            ) : (introStep === 'hello' || introStep === 'welcome') ? (
+              // Step 1 & 2: Type text, then fade out down
               <div className="flex items-center justify-center">
-                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ${displayText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                  {displayText || 'Hello!'}
-                </h1>
-              </div>
-            ) : introStep === 'welcome' ? (
-              // Step 2: Fade out Hello, then type Welcome
-              <div className="flex items-center justify-center">
-                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ${displayText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                  {displayText || (i18n.language === 'sv' ? 'Välkommen till Jarla' : 'Welcome to Jarla')}
+                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                  {displayText}
                 </h1>
               </div>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free"
-              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ${(setupText || freeText) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {setupText}
                 </h1>
@@ -1442,9 +1447,9 @@ const BusinessAuth: React.FC = () => {
             ) : (
               // Step 4: Show company name input
               <div className="flex flex-col items-center space-y-8 animate-fade-in">
-                <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
-                  {i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your "}
-                  <span className="relative inline-block align-baseline whitespace-nowrap">
+                <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap">
+                  <span>{i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your "}</span>
+                  <span className="relative inline-flex items-baseline whitespace-nowrap">
                     <input
                       ref={inputRef}
                       type="text"
@@ -1461,7 +1466,7 @@ const BusinessAuth: React.FC = () => {
                       style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
                     />
                     {!companyName && (
-                      <span className="absolute left-0 top-0 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
                         {typewriterText}
                       </span>
                     )}
