@@ -1511,12 +1511,12 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : (
               <>
-            {/* Main container - uses transform for smooth slide */}
+            {/* Main container - uses transform for smooth slide to left edge */}
             <div 
               className="flex gap-8 items-center"
               style={{
-                transform: showProfilePreview ? 'translateX(-220px)' : 'translateX(0)',
-                transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                transform: showProfilePreview ? 'translateX(calc(-50vw + 360px))' : 'translateX(0)',
+                transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               {/* Chat container - fixed width and position */}
@@ -1832,20 +1832,22 @@ const BusinessAuth: React.FC = () => {
               {/* Company Profile Preview - pops up with animation */}
               {showProfilePreview && (
                 <div 
-                  className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[420px] transition-opacity duration-300 ${
+                  className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[480px] transition-opacity duration-500 ${
                     profileVisible ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{
-                    animation: 'profilePopUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
+                    animation: profileVisible ? 'profilePopUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' : 'none'
                   }}
                 >
                   <div 
-                    className="rounded-[3px] p-8 space-y-6 relative overflow-hidden min-h-[300px] flex items-center justify-center"
+                    className="rounded-[3px] bg-muted/50 p-8 relative overflow-hidden min-h-[350px]"
                   >
                     {profileLoading ? (
-                      <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                      </div>
                     ) : (
-                      <>
+                      <div className="space-y-6">
                     {/* Edit button in top right corner */}
                     <button 
                       className={`absolute top-3 right-3 w-7 h-7 rounded-full shadow-sm flex items-center justify-center transition-all z-20 ${
@@ -1975,7 +1977,7 @@ const BusinessAuth: React.FC = () => {
                         {i18n.language === 'sv' ? 'Inga kampanjer ännu' : 'No campaigns yet'}
                       </p>
                     </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>
