@@ -695,14 +695,14 @@ const BusinessAuth: React.FC = () => {
     }]);
     
     if (confirmed) {
-      // First move chat to left and show profile with loading
+      // First move chat to left
       setShowProfilePreview(true);
       setProfileLoading(true);
       setChatStep('creating-profile');
       setProfileTypedDescription('');
       setProfileTypingComplete(false);
       
-      // After chat has moved (700ms), fade in the profile
+      // After 1 second, show the profile
       setTimeout(() => {
         setProfileVisible(true);
         
@@ -735,7 +735,7 @@ const BusinessAuth: React.FC = () => {
             }
           }, 20);
         }, 500);
-      }, 700);
+      }, 1000);
     } else {
       // Skip profile preview, go directly to credentials
       setChatStep('credentials');
@@ -1511,13 +1511,17 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : (
               <>
-            {/* Main container that holds chat and profile side by side */}
-            <div className={`flex gap-4 items-center transition-all duration-700 ease-out ${
-              showProfilePreview ? 'ml-[160px]' : 'ml-0'
-            }`}>
-              {/* Chat container - fixed width, just moves when profile appears */}
+            {/* Main container - uses transform for smooth slide */}
+            <div 
+              className="flex gap-8 items-center"
+              style={{
+                transform: showProfilePreview ? 'translateX(-220px)' : 'translateX(0)',
+                transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
+              {/* Chat container - fixed width and position */}
               <div 
-                className="h-[calc(100vh-1rem)] w-[680px] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out"
+                className="h-[calc(100vh-1rem)] w-[680px] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative"
                 style={{
                   animation: 'chatBoxScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                 }}
@@ -1836,10 +1840,7 @@ const BusinessAuth: React.FC = () => {
                   }}
                 >
                   <div 
-                    className="rounded-[3px] p-8 space-y-6 shadow-sm relative overflow-hidden min-h-[300px] flex items-center justify-center"
-                    style={{
-                      background: 'hsl(var(--muted))'
-                    }}
+                    className="rounded-[3px] p-8 space-y-6 relative overflow-hidden min-h-[300px] flex items-center justify-center"
                   >
                     {profileLoading ? (
                       <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
