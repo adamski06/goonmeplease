@@ -307,7 +307,7 @@ const BusinessCampaignForm: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Platform Selection */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <Label className="block text-center">Target Platforms</Label>
                   <div className="flex justify-center gap-10">
                     {platforms.map(({ id, name, logo }) => {
@@ -339,7 +339,7 @@ const BusinessCampaignForm: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="pt-4 space-y-2">
                   <Label htmlFor="title">Campaign Title</Label>
                   <Input
                     id="title"
