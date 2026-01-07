@@ -281,7 +281,7 @@ const BusinessCampaignForm: React.FC = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Campaign Info */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader>
@@ -336,7 +336,7 @@ const BusinessCampaignForm: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-4 space-y-2">
+                <div className="pt-4 space-y-2 max-w-lg">
                   <Label htmlFor="title">Campaign Title</Label>
                   <Input
                     id="title"
@@ -346,7 +346,7 @@ const BusinessCampaignForm: React.FC = () => {
                     required
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 max-w-lg">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
@@ -392,7 +392,7 @@ const BusinessCampaignForm: React.FC = () => {
                 </div>
                 
                 {/* Requirements as list */}
-                <div className="space-y-2">
+                <div className="space-y-2 max-w-lg">
                   <div className="flex items-center justify-between">
                     <Label>Requirements</Label>
                     <Button type="button" variant="ghost" size="sm" onClick={addRequirement} className="h-7 px-2">
@@ -469,7 +469,7 @@ const BusinessCampaignForm: React.FC = () => {
                 <CardTitle>Budget</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-2 max-w-lg">
                   <Label htmlFor="total_budget">Total Budget (SEK)</Label>
                   <Input
                     id="total_budget"
@@ -520,7 +520,7 @@ const BusinessCampaignForm: React.FC = () => {
                 <CardTitle>Deadline</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
+                <div className="space-y-2 max-w-lg">
                   <Label htmlFor="deadline">Campaign Deadline</Label>
                   <Input
                     id="deadline"
