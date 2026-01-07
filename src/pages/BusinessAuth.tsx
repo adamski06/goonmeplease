@@ -199,21 +199,23 @@ const BusinessAuth: React.FC = () => {
         await typeText(helloWord, setDisplayText, 140);
         await new Promise(r => setTimeout(r, 800));
         
-        // Delete "Hello!"
-        await deleteText(helloWord, setDisplayText, 60);
+        // Fade out "Hello!" (Apple style)
+        setIntroStep('welcome');
+        await new Promise(r => setTimeout(r, 500));
+        setDisplayText('');
         await new Promise(r => setTimeout(r, 300));
         
         // Step 2: Type "Welcome to Jarla"
-        setIntroStep('welcome');
         await typeText(welcomeText, setDisplayText, 100);
         await new Promise(r => setTimeout(r, 800));
         
-        // Delete "Welcome to Jarla"
-        await deleteText(welcomeText, setDisplayText, 40);
+        // Fade out "Welcome to Jarla" (Apple style)
+        setIntroStep('setup');
+        await new Promise(r => setTimeout(r, 500));
+        setDisplayText('');
         await new Promise(r => setTimeout(r, 300));
         
         // Step 3: Type "Let's setup your business account"
-        setIntroStep('setup');
         await typeText(setupTextContent, setSetupText, 80);
         await new Promise(r => setTimeout(r, 400));
         
@@ -1411,16 +1413,23 @@ const BusinessAuth: React.FC = () => {
               <div className="animate-spin">
                 <Loader2 className="h-8 w-8 text-muted-foreground" />
               </div>
-            ) : introStep === 'hello' || introStep === 'welcome' ? (
-              // Step 1 & 2: Type "Hello!" then "Welcome to Jarla"
+            ) : introStep === 'hello' ? (
+              // Step 1: Type "Hello!" then fade out
               <div className="flex items-center justify-center">
-                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
-                  {displayText}
+                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ${displayText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  {displayText || 'Hello!'}
+                </h1>
+              </div>
+            ) : introStep === 'welcome' ? (
+              // Step 2: Fade out Hello, then type Welcome
+              <div className="flex items-center justify-center">
+                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ${displayText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  {displayText || (i18n.language === 'sv' ? 'Välkommen till Jarla' : 'Welcome to Jarla')}
                 </h1>
               </div>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free"
-              <div className="flex flex-col items-center space-y-3">
+              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ${(setupText || freeText) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {setupText}
                 </h1>
@@ -1435,7 +1444,7 @@ const BusinessAuth: React.FC = () => {
               <div className="flex flex-col items-center space-y-8 animate-fade-in">
                 <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your "}
-                  <span className="relative inline-block align-baseline">
+                  <span className="relative inline-block align-baseline whitespace-nowrap">
                     <input
                       ref={inputRef}
                       type="text"
@@ -1452,12 +1461,12 @@ const BusinessAuth: React.FC = () => {
                       style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
                     />
                     {!companyName && (
-                      <span className="absolute left-0 top-0 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none">
+                      <span className="absolute left-0 top-0 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
                         {typewriterText}
                       </span>
                     )}
                   </span>
-                  ?
+                  <span className="text-lg md:text-xl font-medium font-montserrat">?</span>
                 </p>
                 
                 <Button 
