@@ -110,6 +110,7 @@ const BusinessAuth: React.FC = () => {
   const [devMode, setDevMode] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   const [showProfilePreview, setShowProfilePreview] = useState(false);
+  const [chatLoading, setChatLoading] = useState(true);
   const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
@@ -311,31 +312,37 @@ const BusinessAuth: React.FC = () => {
   const startChat = () => {
     if (!companyName.trim()) return;
     setIsTyping(true); // Show loading dots
+    setChatLoading(true); // Start with loading state
     
     // Brief loading delay before transitioning to chat
     setTimeout(() => {
       setIsTyping(false);
       setMode('chat');
       
+      // Show loading spinner briefly, then reveal chat
       setTimeout(() => {
-        addJarlaMessage(
-          i18n.language === 'sv' 
-            ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
-            : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
-          'text',
-          () => {
-            setTimeout(() => {
-              addJarlaMessageWithInput(
-                i18n.language === 'sv' 
-                  ? 'Har ni en webbplats?'
-                  : "Does it have a website?",
-                'https://yourcompany.com',
-                'website'
-              );
-            }, 500);
-          }
-        );
-      }, 300);
+        setChatLoading(false);
+        
+        setTimeout(() => {
+          addJarlaMessage(
+            i18n.language === 'sv' 
+              ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
+              : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
+            'text',
+            () => {
+              setTimeout(() => {
+                addJarlaMessageWithInput(
+                  i18n.language === 'sv' 
+                    ? 'Har ni en webbplats?'
+                    : "Does it have a website?",
+                  'https://yourcompany.com',
+                  'website'
+                );
+              }, 500);
+            }
+          );
+        }, 300);
+      }, 500);
     }, 300);
   };
 
@@ -1482,7 +1489,7 @@ const BusinessAuth: React.FC = () => {
                   onClick={startChat} 
                   className={`rounded-[3px] px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
-                  {t('common.continue')}
+                  Setup account
                 </Button>
               </div>
             )}
@@ -1490,14 +1497,26 @@ const BusinessAuth: React.FC = () => {
         ) : (
           // Chat interface with optional profile preview
           <div className="h-screen flex items-center justify-center p-2 overflow-hidden">
+            {chatLoading ? (
+              // Loading state before chat appears
+              <div className="flex items-center justify-center">
+                <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+              </div>
+            ) : (
+              <>
             {/* Main container that holds chat and profile side by side */}
             <div className={`flex gap-4 items-center transition-all duration-700 ease-out ${
               showProfilePreview ? 'ml-[160px]' : 'ml-0'
             }`}>
               {/* Chat container - wider initially, narrows when profile appears */}
-              <div className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
-                showProfilePreview ? 'w-[500px]' : 'w-[680px]'
-              }`}>
+              <div 
+                className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
+                  showProfilePreview ? 'w-[500px]' : 'w-[680px]'
+                }`}
+                style={{
+                  animation: 'chatBoxScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
+                }}
+              >
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   <div className="w-full">
@@ -1951,6 +1970,8 @@ const BusinessAuth: React.FC = () => {
                 )}
               </div>
             </div>
+              </>
+            )}
           </div>
         )}
       </div>
