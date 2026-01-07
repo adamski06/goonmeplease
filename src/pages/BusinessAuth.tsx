@@ -1438,8 +1438,8 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free" with laptop image
-              <div className={`flex items-center justify-between w-full max-w-7xl mx-auto px-8 md:px-16 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <div className="flex flex-col items-start space-y-3 text-left flex-shrink-0">
+              <div className={`relative w-full h-screen transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                <div className="absolute left-8 md:left-16 lg:left-24 top-1/3 -translate-y-1/2 flex flex-col items-start space-y-3 text-left z-10">
                   <h1 className="text-2xl md:text-4xl font-bold font-montserrat text-foreground">
                     {setupText}
                   </h1>
@@ -1447,11 +1447,11 @@ const BusinessAuth: React.FC = () => {
                     {freeText || '\u00A0'}
                   </h2>
                 </div>
-                <div className="hidden md:block flex-1 flex justify-end">
+                <div className="hidden md:block absolute right-0 bottom-0">
                   <img 
                     src={businessLaptop} 
                     alt="Business laptop" 
-                    className={`w-[600px] lg:w-[700px] xl:w-[800px] h-auto object-contain transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-[66vh] w-auto object-contain object-bottom transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
                   />
                 </div>
               </div>
