@@ -1841,7 +1841,7 @@ const BusinessAuth: React.FC = () => {
               {/* Company Profile Preview - pops up with animation */}
               {showProfilePreview && (
                 <div 
-                  className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[480px] transition-opacity duration-500 ${
+                  className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[620px] transition-opacity duration-500 ${
                     profileVisible ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{
@@ -1849,7 +1849,7 @@ const BusinessAuth: React.FC = () => {
                   }}
                 >
                   <div 
-                    className="rounded-[3px] bg-muted/50 p-8 relative overflow-hidden min-h-[350px]"
+                    className="rounded-[3px] bg-muted/50 p-10 relative overflow-hidden min-h-[455px]"
                   >
                     {profileLoading ? (
                       <div className="absolute inset-0 flex items-center justify-center">
