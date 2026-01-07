@@ -326,7 +326,7 @@ const BusinessCampaignForm: React.FC = () => {
                               src={logo} 
                               alt={name} 
                               className={`w-full h-full object-cover ${
-                                id === 'instagram' || id === 'youtube' ? 'scale-110' : ''
+                                id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-110' : ''
                               }`}
                             />
                           </div>
