@@ -158,7 +158,7 @@ const BusinessAuth: React.FC = () => {
       setSetupText('');
       setFreeText('');
       
-      const typeText = (text: string, setter: (val: string) => void, speed: number = 80): Promise<void> => {
+      const typeText = (text: string, setter: (val: string) => void, speed: number = 120): Promise<void> => {
         return new Promise((resolve) => {
           let index = 0;
           const timer = setInterval(() => {
@@ -173,7 +173,7 @@ const BusinessAuth: React.FC = () => {
         });
       };
       
-      const deleteText = (text: string, setter: (val: string) => void, speed: number = 40): Promise<void> => {
+      const deleteText = (text: string, setter: (val: string) => void, speed: number = 60): Promise<void> => {
         return new Promise((resolve) => {
           let index = text.length;
           const timer = setInterval(() => {
@@ -196,30 +196,30 @@ const BusinessAuth: React.FC = () => {
         const placeholderText = i18n.language === 'sv' ? 'företagsnamn' : 'company name';
         
         // Step 1: Type "Hello!"
-        await typeText(helloWord, setDisplayText, 100);
-        await new Promise(r => setTimeout(r, 600));
+        await typeText(helloWord, setDisplayText, 140);
+        await new Promise(r => setTimeout(r, 800));
         
         // Delete "Hello!"
-        await deleteText(helloWord, setDisplayText, 40);
-        await new Promise(r => setTimeout(r, 200));
+        await deleteText(helloWord, setDisplayText, 60);
+        await new Promise(r => setTimeout(r, 300));
         
         // Step 2: Type "Welcome to Jarla"
         setIntroStep('welcome');
-        await typeText(welcomeText, setDisplayText, 60);
-        await new Promise(r => setTimeout(r, 600));
+        await typeText(welcomeText, setDisplayText, 100);
+        await new Promise(r => setTimeout(r, 800));
         
         // Delete "Welcome to Jarla"
-        await deleteText(welcomeText, setDisplayText, 30);
-        await new Promise(r => setTimeout(r, 200));
+        await deleteText(welcomeText, setDisplayText, 40);
+        await new Promise(r => setTimeout(r, 300));
         
         // Step 3: Type "Let's setup your business account"
         setIntroStep('setup');
-        await typeText(setupTextContent, setSetupText, 50);
-        await new Promise(r => setTimeout(r, 300));
+        await typeText(setupTextContent, setSetupText, 80);
+        await new Promise(r => setTimeout(r, 400));
         
         // Type "it's free" below
-        await typeText(freeTextContent, setFreeText, 60);
-        await new Promise(r => setTimeout(r, 800));
+        await typeText(freeTextContent, setFreeText, 100);
+        await new Promise(r => setTimeout(r, 1000));
         
         // Step 4: Show input
         setIntroStep('input');
@@ -1416,7 +1416,6 @@ const BusinessAuth: React.FC = () => {
               <div className="flex items-center justify-center">
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {displayText}
-                  <span className="animate-pulse">|</span>
                 </h1>
               </div>
             ) : introStep === 'setup' ? (
@@ -1424,13 +1423,11 @@ const BusinessAuth: React.FC = () => {
               <div className="flex flex-col items-center space-y-3">
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {setupText}
-                  {!freeText && <span className="animate-pulse">|</span>}
                 </h1>
                 {freeText && (
-                  <p className="text-lg md:text-xl font-montserrat text-muted-foreground">
+                  <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                     {freeText}
-                    <span className="animate-pulse">|</span>
-                  </p>
+                  </h1>
                 )}
               </div>
             ) : (
@@ -1451,11 +1448,11 @@ const BusinessAuth: React.FC = () => {
                         }
                       }}
                       placeholder=""
-                      className="bg-transparent border-none outline-none text-4xl md:text-6xl font-bold font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[200px]"
-                      style={{ width: companyName ? `${Math.max(200, companyName.length * 28)}px` : '200px' }}
+                      className="bg-transparent border-none outline-none text-lg md:text-xl font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
+                      style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
                     />
                     {!companyName && (
-                      <span className="absolute left-0 top-0 text-4xl md:text-6xl font-bold font-montserrat text-muted-foreground/50 pointer-events-none">
+                      <span className="absolute left-0 top-0 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none">
                         {typewriterText}
                       </span>
                     )}
