@@ -1515,7 +1515,7 @@ const BusinessAuth: React.FC = () => {
             <div 
               className="flex gap-8 items-center"
               style={{
-                transform: showProfilePreview ? 'translateX(-260px)' : 'translateX(0)',
+                transform: showProfilePreview ? 'translateX(-120px)' : 'translateX(0)',
                 transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
@@ -1875,15 +1875,6 @@ const BusinessAuth: React.FC = () => {
                       )}
                     </button>
 
-                    {/* Brand color overlay from left side */}
-                    {companyBrandColor && (
-                      <div 
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: `linear-gradient(90deg, ${companyBrandColor}30 0%, ${companyBrandColor}10 40%, transparent 100%)`
-                        }}
-                      />
-                    )}
                     {/* Logo and Company Name */}
                     <div className="flex items-center gap-4 relative z-10">
                       <div className="relative">
