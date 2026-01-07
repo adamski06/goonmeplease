@@ -278,13 +278,10 @@ const BusinessCampaignForm: React.FC = () => {
               <h1 className="text-3xl font-bold text-foreground">
                 {isEditing ? 'Edit Campaign' : 'Create Campaign'}
               </h1>
-              <p className="text-muted-foreground mt-1">
-                {isEditing ? 'Update your campaign details' : 'Set up a new advertising campaign'}
-              </p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
             {/* Campaign Info */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
               <CardHeader>
