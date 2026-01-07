@@ -74,6 +74,7 @@ const BusinessAuth: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
   const [setupText, setSetupText] = useState('');
   const [freeText, setFreeText] = useState('');
+  const [promptText, setPromptText] = useState('');
   const [isFadingOut, setIsFadingOut] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -239,6 +240,11 @@ const BusinessAuth: React.FC = () => {
         setIntroStep('input');
         setShowNameInput(true);
         await new Promise(r => setTimeout(r, 300));
+        
+        // Type "First, what's your" prompt
+        const promptTextContent = i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your ";
+        await typeText(promptTextContent, setPromptText, 60);
+        
         inputRef.current?.focus();
         
         // Type placeholder
@@ -1444,32 +1450,36 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : (
               // Step 4: Show company name input
-              <div className="flex flex-col items-center space-y-8 animate-fade-in">
+              <div className="flex flex-col items-center space-y-8">
                 <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap">
-                  <span>{i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your "}</span>
-                  <span className="relative inline-flex items-baseline whitespace-nowrap">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && companyName.trim()) {
-                          e.preventDefault();
-                          startChat();
-                        }
-                      }}
-                      placeholder=""
-                      className="bg-transparent border-none outline-none text-lg md:text-xl font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
-                      style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
-                    />
-                    {!companyName && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
-                        {typewriterText}
+                  <span>{promptText}</span>
+                  {promptText.length > 0 && (
+                    <>
+                      <span className="relative inline-flex items-baseline whitespace-nowrap">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          value={companyName}
+                          onChange={(e) => setCompanyName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && companyName.trim()) {
+                              e.preventDefault();
+                              startChat();
+                            }
+                          }}
+                          placeholder=""
+                          className="bg-transparent border-none outline-none text-lg md:text-xl font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
+                          style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
+                        />
+                        {!companyName && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                            {typewriterText}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </span>
-                  <span className="text-lg md:text-xl font-medium font-montserrat ml-1">?</span>
+                      <span className="text-lg md:text-xl font-medium font-montserrat ml-1">?</span>
+                    </>
+                  )}
                 </p>
                 
                 <Button 
