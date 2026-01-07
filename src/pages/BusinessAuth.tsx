@@ -111,6 +111,7 @@ const BusinessAuth: React.FC = () => {
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
   const [showProfilePreview, setShowProfilePreview] = useState(false);
   const [chatLoading, setChatLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [profileVisible, setProfileVisible] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
@@ -694,40 +695,46 @@ const BusinessAuth: React.FC = () => {
     }]);
     
     if (confirmed) {
-      // First move chat to left
+      // First move chat to left and show profile with loading
       setShowProfilePreview(true);
+      setProfileLoading(true);
       setChatStep('creating-profile');
       setProfileTypedDescription('');
       setProfileTypingComplete(false);
       
-      // After chat has moved (700ms), fade in the profile and start typing
+      // After chat has moved (700ms), fade in the profile
       setTimeout(() => {
         setProfileVisible(true);
         
-        // Start typewriter effect for description - limit to ~100 characters
-        const text = companySummary.split('**')[2]?.trim() || companySummary;
-        const fullDescription = text.slice(0, 100).trim() + (text.length > 100 ? '...' : '');
-        
-        let charIndex = 0;
-        const typeInterval = setInterval(() => {
-          charIndex += 2;
-          setProfileTypedDescription(fullDescription.slice(0, charIndex));
-          if (charIndex >= fullDescription.length) {
-            clearInterval(typeInterval);
-            setProfileTypingComplete(true);
-            
-            // After typing is complete, ask for feedback
-            setTimeout(() => {
-              setChatStep('profile-feedback');
-              addJarlaMessage(
-                i18n.language === 'sv'
-                  ? 'Här är din företagsprofil! Ser det bra ut?'
-                  : "Here's your company profile! Does it look good?",
-                'profile-feedback-buttons'
-              );
-            }, 400);
-          }
-        }, 20);
+        // Show loading for a moment, then reveal content
+        setTimeout(() => {
+          setProfileLoading(false);
+          
+          // Start typewriter effect for description - limit to ~100 characters
+          const text = companySummary.split('**')[2]?.trim() || companySummary;
+          const fullDescription = text.slice(0, 100).trim() + (text.length > 100 ? '...' : '');
+          
+          let charIndex = 0;
+          const typeInterval = setInterval(() => {
+            charIndex += 2;
+            setProfileTypedDescription(fullDescription.slice(0, charIndex));
+            if (charIndex >= fullDescription.length) {
+              clearInterval(typeInterval);
+              setProfileTypingComplete(true);
+              
+              // After typing is complete, ask for feedback
+              setTimeout(() => {
+                setChatStep('profile-feedback');
+                addJarlaMessage(
+                  i18n.language === 'sv'
+                    ? 'Här är din företagsprofil! Ser det bra ut?'
+                    : "Here's your company profile! Does it look good?",
+                  'profile-feedback-buttons'
+                );
+              }, 400);
+            }
+          }, 20);
+        }, 500);
       }, 700);
     } else {
       // Skip profile preview, go directly to credentials
@@ -1508,11 +1515,9 @@ const BusinessAuth: React.FC = () => {
             <div className={`flex gap-4 items-center transition-all duration-700 ease-out ${
               showProfilePreview ? 'ml-[160px]' : 'ml-0'
             }`}>
-              {/* Chat container - wider initially, narrows when profile appears */}
+              {/* Chat container - fixed width, just moves when profile appears */}
               <div 
-                className={`h-[calc(100vh-1rem)] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out ${
-                  showProfilePreview ? 'w-[500px]' : 'w-[680px]'
-                }`}
+                className="h-[calc(100vh-1rem)] w-[680px] bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] overflow-hidden flex flex-col relative transition-all duration-700 ease-out"
                 style={{
                   animation: 'chatBoxScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                 }}
@@ -1820,23 +1825,26 @@ const BusinessAuth: React.FC = () => {
                 </div>
               </div>
 
-              {/* Company Profile Preview - fades in after chat moves */}
-              <div 
-                className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col transition-all duration-500 ease-out ${
-                  showProfilePreview 
-                    ? 'w-[420px] p-4' 
-                    : 'w-0 p-0'
-                } ${
-                  profileVisible ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                {showProfilePreview && (
+              {/* Company Profile Preview - pops up with animation */}
+              {showProfilePreview && (
+                <div 
+                  className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[420px] transition-opacity duration-300 ${
+                    profileVisible ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  style={{
+                    animation: 'profilePopUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
+                  }}
+                >
                   <div 
-                    className="rounded-[3px] p-8 space-y-6 shadow-sm relative overflow-hidden"
+                    className="rounded-[3px] p-8 space-y-6 shadow-sm relative overflow-hidden min-h-[300px] flex items-center justify-center"
                     style={{
                       background: 'hsl(var(--muted))'
                     }}
                   >
+                    {profileLoading ? (
+                      <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                    ) : (
+                      <>
                     {/* Edit button in top right corner */}
                     <button 
                       className={`absolute top-3 right-3 w-7 h-7 rounded-full shadow-sm flex items-center justify-center transition-all z-20 ${
@@ -1966,9 +1974,11 @@ const BusinessAuth: React.FC = () => {
                         {i18n.language === 'sv' ? 'Inga kampanjer ännu' : 'No campaigns yet'}
                       </p>
                     </div>
+                      </>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
               </>
             )}
