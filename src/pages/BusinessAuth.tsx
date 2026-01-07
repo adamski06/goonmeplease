@@ -1441,7 +1441,7 @@ const BusinessAuth: React.FC = () => {
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {setupText}
                 </h1>
-                <h2 className={`text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
+                <h2 className={`text-2xl md:text-3xl font-medium font-montserrat text-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
                   {freeText || '\u00A0'}
                 </h2>
               </div>
@@ -1474,7 +1474,7 @@ const BusinessAuth: React.FC = () => {
                           </span>
                         )}
                       </span>
-                      <span className="text-lg md:text-xl font-medium font-montserrat ml-1">?</span>
+                      <span className="text-lg md:text-xl font-medium font-montserrat ml-2">?</span>
                     </>
                   )}
                 </p>
