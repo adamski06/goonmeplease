@@ -223,9 +223,9 @@ const BusinessAuth: React.FC = () => {
         await typeText(setupTextContent, setSetupText, 80);
         await new Promise(r => setTimeout(r, 400));
         
-        // Type "it's free" below
-        await typeText(freeTextContent, setFreeText, 100);
-        await new Promise(r => setTimeout(r, 1000));
+        // Show "it's free" below (just appear, no typewriter)
+        setFreeText(freeTextContent);
+        await new Promise(r => setTimeout(r, 1200));
         
         // Fade out setup text
         setIsFadingOut(true);
@@ -1431,19 +1431,19 @@ const BusinessAuth: React.FC = () => {
             ) : (introStep === 'hello' || introStep === 'welcome') ? (
               // Step 1 & 2: Type text, then fade out down
               <div className="flex items-center justify-center">
-                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-400 ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                   {displayText}
                 </h1>
               </div>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free"
-              <div className={`flex flex-col items-center space-y-3 transition-all duration-400 ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                 <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
                   {setupText}
                 </h1>
-                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center min-h-[1.2em]">
-                  {freeText}
-                </h1>
+                <h2 className={`text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
+                  {freeText || '\u00A0'}
+                </h2>
               </div>
             ) : (
               // Step 4: Show company name input
