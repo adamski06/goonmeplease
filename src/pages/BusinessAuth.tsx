@@ -1524,7 +1524,7 @@ const BusinessAuth: React.FC = () => {
             <div 
               className="flex gap-8 items-center"
               style={{
-                transform: showProfilePreview ? 'translateX(-120px)' : 'translateX(0)',
+                transform: showProfilePreview ? 'translateX(-50px)' : 'translateX(0)',
                 transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
@@ -1885,17 +1885,17 @@ const BusinessAuth: React.FC = () => {
                     </button>
 
                     {/* Logo and Company Name */}
-                    <div className="flex items-center gap-4 relative z-10">
+                    <div className="flex items-center gap-5 relative z-10">
                       <div className="relative">
                         {companyLogo ? (
                           <img 
                             src={companyLogo} 
                             alt={isProfileEditMode ? editedCompanyName : companyName} 
-                            className={`w-14 h-14 rounded-[3px] object-contain bg-background/50 ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}
+                            className={`w-[72px] h-[72px] rounded-[3px] object-contain bg-background/50 ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}
                           />
                         ) : (
-                          <div className={`w-14 h-14 rounded-[3px] bg-background/50 flex items-center justify-center ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}>
-                            <span className="text-2xl font-bold text-muted-foreground">
+                          <div className={`w-[72px] h-[72px] rounded-[3px] bg-background/50 flex items-center justify-center ${isProfileEditMode ? 'ring-2 ring-foreground/20 cursor-pointer' : ''}`}>
+                            <span className="text-3xl font-bold text-muted-foreground">
                               {(isProfileEditMode ? editedCompanyName : companyName).charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -1905,10 +1905,10 @@ const BusinessAuth: React.FC = () => {
                         <Input
                           value={editedCompanyName}
                           onChange={(e) => setEditedCompanyName(e.target.value)}
-                          className="text-xl font-montserrat font-bold bg-background/50 border-foreground/20 h-10"
+                          className="text-2xl font-montserrat font-bold bg-background/50 border-foreground/20 h-12"
                         />
                       ) : (
-                        <h3 className="text-2xl font-montserrat font-bold">{companyName}</h3>
+                        <h3 className="text-3xl font-montserrat font-bold">{companyName}</h3>
                       )}
                     </div>
 
@@ -1919,10 +1919,10 @@ const BusinessAuth: React.FC = () => {
                           <textarea
                             value={editedDescription}
                             onChange={(e) => setEditedDescription(e.target.value)}
-                            className="w-full text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[80px] p-2 bg-background/50 border border-foreground/20 rounded-[3px] resize-none focus:outline-none focus:ring-2 focus:ring-foreground/30"
+                            className="w-full text-base text-foreground/80 font-montserrat leading-relaxed min-h-[100px] p-3 bg-background/50 border border-foreground/20 rounded-[3px] resize-none focus:outline-none focus:ring-2 focus:ring-foreground/30"
                           />
                         ) : (
-                          <p className="text-sm text-foreground/80 font-montserrat leading-relaxed min-h-[2rem]">
+                          <p className="text-base text-foreground/80 font-montserrat leading-relaxed min-h-[2.5rem]">
                             {profileTypedDescription}
                             {!profileTypingComplete && <span className="animate-pulse">|</span>}
                           </p>
@@ -1931,7 +1931,7 @@ const BusinessAuth: React.FC = () => {
                     )}
 
                     {/* Social media icons - fade in after typing */}
-                    <div className={`flex gap-3 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`flex gap-4 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
                       {Object.keys(socialMedia).filter(k => socialMedia[k]).length > 0 && (
                         <>
                           {Object.entries(socialMedia).filter(([_, url]) => url).map(([platform]) => {
@@ -1955,13 +1955,13 @@ const BusinessAuth: React.FC = () => {
                                   key={platform} 
                                   src={logoUrls[platform]} 
                                   alt={platform}
-                                  className="w-5 h-5 dark:invert"
+                                  className="w-6 h-6 dark:invert"
                                 />
                               );
                             }
                             
                             return (
-                              <IconComponent key={platform} className="w-5 h-5 text-foreground/70" />
+                              <IconComponent key={platform} className="w-6 h-6 text-foreground/70" />
                             );
                           })}
                         </>
@@ -1969,11 +1969,11 @@ const BusinessAuth: React.FC = () => {
                     </div>
 
                     {/* Campaigns section - fade in after typing */}
-                    <div className={`space-y-1 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
-                      <h4 className="text-sm font-montserrat font-semibold">
+                    <div className={`space-y-2 transition-opacity duration-300 relative z-10 ${profileTypingComplete || isProfileEditMode ? 'opacity-100' : 'opacity-0'}`}>
+                      <h4 className="text-base font-montserrat font-semibold">
                         {i18n.language === 'sv' ? 'Kampanjer' : 'Campaigns'}
                       </h4>
-                      <p className="text-sm text-muted-foreground font-geist">
+                      <p className="text-base text-muted-foreground font-geist">
                         {i18n.language === 'sv' ? 'Inga kampanjer ännu' : 'No campaigns yet'}
                       </p>
                     </div>
