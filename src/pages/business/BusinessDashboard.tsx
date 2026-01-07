@@ -162,36 +162,49 @@ const BusinessDashboard: React.FC = () => {
     <BusinessLayout>
       <div className="p-8">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
+          {/* Profile Card - matching auth preview style */}
           <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-            <div className="bg-card border border-border rounded-[4px] p-6">
-              <div className="flex items-center gap-4">
-                {businessProfile?.logo_url ? (
-                  <div 
-                    className={`h-14 w-14 rounded-sm flex items-center justify-center p-1 ${
-                      logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
-                    }`}
-                  >
-                    <img 
-                      src={businessProfile.logo_url} 
-                      alt="Company logo" 
-                      className="max-h-full max-w-full object-contain" 
-                    />
-                  </div>
-                ) : (
-                  <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center">
-                    <span className="text-2xl font-semibold text-muted-foreground">
-                      {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
-                    </span>
-                  </div>
-                )}
-                <h1 className="text-3xl font-bold text-foreground">
-                  {businessProfile?.company_name || 'Your Business'}
-                </h1>
+            <div className="bg-card border border-border rounded-[3px] overflow-hidden w-[620px]">
+              {/* Header with logo and name */}
+              <div className="p-10 pb-6">
+                <div className="flex items-center gap-5">
+                  {businessProfile?.logo_url ? (
+                    <div 
+                      className={`w-[72px] h-[72px] rounded-sm flex items-center justify-center p-2 ${
+                        logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
+                      }`}
+                    >
+                      <img 
+                        src={businessProfile.logo_url} 
+                        alt="Company logo" 
+                        className="max-h-full max-w-full object-contain" 
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-[72px] h-[72px] rounded-sm bg-muted flex items-center justify-center">
+                      <span className="text-3xl font-semibold text-muted-foreground">
+                        {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
+                      </span>
+                    </div>
+                  )}
+                  <h1 className="text-3xl font-bold text-foreground">
+                    {businessProfile?.company_name || 'Your Business'}
+                  </h1>
+                </div>
+                
+                {/* Description */}
+                <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+                  {shortDescription}
+                </p>
               </div>
-              <p className="mt-4 text-muted-foreground max-w-xl">
-                {shortDescription}
-              </p>
+              
+              {/* Campaigns section */}
+              <div className="border-t border-border px-10 py-5">
+                <div className="space-y-2">
+                  <h3 className="text-base font-medium text-foreground">Campaigns</h3>
+                  <p className="text-base text-muted-foreground">No campaigns yet</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
