@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin, Pencil } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
-import businessLaptop from '@/assets/business-laptop-nobg.png';
+import businessLaptop from '@/assets/business-laptop.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -1451,7 +1451,7 @@ const BusinessAuth: React.FC = () => {
                   <img 
                     src={businessLaptop} 
                     alt="Business laptop" 
-                    className={`h-[66vh] w-auto object-contain object-bottom transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-[80vh] w-auto object-contain object-bottom transition-opacity duration-500 mix-blend-multiply dark:mix-blend-screen ${freeText ? 'opacity-100' : 'opacity-0'}`}
                   />
                 </div>
               </div>
