@@ -321,11 +321,15 @@ const BusinessCampaignForm: React.FC = () => {
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <img 
-                            src={logo} 
-                            alt={name} 
-                            className="w-12 h-12 rounded-[2px] object-contain"
-                          />
+                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                            <img 
+                              src={logo} 
+                              alt={name} 
+                              className={`w-full h-full object-cover ${
+                                id === 'instagram' || id === 'youtube' ? 'scale-110' : ''
+                              }`}
+                            />
+                          </div>
                           <span className="text-xs font-medium text-foreground">
                             {name}
                           </span>
