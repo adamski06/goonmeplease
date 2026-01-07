@@ -324,7 +324,7 @@ const BusinessCampaignForm: React.FC = () => {
                           <img 
                             src={logo} 
                             alt={name} 
-                            className="w-12 h-12 rounded-sm object-contain"
+                            className="w-12 h-12 rounded-[2px] object-contain"
                           />
                           <span className="text-xs font-medium text-foreground">
                             {name}
