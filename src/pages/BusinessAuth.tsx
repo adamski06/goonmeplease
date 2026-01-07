@@ -1393,29 +1393,38 @@ const BusinessAuth: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Dev mode toggle */}
-      <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
-        <button
-          onClick={() => setDevMode(!devMode)}
-          className={`px-3 py-1 text-xs rounded-full transition-all ${
-            devMode ? 'bg-green-500 text-white' : 'bg-foreground/20 text-foreground/60 hover:bg-foreground/30'
-          }`}
-        >
-          Dev Mode
-        </button>
-        <button
-          onClick={() => setMode('login')}
-          className="px-3 py-1 text-xs rounded-full bg-foreground/20 text-foreground/60 hover:bg-foreground/30"
-        >
-          Login
-        </button>
+      {/* Jarla logo in top right - only visible when profile is showing */}
+      <div 
+        className={`fixed top-6 right-6 z-50 transition-opacity duration-500 ${
+          showProfilePreview ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="relative h-8 w-[100px]">
+          <div 
+            className="absolute inset-0 bg-foreground"
+            style={{
+              WebkitMaskImage: `url(${jarlaLogo})`,
+              maskImage: `url(${jarlaLogo})`,
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskPosition: 'center'
+            }} 
+          />
+        </div>
       </div>
 
       <div className="absolute inset-0 grainy-background" />
       <div className="noise-layer" />
       
-      {/* Logo */}
-      <div className="fixed top-6 left-6 z-50">
+      {/* Logo - fades out when profile appears */}
+      <div 
+        className={`fixed top-6 left-6 z-50 transition-opacity duration-500 ${
+          showProfilePreview ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+      >
         <div className="relative h-10 w-[130px]">
           <div 
             className="absolute inset-0 bg-foreground"
