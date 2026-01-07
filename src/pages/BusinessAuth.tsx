@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin, Pencil } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import businessLaptop from '@/assets/business-laptop.png';
+import { removeBackground } from '@/lib/removeBackground';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -77,6 +78,7 @@ const BusinessAuth: React.FC = () => {
   const [freeText, setFreeText] = useState('');
   const [promptText, setPromptText] = useState('');
   const [isFadingOut, setIsFadingOut] = useState(false);
+  const [laptopCutoutSrc, setLaptopCutoutSrc] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -150,6 +152,38 @@ const BusinessAuth: React.FC = () => {
       setTimeout(() => chatInputRef.current?.focus(), 500);
     }
   }, [mode, chatStep]);
+
+  // Precompute a true cutout (transparent PNG) so the image uses the site background
+  useEffect(() => {
+    let cancelled = false;
+    let objectUrlToRevoke: string | null = null;
+
+    const run = async () => {
+      try {
+        const img = new Image();
+        img.src = businessLaptop;
+
+        await new Promise<void>((resolve, reject) => {
+          img.onload = () => resolve();
+          img.onerror = () => reject(new Error('Failed to load laptop image'));
+        });
+
+        const blob = await removeBackground(img);
+        objectUrlToRevoke = URL.createObjectURL(blob);
+
+        if (!cancelled) setLaptopCutoutSrc(objectUrlToRevoke);
+      } catch {
+        // If background removal fails (e.g., unsupported browser), just keep it hidden.
+      }
+    };
+
+    run();
+
+    return () => {
+      cancelled = true;
+      if (objectUrlToRevoke) URL.revokeObjectURL(objectUrlToRevoke);
+    };
+  }, []);
 
   // Typewriter effect for intro - multi-step sequence
   useEffect(() => {
@@ -1449,9 +1483,9 @@ const BusinessAuth: React.FC = () => {
                 </div>
                 <div className="hidden md:block absolute right-0 bottom-0">
                   <img 
-                    src={businessLaptop} 
+                    src={laptopCutoutSrc ?? businessLaptop}
                     alt="Business laptop" 
-                    className={`h-[80vh] w-auto object-contain object-bottom transition-opacity duration-500 mix-blend-multiply dark:mix-blend-screen ${freeText ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-[85vh] w-auto object-contain object-bottom transition-opacity duration-500 ${freeText && laptopCutoutSrc ? 'opacity-100' : 'opacity-0'}`}
                   />
                 </div>
               </div>
