@@ -268,7 +268,7 @@ const BusinessCampaignForm: React.FC = () => {
       onRequirementsUpdate={handleRequirementsUpdate}
     >
       <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
@@ -307,9 +307,9 @@ const BusinessCampaignForm: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Platform Selection */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Label className="block text-center">Target Platforms</Label>
-                  <div className="flex justify-center gap-6">
+                  <div className="flex justify-center gap-10">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
@@ -317,11 +317,11 @@ const BusinessCampaignForm: React.FC = () => {
                           key={id}
                           type="button"
                           onClick={() => togglePlatform(id)}
-                          className={`flex flex-col items-center gap-2 transition-all duration-200 ${
+                          className={`flex flex-col items-center gap-3 transition-all duration-200 ${
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                          <div className="w-16 h-16 rounded-[2px] overflow-hidden">
                             <img 
                               src={logo} 
                               alt={name} 
@@ -330,7 +330,7 @@ const BusinessCampaignForm: React.FC = () => {
                               }`}
                             />
                           </div>
-                          <span className="text-xs font-medium text-foreground">
+                          <span className="text-sm font-medium text-foreground">
                             {name}
                           </span>
                         </button>
