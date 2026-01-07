@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin, Pencil } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
+import businessLaptop from '@/assets/business-laptop.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -1431,24 +1432,33 @@ const BusinessAuth: React.FC = () => {
             ) : (introStep === 'hello' || introStep === 'welcome') ? (
               // Step 1 & 2: Type text, then fade out down
               <div className="flex items-center justify-center">
-                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                <h1 className={`text-2xl md:text-4xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                   {displayText}
                 </h1>
               </div>
             ) : introStep === 'setup' ? (
-              // Step 3: Show "Let's setup your business account" and "it's free"
-              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
-                  {setupText}
-                </h1>
-                <h2 className={`text-2xl md:text-3xl font-medium font-montserrat text-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
-                  {freeText || '\u00A0'}
-                </h2>
+              // Step 3: Show "Let's setup your business account" and "it's free" with laptop image
+              <div className={`flex items-center justify-center gap-12 md:gap-20 max-w-5xl mx-auto transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                <div className="flex flex-col items-start space-y-3 text-left">
+                  <h1 className="text-2xl md:text-4xl font-bold font-montserrat text-foreground">
+                    {setupText}
+                  </h1>
+                  <h2 className={`text-lg md:text-xl font-medium font-montserrat text-foreground transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
+                    {freeText || '\u00A0'}
+                  </h2>
+                </div>
+                <div className="hidden md:block">
+                  <img 
+                    src={businessLaptop} 
+                    alt="Business laptop" 
+                    className={`w-80 h-auto object-contain transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                </div>
               </div>
             ) : (
               // Step 4: Show company name input
               <div className="flex flex-col items-center space-y-8">
-                <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap">
+                <p className="text-2xl md:text-4xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap">
                   <span>{promptText}</span>
                   {promptText.length > 0 && (
                     <>
