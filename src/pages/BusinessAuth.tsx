@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { Loader2, X, ArrowUp, Check, Instagram, Facebook, Youtube, Twitter, Linkedin, Pencil } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
-import businessLaptop from '@/assets/business-laptop.png';
+import businessLaptop from '@/assets/business-laptop-nobg.png';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -1438,8 +1438,8 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free" with laptop image
-              <div className={`flex items-center justify-center gap-12 md:gap-20 max-w-5xl mx-auto transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <div className="flex flex-col items-start space-y-3 text-left">
+              <div className={`flex items-center justify-between w-full max-w-7xl mx-auto px-8 md:px-16 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                <div className="flex flex-col items-start space-y-3 text-left flex-shrink-0">
                   <h1 className="text-2xl md:text-4xl font-bold font-montserrat text-foreground">
                     {setupText}
                   </h1>
@@ -1447,11 +1447,11 @@ const BusinessAuth: React.FC = () => {
                     {freeText || '\u00A0'}
                   </h2>
                 </div>
-                <div className="hidden md:block">
+                <div className="hidden md:block flex-1 flex justify-end">
                   <img 
                     src={businessLaptop} 
                     alt="Business laptop" 
-                    className={`w-80 h-auto object-contain transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
+                    className={`w-[600px] lg:w-[700px] xl:w-[800px] h-auto object-contain transition-opacity duration-500 ${freeText ? 'opacity-100' : 'opacity-0'}`}
                   />
                 </div>
               </div>
