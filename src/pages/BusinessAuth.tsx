@@ -70,6 +70,9 @@ const BusinessAuth: React.FC = () => {
   const [companyName, setCompanyName] = useState('');
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
+  const [introStep, setIntroStep] = useState<'hello' | 'welcome' | 'input'>('hello');
+  const [helloText, setHelloText] = useState('');
+  const [welcomeVisible, setWelcomeVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -144,34 +147,70 @@ const BusinessAuth: React.FC = () => {
     }
   }, [mode, chatStep]);
 
-  // Typewriter effect for intro
+  // Typewriter effect for intro - multi-step sequence
   useEffect(() => {
     if (mode === 'intro') {
       setShowNameInput(false);
       setTypewriterText('');
+      setIntroStep('hello');
+      setHelloText('');
+      setWelcomeVisible(false);
       
-      const placeholderText = i18n.language === 'sv' ? 'Företagsnamn' : 'Company name';
-      
+      const helloWord = 'Hello!';
       let charIndex = 0;
-      let typeTimer: ReturnType<typeof setInterval>;
+      let deleteIndex = helloWord.length;
       
-      const showTimer = setTimeout(() => {
-        setShowNameInput(true);
-        setTimeout(() => inputRef.current?.focus(), 600);
-        
-        typeTimer = setInterval(() => {
-          if (charIndex <= placeholderText.length) {
-            setTypewriterText(placeholderText.slice(0, charIndex));
-            charIndex++;
-          } else {
-            clearInterval(typeTimer);
-          }
-        }, 100);
-      }, 500);
+      // Step 1: Type out "Hello!"
+      const typeHelloTimer = setInterval(() => {
+        if (charIndex <= helloWord.length) {
+          setHelloText(helloWord.slice(0, charIndex));
+          charIndex++;
+        } else {
+          clearInterval(typeHelloTimer);
+          
+          // Wait a moment, then delete "Hello!"
+          setTimeout(() => {
+            const deleteTimer = setInterval(() => {
+              if (deleteIndex > 0) {
+                deleteIndex--;
+                setHelloText(helloWord.slice(0, deleteIndex));
+              } else {
+                clearInterval(deleteTimer);
+                
+                // Step 2: Show "Welcome to Jarla" and rest
+                setIntroStep('welcome');
+                setTimeout(() => {
+                  setWelcomeVisible(true);
+                  
+                  // Step 3: After welcome text appears, show the input
+                  setTimeout(() => {
+                    setIntroStep('input');
+                    setShowNameInput(true);
+                    
+                    // Type out "company name" placeholder
+                    const placeholderText = i18n.language === 'sv' ? 'företagsnamn' : 'company name';
+                    let placeholderIndex = 0;
+                    
+                    setTimeout(() => inputRef.current?.focus(), 300);
+                    
+                    const typePlaceholderTimer = setInterval(() => {
+                      if (placeholderIndex <= placeholderText.length) {
+                        setTypewriterText(placeholderText.slice(0, placeholderIndex));
+                        placeholderIndex++;
+                      } else {
+                        clearInterval(typePlaceholderTimer);
+                      }
+                    }, 80);
+                  }, 800);
+                }, 100);
+              }
+            }, 50);
+          }, 800);
+        }
+      }, 100);
       
       return () => {
-        clearTimeout(showTimer);
-        if (typeTimer) clearInterval(typeTimer);
+        clearInterval(typeHelloTimer);
       };
     }
   }, [mode, i18n.language]);
@@ -1345,44 +1384,64 @@ const BusinessAuth: React.FC = () => {
 
       <div className="relative z-10">
         {mode === 'intro' ? (
-          // Intro screen - company name input
+          // Intro screen - animated sequence
           <div className="flex flex-col items-center justify-center min-h-screen px-6">
-            {!showNameInput ? (
-              <div className="animate-spin">
-                <Loader2 className="h-8 w-8 text-muted-foreground" />
-              </div>
-            ) : isTyping ? (
+            {isTyping ? (
               // Loading spinner after entering company name
               <div className="animate-spin">
                 <Loader2 className="h-8 w-8 text-muted-foreground" />
               </div>
+            ) : introStep === 'hello' ? (
+              // Step 1: Type "Hello!" then delete it
+              <div className="flex items-center justify-center">
+                <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground">
+                  {helloText}
+                  <span className="animate-pulse">|</span>
+                </h1>
+              </div>
+            ) : introStep === 'welcome' && !showNameInput ? (
+              // Step 2: Show "Welcome to Jarla" and info
+              <div className={`flex flex-col items-center space-y-4 transition-opacity duration-500 ${welcomeVisible ? 'opacity-100' : 'opacity-0'}`}>
+                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
+                  {i18n.language === 'sv' ? 'Välkommen till Jarla' : 'Welcome to Jarla'}
+                </h1>
+                <p className="text-lg md:text-xl font-montserrat text-foreground/80 text-center">
+                  {i18n.language === 'sv' ? 'Låt oss sätta upp ditt företagskonto' : "Let's setup your business account"}
+                </p>
+                <p className="text-sm font-montserrat text-muted-foreground">
+                  {i18n.language === 'sv' ? 'det är gratis' : "it's free"}
+                </p>
+              </div>
             ) : (
+              // Step 3: Show company name input
               <div className="flex flex-col items-center space-y-8 animate-fade-in">
-                <div className="flex items-baseline gap-3">
-                  <h1 className="text-5xl md:text-7xl font-bold font-montserrat text-foreground whitespace-nowrap">
-                    {t('businessAuth.hello')}
-                  </h1>
-                  <div className="relative" style={{ width: '220px' }}>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && companyName.trim()) {
-                          e.preventDefault();
-                          startChat();
-                        }
-                      }}
-                      placeholder=""
-                      className="w-full bg-transparent border-none outline-none text-2xl md:text-3xl font-medium font-montserrat text-foreground pb-1 whitespace-nowrap"
-                    />
-                    {!companyName && (
-                      <span className="absolute left-0 top-0 text-2xl md:text-3xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
-                        {typewriterText}
-                      </span>
-                    )}
-                  </div>
+                <div className="flex flex-col items-center space-y-2">
+                  <p className="text-lg md:text-xl font-montserrat text-foreground/80">
+                    {i18n.language === 'sv' ? 'Först, vad heter ditt ' : 'First, what\'s your '}
+                    <span className="relative inline-block">
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && companyName.trim()) {
+                            e.preventDefault();
+                            startChat();
+                          }
+                        }}
+                        placeholder=""
+                        className="bg-transparent border-none outline-none text-base md:text-lg font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
+                        style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
+                      />
+                      {!companyName && (
+                        <span className="absolute left-0 top-0 text-base md:text-lg font-medium font-montserrat text-muted-foreground/50 pointer-events-none">
+                          {typewriterText}
+                        </span>
+                      )}
+                    </span>
+                    {i18n.language === 'sv' ? '?' : '?'}
+                  </p>
                 </div>
                 
                 <Button 
