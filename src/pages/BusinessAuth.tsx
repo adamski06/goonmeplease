@@ -113,6 +113,7 @@ const BusinessAuth: React.FC = () => {
   const [chatLoading, setChatLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileVisible, setProfileVisible] = useState(false);
+  const [profileFadingOut, setProfileFadingOut] = useState(false);
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [companySummary, setCompanySummary] = useState('');
   const [companyOneLiner, setCompanyOneLiner] = useState('');
@@ -761,14 +762,23 @@ const BusinessAuth: React.FC = () => {
     }]);
     
     if (approved) {
-      setChatStep('credentials');
+      // Fade out profile and slide chat back to center
+      setProfileFadingOut(true);
+      
       setTimeout(() => {
-        addJarlaMessage(
-          i18n.language === 'sv'
-            ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
-            : "Perfect! Now we just need to create your account.",
-          'credentials-form'
-        );
+        setShowProfilePreview(false);
+        setProfileFadingOut(false);
+        setProfileVisible(false);
+        
+        setChatStep('credentials');
+        setTimeout(() => {
+          addJarlaMessage(
+            i18n.language === 'sv'
+              ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
+              : "Perfect! Now we just need to create your account.",
+            'credentials-form'
+          );
+        }, 300);
       }, 500);
     } else {
       // Let them edit via chat
@@ -1524,8 +1534,9 @@ const BusinessAuth: React.FC = () => {
             <div 
               className="flex gap-8 items-center"
               style={{
-                transform: showProfilePreview ? 'translateX(-50px)' : 'translateX(0)',
-                transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)'
+                transform: showProfilePreview && !profileFadingOut ? 'translateX(-50px)' : 'translateX(0)',
+                transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                willChange: 'transform'
               }}
             >
               {/* Chat container - fixed width and position */}
@@ -1842,10 +1853,11 @@ const BusinessAuth: React.FC = () => {
               {showProfilePreview && (
                 <div 
                   className={`h-auto self-center rounded-[3px] overflow-hidden flex flex-col w-[620px] transition-opacity duration-500 ${
-                    profileVisible ? 'opacity-100' : 'opacity-0'
+                    profileFadingOut ? 'opacity-0' : profileVisible ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{
-                    animation: profileVisible ? 'profilePopUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' : 'none'
+                    animation: profileVisible && !profileFadingOut ? 'profilePopUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' : 'none',
+                    willChange: 'transform, opacity'
                   }}
                 >
                   <div 
