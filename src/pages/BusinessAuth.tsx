@@ -1474,7 +1474,6 @@ const BusinessAuth: React.FC = () => {
                           </span>
                         )}
                       </span>
-                      <span className="text-lg md:text-xl font-medium font-montserrat ml-2">?</span>
                     </>
                   )}
                 </p>
