@@ -308,8 +308,8 @@ const BusinessCampaignForm: React.FC = () => {
               <CardContent className="space-y-4">
                 {/* Platform Selection */}
                 <div className="space-y-3">
-                  <Label>Target Platforms</Label>
-                  <div className="flex gap-6">
+                  <Label className="block text-center">Target Platforms</Label>
+                  <div className="flex justify-center gap-6">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
@@ -324,7 +324,7 @@ const BusinessCampaignForm: React.FC = () => {
                           <img 
                             src={logo} 
                             alt={name} 
-                            className="w-12 h-12 rounded-lg object-cover"
+                            className="w-12 h-12 rounded-sm object-contain"
                           />
                           <span className="text-xs font-medium text-foreground">
                             {name}
