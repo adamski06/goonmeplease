@@ -1511,11 +1511,11 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : (
               <>
-            {/* Main container - uses transform for smooth slide to left edge */}
+            {/* Main container - uses transform for smooth slide */}
             <div 
               className="flex gap-8 items-center"
               style={{
-                transform: showProfilePreview ? 'translateX(calc(-50vw + 360px))' : 'translateX(0)',
+                transform: showProfilePreview ? 'translateX(-260px)' : 'translateX(0)',
                 transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
