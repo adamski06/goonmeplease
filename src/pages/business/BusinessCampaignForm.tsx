@@ -284,9 +284,9 @@ const BusinessCampaignForm: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Platform Selection */}
-                <div className="space-y-6">
+                <div className="space-y-6 max-w-lg">
                   <Label>Target Platforms</Label>
-                  <div className="flex gap-4 flex-wrap">
+                  <div className="flex justify-between">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
