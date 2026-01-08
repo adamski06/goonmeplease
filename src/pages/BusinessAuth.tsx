@@ -101,9 +101,63 @@ const AnalyzingThoughts: React.FC = () => {
   );
 };
 
+const STORAGE_KEY = 'jarla_business_onboarding';
+
+interface OnboardingSession {
+  mode: 'intro' | 'chat' | 'login';
+  chatStep: ChatStep;
+  companyName: string;
+  website: string;
+  socialMedia: Record<string, string>;
+  selectedPlatforms: string[];
+  description: string;
+  country: string;
+  productsServices: string;
+  audienceDescription: string;
+  ageRanges: string[];
+  globalReach: 'worldwide' | 'specific';
+  targetCountries: string[];
+  companyLogo: string | null;
+  companySummary: string;
+  companyOneLiner: string;
+  companyBrandColor: string | null;
+  profileTypedDescription: string;
+  messages: ChatMessage[];
+  // Company registration fields
+  companyCountry: string;
+  organizationNumber: string;
+  vatNumber: string;
+  companyPhone: string;
+  companyAddress: string;
+  companyCity: string;
+  companyPostalCode: string;
+  // Credentials (don't store password)
+  fullName: string;
+  email: string;
+  timestamp: number;
+}
+
+const loadSession = (): OnboardingSession | null => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    const session = JSON.parse(stored) as OnboardingSession;
+    // Expire after 24 hours
+    if (Date.now() - session.timestamp > 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return session;
+  } catch {
+    return null;
+  }
+};
+
 const BusinessAuth: React.FC = () => {
-  const [mode, setMode] = useState<'intro' | 'chat' | 'login'>('intro');
-  const [companyName, setCompanyName] = useState('');
+  const savedSession = loadSession();
+  
+  const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(savedSession?.mode || 'intro');
+  const [companyName, setCompanyName] = useState(savedSession?.companyName || '');
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
   const [introStep, setIntroStep] = useState<'hello' | 'welcome' | 'setup' | 'input'>('hello');
@@ -117,54 +171,54 @@ const BusinessAuth: React.FC = () => {
   const chatInputRef = useRef<HTMLInputElement>(null);
 
   // Chat state
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [chatStep, setChatStep] = useState<ChatStep>('website');
+  const [messages, setMessages] = useState<ChatMessage[]>(savedSession?.messages || []);
+  const [chatStep, setChatStep] = useState<ChatStep>(savedSession?.chatStep || 'website');
   const [inlineInputValue, setInlineInputValue] = useState('');
   const [bottomInputValue, setBottomInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   // Collected data
-  const [website, setWebsite] = useState('');
-  const [socialMedia, setSocialMedia] = useState<Record<string, string>>({});
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
-  const [description, setDescription] = useState('');
-  const [country, setCountry] = useState('');
-  const [productsServices, setProductsServices] = useState('');
-  const [audienceDescription, setAudienceDescription] = useState('');
-  const [ageRanges, setAgeRanges] = useState<string[]>([]);
-  const [globalReach, setGlobalReach] = useState<'worldwide' | 'specific'>('worldwide');
-  const [targetCountries, setTargetCountries] = useState<string[]>([]);
+  const [website, setWebsite] = useState(savedSession?.website || '');
+  const [socialMedia, setSocialMedia] = useState<Record<string, string>>(savedSession?.socialMedia || {});
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(savedSession?.selectedPlatforms || []);
+  const [description, setDescription] = useState(savedSession?.description || '');
+  const [country, setCountry] = useState(savedSession?.country || '');
+  const [productsServices, setProductsServices] = useState(savedSession?.productsServices || '');
+  const [audienceDescription, setAudienceDescription] = useState(savedSession?.audienceDescription || '');
+  const [ageRanges, setAgeRanges] = useState<string[]>(savedSession?.ageRanges || []);
+  const [globalReach, setGlobalReach] = useState<'worldwide' | 'specific'>(savedSession?.globalReach || 'worldwide');
+  const [targetCountries, setTargetCountries] = useState<string[]>(savedSession?.targetCountries || []);
 
   // Credentials
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState(savedSession?.fullName || '');
+  const [email, setEmail] = useState(savedSession?.email || '');
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   // Company registration fields
-  const [companyCountry, setCompanyCountry] = useState('');
-  const [organizationNumber, setOrganizationNumber] = useState('');
-  const [vatNumber, setVatNumber] = useState('');
-  const [companyPhone, setCompanyPhone] = useState('');
-  const [companyAddress, setCompanyAddress] = useState('');
-  const [companyCity, setCompanyCity] = useState('');
-  const [companyPostalCode, setCompanyPostalCode] = useState('');
+  const [companyCountry, setCompanyCountry] = useState(savedSession?.companyCountry || '');
+  const [organizationNumber, setOrganizationNumber] = useState(savedSession?.organizationNumber || '');
+  const [vatNumber, setVatNumber] = useState(savedSession?.vatNumber || '');
+  const [companyPhone, setCompanyPhone] = useState(savedSession?.companyPhone || '');
+  const [companyAddress, setCompanyAddress] = useState(savedSession?.companyAddress || '');
+  const [companyCity, setCompanyCity] = useState(savedSession?.companyCity || '');
+  const [companyPostalCode, setCompanyPostalCode] = useState(savedSession?.companyPostalCode || '');
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
-  const [showProfilePreview, setShowProfilePreview] = useState(false);
-  const [chatLoading, setChatLoading] = useState(true);
-  const [profileLoading, setProfileLoading] = useState(true);
-  const [profileVisible, setProfileVisible] = useState(false);
+  const [showProfilePreview, setShowProfilePreview] = useState(savedSession?.mode === 'chat');
+  const [chatLoading, setChatLoading] = useState(!savedSession);
+  const [profileLoading, setProfileLoading] = useState(!savedSession);
+  const [profileVisible, setProfileVisible] = useState(!!savedSession?.companyName);
   const [profileFadingOut, setProfileFadingOut] = useState(false);
-  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
-  const [companySummary, setCompanySummary] = useState('');
-  const [companyOneLiner, setCompanyOneLiner] = useState('');
-  const [companyBrandColor, setCompanyBrandColor] = useState<string | null>(null);
-  const [profileTypedDescription, setProfileTypedDescription] = useState('');
-  const [profileTypingComplete, setProfileTypingComplete] = useState(false);
+  const [companyLogo, setCompanyLogo] = useState<string | null>(savedSession?.companyLogo || null);
+  const [companySummary, setCompanySummary] = useState(savedSession?.companySummary || '');
+  const [companyOneLiner, setCompanyOneLiner] = useState(savedSession?.companyOneLiner || '');
+  const [companyBrandColor, setCompanyBrandColor] = useState<string | null>(savedSession?.companyBrandColor || null);
+  const [profileTypedDescription, setProfileTypedDescription] = useState(savedSession?.profileTypedDescription || '');
+  const [profileTypingComplete, setProfileTypingComplete] = useState(!!savedSession?.profileTypedDescription);
   const [isProfileEditMode, setIsProfileEditMode] = useState(false);
   const [editedCompanyName, setEditedCompanyName] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
@@ -175,6 +229,57 @@ const BusinessAuth: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
+
+  // Save session to localStorage on state changes
+  useEffect(() => {
+    // Only save if we have meaningful progress
+    if (mode === 'intro' && !companyName) return;
+    
+    const session: OnboardingSession = {
+      mode,
+      chatStep,
+      companyName,
+      website,
+      socialMedia,
+      selectedPlatforms,
+      description,
+      country,
+      productsServices,
+      audienceDescription,
+      ageRanges,
+      globalReach,
+      targetCountries,
+      companyLogo,
+      companySummary,
+      companyOneLiner,
+      companyBrandColor,
+      profileTypedDescription,
+      messages: messages.map(m => ({ ...m, isTyping: false })), // Don't persist typing state
+      companyCountry,
+      organizationNumber,
+      vatNumber,
+      companyPhone,
+      companyAddress,
+      companyCity,
+      companyPostalCode,
+      fullName,
+      email,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  }, [
+    mode, chatStep, companyName, website, socialMedia, selectedPlatforms,
+    description, country, productsServices, audienceDescription, ageRanges,
+    globalReach, targetCountries, companyLogo, companySummary, companyOneLiner,
+    companyBrandColor, profileTypedDescription, messages, companyCountry,
+    organizationNumber, vatNumber, companyPhone, companyAddress, companyCity,
+    companyPostalCode, fullName, email
+  ]);
+
+  // Clear session on successful signup
+  const clearOnboardingSession = () => {
+    localStorage.removeItem(STORAGE_KEY);
+  };
 
   // Scroll to bottom of chat only when Jarla is typing
   useEffect(() => {
@@ -998,6 +1103,9 @@ const BusinessAuth: React.FC = () => {
 
       if (roleError) throw roleError;
 
+      // Clear saved session on successful signup
+      clearOnboardingSession();
+
       toast({
         title: t('businessAuth.accountCreated'),
         description: t('businessAuth.welcomeToDashboard'),
@@ -1727,6 +1835,26 @@ const BusinessAuth: React.FC = () => {
               >
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
+                  {/* Session restored notice */}
+                  {savedSession && messages.length > 0 && (
+                    <div 
+                      className="mb-6 flex items-center justify-between bg-muted/40 dark:bg-white/5 rounded-[3px] px-4 py-2.5"
+                      style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}
+                    >
+                      <span className="text-sm text-muted-foreground font-geist">
+                        {i18n.language === 'sv' ? 'Din session har återställts' : 'Your session has been restored'}
+                      </span>
+                      <button
+                        onClick={() => {
+                          clearOnboardingSession();
+                          window.location.reload();
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
+                      >
+                        {i18n.language === 'sv' ? 'Börja om' : 'Start fresh'}
+                      </button>
+                    </div>
+                  )}
                   <div className="w-full">
                   {messages.map((msg, index) => {
                     const prevMsg = index > 0 ? messages[index - 1] : null;

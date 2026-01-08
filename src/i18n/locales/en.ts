@@ -181,6 +181,8 @@ export default {
     companyPhone: 'Phone Number',
     companyPhonePlaceholder: 'e.g., +46 8 123 456 78',
     accountCredentials: 'Account Credentials',
+    sessionRestored: 'Your session has been restored',
+    startFresh: 'Start fresh',
     stepDescription: 'Description',
     stepProducts: 'Products',
     stepAudience: 'Audience',

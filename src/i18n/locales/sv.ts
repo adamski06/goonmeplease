@@ -181,6 +181,8 @@ export default {
     companyPhone: 'Telefonnummer',
     companyPhonePlaceholder: 't.ex. +46 8 123 456 78',
     accountCredentials: 'Kontouppgifter',
+    sessionRestored: 'Din session har återställts',
+    startFresh: 'Börja om',
     stepDescription: 'Beskrivning',
     stepProducts: 'Produkter',
     stepAudience: 'Målgrupp',
