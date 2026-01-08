@@ -160,17 +160,17 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
 
         {/* Fixed Bottom Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black text-white px-8 py-5 flex items-center justify-between">
+        <div className="absolute bottom-0 left-0 right-0 bg-foreground text-background px-8 py-5 flex items-center justify-between">
           <div>
-            <p className="text-sm text-white/60 mb-1">Earn up to</p>
+            <p className="text-sm text-background/60 mb-1">Earn up to</p>
             <p className="text-2xl font-bold">
               {formData.total_budget > 0 ? `$${formData.total_budget.toLocaleString()}` : '$0'}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-white/60 mb-1">Paid out</p>
+            <p className="text-sm text-background/60 mb-1">Paid out</p>
             <p className="text-2xl font-bold">
-              ${paidOut.toLocaleString()} <span className="text-white/60 font-normal text-base">/ ${formData.total_budget > 0 ? formData.total_budget.toLocaleString() : '0'}</span>
+              ${paidOut.toLocaleString()} <span className="text-background/60 font-normal text-base">/ ${formData.total_budget > 0 ? formData.total_budget.toLocaleString() : '0'}</span>
             </p>
           </div>
         </div>
