@@ -237,34 +237,34 @@ const BusinessAuth: React.FC = () => {
         const placeholderText = i18n.language === 'sv' ? 'företagsnamn' : 'company name';
         
         // Step 1: Type "Hello!"
-        await typeText(helloWord, setDisplayText, 140);
-        await new Promise(r => setTimeout(r, 1300));
+        await typeText(helloWord, setDisplayText, 60);
+        await new Promise(r => setTimeout(r, 600));
         
         // Fade out "Hello!" (Apple style)
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 200));
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('welcome');
         
         // Step 2: Type "Welcome to Jarla"
-        await typeText(welcomeText, setDisplayText, 100);
-        await new Promise(r => setTimeout(r, 1300));
+        await typeText(welcomeText, setDisplayText, 40);
+        await new Promise(r => setTimeout(r, 600));
         
         // Fade out "Welcome to Jarla" (Apple style)
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 200));
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('setup');
         
         // Step 3: Type "Let's setup your business account"
-        await typeText(setupTextContent, setSetupText, 80);
-        await new Promise(r => setTimeout(r, 1300));
+        await typeText(setupTextContent, setSetupText, 30);
+        await new Promise(r => setTimeout(r, 600));
         
         // Fade out setup text
         setIsFadingOut(true);
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 200));
         setIsFadingOut(false);
         setSetupText('');
         setFreeText('');
@@ -275,12 +275,12 @@ const BusinessAuth: React.FC = () => {
         
         // Type "First, what's your" prompt
         const promptTextContent = i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your ";
-        await typeText(promptTextContent, setPromptText, 60);
+        await typeText(promptTextContent, setPromptText, 25);
         
         inputRef.current?.focus();
         
         // Type placeholder
-        await typeText(placeholderText, setTypewriterText, 80);
+        await typeText(placeholderText, setTypewriterText, 35);
       };
       
       runSequence();
