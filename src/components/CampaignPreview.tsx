@@ -1,7 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, DollarSign } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface CampaignPreviewProps {
   formData: {
@@ -20,116 +18,82 @@ interface CampaignPreviewProps {
 const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   formData,
   requirements,
-  selectedPlatforms,
   businessProfile,
-  campaignVideoPreview,
 }) => {
-  const hasContent = formData.title || formData.description || formData.total_budget > 0;
+  // Placeholder for paid out amount (would come from real data)
+  const paidOut = 0;
 
   return (
     <div className="h-full flex flex-col">
       <h2 className="text-sm font-medium text-muted-foreground mb-4">Campaign Preview</h2>
       
-      <Card className="flex-1 bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden flex flex-col">
-        {/* Video Preview */}
-        {campaignVideoPreview ? (
-          <div className="flex-1 min-h-[200px] bg-muted">
-            <video 
-              src={campaignVideoPreview} 
-              className="w-full h-full object-cover"
-              muted
-              loop
-              autoPlay
-              playsInline
-            />
-          </div>
-        ) : (
-          <div className="flex-1 min-h-[200px] bg-muted/50 flex items-center justify-center">
-            <span className="text-xs text-muted-foreground">Video preview</span>
-          </div>
-        )}
-
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-3">
+      <Card className="flex-1 bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden flex flex-col relative">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-auto p-6 pb-20">
+          {/* Header: Logo + Title */}
+          <div className="flex items-start gap-3 mb-6">
             {businessProfile?.logo_url ? (
               <img 
                 src={businessProfile.logo_url} 
                 alt="Company logo" 
-                className="h-8 w-8 object-cover rounded-sm" 
+                className="h-10 w-10 object-cover rounded-sm flex-shrink-0" 
               />
             ) : (
-              <div className="h-8 w-8 rounded-sm bg-muted flex items-center justify-center">
-                <span className="text-sm font-semibold text-muted-foreground">
+              <div className="h-10 w-10 rounded-sm bg-muted flex items-center justify-center flex-shrink-0">
+                <span className="text-lg font-semibold text-muted-foreground">
                   {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
                 </span>
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-muted-foreground truncate">
-                {businessProfile?.company_name || 'Your Business'}
-              </p>
-              <h3 className="font-semibold text-foreground truncate">
+              <h3 className="font-semibold text-foreground text-lg">
                 {formData.title || 'Campaign Title'}
               </h3>
+              <p className="text-xs text-muted-foreground">
+                {businessProfile?.company_name || 'Your Business'}
+              </p>
             </div>
           </div>
-        </CardHeader>
 
-        <CardContent className="pt-0 space-y-4">
           {/* Description */}
-          <p className="text-sm text-muted-foreground line-clamp-3">
-            {formData.description || 'Campaign description will appear here...'}
-          </p>
-
-          {/* Platforms */}
-          {selectedPlatforms.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {selectedPlatforms.map((platform) => (
-                <Badge key={platform} variant="secondary" className="text-xs capitalize">
-                  {platform}
-                </Badge>
-              ))}
-            </div>
-          )}
+          <div className="mb-6">
+            <p className="text-sm text-muted-foreground">
+              {formData.description || 'Campaign description will appear here...'}
+            </p>
+          </div>
 
           {/* Requirements */}
           {requirements.filter(r => r.trim()).length > 0 && (
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground">Requirements</p>
-              <ul className="space-y-1">
-                {requirements.filter(r => r.trim()).slice(0, 3).map((req, i) => (
-                  <li key={i} className="text-xs text-foreground flex items-start gap-2">
-                    <span className="text-muted-foreground">•</span>
-                    <span className="line-clamp-1">{req}</span>
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-foreground">Requirements</p>
+              <ul className="space-y-1.5">
+                {requirements.filter(r => r.trim()).map((req, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <span className="text-foreground">•</span>
+                    <span>{req}</span>
                   </li>
                 ))}
-                {requirements.filter(r => r.trim()).length > 3 && (
-                  <li className="text-xs text-muted-foreground">
-                    +{requirements.filter(r => r.trim()).length - 3} more
-                  </li>
-                )}
               </ul>
             </div>
           )}
+        </div>
 
-          {/* Budget & Deadline */}
-          <div className="flex items-center gap-4 pt-2 border-t border-border">
-            {formData.total_budget > 0 && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <DollarSign className="h-3.5 w-3.5" />
-                <span>${formData.total_budget.toLocaleString()}</span>
-              </div>
-            )}
-            {formData.deadline && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Calendar className="h-3.5 w-3.5" />
-                <span>{new Date(formData.deadline).toLocaleDateString()}</span>
-              </div>
-            )}
+        {/* Fixed Bottom Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black text-white px-6 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs text-white/60 mb-0.5">Earn up to</p>
+            <p className="text-lg font-bold">
+              {formData.total_budget > 0 ? `$${formData.total_budget.toLocaleString()}` : '$0'}
+            </p>
           </div>
-        </CardContent>
+          <div className="text-right">
+            <p className="text-xs text-white/60 mb-0.5">Paid out</p>
+            <p className="text-lg font-bold">
+              ${paidOut.toLocaleString()} <span className="text-white/60 font-normal text-sm">/ ${formData.total_budget > 0 ? formData.total_budget.toLocaleString() : '0'}</span>
+            </p>
+          </div>
+        </div>
       </Card>
-
     </div>
   );
 };
