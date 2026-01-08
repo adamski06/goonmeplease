@@ -15,34 +15,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
-import CampaignChat from '@/components/CampaignChat';
 
 
-interface FormData {
-  brand_name: string;
-  title: string;
-  description: string;
-  deadline: string;
-  total_budget: number;
-}
 
 interface BusinessLayoutProps {
   children: React.ReactNode;
-  hideChat?: boolean;
-  formData?: FormData;
-  requirements?: string[];
-  onFormUpdate?: (updates: Partial<FormData>) => void;
-  onRequirementsUpdate?: (requirements: string[]) => void;
 }
 
-const BusinessLayout: React.FC<BusinessLayoutProps> = ({ 
-  children, 
-  hideChat = false,
-  formData,
-  requirements,
-  onFormUpdate,
-  onRequirementsUpdate
-}) => {
+const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
   const { t, i18n } = useTranslation();
   const { signOut } = useAuth();
   const { profile } = useProfile();
@@ -219,20 +199,6 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({
         </div>
       </aside>
 
-      {/* Campaign Chat - visible on form routes when not hidden */}
-      {isFormRoute && !hideChat && (
-        <>
-          <div className="w-px bg-black/10 dark:bg-white/20 relative z-10" />
-          <div className="w-64 flex-shrink-0 relative z-10">
-            <CampaignChat 
-              formData={formData}
-              requirements={requirements}
-              onFormUpdate={onFormUpdate}
-              onRequirementsUpdate={onRequirementsUpdate}
-            />
-          </div>
-        </>
-      )}
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto relative z-10">

@@ -244,7 +244,7 @@ const BusinessCampaignForm: React.FC = () => {
 
   if (loading || initialLoading) {
     return (
-      <BusinessLayout hideChat>
+      <BusinessLayout>
         <div className="h-full flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
@@ -252,21 +252,9 @@ const BusinessCampaignForm: React.FC = () => {
     );
   }
 
-  const handleFormUpdate = (updates: Partial<typeof formData>) => {
-    setFormData(prev => ({ ...prev, ...updates }));
-  };
-
-  const handleRequirementsUpdate = (newRequirements: string[]) => {
-    setRequirements(newRequirements);
-  };
 
   return (
-    <BusinessLayout
-      formData={formData}
-      requirements={requirements}
-      onFormUpdate={handleFormUpdate}
-      onRequirementsUpdate={handleRequirementsUpdate}
-    >
+    <BusinessLayout>
       <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         <div className="max-w-5xl mx-auto">
           {/* Header */}
