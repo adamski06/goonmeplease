@@ -263,7 +263,7 @@ const BusinessCampaignForm: React.FC = () => {
           <div className="flex-1 overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Campaign Info */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
+            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
               <CardHeader>
                 <div className="flex items-center gap-3">
                   {businessProfile?.logo_url ? (
@@ -444,7 +444,7 @@ const BusinessCampaignForm: React.FC = () => {
 
 
             {/* Budget */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
+            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
               <CardHeader>
                 <CardTitle>Budget</CardTitle>
               </CardHeader>
@@ -495,7 +495,7 @@ const BusinessCampaignForm: React.FC = () => {
             </Card>
 
             {/* Deadline */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
+            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
               <CardHeader>
                 <CardTitle>Deadline</CardTitle>
               </CardHeader>
