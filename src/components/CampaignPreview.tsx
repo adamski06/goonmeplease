@@ -62,7 +62,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           {/* Description */}
           <div className="mb-8">
             <p className="text-base text-muted-foreground leading-relaxed">
-              {formData.description || 'Campaign description will appear here...'}
+              {formData.description || "We're looking for authentic creators to showcase our product in their daily routine. Create engaging content that highlights the key features while keeping it natural and relatable to your audience. Be creative and have fun with it!"}
             </p>
           </div>
 
@@ -101,7 +101,20 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
                 ))}
               </ul>
             ) : (
-              <p className="text-base text-muted-foreground/50 mb-4">No requirements added yet...</p>
+              <ul className="space-y-2 mb-4">
+                <li className="text-base text-muted-foreground/50 flex items-start gap-3">
+                  <span className="text-foreground/50 mt-1">•</span>
+                  <span>Product must be visible for at least 3 seconds in the video</span>
+                </li>
+                <li className="text-base text-muted-foreground/50 flex items-start gap-3">
+                  <span className="text-foreground/50 mt-1">•</span>
+                  <span>Include the brand name or hashtag in your caption</span>
+                </li>
+                <li className="text-base text-muted-foreground/50 flex items-start gap-3">
+                  <span className="text-foreground/50 mt-1">•</span>
+                  <span>Video must be original content, no reposts or duets</span>
+                </li>
+              </ul>
             )}
 
             {/* Reference Images */}
