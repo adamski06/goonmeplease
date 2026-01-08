@@ -34,29 +34,11 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
       <Card className="flex-1 bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden flex flex-col relative">
         {/* Scrollable Content */}
         <div className="flex-1 overflow-auto p-8 pb-24">
-          {/* Header: Logo + Title */}
-          <div className="flex items-start gap-4 mb-8">
-            {businessProfile?.logo_url ? (
-              <img 
-                src={businessProfile.logo_url} 
-                alt="Company logo" 
-                className="h-14 w-14 object-cover rounded-sm flex-shrink-0" 
-              />
-            ) : (
-              <div className="h-14 w-14 rounded-sm bg-muted flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl font-semibold text-muted-foreground">
-                  {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
-                </span>
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-foreground text-2xl mb-1">
-                {formData.title || 'Campaign Title'}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {businessProfile?.company_name || 'Your Business'}
-              </p>
-            </div>
+          {/* Title */}
+          <div className="mb-8">
+            <h3 className="font-bold text-foreground text-2xl">
+              {formData.title || 'Campaign Title'}
+            </h3>
           </div>
 
           {/* Description */}
