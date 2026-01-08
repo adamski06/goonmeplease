@@ -65,6 +65,42 @@ interface ChatMessage {
   heading?: string;
 }
 
+// Rotating "thinking" messages for analysis
+const AnalyzingThoughts: React.FC = () => {
+  const [thoughtIndex, setThoughtIndex] = useState(0);
+  const { i18n } = useTranslation();
+  
+  const thoughts = i18n.language === 'sv' 
+    ? [
+        'Läser igenom er webbplats...',
+        'Analyserar ert varumärke...',
+        'Identifierar era styrkor...',
+        'Sammanställer insikter...'
+      ]
+    : [
+        'Reading through your website...',
+        'Analyzing your brand...',
+        'Identifying your strengths...',
+        'Putting insights together...'
+      ];
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setThoughtIndex(prev => (prev + 1) % thoughts.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [thoughts.length]);
+  
+  return (
+    <div className="flex items-center gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+      <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+      <span className="text-sm text-muted-foreground font-geist transition-opacity duration-300">
+        {thoughts[thoughtIndex]}
+      </span>
+    </div>
+  );
+};
+
 const BusinessAuth: React.FC = () => {
   const [mode, setMode] = useState<'intro' | 'chat' | 'login'>('intro');
   const [companyName, setCompanyName] = useState('');
@@ -333,10 +369,10 @@ const BusinessAuth: React.FC = () => {
             'text',
             () => {
               setTimeout(() => {
-                addJarlaMessageWithInput(
+              addJarlaMessageWithInput(
                   i18n.language === 'sv' 
-                    ? 'Har ni en webbplats?'
-                    : "Does it have a website?",
+                    ? `Har ${companyName} en webbplats?`
+                    : `Does ${companyName} have a website?`,
                   'https://yourcompany.com',
                   'website'
                 );
@@ -489,8 +525,8 @@ const BusinessAuth: React.FC = () => {
     setTimeout(() => {
       addJarlaMessage(
         i18n.language === 'sv'
-          ? `Perfekt! Låt mig skicka ut mina agenter för att lära känna ${companyName} bättre...`
-          : `Perfect! Let me send out my agents to learn more about ${companyName}...`,
+          ? 'Perfekt! Låt mig göra lite research på ert företag – det hjälper oss att matcha er med rätt kreatörer.'
+          : "Perfect! Let me do some research on your company – this helps us connect you with the best matching creators.",
         'analyzing'
       );
     }, 500);
@@ -525,22 +561,24 @@ const BusinessAuth: React.FC = () => {
         const summary = data.data.summary;
         const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
         
-        // Headings to hide (show content without heading)
-        const hiddenHeadings = [
+        // Headings to completely exclude from chat
+        const excludedHeadings = [
           'Key Insights', 'Unique Value Proposition', 'One-Liner',
           'Nyckelinsikter', 'Unik Värdeproposition', 'Kortbeskrivning'
         ];
         
-        // Group into heading + content pairs
-        const sectionPairs: { heading: string; content: string; hideHeading: boolean }[] = [];
+        // Group into heading + content pairs, filtering out excluded sections
+        const sectionPairs: { heading: string; content: string }[] = [];
         for (let i = 0; i < sections.length; i += 2) {
           if (sections[i] && sections[i + 1]) {
             const heading = sections[i].trim();
-            sectionPairs.push({
-              heading,
-              content: sections[i + 1].trim(),
-              hideHeading: hiddenHeadings.includes(heading)
-            });
+            // Skip entirely if heading is in excluded list
+            if (!excludedHeadings.includes(heading)) {
+              sectionPairs.push({
+                heading,
+                content: sections[i + 1].trim()
+              });
+            }
           }
         }
 
@@ -563,7 +601,7 @@ const BusinessAuth: React.FC = () => {
                     content: section.content,
                     displayedContent: section.content,
                     type: 'summary-section',
-                    heading: section.hideHeading ? '' : section.heading
+                    heading: section.heading
                   }]);
                   chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
                 }, sectionDelay);
@@ -1715,12 +1753,7 @@ const BusinessAuth: React.FC = () => {
                             <div style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>{renderSocialPicker()}</div>
                           )}
                           {msg.role === 'jarla' && msg.type === 'analyzing' && chatStep === 'analyzing' && (
-                            <div className="flex items-center gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
-                              <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-                              <span className="text-sm text-muted-foreground font-geist">
-                                {i18n.language === 'sv' ? 'Analyserar...' : 'Analyzing...'}
-                              </span>
-                            </div>
+                            <AnalyzingThoughts />
                           )}
                           {msg.role === 'jarla' && msg.type === 'confirm-buttons' && chatStep === 'confirm-summary' && (
                             <div className="flex gap-3 mt-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
