@@ -256,12 +256,11 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="h-full p-8 animate-fade-in flex gap-8 overflow-hidden" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+      <div className="h-full p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form */}
-        <div className="w-[440px] flex-shrink-0 h-full flex flex-col">
+        <div className="w-[440px] flex-shrink-0 h-full overflow-y-auto">
           <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
-          <div className="flex-1 overflow-y-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 pb-8">
             {/* Campaign Info */}
             <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
               <CardHeader>
@@ -522,7 +521,6 @@ const BusinessCampaignForm: React.FC = () => {
               </Button>
             </div>
           </form>
-          </div>
         </div>
         {/* Right: Preview */}
         <div className="flex-1 min-w-0">
