@@ -16,33 +16,54 @@ export type Database = {
     Tables: {
       business_profiles: {
         Row: {
+          address: string | null
+          city: string | null
           company_name: string
+          country: string | null
           created_at: string
           description: string | null
           id: string
           logo_url: string | null
+          organization_number: string | null
+          phone_number: string | null
+          postal_code: string | null
           updated_at: string
           user_id: string
+          vat_number: string | null
           website: string | null
         }
         Insert: {
+          address?: string | null
+          city?: string | null
           company_name: string
+          country?: string | null
           created_at?: string
           description?: string | null
           id?: string
           logo_url?: string | null
+          organization_number?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
           updated_at?: string
           user_id: string
+          vat_number?: string | null
           website?: string | null
         }
         Update: {
+          address?: string | null
+          city?: string | null
           company_name?: string
+          country?: string | null
           created_at?: string
           description?: string | null
           id?: string
           logo_url?: string | null
+          organization_number?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
           updated_at?: string
           user_id?: string
+          vat_number?: string | null
           website?: string | null
         }
         Relationships: []
