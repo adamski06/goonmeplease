@@ -285,7 +285,7 @@ const BusinessCampaignForm: React.FC = () => {
                 {/* Platform Selection */}
                 <div className="space-y-6 max-w-lg">
                   <Label>Target Platforms</Label>
-                  <div className="flex justify-between">
+                  <div className="flex gap-3">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
