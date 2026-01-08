@@ -27,13 +27,13 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   const hasContent = formData.title || formData.description || formData.total_budget > 0;
 
   return (
-    <div className="sticky top-8">
+    <div className="h-full flex flex-col">
       <h2 className="text-sm font-medium text-muted-foreground mb-4">Campaign Preview</h2>
       
-      <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden">
+      <Card className="flex-1 bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden flex flex-col">
         {/* Video Preview */}
         {campaignVideoPreview ? (
-          <div className="aspect-video bg-muted">
+          <div className="flex-1 min-h-[200px] bg-muted">
             <video 
               src={campaignVideoPreview} 
               className="w-full h-full object-cover"
@@ -44,7 +44,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             />
           </div>
         ) : (
-          <div className="aspect-video bg-muted/50 flex items-center justify-center">
+          <div className="flex-1 min-h-[200px] bg-muted/50 flex items-center justify-center">
             <span className="text-xs text-muted-foreground">Video preview</span>
           </div>
         )}
@@ -130,11 +130,6 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </CardContent>
       </Card>
 
-      {!hasContent && (
-        <p className="text-xs text-muted-foreground mt-3 text-center">
-          Fill in the form to see your campaign preview
-        </p>
-      )}
     </div>
   );
 };
