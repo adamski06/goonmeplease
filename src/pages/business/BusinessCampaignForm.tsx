@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, X, Image, Video, Loader2 } from 'lucide-react';
+import CampaignPreview from '@/components/CampaignPreview';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -255,8 +256,9 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
-        <div className="max-w-xl mx-auto">
+      <div className="p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+        {/* Left: Form */}
+        <div className="w-[420px] flex-shrink-0">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
@@ -530,6 +532,17 @@ const BusinessCampaignForm: React.FC = () => {
               </Button>
             </div>
           </form>
+        </div>
+
+        {/* Right: Preview */}
+        <div className="flex-1 max-w-sm">
+          <CampaignPreview
+            formData={formData}
+            requirements={requirements}
+            selectedPlatforms={selectedPlatforms}
+            businessProfile={businessProfile}
+            campaignVideoPreview={campaignVideoPreview}
+          />
         </div>
       </div>
     </BusinessLayout>
