@@ -263,25 +263,7 @@ const BusinessCampaignForm: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6 pb-8">
             {/* Campaign Info */}
             <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  {businessProfile?.logo_url ? (
-                    <img 
-                      src={businessProfile.logo_url} 
-                      alt="Company logo" 
-                      className="h-10 w-10 object-cover rounded-sm" 
-                    />
-                  ) : (
-                    <div className="h-10 w-10 rounded-sm bg-muted flex items-center justify-center">
-                      <span className="text-lg font-semibold text-muted-foreground">
-                        {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
-                      </span>
-                    </div>
-                  )}
-                  <CardTitle>{businessProfile?.company_name || 'Your Business'}</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="pt-6 space-y-4">
                 {/* Platform Selection */}
                 <div className="space-y-6 max-w-lg">
                   <Label>Target Platforms</Label>
