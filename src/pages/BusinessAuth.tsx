@@ -1910,7 +1910,7 @@ const BusinessAuth: React.FC = () => {
                   }}
                 >
                   <div 
-                    className="rounded-[3px] bg-muted/50 p-10 relative overflow-hidden min-h-[455px]"
+                    className="rounded-[3px] bg-muted p-10 relative overflow-hidden min-h-[455px]"
                   >
                     {profileLoading ? (
                       <div className="absolute inset-0 flex items-center justify-center">
