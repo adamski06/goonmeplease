@@ -294,7 +294,7 @@ const BusinessCampaignForm: React.FC = () => {
                 {/* Platform Selection */}
                 <div className="space-y-6">
                   <Label>Target Platforms</Label>
-                  <div className="flex gap-16">
+                  <div className="flex gap-6">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
@@ -302,11 +302,11 @@ const BusinessCampaignForm: React.FC = () => {
                           key={id}
                           type="button"
                           onClick={() => togglePlatform(id)}
-                          className={`flex flex-col items-center gap-3 transition-all duration-200 ${
+                          className={`flex flex-col items-center gap-2 transition-all duration-200 ${
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                          <div className="w-14 h-14 rounded-[2px] overflow-hidden">
                             <img 
                               src={logo} 
                               alt={name} 
