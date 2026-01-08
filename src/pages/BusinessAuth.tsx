@@ -260,10 +260,6 @@ const BusinessAuth: React.FC = () => {
         
         // Step 3: Type "Let's setup your business account"
         await typeText(setupTextContent, setSetupText, 80);
-        await new Promise(r => setTimeout(r, 200));
-        
-        // Type "it's free" below
-        await typeText(freeTextContent, setFreeText, 80);
         await new Promise(r => setTimeout(r, 1300));
         
         // Fade out setup text
