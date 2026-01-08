@@ -256,7 +256,7 @@ const BusinessCampaignForm: React.FC = () => {
   return (
     <BusinessLayout>
       <div className="p-8 animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
@@ -306,7 +306,7 @@ const BusinessCampaignForm: React.FC = () => {
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <div className="w-20 h-20 rounded-[2px] overflow-hidden">
+                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
                             <img 
                               src={logo} 
                               alt={name} 
