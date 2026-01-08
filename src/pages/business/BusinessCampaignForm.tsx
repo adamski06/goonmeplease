@@ -256,9 +256,9 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+      <div className="h-full p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form */}
-        <div className="w-[420px] flex-shrink-0">
+        <div className="w-[420px] flex-shrink-0 overflow-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
@@ -535,7 +535,7 @@ const BusinessCampaignForm: React.FC = () => {
         </div>
 
         {/* Right: Preview */}
-        <div className="flex-1 max-w-sm">
+        <div className="flex-1 min-w-0">
           <CampaignPreview
             formData={formData}
             requirements={requirements}
