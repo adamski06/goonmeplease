@@ -256,9 +256,9 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="h-full p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+      <div className="min-h-full p-8 animate-fade-in flex gap-8 items-start" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form */}
-        <div className="w-[440px] flex-shrink-0 h-full overflow-y-auto">
+        <div className="w-[440px] flex-shrink-0">
           <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
           <form onSubmit={handleSubmit} className="space-y-6 pb-8">
             {/* Campaign Info */}
@@ -523,7 +523,7 @@ const BusinessCampaignForm: React.FC = () => {
           </form>
         </div>
         {/* Right: Preview */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 sticky top-8 h-[calc(100vh-4rem)]">
           <CampaignPreview
             formData={formData}
             requirements={requirements}
