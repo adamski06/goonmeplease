@@ -297,7 +297,7 @@ const BusinessCampaignForm: React.FC = () => {
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <div className="w-10 h-10 rounded-[2px] overflow-hidden">
+                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
                             <img 
                               src={logo} 
                               alt={name} 
