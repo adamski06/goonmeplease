@@ -525,44 +525,64 @@ const BusinessAuth: React.FC = () => {
         const summary = data.data.summary;
         const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
         
+        // Headings to hide (show content without heading)
+        const hiddenHeadings = [
+          'Key Insights', 'Unique Value Proposition', 'One-Liner',
+          'Nyckelinsikter', 'Unik Värdeproposition', 'Kortbeskrivning'
+        ];
+        
         // Group into heading + content pairs
-        const sectionPairs: { heading: string; content: string }[] = [];
+        const sectionPairs: { heading: string; content: string; hideHeading: boolean }[] = [];
         for (let i = 0; i < sections.length; i += 2) {
           if (sections[i] && sections[i + 1]) {
+            const heading = sections[i].trim();
             sectionPairs.push({
-              heading: sections[i].trim(),
-              content: sections[i + 1].trim()
+              heading,
+              content: sections[i + 1].trim(),
+              hideHeading: hiddenHeadings.includes(heading)
             });
           }
         }
 
-        // Add each section with delay (heading + paragraph together in one node)
+        // First add intro message
         let delay = 500;
-        sectionPairs.forEach((section, index) => {
-          setTimeout(() => {
-            setMessages(prev => [...prev, {
-              id: `section-${Date.now()}-${index}`,
-              role: 'jarla',
-              content: section.content,
-              displayedContent: section.content,
-              type: 'summary-section',
-              heading: section.heading
-            }]);
-            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }, delay);
-          delay += 300;
-        });
-
-        // After all sections, ask for confirmation
         setTimeout(() => {
           addJarlaMessage(
             i18n.language === 'sv'
-              ? 'Stämmer det här?'
-              : 'Was this correct?',
-            'confirm-buttons'
+              ? 'Jag gjorde lite research! Här är vad jag hittade - rätta mig om jag har fel!'
+              : "I did some research! Here's what I found out - correct me if I got anything wrong!",
+            'text',
+            () => {
+              // Add each section with delay (heading + paragraph together in one node)
+              let sectionDelay = 300;
+              sectionPairs.forEach((section, index) => {
+                setTimeout(() => {
+                  setMessages(prev => [...prev, {
+                    id: `section-${Date.now()}-${index}`,
+                    role: 'jarla',
+                    content: section.content,
+                    displayedContent: section.content,
+                    type: 'summary-section',
+                    heading: section.hideHeading ? '' : section.heading
+                  }]);
+                  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }, sectionDelay);
+                sectionDelay += 300;
+              });
+
+              // After all sections, ask for confirmation
+              setTimeout(() => {
+                addJarlaMessage(
+                  i18n.language === 'sv'
+                    ? 'Stämmer det här?'
+                    : 'Was this correct?',
+                  'confirm-buttons'
+                );
+                setChatStep('confirm-summary');
+              }, sectionDelay + 500);
+            }
           );
-          setChatStep('confirm-summary');
-        }, delay + 500);
+        }, delay);
       } else {
         throw new Error('No summary returned');
       }
@@ -1588,7 +1608,7 @@ const BusinessAuth: React.FC = () => {
                                 <Pencil className="h-3.5 w-3.5 text-foreground/70" />
                               </button>
                             )}
-                            <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>
+                            {msg.heading && <h3 className="text-lg font-montserrat font-bold mb-2">{msg.heading}</h3>}
                             {editingSectionId === msg.id ? (
                               <div className="space-y-2">
                                 <textarea
