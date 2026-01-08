@@ -1928,11 +1928,10 @@ const BusinessAuth: React.FC = () => {
                       onClick={() => {
                         if (!isProfileEditMode) {
                           setEditedCompanyName(companyName);
-                          setEditedDescription(companySummary);
+                          setEditedDescription(profileTypedDescription);
                         } else {
                           // Save changes
                           setCompanyName(editedCompanyName);
-                          setCompanySummary(editedDescription);
                           setProfileTypedDescription(editedDescription);
                         }
                         setIsProfileEditMode(!isProfileEditMode);
