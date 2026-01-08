@@ -256,21 +256,11 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="h-full p-8 animate-fade-in flex gap-8" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+      <div className="h-full p-8 animate-fade-in flex gap-8 overflow-hidden" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form */}
-        <div className="w-[420px] flex-shrink-0 overflow-auto">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-8">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                {isEditing ? 'Edit Campaign' : 'Create Campaign'}
-              </h1>
-            </div>
-          </div>
-
+        <div className="w-[420px] flex-shrink-0 h-full flex flex-col">
+          <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
+          <div className="flex-1 overflow-y-auto pr-6 -mr-2">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Campaign Info */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
@@ -532,8 +522,8 @@ const BusinessCampaignForm: React.FC = () => {
               </Button>
             </div>
           </form>
+          </div>
         </div>
-
         {/* Right: Preview */}
         <div className="flex-1 min-w-0">
           <CampaignPreview
