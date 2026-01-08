@@ -68,7 +68,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
         clearInterval(typeInterval);
         setIsTyping(false);
       }
-    }, 15);
+    }, 8);
   };
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
           clearInterval(typeInterval);
           setIsTyping(false);
         }
-      }, 15);
+      }, 8);
     } catch (error) {
       console.error('Chat error:', error);
       setIsTyping(false);
