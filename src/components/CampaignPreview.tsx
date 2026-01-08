@@ -31,7 +31,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
     <div className="h-full flex flex-col">
       <h2 className="text-base font-medium text-muted-foreground mb-4">Campaign Preview</h2>
       
-      <Card className="flex-1 bg-card/50 backdrop-blur-sm border-border rounded-[4px] overflow-hidden flex flex-col relative">
+      <Card className="flex-1 bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative">
         {/* Scrollable Content */}
         <div className="flex-1 overflow-auto p-8 pb-24">
           {/* Title */}
