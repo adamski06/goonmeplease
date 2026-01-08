@@ -155,6 +155,8 @@ const loadSession = (): OnboardingSession | null => {
 
 const BusinessAuth: React.FC = () => {
   const savedSession = loadSession();
+  // Only true if we actually resumed mid-setup (mode was 'chat' with messages)
+  const wasSessionRestored = savedSession?.mode === 'chat' && savedSession?.messages?.length > 0;
   
   const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(savedSession?.mode || 'intro');
   const [companyName, setCompanyName] = useState(savedSession?.companyName || '');
@@ -1836,7 +1838,7 @@ const BusinessAuth: React.FC = () => {
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
                   {/* Session restored notice */}
-                  {savedSession && messages.length > 0 && (
+                  {wasSessionRestored && (
                     <div 
                       className="mb-6 flex items-center justify-between bg-muted/40 dark:bg-white/5 rounded-[3px] px-4 py-2.5"
                       style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}
