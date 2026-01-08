@@ -258,9 +258,9 @@ const BusinessCampaignForm: React.FC = () => {
     <BusinessLayout>
       <div className="h-full p-8 animate-fade-in flex gap-8 overflow-hidden" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form */}
-        <div className="w-[420px] flex-shrink-0 h-full flex flex-col">
+        <div className="w-[440px] flex-shrink-0 h-full flex flex-col">
           <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
-          <div className="flex-1 overflow-y-auto pr-6 -mr-2">
+          <div className="flex-1 overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Campaign Info */}
             <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
@@ -286,7 +286,7 @@ const BusinessCampaignForm: React.FC = () => {
                 {/* Platform Selection */}
                 <div className="space-y-6">
                   <Label>Target Platforms</Label>
-                  <div className="flex gap-6">
+                  <div className="flex gap-4 flex-wrap">
                     {platforms.map(({ id, name, logo }) => {
                       const isSelected = selectedPlatforms.includes(id);
                       return (
@@ -294,11 +294,11 @@ const BusinessCampaignForm: React.FC = () => {
                           key={id}
                           type="button"
                           onClick={() => togglePlatform(id)}
-                          className={`flex flex-col items-center gap-2 transition-all duration-200 ${
+                          className={`flex flex-col items-center gap-1.5 transition-all duration-200 ${
                             isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
                           }`}
                         >
-                          <div className="w-14 h-14 rounded-[2px] overflow-hidden">
+                          <div className="w-10 h-10 rounded-[2px] overflow-hidden">
                             <img 
                               src={logo} 
                               alt={name} 
@@ -307,7 +307,7 @@ const BusinessCampaignForm: React.FC = () => {
                               }`}
                             />
                           </div>
-                          <span className="text-sm font-medium text-foreground">
+                          <span className="text-xs font-medium text-foreground">
                             {name}
                           </span>
                         </button>
