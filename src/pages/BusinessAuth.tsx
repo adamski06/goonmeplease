@@ -229,6 +229,7 @@ const BusinessAuth: React.FC = () => {
   const [editedDescription, setEditedDescription] = useState('');
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [editingSectionContent, setEditingSectionContent] = useState('');
+  const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -434,8 +435,23 @@ const BusinessAuth: React.FC = () => {
     // Re-run intro animation
     setMode('intro');
   };
-
-  // Typewriter effect for messages (no cursor)
+  
+  // Handle logo click - navigate to landing or show confirmation if in progress
+  const handleLogoClick = () => {
+    // If in chat mode (onboarding in progress), show confirmation
+    if (mode === 'chat') {
+      setShowLeaveConfirmation(true);
+    } else {
+      // Not in onboarding, just navigate
+      navigate('/');
+    }
+  };
+  
+  // Confirm leaving the session
+  const handleConfirmLeave = () => {
+    setShowLeaveConfirmation(false);
+    navigate('/');
+  };
   const typeMessage = (messageId: string, fullContent: string, onComplete?: () => void) => {
     let charIndex = 0;
     const typeInterval = setInterval(() => {
@@ -1750,9 +1766,10 @@ const BusinessAuth: React.FC = () => {
       <div className="absolute inset-0 grainy-background" />
       <div className="noise-layer" />
       
-      {/* Logo - fades out when profile appears */}
-      <div 
-        className={`fixed top-6 left-6 z-50 transition-opacity duration-500 ${
+      {/* Logo - fades out when profile appears, clickable to go back */}
+      <button 
+        onClick={handleLogoClick}
+        className={`fixed top-6 left-6 z-50 transition-opacity duration-500 cursor-pointer hover:opacity-80 ${
           showProfilePreview ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
@@ -1771,7 +1788,38 @@ const BusinessAuth: React.FC = () => {
             }} 
           />
         </div>
-      </div>
+      </button>
+      
+      {/* Leave confirmation dialog */}
+      {showLeaveConfirmation && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-background rounded-[3px] p-6 max-w-sm mx-4 shadow-xl">
+            <h3 className="text-lg font-bold font-montserrat text-foreground mb-2">
+              {i18n.language === 'sv' ? 'Lämna registreringen?' : 'Leave registration?'}
+            </h3>
+            <p className="text-sm text-muted-foreground font-geist mb-6">
+              {i18n.language === 'sv' 
+                ? 'Din framgång sparas, men du måste fortsätta där du slutade nästa gång.'
+                : "Your progress will be saved, but you'll need to continue where you left off next time."}
+            </p>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowLeaveConfirmation(false)}
+                className="flex-1 rounded-[3px] font-montserrat"
+              >
+                {i18n.language === 'sv' ? 'Stanna' : 'Stay'}
+              </Button>
+              <Button
+                onClick={handleConfirmLeave}
+                className="flex-1 rounded-[3px] font-montserrat"
+              >
+                {i18n.language === 'sv' ? 'Lämna' : 'Leave'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Login button - top right, only show in intro mode and not on returning/login screens */}
       {mode === 'intro' && introStep !== 'returning' && (
