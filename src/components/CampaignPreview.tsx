@@ -130,7 +130,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
           {/* Description */}
           <div className="mb-8">
-            <p className="text-base text-muted-foreground leading-relaxed">
+            <p className="text-base text-foreground leading-relaxed">
               {formData.description || "We're looking for authentic creators to showcase our product in their daily routine. Create engaging content that highlights the key features while keeping it natural and relatable to your audience. Be creative and have fun with it!"}
             </p>
           </div>
@@ -163,7 +163,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             {requirements.filter(r => r.trim()).length > 0 ? (
               <ul className="space-y-2 mb-4">
                 {requirements.filter(r => r.trim()).map((req, i) => (
-                  <li key={i} className="text-base text-muted-foreground flex items-start gap-3">
+                  <li key={i} className="text-base text-foreground flex items-start gap-3">
                     <span className="text-foreground mt-1">•</span>
                     <span>{req}</span>
                   </li>
