@@ -1772,6 +1772,18 @@ const BusinessAuth: React.FC = () => {
           />
         </div>
       </div>
+      
+      {/* Login button - top right, only show in intro mode and not on returning/login screens */}
+      {mode === 'intro' && introStep !== 'returning' && (
+        <div className="fixed top-6 right-6 z-50">
+          <button
+            onClick={() => setMode('login')}
+            className="px-6 py-2 text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
+          >
+            {i18n.language === 'sv' ? 'Logga in' : 'Log in'}
+          </button>
+        </div>
+      )}
 
       <div className="relative z-10">
         {mode === 'intro' ? (

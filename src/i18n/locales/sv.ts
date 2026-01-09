@@ -35,6 +35,7 @@ export default {
     aboutUs: 'Om oss',
     careers: 'Karriär',
     startEarning: 'Börja tjäna',
+    login: 'Logga in',
     home: 'Hem',
     campaigns: 'Kampanjer',
     submissions: 'Inlämningar',
