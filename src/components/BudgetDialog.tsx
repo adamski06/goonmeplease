@@ -155,16 +155,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
-                {/* Jarla Fee Box - Fixed size (420x110) */}
-                <div className="bg-background rounded-[4px] border border-border w-[420px] h-[110px] relative flex items-center justify-center">
-                  <p className="absolute top-3 left-4 text-base font-medium text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Jarla Fee</p>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
-                    <span className="text-2xl text-foreground">•</span>
-                    <span className="text-4xl text-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
-                  </div>
-                </div>
-
                 <div className="space-y-2 text-center">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
                   <div className="flex items-baseline justify-center gap-2">
