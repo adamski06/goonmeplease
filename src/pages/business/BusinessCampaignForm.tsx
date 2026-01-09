@@ -256,14 +256,14 @@ const BusinessCampaignForm: React.FC = () => {
 
   return (
     <BusinessLayout>
-      <div className="min-h-full p-8 animate-fade-in flex gap-8 items-start" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
-        {/* Left: Form */}
-        <div className="w-[440px] flex-shrink-0">
-          <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
-          <form onSubmit={handleSubmit} className="space-y-6 pb-8">
-            {/* Campaign Info */}
-            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
-              <CardContent className="pt-6 space-y-4">
+      <div className="h-full flex animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
+        {/* Left: Form Panel - sidebar style with grey background */}
+        <div className="w-[440px] flex-shrink-0 h-screen overflow-y-auto backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-r border-border">
+          <div className="p-8">
+            <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
+            <form onSubmit={handleSubmit} className="space-y-6 pb-8">
+              {/* Campaign Info */}
+              <div className="space-y-4">
                 {/* Platform Selection */}
                 <div className="space-y-6 max-w-lg">
                   <Label>Target Platforms</Label>
@@ -420,16 +420,11 @@ const BusinessCampaignForm: React.FC = () => {
                     </label>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
 
-
-            {/* Budget */}
-            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
-              <CardHeader>
-                <CardTitle>Budget</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              {/* Budget Section */}
+              <div className="border-t border-border pt-6 space-y-4">
+                <h3 className="text-base font-semibold text-foreground">Budget</h3>
                 <div className="space-y-2 max-w-lg">
                   <Label htmlFor="total_budget">Total Budget (SEK)</Label>
                   <Input
@@ -472,15 +467,11 @@ const BusinessCampaignForm: React.FC = () => {
                     Budget must be at least 10,000 SEK
                   </p>
                 )}
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Deadline */}
-            <Card className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-border rounded-[4px]">
-              <CardHeader>
-                <CardTitle>Deadline</CardTitle>
-              </CardHeader>
-              <CardContent>
+              {/* Deadline Section */}
+              <div className="border-t border-border pt-6 space-y-4">
+                <h3 className="text-base font-semibold text-foreground">Deadline</h3>
                 <div className="space-y-2 max-w-lg">
                   <Label htmlFor="deadline">Campaign Deadline</Label>
                   <Input
@@ -490,22 +481,23 @@ const BusinessCampaignForm: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Submit */}
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => navigate('/business/campaigns')}>
-                Cancel
-              </Button>
-              <Button type="submit" disabled={saving}>
-                {saving ? 'Saving...' : (isEditing ? 'Update Campaign' : 'Create Campaign')}
-              </Button>
-            </div>
-          </form>
+              {/* Submit */}
+              <div className="flex justify-end gap-3 pt-4">
+                <Button type="button" variant="outline" onClick={() => navigate('/business/campaigns')}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  {saving ? 'Saving...' : (isEditing ? 'Update Campaign' : 'Create Campaign')}
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
+
         {/* Right: Preview */}
-        <div className="flex-1 min-w-0 sticky top-8">
+        <div className="flex-1 min-w-0 p-8">
           <CampaignPreview
             formData={formData}
             requirements={requirements}

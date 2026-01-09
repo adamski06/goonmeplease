@@ -82,15 +82,15 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
       
-      <div className="flex-1 flex justify-center overflow-y-auto pr-2" style={{ height: 'calc(100vh - 100px)' }}>
+      <div className="flex-1 flex justify-center">
         <Card 
-          className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out flex-shrink-0 ${
+          className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
           }`}
-          style={{ height: 'fit-content', minHeight: '100%' }}
+          style={{ height: 'calc(100vh - 100px)' }}
         >
-          {/* Content */}
-          <div className={`${viewMode === 'phone' ? 'p-6' : 'p-8'}`}>
+          {/* Scrollable Content */}
+          <div className={`flex-1 overflow-y-auto ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
           {/* Title */}
           <div className="mb-4">
             <h3 className="font-bold text-foreground text-2xl">
@@ -219,8 +219,8 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           </div>
         </div>
 
-        {/* Bottom Overlay */}
-        <div className={`bg-black text-white flex items-center justify-between rounded-b-[4px] ${
+        {/* Fixed Bottom Overlay */}
+        <div className={`absolute bottom-0 left-0 right-0 bg-black text-white flex items-center justify-between ${
           viewMode === 'phone' ? 'px-5 py-4' : 'px-8 py-5'
         }`}>
           <div>
