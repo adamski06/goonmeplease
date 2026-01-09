@@ -34,6 +34,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   const [animatedBudget, setAnimatedBudget] = useState(budget);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedTier, setSelectedTier] = useState(0);
+  const [staticViewIcons, setStaticViewIcons] = useState(0);
+  const [staticCreatorIcons, setStaticCreatorIcons] = useState(0);
   const animationRef = useRef<number>();
 
   // Constants
@@ -124,6 +126,14 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   const jarlaFeeAmount = displayedBudget - creatorPool;
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
+
+  // Update static icon counts only when not dragging
+  useEffect(() => {
+    if (!isDragging) {
+      setStaticViewIcons(Math.ceil(guaranteedViews / 1000));
+      setStaticCreatorIcons(guaranteedCreators);
+    }
+  }, [isDragging, guaranteedViews, guaranteedCreators]);
 
   const handleConfirm = () => {
     onBudgetChange(snapToFiveThousand(localBudget));
@@ -248,7 +258,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
                 <div className="flex flex-wrap content-start gap-0.5">
-                  {Array.from({ length: Math.ceil(guaranteedViews / 1000) }).map((_, i) => (
+                  {Array.from({ length: staticViewIcons }).map((_, i) => (
                     <PersonStanding key={i} className="h-3 w-3 text-foreground" />
                   ))}
                 </div>
@@ -259,7 +269,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
                 <div className="grid grid-cols-5 gap-2">
-                  {Array.from({ length: guaranteedCreators }).map((_, i) => (
+                  {Array.from({ length: isDragging && guaranteedCreators > 30 ? staticCreatorIcons : guaranteedCreators }).map((_, i) => (
                     <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
                   ))}
                 </div>
