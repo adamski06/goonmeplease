@@ -163,10 +163,12 @@ const BusinessAuth: React.FC = () => {
   // Detect returning user: has saved email but no active Supabase session
   const hasReturningUserEmail = savedSession?.email && savedSession.email.trim().length > 0;
   
-  // Determine initial mode: URL param takes precedence, then saved session, then default to 'intro'
+  // Determine initial mode: URL param takes precedence, then saved session (but not 'login'), then default to 'intro'
   const getInitialMode = (): 'intro' | 'chat' | 'login' => {
     if (urlMode === 'login') return 'login';
-    return savedSession?.mode || 'intro';
+    // Don't restore 'login' mode from saved session - only restore 'chat' or 'intro'
+    if (savedSession?.mode && savedSession.mode !== 'login') return savedSession.mode;
+    return 'intro';
   };
   
   const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(getInitialMode());
