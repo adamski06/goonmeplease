@@ -39,7 +39,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl w-[90vw] h-[80vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden">
+      <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden">
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-border">
