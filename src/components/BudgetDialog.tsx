@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X, Users, Eye, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -13,16 +13,23 @@ interface BudgetDialogProps {
   onBudgetChange: (budget: number) => void;
 }
 
-const jarlaPricingPlans = [
-  { name: 'Free', price: 0, feePercent: 50 },
-  { name: 'Pro', price: 5000, feePercent: 25 },
-  { name: 'Business', price: 9000, feePercent: 12.5 },
-];
-
 const paymentTiers = [
   { payout: 100, views: 3000 },
   { payout: 500, views: 15000 },
 ];
+
+// Exponential fee calculation: 25% at 15k, decreases as budget increases
+const calculateFeePercent = (budget: number): number => {
+  const minBudget = 15000;
+  const maxBudget = 500000;
+  const maxFee = 25;
+  const minFee = 5;
+  
+  // Exponential decay from 25% to 5%
+  const t = (budget - minBudget) / (maxBudget - minBudget);
+  const fee = maxFee * Math.pow(minFee / maxFee, t);
+  return Math.round(fee * 10) / 10; // Round to 1 decimal
+};
 
 const BudgetDialog: React.FC<BudgetDialogProps> = ({
   open,
@@ -32,7 +39,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 }) => {
   const [localBudget, setLocalBudget] = useState(budget);
   const [selectedTier, setSelectedTier] = useState(0);
-  const [selectedPlan, setSelectedPlan] = useState(0);
 
   // Exponential scale helpers
   const minBudget = 15000;
@@ -56,8 +62,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   }, [open, budget]);
 
   const currentTier = paymentTiers[selectedTier];
-  const currentPlan = jarlaPricingPlans[selectedPlan];
-  const budgetAfterFee = localBudget * (1 - currentPlan.feePercent / 100);
+  const feePercent = calculateFeePercent(localBudget);
+  const budgetAfterFee = localBudget * (1 - feePercent / 100);
   const guaranteedCreators = Math.floor(budgetAfterFee / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
@@ -90,28 +96,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             <div className="h-full grid grid-cols-1 md:grid-cols-2">
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
-                {/* Jarla Pricing Plans */}
-                <div className="w-full max-w-md space-y-3">
-                  <Label className="text-sm text-muted-foreground">Jarla Plan</Label>
-                  <div className="flex gap-2">
-                    {jarlaPricingPlans.map((plan, index) => (
-                      <Button
-                        key={index}
-                        type="button"
-                        variant={selectedPlan === index ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setSelectedPlan(index)}
-                        className="flex-1 flex-col h-auto py-3"
-                      >
-                        <span className="font-bold">{plan.name}</span>
-                        <span className="text-xs opacity-70">
-                          {plan.price === 0 ? 'Free' : `${plan.price.toLocaleString()} SEK/mo`}
-                        </span>
-                        <span className="text-xs opacity-70">{plan.feePercent}% fee</span>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
 
                 <div className="space-y-2 text-center">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
@@ -127,7 +111,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Budget for creators: {budgetAfterFee.toLocaleString()} SEK ({100 - currentPlan.feePercent}%)
+                    Jarla fee: {feePercent}% • Budget for creators: {budgetAfterFee.toLocaleString()} SEK
                   </p>
                 </div>
 
@@ -170,44 +154,23 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
               {/* Right Side - Guaranteed Results */}
               <div className="p-8 flex flex-col justify-center space-y-6 bg-muted/30">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
-                </div>
+                <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
 
                 {/* Views */}
-                <div className="p-6 bg-background rounded-lg border border-border space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Eye className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-3xl font-bold text-foreground">
-                        {guaranteedViews.toLocaleString()}+
-                      </p>
-                      <p className="text-sm text-muted-foreground">Guaranteed Views</p>
-                    </div>
-                  </div>
+                <div className="p-6 bg-background rounded-lg border border-border">
+                  <p className="text-3xl font-bold text-foreground">
+                    {guaranteedViews.toLocaleString()}+
+                  </p>
+                  <p className="text-sm text-muted-foreground">Guaranteed Views</p>
                 </div>
 
                 {/* Creators */}
-                <div className="p-6 bg-background rounded-lg border border-border space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Users className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-3xl font-bold text-foreground">
-                        {guaranteedCreators}+
-                      </p>
-                      <p className="text-sm text-muted-foreground">Creators</p>
-                    </div>
-                  </div>
+                <div className="p-6 bg-background rounded-lg border border-border">
+                  <p className="text-3xl font-bold text-foreground">
+                    {guaranteedCreators}+
+                  </p>
+                  <p className="text-sm text-muted-foreground">Creators</p>
                 </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {currentTier.payout} SEK per {currentTier.views.toLocaleString()} views • {currentPlan.feePercent}% Jarla fee
-                </p>
               </div>
             </div>
           </div>
