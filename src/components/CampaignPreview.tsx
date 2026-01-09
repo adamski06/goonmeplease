@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Video, Image, Calendar, Smartphone, Monitor } from 'lucide-react';
+import { Video, Image, Calendar, Smartphone, Monitor, X } from 'lucide-react';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -92,10 +92,10 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         >
           {/* Fixed Top Header Bar */}
           <div className={`flex items-center justify-between border-b border-border ${viewMode === 'phone' ? 'px-6 py-4' : 'px-8 py-5'}`}>
-            <div className="flex flex-col">
-              <span className="text-sm text-muted-foreground">
-                {businessProfile?.company_name || 'Company Name'}
-              </span>
+            <div className="flex items-center gap-3">
+              <button className="w-8 h-8 rounded-full bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors">
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
               <h3 className="font-bold text-foreground text-xl">
                 {formData.title || 'Campaign Title'}
               </h3>
@@ -120,6 +120,13 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
           {/* Scrollable Content */}
           <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
+          
+          {/* Company Name */}
+          <div className="mb-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {businessProfile?.company_name || 'Company Name'}
+            </span>
+          </div>
 
           {/* Description */}
           <div className="mb-8">
