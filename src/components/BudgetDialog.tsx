@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X } from 'lucide-react';
-import personIcon from '@/assets/person-icon.png';
+import { X, PersonStanding } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -248,9 +247,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col min-h-0">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
-                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-y-auto min-h-0 opacity-40">
+                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-y-auto min-h-0">
                   {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
-                    <img key={i} src={personIcon} alt="" className="h-3 w-3" />
+                    <PersonStanding key={i} className="h-3 w-3 text-muted-foreground/40" />
                   ))}
                 </div>
               </div>
@@ -261,7 +260,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
                 <div className="flex-1 flex flex-wrap content-start gap-1 overflow-y-auto min-h-0">
                   {Array.from({ length: guaranteedCreators }).map((_, i) => (
-                    <img key={i} src={personIcon} alt="" className="h-6 w-6" />
+                    <PersonStanding key={i} className="h-6 w-6 text-foreground" />
                   ))}
                 </div>
               </div>
