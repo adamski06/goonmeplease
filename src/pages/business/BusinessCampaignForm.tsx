@@ -301,15 +301,15 @@ const BusinessCampaignForm: React.FC = () => {
                     
                     {/* Dropdown overlay */}
                     {showPlatformPicker && (
-                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex gap-4">
+                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex flex-col gap-2">
                         {platforms.map(({ id, name, logo }) => (
                           <button
                             key={id}
                             type="button"
                             onClick={() => selectPlatform(id)}
-                            className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:scale-105"
+                            className="flex items-center gap-3 px-2 py-1.5 rounded-md transition-all duration-200 hover:bg-muted"
                           >
-                            <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                            <div className="w-10 h-10 rounded-[2px] overflow-hidden flex-shrink-0">
                               <img 
                                 src={logo} 
                                 alt={name} 
@@ -318,7 +318,7 @@ const BusinessCampaignForm: React.FC = () => {
                                 }`}
                               />
                             </div>
-                            <span className="text-xs font-medium text-foreground">
+                            <span className="text-sm font-medium text-foreground">
                               {name}
                             </span>
                           </button>
