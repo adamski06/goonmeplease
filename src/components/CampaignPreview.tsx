@@ -101,18 +101,18 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
           {/* Platform badges */}
           {selectedPlatforms.length > 0 && (
-            <div className="flex gap-2 mb-6">
+            <div className="flex gap-3 mb-6">
               {selectedPlatforms.map((platform) => (
                 <div 
                   key={platform}
-                  className="flex items-center gap-1.5 bg-muted/50 rounded-[3px] px-2.5 py-1.5"
+                  className="flex items-center gap-2.5 bg-muted/50 rounded-[4px] px-4 py-2.5"
                 >
                   <img 
                     src={platformLogos[platform]} 
                     alt={platformNames[platform]} 
-                    className="w-4 h-4 object-cover rounded-[2px]"
+                    className="w-8 h-8 object-cover rounded-[3px]"
                   />
-                  <span className="text-xs font-medium text-foreground">
+                  <span className="text-sm font-medium text-foreground">
                     {platformNames[platform]}
                   </span>
                 </div>
