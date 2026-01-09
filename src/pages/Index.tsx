@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import jarlaLogo from "@/assets/jarla-logo.png";
@@ -6,6 +7,39 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'creator' | 'business'>('creator');
+
+  const handleTabChange = (tab: 'creator' | 'business') => {
+    if (tab !== activeTab) {
+      setActiveTab(tab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const TabButtons = () => (
+    <>
+      <button
+        onClick={() => handleTabChange('creator')}
+        className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
+          activeTab === 'creator'
+            ? 'bg-background text-foreground rounded-full'
+            : 'text-foreground/60 group-hover:text-background hover:text-background'
+        }`}
+      >
+        {t('nav.creator')}
+      </button>
+      <button
+        onClick={() => handleTabChange('business')}
+        className={`px-5 py-1.5 text-sm font-bold font-montserrat transition-colors ${
+          activeTab === 'business'
+            ? 'bg-background text-foreground rounded-full'
+            : 'text-foreground/60 group-hover:text-background hover:text-background'
+        }`}
+      >
+        {t('nav.business')}
+      </button>
+    </>
+  );
 
   return (
     <div className="overflow-x-hidden relative">
@@ -16,7 +50,14 @@ const Index = () => {
       {/* Fixed Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-end gap-4">
-          <div className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center">
+          {/* Clickable Jarla logo */}
+          <button 
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setActiveTab('creator');
+            }}
+            className="relative h-8 md:h-10 w-[120px] md:w-[150px] flex items-center cursor-pointer"
+          >
             <div 
               className="absolute inset-0 bg-foreground"
               style={{
@@ -30,11 +71,16 @@ const Index = () => {
                 maskPosition: 'left center'
               }} 
             />
+          </button>
+          
+          {/* Tabs next to logo */}
+          <div className="group flex bg-black/10 hover:bg-foreground rounded-full overflow-hidden ml-8 transition-colors">
+            <TabButtons />
           </div>
           
           {/* Nav buttons */}
           <button className="ml-8 px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
-            {t('nav.pricing')}
+            {activeTab === 'creator' ? t('nav.howToEarn') : t('nav.pricing')}
           </button>
           <button className="px-4 pt-1 pb-[7px] text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity">
             {t('nav.aboutUs')}
@@ -46,41 +92,82 @@ const Index = () => {
           {/* Right side */}
           <div className="ml-auto flex items-center gap-4">
             <LanguageSwitcher variant="minimal" />
-            <button 
-              onClick={() => navigate('/business/auth?mode=login')}
-              className="px-6 py-2 text-base font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
-            >
-              {t('nav.login')}
-            </button>
-            <button 
-              onClick={() => navigate('/business/auth')}
-              className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
-            >
-              {t('landing.getStarted')}
-            </button>
+            {activeTab === 'creator' ? (
+              <button 
+                onClick={() => navigate('/auth')}
+                className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+              >
+                {t('nav.startEarning')}
+              </button>
+            ) : (
+              <>
+                <button 
+                  onClick={() => navigate('/business/auth?mode=login')}
+                  className="px-6 py-2 text-base font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
+                >
+                  {t('nav.login')}
+                </button>
+                <button 
+                  onClick={() => navigate('/business/auth')}
+                  className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+                >
+                  {t('landing.getStarted')}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </nav>
       
       {/* Hero Section */}
       <section className="min-h-screen px-6 flex flex-col relative">
-        <div className="flex-1 flex items-center max-w-7xl mx-auto w-full justify-center">
-          <div className="relative z-10 flex flex-col gap-8 animate-fade-in-up w-full items-center">
-            <h1 className="animate-fade-in-delayed font-bold text-foreground font-montserrat text-center">
-              <div className="mt-80">
-                <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title1')}</span>
-                <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title2')}</span>
-                <div className="flex justify-center mt-8">
-                  <button 
-                    onClick={() => navigate('/business/auth')}
-                    className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
-                  >
-                    {t('landing.getStarted')}
-                  </button>
+        <div className={`flex-1 flex items-center max-w-7xl mx-auto w-full ${activeTab === 'business' ? 'justify-center' : 'justify-center gap-16'}`}>
+          <div className={`relative z-10 flex flex-col gap-8 animate-fade-in-up ${activeTab === 'business' ? 'w-full items-center' : ''}`}>
+            <h1 className={`animate-fade-in-delayed font-bold text-foreground font-montserrat ${activeTab === 'business' ? 'text-center' : 'text-left'}`}>
+              {activeTab === 'creator' ? (
+                <div className="mt-16 text-center">
+                  <span className="block text-6xl md:text-8xl">{t('landing.creatorHero.title1')}</span>
+                  <span className="block text-6xl md:text-8xl">
+                    {t('landing.creatorHero.title2')}{' '}
+                    <span className="inline-block">
+                      <span className="inline-block text-foreground">
+                        {t('landing.creatorHero.title3')}
+                      </span>
+                    </span>
+                  </span>
+                  <div className="flex justify-center mt-8">
+                    <button 
+                      onClick={() => navigate('/auth')}
+                      className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+                    >
+                      {t('nav.startEarning')}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="mt-80">
+                  <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title1')}</span>
+                  <span className="block text-4xl md:text-6xl">{t('landing.businessHero.title2')}</span>
+                  <div className="flex justify-center mt-8">
+                    <button 
+                      onClick={() => navigate('/business/auth')}
+                      className="px-12 py-4 text-xl font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+                    >
+                      {t('landing.getStarted')}
+                    </button>
+                  </div>
+                </div>
+              )}
             </h1>
           </div>
+          {/* Vertical video placeholder - right side (only for creator) */}
+          {activeTab === 'creator' && (
+            <div className="flex items-center justify-center">
+              <div className="w-56 h-[400px] bg-black/5 dark:bg-white/10 backdrop-blur-sm rounded-[4px] flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-montserrat">{t('landing.video')}</span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
