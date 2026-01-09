@@ -161,10 +161,9 @@ const BusinessDashboard: React.FC = () => {
   return (
     <BusinessLayout>
       <div className="p-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Profile Card - matching auth preview style */}
-          <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
-            <div className="bg-card border border-border rounded-[3px] overflow-hidden w-[620px]">
+        {/* Profile Card - responsive width */}
+        <div className="mb-8 opacity-0 animate-fade-in" style={{ animationDelay: '0ms', animationFillMode: 'forwards' }}>
+          <div className="bg-card border border-border rounded-[3px] overflow-hidden w-full">
               {/* Header with logo and name */}
               <div className="p-10 pb-6">
                 <div className="flex items-center gap-5">
@@ -208,7 +207,6 @@ const BusinessDashboard: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
     </BusinessLayout>
   );
 };
