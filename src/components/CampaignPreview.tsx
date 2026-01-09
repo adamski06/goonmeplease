@@ -92,32 +92,31 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         >
           {/* Scrollable Content */}
           <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
-          {/* Platform badges */}
-          {selectedPlatforms.length > 0 && (
-            <div className="flex gap-5 mb-4">
-              {selectedPlatforms.map((platform) => (
-                <div 
-                  key={platform}
-                  className="flex items-center gap-3"
-                >
-                  <img 
-                    src={platformLogos[platform]} 
-                    alt={platformNames[platform]} 
-                    className="w-12 h-12 object-cover rounded-[4px]"
-                  />
-                  <span className="text-lg font-medium text-foreground">
-                    {platformNames[platform]}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Title */}
-          <div className="mb-4">
+          {/* Title and Platform badges */}
+          <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-foreground text-2xl">
               {formData.title || 'Campaign Title'}
             </h3>
+            
+            {selectedPlatforms.length > 0 && (
+              <div className="flex gap-4">
+                {selectedPlatforms.map((platform) => (
+                  <div 
+                    key={platform}
+                    className="flex items-center gap-2"
+                  >
+                    <img 
+                      src={platformLogos[platform]} 
+                      alt={platformNames[platform]} 
+                      className="w-12 h-12 object-cover rounded-[4px]"
+                    />
+                    <span className="text-lg font-medium text-foreground">
+                      {platformNames[platform]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Description */}
