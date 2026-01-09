@@ -55,14 +55,14 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   
   const gradientPresets = [
     { name: 'Default', value: 'bg-card', style: {} },
-    { name: 'Warm', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(35 25% 95%) 0%, hsl(30 20% 90%) 100%)' } },
-    { name: 'Cool', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(210 20% 96%) 0%, hsl(220 15% 92%) 100%)' } },
-    { name: 'Stone', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(30 10% 94%) 0%, hsl(25 8% 88%) 100%)' } },
-    { name: 'Slate', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(220 15% 95%) 0%, hsl(215 12% 89%) 100%)' } },
-    { name: 'Sand', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(40 25% 96%) 0%, hsl(35 18% 91%) 100%)' } },
-    { name: 'Mist', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(200 15% 96%) 0%, hsl(195 12% 91%) 100%)' } },
-    { name: 'Cloud', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 93%) 100%)' } },
-    { name: 'Cream', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(45 30% 97%) 0%, hsl(40 22% 92%) 100%)' } },
+    { name: 'Sky', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(210 100% 97%) 0%, hsl(200 80% 92%) 100%)' } },
+    { name: 'Mint', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(160 60% 96%) 0%, hsl(150 50% 90%) 100%)' } },
+    { name: 'Lavender', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(270 60% 97%) 0%, hsl(260 50% 92%) 100%)' } },
+    { name: 'Peach', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(20 80% 96%) 0%, hsl(15 70% 91%) 100%)' } },
+    { name: 'Rose', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(340 60% 97%) 0%, hsl(330 50% 92%) 100%)' } },
+    { name: 'Lemon', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(55 70% 96%) 0%, hsl(50 60% 90%) 100%)' } },
+    { name: 'Aqua', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(180 50% 96%) 0%, hsl(175 45% 90%) 100%)' } },
+    { name: 'Lilac', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(290 50% 97%) 0%, hsl(285 45% 92%) 100%)' } },
   ];
   
   // Placeholder for paid out amount (would come from real data)
