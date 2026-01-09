@@ -1806,6 +1806,13 @@ const BusinessAuth: React.FC = () => {
                 >
                   Setup account
                 </Button>
+                
+                <button
+                  onClick={() => setMode('login')}
+                  className="text-sm text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
+                >
+                  {i18n.language === 'sv' ? 'Redan ett konto? Logga in' : 'Already have an account? Log in'}
+                </button>
               </div>
             )}
           </div>
