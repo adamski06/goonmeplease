@@ -157,11 +157,11 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
                 {/* Jarla Fee Box - Fixed size (420x110) */}
                 <div className="bg-background rounded-[4px] border border-border w-[420px] h-[110px] flex flex-col items-center justify-center">
-                  <p className="text-sm font-medium text-foreground mb-2">Jarla Fee</p>
+                  <p className="text-sm font-medium text-foreground mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Jarla Fee</p>
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
-                    <span className="text-muted-foreground">•</span>
-                    <span className="text-sm text-muted-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
+                    <span className="text-foreground">•</span>
+                    <span className="text-4xl font-bold text-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
                   </div>
                 </div>
 
@@ -238,9 +238,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Right Side - Guaranteed Results */}
               <div className="p-8 flex flex-col justify-center space-y-6 bg-muted/30">
                 {/* Creator Pool Box */}
-                <div className="p-8 bg-background rounded-[4px] border border-border w-full max-w-sm">
-                  <p className="text-xs text-muted-foreground mb-2">Creator Pool</p>
-                  <p className="text-4xl font-bold text-foreground">{creatorPool.toLocaleString()} SEK</p>
+                <div className="p-8 bg-foreground rounded-[4px] border border-border">
+                  <p className="text-xs text-background mb-2">Creator Pool</p>
+                  <p className="text-4xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
                 </div>
 
                 <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
