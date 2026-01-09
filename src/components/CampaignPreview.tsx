@@ -99,21 +99,14 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             </h3>
             
             {selectedPlatforms.length > 0 && (
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {selectedPlatforms.map((platform) => (
-                  <div 
+                  <img 
                     key={platform}
-                    className="flex items-center gap-2"
-                  >
-                    <img 
-                      src={platformLogos[platform]} 
-                      alt={platformNames[platform]} 
-                      className="w-12 h-12 object-cover rounded-[4px]"
-                    />
-                    <span className="text-lg font-medium text-foreground">
-                      {platformNames[platform]}
-                    </span>
-                  </div>
+                    src={platformLogos[platform]} 
+                    alt={platformNames[platform]} 
+                    className="w-10 h-10 object-cover rounded-[4px]"
+                  />
                 ))}
               </div>
             )}
@@ -220,8 +213,8 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
 
         {/* Fixed Bottom Overlay */}
-        <div className={`absolute bottom-0 left-0 right-0 bg-black text-white flex items-center justify-between rounded-t-xl ${
-          viewMode === 'phone' ? 'px-5 py-4' : 'px-8 py-5'
+        <div className={`absolute bottom-4 left-4 right-4 bg-black text-white flex items-center justify-between rounded-xl ${
+          viewMode === 'phone' ? 'px-5 py-4' : 'px-6 py-4'
         }`}>
           <div>
             <p className={`text-white/60 mb-1 ${viewMode === 'phone' ? 'text-xs' : 'text-sm'}`}>Earn up to</p>
