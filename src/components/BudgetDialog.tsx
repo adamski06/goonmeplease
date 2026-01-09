@@ -13,6 +13,12 @@ interface BudgetDialogProps {
   onBudgetChange: (budget: number) => void;
 }
 
+const jarlaPricingPlans = [
+  { name: 'Free', price: 0, feePercent: 50 },
+  { name: 'Pro', price: 5000, feePercent: 25 },
+  { name: 'Business', price: 9000, feePercent: 12.5 },
+];
+
 const paymentTiers = [
   { payout: 100, views: 3000 },
   { payout: 500, views: 10000 },
@@ -27,6 +33,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 }) => {
   const [localBudget, setLocalBudget] = useState(budget);
   const [selectedTier, setSelectedTier] = useState(0);
+  const [selectedPlan, setSelectedPlan] = useState(0);
 
   // Exponential scale helpers
   const minBudget = 15000;
@@ -50,8 +57,10 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   }, [open, budget]);
 
   const currentTier = paymentTiers[selectedTier];
-  const guaranteedViews = Math.floor((localBudget / currentTier.payout) * currentTier.views);
-  const guaranteedCreators = Math.floor(localBudget / currentTier.payout);
+  const currentPlan = jarlaPricingPlans[selectedPlan];
+  const budgetAfterFee = localBudget * (1 - currentPlan.feePercent / 100);
+  const guaranteedCreators = Math.floor(budgetAfterFee / currentTier.payout);
+  const guaranteedViews = guaranteedCreators * currentTier.views;
 
   const handleConfirm = () => {
     onBudgetChange(localBudget);
@@ -82,6 +91,29 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             <div className="h-full grid grid-cols-1 md:grid-cols-2">
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
+                {/* Jarla Pricing Plans */}
+                <div className="w-full max-w-md space-y-3">
+                  <Label className="text-sm text-muted-foreground">Jarla Plan</Label>
+                  <div className="flex gap-2">
+                    {jarlaPricingPlans.map((plan, index) => (
+                      <Button
+                        key={index}
+                        type="button"
+                        variant={selectedPlan === index ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedPlan(index)}
+                        className="flex-1 flex-col h-auto py-3"
+                      >
+                        <span className="font-bold">{plan.name}</span>
+                        <span className="text-xs opacity-70">
+                          {plan.price === 0 ? 'Free' : `${plan.price.toLocaleString()} SEK/mo`}
+                        </span>
+                        <span className="text-xs opacity-70">{plan.feePercent}% fee</span>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="space-y-2 text-center">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
                   <div className="flex items-baseline justify-center gap-2">
@@ -95,6 +127,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Budget for creators: {budgetAfterFee.toLocaleString()} SEK ({100 - currentPlan.feePercent}%)
+                  </p>
                 </div>
 
                 {/* Slider */}
@@ -173,7 +208,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  Based on {currentTier.payout} SEK per {currentTier.views.toLocaleString()} views
+                  {currentTier.payout} SEK per {currentTier.views.toLocaleString()} views • {currentPlan.feePercent}% Jarla fee
                 </p>
               </div>
             </div>
