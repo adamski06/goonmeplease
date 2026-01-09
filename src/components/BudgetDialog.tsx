@@ -97,6 +97,12 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
+                {/* Jarla Fee Box */}
+                <div className="p-6 bg-muted/50 rounded-[4px] border border-border text-center">
+                  <p className="text-4xl font-bold text-foreground">{feePercent}%</p>
+                  <p className="text-sm text-muted-foreground mt-1">Jarla Fee</p>
+                </div>
+
                 <div className="space-y-2 text-center">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
                   <div className="flex items-baseline justify-center gap-2">
@@ -110,7 +116,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
-                  {/* Fee summary removed */}
                 </div>
 
                 {/* Slider */}
