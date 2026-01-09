@@ -110,9 +110,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Jarla fee: {feePercent}% • Budget for creators: {budgetAfterFee.toLocaleString()} SEK
-                  </p>
+                  {/* Fee summary removed */}
                 </div>
 
                 {/* Slider */}
