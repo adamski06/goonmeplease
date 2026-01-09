@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Video, Image, Calendar } from 'lucide-react';
+import { Video, Image, Calendar, Smartphone, Monitor } from 'lucide-react';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -48,16 +48,46 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   campaignVideoPreview,
   requirementImages = [],
 }) => {
+  const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('phone');
   // Placeholder for paid out amount (would come from real data)
   const paidOut = 0;
 
   return (
     <div className="h-full flex flex-col">
-      <h2 className="text-base font-medium text-muted-foreground mb-4">Campaign Preview</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-medium text-muted-foreground">Preview</h2>
+        <div className="flex items-center gap-1 bg-muted/50 rounded-[3px] p-1">
+          <button
+            type="button"
+            onClick={() => setViewMode('phone')}
+            className={`p-1.5 rounded-[2px] transition-colors ${
+              viewMode === 'phone' 
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Smartphone className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('desktop')}
+            className={`p-1.5 rounded-[2px] transition-colors ${
+              viewMode === 'desktop' 
+                ? 'bg-background text-foreground shadow-sm' 
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Monitor className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
       
-      <Card className="flex-1 bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative">
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-auto p-8 pb-24">
+      <div className={`flex-1 flex ${viewMode === 'phone' ? 'justify-center' : ''}`}>
+        <Card className={`bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative ${
+          viewMode === 'phone' ? 'w-[320px] h-[640px]' : 'w-full h-full'
+        }`}>
+          {/* Scrollable Content */}
+          <div className={`flex-1 overflow-auto pb-24 ${viewMode === 'phone' ? 'p-5' : 'p-8'}`}>
           {/* Title */}
           <div className="mb-4">
             <h3 className="font-bold text-foreground text-2xl">
@@ -95,7 +125,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
           {/* Campaign Video Placeholder */}
           <div className="mb-8">
-            <p className="text-sm font-medium text-foreground mb-3">Campaign Video</p>
+            <p className="text-sm font-medium text-foreground mb-3">Video</p>
             {campaignVideoPreview ? (
               <div className="aspect-[9/16] max-w-[200px] bg-muted rounded-[4px] overflow-hidden">
                 <video 
@@ -187,21 +217,24 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
 
         {/* Fixed Bottom Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black text-white px-8 py-5 flex items-center justify-between">
+        <div className={`absolute bottom-0 left-0 right-0 bg-black text-white flex items-center justify-between ${
+          viewMode === 'phone' ? 'px-5 py-4' : 'px-8 py-5'
+        }`}>
           <div>
-            <p className="text-sm text-white/60 mb-1">Earn up to</p>
-            <p className="text-2xl font-bold">
+            <p className={`text-white/60 mb-1 ${viewMode === 'phone' ? 'text-xs' : 'text-sm'}`}>Earn up to</p>
+            <p className={`font-bold ${viewMode === 'phone' ? 'text-xl' : 'text-2xl'}`}>
               {formData.total_budget > 0 ? `$${formData.total_budget.toLocaleString()}` : '$0'}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-white/60 mb-1">Paid out</p>
-            <p className="text-2xl font-bold">
-              ${paidOut.toLocaleString()} <span className="text-white/60 font-normal text-base">/ ${formData.total_budget > 0 ? formData.total_budget.toLocaleString() : '0'}</span>
+            <p className={`text-white/60 mb-1 ${viewMode === 'phone' ? 'text-xs' : 'text-sm'}`}>Paid out</p>
+            <p className={`font-bold ${viewMode === 'phone' ? 'text-xl' : 'text-2xl'}`}>
+              ${paidOut.toLocaleString()} <span className={`text-white/60 font-normal ${viewMode === 'phone' ? 'text-sm' : 'text-base'}`}>/ ${formData.total_budget > 0 ? formData.total_budget.toLocaleString() : '0'}</span>
             </p>
           </div>
         </div>
       </Card>
+      </div>
     </div>
   );
 };
