@@ -2,6 +2,29 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Video, Image, Calendar } from 'lucide-react';
 
+// Platform logo imports
+import tiktokLogo from '@/assets/platforms/tiktok.png';
+import instagramLogo from '@/assets/platforms/instagram.png';
+import youtubeLogo from '@/assets/platforms/youtube.png';
+import facebookLogo from '@/assets/platforms/facebook.png';
+import linkedinLogo from '@/assets/platforms/linkedin.png';
+
+const platformLogos: Record<string, string> = {
+  tiktok: tiktokLogo,
+  instagram: instagramLogo,
+  youtube: youtubeLogo,
+  facebook: facebookLogo,
+  linkedin: linkedinLogo,
+};
+
+const platformNames: Record<string, string> = {
+  tiktok: 'TikTok',
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  facebook: 'Facebook',
+  linkedin: 'LinkedIn',
+};
+
 interface CampaignPreviewProps {
   formData: {
     brand_name: string;
@@ -20,6 +43,7 @@ interface CampaignPreviewProps {
 const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   formData,
   requirements,
+  selectedPlatforms,
   businessProfile,
   campaignVideoPreview,
   requirementImages = [],
@@ -35,11 +59,32 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         {/* Scrollable Content */}
         <div className="flex-1 overflow-auto p-8 pb-24">
           {/* Title */}
-          <div className="mb-8">
+          <div className="mb-4">
             <h3 className="font-bold text-foreground text-2xl">
               {formData.title || 'Campaign Title'}
             </h3>
           </div>
+
+          {/* Platform badges */}
+          {selectedPlatforms.length > 0 && (
+            <div className="flex gap-2 mb-6">
+              {selectedPlatforms.map((platform) => (
+                <div 
+                  key={platform}
+                  className="flex items-center gap-1.5 bg-muted/50 rounded-[3px] px-2.5 py-1.5"
+                >
+                  <img 
+                    src={platformLogos[platform]} 
+                    alt={platformNames[platform]} 
+                    className="w-4 h-4 object-cover rounded-[2px]"
+                  />
+                  <span className="text-xs font-medium text-foreground">
+                    {platformNames[platform]}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Description */}
           <div className="mb-8">
