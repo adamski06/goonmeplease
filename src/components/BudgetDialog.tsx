@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X, User } from 'lucide-react';
+import { X, PersonStanding } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -249,7 +249,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
                 <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-hidden">
                   {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
-                    <User key={i} className="h-3 w-3 text-muted-foreground/40" />
+                    <PersonStanding key={i} className="h-3 w-3 text-muted-foreground/40" />
                   ))}
                 </div>
               </div>
@@ -260,7 +260,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
                 <div className="flex-1 flex flex-wrap content-start gap-1 overflow-hidden">
                   {Array.from({ length: Math.min(guaranteedCreators, 200) }).map((_, i) => (
-                    <User key={i} className="h-5 w-5 text-foreground" />
+                    <PersonStanding key={i} className="h-5 w-5 text-foreground" />
                   ))}
                 </div>
               </div>
