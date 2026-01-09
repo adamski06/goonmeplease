@@ -85,14 +85,29 @@ const Index = () => {
           {/* Language Switcher */}
           <div className="ml-auto flex items-center gap-4">
             <LanguageSwitcher variant="minimal" />
-            {/* Right side button - only show in creator mode */}
-            {activeTab === 'creator' && (
+            {/* Right side buttons */}
+            {activeTab === 'creator' ? (
               <button 
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/auth')}
                 className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
               >
                 {t('nav.startEarning')}
               </button>
+            ) : (
+              <>
+                <button 
+                  onClick={() => navigate('/business/auth')}
+                  className="px-6 py-2 text-base font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
+                >
+                  {t('nav.login')}
+                </button>
+                <button 
+                  onClick={() => navigate('/business/auth')}
+                  className="px-6 py-2 text-base font-bold font-montserrat bg-foreground text-background rounded-full transition-all duration-300 hover:opacity-90"
+                >
+                  {t('landing.getStarted')}
+                </button>
+              </>
             )}
           </div>
         </div>

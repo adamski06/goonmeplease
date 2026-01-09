@@ -35,6 +35,7 @@ export default {
     aboutUs: 'About us',
     careers: 'Careers',
     startEarning: 'Start earning',
+    login: 'Log in',
     home: 'Home',
     campaigns: 'Campaigns',
     submissions: 'Submissions',
