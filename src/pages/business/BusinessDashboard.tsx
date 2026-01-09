@@ -191,14 +191,14 @@ const BusinessDashboard: React.FC = () => {
                   </h1>
                   
                   {/* Stats */}
-                  <div className="ml-auto flex gap-8">
+                  <div className="ml-auto flex gap-8 items-start">
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-foreground">0</div>
-                      <div className="text-base font-medium text-foreground">Creators</div>
+                      <div className="text-3xl font-bold text-foreground leading-none">0</div>
+                      <div className="text-base font-medium text-foreground mt-1">Creators</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-foreground">0</div>
-                      <div className="text-base font-medium text-foreground">Campaigns</div>
+                      <div className="text-3xl font-bold text-foreground leading-none">0</div>
+                      <div className="text-base font-medium text-foreground mt-1">Campaigns</div>
                     </div>
                   </div>
                 </div>
