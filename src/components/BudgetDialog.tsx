@@ -99,8 +99,16 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   const currentTier = paymentTiers[selectedTier];
   
-  // Base fee is 25% at min, scaling down to 5% at max
-  const poolRatio = 0.75 + (0.20 * (animatedBudget - minBudget) / (maxBudget - minBudget));
+  // Fee calculation: 25% at 20k, drops faster initially, 10% at 500k
+  // Using exponential decay for faster initial drop
+  const t = (animatedBudget - minBudget) / (maxBudget - minBudget);
+  const maxFee = 25;
+  const minFee = 10;
+  // Exponential decay - drops faster at beginning
+  const calculatedFeePercent = maxFee * Math.pow(minFee / maxFee, Math.pow(t, 0.6));
+  const feePercent = Math.round(calculatedFeePercent * 10) / 10;
+  
+  const poolRatio = 1 - (feePercent / 100);
   const rawCreatorPool = animatedBudget * poolRatio;
   
   // Creator pool: minimum 15k, snaps to 5k increments
@@ -114,9 +122,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     : snapToFiveThousand(animatedBudget);
   
   const jarlaFeeAmount = displayedBudget - creatorPool;
-  const feePercent = displayedBudget > 0 
-    ? Math.round((jarlaFeeAmount / displayedBudget) * 1000) / 10 
-    : 25;
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
@@ -150,8 +155,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
-                {/* Jarla Fee Box - Fixed size */}
-                <div className="py-4 px-6 bg-background rounded-[4px] border border-border w-[280px] h-[88px]">
+                {/* Jarla Fee Box - Fixed size (420x110) */}
+                <div className="bg-background rounded-[4px] border border-border w-[420px] h-[110px] flex flex-col items-center justify-center">
                   <p className="text-sm font-medium text-foreground mb-2">Jarla Fee</p>
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
