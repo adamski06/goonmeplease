@@ -96,7 +96,7 @@ const Index = () => {
             ) : (
               <>
                 <button 
-                  onClick={() => navigate('/business/auth')}
+                  onClick={() => navigate('/business/auth?mode=login')}
                   className="px-6 py-2 text-base font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
                 >
                   {t('nav.login')}
