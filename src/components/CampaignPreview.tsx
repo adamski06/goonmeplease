@@ -100,7 +100,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
               <Palette className="h-4 w-4" />
             </button>
             {showColorPicker && (
-              <div className="absolute top-full right-0 mt-2 z-50 bg-card border border-border rounded-lg shadow-lg p-3 animate-scale-in origin-top-right">
+              <div className="absolute top-full right-0 mt-2 z-[100] bg-card border border-border rounded-lg shadow-lg p-3 animate-scale-in origin-top-right">
                 <div className="grid grid-cols-4 gap-2">
                   {colorPresets.map((color) => (
                     <button
