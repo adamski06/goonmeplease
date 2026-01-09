@@ -70,9 +70,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Centered Preview header with view toggle */}
-      <div className="flex justify-center mb-2">
-        <div className="flex items-center gap-2 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] px-3 py-1.5 border border-black/10 dark:border-white/20">
+      {/* Seamless top bar attached to sidebar */}
+      <div className="flex items-center h-14 -mt-2 -mx-4 px-4 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
+        <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">Preview</span>
           <div className="w-px h-4 bg-border" />
           <button
@@ -142,7 +142,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           </Popover>
         </div>
       </div>
-      
+
       <div className="flex-1 flex justify-center min-h-0">
         <Card 
           className={`border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
