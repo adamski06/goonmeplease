@@ -186,16 +186,13 @@ const BusinessDashboard: React.FC = () => {
                       </span>
                     </div>
                   )}
-                  <div>
-                    <h1 className="text-3xl font-bold text-foreground">
-                      {businessProfile?.company_name || 'Your Business'}
-                    </h1>
-                    <span className="text-sm text-white">Online</span>
-                  </div>
+                  <h1 className="text-3xl font-bold text-foreground">
+                    {businessProfile?.company_name || 'Your Business'}
+                  </h1>
                 </div>
                 
                 {/* Description */}
-                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
+                <p className="mt-5 text-lg text-white leading-relaxed">
                   {shortDescription}
                 </p>
               </div>
