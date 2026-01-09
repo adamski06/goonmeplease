@@ -49,6 +49,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   requirementImages = [],
 }) => {
   const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('desktop');
+  const [showPlatforms, setShowPlatforms] = useState(false);
   // Placeholder for paid out amount (would come from real data)
   const paidOut = 0;
 
@@ -101,21 +102,33 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
               </h3>
             </div>
             
-            {selectedPlatforms.length > 0 && (
-              <div className="flex items-center gap-3">
-                <div className="w-px h-10 bg-border" />
-                <div className="flex gap-2">
-                  {selectedPlatforms.map((platform) => (
-                    <img 
-                      key={platform}
-                      src={platformLogos[platform]} 
-                      alt={platformNames[platform]} 
-                      className="w-9 h-9 object-cover rounded-[4px]"
-                    />
-                  ))}
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="w-px h-10 bg-border" />
+              <div className="relative">
+                {showPlatforms && selectedPlatforms.length > 0 ? (
+                  <div className="flex gap-2">
+                    {selectedPlatforms.map((platform) => (
+                      <img 
+                        key={platform}
+                        src={platformLogos[platform]} 
+                        alt={platformNames[platform]} 
+                        className="w-9 h-9 object-cover rounded-[4px] cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => setShowPlatforms(false)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowPlatforms(true)}
+                    className="w-9 h-9 rounded-[4px] bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors"
+                  >
+                    <span className="text-xs text-muted-foreground font-medium">
+                      {selectedPlatforms.length || '?'}
+                    </span>
+                  </button>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Scrollable Content */}
