@@ -134,10 +134,10 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden">
-        <div className="h-full flex">
+      <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] max-h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden overflow-hidden">
+        <div className="h-full flex overflow-hidden">
           {/* Left Side - Budget Controls (1/3 width, full height) */}
-          <div className="w-1/3 h-full flex flex-col border-r border-border">
+          <div className="w-1/3 h-full flex flex-col border-r border-border shrink-0">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
               <h2 className="text-xl font-semibold text-foreground">Set Campaign Budget</h2>
@@ -234,15 +234,15 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           </div>
 
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
-          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 space-y-4 overflow-y-auto">
+          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 overflow-hidden">
             {/* First Row - Creator Pool */}
-            <div className="p-6 bg-foreground rounded-[4px] border border-border shrink-0">
+            <div className="p-6 bg-foreground rounded-[4px] border border-border shrink-0 mb-4">
               <p className="text-xs text-background mb-2">Creator Pool</p>
               <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
             </div>
 
-            {/* Second Row - Views and Creators */}
-            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
+            {/* Second Row - Views and Creators (scrollable) */}
+            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0 overflow-y-auto">
               {/* Views */}
               <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
