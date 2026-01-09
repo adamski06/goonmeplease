@@ -230,6 +230,7 @@ const BusinessAuth: React.FC = () => {
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
   const [editingSectionContent, setEditingSectionContent] = useState('');
   const [showLeaveConfirmation, setShowLeaveConfirmation] = useState(false);
+  const [loginTransitioning, setLoginTransitioning] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -421,11 +422,19 @@ const BusinessAuth: React.FC = () => {
   }, [mode, i18n.language, hasReturningUserEmail, user, isReturningUser]);
   
   // Handle returning user login - pre-fill email and go to login mode
-  const handleReturningUserLogin = () => {
-    // Email is already pre-filled from savedSession
-    setMode('login');
+  // Handle transition to login with loading animation
+  const transitionToLogin = () => {
+    setLoginTransitioning(true);
+    setTimeout(() => {
+      setMode('login');
+      setLoginTransitioning(false);
+    }, 500);
   };
   
+  const handleReturningUserLogin = () => {
+    // Email is already pre-filled from savedSession
+    transitionToLogin();
+  };
   // Handle returning user starting fresh
   const handleStartFresh = () => {
     clearOnboardingSession();
@@ -1825,11 +1834,18 @@ const BusinessAuth: React.FC = () => {
       {mode === 'intro' && introStep !== 'returning' && (
         <div className="fixed top-6 right-6 z-50">
           <button
-            onClick={() => setMode('login')}
+            onClick={transitionToLogin}
             className="px-6 py-2 text-sm font-bold font-montserrat text-foreground hover:opacity-80 transition-opacity"
           >
             {i18n.language === 'sv' ? 'Logga in' : 'Log in'}
           </button>
+        </div>
+      )}
+      
+      {/* Login transition loading overlay */}
+      {loginTransitioning && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-background">
+          <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
         </div>
       )}
 
@@ -1928,7 +1944,7 @@ const BusinessAuth: React.FC = () => {
                 </Button>
                 
                 <button
-                  onClick={() => setMode('login')}
+                  onClick={transitionToLogin}
                   className="text-sm text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
                 >
                   {i18n.language === 'sv' ? 'Redan ett konto? Logga in' : 'Already have an account? Log in'}
