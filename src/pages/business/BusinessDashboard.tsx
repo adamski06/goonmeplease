@@ -202,7 +202,7 @@ const BusinessDashboard: React.FC = () => {
                 <h3 className="text-base font-medium text-foreground mb-4">Campaigns</h3>
                 {/* Add campaign button - larger */}
                 <div 
-                  className="w-[320px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                  className="w-[256px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
                   onClick={() => navigate('/business/campaigns/new')}
                 >
                   <div className="text-center">
