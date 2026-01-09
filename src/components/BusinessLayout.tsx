@@ -97,8 +97,8 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       {/* Left Sidebar */}
       <aside className={`${isFormRoute ? 'w-14' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-[width] duration-500 ease-in-out border-r border-black/10 dark:border-white/20`}>
         {/* Logo */}
-        <div className={`${isFormRoute ? 'px-0 flex justify-center' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
-          <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'} flex items-center justify-center`}>
+        <div className={`${isFormRoute ? 'hidden' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
+          <button onClick={() => navigate('/business')} className="relative h-10 w-[120px] flex items-center justify-center">
             <div 
               className="absolute inset-0 bg-foreground"
               style={{
@@ -108,12 +108,12 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
                 maskSize: 'contain',
                 WebkitMaskRepeat: 'no-repeat',
                 maskRepeat: 'no-repeat',
-                WebkitMaskPosition: isFormRoute ? 'center' : 'left center',
-                maskPosition: isFormRoute ? 'center' : 'left center',
+                WebkitMaskPosition: 'left center',
+                maskPosition: 'left center',
               }} 
             />
           </button>
-          <span className={`text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 h-0 mt-0 overflow-hidden' : 'opacity-100'}`}>
+          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">
             {t('nav.business')}
           </span>
         </div>
