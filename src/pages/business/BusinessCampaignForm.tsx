@@ -301,7 +301,7 @@ const BusinessCampaignForm: React.FC = () => {
                     
                     {/* Dropdown overlay */}
                     {showPlatformPicker && (
-                      <div className="absolute top-0 left-0 z-50 bg-card border border-border rounded-lg shadow-lg p-4 flex flex-col gap-2 min-w-[200px]">
+                      <div className="absolute top-0 left-0 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex flex-col gap-1.5 min-w-[180px] animate-fade-in">
                         {platforms.map(({ id, name, logo }) => {
                           const isSelected = selectedPlatform === id;
                           return (
@@ -309,13 +309,13 @@ const BusinessCampaignForm: React.FC = () => {
                               key={id}
                               type="button"
                               onClick={() => selectPlatform(id)}
-                              className={`flex items-center gap-4 px-3 py-2 rounded-md transition-all duration-200 ${
+                              className={`flex items-center gap-3 px-2.5 py-2 rounded-md transition-all duration-200 ${
                                 isSelected 
                                   ? 'bg-muted' 
                                   : 'hover:bg-muted/50'
                               }`}
                             >
-                              <div className="w-10 h-10 rounded-[2px] overflow-hidden flex-shrink-0">
+                              <div className="w-7 h-7 rounded-[2px] overflow-hidden flex-shrink-0">
                                 <img 
                                   src={logo} 
                                   alt={name} 
@@ -324,7 +324,7 @@ const BusinessCampaignForm: React.FC = () => {
                                   }`}
                                 />
                               </div>
-                              <span className={`text-base font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                              <span className={`text-sm font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
                                 {name}
                               </span>
                             </button>
