@@ -55,7 +55,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   return (
     <div className="flex flex-col h-full">
       {/* Centered Preview header with view toggle */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-2">
         <div className="flex items-center gap-2 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] px-3 py-1.5 border border-black/10 dark:border-white/20">
           <span className="text-sm font-medium text-muted-foreground">Preview</span>
           <div className="w-px h-4 bg-border" />
@@ -84,15 +84,14 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
       
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center min-h-0">
         <Card 
           className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
-          }`}
-          style={{ height: 'calc(100vh - 100px)' }}
+          } h-full`}
         >
           {/* Scrollable Content */}
-          <div className={`flex-1 overflow-y-auto ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
+          <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
           {/* Title */}
           <div className="mb-4">
             <h3 className="font-bold text-foreground text-2xl">
