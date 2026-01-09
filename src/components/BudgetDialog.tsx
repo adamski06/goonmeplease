@@ -257,10 +257,16 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
-                <div className="flex flex-wrap content-start gap-0.5">
-                  {Array.from({ length: staticViewIcons }).map((_, i) => (
-                    <PersonStanding key={i} className="h-3 w-3 text-foreground" />
-                  ))}
+                <div className="flex flex-wrap content-start gap-0.5 flex-1">
+                  {isDragging ? (
+                    <div className="flex items-center justify-center w-full h-full">
+                      <div className="animate-pulse text-muted-foreground text-sm">Calculating...</div>
+                    </div>
+                  ) : (
+                    Array.from({ length: staticViewIcons }).map((_, i) => (
+                      <PersonStanding key={i} className="h-3 w-3 text-foreground" />
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -268,10 +274,16 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
-                <div className="grid grid-cols-5 gap-2">
-                  {Array.from({ length: isDragging && guaranteedCreators > 30 ? staticCreatorIcons : guaranteedCreators }).map((_, i) => (
-                    <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
-                  ))}
+                <div className="grid grid-cols-5 gap-2 flex-1">
+                  {isDragging ? (
+                    <div className="col-span-5 flex items-center justify-center">
+                      <div className="animate-pulse text-muted-foreground text-sm">Calculating...</div>
+                    </div>
+                  ) : (
+                    Array.from({ length: staticCreatorIcons }).map((_, i) => (
+                      <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
+                    ))
+                  )}
                 </div>
               </div>
             </div>
