@@ -52,14 +52,12 @@ const BusinessCampaignForm: React.FC = () => {
   const [requirementImagePreviews, setRequirementImagePreviews] = useState<string[]>([]);
   const [campaignVideo, setCampaignVideo] = useState<File | null>(null);
   const [campaignVideoPreview, setCampaignVideoPreview] = useState<string>('');
-  const [selectedPlatforms, setSelectedPlatforms] = useState<Platform[]>([]);
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
+  const [showPlatformPicker, setShowPlatformPicker] = useState(false);
 
-  const togglePlatform = (platformId: Platform) => {
-    setSelectedPlatforms(prev => 
-      prev.includes(platformId) 
-        ? prev.filter(p => p !== platformId)
-        : [...prev, platformId]
-    );
+  const selectPlatform = (platformId: Platform) => {
+    setSelectedPlatform(platformId);
+    setShowPlatformPicker(false);
   };
 
   useEffect(() => {
@@ -264,35 +262,66 @@ const BusinessCampaignForm: React.FC = () => {
               {/* Campaign Info */}
               <div className="space-y-4">
                 {/* Platform Selection */}
-                <div className="space-y-6 max-w-lg">
-                  <Label>Target Platforms</Label>
-                  <div className="flex justify-center gap-5">
-                    {platforms.map(({ id, name, logo }) => {
-                      const isSelected = selectedPlatforms.includes(id);
-                      return (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => togglePlatform(id)}
-                          className={`flex flex-col items-center gap-1.5 transition-all duration-200 ${
-                            isSelected ? 'opacity-100 scale-105' : 'opacity-40 hover:opacity-70'
-                          }`}
-                        >
-                          <div className="w-12 h-12 rounded-[2px] overflow-hidden">
-                            <img 
-                              src={logo} 
-                              alt={name} 
-                              className={`w-full h-full object-cover ${
-                                id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                              }`}
-                            />
-                          </div>
-                          <span className="text-xs font-medium text-foreground">
-                            {name}
-                          </span>
-                        </button>
-                      );
-                    })}
+                <div className="space-y-3 max-w-lg">
+                  <Label>Target Platform</Label>
+                  <div className="flex justify-center">
+                    {showPlatformPicker ? (
+                      <div className="flex gap-5">
+                        {platforms.map(({ id, name, logo }) => (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => selectPlatform(id)}
+                            className="flex flex-col items-center gap-1.5 transition-all duration-200 opacity-100 hover:scale-105"
+                          >
+                            <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                              <img 
+                                src={logo} 
+                                alt={name} 
+                                className={`w-full h-full object-cover ${
+                                  id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                                }`}
+                              />
+                            </div>
+                            <span className="text-xs font-medium text-foreground">
+                              {name}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    ) : selectedPlatform ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowPlatformPicker(true)}
+                        className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
+                      >
+                        <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                          <img 
+                            src={platforms.find(p => p.id === selectedPlatform)?.logo} 
+                            alt={platforms.find(p => p.id === selectedPlatform)?.name} 
+                            className={`w-full h-full object-cover ${
+                              selectedPlatform === 'instagram' ? 'scale-125' : selectedPlatform === 'youtube' ? 'scale-[1.15]' : ''
+                            }`}
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-foreground">
+                          {platforms.find(p => p.id === selectedPlatform)?.name}
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setShowPlatformPicker(true)}
+                        className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
+                      >
+                        <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
+                          <span className="text-muted-foreground text-lg">?</span>
+                        </div>
+                        <span className="text-xs font-medium text-muted-foreground">
+                          Select
+                        </span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -500,7 +529,7 @@ const BusinessCampaignForm: React.FC = () => {
           <CampaignPreview
             formData={formData}
             requirements={requirements}
-            selectedPlatforms={selectedPlatforms}
+            selectedPlatforms={selectedPlatform ? [selectedPlatform] : []}
             businessProfile={businessProfile}
             campaignVideoPreview={campaignVideoPreview}
           />
