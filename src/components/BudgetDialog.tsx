@@ -19,13 +19,13 @@ const paymentTiers = [
 ];
 
 // Calculate fee percent based on desired creator pool
-// Creator pool snaps to 5000 increments, minimum 10000
+// Creator pool snaps to 5000 increments, minimum 20000
 const calculateFeeFromCreatorPool = (totalBudget: number, creatorPool: number): number => {
   const fee = ((totalBudget - creatorPool) / totalBudget) * 100;
   return Math.round(fee * 10) / 10; // Round to 1 decimal
 };
 
-// Snap creator pool to nearest 5000
+// Snap to nearest 5000
 const snapToFiveThousand = (value: number): number => {
   return Math.round(value / 5000) * 5000;
 };
@@ -63,24 +63,25 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     }
   }, [open, budget]);
 
-  // Calculate creator pool - snaps to 5000, minimum 10000
+  // Calculate creator pool - snaps to 5000, minimum 20000
   const currentTier = paymentTiers[selectedTier];
   
-  // While dragging: show exact value, on release: snap to 5000
-  const rawCreatorPool = displayBudget * 0.75; // Start with ~25% fee as baseline
-  const targetCreatorPool = isDragging 
-    ? Math.max(10000, rawCreatorPool)
-    : Math.max(10000, snapToFiveThousand(rawCreatorPool));
-  
-  // Calculate the actual budget needed to achieve the snapped creator pool
-  // Creator pool should be ~75% of budget at minimum, scaling to ~95% at max
+  // Base fee is 25%, scaling down to 5% at max budget
   const poolRatio = 0.75 + (0.20 * (displayBudget - minBudget) / (maxBudget - minBudget)); // 75% to 95%
-  const creatorPool = isDragging 
-    ? Math.max(10000, Math.round(displayBudget * poolRatio))
-    : Math.max(10000, snapToFiveThousand(displayBudget * poolRatio));
+  const rawCreatorPool = displayBudget * poolRatio;
   
-  const jarlaFeeAmount = displayBudget - creatorPool;
-  const feePercent = calculateFeeFromCreatorPool(displayBudget, creatorPool);
+  // While dragging: show exact value, on release: snap to 5000
+  const creatorPool = isDragging 
+    ? Math.max(20000, Math.round(rawCreatorPool))
+    : Math.max(20000, snapToFiveThousand(rawCreatorPool));
+  
+  // Snap budget to match creator pool on release
+  const snappedBudget = isDragging 
+    ? displayBudget 
+    : snapToFiveThousand(displayBudget);
+  
+  const jarlaFeeAmount = snappedBudget - creatorPool;
+  const feePercent = calculateFeeFromCreatorPool(snappedBudget, creatorPool);
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
@@ -115,9 +116,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
                 {/* Jarla Fee Box */}
-                <div className="py-3 px-4 bg-background rounded-[4px] border border-border">
-                  <p className="text-xs text-muted-foreground mb-1">Jarla Fee</p>
-                  <div className="flex items-baseline gap-2">
+                <div className="py-4 px-6 bg-background rounded-[4px] border border-border min-w-[220px]">
+                  <p className="text-sm font-medium text-foreground mb-2">Jarla Fee</p>
+                  <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
                     <span className="text-muted-foreground">•</span>
                     <span className="text-sm text-muted-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
@@ -131,7 +132,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                       type="number"
                       min={15000}
                       step={1000}
-                      value={Math.round(displayBudget)}
+                      value={isDragging ? Math.round(displayBudget) : snappedBudget}
                       onChange={(e) => {
                         const val = Math.max(15000, parseInt(e.target.value) || 15000);
                         setDisplayBudget(val);
