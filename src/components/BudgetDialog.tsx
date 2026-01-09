@@ -248,7 +248,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
                 <div className="flex flex-wrap content-start gap-0.5">
-                  {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
+                  {Array.from({ length: Math.ceil(guaranteedViews / 1000) }).map((_, i) => (
                     <PersonStanding key={i} className="h-3 w-3 text-foreground" />
                   ))}
                 </div>
