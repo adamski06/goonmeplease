@@ -269,7 +269,7 @@ const BusinessCampaignForm: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setShowPlatformPicker(!showPlatformPicker)}
-                        className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
+                        className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
                       >
                         <div className="w-12 h-12 rounded-[2px] overflow-hidden">
                           <img 
@@ -280,7 +280,7 @@ const BusinessCampaignForm: React.FC = () => {
                             }`}
                           />
                         </div>
-                        <span className="text-xs font-medium text-foreground">
+                        <span className="text-sm font-medium text-foreground">
                           {platforms.find(p => p.id === selectedPlatform)?.name}
                         </span>
                       </button>
@@ -288,20 +288,20 @@ const BusinessCampaignForm: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setShowPlatformPicker(!showPlatformPicker)}
-                        className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
+                        className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
                       >
                         <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
                           <span className="text-muted-foreground text-lg">?</span>
                         </div>
-                        <span className="text-xs font-medium text-muted-foreground">
-                          Select
+                        <span className="text-sm font-medium text-muted-foreground">
+                          Select platform
                         </span>
                       </button>
                     )}
                     
                     {/* Dropdown overlay */}
                     {showPlatformPicker && (
-                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-4 flex flex-col gap-2 min-w-[200px]">
+                      <div className="absolute bottom-full left-0 mb-2 z-50 bg-card border border-border rounded-lg shadow-lg p-4 flex flex-col gap-2 min-w-[200px]">
                         {platforms.map(({ id, name, logo }) => {
                           const isSelected = selectedPlatform === id;
                           return (
@@ -311,8 +311,8 @@ const BusinessCampaignForm: React.FC = () => {
                               onClick={() => selectPlatform(id)}
                               className={`flex items-center gap-4 px-3 py-2 rounded-md transition-all duration-200 ${
                                 isSelected 
-                                  ? 'bg-primary/10 ring-2 ring-primary' 
-                                  : 'hover:bg-muted'
+                                  ? 'bg-muted' 
+                                  : 'hover:bg-muted/50'
                               }`}
                             >
                               <div className="w-10 h-10 rounded-[2px] overflow-hidden flex-shrink-0">
@@ -324,7 +324,7 @@ const BusinessCampaignForm: React.FC = () => {
                                   }`}
                                 />
                               </div>
-                              <span className={`text-base font-medium ${isSelected ? 'text-primary' : 'text-foreground'}`}>
+                              <span className={`text-base font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
                                 {name}
                               </span>
                             </button>
