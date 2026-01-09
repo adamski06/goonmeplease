@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X } from 'lucide-react';
+import { X, User } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -242,17 +242,27 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             </div>
 
             {/* Second Row - Views and Creators */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 flex-1">
               {/* Views */}
-              <div className="p-6 bg-background rounded-[4px] border border-border">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
-                <p className="text-5xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
+                <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
+                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-hidden">
+                  {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
+                    <User key={i} className="h-3 w-3 text-muted-foreground/40" />
+                  ))}
+                </div>
               </div>
 
               {/* Creators */}
-              <div className="p-6 bg-background rounded-[4px] border border-border">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
-                <p className="text-5xl font-bold text-foreground">{guaranteedCreators}+</p>
+                <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
+                <div className="flex-1 flex flex-wrap content-start gap-1 overflow-hidden">
+                  {Array.from({ length: Math.min(guaranteedCreators, 200) }).map((_, i) => (
+                    <User key={i} className="h-5 w-5 text-foreground" />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
