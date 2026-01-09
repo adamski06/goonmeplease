@@ -24,6 +24,7 @@ export default {
       },
       colors: {
         'dark-surface': '#1c1c1c',
+        paper: "hsl(var(--paper))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

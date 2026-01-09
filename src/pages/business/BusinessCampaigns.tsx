@@ -136,7 +136,7 @@ const BusinessCampaigns: React.FC = () => {
                   <button
                     key={campaign.id}
                     onClick={() => navigate(`/business/campaigns/${campaign.id}`)}
-                    className="w-full flex items-center justify-between py-16 px-10 bg-white dark:bg-white/5 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_20px_rgba(0,0,0,0.4)] transition-shadow opacity-0 animate-fade-in"
+                    className="w-full flex items-center justify-between py-16 px-10 bg-paper dark:bg-white/5 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.05)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_0_20px_rgba(0,0,0,0.4)] transition-shadow opacity-0 animate-fade-in"
                     style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
                   >
                     {/* Left: Title */}
