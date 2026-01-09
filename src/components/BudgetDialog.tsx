@@ -23,7 +23,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      setLocalBudget(budget || 10000);
+      setLocalBudget(budget || 15000);
     }
   }, [open, budget]);
 
@@ -35,7 +35,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     onOpenChange(false);
   };
 
-  const presetBudgets = [10000, 25000, 50000, 100000, 250000];
+  const presetBudgets = [15000, 25000, 50000, 100000, 250000];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -64,10 +64,10 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                   <div className="flex items-baseline justify-center gap-2">
                     <Input
                       type="number"
-                      min={10000}
+                      min={15000}
                       step={1000}
                       value={localBudget}
-                      onChange={(e) => setLocalBudget(Math.max(10000, parseInt(e.target.value) || 10000))}
+                      onChange={(e) => setLocalBudget(Math.max(15000, parseInt(e.target.value) || 15000))}
                       className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
@@ -75,17 +75,17 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 {/* Slider */}
-                <div>
+                <div className="w-full max-w-md">
                   <Slider
                     value={[localBudget]}
                     onValueChange={(value) => setLocalBudget(value[0])}
-                    min={10000}
+                    min={15000}
                     max={500000}
                     step={5000}
                     className="w-full"
                   />
                   <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                    <span>10,000 SEK</span>
+                    <span>15,000 SEK</span>
                     <span>500,000 SEK</span>
                   </div>
                 </div>
@@ -107,7 +107,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Minimum budget: 10,000 SEK
+                  Minimum budget: 15,000 SEK
                 </p>
               </div>
 
