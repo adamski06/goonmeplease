@@ -200,34 +200,16 @@ const BusinessDashboard: React.FC = () => {
               {/* Campaigns section */}
               <div className="border-t border-border px-10 py-6">
                 <h3 className="text-base font-medium text-foreground mb-4">Campaigns</h3>
-                <div className="flex gap-4 overflow-x-auto pb-2">
-                  {/* Placeholder campaign cards - vertical style */}
-                  {[1, 2, 3].map((i) => (
-                    <div 
-                      key={i}
-                      className="flex-shrink-0 w-[140px] bg-muted/50 rounded-[3px] overflow-hidden border border-border/50"
-                    >
-                      {/* 9:16 aspect ratio placeholder */}
-                      <div className="aspect-[9/16] bg-muted flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-muted-foreground/20" />
-                      </div>
-                      <div className="p-3 space-y-1.5">
-                        <div className="h-3 bg-muted-foreground/20 rounded-sm w-3/4" />
-                        <div className="h-2 bg-muted-foreground/10 rounded-sm w-1/2" />
-                      </div>
+                {/* Add campaign button - larger */}
+                <div 
+                  className="w-[200px] aspect-[9/12] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => navigate('/business/campaigns/new')}
+                >
+                  <div className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
+                      <span className="text-2xl text-muted-foreground">+</span>
                     </div>
-                  ))}
-                  {/* Add campaign button */}
-                  <div 
-                    className="flex-shrink-0 w-[140px] aspect-[9/14] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => navigate('/business/campaigns/new')}
-                  >
-                    <div className="text-center">
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mx-auto mb-2">
-                        <span className="text-xl text-muted-foreground">+</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">New Campaign</span>
-                    </div>
+                    <span className="text-sm text-muted-foreground">New Campaign</span>
                   </div>
                 </div>
               </div>
