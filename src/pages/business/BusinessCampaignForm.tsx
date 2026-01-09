@@ -11,8 +11,8 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, X, Image, Video, Loader2, Wallet } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import CampaignPreview from '@/components/CampaignPreview';
+import BudgetDialog from '@/components/BudgetDialog';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -55,6 +55,7 @@ const BusinessCampaignForm: React.FC = () => {
   const [campaignVideoPreview, setCampaignVideoPreview] = useState<string>('');
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const [showPlatformPicker, setShowPlatformPicker] = useState(false);
+  const [budgetDialogOpen, setBudgetDialogOpen] = useState(false);
 
   const selectPlatform = (platformId: Platform) => {
     setSelectedPlatform(platformId);
@@ -464,69 +465,26 @@ const BusinessCampaignForm: React.FC = () => {
               {/* Budget Section */}
               <div className="border-t border-border pt-6 space-y-4">
                 <Label>Budget</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
-                    >
-                      <div className="w-12 h-12 rounded-[4px] bg-muted/50 flex items-center justify-center">
-                        <Wallet className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <span className="text-sm font-medium text-foreground">
-                        {formData.total_budget >= 10000 
-                          ? `${formData.total_budget.toLocaleString()} SEK` 
-                          : 'Set budget'}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-80 p-4 rounded-[4px]">
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="total_budget">Total Budget (SEK)</Label>
-                        <Input
-                          id="total_budget"
-                          type="number"
-                          min={10000}
-                          value={formData.total_budget || ''}
-                          onChange={(e) => setFormData({ ...formData, total_budget: Math.max(0, parseFloat(e.target.value) || 0) })}
-                          placeholder="10000"
-                        />
-                        <p className="text-xs text-muted-foreground">Minimum budget: 10,000 SEK</p>
-                      </div>
-
-                      {/* Budget Calculator */}
-                      {formData.total_budget >= 10000 && (
-                        <div className="bg-muted/50 rounded-[4px] p-4 space-y-3">
-                          <p className="text-sm font-medium text-foreground">Estimated reach</p>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-1">
-                              <p className="text-xl font-bold text-foreground">
-                                {Math.floor((formData.total_budget / 10000) * 100000).toLocaleString()}+
-                              </p>
-                              <p className="text-xs text-muted-foreground">Guaranteed views</p>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-xl font-bold text-foreground">
-                                {Math.floor((formData.total_budget / 10000) * 10)}+
-                              </p>
-                              <p className="text-xs text-muted-foreground">Creators</p>
-                            </div>
-                          </div>
-                          <p className="text-xs text-muted-foreground border-t border-border pt-3">
-                            10,000 SEK = 100,000+ views • 10+ creators
-                          </p>
-                        </div>
-                      )}
-
-                      {formData.total_budget > 0 && formData.total_budget < 10000 && (
-                        <p className="text-xs text-destructive">
-                          Budget must be at least 10,000 SEK
-                        </p>
-                      )}
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                <button
+                  type="button"
+                  onClick={() => setBudgetDialogOpen(true)}
+                  className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                >
+                  <div className="w-12 h-12 rounded-[4px] bg-muted/50 flex items-center justify-center">
+                    <Wallet className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {formData.total_budget >= 10000 
+                      ? `${formData.total_budget.toLocaleString()} SEK` 
+                      : 'Set budget'}
+                  </span>
+                </button>
+                <BudgetDialog
+                  open={budgetDialogOpen}
+                  onOpenChange={setBudgetDialogOpen}
+                  budget={formData.total_budget}
+                  onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
+                />
               </div>
 
               {/* Deadline Section */}
