@@ -1682,7 +1682,10 @@ const BusinessAuth: React.FC = () => {
         <div className="absolute inset-0 grainy-background" />
         <div className="noise-layer" />
         
-        <div className="fixed top-6 left-6 z-50">
+        <button 
+          onClick={() => navigate('/')}
+          className="fixed top-6 left-6 z-50 cursor-pointer"
+        >
           <div className="relative h-10 w-[130px]">
             <div 
               className="absolute inset-0 bg-foreground"
@@ -1698,7 +1701,7 @@ const BusinessAuth: React.FC = () => {
               }} 
             />
           </div>
-        </div>
+        </button>
 
         <div className="relative z-10 flex flex-col min-h-screen px-6 py-12 justify-center">
           <div className="flex flex-col items-center w-full max-w-md mx-auto space-y-8">
