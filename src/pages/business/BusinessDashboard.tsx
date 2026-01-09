@@ -189,10 +189,22 @@ const BusinessDashboard: React.FC = () => {
                   <h1 className="text-3xl font-bold text-foreground">
                     {businessProfile?.company_name || 'Your Business'}
                   </h1>
+                  
+                  {/* Stats */}
+                  <div className="ml-auto flex gap-8">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-foreground">0</div>
+                      <div className="text-sm text-muted-foreground">Creators</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-foreground">0</div>
+                      <div className="text-sm text-muted-foreground">Campaigns</div>
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Description */}
-                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
+                <p className="mt-5 text-lg text-foreground leading-relaxed">
                   {shortDescription}
                 </p>
               </div>
