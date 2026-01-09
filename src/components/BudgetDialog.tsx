@@ -130,7 +130,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   // Update static icon counts only when not dragging or on initial load
   useEffect(() => {
     if (!isDragging || staticViewIcons === 0) {
-      setStaticViewIcons(Math.ceil(guaranteedViews / 1000));
+      setStaticViewIcons(Math.ceil(guaranteedViews / 100));
       setStaticCreatorIcons(guaranteedCreators);
     }
   }, [isDragging, guaranteedViews, guaranteedCreators, staticViewIcons]);
