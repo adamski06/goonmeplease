@@ -69,9 +69,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   const paidOut = 0;
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Seamless top bar attached to sidebar */}
-      <div className="flex items-center h-14 -mt-2 -mx-4 px-4 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
+    <div className="flex flex-col h-full -mt-2 -mr-4">
+      {/* Seamless top bar matching sidebar */}
+      <div className="flex items-center h-14 px-4 bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">Preview</span>
           <div className="w-px h-4 bg-border" />
@@ -143,7 +143,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 flex justify-center min-h-0">
+      <div className="flex-1 flex justify-center min-h-0 p-4 pt-4">
         <Card 
           className={`border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
