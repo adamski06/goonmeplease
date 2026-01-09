@@ -63,8 +63,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   const currentTier = paymentTiers[selectedTier];
   const feePercent = calculateFeePercent(localBudget);
-  const budgetAfterFee = localBudget * (1 - feePercent / 100);
-  const guaranteedCreators = Math.floor(budgetAfterFee / currentTier.payout);
+  const jarlaFeeAmount = Math.round(localBudget * feePercent / 100 / 1000) * 1000;
+  const creatorPool = Math.round((localBudget - jarlaFeeAmount) / 1000) * 1000;
+  const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
   const handleConfirm = () => {
@@ -98,10 +99,13 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
                 {/* Jarla Fee Box */}
-                <div className="p-6 bg-muted/50 rounded-[4px] border border-border min-w-[200px]">
-                  <p className="text-xs text-muted-foreground mb-2">Jarla Fee</p>
-                  <p className="text-4xl font-bold text-foreground">{feePercent}%</p>
-                  <p className="text-sm text-muted-foreground mt-2">{(localBudget * feePercent / 100).toLocaleString()} SEK</p>
+                <div className="py-3 px-4 bg-background rounded-[4px] border border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Jarla Fee</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
+                    <span className="text-muted-foreground">•</span>
+                    <span className="text-sm text-muted-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
+                  </div>
                 </div>
 
                 <div className="space-y-2 text-center">
@@ -159,9 +163,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Right Side - Guaranteed Results */}
               <div className="p-8 flex flex-col justify-center space-y-6 bg-muted/30">
                 {/* Creator Pool Box */}
-                <div className="p-6 bg-background rounded-[4px] border border-border">
+                <div className="p-8 bg-background rounded-[4px] border border-border w-full max-w-sm">
                   <p className="text-xs text-muted-foreground mb-2">Creator Pool</p>
-                  <p className="text-4xl font-bold text-foreground">{budgetAfterFee.toLocaleString()} SEK</p>
+                  <p className="text-4xl font-bold text-foreground">{creatorPool.toLocaleString()} SEK</p>
                 </div>
 
                 <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
