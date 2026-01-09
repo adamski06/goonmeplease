@@ -264,35 +264,11 @@ const BusinessCampaignForm: React.FC = () => {
                 {/* Platform Selection */}
                 <div className="space-y-3 max-w-lg">
                   <Label>Target Platform</Label>
-                  <div className="flex justify-center">
-                    {showPlatformPicker ? (
-                      <div className="flex gap-5">
-                        {platforms.map(({ id, name, logo }) => (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => selectPlatform(id)}
-                            className="flex flex-col items-center gap-1.5 transition-all duration-200 opacity-100 hover:scale-105"
-                          >
-                            <div className="w-12 h-12 rounded-[2px] overflow-hidden">
-                              <img 
-                                src={logo} 
-                                alt={name} 
-                                className={`w-full h-full object-cover ${
-                                  id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                                }`}
-                              />
-                            </div>
-                            <span className="text-xs font-medium text-foreground">
-                              {name}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    ) : selectedPlatform ? (
+                  <div className="relative">
+                    {selectedPlatform ? (
                       <button
                         type="button"
-                        onClick={() => setShowPlatformPicker(true)}
+                        onClick={() => setShowPlatformPicker(!showPlatformPicker)}
                         className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
                       >
                         <div className="w-12 h-12 rounded-[2px] overflow-hidden">
@@ -311,7 +287,7 @@ const BusinessCampaignForm: React.FC = () => {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => setShowPlatformPicker(true)}
+                        onClick={() => setShowPlatformPicker(!showPlatformPicker)}
                         className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:opacity-80"
                       >
                         <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
@@ -321,6 +297,33 @@ const BusinessCampaignForm: React.FC = () => {
                           Select
                         </span>
                       </button>
+                    )}
+                    
+                    {/* Dropdown overlay */}
+                    {showPlatformPicker && (
+                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex gap-4">
+                        {platforms.map(({ id, name, logo }) => (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => selectPlatform(id)}
+                            className="flex flex-col items-center gap-1.5 transition-all duration-200 hover:scale-105"
+                          >
+                            <div className="w-12 h-12 rounded-[2px] overflow-hidden">
+                              <img 
+                                src={logo} 
+                                alt={name} 
+                                className={`w-full h-full object-cover ${
+                                  id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                                }`}
+                              />
+                            </div>
+                            <span className="text-xs font-medium text-foreground">
+                              {name}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>
