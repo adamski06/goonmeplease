@@ -234,33 +234,33 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           </div>
 
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
-          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 space-y-4">
+          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 space-y-4 overflow-y-auto">
             {/* First Row - Creator Pool */}
-            <div className="p-6 bg-foreground rounded-[4px] border border-border">
+            <div className="p-6 bg-foreground rounded-[4px] border border-border shrink-0">
               <p className="text-xs text-background mb-2">Creator Pool</p>
               <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
             </div>
 
             {/* Second Row - Views and Creators */}
-            <div className="grid grid-cols-2 gap-4 flex-1">
+            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
               {/* Views */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col min-h-0">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
-                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-y-auto min-h-0">
+                <div className="flex flex-wrap content-start gap-0.5">
                   {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
-                    <PersonStanding key={i} className="h-3 w-3 text-muted-foreground/40" />
+                    <PersonStanding key={i} className="h-3 w-3 text-foreground" />
                   ))}
                 </div>
               </div>
 
               {/* Creators */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col min-h-0">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
-                <div className="flex-1 flex flex-wrap content-start gap-1 overflow-y-auto min-h-0">
+                <div className="flex flex-wrap content-start gap-2">
                   {Array.from({ length: guaranteedCreators }).map((_, i) => (
-                    <PersonStanding key={i} className="h-6 w-6 text-foreground" />
+                    <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
                   ))}
                 </div>
               </div>
