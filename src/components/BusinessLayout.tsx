@@ -97,7 +97,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
       {/* Left Sidebar */}
       <aside className={`${isFormRoute ? 'w-14' : 'w-56 lg:w-52'} flex flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-geist transition-[width] duration-500 ease-in-out border-r border-black/10 dark:border-white/20`}>
         {/* Logo */}
-        <div className={`${isFormRoute ? 'px-3' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
+        <div className={`${isFormRoute ? 'px-0 flex justify-center' : 'px-6'} pt-6 pb-4 transition-[padding] duration-500 ease-in-out`}>
           <button onClick={() => navigate('/business')} className={`relative h-10 ${isFormRoute ? 'w-10' : 'w-[120px]'} flex items-center justify-center`}>
             <div 
               className="absolute inset-0 bg-foreground"
@@ -124,7 +124,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3 ${
+              className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'text-lg lg:text-base px-3 py-1.5 text-left flex items-center gap-3'} transition-all duration-500 ease-in-out ${
                 isActive(item.path) 
                   ? 'font-bold text-foreground' 
                   : 'font-medium text-foreground hover:font-semibold'
@@ -141,10 +141,10 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
 
 
         {/* More Menu at bottom */}
-        <div className={`mt-auto ${isFormRoute ? 'px-0' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20 transition-[padding] duration-500 ease-in-out`}>
+        <div className={`mt-auto ${isFormRoute ? 'px-0 flex justify-center' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20 transition-[padding] duration-500 ease-in-out`}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3`}>
+              <button className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left flex items-center gap-3'} transition-all duration-500 ease-in-out`}>
                 <Menu className="h-6 w-6 flex-shrink-0" />
                 <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}`}>
                   {t('common.more')}
