@@ -55,13 +55,14 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   
   const gradientPresets = [
     { name: 'Default', value: 'bg-card', style: {} },
-    { name: 'Sunset', value: 'gradient', style: { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' } },
-    { name: 'Ocean', value: 'gradient', style: { background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)' } },
-    { name: 'Forest', value: 'gradient', style: { background: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' } },
-    { name: 'Fire', value: 'gradient', style: { background: 'linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%)' } },
-    { name: 'Night', value: 'gradient', style: { background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' } },
-    { name: 'Peach', value: 'gradient', style: { background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' } },
-    { name: 'Mint', value: 'gradient', style: { background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' } },
+    { name: 'Warm', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(35 25% 95%) 0%, hsl(30 20% 90%) 100%)' } },
+    { name: 'Cool', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(210 20% 96%) 0%, hsl(220 15% 92%) 100%)' } },
+    { name: 'Stone', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(30 10% 94%) 0%, hsl(25 8% 88%) 100%)' } },
+    { name: 'Slate', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(220 15% 95%) 0%, hsl(215 12% 89%) 100%)' } },
+    { name: 'Sand', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(40 25% 96%) 0%, hsl(35 18% 91%) 100%)' } },
+    { name: 'Mist', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(200 15% 96%) 0%, hsl(195 12% 91%) 100%)' } },
+    { name: 'Cloud', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 93%) 100%)' } },
+    { name: 'Cream', value: 'gradient', style: { background: 'linear-gradient(180deg, hsl(45 30% 97%) 0%, hsl(40 22% 92%) 100%)' } },
   ];
   
   // Placeholder for paid out amount (would come from real data)
