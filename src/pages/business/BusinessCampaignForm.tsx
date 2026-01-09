@@ -258,7 +258,7 @@ const BusinessCampaignForm: React.FC = () => {
     <BusinessLayout>
       <div className="h-full flex animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form Panel - sidebar style with grey background */}
-        <div className="w-[440px] flex-shrink-0 h-screen overflow-y-auto backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-r border-border scrollbar-thin">
+        <div className="w-[440px] flex-shrink-0 h-screen overflow-y-auto backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-r-2 border-border/50 scrollbar-thin">
           <div className="p-8">
             <h2 className="text-base font-medium text-muted-foreground mb-4">Create Campaign</h2>
             <form onSubmit={handleSubmit} className="space-y-6 pb-8">
