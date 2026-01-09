@@ -92,16 +92,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         >
           {/* Scrollable Content */}
           <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
-          {/* Title */}
-          <div className="mb-4">
-            <h3 className="font-bold text-foreground text-2xl">
-              {formData.title || 'Campaign Title'}
-            </h3>
-          </div>
-
           {/* Platform badges */}
           {selectedPlatforms.length > 0 && (
-            <div className="flex gap-4 mb-6">
+            <div className="flex gap-4 mb-4">
               {selectedPlatforms.map((platform) => (
                 <div 
                   key={platform}
@@ -119,6 +112,13 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
               ))}
             </div>
           )}
+
+          {/* Title */}
+          <div className="mb-4">
+            <h3 className="font-bold text-foreground text-2xl">
+              {formData.title || 'Campaign Title'}
+            </h3>
+          </div>
 
           {/* Description */}
           <div className="mb-8">
