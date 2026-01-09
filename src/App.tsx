@@ -35,9 +35,9 @@ const App = () => (
             <ProfileProvider>
               <DomainRouter>
                 <Routes>
-                  <Route path="/" element={<Campaigns />} />
+                  <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
-                  <Route path="/landing" element={<Index />} />
+                  <Route path="/campaigns" element={<Campaigns />} />
                   <Route path="/campaigns/:id" element={<CampaignDetail />} />
                   <Route path="/activity" element={<Activity />} />
                   <Route path="/profile" element={<Profile />} />
