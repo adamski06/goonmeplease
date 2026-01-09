@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Video, Image, Calendar, Smartphone, Monitor, ArrowLeft } from 'lucide-react';
+import { Video, Image, Calendar, Smartphone, Monitor, ArrowLeft, Palette } from 'lucide-react';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -48,7 +48,16 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   campaignVideoPreview,
   requirementImages = [],
 }) => {
-  const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('desktop');
+  const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('phone');
+  const [accentColor, setAccentColor] = useState('#000000');
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  
+  const colorPresets = [
+    '#000000', '#1a1a2e', '#16213e', '#0f3460',
+    '#e94560', '#ff6b6b', '#4ecdc4', '#45b7d1',
+    '#96ceb4', '#ffeaa7', '#dfe6e9', '#ffffff'
+  ];
+  
   // Placeholder for paid out amount (would come from real data)
   const paidOut = 0;
 
@@ -81,6 +90,36 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           >
             <Monitor className="h-4 w-4" />
           </button>
+          <div className="w-px h-4 bg-border" />
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowColorPicker(!showColorPicker)}
+              className="p-1.5 rounded-[2px] transition-colors text-muted-foreground hover:text-foreground"
+            >
+              <Palette className="h-4 w-4" />
+            </button>
+            {showColorPicker && (
+              <div className="absolute top-full right-0 mt-2 z-50 bg-card border border-border rounded-lg shadow-lg p-3 animate-scale-in origin-top-right">
+                <div className="grid grid-cols-4 gap-2">
+                  {colorPresets.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => {
+                        setAccentColor(color);
+                        setShowColorPicker(false);
+                      }}
+                      className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
+                        accentColor === color ? 'border-foreground' : 'border-transparent'
+                      }`}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       
@@ -229,9 +268,12 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
 
         {/* Fixed Bottom Overlay */}
-        <div className={`absolute bottom-4 left-4 right-4 bg-black text-white flex items-center justify-between rounded-xl ${
-          viewMode === 'phone' ? 'px-5 py-4' : 'px-6 py-4'
-        }`}>
+        <div 
+          className={`absolute bottom-4 left-4 right-4 text-white flex items-center justify-between rounded-xl ${
+            viewMode === 'phone' ? 'px-5 py-4' : 'px-6 py-4'
+          }`}
+          style={{ backgroundColor: accentColor }}
+        >
           <div>
             <p className={`text-white/60 mb-1 ${viewMode === 'phone' ? 'text-xs' : 'text-sm'}`}>Earn up to</p>
             <p className={`font-bold ${viewMode === 'phone' ? 'text-xl' : 'text-2xl'}`}>
