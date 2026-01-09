@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X, PersonStanding } from 'lucide-react';
+import { X } from 'lucide-react';
+import personIcon from '@/assets/person-icon.png';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -244,23 +245,23 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             {/* Second Row - Views and Creators */}
             <div className="grid grid-cols-2 gap-4 flex-1">
               {/* Views */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col min-h-0">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
-                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-hidden">
+                <div className="flex-1 flex flex-wrap content-start gap-0.5 overflow-y-auto min-h-0 opacity-40">
                   {Array.from({ length: Math.min(guaranteedViews / 100, 500) }).map((_, i) => (
-                    <PersonStanding key={i} className="h-3 w-3 text-muted-foreground/40" />
+                    <img key={i} src={personIcon} alt="" className="h-3 w-3" />
                   ))}
                 </div>
               </div>
 
               {/* Creators */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
+              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col min-h-0">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
-                <div className="flex-1 flex flex-wrap content-start gap-1 overflow-hidden">
-                  {Array.from({ length: Math.min(guaranteedCreators, 200) }).map((_, i) => (
-                    <PersonStanding key={i} className="h-5 w-5 text-foreground" />
+                <div className="flex-1 flex flex-wrap content-start gap-1 overflow-y-auto min-h-0">
+                  {Array.from({ length: guaranteedCreators }).map((_, i) => (
+                    <img key={i} src={personIcon} alt="" className="h-6 w-6" />
                   ))}
                 </div>
               </div>
