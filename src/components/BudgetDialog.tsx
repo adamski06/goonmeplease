@@ -135,133 +135,129 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden">
-        <div className="h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-border">
-            <h2 className="text-xl font-semibold text-foreground">Set Campaign Budget</h2>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="h-10 w-10"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
+        <div className="h-full flex">
+          {/* Left Side - Budget Controls (1/3 width, full height) */}
+          <div className="w-1/3 h-full flex flex-col border-r border-border">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-border">
+              <h2 className="text-xl font-semibold text-foreground">Set Campaign Budget</h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onOpenChange(false)}
+                className="h-10 w-10"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
 
-          {/* Content - Split Layout */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="h-full grid grid-cols-1 md:grid-cols-2">
-              {/* Left Side - Budget Controls */}
-              <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
-
-                <div className="space-y-2 text-center">
-                  <Label className="text-sm text-muted-foreground">Total Budget</Label>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <Input
-                      type="number"
-                      min={minBudget}
-                      step={5000}
-                      value={displayedBudget}
-                      onChange={(e) => {
-                        const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
-                        setDisplayBudget(val);
-                        setAnimatedBudget(val);
-                        setLocalBudget(val);
-                      }}
-                      className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
-                    />
-                    <span className="text-2xl font-medium text-muted-foreground">SEK</span>
-                  </div>
-                </div>
-
-                {/* Slider */}
-                <div className="w-full max-w-md">
-                  <Slider
-                    value={[budgetToSlider(animatedBudget)]}
-                    onValueChange={(value) => {
-                      setIsDragging(true);
-                      const newBudget = sliderToBudget(value[0]);
-                      setDisplayBudget(newBudget);
-                      setAnimatedBudget(newBudget);
+            {/* Budget Controls */}
+            <div className="flex-1 p-8 flex flex-col items-center justify-center space-y-8">
+              <div className="space-y-2 text-center">
+                <Label className="text-sm text-muted-foreground">Total Budget</Label>
+                <div className="flex items-baseline justify-center gap-2">
+                  <Input
+                    type="number"
+                    min={minBudget}
+                    step={5000}
+                    value={displayedBudget}
+                    onChange={(e) => {
+                      const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
+                      setDisplayBudget(val);
+                      setAnimatedBudget(val);
+                      setLocalBudget(val);
                     }}
-                    onValueCommit={(value) => {
-                      setIsDragging(false);
-                      const rawBudget = sliderToBudget(value[0]);
-                      const snappedBudget = snapToFiveThousand(rawBudget);
-                      setLocalBudget(snappedBudget);
-                      // Animate to snapped value
-                      animateTo(snappedBudget);
-                    }}
-                    min={0}
-                    max={100}
-                    step={0.1}
-                    className="w-full"
+                    className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
                   />
-                  <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                    <span>20,000 SEK</span>
-                    <span>500,000 SEK</span>
-                  </div>
-                </div>
-
-
-                {/* Payment Tiers */}
-                <div className="w-full max-w-md space-y-3">
-                  <Label className="text-sm text-muted-foreground">Creator Payment Tier</Label>
-                  <div className="flex gap-2">
-                    {paymentTiers.map((tier, index) => (
-                      <Button
-                        key={index}
-                        type="button"
-                        variant={selectedTier === index ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setSelectedTier(index)}
-                        className="flex-1 flex-col h-auto py-3"
-                      >
-                        <span className="font-bold">{tier.payout} SEK</span>
-                      </Button>
-                    ))}
-                  </div>
+                  <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                 </div>
               </div>
 
-              {/* Right Side - Guaranteed Results */}
-              <div className="p-8 flex flex-col justify-center space-y-6 bg-muted/30">
-                {/* Creator Pool Box */}
-                <div className="p-8 bg-foreground rounded-[4px] border border-border">
-                  <p className="text-xs text-background mb-2">Creator Pool</p>
-                  <p className="text-4xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
+              {/* Slider */}
+              <div className="w-full max-w-md">
+                <Slider
+                  value={[budgetToSlider(animatedBudget)]}
+                  onValueChange={(value) => {
+                    setIsDragging(true);
+                    const newBudget = sliderToBudget(value[0]);
+                    setDisplayBudget(newBudget);
+                    setAnimatedBudget(newBudget);
+                  }}
+                  onValueCommit={(value) => {
+                    setIsDragging(false);
+                    const rawBudget = sliderToBudget(value[0]);
+                    const snappedBudget = snapToFiveThousand(rawBudget);
+                    setLocalBudget(snappedBudget);
+                    // Animate to snapped value
+                    animateTo(snappedBudget);
+                  }}
+                  min={0}
+                  max={100}
+                  step={0.1}
+                  className="w-full"
+                />
+                <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                  <span>20,000 SEK</span>
+                  <span>500,000 SEK</span>
                 </div>
+              </div>
 
-                <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
-
-                {/* Views */}
-                <div className="p-6 bg-background rounded-lg border border-border">
-                  <p className="text-3xl font-bold text-foreground">
-                    {guaranteedViews.toLocaleString()}+
-                  </p>
-                  <p className="text-sm text-muted-foreground">Guaranteed Views</p>
-                </div>
-
-                {/* Creators */}
-                <div className="p-6 bg-background rounded-lg border border-border">
-                  <p className="text-3xl font-bold text-foreground">
-                    {guaranteedCreators}+
-                  </p>
-                  <p className="text-sm text-muted-foreground">Creators</p>
+              {/* Payment Tiers */}
+              <div className="w-full max-w-md space-y-3">
+                <Label className="text-sm text-muted-foreground">Creator Payment Tier</Label>
+                <div className="flex gap-2">
+                  {paymentTiers.map((tier, index) => (
+                    <Button
+                      key={index}
+                      type="button"
+                      variant={selectedTier === index ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedTier(index)}
+                      className="flex-1 flex-col h-auto py-3"
+                    >
+                      <span className="font-bold">{tier.payout} SEK</span>
+                    </Button>
+                  ))}
                 </div>
               </div>
             </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-border flex justify-end gap-3">
+              <Button variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleConfirm}>
+                Confirm Budget
+              </Button>
+            </div>
           </div>
 
-          {/* Footer */}
-          <div className="p-6 border-t border-border flex justify-end gap-3">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleConfirm}>
-              Confirm Budget
-            </Button>
+          {/* Right Side - Guaranteed Results (2/3 width, full height) */}
+          <div className="w-2/3 h-full p-8 flex flex-col justify-center space-y-6 bg-muted/30">
+            {/* Creator Pool Box */}
+            <div className="p-8 bg-foreground rounded-[4px] border border-border">
+              <p className="text-xs text-background mb-2">Creator Pool</p>
+              <p className="text-4xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
+            </div>
+
+            <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
+
+            {/* Views */}
+            <div className="p-6 bg-background rounded-lg border border-border">
+              <p className="text-3xl font-bold text-foreground">
+                {guaranteedViews.toLocaleString()}+
+              </p>
+              <p className="text-sm text-muted-foreground">Guaranteed Views</p>
+            </div>
+
+            {/* Creators */}
+            <div className="p-6 bg-background rounded-lg border border-border">
+              <p className="text-3xl font-bold text-foreground">
+                {guaranteedCreators}+
+              </p>
+              <p className="text-sm text-muted-foreground">Creators</p>
+            </div>
           </div>
         </div>
       </DialogContent>
