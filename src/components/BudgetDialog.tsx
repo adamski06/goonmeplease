@@ -27,8 +27,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     }
   }, [open, budget]);
 
-  const guaranteedViews = Math.floor((localBudget / 10000) * 100000);
-  const guaranteedCreators = Math.floor((localBudget / 10000) * 10);
+  const guaranteedViews = Math.floor((localBudget / 15000) * 100000);
+  const guaranteedCreators = Math.floor((localBudget / 15000) * 10);
 
   const handleConfirm = () => {
     onBudgetChange(localBudget);
@@ -58,17 +58,17 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           <div className="flex-1 overflow-y-auto">
             <div className="h-full grid grid-cols-1 md:grid-cols-2">
               {/* Left Side - Budget Controls */}
-              <div className="p-8 flex flex-col justify-center space-y-8 border-r border-border">
-                <div className="space-y-2">
+              <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
+                <div className="space-y-2 text-center">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
-                  <div className="flex items-baseline gap-2">
+                  <div className="flex items-baseline justify-center gap-2">
                     <Input
                       type="number"
                       min={10000}
                       step={1000}
                       value={localBudget}
                       onChange={(e) => setLocalBudget(Math.max(10000, parseInt(e.target.value) || 10000))}
-                      className="text-4xl font-bold w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
+                      className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
@@ -91,7 +91,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 {/* Preset Buttons */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center gap-2">
                   {presetBudgets.map((preset) => (
                     <Button
                       key={preset}
@@ -106,7 +106,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                   ))}
                 </div>
 
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground text-center">
                   Minimum budget: 10,000 SEK
                 </p>
               </div>
@@ -149,7 +149,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  Based on 10,000 SEK = 100,000+ views • 10+ creators
+                  Based on 15,000 SEK = 100,000+ views • 10+ creators
                 </p>
               </div>
             </div>
