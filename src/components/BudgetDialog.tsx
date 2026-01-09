@@ -39,7 +39,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-none w-screen h-screen p-0 rounded-none border-none bg-background">
+      <DialogContent className="max-w-4xl w-[90vw] h-[80vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden">
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-border">
@@ -54,28 +54,28 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             </Button>
           </div>
 
-          {/* Content */}
+          {/* Content - Split Layout */}
           <div className="flex-1 overflow-y-auto">
-            <div className="max-w-2xl mx-auto p-8 space-y-10">
-              {/* Budget Input Section */}
-              <div className="space-y-6">
-                <div className="text-center space-y-2">
+            <div className="h-full grid grid-cols-1 md:grid-cols-2">
+              {/* Left Side - Budget Controls */}
+              <div className="p-8 flex flex-col justify-center space-y-8 border-r border-border">
+                <div className="space-y-2">
                   <Label className="text-sm text-muted-foreground">Total Budget</Label>
-                  <div className="flex items-baseline justify-center gap-2">
+                  <div className="flex items-baseline gap-2">
                     <Input
                       type="number"
                       min={10000}
                       step={1000}
                       value={localBudget}
                       onChange={(e) => setLocalBudget(Math.max(10000, parseInt(e.target.value) || 10000))}
-                      className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0"
+                      className="text-4xl font-bold w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
                     />
                     <span className="text-2xl font-medium text-muted-foreground">SEK</span>
                   </div>
                 </div>
 
                 {/* Slider */}
-                <div className="px-4">
+                <div>
                   <Slider
                     value={[localBudget]}
                     onValueChange={(value) => setLocalBudget(value[0])}
@@ -91,7 +91,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 {/* Preset Buttons */}
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap gap-2">
                   {presetBudgets.map((preset) => (
                     <Button
                       key={preset}
@@ -105,48 +105,53 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     </Button>
                   ))}
                 </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Minimum budget: 10,000 SEK
+                </p>
               </div>
 
-              {/* Guaranteed Results Section */}
-              <div className="bg-muted/50 rounded-xl p-8 space-y-6">
-                <div className="flex items-center gap-2 justify-center">
+              {/* Right Side - Guaranteed Results */}
+              <div className="p-8 flex flex-col justify-center space-y-6 bg-muted/30">
+                <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
                   <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8">
-                  {/* Views */}
-                  <div className="text-center space-y-2 p-6 bg-background rounded-lg">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                      <Eye className="h-7 w-7 text-primary" />
+                {/* Views */}
+                <div className="p-6 bg-background rounded-lg border border-border space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Eye className="h-6 w-6 text-primary" />
                     </div>
-                    <p className="text-4xl font-bold text-foreground">
-                      {guaranteedViews.toLocaleString()}+
-                    </p>
-                    <p className="text-sm text-muted-foreground">Guaranteed Views</p>
-                  </div>
-
-                  {/* Creators */}
-                  <div className="text-center space-y-2 p-6 bg-background rounded-lg">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                      <Users className="h-7 w-7 text-primary" />
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">
+                        {guaranteedViews.toLocaleString()}+
+                      </p>
+                      <p className="text-sm text-muted-foreground">Guaranteed Views</p>
                     </div>
-                    <p className="text-4xl font-bold text-foreground">
-                      {guaranteedCreators}+
-                    </p>
-                    <p className="text-sm text-muted-foreground">Creators</p>
                   </div>
                 </div>
 
-                <p className="text-center text-xs text-muted-foreground">
+                {/* Creators */}
+                <div className="p-6 bg-background rounded-lg border border-border space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Users className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">
+                        {guaranteedCreators}+
+                      </p>
+                      <p className="text-sm text-muted-foreground">Creators</p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-muted-foreground">
                   Based on 10,000 SEK = 100,000+ views • 10+ creators
                 </p>
               </div>
-
-              {/* Minimum notice */}
-              <p className="text-center text-sm text-muted-foreground">
-                Minimum budget: 10,000 SEK
-              </p>
             </div>
           </div>
 
