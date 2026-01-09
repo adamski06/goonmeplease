@@ -48,7 +48,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   campaignVideoPreview,
   requirementImages = [],
 }) => {
-  const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('phone');
+  const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('desktop');
   // Placeholder for paid out amount (would come from real data)
   const paidOut = 0;
 
@@ -82,10 +82,13 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
       
-      <div className={`flex-1 flex ${viewMode === 'phone' ? 'justify-center' : ''}`}>
-        <Card className={`bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative ${
-          viewMode === 'phone' ? 'w-[320px] h-[640px]' : 'w-full h-full'
-        }`}>
+      <div className="flex-1 flex justify-center items-start">
+        <Card 
+          className={`bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative transition-all duration-300 ease-out ${
+            viewMode === 'phone' ? 'w-[320px]' : 'w-full'
+          }`}
+          style={{ height: 'calc(100% - 8px)' }}
+        >
           {/* Scrollable Content */}
           <div className={`flex-1 overflow-auto pb-24 ${viewMode === 'phone' ? 'p-5' : 'p-8'}`}>
           {/* Title */}
