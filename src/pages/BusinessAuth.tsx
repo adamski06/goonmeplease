@@ -157,12 +157,15 @@ const BusinessAuth: React.FC = () => {
   const savedSession = loadSession();
   // Only true if we actually resumed mid-setup (mode was 'chat' with messages)
   const wasSessionRestored = savedSession?.mode === 'chat' && savedSession?.messages?.length > 0;
+  // Detect returning user: has saved email but no active Supabase session
+  const hasReturningUserEmail = savedSession?.email && savedSession.email.trim().length > 0;
   
   const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(savedSession?.mode || 'intro');
   const [companyName, setCompanyName] = useState(savedSession?.companyName || '');
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
-  const [introStep, setIntroStep] = useState<'hello' | 'welcome' | 'setup' | 'input'>('hello');
+  const [introStep, setIntroStep] = useState<'hello' | 'welcome' | 'setup' | 'input' | 'returning'>('hello');
+  const [isReturningUser, setIsReturningUser] = useState(false);
   const [displayText, setDisplayText] = useState('');
   const [setupText, setSetupText] = useState('');
   const [freeText, setFreeText] = useState('');
@@ -308,6 +311,19 @@ const BusinessAuth: React.FC = () => {
   // Typewriter effect for intro - multi-step sequence
   useEffect(() => {
     if (mode === 'intro') {
+      // Check if this is a returning user with saved email (but no active session)
+      if (hasReturningUserEmail && !user && !isReturningUser) {
+        // Skip the intro animation and show returning user screen
+        setIsReturningUser(true);
+        setIntroStep('returning');
+        return;
+      }
+      
+      // If already showing returning user screen, don't run intro animation
+      if (isReturningUser) {
+        return;
+      }
+      
       setShowNameInput(false);
       setTypewriterText('');
       setIntroStep('hello');
@@ -401,7 +417,23 @@ const BusinessAuth: React.FC = () => {
       
       runSequence();
     }
-  }, [mode, i18n.language]);
+  }, [mode, i18n.language, hasReturningUserEmail, user, isReturningUser]);
+  
+  // Handle returning user login - pre-fill email and go to login mode
+  const handleReturningUserLogin = () => {
+    // Email is already pre-filled from savedSession
+    setMode('login');
+  };
+  
+  // Handle returning user starting fresh
+  const handleStartFresh = () => {
+    clearOnboardingSession();
+    setIsReturningUser(false);
+    setEmail('');
+    setIntroStep('hello');
+    // Re-run intro animation
+    setMode('intro');
+  };
 
   // Typewriter effect for messages (no cursor)
   const typeMessage = (messageId: string, fullContent: string, onComplete?: () => void) => {
@@ -1749,6 +1781,34 @@ const BusinessAuth: React.FC = () => {
               // Loading spinner after entering company name
               <div className="animate-spin">
                 <Loader2 className="h-8 w-8 text-muted-foreground" />
+              </div>
+            ) : introStep === 'returning' ? (
+              // Returning user screen - welcome back with login prompt
+              <div className="flex flex-col items-center space-y-8 animate-fade-in">
+                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
+                  {i18n.language === 'sv' ? 'Välkommen tillbaka!' : 'Welcome back!'}
+                </h1>
+                <p className="text-lg text-muted-foreground font-montserrat text-center max-w-md">
+                  {i18n.language === 'sv' 
+                    ? `Logga in som ${email}` 
+                    : `Log in as ${email}`}
+                </p>
+                
+                <div className="flex flex-col items-center gap-4">
+                  <Button 
+                    onClick={handleReturningUserLogin}
+                    className="rounded-[3px] px-8 font-montserrat"
+                  >
+                    {i18n.language === 'sv' ? 'Logga in' : 'Log in'}
+                  </Button>
+                  
+                  <button
+                    onClick={handleStartFresh}
+                    className="text-sm text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
+                  >
+                    {i18n.language === 'sv' ? 'Inte du? Börja om' : 'Not you? Start fresh'}
+                  </button>
+                </div>
               </div>
             ) : (introStep === 'hello' || introStep === 'welcome') ? (
               // Step 1 & 2: Type text, then fade out down
