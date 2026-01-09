@@ -119,12 +119,12 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
         </div>
 
         {/* Navigation */}
-        <nav className={`flex flex-col ${isFormRoute ? 'px-2 items-center' : 'px-3'} gap-4 mt-8 transition-[padding] duration-500 ease-in-out`}>
+        <nav className={`flex flex-col ${isFormRoute ? 'px-0 items-center' : 'px-3'} gap-4 mt-8 transition-[padding] duration-500 ease-in-out`}>
           {navItems.map((item) => (
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`${isFormRoute ? 'p-2 justify-center' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3 ${
+              className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'text-lg lg:text-base px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3 ${
                 isActive(item.path) 
                   ? 'font-bold text-foreground' 
                   : 'font-medium text-foreground hover:font-semibold'
@@ -141,11 +141,11 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
 
 
         {/* More Menu at bottom */}
-        <div className={`mt-auto ${isFormRoute ? 'px-2' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20 transition-[padding] duration-500 ease-in-out`}>
+        <div className={`mt-auto ${isFormRoute ? 'px-0' : 'px-3'} py-4 border-t border-black/10 dark:border-white/20 transition-[padding] duration-500 ease-in-out`}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`${isFormRoute ? 'w-full justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3`}>
-                <Menu className="h-6 w-6" />
+              <button className={`${isFormRoute ? 'w-full flex justify-center p-2' : 'w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left'} transition-all duration-500 ease-in-out flex items-center gap-3`}>
+                <Menu className="h-6 w-6 flex-shrink-0" />
                 <span className={`whitespace-nowrap transition-all duration-500 ease-in-out ${isFormRoute ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}`}>
                   {t('common.more')}
                 </span>
