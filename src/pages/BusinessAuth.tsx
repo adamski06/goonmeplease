@@ -321,6 +321,16 @@ const BusinessAuth: React.FC = () => {
     }
   }, [mode, chatStep]);
 
+  // Show toast notification when session is restored
+  useEffect(() => {
+    if (wasSessionRestored && mode === 'chat') {
+      toast({
+        description: i18n.language === 'sv' ? 'Din session har återställts' : 'Session restored',
+        duration: 3000,
+      });
+    }
+  }, []); // Only run once on mount
+
   // Typewriter effect for intro - multi-step sequence
   useEffect(() => {
     if (mode === 'intro') {
@@ -2019,26 +2029,6 @@ const BusinessAuth: React.FC = () => {
               >
                 {/* Scrollable chat messages area */}
                 <div className="flex-1 overflow-y-auto px-8 pt-12 pb-24">
-                  {/* Session restored notice */}
-                  {wasSessionRestored && (
-                    <div 
-                      className="mb-6 flex items-center justify-between bg-muted/40 dark:bg-white/5 rounded-[3px] px-4 py-2.5"
-                      style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}
-                    >
-                      <span className="text-sm text-muted-foreground font-geist">
-                        {i18n.language === 'sv' ? 'Din session har återställts' : 'Your session has been restored'}
-                      </span>
-                      <button
-                        onClick={() => {
-                          clearOnboardingSession();
-                          window.location.reload();
-                        }}
-                        className="text-xs text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
-                      >
-                        {i18n.language === 'sv' ? 'Börja om' : 'Start fresh'}
-                      </button>
-                    </div>
-                  )}
                   <div className="w-full">
                   {messages.map((msg, index) => {
                     const prevMsg = index > 0 ? messages[index - 1] : null;
