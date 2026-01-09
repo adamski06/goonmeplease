@@ -50,13 +50,18 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   requirementImages = [],
 }) => {
   const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('phone');
-  const [accentColor, setAccentColor] = useState('#000000');
+  const [selectedGradient, setSelectedGradient] = useState(0);
   const [showColorPicker, setShowColorPicker] = useState(false);
   
-  const colorPresets = [
-    '#000000', '#1a1a2e', '#16213e', '#0f3460',
-    '#e94560', '#ff6b6b', '#4ecdc4', '#45b7d1',
-    '#96ceb4', '#ffeaa7', '#dfe6e9', '#ffffff'
+  const gradientPresets = [
+    { name: 'Default', value: 'bg-card', style: {} },
+    { name: 'Sunset', value: 'gradient', style: { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' } },
+    { name: 'Ocean', value: 'gradient', style: { background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)' } },
+    { name: 'Forest', value: 'gradient', style: { background: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)' } },
+    { name: 'Fire', value: 'gradient', style: { background: 'linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%)' } },
+    { name: 'Night', value: 'gradient', style: { background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' } },
+    { name: 'Peach', value: 'gradient', style: { background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' } },
+    { name: 'Mint', value: 'gradient', style: { background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' } },
   ];
   
   // Placeholder for paid out amount (would come from real data)
@@ -105,21 +110,22 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             </PopoverTrigger>
             <PopoverContent
               align="end"
-              className="z-[200] bg-card border-border p-3 shadow-lg"
+              className="z-[200] bg-card border-border p-3 shadow-lg w-auto"
             >
               <div className="grid grid-cols-4 gap-2">
-                {colorPresets.map((color) => (
+                {gradientPresets.map((gradient, index) => (
                   <button
-                    key={color}
+                    key={gradient.name}
                     type="button"
                     onClick={() => {
-                      setAccentColor(color);
+                      setSelectedGradient(index);
                       setShowColorPicker(false);
                     }}
-                    className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
-                      accentColor === color ? 'border-foreground' : 'border-transparent'
-                    }`}
-                    style={{ backgroundColor: color }}
+                    className={`w-8 h-8 rounded-md border-2 transition-all hover:scale-110 ${
+                      selectedGradient === index ? 'border-foreground' : 'border-transparent'
+                    } ${gradient.value === 'bg-card' ? 'bg-card' : ''}`}
+                    style={gradient.style}
+                    title={gradient.name}
                   />
                 ))}
               </div>
@@ -130,9 +136,10 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
       
       <div className="flex-1 flex justify-center min-h-0">
         <Card 
-          className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
+          className={`border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
-          } h-full`}
+          } h-full ${gradientPresets[selectedGradient].value === 'bg-card' ? 'bg-card' : ''}`}
+          style={gradientPresets[selectedGradient].value === 'gradient' ? gradientPresets[selectedGradient].style : {}}
         >
           {/* Fixed Top Header Bar */}
           <div className={`flex items-center justify-between border-b border-border ${viewMode === 'phone' ? 'px-6 py-4' : 'px-8 py-5'}`}>
@@ -274,10 +281,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
         {/* Fixed Bottom Overlay */}
         <div 
-          className={`absolute bottom-4 left-4 right-4 text-white flex items-center justify-between rounded-xl ${
+          className={`absolute bottom-4 left-4 right-4 bg-black text-white flex items-center justify-between rounded-xl ${
             viewMode === 'phone' ? 'px-5 py-4' : 'px-6 py-4'
           }`}
-          style={{ backgroundColor: accentColor }}
         >
           <div>
             <p className={`text-white/60 mb-1 ${viewMode === 'phone' ? 'text-xs' : 'text-sm'}`}>Earn up to</p>
