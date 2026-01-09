@@ -301,28 +301,35 @@ const BusinessCampaignForm: React.FC = () => {
                     
                     {/* Dropdown overlay */}
                     {showPlatformPicker && (
-                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex flex-col gap-2">
-                        {platforms.map(({ id, name, logo }) => (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => selectPlatform(id)}
-                            className="flex items-center gap-3 px-2 py-1.5 rounded-md transition-all duration-200 hover:bg-muted"
-                          >
-                            <div className="w-10 h-10 rounded-[2px] overflow-hidden flex-shrink-0">
-                              <img 
-                                src={logo} 
-                                alt={name} 
-                                className={`w-full h-full object-cover ${
-                                  id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                                }`}
-                              />
-                            </div>
-                            <span className="text-sm font-medium text-foreground">
-                              {name}
-                            </span>
-                          </button>
-                        ))}
+                      <div className="absolute top-0 left-16 z-50 bg-card border border-border rounded-lg shadow-lg p-4 flex flex-col gap-2 min-w-[200px]">
+                        {platforms.map(({ id, name, logo }) => {
+                          const isSelected = selectedPlatform === id;
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              onClick={() => selectPlatform(id)}
+                              className={`flex items-center gap-4 px-3 py-2 rounded-md transition-all duration-200 ${
+                                isSelected 
+                                  ? 'bg-primary/10 ring-2 ring-primary' 
+                                  : 'hover:bg-muted'
+                              }`}
+                            >
+                              <div className="w-10 h-10 rounded-[2px] overflow-hidden flex-shrink-0">
+                                <img 
+                                  src={logo} 
+                                  alt={name} 
+                                  className={`w-full h-full object-cover ${
+                                    id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                                  }`}
+                                />
+                              </div>
+                              <span className={`text-base font-medium ${isSelected ? 'text-primary' : 'text-foreground'}`}>
+                                {name}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
