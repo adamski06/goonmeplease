@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,13 +18,6 @@ const paymentTiers = [
   { payout: 500, views: 15000 },
 ];
 
-// Calculate fee percent based on desired creator pool
-// Creator pool snaps to 5000 increments, minimum 20000
-const calculateFeeFromCreatorPool = (totalBudget: number, creatorPool: number): number => {
-  const fee = ((totalBudget - creatorPool) / totalBudget) * 100;
-  return Math.round(fee * 10) / 10; // Round to 1 decimal
-};
-
 // Snap to nearest 5000
 const snapToFiveThousand = (value: number): number => {
   return Math.round(value / 5000) * 5000;
@@ -37,56 +30,98 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   onBudgetChange,
 }) => {
   const [localBudget, setLocalBudget] = useState(budget);
-  const [displayBudget, setDisplayBudget] = useState(budget); // Smooth display value
+  const [displayBudget, setDisplayBudget] = useState(budget);
+  const [animatedBudget, setAnimatedBudget] = useState(budget);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedTier, setSelectedTier] = useState(0);
+  const animationRef = useRef<number>();
 
-  // Exponential scale helpers
-  const minBudget = 15000;
+  // Constants
+  const minBudget = 20000; // Minimum budget (gives 15k creator pool at 25% fee)
   const maxBudget = 500000;
   const minLog = Math.log(minBudget);
   const maxLog = Math.log(maxBudget);
 
   const budgetToSlider = (budget: number) => {
-    return ((Math.log(budget) - minLog) / (maxLog - minLog)) * 100;
+    const clampedBudget = Math.max(minBudget, Math.min(maxBudget, budget));
+    return ((Math.log(clampedBudget) - minLog) / (maxLog - minLog)) * 100;
   };
 
   const sliderToBudget = (sliderValue: number) => {
     const logValue = minLog + (sliderValue / 100) * (maxLog - minLog);
-    return Math.round(Math.exp(logValue)); // No rounding while dragging - smooth
+    return Math.exp(logValue);
+  };
+
+  // Animate to target value
+  const animateTo = (target: number) => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    
+    const start = animatedBudget;
+    const startTime = performance.now();
+    const duration = 200; // 200ms animation
+    
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = start + (target - start) * eased;
+      
+      setAnimatedBudget(current);
+      
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    
+    animationRef.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
     if (open) {
-      setLocalBudget(budget || 15000);
-      setDisplayBudget(budget || 15000);
+      const initialBudget = Math.max(minBudget, budget || minBudget);
+      setLocalBudget(initialBudget);
+      setDisplayBudget(initialBudget);
+      setAnimatedBudget(initialBudget);
     }
   }, [open, budget]);
 
-  // Calculate creator pool - snaps to 5000, minimum 20000
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
   const currentTier = paymentTiers[selectedTier];
   
-  // Base fee is 25%, scaling down to 5% at max budget
-  const poolRatio = 0.75 + (0.20 * (displayBudget - minBudget) / (maxBudget - minBudget)); // 75% to 95%
-  const rawCreatorPool = displayBudget * poolRatio;
+  // Base fee is 25% at min, scaling down to 5% at max
+  const poolRatio = 0.75 + (0.20 * (animatedBudget - minBudget) / (maxBudget - minBudget));
+  const rawCreatorPool = animatedBudget * poolRatio;
   
-  // While dragging: show exact value, on release: snap to 5000
+  // Creator pool: minimum 15k, snaps to 5k increments
   const creatorPool = isDragging 
-    ? Math.max(20000, Math.round(rawCreatorPool))
-    : Math.max(20000, snapToFiveThousand(rawCreatorPool));
+    ? Math.max(15000, Math.round(rawCreatorPool))
+    : Math.max(15000, snapToFiveThousand(rawCreatorPool));
   
-  // Snap budget to match creator pool on release
-  const snappedBudget = isDragging 
-    ? displayBudget 
-    : snapToFiveThousand(displayBudget);
+  // Budget snaps to 5k increments
+  const displayedBudget = isDragging 
+    ? Math.round(animatedBudget) 
+    : snapToFiveThousand(animatedBudget);
   
-  const jarlaFeeAmount = snappedBudget - creatorPool;
-  const feePercent = calculateFeeFromCreatorPool(snappedBudget, creatorPool);
+  const jarlaFeeAmount = displayedBudget - creatorPool;
+  const feePercent = displayedBudget > 0 
+    ? Math.round((jarlaFeeAmount / displayedBudget) * 1000) / 10 
+    : 25;
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
   const handleConfirm = () => {
-    onBudgetChange(localBudget);
+    onBudgetChange(snapToFiveThousand(localBudget));
     onOpenChange(false);
   };
 
@@ -115,8 +150,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Left Side - Budget Controls */}
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
-                {/* Jarla Fee Box */}
-                <div className="py-4 px-6 bg-background rounded-[4px] border border-border min-w-[220px]">
+                {/* Jarla Fee Box - Fixed size */}
+                <div className="py-4 px-6 bg-background rounded-[4px] border border-border w-[280px] h-[88px]">
                   <p className="text-sm font-medium text-foreground mb-2">Jarla Fee</p>
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
@@ -130,12 +165,13 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                   <div className="flex items-baseline justify-center gap-2">
                     <Input
                       type="number"
-                      min={15000}
-                      step={1000}
-                      value={isDragging ? Math.round(displayBudget) : snappedBudget}
+                      min={minBudget}
+                      step={5000}
+                      value={displayedBudget}
                       onChange={(e) => {
-                        const val = Math.max(15000, parseInt(e.target.value) || 15000);
+                        const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
                         setDisplayBudget(val);
+                        setAnimatedBudget(val);
                         setLocalBudget(val);
                       }}
                       className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
@@ -147,17 +183,20 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 {/* Slider */}
                 <div className="w-full max-w-md">
                   <Slider
-                    value={[budgetToSlider(displayBudget)]}
+                    value={[budgetToSlider(animatedBudget)]}
                     onValueChange={(value) => {
                       setIsDragging(true);
                       const newBudget = sliderToBudget(value[0]);
                       setDisplayBudget(newBudget);
+                      setAnimatedBudget(newBudget);
                     }}
                     onValueCommit={(value) => {
                       setIsDragging(false);
-                      const newBudget = sliderToBudget(value[0]);
-                      setDisplayBudget(newBudget);
-                      setLocalBudget(newBudget);
+                      const rawBudget = sliderToBudget(value[0]);
+                      const snappedBudget = snapToFiveThousand(rawBudget);
+                      setLocalBudget(snappedBudget);
+                      // Animate to snapped value
+                      animateTo(snappedBudget);
                     }}
                     min={0}
                     max={100}
@@ -165,7 +204,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     className="w-full"
                   />
                   <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                    <span>15,000 SEK</span>
+                    <span>20,000 SEK</span>
                     <span>500,000 SEK</span>
                   </div>
                 </div>
