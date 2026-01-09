@@ -105,7 +105,7 @@ const BusinessCampaigns: React.FC = () => {
   return (
     <BusinessLayout>
       <div className="p-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold text-foreground">Campaigns</h1>
@@ -116,11 +116,11 @@ const BusinessCampaigns: React.FC = () => {
           </div>
 
           {loadingCampaigns ? (
-            <div className="flex items-center justify-center py-12">
+            <div className="flex items-center justify-start py-12">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : campaigns.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="py-12">
               <p className="text-muted-foreground mb-4">No campaigns yet</p>
               <Button onClick={() => navigate('/business/campaigns/new')} className="gap-2">
                 <Plus className="h-4 w-4" />
@@ -128,7 +128,7 @@ const BusinessCampaigns: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {campaigns.map((campaign, index) => {
                 const stats = campaignStats[campaign.id] || { totalViews: 0, totalSpent: 0, pendingCount: 0, approvedCount: 0, creatorCount: 0 };
 
@@ -136,31 +136,31 @@ const BusinessCampaigns: React.FC = () => {
                   <button
                     key={campaign.id}
                     onClick={() => navigate(`/business/campaigns/${campaign.id}`)}
-                    className="w-full flex items-center justify-between p-5 bg-white dark:bg-white/5 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_20px_rgba(0,0,0,0.4)] transition-shadow opacity-0 animate-fade-in"
+                    className="w-full flex items-center justify-between p-8 bg-white dark:bg-white/5 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_20px_rgba(0,0,0,0.4)] transition-shadow opacity-0 animate-fade-in"
                     style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
                   >
                     {/* Left: Title */}
                     <div className="text-left">
-                      <h3 className="text-lg font-semibold text-foreground">{campaign.title}</h3>
+                      <h3 className="text-2xl font-bold text-foreground">{campaign.title}</h3>
                     </div>
 
                     {/* Right: Stats */}
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-12">
                       <div className="text-center">
-                        <div className="text-xl font-bold text-foreground">{formatNumber(stats.totalViews)}</div>
-                        <div className="text-xs text-muted-foreground">Views</div>
+                        <div className="text-3xl font-bold text-foreground">{formatNumber(stats.totalViews)}</div>
+                        <div className="text-sm text-muted-foreground">Views</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-foreground">{stats.creatorCount}</div>
-                        <div className="text-xs text-muted-foreground">Creators</div>
+                        <div className="text-3xl font-bold text-foreground">{stats.creatorCount}</div>
+                        <div className="text-sm text-muted-foreground">Creators</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-foreground">{stats.pendingCount}</div>
-                        <div className="text-xs text-muted-foreground">Pending</div>
+                        <div className="text-3xl font-bold text-foreground">{stats.pendingCount}</div>
+                        <div className="text-sm text-muted-foreground">Pending</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-foreground">{stats.approvedCount}</div>
-                        <div className="text-xs text-muted-foreground">Approved</div>
+                        <div className="text-3xl font-bold text-foreground">{stats.approvedCount}</div>
+                        <div className="text-sm text-muted-foreground">Approved</div>
                       </div>
                     </div>
                   </button>
