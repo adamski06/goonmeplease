@@ -1518,172 +1518,176 @@ const BusinessAuth: React.FC = () => {
   const renderCredentialsForm = () => (
     <form onSubmit={handleFinalSubmit} className="space-y-4 mt-2">
       {/* Company Registration Section */}
-      <div className="space-y-3 pb-4 border-b border-foreground/10">
-        <h4 className="font-montserrat font-semibold text-sm text-foreground">
-          {t('businessAuth.companyDetails')}
-        </h4>
-        
-        {/* Company Country */}
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyCountry')}</Label>
-          <div className="relative">
-            <select
-              value={companyCountry}
-              onChange={(e) => setCompanyCountry(e.target.value)}
-              className="w-full h-10 bg-white dark:bg-white/10 border border-foreground/20 text-foreground rounded-[3px] font-geist text-sm px-3 appearance-none cursor-pointer"
-              required
-            >
-              <option value="" disabled>{t('businessAuth.selectCountry')}</option>
-              {COUNTRIES.map(c => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+      <div className="bg-white dark:bg-white/5 rounded-[4px] p-4 border border-foreground/10">
+        <div className="space-y-3">
+          <h4 className="font-montserrat font-semibold text-sm text-foreground">
+            {t('businessAuth.companyDetails')}
+          </h4>
+          
+          {/* Company Country */}
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyCountry')}</Label>
+            <div className="relative">
+              <select
+                value={companyCountry}
+                onChange={(e) => setCompanyCountry(e.target.value)}
+                className="w-full h-10 bg-muted/50 dark:bg-white/10 border border-foreground/20 text-foreground rounded-[3px] font-geist text-sm px-3 appearance-none cursor-pointer"
+                required
+              >
+                <option value="" disabled>{t('businessAuth.selectCountry')}</option>
+                {COUNTRIES.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {/* Organization Number */}
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.organizationNumber')}</Label>
-          <Input
-            type="text"
-            placeholder={t('businessAuth.organizationNumberPlaceholder')}
-            value={organizationNumber}
-            onChange={(e) => setOrganizationNumber(e.target.value)}
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
-        </div>
-        
-        {/* VAT Number */}
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.vatNumber')}</Label>
-          <Input
-            type="text"
-            placeholder={t('businessAuth.vatNumberPlaceholder')}
-            value={vatNumber}
-            onChange={(e) => setVatNumber(e.target.value)}
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
-        </div>
-        
-        {/* Address */}
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyAddress')}</Label>
-          <Input
-            type="text"
-            placeholder={t('businessAuth.companyAddressPlaceholder')}
-            value={companyAddress}
-            onChange={(e) => setCompanyAddress(e.target.value)}
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
-        </div>
-        
-        {/* City and Postal Code */}
-        <div className="grid grid-cols-2 gap-3">
+          
+          {/* Organization Number */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.city')}</Label>
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.organizationNumber')}</Label>
             <Input
               type="text"
-              placeholder={t('businessAuth.cityPlaceholder')}
-              value={companyCity}
-              onChange={(e) => setCompanyCity(e.target.value)}
-              className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              placeholder={t('businessAuth.organizationNumberPlaceholder')}
+              value={organizationNumber}
+              onChange={(e) => setOrganizationNumber(e.target.value)}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
             />
           </div>
+          
+          {/* VAT Number */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.postalCode')}</Label>
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.vatNumber')}</Label>
             <Input
               type="text"
-              placeholder={t('businessAuth.postalCodePlaceholder')}
-              value={companyPostalCode}
-              onChange={(e) => setCompanyPostalCode(e.target.value)}
-              className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              placeholder={t('businessAuth.vatNumberPlaceholder')}
+              value={vatNumber}
+              onChange={(e) => setVatNumber(e.target.value)}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
             />
           </div>
-        </div>
-        
-        {/* Phone */}
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyPhone')}</Label>
-          <Input
-            type="tel"
-            placeholder={t('businessAuth.companyPhonePlaceholder')}
-            value={companyPhone}
-            onChange={(e) => setCompanyPhone(e.target.value)}
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
+          
+          {/* Address */}
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyAddress')}</Label>
+            <Input
+              type="text"
+              placeholder={t('businessAuth.companyAddressPlaceholder')}
+              value={companyAddress}
+              onChange={(e) => setCompanyAddress(e.target.value)}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+            />
+          </div>
+          
+          {/* City and Postal Code */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.city')}</Label>
+              <Input
+                type="text"
+                placeholder={t('businessAuth.cityPlaceholder')}
+                value={companyCity}
+                onChange={(e) => setCompanyCity(e.target.value)}
+                className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.postalCode')}</Label>
+              <Input
+                type="text"
+                placeholder={t('businessAuth.postalCodePlaceholder')}
+                value={companyPostalCode}
+                onChange={(e) => setCompanyPostalCode(e.target.value)}
+                className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              />
+            </div>
+          </div>
+          
+          {/* Phone */}
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyPhone')}</Label>
+            <Input
+              type="tel"
+              placeholder={t('businessAuth.companyPhonePlaceholder')}
+              value={companyPhone}
+              onChange={(e) => setCompanyPhone(e.target.value)}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+            />
+          </div>
         </div>
       </div>
       
       {/* Account Credentials Section */}
-      <div className="space-y-3 pt-2">
-        <h4 className="font-montserrat font-semibold text-sm text-foreground">
-          {t('businessAuth.accountCredentials')}
-        </h4>
-        
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.yourName')}</Label>
-          <Input
-            type="text"
-            placeholder={t('businessAuth.yourNamePlaceholder')}
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            autoComplete="name"
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.workEmail')}</Label>
-          <Input
-            type="email"
-            placeholder={t('businessAuth.workEmailPlaceholder')}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.password')}</Label>
-          <Input
-            type="password"
-            placeholder={t('auth.passwordPlaceholder')}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            className="bg-white dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-          />
+      <div className="bg-white dark:bg-white/5 rounded-[4px] p-4 border border-foreground/10">
+        <div className="space-y-3">
+          <h4 className="font-montserrat font-semibold text-sm text-foreground">
+            {t('businessAuth.accountCredentials')}
+          </h4>
+          
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.yourName')}</Label>
+            <Input
+              type="text"
+              placeholder={t('businessAuth.yourNamePlaceholder')}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              autoComplete="name"
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.workEmail')}</Label>
+            <Input
+              type="email"
+              placeholder={t('businessAuth.workEmailPlaceholder')}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm font-montserrat">{t('auth.password')}</Label>
+            <Input
+              type="password"
+              placeholder={t('auth.passwordPlaceholder')}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 pt-2">
+            <Checkbox 
+              id="terms" 
+              checked={termsAccepted}
+              onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+              className="h-4 w-4 rounded-none"
+            />
+            <Label 
+              htmlFor="terms" 
+              className="text-xs text-muted-foreground font-geist cursor-pointer"
+            >
+              {t('businessAuth.agreeToTerms')}
+            </Label>
+          </div>
+
+          <Button 
+            type="submit" 
+            disabled={isLoading || !fullName.trim() || !email.trim() || !password.trim() || !termsAccepted}
+            className="w-full rounded-[3px] font-montserrat"
+          >
+            {isLoading ? t('businessAuth.creating') : t('businessAuth.completeSetup')}
+          </Button>
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        <Checkbox 
-          id="terms" 
-          checked={termsAccepted}
-          onCheckedChange={(checked) => setTermsAccepted(checked === true)}
-          className="h-4 w-4 rounded-none"
-        />
-        <Label 
-          htmlFor="terms" 
-          className="text-xs text-muted-foreground font-geist cursor-pointer"
-        >
-          {t('businessAuth.agreeToTerms')}
-        </Label>
-      </div>
-
-      <Button 
-        type="submit" 
-        disabled={isLoading || !fullName.trim() || !email.trim() || !password.trim() || !termsAccepted}
-        className="w-full rounded-[3px] font-montserrat"
-      >
-        {isLoading ? t('businessAuth.creating') : t('businessAuth.completeSetup')}
-      </Button>
     </form>
   );
 
