@@ -49,8 +49,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     }
   }, [open, budget]);
 
-  const guaranteedViews = Math.floor((localBudget / 15000) * 100000);
-  const guaranteedCreators = Math.floor((localBudget / 15000) * 10);
+  const currentTier = paymentTiers[selectedTier];
+  const guaranteedViews = Math.floor((localBudget / currentTier.payout) * currentTier.views);
+  const guaranteedCreators = Math.floor(localBudget / currentTier.payout);
 
   const handleConfirm = () => {
     onBudgetChange(localBudget);
@@ -191,7 +192,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  Based on 15,000 SEK = 100,000+ views • 10+ creators
+                  Based on {currentTier.payout} SEK per {currentTier.views.toLocaleString()} views
                 </p>
               </div>
             </div>
