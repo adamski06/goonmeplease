@@ -186,20 +186,23 @@ const BusinessDashboard: React.FC = () => {
                       </span>
                     </div>
                   )}
-                  <h1 className="text-3xl font-bold text-foreground">
-                    {businessProfile?.company_name || 'Your Business'}
-                  </h1>
+                  <div>
+                    <h1 className="text-3xl font-bold text-foreground">
+                      {businessProfile?.company_name || 'Your Business'}
+                    </h1>
+                    <span className="text-sm text-white">Online</span>
+                  </div>
                 </div>
                 
                 {/* Description */}
-                <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
                   {shortDescription}
                 </p>
               </div>
               
               {/* Campaigns section */}
               <div className="border-t border-border px-10 py-6">
-                <h3 className="text-base font-medium text-foreground mb-4">Campaigns</h3>
+                <h3 className="text-xl font-bold text-foreground mb-4">Campaigns</h3>
                 {/* Add campaign button - larger */}
                 <div 
                   className="w-[256px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
