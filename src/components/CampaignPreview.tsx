@@ -94,7 +94,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
           {/* Platform badges */}
           {selectedPlatforms.length > 0 && (
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-5 mb-4">
               {selectedPlatforms.map((platform) => (
                 <div 
                   key={platform}
@@ -103,9 +103,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
                   <img 
                     src={platformLogos[platform]} 
                     alt={platformNames[platform]} 
-                    className="w-10 h-10 object-cover rounded-[4px]"
+                    className="w-12 h-12 object-cover rounded-[4px]"
                   />
-                  <span className="text-base font-medium text-foreground">
+                  <span className="text-lg font-medium text-foreground">
                     {platformNames[platform]}
                   </span>
                 </div>
@@ -221,7 +221,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
 
         {/* Fixed Bottom Overlay */}
-        <div className={`absolute bottom-0 left-0 right-0 bg-black text-white flex items-center justify-between ${
+        <div className={`absolute bottom-0 left-0 right-0 bg-black text-white flex items-center justify-between rounded-t-xl ${
           viewMode === 'phone' ? 'px-5 py-4' : 'px-8 py-5'
         }`}>
           <div>
