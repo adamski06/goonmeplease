@@ -258,7 +258,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
                 <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
-                <div className="flex flex-wrap content-start gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {Array.from({ length: guaranteedCreators }).map((_, i) => (
                     <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
                   ))}
