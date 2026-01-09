@@ -90,27 +90,36 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
           } h-full`}
         >
-          {/* Scrollable Content */}
-          <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
-          {/* Title and Platform badges */}
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-foreground text-2xl">
-              {formData.title || 'Campaign Title'}
-            </h3>
+          {/* Fixed Top Header Bar */}
+          <div className={`flex items-center justify-between border-b border-border ${viewMode === 'phone' ? 'px-6 py-4' : 'px-8 py-5'}`}>
+            <div className="flex flex-col">
+              <span className="text-sm text-muted-foreground">
+                {businessProfile?.company_name || 'Company Name'}
+              </span>
+              <h3 className="font-bold text-foreground text-xl">
+                {formData.title || 'Campaign Title'}
+              </h3>
+            </div>
             
             {selectedPlatforms.length > 0 && (
-              <div className="flex gap-3">
-                {selectedPlatforms.map((platform) => (
-                  <img 
-                    key={platform}
-                    src={platformLogos[platform]} 
-                    alt={platformNames[platform]} 
-                    className="w-10 h-10 object-cover rounded-[4px]"
-                  />
-                ))}
+              <div className="flex items-center gap-3">
+                <div className="w-px h-10 bg-border" />
+                <div className="flex gap-2">
+                  {selectedPlatforms.map((platform) => (
+                    <img 
+                      key={platform}
+                      src={platformLogos[platform]} 
+                      alt={platformNames[platform]} 
+                      className="w-9 h-9 object-cover rounded-[4px]"
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>
+
+          {/* Scrollable Content */}
+          <div className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30 ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
 
           {/* Description */}
           <div className="mb-8">
