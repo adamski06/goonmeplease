@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Pencil } from 'lucide-react';
-
-import defaultAvatar from '@/assets/default-avatar.png';
+import { ArrowLeft, Pencil, Loader2 } from 'lucide-react';
+import CampaignPreview from '@/components/CampaignPreview';
 
 interface Campaign {
   id: string;
@@ -26,24 +22,12 @@ interface Campaign {
   total_budget: number;
 }
 
-interface Submission {
-  id: string;
-  creator_id: string;
-  tiktok_video_url: string;
-  status: string;
-  current_views: number;
-  created_at: string;
-  review_notes: string | null;
-  profiles?: {
-    full_name: string | null;
-    avatar_url: string | null;
-  };
-}
-
-interface Tier {
-  min_views: number;
-  max_views: number | null;
-  rate_per_view: number;
+interface CampaignStats {
+  totalViews: number;
+  totalSpent: number;
+  pendingCount: number;
+  approvedCount: number;
+  creatorCount: number;
 }
 
 const BusinessCampaignDetail: React.FC = () => {
@@ -53,8 +37,8 @@ const BusinessCampaignDetail: React.FC = () => {
   const { toast } = useToast();
 
   const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [tiers, setTiers] = useState<Tier[]>([]);
+  const [stats, setStats] = useState<CampaignStats>({ totalViews: 0, totalSpent: 0, pendingCount: 0, approvedCount: 0, creatorCount: 0 });
+  const [businessProfile, setBusinessProfile] = useState<{ company_name: string; logo_url: string | null } | null>(null);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -66,8 +50,23 @@ const BusinessCampaignDetail: React.FC = () => {
   useEffect(() => {
     if (user && id) {
       fetchCampaignData();
+      fetchBusinessProfile();
     }
   }, [user, id]);
+
+  const fetchBusinessProfile = async () => {
+    if (!user) return;
+    
+    const { data } = await supabase
+      .from('business_profiles')
+      .select('company_name, logo_url')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    
+    if (data) {
+      setBusinessProfile(data);
+    }
+  };
 
   const fetchCampaignData = async () => {
     try {
@@ -81,27 +80,24 @@ const BusinessCampaignDetail: React.FC = () => {
       if (campaignError) throw campaignError;
       setCampaign(campaignData);
 
-      // Fetch tiers
-      const { data: tierData } = await supabase
-        .from('campaign_tiers')
-        .select('*')
-        .eq('campaign_id', id)
-        .order('min_views', { ascending: true });
-
-      setTiers(tierData?.map(t => ({
-        min_views: t.min_views,
-        max_views: t.max_views,
-        rate_per_view: Number(t.rate_per_view),
-      })) || []);
-
-      // Fetch submissions
-      const { data: submissionData } = await supabase
+      // Fetch submissions for stats
+      const { data: submissions } = await supabase
         .from('content_submissions')
-        .select('*')
-        .eq('campaign_id', id)
-        .order('created_at', { ascending: false });
+        .select('current_views, status, creator_id')
+        .eq('campaign_id', id);
 
-      setSubmissions((submissionData || []) as any);
+      const totalViews = submissions?.reduce((sum, s) => sum + (s.current_views || 0), 0) || 0;
+      const pendingCount = submissions?.filter(s => s.status === 'pending_review').length || 0;
+      const approvedCount = submissions?.filter(s => s.status === 'approved' || s.status === 'paid').length || 0;
+      const uniqueCreators = new Set(submissions?.map(s => s.creator_id) || []);
+
+      setStats({
+        totalViews,
+        totalSpent: 0,
+        pendingCount,
+        approvedCount,
+        creatorCount: uniqueCreators.size,
+      });
     } catch (err) {
       console.error('Error fetching campaign:', err);
       toast({ title: 'Error loading campaign', variant: 'destructive' });
@@ -110,32 +106,13 @@ const BusinessCampaignDetail: React.FC = () => {
     }
   };
 
-  const updateSubmissionStatus = async (submissionId: string, status: 'approved' | 'denied' | 'paid' | 'pending_review', notes?: string) => {
-    try {
-      const { error } = await supabase
-        .from('content_submissions')
-        .update({ 
-          status, 
-          review_notes: notes,
-          reviewed_at: new Date().toISOString(),
-          reviewed_by: user?.id
-        })
-        .eq('id', submissionId);
-
-      if (error) throw error;
-      toast({ title: `Submission ${status}` });
-      fetchCampaignData();
-    } catch (err) {
-      console.error('Error updating submission:', err);
-      toast({ title: 'Error updating submission', variant: 'destructive' });
-    }
-  };
-
   if (loading || loadingData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
+      <BusinessLayout>
+        <div className="h-full flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      </BusinessLayout>
     );
   }
 
@@ -152,221 +129,72 @@ const BusinessCampaignDetail: React.FC = () => {
     );
   }
 
-  const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
-  const uniqueCreators = new Set(submissions.map(s => s.creator_id)).size;
-
-  // Calculate max earnings based on tiers or a default rate
-  const defaultRate = tiers.length > 0 ? tiers[0].rate_per_view : 0.04;
-  const maxEarnings = campaign.total_budget || 0;
-  const ratePerThousand = defaultRate * 1000;
-  
-  // Calculate spent budget (simplified - based on views * rate)
-  const spentBudget = Math.min(totalViews * defaultRate, maxEarnings);
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <Badge className="bg-green-500/20 text-green-600 border-green-500/30">Approved</Badge>;
-      case 'pending_review':
-        return <Badge className="bg-yellow-500/20 text-yellow-600 border-yellow-500/30">Pending</Badge>;
-      case 'denied':
-        return <Badge className="bg-red-500/20 text-red-600 border-red-500/30">Rejected</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
+  const formatNumber = (num: number) => {
+    return num.toLocaleString('sv-SE');
   };
 
-  // Parse guidelines into array
-  const guidelinesArray = campaign.guidelines 
-    ? campaign.guidelines.split('\n').filter(g => g.trim())
-    : [];
+  const getRequirements = (guidelines: string | null): string[] => {
+    if (!guidelines) return [];
+    return guidelines.split('\n').filter(g => g.trim());
+  };
 
   return (
     <BusinessLayout>
       <div className="p-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" onClick={() => navigate('/business/campaigns')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-foreground">{campaign.title}</h1>
-                <Badge variant={campaign.status === 'active' ? 'default' : 'outline'}>
-                  {campaign.status || 'active'}
-                </Badge>
-              </div>
-            </div>
-            <Button variant="outline" onClick={() => navigate(`/business/campaigns/${id}/edit`)}>
+            <h1 className="text-2xl font-bold text-foreground flex-1">{campaign.title}</h1>
+            <Button variant="outline" size="sm" onClick={() => navigate(`/business/campaigns/${id}/edit`)}>
               <Pencil className="h-4 w-4 mr-2" />
               Edit
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-              <CardContent className="pt-4">
-                <div className="text-muted-foreground text-sm">Views</div>
-                <p className="text-2xl font-bold mt-1">{totalViews.toLocaleString()}</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-              <CardContent className="pt-4">
-                <div className="text-muted-foreground text-sm">Creators</div>
-                <p className="text-2xl font-bold mt-1">{uniqueCreators}</p>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-              <CardContent className="pt-4">
-                <div className="text-muted-foreground text-sm">Budget</div>
-                <p className="text-2xl font-bold mt-1">
-                  {Math.round(spentBudget).toLocaleString()}/{maxEarnings.toLocaleString()} SEK
-                </p>
-              </CardContent>
-            </Card>
+          {/* Stats Bar */}
+          <div className="flex items-center justify-between p-5 bg-white dark:bg-white/5 rounded-[4px] shadow-[0_0_15px_rgba(0,0,0,0.06)] dark:shadow-[0_0_15px_rgba(0,0,0,0.3)] mb-8">
+            <div className="flex items-center gap-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">{formatNumber(stats.totalViews)}</div>
+                <div className="text-xs text-muted-foreground">Views</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">{stats.creatorCount}</div>
+                <div className="text-xs text-muted-foreground">Creators</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">{stats.pendingCount}</div>
+                <div className="text-xs text-muted-foreground">Pending</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">{stats.approvedCount}</div>
+                <div className="text-xs text-muted-foreground">Approved</div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-foreground">{formatNumber(campaign.total_budget || 0)}</div>
+              <div className="text-xs text-muted-foreground">Budget (SEK)</div>
+            </div>
           </div>
 
-          {/* Tabs */}
-          <Tabs defaultValue="preview" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="preview">Creator Preview</TabsTrigger>
-              <TabsTrigger value="details">Campaign Details</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="preview">
-              <h3 className="text-lg font-semibold text-foreground mb-4">How Creators See Your Campaign</h3>
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-                <CardContent className="pt-6">
-                  {/* Creator Preview - mimics what creators see */}
-                  <div className="max-w-2xl">
-                    {/* Header - Logo and brand */}
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center flex-shrink-0 border border-border overflow-hidden">
-                        {campaign.brand_logo_url ? (
-                          <img src={campaign.brand_logo_url} alt={campaign.brand_name} className="w-full h-full object-contain" />
-                        ) : (
-                          <span className="text-xl font-bold text-foreground">
-                            {campaign.brand_name.charAt(0).toUpperCase()}
-                          </span>
-                        )}
-                      </div>
-                      <div>
-                        <h2 className="text-2xl font-bold text-foreground font-montserrat">{campaign.title}</h2>
-                        <p className="text-sm text-muted-foreground">{campaign.brand_name}</p>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-lg text-foreground font-jakarta leading-relaxed mb-6">
-                      {campaign.description || 'No description provided.'}
-                    </p>
-
-                    {/* Earnings Display - matching creator view */}
-                    <div className="mb-6 relative">
-                      {/* Rate per view */}
-                      <div className="flex items-baseline gap-1 mb-2">
-                        <span className="text-xl font-bold text-foreground font-montserrat">{ratePerThousand.toFixed(0)}</span>
-                        <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-                        <span className="text-xs font-bold text-muted-foreground font-jakarta">/ 1000 views</span>
-                      </div>
-
-                      {/* Line and bubbles */}
-                      <div className="relative mt-4">
-                        {/* Earnings bubble - above line */}
-                        <div className="absolute -top-10 right-0 pointer-events-none z-20">
-                          <div className="bg-black px-4 py-2 flex items-baseline gap-1 rounded-full rounded-br-none">
-                            <span className="text-2xl font-bold text-white font-montserrat">{maxEarnings.toLocaleString()}</span>
-                            <span className="text-sm text-white font-montserrat">sek</span>
-                          </div>
-                        </div>
-
-                        {/* The line - with left margin to align with center of min/1000 text */}
-                        <div className="relative py-4 ml-4">
-                          <div className="h-[2px] bg-foreground w-full" />
-                          
-                          {/* Min marker - always at left, always 1000 views */}
-                          <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
-                            <div className="relative">
-                              <div className="w-[2px] h-[10px] bg-foreground" />
-                              <span className="absolute -top-6 left-0 -translate-x-1/2 text-xs text-foreground font-jakarta pointer-events-none whitespace-nowrap">min</span>
-                              <span className="absolute top-3 left-0 -translate-x-1/2 text-xs text-muted-foreground font-jakarta pointer-events-none whitespace-nowrap">1,000</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Views bubble - below line */}
-                        <div className="absolute top-10 right-0 pointer-events-none z-20">
-                          <div className="bg-background border border-border px-3 py-1.5 flex items-baseline gap-1 rounded-full rounded-tr-none">
-                            <span className="text-base font-normal text-foreground font-jakarta">
-                              {maxEarnings > 0 && ratePerThousand > 0 
-                                ? ((maxEarnings / ratePerThousand) * 1000).toLocaleString() 
-                                : '0'}
-                            </span>
-                            <span className="text-xs text-foreground font-jakarta">views</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Spacer for bubbles */}
-                      <div className="h-12" />
-                    </div>
-
-                    {/* Requirements */}
-                    {guidelinesArray.length > 0 && (
-                      <div className="backdrop-blur-md bg-muted/20 rounded-xl p-4 mb-6">
-                        <h3 className="text-sm font-semibold text-foreground mb-3 font-montserrat">Requirements</h3>
-                        <ul className="space-y-2">
-                          {guidelinesArray.map((guideline, idx) => (
-                            <li key={idx} className="text-sm text-foreground font-jakarta flex items-start gap-2">
-                              <span className="text-foreground">•</span>
-                              {guideline}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* CTA Preview */}
-                    <Button 
-                      size="lg" 
-                      className="w-full py-5 text-base font-bold rounded-full"
-                      disabled
-                    >
-                      Submit Content (Preview)
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="details">
-              <Card className="bg-card/50 backdrop-blur-sm border-border rounded-[4px]">
-                <CardHeader>
-                  <CardTitle>Campaign Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-medium mb-1">Description</h4>
-                    <p className="text-muted-foreground">{campaign.description || 'No description'}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium mb-1">Guidelines</h4>
-                    <p className="text-muted-foreground whitespace-pre-wrap">{campaign.guidelines || 'No guidelines'}</p>
-                  </div>
-                  {campaign.deadline && (
-                    <div>
-                      <h4 className="font-medium mb-1">Deadline</h4>
-                      <p className="text-muted-foreground">
-                        {new Date(campaign.deadline).toLocaleDateString()}
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          {/* Preview */}
+          <div className="flex justify-center">
+            <CampaignPreview
+              formData={{
+                brand_name: campaign.brand_name,
+                title: campaign.title,
+                description: campaign.description || '',
+                deadline: campaign.deadline || '',
+                total_budget: campaign.total_budget || 0,
+              }}
+              requirements={getRequirements(campaign.guidelines)}
+              selectedPlatforms={[]}
+              businessProfile={businessProfile}
+            />
+          </div>
         </div>
       </div>
     </BusinessLayout>
