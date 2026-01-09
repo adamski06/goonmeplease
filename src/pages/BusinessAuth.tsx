@@ -1902,67 +1902,92 @@ const BusinessAuth: React.FC = () => {
               </div>
             ) : (introStep === 'hello' || introStep === 'welcome') ? (
               // Step 1 & 2: Type text, then fade out down
-              <div className="flex items-center justify-center">
-                <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                  {displayText}
-                </h1>
-              </div>
+              <>
+                <div className="flex items-center justify-center">
+                  <h1 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                    {displayText}
+                  </h1>
+                </div>
+                {/* Skip button at bottom during typewriter animation */}
+                <button
+                  onClick={() => setIntroStep('input')}
+                  className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-muted-foreground/60 hover:text-muted-foreground font-montserrat transition-colors"
+                >
+                  {i18n.language === 'sv' ? 'hoppa över' : 'skip'}
+                </button>
+              </>
             ) : introStep === 'setup' ? (
               // Step 3: Show "Let's setup your business account" and "it's free"
-              <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
-                  {setupText}
-                </h1>
-                <h2 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
-                  {freeText || '\u00A0'}
-                </h2>
-              </div>
+              <>
+                <div className={`flex flex-col items-center space-y-3 transition-all duration-500 ease-out ${isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                  <h1 className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center">
+                    {setupText}
+                  </h1>
+                  <h2 className={`text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center transition-opacity duration-300 ${freeText ? 'opacity-100' : 'opacity-0'}`}>
+                    {freeText || '\u00A0'}
+                  </h2>
+                </div>
+                {/* Skip button at bottom during typewriter animation */}
+                <button
+                  onClick={() => setIntroStep('input')}
+                  className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-muted-foreground/60 hover:text-muted-foreground font-montserrat transition-colors"
+                >
+                  {i18n.language === 'sv' ? 'hoppa över' : 'skip'}
+                </button>
+              </>
             ) : (
               // Step 4: Show company name input
               <div className="flex flex-col items-center space-y-8">
-                <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap">
-                  <span>{promptText}</span>
-                  {promptText.length > 0 && (
-                    <>
-                      <span className="relative inline-flex items-baseline whitespace-nowrap ml-4">
-                        <input
-                          ref={inputRef}
-                          type="text"
-                          value={companyName}
-                          onChange={(e) => setCompanyName(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' && companyName.trim()) {
-                              e.preventDefault();
-                              startChat();
-                            }
-                          }}
-                          placeholder=""
-                          className="bg-transparent border-none outline-none text-lg md:text-xl font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
-                          style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
-                        />
-                        {!companyName && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
-                            {typewriterText}
-                          </span>
-                        )}
+                <p className="text-4xl md:text-6xl font-bold font-montserrat text-foreground text-center flex items-baseline justify-center flex-wrap animate-fade-in">
+                  <span>{i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your "}</span>
+                  <span className="relative inline-flex items-baseline whitespace-nowrap ml-4">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && companyName.trim()) {
+                          e.preventDefault();
+                          startChat();
+                        }
+                      }}
+                      placeholder=""
+                      autoFocus
+                      className="bg-transparent border-none outline-none text-lg md:text-xl font-medium font-montserrat text-foreground border-b-2 border-foreground/30 focus:border-foreground transition-colors min-w-[140px]"
+                      style={{ width: companyName ? `${Math.max(140, companyName.length * 12)}px` : '140px' }}
+                    />
+                    {!companyName && (
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 text-lg md:text-xl font-medium font-montserrat text-muted-foreground/50 pointer-events-none whitespace-nowrap">
+                        {i18n.language === 'sv' ? 'företagsnamn' : 'company name'}
                       </span>
-                    </>
-                  )}
+                    )}
+                  </span>
                 </p>
                 
-                <Button 
-                  onClick={startChat} 
-                  className={`rounded-[3px] px-8 font-montserrat transition-opacity duration-300 ${companyName.trim() ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                <div 
+                  className="flex flex-col items-center space-y-4 opacity-0"
+                  style={{ animation: 'smoothFadeIn 0.5s ease-out 1s forwards' }}
                 >
-                  Setup account
-                </Button>
-                
-                <button
-                  onClick={transitionToLogin}
-                  className="text-sm text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
-                >
-                  {i18n.language === 'sv' ? 'Redan ett konto? Logga in' : 'Already have an account? Log in'}
-                </button>
+                  <Button 
+                    onClick={startChat} 
+                    disabled={!companyName.trim()}
+                    className={`rounded-[3px] px-8 font-montserrat transition-all duration-300 ${
+                      companyName.trim() 
+                        ? 'opacity-100' 
+                        : 'opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    {i18n.language === 'sv' ? 'Skapa konto' : 'Setup account'}
+                  </Button>
+                  
+                  <button
+                    onClick={transitionToLogin}
+                    className="text-sm text-muted-foreground hover:text-foreground font-montserrat underline underline-offset-2 transition-colors"
+                  >
+                    {i18n.language === 'sv' ? 'Redan ett konto? Logga in' : 'Already have an account? Log in'}
+                  </button>
+                </div>
               </div>
             )}
           </div>
