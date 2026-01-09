@@ -234,15 +234,15 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           </div>
 
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
-          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30">
-            {/* Top Row - Equal sized boxes */}
-            <div className="grid grid-cols-3 gap-4">
-              {/* Creator Pool Box */}
-              <div className="p-6 bg-foreground rounded-[4px] border border-border">
-                <p className="text-xs text-background mb-2">Creator Pool</p>
-                <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
-              </div>
+          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 space-y-4">
+            {/* First Row - Creator Pool */}
+            <div className="p-6 bg-foreground rounded-[4px] border border-border">
+              <p className="text-xs text-background mb-2">Creator Pool</p>
+              <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
+            </div>
 
+            {/* Second Row - Views and Creators */}
+            <div className="grid grid-cols-2 gap-4">
               {/* Views */}
               <div className="p-6 bg-background rounded-[4px] border border-border">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
