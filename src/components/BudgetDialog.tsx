@@ -113,25 +113,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                   </div>
                 </div>
 
-                {/* Preset Buttons */}
-                <div className="flex flex-wrap justify-center gap-2">
-                  {presetBudgets.map((preset) => (
-                    <Button
-                      key={preset}
-                      type="button"
-                      variant={localBudget === preset ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setLocalBudget(preset)}
-                      className="rounded-full"
-                    >
-                      {preset.toLocaleString()} SEK
-                    </Button>
-                  ))}
-                </div>
-
-                <p className="text-xs text-muted-foreground text-center">
-                  Minimum budget: 15,000 SEK
-                </p>
 
                 {/* Payment Tiers */}
                 <div className="w-full max-w-md space-y-3">
