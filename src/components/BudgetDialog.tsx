@@ -21,6 +21,21 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 }) => {
   const [localBudget, setLocalBudget] = useState(budget);
 
+  // Exponential scale helpers
+  const minBudget = 15000;
+  const maxBudget = 500000;
+  const minLog = Math.log(minBudget);
+  const maxLog = Math.log(maxBudget);
+
+  const budgetToSlider = (budget: number) => {
+    return ((Math.log(budget) - minLog) / (maxLog - minLog)) * 100;
+  };
+
+  const sliderToBudget = (sliderValue: number) => {
+    const logValue = minLog + (sliderValue / 100) * (maxLog - minLog);
+    return Math.round(Math.exp(logValue) / 1000) * 1000; // Round to nearest 1000
+  };
+
   useEffect(() => {
     if (open) {
       setLocalBudget(budget || 15000);
@@ -77,11 +92,11 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 {/* Slider */}
                 <div className="w-full max-w-md">
                   <Slider
-                    value={[localBudget]}
-                    onValueChange={(value) => setLocalBudget(value[0])}
-                    min={15000}
-                    max={500000}
-                    step={5000}
+                    value={[budgetToSlider(localBudget)]}
+                    onValueChange={(value) => setLocalBudget(sliderToBudget(value[0]))}
+                    min={0}
+                    max={100}
+                    step={0.5}
                     className="w-full"
                   />
                   <div className="flex justify-between mt-2 text-xs text-muted-foreground">
