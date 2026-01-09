@@ -100,7 +100,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 {/* Jarla Fee Box */}
                 <div className="p-6 bg-muted/50 rounded-[4px] border border-border min-w-[200px]">
                   <p className="text-xs text-muted-foreground mb-2">Jarla Fee</p>
-                  <p className="text-6xl font-bold text-foreground">{feePercent}%</p>
+                  <p className="text-4xl font-bold text-foreground">{feePercent}%</p>
                   <p className="text-sm text-muted-foreground mt-2">{(localBudget * feePercent / 100).toLocaleString()} SEK</p>
                 </div>
 
@@ -161,7 +161,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 {/* Creator Pool Box */}
                 <div className="p-6 bg-background rounded-[4px] border border-border">
                   <p className="text-xs text-muted-foreground mb-2">Creator Pool</p>
-                  <p className="text-5xl font-bold text-foreground">{budgetAfterFee.toLocaleString()} SEK</p>
+                  <p className="text-4xl font-bold text-foreground">{budgetAfterFee.toLocaleString()} SEK</p>
                 </div>
 
                 <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
