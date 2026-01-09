@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Video, Image, Calendar, Smartphone, Monitor, ArrowLeft, Palette } from 'lucide-react';
 
 // Platform logo imports
@@ -91,35 +92,39 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             <Monitor className="h-4 w-4" />
           </button>
           <div className="w-px h-4 bg-border" />
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowColorPicker(!showColorPicker)}
-              className="p-1.5 rounded-[2px] transition-colors text-muted-foreground hover:text-foreground"
+
+          <Popover open={showColorPicker} onOpenChange={setShowColorPicker}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="p-1.5 rounded-[2px] transition-colors text-muted-foreground hover:text-foreground"
+                aria-label="Adjust color"
+              >
+                <Palette className="h-4 w-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="z-[200] bg-card border-border p-3 shadow-lg"
             >
-              <Palette className="h-4 w-4" />
-            </button>
-            {showColorPicker && (
-              <div className="absolute top-full right-0 mt-2 z-[100] bg-card border border-border rounded-lg shadow-lg p-3 animate-scale-in origin-top-right">
-                <div className="grid grid-cols-4 gap-2">
-                  {colorPresets.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => {
-                        setAccentColor(color);
-                        setShowColorPicker(false);
-                      }}
-                      className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
-                        accentColor === color ? 'border-foreground' : 'border-transparent'
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
+              <div className="grid grid-cols-4 gap-2">
+                {colorPresets.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => {
+                      setAccentColor(color);
+                      setShowColorPicker(false);
+                    }}
+                    className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
+                      accentColor === color ? 'border-foreground' : 'border-transparent'
+                    }`}
+                    style={{ backgroundColor: color }}
+                  />
+                ))}
               </div>
-            )}
-          </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       
