@@ -87,7 +87,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
           }`}
-          style={{ height: 'calc(100vh - 180px)' }}
+          style={{ height: 'calc(100vh - 100px)' }}
         >
           {/* Scrollable Content */}
           <div className={`flex-1 overflow-y-auto ${viewMode === 'phone' ? 'p-6' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
