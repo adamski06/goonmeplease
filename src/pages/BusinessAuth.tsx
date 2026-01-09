@@ -1514,6 +1514,9 @@ const BusinessAuth: React.FC = () => {
     </div>
   );
 
+  // Check if company details are complete (at minimum country is required)
+  const isCompanyDetailsComplete = companyCountry.trim() !== '';
+
   // Render credentials form
   const renderCredentialsForm = () => (
     <form onSubmit={handleFinalSubmit} className="space-y-4 mt-2">
@@ -1622,7 +1625,7 @@ const BusinessAuth: React.FC = () => {
       </div>
       
       {/* Account Credentials Section */}
-      <div className="bg-white dark:bg-white/5 rounded-[4px] p-4 border border-foreground/10">
+      <div className={`bg-white dark:bg-white/5 rounded-[4px] p-4 border border-foreground/10 transition-opacity duration-300 ${!isCompanyDetailsComplete ? 'opacity-50 pointer-events-none' : ''}`}>
         <div className="space-y-3">
           <h4 className="font-montserrat font-semibold text-sm text-foreground">
             {t('businessAuth.accountCredentials')}
@@ -1636,7 +1639,8 @@ const BusinessAuth: React.FC = () => {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               autoComplete="name"
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              disabled={!isCompanyDetailsComplete}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
@@ -1648,7 +1652,8 @@ const BusinessAuth: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              disabled={!isCompanyDetailsComplete}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
@@ -1660,7 +1665,8 @@ const BusinessAuth: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
+              disabled={!isCompanyDetailsComplete}
+              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist disabled:opacity-50"
             />
           </div>
 
@@ -1669,6 +1675,7 @@ const BusinessAuth: React.FC = () => {
               id="terms" 
               checked={termsAccepted}
               onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+              disabled={!isCompanyDetailsComplete}
               className="h-4 w-4 rounded-none"
             />
             <Label 
