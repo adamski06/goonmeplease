@@ -246,13 +246,13 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               {/* Views */}
               <div className="p-6 bg-background rounded-[4px] border border-border">
                 <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
-                <p className="text-6xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
+                <p className="text-5xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
               </div>
 
               {/* Creators */}
               <div className="p-6 bg-background rounded-[4px] border border-border">
                 <p className="text-xs text-muted-foreground mb-2">Creators</p>
-                <p className="text-6xl font-bold text-foreground">{guaranteedCreators}+</p>
+                <p className="text-5xl font-bold text-foreground">{guaranteedCreators}+</p>
               </div>
             </div>
           </div>
