@@ -111,9 +111,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             </PopoverTrigger>
             <PopoverContent
               align="end"
-              className="z-[200] bg-card border-border p-3 shadow-lg w-auto"
+              className="z-[200] bg-card border-border p-2 shadow-lg w-auto rounded-[4px]"
             >
-              <div className="grid grid-cols-4 gap-2">
+              <div className="flex flex-col gap-1">
                 {gradientPresets.map((gradient, index) => (
                   <button
                     key={gradient.name}
@@ -122,12 +122,20 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
                       setSelectedGradient(index);
                       setShowColorPicker(false);
                     }}
-                    className={`w-8 h-8 rounded-md border-2 transition-all hover:scale-110 ${
-                      selectedGradient === index ? 'border-foreground' : 'border-transparent'
-                    } ${gradient.value === 'bg-card' ? 'bg-card' : ''}`}
-                    style={gradient.style}
-                    title={gradient.name}
-                  />
+                    className={`flex items-center gap-3 px-2 py-1.5 rounded-[3px] transition-all duration-200 ${
+                      selectedGradient === index ? 'bg-muted' : 'hover:bg-muted/50'
+                    }`}
+                  >
+                    <div 
+                      className={`w-6 h-6 rounded-[3px] border ${
+                        selectedGradient === index ? 'border-foreground' : 'border-border'
+                      } ${gradient.value === 'bg-card' ? 'bg-card' : ''}`}
+                      style={gradient.style}
+                    />
+                    <span className={`text-sm ${selectedGradient === index ? 'text-foreground' : 'text-muted-foreground'}`}>
+                      {gradient.name}
+                    </span>
+                  </button>
                 ))}
               </div>
             </PopoverContent>
