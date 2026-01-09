@@ -14,8 +14,8 @@ interface BudgetDialogProps {
 }
 
 const paymentTiers = [
-  { payout: 100, views: 3000 },
-  { payout: 500, views: 15000 },
+  { payout: 100, views: 3500 },
+  { payout: 1000, views: 20000 },
 ];
 
 // Snap to nearest 5000
@@ -156,12 +156,12 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="p-8 flex flex-col items-center justify-center space-y-8 border-r border-border">
 
                 {/* Jarla Fee Box - Fixed size (420x110) */}
-                <div className="bg-background rounded-[4px] border border-border w-[420px] h-[110px] flex flex-col items-center justify-center">
-                  <p className="text-sm font-medium text-foreground mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Jarla Fee</p>
+                <div className="bg-background rounded-[4px] border border-border w-[420px] h-[110px] relative flex items-center justify-center">
+                  <p className="absolute top-3 left-4 text-base font-medium text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Jarla Fee</p>
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-bold text-foreground">{feePercent}%</span>
-                    <span className="text-foreground">•</span>
-                    <span className="text-4xl font-bold text-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
+                    <span className="text-2xl text-foreground">•</span>
+                    <span className="text-4xl text-foreground">{jarlaFeeAmount.toLocaleString()} SEK</span>
                   </div>
                 </div>
 
