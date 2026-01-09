@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -154,13 +154,22 @@ const loadSession = (): OnboardingSession | null => {
 };
 
 const BusinessAuth: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const urlMode = searchParams.get('mode');
+  
   const savedSession = loadSession();
   // Only true if we actually resumed mid-setup (mode was 'chat' with messages)
   const wasSessionRestored = savedSession?.mode === 'chat' && savedSession?.messages?.length > 0;
   // Detect returning user: has saved email but no active Supabase session
   const hasReturningUserEmail = savedSession?.email && savedSession.email.trim().length > 0;
   
-  const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(savedSession?.mode || 'intro');
+  // Determine initial mode: URL param takes precedence, then saved session, then default to 'intro'
+  const getInitialMode = (): 'intro' | 'chat' | 'login' => {
+    if (urlMode === 'login') return 'login';
+    return savedSession?.mode || 'intro';
+  };
+  
+  const [mode, setMode] = useState<'intro' | 'chat' | 'login'>(getInitialMode());
   const [companyName, setCompanyName] = useState(savedSession?.companyName || '');
   const [showNameInput, setShowNameInput] = useState(false);
   const [typewriterText, setTypewriterText] = useState('');
