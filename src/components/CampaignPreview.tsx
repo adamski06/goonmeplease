@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Video, Image, Calendar, Smartphone, Monitor, X } from 'lucide-react';
+import { Video, Image, Calendar, Smartphone, Monitor, ArrowLeft } from 'lucide-react';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -94,7 +94,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           <div className={`flex items-center justify-between border-b border-border ${viewMode === 'phone' ? 'px-6 py-4' : 'px-8 py-5'}`}>
             <div className="flex items-center gap-3">
               <button className="w-8 h-8 rounded-full bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors">
-                <X className="w-4 h-4 text-muted-foreground" />
+                <ArrowLeft className="w-4 h-4 text-muted-foreground" />
               </button>
               <h3 className="font-bold text-foreground text-xl">
                 {formData.title || 'Campaign Title'}
