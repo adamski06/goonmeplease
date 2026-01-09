@@ -234,29 +234,26 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           </div>
 
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
-          <div className="w-2/3 h-full p-8 flex flex-col justify-center space-y-6 bg-muted/30">
-            {/* Creator Pool Box */}
-            <div className="p-8 bg-foreground rounded-[4px] border border-border">
-              <p className="text-xs text-background mb-2">Creator Pool</p>
-              <p className="text-4xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
-            </div>
+          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30">
+            {/* Top Row - Equal sized boxes */}
+            <div className="grid grid-cols-3 gap-4">
+              {/* Creator Pool Box */}
+              <div className="p-6 bg-foreground rounded-[4px] border border-border">
+                <p className="text-xs text-background mb-2">Creator Pool</p>
+                <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
+              </div>
 
-            <h3 className="text-lg font-semibold text-foreground">Guaranteed Results</h3>
+              {/* Views */}
+              <div className="p-6 bg-background rounded-[4px] border border-border">
+                <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
+                <p className="text-3xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
+              </div>
 
-            {/* Views */}
-            <div className="p-6 bg-background rounded-lg border border-border">
-              <p className="text-3xl font-bold text-foreground">
-                {guaranteedViews.toLocaleString()}+
-              </p>
-              <p className="text-sm text-muted-foreground">Guaranteed Views</p>
-            </div>
-
-            {/* Creators */}
-            <div className="p-6 bg-background rounded-lg border border-border">
-              <p className="text-3xl font-bold text-foreground">
-                {guaranteedCreators}+
-              </p>
-              <p className="text-sm text-muted-foreground">Creators</p>
+              {/* Creators */}
+              <div className="p-6 bg-background rounded-[4px] border border-border">
+                <p className="text-xs text-muted-foreground mb-2">Creators</p>
+                <p className="text-3xl font-bold text-foreground">{guaranteedCreators}+</p>
+              </div>
             </div>
           </div>
         </div>
