@@ -56,7 +56,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
     <div className="flex flex-col h-full">
       {/* Centered Preview header with view toggle */}
       <div className="flex justify-center mb-4">
-        <div className="flex items-center gap-2 bg-muted/50 rounded-[3px] px-3 py-1.5">
+        <div className="flex items-center gap-2 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-[3px] px-3 py-1.5 border border-black/10 dark:border-white/20">
           <span className="text-sm font-medium text-muted-foreground">Preview</span>
           <div className="w-px h-4 bg-border" />
           <button
