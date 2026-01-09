@@ -127,13 +127,13 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
-  // Update static icon counts only when not dragging
+  // Update static icon counts only when not dragging or on initial load
   useEffect(() => {
-    if (!isDragging) {
+    if (!isDragging || staticViewIcons === 0) {
       setStaticViewIcons(Math.ceil(guaranteedViews / 1000));
       setStaticCreatorIcons(guaranteedCreators);
     }
-  }, [isDragging, guaranteedViews, guaranteedCreators]);
+  }, [isDragging, guaranteedViews, guaranteedCreators, staticViewIcons]);
 
   const handleConfirm = () => {
     onBudgetChange(snapToFiveThousand(localBudget));
