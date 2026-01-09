@@ -13,6 +13,12 @@ interface BudgetDialogProps {
   onBudgetChange: (budget: number) => void;
 }
 
+const paymentTiers = [
+  { payout: 100, views: 3000 },
+  { payout: 500, views: 10000 },
+  { payout: 1000, views: 25000 },
+];
+
 const BudgetDialog: React.FC<BudgetDialogProps> = ({
   open,
   onOpenChange,
@@ -20,6 +26,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   onBudgetChange,
 }) => {
   const [localBudget, setLocalBudget] = useState(budget);
+  const [selectedTier, setSelectedTier] = useState(0);
 
   // Exponential scale helpers
   const minBudget = 15000;
@@ -124,6 +131,26 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <p className="text-xs text-muted-foreground text-center">
                   Minimum budget: 15,000 SEK
                 </p>
+
+                {/* Payment Tiers */}
+                <div className="w-full max-w-md space-y-3">
+                  <Label className="text-sm text-muted-foreground">Creator Payment Tier</Label>
+                  <div className="flex gap-2">
+                    {paymentTiers.map((tier, index) => (
+                      <Button
+                        key={index}
+                        type="button"
+                        variant={selectedTier === index ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedTier(index)}
+                        className="flex-1 flex-col h-auto py-3"
+                      >
+                        <span className="font-bold">{tier.payout} SEK</span>
+                        <span className="text-xs opacity-70">per {tier.views.toLocaleString()} views</span>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Right Side - Guaranteed Results */}
