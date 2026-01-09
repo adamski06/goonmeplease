@@ -192,7 +192,7 @@ const BusinessDashboard: React.FC = () => {
                 </div>
                 
                 {/* Description */}
-                <p className="mt-5 text-lg text-white leading-relaxed">
+                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
                   {shortDescription}
                 </p>
               </div>
