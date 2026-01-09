@@ -21,8 +21,7 @@ const jarlaPricingPlans = [
 
 const paymentTiers = [
   { payout: 100, views: 3000 },
-  { payout: 500, views: 10000 },
-  { payout: 1000, views: 25000 },
+  { payout: 500, views: 15000 },
 ];
 
 const BudgetDialog: React.FC<BudgetDialogProps> = ({
@@ -163,7 +162,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                         className="flex-1 flex-col h-auto py-3"
                       >
                         <span className="font-bold">{tier.payout} SEK</span>
-                        <span className="text-xs opacity-70">per {tier.views.toLocaleString()} views</span>
                       </Button>
                     ))}
                   </div>
