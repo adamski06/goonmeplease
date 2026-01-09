@@ -54,9 +54,11 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-medium text-muted-foreground">Preview</h2>
-        <div className="flex items-center gap-1 bg-muted/50 rounded-[3px] p-1">
+      {/* Centered Preview header with view toggle */}
+      <div className="flex justify-center mb-4">
+        <div className="flex items-center gap-2 bg-muted/50 rounded-[3px] px-3 py-1.5">
+          <span className="text-sm font-medium text-muted-foreground">Preview</span>
+          <div className="w-px h-4 bg-border" />
           <button
             type="button"
             onClick={() => setViewMode('phone')}
