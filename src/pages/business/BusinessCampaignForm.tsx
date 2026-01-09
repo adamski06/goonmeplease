@@ -505,7 +505,7 @@ const BusinessCampaignForm: React.FC = () => {
           </form>
         </div>
         {/* Right: Preview */}
-        <div className="flex-1 min-w-0 sticky top-8 h-[calc(100vh-4rem)]">
+        <div className="flex-1 min-w-0 sticky top-8">
           <CampaignPreview
             formData={formData}
             requirements={requirements}

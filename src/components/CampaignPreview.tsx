@@ -53,7 +53,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   const paidOut = 0;
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-medium text-muted-foreground">Preview</h2>
         <div className="flex items-center gap-1 bg-muted/50 rounded-[3px] p-1">
@@ -82,15 +82,15 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
       
-      <div className="flex-1 flex justify-center items-start">
+      <div className="flex-1 flex justify-center">
         <Card 
-          className={`bg-card border-border rounded-[4px] overflow-hidden flex flex-col relative transition-all duration-300 ease-out ${
+          className={`bg-card border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[320px]' : 'w-full'
           }`}
-          style={{ height: 'calc(100% - 8px)' }}
+          style={{ height: '600px' }}
         >
           {/* Scrollable Content */}
-          <div className={`flex-1 overflow-auto pb-24 ${viewMode === 'phone' ? 'p-5' : 'p-8'}`}>
+          <div className={`flex-1 overflow-y-auto ${viewMode === 'phone' ? 'p-5' : 'p-8'}`} style={{ paddingBottom: '100px' }}>
           {/* Title */}
           <div className="mb-4">
             <h3 className="font-bold text-foreground text-2xl">
