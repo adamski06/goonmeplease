@@ -301,7 +301,7 @@ const BusinessCampaignForm: React.FC = () => {
                     
                     {/* Dropdown overlay */}
                     {showPlatformPicker && (
-                      <div className="absolute top-0 left-0 z-50 bg-card border border-border rounded-lg shadow-lg p-3 flex flex-col gap-1.5 min-w-[180px] animate-scale-in origin-top-left">
+                      <div className="absolute top-0 left-0 z-50 bg-card border border-border rounded-[4px] shadow-lg p-2 flex flex-col gap-1 min-w-[180px] animate-scale-in origin-top-left">
                         {platforms.map(({ id, name, logo }) => {
                           const isSelected = selectedPlatform === id;
                           return (
@@ -309,7 +309,7 @@ const BusinessCampaignForm: React.FC = () => {
                               key={id}
                               type="button"
                               onClick={() => selectPlatform(id)}
-                              className={`flex items-center gap-3 px-2.5 py-2 rounded-md transition-all duration-200 ${
+                              className={`flex items-center gap-3 px-2.5 py-2 rounded-[3px] transition-all duration-200 ${
                                 isSelected 
                                   ? 'bg-muted' 
                                   : 'hover:bg-muted/50'
