@@ -169,7 +169,7 @@ const BusinessDashboard: React.FC = () => {
               {/* Header with logo and name */}
               <div className="p-10 pb-6">
                 <div className="flex items-start gap-6">
-                  {/* Left column - Logo and Campaigns */}
+                  {/* Left column - Logo */}
                   <div className="flex-shrink-0">
                     {/* Logo - 3x larger (216px) */}
                     {businessProfile?.logo_url ? (
@@ -191,25 +191,6 @@ const BusinessDashboard: React.FC = () => {
                         </span>
                       </div>
                     )}
-                    
-                    {/* Campaigns section - under logo */}
-                    <div className="mt-4">
-                      <h3 className="text-sm font-medium text-foreground">Campaigns</h3>
-                      <div className="border-t border-border mt-2 pt-3">
-                        {/* Add campaign button */}
-                        <div 
-                          className="w-[216px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
-                          onClick={() => navigate('/business/campaigns/new')}
-                        >
-                          <div className="text-center">
-                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mx-auto mb-2">
-                              <span className="text-xl text-muted-foreground">+</span>
-                            </div>
-                            <span className="text-sm text-muted-foreground">New Campaign</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                   
                   {/* Right side content */}
@@ -260,6 +241,25 @@ const BusinessDashboard: React.FC = () => {
                     <p className="mt-3 text-sm font-medium text-foreground leading-relaxed">
                       {shortDescription}
                     </p>
+                  </div>
+                </div>
+                
+                {/* Campaigns section - full width divider */}
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-foreground">Campaigns</h3>
+                  <div className="border-t border-border mt-2 pt-4">
+                    {/* Add campaign button */}
+                    <div 
+                      className="w-[216px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => navigate('/business/campaigns/new')}
+                    >
+                      <div className="text-center">
+                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mx-auto mb-2">
+                          <span className="text-xl text-muted-foreground">+</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">New Campaign</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
