@@ -7,13 +7,17 @@ import { ArrowLeft } from 'lucide-react';
 import tiktokLogo from '@/assets/platforms/tiktok.png';
 import instagramLogo from '@/assets/platforms/instagram.png';
 import youtubeLogo from '@/assets/platforms/youtube.png';
+import facebookLogo from '@/assets/platforms/facebook.png';
+import linkedinLogo from '@/assets/platforms/linkedin.png';
 
-type Platform = 'tiktok' | 'instagram' | 'youtube';
+type Platform = 'tiktok' | 'instagram' | 'youtube' | 'facebook' | 'linkedin';
 
 const platforms: { id: Platform; name: string; logo: string }[] = [
   { id: 'tiktok', name: 'TikTok', logo: tiktokLogo },
   { id: 'instagram', name: 'Instagram', logo: instagramLogo },
   { id: 'youtube', name: 'YouTube', logo: youtubeLogo },
+  { id: 'facebook', name: 'Facebook', logo: facebookLogo },
+  { id: 'linkedin', name: 'LinkedIn', logo: linkedinLogo },
 ];
 
 interface PlatformDialogProps {
@@ -34,6 +38,8 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
     onOpenChange(false);
   };
 
+  const selectedPlatformData = platforms.find(p => p.id === selectedPlatform);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] max-h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden overflow-hidden">
@@ -50,11 +56,17 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
             </Button>
           </div>
 
-          {/* Main content area - empty/clean */}
-          <div className="flex-1" />
+          {/* Main content area - show selected platform heading */}
+          <div className="flex-1 flex items-center justify-center">
+            {selectedPlatformData && (
+              <h1 className="text-6xl font-bold text-foreground">
+                {selectedPlatformData.name}
+              </h1>
+            )}
+          </div>
 
-          {/* Bottom - Platform logos in horizontal row */}
-          <div className="p-8 flex justify-center gap-8">
+          {/* Platform logos - moved up with more spacing */}
+          <div className="pb-32 flex justify-center gap-12">
             {platforms.map(({ id, name, logo }) => {
               const isSelected = selectedPlatform === id;
               return (
@@ -62,19 +74,26 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
                   key={id}
                   type="button"
                   onClick={() => handleSelect(id)}
-                  className={`w-32 h-32 rounded-[4px] overflow-hidden transition-all duration-150 ${
+                  className={`flex flex-col items-center gap-3 transition-all duration-150 ${
                     isSelected 
-                      ? 'ring-2 ring-primary ring-offset-2' 
+                      ? 'opacity-100' 
                       : 'opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img 
-                    src={logo} 
-                    alt={name} 
-                    className={`w-full h-full object-cover ${
-                      id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                    }`}
-                  />
+                  <div className={`w-[90px] h-[90px] rounded-[4px] overflow-hidden ${
+                    isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
+                  }`}>
+                    <img 
+                      src={logo} 
+                      alt={name} 
+                      className={`w-full h-full object-cover ${
+                        id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                      }`}
+                    />
+                  </div>
+                  <span className={`text-sm ${isSelected ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                    {name}
+                  </span>
                 </button>
               );
             })}
