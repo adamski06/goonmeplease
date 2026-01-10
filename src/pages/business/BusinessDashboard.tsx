@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Pencil, Share2, Settings, ExternalLink } from 'lucide-react';
+import { Pencil, Forward, Settings, ExternalLink } from 'lucide-react';
 
 interface BusinessProfile {
   id: string;
@@ -197,8 +197,33 @@ const BusinessDashboard: React.FC = () => {
                       {businessProfile?.company_name || 'Your Business'}
                     </h1>
                     
-                    {/* Stats under company name */}
-                    <div className="flex gap-6 mt-3">
+                    {/* Action row: Edit Profile, Website link, Share, Settings */}
+                    <div className="flex items-center gap-3 mt-3">
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Pencil className="w-4 h-4" />
+                        Edit Profile
+                      </Button>
+                      {businessProfile?.website && (
+                        <a 
+                          href={businessProfile.website.startsWith('http') ? businessProfile.website : `https://${businessProfile.website}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-primary hover:underline text-sm"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span>{businessProfile.website.replace(/^https?:\/\//, '')}</span>
+                        </a>
+                      )}
+                      <Button variant="outline" size="icon" className="h-8 w-8">
+                        <Forward className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-8 w-8">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    {/* Stats moved down */}
+                    <div className="flex gap-6 mt-5">
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-2xl font-bold text-foreground">0</span>
                         <span className="text-base text-muted-foreground">Creators</span>
@@ -209,37 +234,8 @@ const BusinessDashboard: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Website link */}
-                    {businessProfile?.website && (
-                      <a 
-                        href={businessProfile.website.startsWith('http') ? businessProfile.website : `https://${businessProfile.website}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 mt-3 text-primary hover:underline"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>{businessProfile.website.replace(/^https?:\/\//, '')}</span>
-                      </a>
-                    )}
-                    
-                    {/* Action buttons */}
-                    <div className="flex gap-3 mt-5">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Pencil className="w-4 h-4" />
-                        Edit Profile
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Share2 className="w-4 h-4" />
-                        Share
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Settings className="w-4 h-4" />
-                        Settings
-                      </Button>
-                    </div>
-                    
-                    {/* Description */}
-                    <p className="mt-5 text-lg text-foreground leading-relaxed">
+                    {/* Description - constrained to logo width */}
+                    <p className="mt-5 text-lg text-foreground leading-relaxed max-w-[216px]">
                       {shortDescription}
                     </p>
                   </div>
