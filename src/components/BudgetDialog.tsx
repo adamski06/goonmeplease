@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X, PersonStanding } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -34,8 +34,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   const [animatedBudget, setAnimatedBudget] = useState(budget);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedTier, setSelectedTier] = useState(0);
-  const [staticViewIcons, setStaticViewIcons] = useState(0);
-  const [staticCreatorIcons, setStaticCreatorIcons] = useState(0);
   const animationRef = useRef<number>();
 
   // Constants
@@ -127,13 +125,6 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   const guaranteedCreators = Math.floor(creatorPool / currentTier.payout);
   const guaranteedViews = guaranteedCreators * currentTier.views;
 
-  // Update static icon counts only when not dragging or on initial load
-  useEffect(() => {
-    if (!isDragging || staticViewIcons === 0) {
-      setStaticViewIcons(Math.ceil(guaranteedViews / 100));
-      setStaticCreatorIcons(guaranteedCreators);
-    }
-  }, [isDragging, guaranteedViews, guaranteedCreators, staticViewIcons]);
 
   const handleConfirm = () => {
     onBudgetChange(snapToFiveThousand(localBudget));
@@ -246,45 +237,23 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
           <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 overflow-hidden">
             {/* First Row - Creator Pool */}
-            <div className="p-6 bg-foreground rounded-[4px] border border-border shrink-0 mb-4">
-              <p className="text-xs text-background mb-2">Creator Pool</p>
-              <p className="text-3xl font-bold text-background">{creatorPool.toLocaleString()} SEK</p>
+            <div className="p-8 bg-black rounded-[4px] border border-border shrink-0 mb-4 flex flex-col items-center justify-center">
+              <p className="text-sm text-white/70 mb-2">Creator Pool</p>
+              <p className="text-5xl font-bold text-white">{creatorPool.toLocaleString()} SEK</p>
             </div>
 
-            {/* Second Row - Views and Creators (scrollable) */}
-            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0 overflow-y-auto">
+            {/* Second Row - Views and Creators */}
+            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
               {/* Views */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
-                <p className="text-xs text-muted-foreground mb-2">Guaranteed Views</p>
-                <p className="text-5xl font-bold text-foreground mb-4">{guaranteedViews.toLocaleString()}+</p>
-                <div className="flex flex-wrap content-start gap-0.5 flex-1">
-                  {isDragging ? (
-                    <div className="flex items-center justify-center w-full h-full">
-                      <div className="animate-pulse text-muted-foreground text-sm">Calculating...</div>
-                    </div>
-                  ) : (
-                    Array.from({ length: staticViewIcons }).map((_, i) => (
-                      <PersonStanding key={i} className="h-3 w-3 text-foreground" />
-                    ))
-                  )}
-                </div>
+              <div className="p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
+                <p className="text-sm text-muted-foreground mb-2">Guaranteed Views</p>
+                <p className="text-6xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
               </div>
 
               {/* Creators */}
-              <div className="p-6 bg-background rounded-[4px] border border-border flex flex-col">
-                <p className="text-xs text-muted-foreground mb-2">Creators</p>
-                <p className="text-5xl font-bold text-foreground mb-4">{guaranteedCreators}+</p>
-                <div className="grid grid-cols-5 gap-2 flex-1">
-                  {isDragging ? (
-                    <div className="col-span-5 flex items-center justify-center">
-                      <div className="animate-pulse text-muted-foreground text-sm">Calculating...</div>
-                    </div>
-                  ) : (
-                    Array.from({ length: staticCreatorIcons }).map((_, i) => (
-                      <PersonStanding key={i} className="h-[72px] w-[72px] text-foreground" />
-                    ))
-                  )}
-                </div>
+              <div className="p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
+                <p className="text-sm text-muted-foreground mb-2">Creators</p>
+                <p className="text-6xl font-bold text-foreground">{guaranteedCreators}+</p>
               </div>
             </div>
           </div>
