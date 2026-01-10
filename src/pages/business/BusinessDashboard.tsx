@@ -169,26 +169,48 @@ const BusinessDashboard: React.FC = () => {
               {/* Header with logo and name */}
               <div className="p-10 pb-6">
                 <div className="flex items-start gap-6">
-                  {/* Logo - 3x larger (216px) */}
-                  {businessProfile?.logo_url ? (
-                    <div 
-                      className={`w-[216px] h-[216px] rounded-sm flex items-center justify-center p-4 flex-shrink-0 ${
-                        logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
-                      }`}
-                    >
-                      <img 
-                        src={businessProfile.logo_url} 
-                        alt="Company logo" 
-                        className="max-h-full max-w-full object-contain" 
-                      />
+                  {/* Left column - Logo and Campaigns */}
+                  <div className="flex-shrink-0">
+                    {/* Logo - 3x larger (216px) */}
+                    {businessProfile?.logo_url ? (
+                      <div 
+                        className={`w-[216px] h-[216px] rounded-sm flex items-center justify-center p-4 ${
+                          logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
+                        }`}
+                      >
+                        <img 
+                          src={businessProfile.logo_url} 
+                          alt="Company logo" 
+                          className="max-h-full max-w-full object-contain" 
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-[216px] h-[216px] rounded-sm bg-muted flex items-center justify-center">
+                        <span className="text-6xl font-semibold text-muted-foreground">
+                          {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Campaigns section - under logo */}
+                    <div className="mt-4">
+                      <h3 className="text-sm font-medium text-foreground">Campaigns</h3>
+                      <div className="border-t border-border mt-2 pt-3">
+                        {/* Add campaign button */}
+                        <div 
+                          className="w-[216px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                          onClick={() => navigate('/business/campaigns/new')}
+                        >
+                          <div className="text-center">
+                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mx-auto mb-2">
+                              <span className="text-xl text-muted-foreground">+</span>
+                            </div>
+                            <span className="text-sm text-muted-foreground">New Campaign</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="w-[216px] h-[216px] rounded-sm bg-muted flex items-center justify-center flex-shrink-0">
-                      <span className="text-6xl font-semibold text-muted-foreground">
-                        {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
-                      </span>
-                    </div>
-                  )}
+                  </div>
                   
                   {/* Right side content */}
                   <div className="flex-1">
@@ -214,7 +236,7 @@ const BusinessDashboard: React.FC = () => {
                           href={businessProfile.website.startsWith('http') ? businessProfile.website : `https://${businessProfile.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-primary hover:underline text-sm"
+                          className="inline-flex items-center gap-1.5 text-primary hover:underline text-sm font-medium"
                         >
                           <ExternalLink className="w-4 h-4" />
                           <span>{businessProfile.website.replace(/^https?:\/\//, '')}</span>
@@ -222,41 +244,22 @@ const BusinessDashboard: React.FC = () => {
                       )}
                     </div>
                     
-                    {/* Stats - same size for numbers and text */}
+                    {/* Stats - using link font style */}
                     <div className="flex gap-6 mt-3">
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-base font-bold text-foreground">0</span>
-                        <span className="text-base text-muted-foreground">Creators</span>
+                        <span className="text-sm font-medium text-foreground">0</span>
+                        <span className="text-sm font-medium text-muted-foreground">Creators</span>
                       </div>
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-base font-bold text-foreground">0</span>
-                        <span className="text-base text-muted-foreground">Campaigns</span>
+                        <span className="text-sm font-medium text-foreground">0</span>
+                        <span className="text-sm font-medium text-muted-foreground">Campaigns</span>
                       </div>
                     </div>
                     
-                    {/* Description - as wide as action row */}
-                    <p className="mt-3 text-sm text-foreground leading-relaxed">
+                    {/* Description - same font as stats */}
+                    <p className="mt-3 text-sm font-medium text-foreground leading-relaxed">
                       {shortDescription}
                     </p>
-                    
-                    {/* Campaigns section - inside profile area, above divider */}
-                    <div className="mt-6">
-                      <h3 className="text-xl font-bold text-foreground text-left">Campaigns</h3>
-                      <div className="border-t border-border mt-3 pt-4">
-                        {/* Add campaign button - larger */}
-                        <div 
-                          className="w-[256px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
-                          onClick={() => navigate('/business/campaigns/new')}
-                        >
-                          <div className="text-center">
-                            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
-                              <span className="text-2xl text-muted-foreground">+</span>
-                            </div>
-                            <span className="text-sm text-muted-foreground">New Campaign</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
