@@ -10,10 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, X, Image, Video, Loader2, Wallet } from 'lucide-react';
+import { ArrowLeft, Plus, X, Image, Video, Loader2, Wallet, Users } from 'lucide-react';
 import CampaignPreview from '@/components/CampaignPreview';
 import BudgetDialog from '@/components/BudgetDialog';
 import PlatformDialog from '@/components/PlatformDialog';
+import AudienceDialog from '@/components/AudienceDialog';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
@@ -57,6 +58,9 @@ const BusinessCampaignForm: React.FC = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const [platformDialogOpen, setPlatformDialogOpen] = useState(false);
   const [budgetDialogOpen, setBudgetDialogOpen] = useState(false);
+  const [audienceDialogOpen, setAudienceDialogOpen] = useState(false);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -295,6 +299,38 @@ const BusinessCampaignForm: React.FC = () => {
                   </button>
                 </div>
 
+                {/* Target Audience Selection */}
+                <div className="space-y-3 max-w-lg">
+                  <Label>Target Audience</Label>
+                  <button
+                    type="button"
+                    onClick={() => setAudienceDialogOpen(true)}
+                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                  >
+                    {selectedRegions.length > 0 || selectedAudiences.length > 0 ? (
+                      <>
+                        <div className="w-12 h-12 rounded-[2px] bg-primary/10 flex items-center justify-center">
+                          <Users className="h-5 w-5 text-primary" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">
+                          {selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}
+                          {selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}
+                          {selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
+                          <Users className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <span className="text-sm font-medium text-muted-foreground">
+                          Select audience
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 <div className="pt-4 space-y-2 max-w-lg">
                   <Label htmlFor="title">Campaign Title</Label>
                   <Input
@@ -490,6 +526,16 @@ const BusinessCampaignForm: React.FC = () => {
         onOpenChange={setPlatformDialogOpen}
         selectedPlatform={selectedPlatform}
         onPlatformChange={setSelectedPlatform}
+      />
+
+      {/* Audience Dialog */}
+      <AudienceDialog
+        open={audienceDialogOpen}
+        onOpenChange={setAudienceDialogOpen}
+        selectedRegions={selectedRegions}
+        selectedAudiences={selectedAudiences}
+        onRegionsChange={setSelectedRegions}
+        onAudiencesChange={setSelectedAudiences}
       />
     </BusinessLayout>
   );

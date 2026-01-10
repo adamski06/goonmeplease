@@ -75,8 +75,8 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
           {/* Main content area - empty */}
           <div className="flex-1" />
 
-          {/* Platform logos */}
-          <div className="pb-8 flex justify-center gap-12">
+          {/* Platform logos - smaller, lower, evenly spread */}
+          <div className="px-16 pb-16 flex justify-between">
             {platforms.map(({ id, name, logo }) => {
               const isSelected = localSelection === id;
               return (
@@ -90,7 +90,7 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
                       : 'opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <div className={`w-[90px] h-[90px] rounded-[4px] overflow-hidden ${
+                  <div className={`w-16 h-16 rounded-[4px] overflow-hidden ${
                     isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
                   }`}>
                     <img 
@@ -109,8 +109,8 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
             })}
           </div>
 
-          {/* Footer with Continue button */}
-          <div className="p-6 border-t border-border flex justify-end gap-3">
+          {/* Footer with Continue button - no border */}
+          <div className="p-6 flex justify-end gap-3">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
