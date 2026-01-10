@@ -158,20 +158,22 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                 <Label className="text-sm text-muted-foreground block text-center mb-3">Total Budget</Label>
                 <div className="p-6 bg-background rounded-[4px] border border-border">
                   <div className="flex items-baseline justify-center mb-6">
-                    <Input
-                      type="number"
-                      min={minBudget}
-                      step={5000}
-                      value={displayedBudget}
-                      onChange={(e) => {
-                        const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
-                        setDisplayBudget(val);
-                        setAnimatedBudget(val);
-                        setLocalBudget(val);
-                      }}
-                      className="text-4xl font-bold text-right w-auto min-w-[120px] h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="text-2xl font-medium text-muted-foreground ml-2 shrink-0">SEK</span>
+                    <div className="flex items-baseline">
+                      <Input
+                        type="number"
+                        min={minBudget}
+                        step={5000}
+                        value={displayedBudget}
+                        onChange={(e) => {
+                          const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
+                          setDisplayBudget(val);
+                          setAnimatedBudget(val);
+                          setLocalBudget(val);
+                        }}
+                        className="text-4xl font-bold text-right w-[180px] h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="text-2xl font-medium text-muted-foreground ml-2 shrink-0">SEK</span>
+                    </div>
                   </div>
 
                   {/* Slider */}
