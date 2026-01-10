@@ -154,52 +154,53 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
 
             {/* Budget Controls */}
             <div className="flex-1 p-8 flex flex-col items-center justify-center space-y-8">
-              <div className="space-y-2 text-center">
-                <Label className="text-sm text-muted-foreground">Total Budget</Label>
-                <div className="flex items-baseline justify-center gap-2">
-                  <Input
-                    type="number"
-                    min={minBudget}
-                    step={5000}
-                    value={displayedBudget}
-                    onChange={(e) => {
-                      const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
-                      setDisplayBudget(val);
-                      setAnimatedBudget(val);
-                      setLocalBudget(val);
-                    }}
-                    className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
-                  />
-                  <span className="text-2xl font-medium text-muted-foreground">SEK</span>
-                </div>
-              </div>
-
-              {/* Slider */}
+              {/* Total Budget Node */}
               <div className="w-full max-w-md">
-                <Slider
-                  value={[budgetToSlider(animatedBudget)]}
-                  onValueChange={(value) => {
-                    setIsDragging(true);
-                    const newBudget = sliderToBudget(value[0]);
-                    setDisplayBudget(newBudget);
-                    setAnimatedBudget(newBudget);
-                  }}
-                  onValueCommit={(value) => {
-                    setIsDragging(false);
-                    const rawBudget = sliderToBudget(value[0]);
-                    const snappedBudget = snapToFiveThousand(rawBudget);
-                    setLocalBudget(snappedBudget);
-                    // Animate to snapped value
-                    animateTo(snappedBudget);
-                  }}
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  className="w-full"
-                />
-                <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                  <span>20,000 SEK</span>
-                  <span>500,000 SEK</span>
+                <Label className="text-sm text-muted-foreground block text-center mb-3">Total Budget</Label>
+                <div className="p-6 bg-background rounded-[4px] border border-border">
+                  <div className="flex items-baseline justify-center gap-2 mb-6">
+                    <Input
+                      type="number"
+                      min={minBudget}
+                      step={5000}
+                      value={displayedBudget}
+                      onChange={(e) => {
+                        const val = Math.max(minBudget, parseInt(e.target.value) || minBudget);
+                        setDisplayBudget(val);
+                        setAnimatedBudget(val);
+                        setLocalBudget(val);
+                      }}
+                      className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
+                    />
+                    <span className="text-2xl font-medium text-muted-foreground">SEK</span>
+                  </div>
+
+                  {/* Slider */}
+                  <Slider
+                    value={[budgetToSlider(animatedBudget)]}
+                    onValueChange={(value) => {
+                      setIsDragging(true);
+                      const newBudget = sliderToBudget(value[0]);
+                      setDisplayBudget(newBudget);
+                      setAnimatedBudget(newBudget);
+                    }}
+                    onValueCommit={(value) => {
+                      setIsDragging(false);
+                      const rawBudget = sliderToBudget(value[0]);
+                      const snappedBudget = snapToFiveThousand(rawBudget);
+                      setLocalBudget(snappedBudget);
+                      // Animate to snapped value
+                      animateTo(snappedBudget);
+                    }}
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                    <span>20,000 SEK</span>
+                    <span>500,000 SEK</span>
+                  </div>
                 </div>
               </div>
 
