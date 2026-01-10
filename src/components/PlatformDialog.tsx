@@ -37,90 +37,47 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] max-h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden overflow-hidden">
-        <div className="h-full flex overflow-hidden">
-          {/* Left Side - Platform Selection (1/3 width) */}
-          <div className="w-1/3 h-full flex flex-col border-r border-border shrink-0">
-            {/* Header - arrow in top left */}
-            <div className="flex items-center justify-start p-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Platform Selection */}
-            <div className="flex-1 p-8 flex flex-col items-center justify-center">
-              <div className="w-full max-w-md">
-                <p className="text-sm text-muted-foreground text-center mb-6">Select Platform</p>
-                <div className="space-y-3">
-                  {platforms.map(({ id, name, logo }) => {
-                    const isSelected = selectedPlatform === id;
-                    return (
-                      <button
-                        key={id}
-                        type="button"
-                        onClick={() => handleSelect(id)}
-                        className={`w-full flex items-center gap-4 p-4 rounded-[4px] border transition-all duration-200 ${
-                          isSelected 
-                            ? 'border-primary bg-primary/5' 
-                            : 'border-border hover:border-primary/50 hover:bg-muted/30'
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-[4px] overflow-hidden flex-shrink-0">
-                          <img 
-                            src={logo} 
-                            alt={name} 
-                            className={`w-full h-full object-cover ${
-                              id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                            }`}
-                          />
-                        </div>
-                        <span className={`text-lg font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
-                          {name}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+        <div className="h-full flex flex-col overflow-hidden">
+          {/* Header - arrow in top left */}
+          <div className="flex items-center justify-start p-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onOpenChange(false)}
+              className="h-8 w-8"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
           </div>
 
-          {/* Right Side - Preview/Info (2/3 width) */}
-          <div className="w-2/3 h-full p-8 flex flex-col items-center justify-center bg-muted/30 overflow-hidden">
-            {selectedPlatform ? (
-              <div className="text-center">
-                <div className="w-32 h-32 rounded-[4px] overflow-hidden mx-auto mb-6">
+          {/* Main content area - empty/clean */}
+          <div className="flex-1" />
+
+          {/* Bottom - Platform logos in horizontal row */}
+          <div className="p-8 flex justify-center gap-8">
+            {platforms.map(({ id, name, logo }) => {
+              const isSelected = selectedPlatform === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => handleSelect(id)}
+                  className={`w-32 h-32 rounded-[4px] overflow-hidden transition-all duration-150 ${
+                    isSelected 
+                      ? 'ring-2 ring-primary ring-offset-2' 
+                      : 'opacity-70 hover:opacity-100'
+                  }`}
+                >
                   <img 
-                    src={platforms.find(p => p.id === selectedPlatform)?.logo} 
-                    alt={platforms.find(p => p.id === selectedPlatform)?.name}
+                    src={logo} 
+                    alt={name} 
                     className={`w-full h-full object-cover ${
-                      selectedPlatform === 'instagram' ? 'scale-125' : selectedPlatform === 'youtube' ? 'scale-[1.15]' : ''
+                      id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
                     }`}
                   />
-                </div>
-                <h2 className="text-3xl font-bold text-foreground mb-2">
-                  {platforms.find(p => p.id === selectedPlatform)?.name}
-                </h2>
-                <p className="text-muted-foreground">
-                  Create content for {platforms.find(p => p.id === selectedPlatform)?.name}
-                </p>
-              </div>
-            ) : (
-              <div className="text-center">
-                <div className="w-32 h-32 rounded-[4px] bg-muted/50 mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-4xl text-muted-foreground">?</span>
-                </div>
-                <h2 className="text-3xl font-bold text-foreground mb-2">Select a Platform</h2>
-                <p className="text-muted-foreground">
-                  Choose where creators will post content
-                </p>
-              </div>
-            )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </DialogContent>
