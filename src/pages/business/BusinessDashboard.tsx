@@ -223,7 +223,7 @@ const BusinessDashboard: React.FC = () => {
                     </div>
                     
                     {/* Stats - same size for numbers and text */}
-                    <div className="flex gap-6 mt-5">
+                    <div className="flex gap-6 mt-3">
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-base font-bold text-foreground">0</span>
                         <span className="text-base text-muted-foreground">Creators</span>
@@ -235,23 +235,25 @@ const BusinessDashboard: React.FC = () => {
                     </div>
                     
                     {/* Description - as wide as action row */}
-                    <p className="mt-5 text-lg text-foreground leading-relaxed">
+                    <p className="mt-3 text-sm text-foreground leading-relaxed">
                       {shortDescription}
                     </p>
                     
                     {/* Campaigns section - inside profile area, above divider */}
-                    <div className="mt-8">
-                      <h3 className="text-xl font-bold text-foreground mb-4">Campaigns</h3>
-                      {/* Add campaign button - larger */}
-                      <div 
-                        className="w-[256px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
-                        onClick={() => navigate('/business/campaigns/new')}
-                      >
-                        <div className="text-center">
-                          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
-                            <span className="text-2xl text-muted-foreground">+</span>
+                    <div className="mt-6">
+                      <h3 className="text-xl font-bold text-foreground text-left">Campaigns</h3>
+                      <div className="border-t border-border mt-3 pt-4">
+                        {/* Add campaign button - larger */}
+                        <div 
+                          className="w-[256px] aspect-[9/16] bg-muted/30 rounded-[3px] border border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                          onClick={() => navigate('/business/campaigns/new')}
+                        >
+                          <div className="text-center">
+                            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
+                              <span className="text-2xl text-muted-foreground">+</span>
+                            </div>
+                            <span className="text-sm text-muted-foreground">New Campaign</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">New Campaign</span>
                         </div>
                       </div>
                     </div>
