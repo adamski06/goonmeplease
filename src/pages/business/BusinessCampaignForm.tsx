@@ -19,13 +19,17 @@ import PlatformDialog from '@/components/PlatformDialog';
 import tiktokLogo from '@/assets/platforms/tiktok.png';
 import instagramLogo from '@/assets/platforms/instagram.png';
 import youtubeLogo from '@/assets/platforms/youtube.png';
+import facebookLogo from '@/assets/platforms/facebook.png';
+import linkedinLogo from '@/assets/platforms/linkedin.png';
 
-type Platform = 'tiktok' | 'instagram' | 'youtube';
+type Platform = 'tiktok' | 'instagram' | 'youtube' | 'facebook' | 'linkedin';
 
 const platforms: { id: Platform; name: string; logo: string }[] = [
   { id: 'tiktok', name: 'TikTok', logo: tiktokLogo },
   { id: 'instagram', name: 'Instagram', logo: instagramLogo },
   { id: 'youtube', name: 'YouTube', logo: youtubeLogo },
+  { id: 'facebook', name: 'Facebook', logo: facebookLogo },
+  { id: 'linkedin', name: 'LinkedIn', logo: linkedinLogo },
 ];
 
 const BusinessCampaignForm: React.FC = () => {
