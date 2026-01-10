@@ -158,7 +158,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="w-full max-w-md">
                 <Label className="text-sm text-muted-foreground block text-center mb-3">Total Budget</Label>
                 <div className="p-6 bg-background rounded-[4px] border border-border">
-                  <div className="flex items-baseline justify-center gap-2 mb-6">
+                  <div className="flex items-baseline justify-end mb-6">
                     <Input
                       type="number"
                       min={minBudget}
@@ -170,9 +170,9 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                         setAnimatedBudget(val);
                         setLocalBudget(val);
                       }}
-                      className="text-4xl font-bold text-center w-48 h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0"
+                      className="text-4xl font-bold text-right w-auto min-w-[120px] h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
-                    <span className="text-2xl font-medium text-muted-foreground">SEK</span>
+                    <span className="text-2xl font-medium text-muted-foreground ml-2 shrink-0">SEK</span>
                   </div>
 
                   {/* Slider */}
