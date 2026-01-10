@@ -109,7 +109,7 @@ const Index = () => {
                 </button>
                 <button 
                   onClick={() => navigate('/business/auth')}
-                  className="px-6 py-2 text-base font-semibold bg-foreground text-background rounded-[4px] transition-all duration-300 hover:opacity-90"
+                  className="px-5 py-2 text-sm font-semibold bg-foreground text-background rounded-[4px] transition-opacity duration-300 hover:opacity-90"
                 >
                   {t('landing.getStarted')}
                 </button>
@@ -151,7 +151,7 @@ const Index = () => {
                   <div className="flex justify-center mt-8">
                     <button 
                       onClick={() => navigate('/business/auth')}
-                      className="px-12 py-4 text-xl font-semibold bg-foreground text-background rounded-[4px] transition-all duration-300 hover:opacity-90"
+                      className="px-10 py-3 text-base font-semibold bg-foreground text-background rounded-[4px] transition-opacity duration-300 hover:opacity-90"
                     >
                       {t('landing.getStarted')}
                     </button>
