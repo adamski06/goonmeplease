@@ -291,7 +291,14 @@ CREATE TABLE public.business_profiles (
     description text,
     website text,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    country text,
+    organization_number text,
+    vat_number text,
+    phone_number text,
+    address text,
+    city text,
+    postal_code text
 );
 
 
