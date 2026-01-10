@@ -13,22 +13,19 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, X, Image, Video, Loader2, Wallet } from 'lucide-react';
 import CampaignPreview from '@/components/CampaignPreview';
 import BudgetDialog from '@/components/BudgetDialog';
+import PlatformDialog from '@/components/PlatformDialog';
 
 // Platform logo imports
 import tiktokLogo from '@/assets/platforms/tiktok.png';
 import instagramLogo from '@/assets/platforms/instagram.png';
 import youtubeLogo from '@/assets/platforms/youtube.png';
-import facebookLogo from '@/assets/platforms/facebook.png';
-import linkedinLogo from '@/assets/platforms/linkedin.png';
 
-type Platform = 'tiktok' | 'instagram' | 'youtube' | 'facebook' | 'linkedin';
+type Platform = 'tiktok' | 'instagram' | 'youtube';
 
 const platforms: { id: Platform; name: string; logo: string }[] = [
   { id: 'tiktok', name: 'TikTok', logo: tiktokLogo },
   { id: 'instagram', name: 'Instagram', logo: instagramLogo },
   { id: 'youtube', name: 'YouTube', logo: youtubeLogo },
-  { id: 'facebook', name: 'Facebook', logo: facebookLogo },
-  { id: 'linkedin', name: 'LinkedIn', logo: linkedinLogo },
 ];
 
 const BusinessCampaignForm: React.FC = () => {
@@ -54,13 +51,8 @@ const BusinessCampaignForm: React.FC = () => {
   const [campaignVideo, setCampaignVideo] = useState<File | null>(null);
   const [campaignVideoPreview, setCampaignVideoPreview] = useState<string>('');
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
-  const [showPlatformPicker, setShowPlatformPicker] = useState(false);
+  const [platformDialogOpen, setPlatformDialogOpen] = useState(false);
   const [budgetDialogOpen, setBudgetDialogOpen] = useState(false);
-
-  const selectPlatform = (platformId: Platform) => {
-    setSelectedPlatform(platformId);
-    setShowPlatformPicker(false);
-  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -266,13 +258,13 @@ const BusinessCampaignForm: React.FC = () => {
                 {/* Platform Selection */}
                 <div className="space-y-3 max-w-lg">
                   <Label>Target Platform</Label>
-                  <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setPlatformDialogOpen(true)}
+                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                  >
                     {selectedPlatform ? (
-                      <button
-                        type="button"
-                        onClick={() => setShowPlatformPicker(!showPlatformPicker)}
-                        className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
-                      >
+                      <>
                         <div className="w-12 h-12 rounded-[2px] overflow-hidden">
                           <img 
                             src={platforms.find(p => p.id === selectedPlatform)?.logo} 
@@ -285,56 +277,18 @@ const BusinessCampaignForm: React.FC = () => {
                         <span className="text-sm font-medium text-foreground">
                           {platforms.find(p => p.id === selectedPlatform)?.name}
                         </span>
-                      </button>
+                      </>
                     ) : (
-                      <button
-                        type="button"
-                        onClick={() => setShowPlatformPicker(!showPlatformPicker)}
-                        className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
-                      >
+                      <>
                         <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
                           <span className="text-muted-foreground text-lg">?</span>
                         </div>
                         <span className="text-sm font-medium text-muted-foreground">
                           Select platform
                         </span>
-                      </button>
+                      </>
                     )}
-                    
-                    {/* Dropdown overlay */}
-                    {showPlatformPicker && (
-                      <div className="absolute top-0 left-0 z-50 bg-card border border-border rounded-[4px] shadow-lg p-2 flex flex-col gap-1 min-w-[180px] animate-scale-in origin-top-left">
-                        {platforms.map(({ id, name, logo }) => {
-                          const isSelected = selectedPlatform === id;
-                          return (
-                            <button
-                              key={id}
-                              type="button"
-                              onClick={() => selectPlatform(id)}
-                              className={`flex items-center gap-3 px-2.5 py-2 rounded-[3px] transition-all duration-200 ${
-                                isSelected 
-                                  ? 'bg-muted' 
-                                  : 'hover:bg-muted/50'
-                              }`}
-                            >
-                              <div className="w-7 h-7 rounded-[2px] overflow-hidden flex-shrink-0">
-                                <img 
-                                  src={logo} 
-                                  alt={name} 
-                                  className={`w-full h-full object-cover ${
-                                    id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                                  }`}
-                                />
-                              </div>
-                              <span className={`text-sm font-medium ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                {name}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                  </button>
                 </div>
 
                 <div className="pt-4 space-y-2 max-w-lg">
@@ -525,6 +479,14 @@ const BusinessCampaignForm: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Platform Dialog */}
+      <PlatformDialog
+        open={platformDialogOpen}
+        onOpenChange={setPlatformDialogOpen}
+        selectedPlatform={selectedPlatform}
+        onPlatformChange={setSelectedPlatform}
+      />
     </BusinessLayout>
   );
 };

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { X } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -139,15 +139,15 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
         <div className="h-full flex overflow-hidden">
           {/* Left Side - Budget Controls (1/3 width, full height) */}
           <div className="w-1/3 h-full flex flex-col border-r border-border shrink-0">
-            {/* Header - just close button */}
-            <div className="flex items-center justify-end p-4">
+            {/* Header - arrow in top left */}
+            <div className="flex items-center justify-start p-4">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onOpenChange(false)}
                 className="h-8 w-8"
               >
-                <X className="h-4 w-4" />
+                <ArrowLeft className="h-4 w-4" />
               </Button>
             </div>
 
@@ -157,7 +157,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="w-full max-w-md">
                 <Label className="text-sm text-muted-foreground block text-center mb-3">Total Budget</Label>
                 <div className="p-6 bg-background rounded-[4px] border border-border">
-                  <div className="flex items-baseline justify-center mb-6">
+                  <div className="flex items-baseline justify-center mb-4">
                     <div className="flex items-baseline">
                       <Input
                         type="number"
@@ -170,7 +170,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                           setAnimatedBudget(val);
                           setLocalBudget(val);
                         }}
-                        className="text-4xl font-bold text-right w-[180px] h-16 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="text-4xl font-bold text-right w-[180px] h-14 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       />
                       <span className="text-2xl font-medium text-muted-foreground ml-2 shrink-0">SEK</span>
                     </div>
