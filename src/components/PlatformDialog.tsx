@@ -33,19 +33,29 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
   selectedPlatform,
   onPlatformChange,
 }) => {
-  const handleSelect = (platform: Platform) => {
-    onPlatformChange(platform);
-    onOpenChange(false);
+  const [localSelection, setLocalSelection] = React.useState<Platform | null>(selectedPlatform);
+
+  React.useEffect(() => {
+    if (open) {
+      setLocalSelection(selectedPlatform);
+    }
+  }, [open, selectedPlatform]);
+
+  const handleConfirm = () => {
+    if (localSelection) {
+      onPlatformChange(localSelection);
+      onOpenChange(false);
+    }
   };
 
-  const selectedPlatformData = platforms.find(p => p.id === selectedPlatform);
+  const selectedPlatformData = platforms.find(p => p.id === localSelection);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] max-h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden overflow-hidden">
         <div className="h-full flex flex-col overflow-hidden">
-          {/* Header - arrow in top left */}
-          <div className="flex items-center justify-start p-4">
+          {/* Header - arrow in top left, heading at top */}
+          <div className="flex items-center justify-between p-4">
             <Button
               variant="ghost"
               size="icon"
@@ -54,26 +64,26 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-          </div>
-
-          {/* Main content area - show selected platform heading */}
-          <div className="flex-1 flex items-center justify-center">
             {selectedPlatformData && (
-              <h1 className="text-6xl font-bold text-foreground">
+              <h1 className="text-4xl font-bold text-foreground">
                 {selectedPlatformData.name}
               </h1>
             )}
+            <div className="w-8" /> {/* Spacer for centering */}
           </div>
 
-          {/* Platform logos - moved up with more spacing */}
-          <div className="pb-32 flex justify-center gap-12">
+          {/* Main content area - empty */}
+          <div className="flex-1" />
+
+          {/* Platform logos */}
+          <div className="pb-8 flex justify-center gap-12">
             {platforms.map(({ id, name, logo }) => {
-              const isSelected = selectedPlatform === id;
+              const isSelected = localSelection === id;
               return (
                 <button
                   key={id}
                   type="button"
-                  onClick={() => handleSelect(id)}
+                  onClick={() => setLocalSelection(id)}
                   className={`flex flex-col items-center gap-3 transition-all duration-150 ${
                     isSelected 
                       ? 'opacity-100' 
@@ -97,6 +107,16 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
                 </button>
               );
             })}
+          </div>
+
+          {/* Footer with Continue button */}
+          <div className="p-6 border-t border-border flex justify-end gap-3">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirm} disabled={!localSelection}>
+              Continue
+            </Button>
           </div>
         </div>
       </DialogContent>
