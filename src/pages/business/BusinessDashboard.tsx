@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BusinessLayout from '@/components/BusinessLayout';
 import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Pencil, Share2, Settings, ExternalLink } from 'lucide-react';
 
 interface BusinessProfile {
   id: string;
@@ -166,10 +168,11 @@ const BusinessDashboard: React.FC = () => {
           <div className="bg-card border border-border rounded-[3px] overflow-hidden w-full">
               {/* Header with logo and name */}
               <div className="p-10 pb-6">
-                <div className="flex items-center gap-5">
+                <div className="flex items-start gap-6">
+                  {/* Logo - 3x larger (216px) */}
                   {businessProfile?.logo_url ? (
                     <div 
-                      className={`w-[72px] h-[72px] rounded-sm flex items-center justify-center p-2 ${
+                      className={`w-[216px] h-[216px] rounded-sm flex items-center justify-center p-4 flex-shrink-0 ${
                         logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
                       }`}
                     >
@@ -180,33 +183,67 @@ const BusinessDashboard: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    <div className="w-[72px] h-[72px] rounded-sm bg-muted flex items-center justify-center">
-                      <span className="text-3xl font-semibold text-muted-foreground">
+                    <div className="w-[216px] h-[216px] rounded-sm bg-muted flex items-center justify-center flex-shrink-0">
+                      <span className="text-6xl font-semibold text-muted-foreground">
                         {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
                       </span>
                     </div>
                   )}
-                  <h1 className="text-3xl font-bold text-foreground">
-                    {businessProfile?.company_name || 'Your Business'}
-                  </h1>
                   
-                  {/* Stats */}
-                  <div className="ml-auto flex gap-8 items-start">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-foreground leading-none">0</div>
-                      <div className="text-base font-medium text-foreground mt-1">Creators</div>
+                  {/* Right side content */}
+                  <div className="flex-1">
+                    {/* Company name */}
+                    <h1 className="text-3xl font-bold text-foreground">
+                      {businessProfile?.company_name || 'Your Business'}
+                    </h1>
+                    
+                    {/* Stats under company name */}
+                    <div className="flex gap-6 mt-3">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-2xl font-bold text-foreground">0</span>
+                        <span className="text-base text-muted-foreground">Creators</span>
+                      </div>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-2xl font-bold text-foreground">0</span>
+                        <span className="text-base text-muted-foreground">Campaigns</span>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-foreground leading-none">0</div>
-                      <div className="text-base font-medium text-foreground mt-1">Campaigns</div>
+                    
+                    {/* Website link */}
+                    {businessProfile?.website && (
+                      <a 
+                        href={businessProfile.website.startsWith('http') ? businessProfile.website : `https://${businessProfile.website}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 mt-3 text-primary hover:underline"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>{businessProfile.website.replace(/^https?:\/\//, '')}</span>
+                      </a>
+                    )}
+                    
+                    {/* Action buttons */}
+                    <div className="flex gap-3 mt-5">
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Pencil className="w-4 h-4" />
+                        Edit Profile
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Share2 className="w-4 h-4" />
+                        Share
+                      </Button>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Settings className="w-4 h-4" />
+                        Settings
+                      </Button>
                     </div>
+                    
+                    {/* Description */}
+                    <p className="mt-5 text-lg text-foreground leading-relaxed">
+                      {shortDescription}
+                    </p>
                   </div>
                 </div>
-                
-                {/* Description */}
-                <p className="mt-5 text-lg text-foreground leading-relaxed">
-                  {shortDescription}
-                </p>
               </div>
               
               {/* Campaigns section */}
