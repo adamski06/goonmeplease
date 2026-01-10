@@ -139,16 +139,15 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
         <div className="h-full flex overflow-hidden">
           {/* Left Side - Budget Controls (1/3 width, full height) */}
           <div className="w-1/3 h-full flex flex-col border-r border-border shrink-0">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border">
-              <h2 className="text-xl font-semibold text-foreground">Set Campaign Budget</h2>
+            {/* Header - just close button */}
+            <div className="flex items-center justify-end p-4">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onOpenChange(false)}
-                className="h-10 w-10"
+                className="h-8 w-8"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </Button>
             </div>
 
@@ -158,7 +157,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <div className="w-full max-w-md">
                 <Label className="text-sm text-muted-foreground block text-center mb-3">Total Budget</Label>
                 <div className="p-6 bg-background rounded-[4px] border border-border">
-                  <div className="flex items-baseline justify-end mb-6">
+                  <div className="flex items-baseline justify-center mb-6">
                     <Input
                       type="number"
                       min={minBudget}
@@ -238,7 +237,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
           {/* Right Side - Guaranteed Results (2/3 width, full height) */}
           <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 overflow-hidden">
             {/* First Row - Creator Pool */}
-            <div className="p-8 bg-black rounded-[4px] border border-border shrink-0 mb-4 flex flex-col items-center justify-center">
+            <div className="p-8 bg-black rounded-[4px] border border-border shrink-0 mb-4 flex flex-col items-start justify-center">
               <p className="text-sm text-white/70 mb-2">Creator Pool</p>
               <p className="text-5xl font-bold text-white">{creatorPool.toLocaleString()} SEK</p>
             </div>
