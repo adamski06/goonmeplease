@@ -242,19 +242,11 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
               <p className="text-5xl font-bold text-white">{creatorPool.toLocaleString()} SEK</p>
             </div>
 
-            {/* Second Row - Views and Creators */}
-            <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
-              {/* Views */}
-              <div className="p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
-                <p className="text-sm text-muted-foreground mb-2">Guaranteed Views</p>
-                <p className="text-6xl font-bold text-foreground">{guaranteedViews.toLocaleString()}+</p>
-              </div>
-
-              {/* Creators */}
-              <div className="p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
-                <p className="text-sm text-muted-foreground mb-2">Creators</p>
-                <p className="text-6xl font-bold text-foreground">{guaranteedCreators}+</p>
-              </div>
+            {/* Second Row - Humans (Creators) with Views */}
+            <div className="flex-1 min-h-0 p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
+              <p className="text-sm text-muted-foreground mb-2">Humans:</p>
+              <p className="text-6xl font-bold text-foreground">{guaranteedCreators}+</p>
+              <p className="text-lg text-muted-foreground mt-3">{guaranteedViews.toLocaleString()}+ views</p>
             </div>
           </div>
         </div>
