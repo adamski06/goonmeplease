@@ -331,9 +331,32 @@ const BusinessAuth: React.FC = () => {
     }
   }, []); // Only run once on mount
 
+  // Ref to track if intro animation should be aborted
+  const introAbortedRef = useRef(false);
+
+  // Skip intro animation handler
+  const handleSkipIntro = () => {
+    introAbortedRef.current = true;
+    setIntroStep('input');
+    setShowNameInput(true);
+    setDisplayText('');
+    setSetupText('');
+    setFreeText('');
+    setIsFadingOut(false);
+    // Set final state for prompt and placeholder
+    const promptTextContent = i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your ";
+    const placeholderText = i18n.language === 'sv' ? 'företagsnamn' : 'company name';
+    setPromptText(promptTextContent);
+    setTypewriterText(placeholderText);
+    inputRef.current?.focus();
+  };
+
   // Typewriter effect for intro - multi-step sequence
   useEffect(() => {
     if (mode === 'intro') {
+      // Reset abort flag when starting new intro
+      introAbortedRef.current = false;
+      
       // Check if this is a returning user with saved email (but no active session)
       if (hasReturningUserEmail && !user && !isReturningUser) {
         // Skip the intro animation and show returning user screen
@@ -358,6 +381,11 @@ const BusinessAuth: React.FC = () => {
         return new Promise((resolve) => {
           let index = 0;
           const timer = setInterval(() => {
+            if (introAbortedRef.current) {
+              clearInterval(timer);
+              resolve();
+              return;
+            }
             if (index <= text.length) {
               setter(text.slice(0, index));
               index++;
@@ -373,6 +401,11 @@ const BusinessAuth: React.FC = () => {
         return new Promise((resolve) => {
           let index = text.length;
           const timer = setInterval(() => {
+            if (introAbortedRef.current) {
+              clearInterval(timer);
+              resolve();
+              return;
+            }
             if (index >= 0) {
               setter(text.slice(0, index));
               index--;
@@ -393,33 +426,42 @@ const BusinessAuth: React.FC = () => {
         
         // Step 1: Type "Hello!"
         await typeText(helloWord, setDisplayText, 60);
+        if (introAbortedRef.current) return;
         await new Promise(r => setTimeout(r, 1100));
+        if (introAbortedRef.current) return;
         
         // Fade out "Hello!" (Apple style)
         setIsFadingOut(true);
         await new Promise(r => setTimeout(r, 200));
+        if (introAbortedRef.current) return;
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('welcome');
         
         // Step 2: Type "Welcome to Jarla"
         await typeText(welcomeText, setDisplayText, 40);
+        if (introAbortedRef.current) return;
         await new Promise(r => setTimeout(r, 1100));
+        if (introAbortedRef.current) return;
         
         // Fade out "Welcome to Jarla" (Apple style)
         setIsFadingOut(true);
         await new Promise(r => setTimeout(r, 200));
+        if (introAbortedRef.current) return;
         setIsFadingOut(false);
         setDisplayText('');
         setIntroStep('setup');
         
         // Step 3: Type "Let's setup your business account"
         await typeText(setupTextContent, setSetupText, 30);
+        if (introAbortedRef.current) return;
         await new Promise(r => setTimeout(r, 1100));
+        if (introAbortedRef.current) return;
         
         // Fade out setup text
         setIsFadingOut(true);
         await new Promise(r => setTimeout(r, 200));
+        if (introAbortedRef.current) return;
         setIsFadingOut(false);
         setSetupText('');
         setFreeText('');
@@ -431,6 +473,7 @@ const BusinessAuth: React.FC = () => {
         // Type "First, what's your" prompt
         const promptTextContent = i18n.language === 'sv' ? 'Först, vad heter ditt ' : "First, what's your ";
         await typeText(promptTextContent, setPromptText, 25);
+        if (introAbortedRef.current) return;
         
         inputRef.current?.focus();
         
@@ -1931,7 +1974,7 @@ const BusinessAuth: React.FC = () => {
                 </div>
                 {/* Skip button at bottom during typewriter animation */}
                 <button
-                  onClick={() => setIntroStep('input')}
+                  onClick={handleSkipIntro}
                   className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-muted-foreground/60 hover:text-muted-foreground font-montserrat transition-colors"
                 >
                   {i18n.language === 'sv' ? 'hoppa över' : 'skip'}
@@ -1950,7 +1993,7 @@ const BusinessAuth: React.FC = () => {
                 </div>
                 {/* Skip button at bottom during typewriter animation */}
                 <button
-                  onClick={() => setIntroStep('input')}
+                  onClick={handleSkipIntro}
                   className="fixed bottom-8 left-1/2 -translate-x-1/2 text-sm text-muted-foreground/60 hover:text-muted-foreground font-montserrat transition-colors"
                 >
                   {i18n.language === 'sv' ? 'hoppa över' : 'skip'}
