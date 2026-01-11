@@ -171,10 +171,10 @@ const BusinessDashboard: React.FC = () => {
                 <div className="flex items-start gap-6">
                   {/* Left column - Logo */}
                   <div className="flex-shrink-0">
-                    {/* Logo - 3x larger (216px) */}
+                    {/* Logo - round profile picture */}
                     {businessProfile?.logo_url ? (
                       <div 
-                        className={`w-[216px] h-[216px] rounded-sm flex items-center justify-center p-4 ${
+                        className={`w-[216px] h-[216px] rounded-full flex items-center justify-center p-4 overflow-hidden ${
                           logoBgColor === 'white' ? 'bg-white' : logoBgColor === 'black' ? 'bg-black' : 'bg-white'
                         }`}
                       >
@@ -185,7 +185,7 @@ const BusinessDashboard: React.FC = () => {
                         />
                       </div>
                     ) : (
-                      <div className="w-[216px] h-[216px] rounded-sm bg-muted flex items-center justify-center">
+                      <div className="w-[216px] h-[216px] rounded-full bg-muted flex items-center justify-center">
                         <span className="text-6xl font-semibold text-muted-foreground">
                           {businessProfile?.company_name?.charAt(0)?.toUpperCase() || 'B'}
                         </span>
@@ -194,23 +194,23 @@ const BusinessDashboard: React.FC = () => {
                   </div>
                   
                   {/* Right side content */}
-                  <div className="flex-1">
-                    {/* Company name */}
-                    <h1 className="text-3xl font-bold text-foreground">
+                  <div className="flex-1 flex flex-col justify-center">
+                    {/* Company name - smaller and closer to content below */}
+                    <h1 className="text-xl font-bold text-foreground leading-tight">
                       {businessProfile?.company_name || 'Your Business'}
                     </h1>
                     
-                    {/* Action row: Edit Profile, Share, Settings, Website link */}
-                    <div className="flex items-center gap-3 mt-3">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Pencil className="w-4 h-4" />
+                    {/* Action row: Edit Profile, Share, Settings, Website link - all same height */}
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <Button variant="outline" size="sm" className="gap-2 h-8">
+                        <Pencil className="w-3.5 h-3.5" />
                         Edit Profile
                       </Button>
                       <Button variant="outline" size="icon" className="h-8 w-8">
-                        <Forward className="w-4 h-4" />
+                        <Forward className="w-3.5 h-3.5" />
                       </Button>
                       <Button variant="outline" size="icon" className="h-8 w-8">
-                        <Settings className="w-4 h-4" />
+                        <Settings className="w-3.5 h-3.5" />
                       </Button>
                       {businessProfile?.website && (
                         <a 
@@ -219,14 +219,14 @@ const BusinessDashboard: React.FC = () => {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 text-primary hover:underline text-sm font-medium"
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-3.5 h-3.5" />
                           <span>{businessProfile.website.replace(/^https?:\/\//, '')}</span>
                         </a>
                       )}
                     </div>
                     
-                    {/* Stats - using link font style */}
-                    <div className="flex gap-6 mt-3">
+                    {/* Stats - centered with other rows */}
+                    <div className="flex gap-6 mt-2">
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-sm font-medium text-foreground">0</span>
                         <span className="text-sm font-medium text-muted-foreground">Creators</span>
@@ -237,8 +237,8 @@ const BusinessDashboard: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Description - same font as stats */}
-                    <p className="mt-3 text-sm font-medium text-foreground leading-relaxed">
+                    {/* Description */}
+                    <p className="mt-2 text-sm font-medium text-foreground leading-relaxed">
                       {shortDescription}
                     </p>
                   </div>
