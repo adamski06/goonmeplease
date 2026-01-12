@@ -33,11 +33,11 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
   selectedPlatform,
   onPlatformChange,
 }) => {
-  const [localSelection, setLocalSelection] = React.useState<Platform | null>(selectedPlatform);
+  const [localSelection, setLocalSelection] = React.useState<Platform | null>(selectedPlatform || 'tiktok');
 
   React.useEffect(() => {
     if (open) {
-      setLocalSelection(selectedPlatform);
+      setLocalSelection(selectedPlatform || 'tiktok');
     }
   }, [open, selectedPlatform]);
 
@@ -78,49 +78,54 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
           {/* Platform logos - compact box lower down */}
           <div className="px-16 pb-8 flex justify-center">
             <div className="border border-input rounded-[4px] p-4 flex gap-6">
-              {platforms.map(({ id, name, logo }) => {
-                const isSelected = localSelection === id;
-                const isComingSoon = id !== 'tiktok';
-                
-                return (
-                  <div key={id} className="relative">
-                    <button
-                      type="button"
-                      onClick={() => !isComingSoon && setLocalSelection(id)}
-                      disabled={isComingSoon}
-                      className={`flex flex-col items-center gap-2 transition-all duration-150 ${
-                        isComingSoon
-                          ? 'opacity-40 cursor-not-allowed'
-                          : isSelected 
-                            ? 'opacity-100' 
-                            : 'opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <div className={`w-12 h-12 rounded-[4px] overflow-hidden ${
-                        isSelected && !isComingSoon ? 'ring-2 ring-primary ring-offset-2' : ''
-                      }`}>
-                        <img 
-                          src={logo} 
-                          alt={name} 
-                          className={`w-full h-full object-cover ${
-                            id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                          }`}
-                        />
-                      </div>
-                      <span className={`text-xs ${isSelected && !isComingSoon ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                        {name}
-                      </span>
-                    </button>
-                    {isComingSoon && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-[10px] text-muted-foreground font-medium bg-background/80 px-1.5 py-0.5 rounded">
-                          Coming soon
-                        </span>
-                      </div>
-                    )}
+              {/* TikTok - selectable */}
+              <button
+                type="button"
+                onClick={() => setLocalSelection('tiktok')}
+                className="flex flex-col items-center gap-2 transition-all duration-150 opacity-100"
+              >
+                <div className={`w-12 h-12 rounded-[4px] overflow-hidden transition-all ${
+                  localSelection === 'tiktok' ? 'ring-1 ring-primary/50 ring-offset-1' : ''
+                }`}>
+                  <img 
+                    src={tiktokLogo} 
+                    alt="TikTok" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className={`text-xs ${localSelection === 'tiktok' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                  TikTok
+                </span>
+              </button>
+
+              {/* Other platforms - faded with coming soon overlay */}
+              <div className="relative flex gap-6">
+                {platforms.filter(p => p.id !== 'tiktok').map(({ id, name, logo }) => (
+                  <div
+                    key={id}
+                    className="flex flex-col items-center gap-2 opacity-30"
+                  >
+                    <div className="w-12 h-12 rounded-[4px] overflow-hidden">
+                      <img 
+                        src={logo} 
+                        alt={name} 
+                        className={`w-full h-full object-cover ${
+                          id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                        }`}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {name}
+                    </span>
                   </div>
-                );
-              })}
+                ))}
+                {/* Coming soon overlay */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-sm text-muted-foreground font-medium">
+                    Coming soon
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
