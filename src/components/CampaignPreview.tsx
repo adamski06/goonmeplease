@@ -71,7 +71,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   return (
     <div className="flex flex-col h-full -mt-2 -mr-4">
       {/* Seamless top bar matching sidebar */}
-      <div className="flex items-center h-14 px-4 bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface">
+      <div className="flex items-center h-14 px-4 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-b border-black/10 dark:border-white/20">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">Preview</span>
           <div className="w-px h-4 bg-border" />

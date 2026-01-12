@@ -269,17 +269,12 @@ const BusinessCampaignForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setPlatformDialogOpen(true)}
-                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
                   >
-                    {selectedPlatform ? (
-                      <span className="text-foreground">
-                        {platforms.find(p => p.id === selectedPlatform)?.name}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">
-                        Select platform
-                      </span>
-                    )}
+                    {selectedPlatform 
+                      ? platforms.find(p => p.id === selectedPlatform)?.name
+                      : 'Select platform'
+                    }
                   </button>
                 </div>
 
@@ -289,19 +284,12 @@ const BusinessCampaignForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setAudienceDialogOpen(true)}
-                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
                   >
-                    {selectedRegions.length > 0 || selectedAudiences.length > 0 ? (
-                      <span className="text-foreground">
-                        {selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}
-                        {selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}
-                        {selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">
-                        Select audience
-                      </span>
-                    )}
+                    {selectedRegions.length > 0 || selectedAudiences.length > 0 
+                      ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
+                      : 'Select audience'
+                    }
                   </button>
                 </div>
 
@@ -311,17 +299,12 @@ const BusinessCampaignForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBudgetDialogOpen(true)}
-                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
                   >
-                    {formData.total_budget >= 10000 ? (
-                      <span className="text-foreground">
-                        {formData.total_budget.toLocaleString()} SEK
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">
-                        Set budget
-                      </span>
-                    )}
+                    {formData.total_budget >= 10000 
+                      ? `${formData.total_budget.toLocaleString()} SEK`
+                      : 'Set budget'
+                    }
                   </button>
                   <BudgetDialog
                     open={budgetDialogOpen}
