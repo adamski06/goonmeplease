@@ -266,11 +266,11 @@ const BusinessCampaignForm: React.FC = () => {
                 <div className="flex-1 flex flex-col">
                   {/* Centered setup container */}
                   <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="w-full max-w-xs border border-input rounded-[4px] p-6 space-y-6">
+                    <div className="w-full max-w-xs border border-input rounded-[4px] p-4 space-y-4">
                       <button
                         type="button"
                         onClick={() => setPlatformDialogOpen(true)}
-                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
                       >
                         {selectedPlatform 
                           ? platforms.find(p => p.id === selectedPlatform)?.name
@@ -280,7 +280,7 @@ const BusinessCampaignForm: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setAudienceDialogOpen(true)}
-                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
                       >
                         {selectedRegions.length > 0 || selectedAudiences.length > 0 
                           ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
@@ -290,7 +290,7 @@ const BusinessCampaignForm: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setBudgetDialogOpen(true)}
-                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
                       >
                         {formData.total_budget >= 10000 
                           ? `${formData.total_budget.toLocaleString()} SEK`
@@ -298,7 +298,7 @@ const BusinessCampaignForm: React.FC = () => {
                         }
                       </button>
                       {/* Progress indicator inside the node */}
-                      <p className="text-sm text-muted-foreground text-center">
+                      <p className="text-sm text-muted-foreground text-center pt-1">
                         {(() => {
                           let count = 0;
                           if (selectedPlatform) count++;
