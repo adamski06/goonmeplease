@@ -137,8 +137,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] max-h-[90vh] p-0 rounded-lg border border-border bg-background [&>button]:hidden overflow-hidden">
         <div className="h-full flex overflow-hidden">
-          {/* Left Side - Budget Controls (1/3 width, full height) */}
-          <div className="w-1/3 h-full flex flex-col border-r border-border shrink-0">
+          {/* Left Side - Budget Controls (1/2 width, full height) */}
+          <div className="w-1/2 h-full flex flex-col border-r border-border shrink-0">
             {/* Header - arrow in top left */}
             <div className="flex items-center justify-start p-4">
               <Button
@@ -234,18 +234,18 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
             </div>
           </div>
 
-          {/* Right Side - Guaranteed Results (2/3 width, full height) */}
-          <div className="w-2/3 h-full p-8 flex flex-col bg-muted/30 overflow-hidden">
+          {/* Right Side - Guaranteed Results (1/2 width, full height) */}
+          <div className="w-1/2 h-full p-8 flex flex-col bg-muted/30 overflow-hidden">
             {/* First Row - Creator Pool */}
-            <div className="p-8 bg-black rounded-[4px] border border-border shrink-0 mb-4 flex flex-col items-start justify-center">
+            <div className="p-8 bg-black rounded-[4px] border border-border shrink-0 mb-4 flex flex-col items-start justify-start">
               <p className="text-sm text-white/70 mb-2">Creator Pool</p>
               <p className="text-5xl font-bold text-white">{creatorPool.toLocaleString()} SEK</p>
             </div>
 
-            {/* Second Row - Humans (Creators) with Views */}
-            <div className="flex-1 min-h-0 p-8 bg-background rounded-[4px] border border-border flex flex-col items-center justify-center">
+            {/* Second Row - Humans (Creators) with Views - aligned left and top like Creator Pool */}
+            <div className="flex-1 min-h-0 p-8 bg-background rounded-[4px] border border-border flex flex-col items-start justify-start">
               <p className="text-sm text-muted-foreground mb-2">Humans:</p>
-              <p className="text-6xl font-bold text-foreground">{guaranteedCreators}+</p>
+              <p className="text-5xl font-bold text-foreground">{guaranteedCreators}+</p>
               <p className="text-lg text-muted-foreground mt-3">{guaranteedViews.toLocaleString()}+ views</p>
             </div>
           </div>
