@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, X, Image, Video, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, X, Image, Video, Loader2, Check } from 'lucide-react';
 import CampaignPreview from '@/components/CampaignPreview';
 import BudgetDialog from '@/components/BudgetDialog';
 import PlatformDialog from '@/components/PlatformDialog';
@@ -270,32 +270,38 @@ const BusinessCampaignForm: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setPlatformDialogOpen(true)}
-                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className={`w-full h-10 px-3 flex items-center justify-between text-sm rounded-[4px] border transition-colors ${
+                          selectedPlatform 
+                            ? 'border-green-500/30 bg-green-50 dark:bg-green-950/20 text-foreground' 
+                            : 'border-input bg-background text-foreground hover:bg-accent'
+                        }`}
                       >
-                        {selectedPlatform 
-                          ? platforms.find(p => p.id === selectedPlatform)?.name
-                          : 'Select platform'
-                        }
+                        <span className="flex-1 text-center">Select platform</span>
+                        {selectedPlatform && <Check className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />}
                       </button>
                       <button
                         type="button"
                         onClick={() => setAudienceDialogOpen(true)}
-                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className={`w-full h-10 px-3 flex items-center justify-between text-sm rounded-[4px] border transition-colors ${
+                          selectedRegions.length > 0 || selectedAudiences.length > 0
+                            ? 'border-green-500/30 bg-green-50 dark:bg-green-950/20 text-foreground' 
+                            : 'border-input bg-background text-foreground hover:bg-accent'
+                        }`}
                       >
-                        {selectedRegions.length > 0 || selectedAudiences.length > 0 
-                          ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
-                          : 'Select audience'
-                        }
+                        <span className="flex-1 text-center">Select audience</span>
+                        {(selectedRegions.length > 0 || selectedAudiences.length > 0) && <Check className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />}
                       </button>
                       <button
                         type="button"
                         onClick={() => setBudgetDialogOpen(true)}
-                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                        className={`w-full h-10 px-3 flex items-center justify-between text-sm rounded-[4px] border transition-colors ${
+                          formData.total_budget >= 10000
+                            ? 'border-green-500/30 bg-green-50 dark:bg-green-950/20 text-foreground' 
+                            : 'border-input bg-background text-foreground hover:bg-accent'
+                        }`}
                       >
-                        {formData.total_budget >= 10000 
-                          ? `${formData.total_budget.toLocaleString()} SEK`
-                          : 'Set budget'
-                        }
+                        <span className="flex-1 text-center">Set budget</span>
+                        {formData.total_budget >= 10000 && <Check className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />}
                       </button>
                     </div>
 
@@ -523,27 +529,12 @@ const BusinessCampaignForm: React.FC = () => {
           
           {/* Blurred preview at bottom - only show when setup incomplete */}
           {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) && (
-            <div className="absolute bottom-0 left-0 right-0 h-[12.5vh] overflow-hidden pointer-events-none select-none z-10">
+            <div className="absolute bottom-0 left-0 right-0 h-[12.5vh] pointer-events-none select-none z-10">
               {/* Fade */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
-              <div className="relative h-full px-8 pb-6 pt-4">
-                <div className="relative h-full">
-                  <div className="space-y-2 blur-[2px]">
-                    <div className="space-y-1 max-w-lg">
-                      <Label className="text-xs">Campaign Title</Label>
-                      <div className="w-full h-8 px-3 rounded-[4px] border border-input bg-background" />
-                    </div>
-                    <div className="space-y-1 max-w-lg">
-                      <Label className="text-xs">Description</Label>
-                      <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
-                    </div>
-                  </div>
-
-                  <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center">
-                    <p className="text-muted-foreground text-sm">Complete the steps above</p>
-                  </div>
-                </div>
+              <div className="relative h-full flex items-center justify-center">
+                <p className="text-muted-foreground text-sm">Complete the steps above</p>
               </div>
             </div>
           )}

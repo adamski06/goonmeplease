@@ -75,38 +75,40 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
           {/* Main content area - empty */}
           <div className="flex-1" />
 
-          {/* Platform logos - smaller, lower, evenly spread */}
-          <div className="px-16 pb-16 flex justify-between">
-            {platforms.map(({ id, name, logo }) => {
-              const isSelected = localSelection === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setLocalSelection(id)}
-                  className={`flex flex-col items-center gap-3 transition-all duration-150 ${
-                    isSelected 
-                      ? 'opacity-100' 
-                      : 'opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <div className={`w-16 h-16 rounded-[4px] overflow-hidden ${
-                    isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
-                  }`}>
-                    <img 
-                      src={logo} 
-                      alt={name} 
-                      className={`w-full h-full object-cover ${
-                        id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                      }`}
-                    />
-                  </div>
-                  <span className={`text-sm ${isSelected ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                    {name}
-                  </span>
-                </button>
-              );
-            })}
+          {/* Platform logos - compact box in center-bottom */}
+          <div className="px-16 pb-16 flex justify-center">
+            <div className="border border-input rounded-[4px] p-4 flex gap-6">
+              {platforms.map(({ id, name, logo }) => {
+                const isSelected = localSelection === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setLocalSelection(id)}
+                    className={`flex flex-col items-center gap-2 transition-all duration-150 ${
+                      isSelected 
+                        ? 'opacity-100' 
+                        : 'opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <div className={`w-12 h-12 rounded-[4px] overflow-hidden ${
+                      isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
+                    }`}>
+                      <img 
+                        src={logo} 
+                        alt={name} 
+                        className={`w-full h-full object-cover ${
+                          id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                        }`}
+                      />
+                    </div>
+                    <span className={`text-xs ${isSelected ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                      {name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Footer with Continue button - no border */}
