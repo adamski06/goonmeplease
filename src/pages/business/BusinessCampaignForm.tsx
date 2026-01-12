@@ -259,209 +259,262 @@ const BusinessCampaignForm: React.FC = () => {
       <div className="h-full flex animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form Panel - sidebar style with grey background */}
         <div className="w-[440px] flex-shrink-0 h-screen overflow-y-auto backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-r border-black/10 dark:border-white/20 scrollbar-thin">
-          <div className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-6 pb-8">
-              {/* Campaign Info */}
-              <div className="space-y-4">
-                {/* Platform Selection */}
-                <div className="space-y-2 max-w-lg">
-                  <Label>Target Platform</Label>
-                  <button
-                    type="button"
-                    onClick={() => setPlatformDialogOpen(true)}
-                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                  >
-                    {selectedPlatform 
-                      ? platforms.find(p => p.id === selectedPlatform)?.name
-                      : 'Select platform'
-                    }
-                  </button>
-                </div>
+          <div className="p-8 h-full">
+            <form onSubmit={handleSubmit} className="h-full flex flex-col pb-8">
+              {/* Initial Setup - Centered when not all selected */}
+              {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
+                <div className="flex-1 flex flex-col items-center justify-center space-y-4">
+                  {/* Platform Selection */}
+                  <div className="space-y-2 w-full max-w-xs">
+                    <Label className="text-center block">Target Platform</Label>
+                    <button
+                      type="button"
+                      onClick={() => setPlatformDialogOpen(true)}
+                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                    >
+                      {selectedPlatform 
+                        ? platforms.find(p => p.id === selectedPlatform)?.name
+                        : 'Select platform'
+                      }
+                    </button>
+                  </div>
 
-                {/* Target Audience Selection */}
-                <div className="space-y-2 max-w-lg">
-                  <Label>Target Audience</Label>
-                  <button
-                    type="button"
-                    onClick={() => setAudienceDialogOpen(true)}
-                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                  >
-                    {selectedRegions.length > 0 || selectedAudiences.length > 0 
-                      ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
-                      : 'Select audience'
-                    }
-                  </button>
-                </div>
+                  {/* Target Audience Selection */}
+                  <div className="space-y-2 w-full max-w-xs">
+                    <Label className="text-center block">Target Audience</Label>
+                    <button
+                      type="button"
+                      onClick={() => setAudienceDialogOpen(true)}
+                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                    >
+                      {selectedRegions.length > 0 || selectedAudiences.length > 0 
+                        ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
+                        : 'Select audience'
+                      }
+                    </button>
+                  </div>
 
-                {/* Budget Section */}
-                <div className="space-y-2 max-w-lg">
-                  <Label>Budget</Label>
-                  <button
-                    type="button"
-                    onClick={() => setBudgetDialogOpen(true)}
-                    className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                  >
-                    {formData.total_budget >= 10000 
-                      ? `${formData.total_budget.toLocaleString()} SEK`
-                      : 'Set budget'
-                    }
-                  </button>
-                  <BudgetDialog
-                    open={budgetDialogOpen}
-                    onOpenChange={setBudgetDialogOpen}
-                    budget={formData.total_budget}
-                    onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
-                  />
+                  {/* Budget Section */}
+                  <div className="space-y-2 w-full max-w-xs">
+                    <Label className="text-center block">Budget</Label>
+                    <button
+                      type="button"
+                      onClick={() => setBudgetDialogOpen(true)}
+                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                    >
+                      {formData.total_budget >= 10000 
+                        ? `${formData.total_budget.toLocaleString()} SEK`
+                        : 'Set budget'
+                      }
+                    </button>
+                    <BudgetDialog
+                      open={budgetDialogOpen}
+                      onOpenChange={setBudgetDialogOpen}
+                      budget={formData.total_budget}
+                      onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
+                    />
+                  </div>
                 </div>
-
-                <div className="pt-4 space-y-2 max-w-lg">
-                  <Label htmlFor="title">Campaign Title</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="e.g., Summer Refresh Campaign"
-                    required
-                  />
-                </div>
-                <div className="space-y-2 max-w-lg">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Describe what you want creators to make..."
-                    rows={3}
-                  />
-                </div>
-
-                {/* Video Upload */}
-                <div className="space-y-2">
-                  <Label>Campaign Video</Label>
-                  {campaignVideoPreview ? (
-                    <div className="relative w-32 aspect-[9/16]">
-                      <video 
-                        src={campaignVideoPreview} 
-                        controls 
-                        className="w-full h-full object-cover rounded-lg border border-border"
-                      />
-                      <Button
+              ) : (
+                /* Full Form - Shown after all three are set */
+                <div className="space-y-6">
+                  {/* Compact selectors at top */}
+                  <div className="space-y-4">
+                    {/* Platform Selection */}
+                    <div className="space-y-2 max-w-lg">
+                      <Label>Target Platform</Label>
+                      <button
                         type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={removeVideo}
-                        className="absolute top-2 right-2 h-6 w-6 bg-background/80 hover:bg-destructive hover:text-destructive-foreground"
+                        onClick={() => setPlatformDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
                       >
-                        <X className="h-3 w-3" />
+                        {platforms.find(p => p.id === selectedPlatform)?.name}
+                      </button>
+                    </div>
+
+                    {/* Target Audience Selection */}
+                    <div className="space-y-2 max-w-lg">
+                      <Label>Target Audience</Label>
+                      <button
+                        type="button"
+                        onClick={() => setAudienceDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {`${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`}
+                      </button>
+                    </div>
+
+                    {/* Budget Section */}
+                    <div className="space-y-2 max-w-lg">
+                      <Label>Budget</Label>
+                      <button
+                        type="button"
+                        onClick={() => setBudgetDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {`${formData.total_budget.toLocaleString()} SEK`}
+                      </button>
+                      <BudgetDialog
+                        open={budgetDialogOpen}
+                        onOpenChange={setBudgetDialogOpen}
+                        budget={formData.total_budget}
+                        onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Campaign Details - Only visible after setup */}
+                  <div className="space-y-4 pt-4 border-t border-border">
+                    <div className="space-y-2 max-w-lg">
+                      <Label htmlFor="title">Campaign Title</Label>
+                      <Input
+                        id="title"
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        placeholder="e.g., Summer Refresh Campaign"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2 max-w-lg">
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="Describe what you want creators to make..."
+                        rows={3}
+                      />
+                    </div>
+
+                    {/* Video Upload */}
+                    <div className="space-y-2">
+                      <Label>Campaign Video</Label>
+                      {campaignVideoPreview ? (
+                        <div className="relative w-32 aspect-[9/16]">
+                          <video 
+                            src={campaignVideoPreview} 
+                            controls 
+                            className="w-full h-full object-cover rounded-lg border border-border"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={removeVideo}
+                            className="absolute top-2 right-2 h-6 w-6 bg-background/80 hover:bg-destructive hover:text-destructive-foreground"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <label className="flex flex-col items-center justify-center w-32 aspect-[9/16] border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                          <Video className="h-8 w-8 text-muted-foreground mb-2" />
+                          <span className="text-xs text-muted-foreground text-center px-2">Upload video</span>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            onChange={handleVideoUpload}
+                            className="hidden"
+                          />
+                        </label>
+                      )}
+                    </div>
+                    
+                    {/* Requirements as list */}
+                    <div className="space-y-2 max-w-lg">
+                      <div className="flex items-center justify-between">
+                        <Label>Requirements</Label>
+                        <Button type="button" variant="ghost" size="sm" onClick={addRequirement} className="h-7 px-2">
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {requirements.map((requirement, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <span className="text-muted-foreground text-sm w-4">•</span>
+                            <Input
+                              value={requirement}
+                              onChange={(e) => updateRequirement(index, e.target.value)}
+                              placeholder="Enter a requirement..."
+                              className="flex-1"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeRequirement(index)}
+                              className="h-8 w-8 text-muted-foreground hover:text-red-500"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Requirement Images */}
+                    <div className="space-y-2">
+                      <Label>Reference Images</Label>
+                      <div className="flex flex-wrap gap-3">
+                        {requirementImagePreviews.map((preview, index) => (
+                          <div key={index} className="relative w-24 h-24">
+                            <img 
+                              src={preview} 
+                              alt={`Reference ${index + 1}`} 
+                              className="w-full h-full object-cover rounded-lg border border-border"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeImage(index)}
+                              className="absolute -top-2 -right-2 h-6 w-6 bg-background border border-border rounded-full hover:bg-destructive hover:text-destructive-foreground"
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        <label className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                          <Image className="h-6 w-6 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground mt-1">Add</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageUpload}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Deadline Section */}
+                    <div className="border-t border-border pt-6 space-y-4">
+                      <h3 className="text-base font-semibold text-foreground">Deadline</h3>
+                      <div className="space-y-2 max-w-lg">
+                        <Label htmlFor="deadline">Campaign Deadline</Label>
+                        <Input
+                          id="deadline"
+                          type="date"
+                          value={formData.deadline}
+                          onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Submit */}
+                    <div className="flex justify-end gap-3 pt-4">
+                      <Button type="button" variant="outline" onClick={() => navigate('/business/campaigns')}>
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={saving}>
+                        {saving ? 'Saving...' : (isEditing ? 'Update Campaign' : 'Create Campaign')}
                       </Button>
                     </div>
-                  ) : (
-                    <label className="flex flex-col items-center justify-center w-32 aspect-[9/16] border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                      <Video className="h-8 w-8 text-muted-foreground mb-2" />
-                      <span className="text-xs text-muted-foreground text-center px-2">Upload video</span>
-                      <input
-                        type="file"
-                        accept="video/*"
-                        onChange={handleVideoUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-                
-                {/* Requirements as list */}
-                <div className="space-y-2 max-w-lg">
-                  <div className="flex items-center justify-between">
-                    <Label>Requirements</Label>
-                    <Button type="button" variant="ghost" size="sm" onClick={addRequirement} className="h-7 px-2">
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add
-                    </Button>
-                  </div>
-                  <div className="space-y-2">
-                    {requirements.map((requirement, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <span className="text-muted-foreground text-sm w-4">•</span>
-                        <Input
-                          value={requirement}
-                          onChange={(e) => updateRequirement(index, e.target.value)}
-                          placeholder="Enter a requirement..."
-                          className="flex-1"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeRequirement(index)}
-                          className="h-8 w-8 text-muted-foreground hover:text-red-500"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
                   </div>
                 </div>
-
-                {/* Requirement Images */}
-                <div className="space-y-2">
-                  <Label>Reference Images</Label>
-                  <div className="flex flex-wrap gap-3">
-                    {requirementImagePreviews.map((preview, index) => (
-                      <div key={index} className="relative w-24 h-24">
-                        <img 
-                          src={preview} 
-                          alt={`Reference ${index + 1}`} 
-                          className="w-full h-full object-cover rounded-lg border border-border"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeImage(index)}
-                          className="absolute -top-2 -right-2 h-6 w-6 bg-background border border-border rounded-full hover:bg-destructive hover:text-destructive-foreground"
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                    <label className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                      <Image className="h-6 w-6 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground mt-1">Add</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Deadline Section */}
-              <div className="border-t border-border pt-6 space-y-4">
-                <h3 className="text-base font-semibold text-foreground">Deadline</h3>
-                <div className="space-y-2 max-w-lg">
-                  <Label htmlFor="deadline">Campaign Deadline</Label>
-                  <Input
-                    id="deadline"
-                    type="date"
-                    value={formData.deadline}
-                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              {/* Submit */}
-              <div className="flex justify-end gap-3 pt-4">
-                <Button type="button" variant="outline" onClick={() => navigate('/business/campaigns')}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={saving}>
-                  {saving ? 'Saving...' : (isEditing ? 'Update Campaign' : 'Create Campaign')}
-                </Button>
-              </div>
+              )}
             </form>
           </div>
         </div>
