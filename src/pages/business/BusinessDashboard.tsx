@@ -168,7 +168,7 @@ const BusinessDashboard: React.FC = () => {
           <div className="bg-card border border-border rounded-[3px] overflow-hidden w-full">
               {/* Header with logo and name */}
               <div className="p-10 pb-6">
-                <div className="flex items-start gap-6">
+                <div className="flex items-center gap-6">
                   {/* Left column - Logo */}
                   <div className="flex-shrink-0">
                     {/* Logo - round profile picture */}
