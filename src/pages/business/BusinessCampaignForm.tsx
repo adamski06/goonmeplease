@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Plus, X, Image, Video, Loader2, Wallet, Users } from 'lucide-react';
+import { ArrowLeft, Plus, X, Image, Video, Loader2 } from 'lucide-react';
 import CampaignPreview from '@/components/CampaignPreview';
 import BudgetDialog from '@/components/BudgetDialog';
 import PlatformDialog from '@/components/PlatformDialog';
@@ -264,89 +264,64 @@ const BusinessCampaignForm: React.FC = () => {
               {/* Campaign Info */}
               <div className="space-y-4">
                 {/* Platform Selection */}
-                <div className="space-y-3 max-w-lg">
+                <div className="space-y-2 max-w-lg">
                   <Label>Target Platform</Label>
                   <button
                     type="button"
                     onClick={() => setPlatformDialogOpen(true)}
-                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
                     {selectedPlatform ? (
-                      <>
-                        <div className="w-12 h-12 rounded-[2px] overflow-hidden">
-                          <img 
-                            src={platforms.find(p => p.id === selectedPlatform)?.logo} 
-                            alt={platforms.find(p => p.id === selectedPlatform)?.name} 
-                            className={`w-full h-full object-cover ${
-                              selectedPlatform === 'instagram' ? 'scale-125' : selectedPlatform === 'youtube' ? 'scale-[1.15]' : ''
-                            }`}
-                          />
-                        </div>
-                        <span className="text-sm font-medium text-foreground">
-                          {platforms.find(p => p.id === selectedPlatform)?.name}
-                        </span>
-                      </>
+                      <span className="text-foreground">
+                        {platforms.find(p => p.id === selectedPlatform)?.name}
+                      </span>
                     ) : (
-                      <>
-                        <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
-                          <span className="text-muted-foreground text-lg">?</span>
-                        </div>
-                        <span className="text-sm font-medium text-muted-foreground">
-                          Select platform
-                        </span>
-                      </>
+                      <span className="text-muted-foreground">
+                        Select platform
+                      </span>
                     )}
                   </button>
                 </div>
 
                 {/* Target Audience Selection */}
-                <div className="space-y-3 max-w-lg">
+                <div className="space-y-2 max-w-lg">
                   <Label>Target Audience</Label>
                   <button
                     type="button"
                     onClick={() => setAudienceDialogOpen(true)}
-                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
                     {selectedRegions.length > 0 || selectedAudiences.length > 0 ? (
-                      <>
-                        <div className="w-12 h-12 rounded-[2px] bg-primary/10 flex items-center justify-center">
-                          <Users className="h-5 w-5 text-primary" />
-                        </div>
-                        <span className="text-sm font-medium text-foreground">
-                          {selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}
-                          {selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}
-                          {selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}
-                        </span>
-                      </>
+                      <span className="text-foreground">
+                        {selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}
+                        {selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}
+                        {selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}
+                      </span>
                     ) : (
-                      <>
-                        <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
-                          <Users className="h-5 w-5 text-muted-foreground" />
-                        </div>
-                        <span className="text-sm font-medium text-muted-foreground">
-                          Select audience
-                        </span>
-                      </>
+                      <span className="text-muted-foreground">
+                        Select audience
+                      </span>
                     )}
                   </button>
                 </div>
 
                 {/* Budget Section */}
-                <div className="space-y-3 max-w-lg">
+                <div className="space-y-2 max-w-lg">
                   <Label>Budget</Label>
                   <button
                     type="button"
                     onClick={() => setBudgetDialogOpen(true)}
-                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                    className="w-full h-10 px-3 text-left text-sm rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
-                    <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
-                      <Wallet className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      {formData.total_budget >= 10000 
-                        ? `${formData.total_budget.toLocaleString()} SEK` 
-                        : 'Set budget'}
-                    </span>
+                    {formData.total_budget >= 10000 ? (
+                      <span className="text-foreground">
+                        {formData.total_budget.toLocaleString()} SEK
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">
+                        Set budget
+                      </span>
+                    )}
                   </button>
                   <BudgetDialog
                     open={budgetDialogOpen}
