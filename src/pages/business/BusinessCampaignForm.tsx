@@ -263,57 +263,56 @@ const BusinessCampaignForm: React.FC = () => {
             <form onSubmit={handleSubmit} className="h-full flex flex-col pb-8">
               {/* Initial Setup - Centered when not all selected */}
               {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
-                <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-                  {/* Platform Selection */}
-                  <div className="space-y-2 w-full max-w-xs">
-                    <Label className="text-center block">Target Platform</Label>
+                <div className="flex-1 flex flex-col items-center justify-center">
+                  {/* Single container for all three buttons */}
+                  <div className="w-full max-w-xs border border-input bg-background rounded-none">
                     <button
                       type="button"
                       onClick={() => setPlatformDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      className="w-full h-10 px-3 text-center text-sm text-foreground hover:bg-accent transition-colors border-b border-input"
                     >
                       {selectedPlatform 
                         ? platforms.find(p => p.id === selectedPlatform)?.name
                         : 'Select platform'
                       }
                     </button>
-                  </div>
-
-                  {/* Target Audience Selection */}
-                  <div className="space-y-2 w-full max-w-xs">
-                    <Label className="text-center block">Target Audience</Label>
                     <button
                       type="button"
                       onClick={() => setAudienceDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      className="w-full h-10 px-3 text-center text-sm text-foreground hover:bg-accent transition-colors border-b border-input"
                     >
                       {selectedRegions.length > 0 || selectedAudiences.length > 0 
                         ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
                         : 'Select audience'
                       }
                     </button>
-                  </div>
-
-                  {/* Budget Section */}
-                  <div className="space-y-2 w-full max-w-xs">
-                    <Label className="text-center block">Budget</Label>
                     <button
                       type="button"
                       onClick={() => setBudgetDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-none border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      className="w-full h-10 px-3 text-center text-sm text-foreground hover:bg-accent transition-colors"
                     >
                       {formData.total_budget >= 10000 
                         ? `${formData.total_budget.toLocaleString()} SEK`
                         : 'Set budget'
                       }
                     </button>
-                    <BudgetDialog
-                      open={budgetDialogOpen}
-                      onOpenChange={setBudgetDialogOpen}
-                      budget={formData.total_budget}
-                      onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
-                    />
                   </div>
+                  {/* Progress indicator */}
+                  <p className="text-sm text-muted-foreground mt-4">
+                    {(() => {
+                      let count = 0;
+                      if (selectedPlatform) count++;
+                      if (selectedRegions.length > 0 || selectedAudiences.length > 0) count++;
+                      if (formData.total_budget >= 10000) count++;
+                      return `${count}/3`;
+                    })()}
+                  </p>
+                  <BudgetDialog
+                    open={budgetDialogOpen}
+                    onOpenChange={setBudgetDialogOpen}
+                    budget={formData.total_budget}
+                    onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
+                  />
                 </div>
               ) : (
                 /* Full Form - Shown after all three are set */
