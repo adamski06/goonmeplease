@@ -263,50 +263,65 @@ const BusinessCampaignForm: React.FC = () => {
             <form onSubmit={handleSubmit} className="h-full flex flex-col pb-8">
               {/* Initial Setup - Centered when not all selected */}
               {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
-                <div className="flex-1 flex flex-col items-center justify-center">
-                  {/* Container with thin border around all three buttons */}
-                  <div className="w-full max-w-xs border border-input rounded-[4px] p-6 space-y-6">
-                    <button
-                      type="button"
-                      onClick={() => setPlatformDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {selectedPlatform 
-                        ? platforms.find(p => p.id === selectedPlatform)?.name
-                        : 'Select platform'
-                      }
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAudienceDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {selectedRegions.length > 0 || selectedAudiences.length > 0 
-                        ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
-                        : 'Select audience'
-                      }
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setBudgetDialogOpen(true)}
-                      className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {formData.total_budget >= 10000 
-                        ? `${formData.total_budget.toLocaleString()} SEK`
-                        : 'Set budget'
-                      }
-                    </button>
-                    {/* Progress indicator inside the node */}
-                    <p className="text-sm text-muted-foreground text-center">
-                      {(() => {
-                        let count = 0;
-                        if (selectedPlatform) count++;
-                        if (selectedRegions.length > 0 || selectedAudiences.length > 0) count++;
-                        if (formData.total_budget >= 10000) count++;
-                        return `${count}/3`;
-                      })()}
-                    </p>
+                <div className="flex-1 flex flex-col">
+                  {/* Centered setup container */}
+                  <div className="flex-1 flex flex-col items-center justify-center">
+                    <div className="w-full max-w-xs border border-input rounded-[4px] p-6 space-y-6">
+                      <button
+                        type="button"
+                        onClick={() => setPlatformDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {selectedPlatform 
+                          ? platforms.find(p => p.id === selectedPlatform)?.name
+                          : 'Select platform'
+                        }
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAudienceDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {selectedRegions.length > 0 || selectedAudiences.length > 0 
+                          ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
+                          : 'Select audience'
+                        }
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBudgetDialogOpen(true)}
+                        className="w-full h-10 px-3 text-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {formData.total_budget >= 10000 
+                          ? `${formData.total_budget.toLocaleString()} SEK`
+                          : 'Set budget'
+                        }
+                      </button>
+                      {/* Progress indicator inside the node */}
+                      <p className="text-sm text-muted-foreground text-center">
+                        {(() => {
+                          let count = 0;
+                          if (selectedPlatform) count++;
+                          if (selectedRegions.length > 0 || selectedAudiences.length > 0) count++;
+                          if (formData.total_budget >= 10000) count++;
+                          return `${count}/3`;
+                        })()}
+                      </p>
+                    </div>
                   </div>
+                  
+                  {/* Faded preview of upcoming fields */}
+                  <div className="opacity-30 pointer-events-none select-none space-y-4 pt-8 border-t border-border mt-8">
+                    <div className="space-y-2 max-w-lg">
+                      <Label>Campaign Title</Label>
+                      <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
+                    </div>
+                    <div className="space-y-2 max-w-lg">
+                      <Label>Description</Label>
+                      <div className="w-full h-20 px-3 rounded-[4px] border border-input bg-background" />
+                    </div>
+                  </div>
+                  
                   <BudgetDialog
                     open={budgetDialogOpen}
                     onOpenChange={setBudgetDialogOpen}
@@ -526,6 +541,7 @@ const BusinessCampaignForm: React.FC = () => {
             selectedPlatforms={selectedPlatform ? [selectedPlatform] : []}
             businessProfile={businessProfile}
             campaignVideoPreview={campaignVideoPreview}
+            isSetupComplete={!!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000)}
           />
         </div>
       </div>

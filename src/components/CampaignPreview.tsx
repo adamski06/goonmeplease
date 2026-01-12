@@ -39,6 +39,7 @@ interface CampaignPreviewProps {
   businessProfile: { company_name: string; logo_url: string | null } | null;
   campaignVideoPreview?: string;
   requirementImages?: string[];
+  isSetupComplete?: boolean;
 }
 
 const CampaignPreview: React.FC<CampaignPreviewProps> = ({
@@ -48,6 +49,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   businessProfile,
   campaignVideoPreview,
   requirementImages = [],
+  isSetupComplete = true,
 }) => {
   const [viewMode, setViewMode] = useState<'phone' | 'desktop'>('phone');
   const [selectedGradient, setSelectedGradient] = useState(0);
@@ -143,7 +145,13 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 flex justify-center min-h-0 p-4 pt-4">
+      <div className="flex-1 flex justify-center min-h-0 p-4 pt-4 relative">
+        {/* Greyed out overlay when setup not complete */}
+        {!isSetupComplete && (
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
+            <p className="text-muted-foreground text-center px-8">Complete the steps to start editing your campaign</p>
+          </div>
+        )}
         <Card 
           className={`border-border rounded-[4px] flex flex-col relative transition-all duration-300 ease-out ${
             viewMode === 'phone' ? 'w-[380px]' : 'w-full'
