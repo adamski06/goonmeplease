@@ -265,7 +265,7 @@ const BusinessCampaignForm: React.FC = () => {
               {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
                 <div className="h-full flex flex-col items-center justify-center relative">
                   {/* Centered setup container */}
-                  <div className="w-full max-w-xs border border-input rounded-[4px] p-4 space-y-4">
+                  <div className="w-full max-w-xs border border-input rounded-[4px] p-4 space-y-6">
                     <button
                       type="button"
                       onClick={() => setPlatformDialogOpen(true)}
@@ -297,7 +297,7 @@ const BusinessCampaignForm: React.FC = () => {
                       }
                     </button>
                     {/* Progress indicator inside the node */}
-                    <p className="text-sm text-muted-foreground text-center pt-1">
+                    <p className="text-xs text-muted-foreground text-center">
                       {(() => {
                         let count = 0;
                         if (selectedPlatform) count++;
@@ -308,15 +308,21 @@ const BusinessCampaignForm: React.FC = () => {
                     </p>
                   </div>
                   
-                  {/* Faded preview of upcoming fields - positioned at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 opacity-30 pointer-events-none select-none space-y-4 pt-8 border-t border-border">
-                    <div className="space-y-2 max-w-lg">
-                      <Label>Campaign Title</Label>
-                      <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
-                    </div>
-                    <div className="space-y-2 max-w-lg">
-                      <Label>Description</Label>
-                      <div className="w-full h-20 px-3 rounded-[4px] border border-input bg-background" />
+                  {/* Blurred preview of upcoming fields - positioned at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 pointer-events-none select-none">
+                    <div className="relative space-y-4 p-4 border-t border-border">
+                      <div className="space-y-2 max-w-lg blur-[2px]">
+                        <Label>Campaign Title</Label>
+                        <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
+                      </div>
+                      <div className="space-y-2 max-w-lg blur-[2px]">
+                        <Label>Description</Label>
+                        <div className="w-full h-20 px-3 rounded-[4px] border border-input bg-background" />
+                      </div>
+                      {/* Overlay with message */}
+                      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center">
+                        <p className="text-muted-foreground text-sm">Complete the steps above</p>
+                      </div>
                     </div>
                   </div>
                   
