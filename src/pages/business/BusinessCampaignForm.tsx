@@ -259,45 +259,48 @@ const BusinessCampaignForm: React.FC = () => {
       <div className="h-full flex animate-fade-in" style={{ animationDelay: '0s', animationDuration: '0.4s', animationFillMode: 'both' }}>
         {/* Left: Form Panel - sidebar style with grey background */}
         <div className="w-[440px] flex-shrink-0 h-screen overflow-hidden backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface border-r border-black/10 dark:border-white/20 relative">
-          <div className="p-8 h-full overflow-y-auto scrollbar-thin pb-52">
+          <div className="p-8 h-full overflow-y-auto scrollbar-thin">
             <form onSubmit={handleSubmit} className="h-full flex flex-col">
               {/* Initial Setup - Centered when not all selected */}
               {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
-                <div className="flex-1 flex flex-col items-center justify-center">
+                <div className="flex-1 flex flex-col items-center justify-center pb-[12.5vh]">
                   {/* Centered setup container */}
-                  <div className="w-full max-w-xs border border-input rounded-[4px] p-4 space-y-6">
-                    <button
-                      type="button"
-                      onClick={() => setPlatformDialogOpen(true)}
-                      className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {selectedPlatform 
-                        ? platforms.find(p => p.id === selectedPlatform)?.name
-                        : 'Select platform'
-                      }
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAudienceDialogOpen(true)}
-                      className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {selectedRegions.length > 0 || selectedAudiences.length > 0 
-                        ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
-                        : 'Select audience'
-                      }
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setBudgetDialogOpen(true)}
-                      className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
-                    >
-                      {formData.total_budget >= 10000 
-                        ? `${formData.total_budget.toLocaleString()} SEK`
-                        : 'Set budget'
-                      }
-                    </button>
+                  <div className="w-full max-w-xs border border-input rounded-[4px] p-4">
+                    <div className="space-y-6">
+                      <button
+                        type="button"
+                        onClick={() => setPlatformDialogOpen(true)}
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {selectedPlatform 
+                          ? platforms.find(p => p.id === selectedPlatform)?.name
+                          : 'Select platform'
+                        }
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAudienceDialogOpen(true)}
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {selectedRegions.length > 0 || selectedAudiences.length > 0 
+                          ? `${selectedRegions.length > 0 ? `${selectedRegions.length} region${selectedRegions.length > 1 ? 's' : ''}` : ''}${selectedRegions.length > 0 && selectedAudiences.length > 0 ? ', ' : ''}${selectedAudiences.length > 0 ? `${selectedAudiences.length} audience${selectedAudiences.length > 1 ? 's' : ''}` : ''}`
+                          : 'Select audience'
+                        }
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBudgetDialogOpen(true)}
+                        className="w-full h-10 px-3 flex items-center justify-center text-sm rounded-[4px] border border-input bg-background text-foreground hover:bg-accent transition-colors"
+                      >
+                        {formData.total_budget >= 10000 
+                          ? `${formData.total_budget.toLocaleString()} SEK`
+                          : 'Set budget'
+                        }
+                      </button>
+                    </div>
+
                     {/* Progress indicator inside the node */}
-                    <p className="text-xs text-muted-foreground text-center">
+                    <p className="mt-2 text-xs text-muted-foreground text-center leading-none">
                       {(() => {
                         let count = 0;
                         if (selectedPlatform) count++;
@@ -520,19 +523,26 @@ const BusinessCampaignForm: React.FC = () => {
           
           {/* Blurred preview at bottom - only show when setup incomplete */}
           {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) && (
-            <div className="absolute bottom-0 left-0 right-0 pointer-events-none select-none z-10">
-              <div className="relative p-8 pt-6 space-y-4 border-t border-border bg-background/40">
-                <div className="space-y-2 max-w-lg blur-[2px]">
-                  <Label>Campaign Title</Label>
-                  <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
-                </div>
-                <div className="space-y-2 max-w-lg blur-[2px]">
-                  <Label>Description</Label>
-                  <div className="w-full h-20 px-3 rounded-[4px] border border-input bg-background" />
-                </div>
-                {/* Overlay with message */}
-                <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center">
-                  <p className="text-muted-foreground text-sm">Complete the steps above</p>
+            <div className="absolute bottom-0 left-0 right-0 h-[12.5vh] overflow-hidden pointer-events-none select-none z-10">
+              {/* Fade */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/70 to-transparent" />
+
+              <div className="relative h-full px-8 pb-6 pt-4">
+                <div className="relative h-full">
+                  <div className="space-y-2 blur-[2px]">
+                    <div className="space-y-1 max-w-lg">
+                      <Label className="text-xs">Campaign Title</Label>
+                      <div className="w-full h-8 px-3 rounded-[4px] border border-input bg-background" />
+                    </div>
+                    <div className="space-y-1 max-w-lg">
+                      <Label className="text-xs">Description</Label>
+                      <div className="w-full h-10 px-3 rounded-[4px] border border-input bg-background" />
+                    </div>
+                  </div>
+
+                  <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center">
+                    <p className="text-muted-foreground text-sm">Complete the steps above</p>
+                  </div>
                 </div>
               </div>
             </div>
