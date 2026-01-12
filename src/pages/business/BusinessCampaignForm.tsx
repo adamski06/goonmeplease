@@ -265,7 +265,7 @@ const BusinessCampaignForm: React.FC = () => {
               {!(selectedPlatform && (selectedRegions.length > 0 || selectedAudiences.length > 0) && formData.total_budget >= 10000) ? (
                 <div className="flex-1 flex flex-col items-center justify-center">
                   {/* Container with thin border around all three buttons */}
-                  <div className="w-full max-w-xs border border-input p-4 space-y-3">
+                  <div className="w-full max-w-xs border border-input p-6 space-y-6">
                     <button
                       type="button"
                       onClick={() => setPlatformDialogOpen(true)}
@@ -296,17 +296,17 @@ const BusinessCampaignForm: React.FC = () => {
                         : 'Set budget'
                       }
                     </button>
+                    {/* Progress indicator inside the node */}
+                    <p className="text-sm text-muted-foreground text-center pt-2">
+                      {(() => {
+                        let count = 0;
+                        if (selectedPlatform) count++;
+                        if (selectedRegions.length > 0 || selectedAudiences.length > 0) count++;
+                        if (formData.total_budget >= 10000) count++;
+                        return `${count}/3`;
+                      })()}
+                    </p>
                   </div>
-                  {/* Progress indicator */}
-                  <p className="text-sm text-muted-foreground mt-4">
-                    {(() => {
-                      let count = 0;
-                      if (selectedPlatform) count++;
-                      if (selectedRegions.length > 0 || selectedAudiences.length > 0) count++;
-                      if (formData.total_budget >= 10000) count++;
-                      return `${count}/3`;
-                    })()}
-                  </p>
                   <BudgetDialog
                     open={budgetDialogOpen}
                     onOpenChange={setBudgetDialogOpen}
