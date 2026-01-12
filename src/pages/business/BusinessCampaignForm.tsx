@@ -331,6 +331,31 @@ const BusinessCampaignForm: React.FC = () => {
                   </button>
                 </div>
 
+                {/* Budget Section */}
+                <div className="space-y-3 max-w-lg">
+                  <Label>Budget</Label>
+                  <button
+                    type="button"
+                    onClick={() => setBudgetDialogOpen(true)}
+                    className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
+                  >
+                    <div className="w-12 h-12 rounded-[2px] bg-muted/50 flex items-center justify-center">
+                      <Wallet className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">
+                      {formData.total_budget >= 10000 
+                        ? `${formData.total_budget.toLocaleString()} SEK` 
+                        : 'Set budget'}
+                    </span>
+                  </button>
+                  <BudgetDialog
+                    open={budgetDialogOpen}
+                    onOpenChange={setBudgetDialogOpen}
+                    budget={formData.total_budget}
+                    onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
+                  />
+                </div>
+
                 <div className="pt-4 space-y-2 max-w-lg">
                   <Label htmlFor="title">Campaign Title</Label>
                   <Input
@@ -454,31 +479,6 @@ const BusinessCampaignForm: React.FC = () => {
                     </label>
                   </div>
                 </div>
-              </div>
-
-              {/* Budget Section */}
-              <div className="border-t border-border pt-6 space-y-4">
-                <Label>Budget</Label>
-                <button
-                  type="button"
-                  onClick={() => setBudgetDialogOpen(true)}
-                  className="flex items-center gap-3 transition-all duration-200 hover:opacity-80"
-                >
-                  <div className="w-12 h-12 rounded-[4px] bg-muted/50 flex items-center justify-center">
-                    <Wallet className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">
-                    {formData.total_budget >= 10000 
-                      ? `${formData.total_budget.toLocaleString()} SEK` 
-                      : 'Set budget'}
-                  </span>
-                </button>
-                <BudgetDialog
-                  open={budgetDialogOpen}
-                  onOpenChange={setBudgetDialogOpen}
-                  budget={formData.total_budget}
-                  onBudgetChange={(budget) => setFormData({ ...formData, total_budget: budget })}
-                />
               </div>
 
               {/* Deadline Section */}
