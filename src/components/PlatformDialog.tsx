@@ -75,37 +75,50 @@ const PlatformDialog: React.FC<PlatformDialogProps> = ({
           {/* Main content area - empty */}
           <div className="flex-1" />
 
-          {/* Platform logos - compact box in center-bottom */}
-          <div className="px-16 pb-16 flex justify-center">
+          {/* Platform logos - compact box lower down */}
+          <div className="px-16 pb-8 flex justify-center">
             <div className="border border-input rounded-[4px] p-4 flex gap-6">
               {platforms.map(({ id, name, logo }) => {
                 const isSelected = localSelection === id;
+                const isComingSoon = id !== 'tiktok';
+                
                 return (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setLocalSelection(id)}
-                    className={`flex flex-col items-center gap-2 transition-all duration-150 ${
-                      isSelected 
-                        ? 'opacity-100' 
-                        : 'opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <div className={`w-12 h-12 rounded-[4px] overflow-hidden ${
-                      isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
-                    }`}>
-                      <img 
-                        src={logo} 
-                        alt={name} 
-                        className={`w-full h-full object-cover ${
-                          id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
-                        }`}
-                      />
-                    </div>
-                    <span className={`text-xs ${isSelected ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                      {name}
-                    </span>
-                  </button>
+                  <div key={id} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => !isComingSoon && setLocalSelection(id)}
+                      disabled={isComingSoon}
+                      className={`flex flex-col items-center gap-2 transition-all duration-150 ${
+                        isComingSoon
+                          ? 'opacity-40 cursor-not-allowed'
+                          : isSelected 
+                            ? 'opacity-100' 
+                            : 'opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <div className={`w-12 h-12 rounded-[4px] overflow-hidden ${
+                        isSelected && !isComingSoon ? 'ring-2 ring-primary ring-offset-2' : ''
+                      }`}>
+                        <img 
+                          src={logo} 
+                          alt={name} 
+                          className={`w-full h-full object-cover ${
+                            id === 'instagram' ? 'scale-125' : id === 'youtube' ? 'scale-[1.15]' : ''
+                          }`}
+                        />
+                      </div>
+                      <span className={`text-xs ${isSelected && !isComingSoon ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                        {name}
+                      </span>
+                    </button>
+                    {isComingSoon && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-[10px] text-muted-foreground font-medium bg-background/80 px-1.5 py-0.5 rounded">
+                          Coming soon
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </div>
