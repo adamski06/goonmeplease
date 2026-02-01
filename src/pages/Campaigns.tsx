@@ -988,14 +988,14 @@ const Campaigns: React.FC = () => {
               return (
               <div 
                 key={campaign.id} 
-                className="h-[calc(100dvh-80px)] md:h-screen flex items-stretch justify-stretch md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8"
+                className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative w-full h-full md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
+                  className="relative w-[calc(100%-24px)] h-[calc(100%-16px)] rounded-2xl overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div 
@@ -1134,7 +1134,7 @@ const Campaigns: React.FC = () => {
           </>
         ) : (
           /* Browse Mode - Horizontal List Layout */
-          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24 pb-24 md:pb-8">
+          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24 pb-24 md:pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <div className="px-4 md:pl-8 md:pr-8">
               <div className="grid grid-cols-2 md:flex md:flex-wrap gap-3 md:gap-x-6 md:gap-y-8">
               {campaigns.map((campaign, index) => {
