@@ -124,12 +124,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           className="md:hidden absolute left-3 right-3 rounded-[22px] overflow-hidden"
           style={{
             bottom: '12px',
-            top: isExpanded ? '80px' : 'auto',
-            background: 'rgba(0, 0, 0, 0.4)',
-            backdropFilter: 'blur(24px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            maxHeight: isExpanded ? 'calc(100% - 92px)' : '72px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            transition: 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
           {!isExpanded ? (
