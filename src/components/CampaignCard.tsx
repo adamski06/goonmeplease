@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { Bookmark, Share2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bookmark, Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Campaign {
   id: string;
@@ -28,47 +29,22 @@ interface CampaignCardProps {
 const CampaignCard: React.FC<CampaignCardProps> = ({
   campaign,
   isSaved,
-  onSelect,
   onToggleFavorite,
 }) => {
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const touchStartXRef = useRef(0);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    setIsDragging(true);
-  };
+  const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
+  const minViews = Math.round(totalViews * 0.125);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const currentX = e.touches[0].clientX;
-    const offset = Math.max(0, touchStartXRef.current - currentX);
-    setDragOffset(offset);
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    if (dragOffset > 80) {
-      onSelect(campaign);
-    }
-    setDragOffset(0);
+  const handleNodeClick = () => {
+    setIsExpanded(!isExpanded);
   };
 
   return (
-    <div
-      className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Full screen photo on mobile, left side on desktop */}
       <div
-        onClick={() => onSelect(campaign)}
         className="relative w-[calc(100%-24px)] h-[calc(100%-16px)] rounded-2xl overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] md:flex-shrink-0"
-        style={{
-          transform: `translateX(${-dragOffset}px)`,
-          transition: isDragging ? 'none' : 'transform 0.3s ease-out',
-        }}
       >
         <img
           src={campaign.image}
@@ -86,7 +62,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         <div className="md:hidden absolute bottom-32 right-3 flex flex-col items-center gap-3">
           {/* Company profile icon - circular with cover */}
           <div
-            className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center"
+            className="w-12 h-12 rounded-full overflow-hidden"
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(12px) saturate(180%)',
@@ -97,7 +73,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <img
               src={campaign.logo}
               alt={campaign.brand}
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full object-cover"
             />
           </div>
 
@@ -137,13 +113,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               border: '1px solid rgba(255, 255, 255, 0.3)',
             }}
           >
-            <Share2 className="h-6 w-6 text-white/90" strokeWidth={1.5} />
+            <Send className="h-5 w-5 text-white/90" strokeWidth={1.5} />
           </button>
         </div>
 
-        {/* Apple Liquid Glass Earnings Node - Full Width (mobile only) */}
+        {/* Expandable Glass Node - Mobile Only */}
         <div
-          className="md:hidden absolute bottom-3 left-3 right-3 px-5 py-4 rounded-[22px] flex items-center justify-between"
+          onClick={handleNodeClick}
+          className={`md:hidden absolute left-3 right-3 rounded-[22px] transition-all duration-300 ease-out overflow-hidden ${
+            isExpanded ? 'bottom-3 top-20' : 'bottom-3'
+          }`}
           style={{
             background: 'rgba(255, 255, 255, 0.15)',
             backdropFilter: 'blur(20px) saturate(180%)',
@@ -151,25 +130,153 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             border: '1px solid rgba(255, 255, 255, 0.25)',
           }}
         >
-          <div className="flex items-baseline gap-1">
-            <span className="text-xl font-bold text-white font-montserrat">
-              {campaign.ratePerThousand}
-            </span>
-            <span className="text-xs font-medium text-white/80 font-montserrat">
-              sek / 1000 views
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xs font-medium text-white/70 font-montserrat">
-              Up to
-            </span>
-            <span className="text-xl font-bold text-white font-montserrat">
-              {campaign.maxEarnings.toLocaleString()}
-            </span>
-            <span className="text-sm font-semibold text-white/90 font-montserrat">
-              sek
-            </span>
-          </div>
+          {!isExpanded ? (
+            /* Collapsed state - earnings info */
+            <div className="px-5 py-4 flex items-center justify-between">
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold text-white font-montserrat">
+                  {campaign.ratePerThousand}
+                </span>
+                <span className="text-xs font-medium text-white/80 font-montserrat">
+                  sek / 1000 views
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xs font-medium text-white/70 font-montserrat">
+                  Up to
+                </span>
+                <span className="text-xl font-bold text-white font-montserrat">
+                  {campaign.maxEarnings.toLocaleString()}
+                </span>
+                <span className="text-sm font-semibold text-white/90 font-montserrat">
+                  sek
+                </span>
+              </div>
+            </div>
+          ) : (
+            /* Expanded state - full campaign detail */
+            <div className="h-full flex flex-col overflow-hidden">
+              {/* Header with brand */}
+              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-white/10">
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                  <img
+                    src={campaign.logo}
+                    alt={campaign.brand}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h2 className="text-base font-bold text-white font-montserrat flex-1">
+                  {campaign.brand}
+                </h2>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(campaign.id, e);
+                  }}
+                  className="p-1"
+                >
+                  <Bookmark
+                    className={`h-5 w-5 ${isSaved ? 'fill-white text-white' : 'text-white/60'}`}
+                    strokeWidth={1.5}
+                  />
+                </button>
+              </div>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+                {/* Description */}
+                <p className="text-sm text-white/90 font-jakarta leading-relaxed mb-5">
+                  {campaign.description}
+                </p>
+
+                {/* Earnings Display */}
+                <div className="mb-5">
+                  <div className="flex items-baseline gap-1 mb-3">
+                    <span className="text-lg font-bold text-white font-montserrat">
+                      {campaign.ratePerThousand}
+                    </span>
+                    <span className="text-sm font-bold text-white/80 font-jakarta">sek</span>
+                    <span className="text-xs font-bold text-white/70 font-jakarta">/ 1000 views</span>
+                  </div>
+
+                  {/* Earnings line visualization */}
+                  <div className="relative mt-3">
+                    {/* Max earnings bubble */}
+                    <div className="absolute -top-8 right-0 z-10">
+                      <div className="bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full rounded-br-none flex items-baseline gap-1">
+                        <span className="text-xl font-bold text-white font-montserrat">
+                          {campaign.maxEarnings.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-white/80 font-montserrat">sek</span>
+                      </div>
+                    </div>
+
+                    {/* The line */}
+                    <div className="relative py-3">
+                      <div className="h-[2px] bg-white/50 w-full" />
+                      {/* Min marker */}
+                      <div className="absolute left-[12.5%] top-1/2 -translate-y-1/2">
+                        <div className="w-[2px] h-[8px] bg-white/70" />
+                        <div className="absolute -top-5 left-0 whitespace-nowrap">
+                          <span className="text-[10px] text-white/70 font-jakarta">min</span>
+                        </div>
+                        <div className="absolute top-3 left-0 whitespace-nowrap">
+                          <span className="text-[10px] text-white/70 font-jakarta">{minViews.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Views bubble */}
+                    <div className="absolute top-7 right-0 z-10">
+                      <div className="bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full rounded-tr-none flex items-baseline gap-1">
+                        <span className="text-sm font-normal text-white/90 font-jakarta">
+                          {totalViews.toLocaleString()}
+                        </span>
+                        <span className="text-[10px] text-white/70 font-jakarta">views</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-10" />
+                </div>
+
+                {/* Requirements */}
+                <div className="bg-white/10 rounded-xl p-4 mb-4">
+                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Requirements</h3>
+                  <ul className="space-y-1.5">
+                    {campaign.guidelines.map((guideline, idx) => (
+                      <li key={idx} className="text-xs text-white/80 font-jakarta flex items-start gap-2">
+                        <span className="text-white/60">•</span>
+                        {guideline}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Example images */}
+                  {campaign.exampleImages && campaign.exampleImages.length > 0 && (
+                    <div className="flex gap-2 mt-3">
+                      {campaign.exampleImages.slice(0, 2).map((img, i) => (
+                        <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                          <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Fixed CTA at bottom */}
+              <div className="px-5 pb-4 pt-2">
+                <Button
+                  size="lg"
+                  className="w-full py-4 text-sm font-bold rounded-full bg-white/90 hover:bg-white text-black"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Submit Content
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
