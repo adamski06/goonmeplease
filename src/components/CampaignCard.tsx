@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Share2 } from 'lucide-react';
 
 interface Campaign {
   id: string;
@@ -82,9 +82,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           }}
         />
 
-        {/* Right side icons - Company logo + Save (mobile only) */}
-        <div className="md:hidden absolute bottom-28 right-4 flex flex-col items-center gap-3">
-          {/* Company profile icon */}
+        {/* Right side icons - Company logo + Save + Share (mobile only) */}
+        <div className="md:hidden absolute bottom-32 right-3 flex flex-col items-center gap-3">
+          {/* Company profile icon - circular with cover */}
           <div
             className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center"
             style={{
@@ -97,7 +97,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <img
               src={campaign.logo}
               alt={campaign.brand}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-full"
             />
           </div>
 
@@ -117,11 +117,33 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               strokeWidth={1.5}
             />
           </button>
+
+          {/* Share button in glass bubble */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (navigator.share) {
+                navigator.share({
+                  title: campaign.brand,
+                  text: campaign.description,
+                });
+              }
+            }}
+            className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(12px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+            }}
+          >
+            <Share2 className="h-6 w-6 text-white/90" strokeWidth={1.5} />
+          </button>
         </div>
 
         {/* Apple Liquid Glass Earnings Node - Full Width (mobile only) */}
         <div
-          className="md:hidden absolute bottom-4 left-4 right-4 px-5 py-3 rounded-[20px] flex items-center justify-between"
+          className="md:hidden absolute bottom-3 left-3 right-3 px-5 py-4 rounded-[22px] flex items-center justify-between"
           style={{
             background: 'rgba(255, 255, 255, 0.15)',
             backdropFilter: 'blur(20px) saturate(180%)',
