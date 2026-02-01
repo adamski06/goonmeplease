@@ -33,9 +33,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
-  const minViews = Math.round(totalViews * 0.125);
-
   const handleNodeClick = () => {
     setIsExpanded(!isExpanded);
   };
@@ -58,8 +55,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           }}
         />
 
-        {/* Right side icons - Company logo + Save + Share (mobile only) */}
-        <div className="md:hidden absolute bottom-32 right-3 flex flex-col items-center gap-3">
+        {/* Right side icons - Company logo + Save + Share (mobile only) - hidden when expanded */}
+        <div 
+          className={`md:hidden absolute bottom-32 right-3 flex flex-col items-center gap-3 transition-all duration-500 ease-out ${
+            isExpanded ? 'opacity-0 pointer-events-none translate-x-4' : 'opacity-100 translate-x-0'
+          }`}
+        >
           {/* Company profile icon - circular with cover */}
           <div
             className="w-12 h-12 rounded-full overflow-hidden"
@@ -120,35 +121,36 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         {/* Expandable Glass Node - Mobile Only */}
         <div
           onClick={handleNodeClick}
-          className={`md:hidden absolute left-3 right-3 rounded-[22px] transition-all duration-300 ease-out overflow-hidden ${
-            isExpanded ? 'bottom-3 top-20' : 'bottom-3'
-          }`}
+          className="md:hidden absolute left-3 right-3 rounded-[22px] overflow-hidden"
           style={{
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-            border: '1px solid rgba(255, 255, 255, 0.25)',
+            bottom: '12px',
+            top: isExpanded ? '80px' : 'auto',
+            background: 'rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
           {!isExpanded ? (
             /* Collapsed state - earnings info */
             <div className="px-5 py-4 flex items-center justify-between">
               <div className="flex items-baseline gap-1">
-                <span className="text-xl font-bold text-white font-montserrat">
+                <span className="text-xl font-bold text-white font-montserrat drop-shadow-sm">
                   {campaign.ratePerThousand}
                 </span>
-                <span className="text-xs font-medium text-white/80 font-montserrat">
+                <span className="text-xs font-medium text-white/90 font-montserrat drop-shadow-sm">
                   sek / 1000 views
                 </span>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-xs font-medium text-white/70 font-montserrat">
+                <span className="text-xs font-medium text-white/80 font-montserrat drop-shadow-sm">
                   Up to
                 </span>
-                <span className="text-xl font-bold text-white font-montserrat">
+                <span className="text-xl font-bold text-white font-montserrat drop-shadow-sm">
                   {campaign.maxEarnings.toLocaleString()}
                 </span>
-                <span className="text-sm font-semibold text-white/90 font-montserrat">
+                <span className="text-sm font-semibold text-white/90 font-montserrat drop-shadow-sm">
                   sek
                 </span>
               </div>
@@ -165,7 +167,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h2 className="text-base font-bold text-white font-montserrat flex-1">
+                <h2 className="text-base font-bold text-white font-montserrat flex-1 drop-shadow-sm">
                   {campaign.brand}
                 </h2>
                 <button
@@ -176,7 +178,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   className="p-1"
                 >
                   <Bookmark
-                    className={`h-5 w-5 ${isSaved ? 'fill-white text-white' : 'text-white/60'}`}
+                    className={`h-5 w-5 drop-shadow-sm ${isSaved ? 'fill-white text-white' : 'text-white/70'}`}
                     strokeWidth={1.5}
                   />
                 </button>
@@ -185,68 +187,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
                 {/* Description */}
-                <p className="text-sm text-white/90 font-jakarta leading-relaxed mb-5">
+                <p className="text-sm text-white font-jakarta leading-relaxed mb-5 drop-shadow-sm">
                   {campaign.description}
                 </p>
 
-                {/* Earnings Display */}
-                <div className="mb-5">
-                  <div className="flex items-baseline gap-1 mb-3">
-                    <span className="text-lg font-bold text-white font-montserrat">
-                      {campaign.ratePerThousand}
-                    </span>
-                    <span className="text-sm font-bold text-white/80 font-jakarta">sek</span>
-                    <span className="text-xs font-bold text-white/70 font-jakarta">/ 1000 views</span>
-                  </div>
-
-                  {/* Earnings line visualization */}
-                  <div className="relative mt-3">
-                    {/* Max earnings bubble */}
-                    <div className="absolute -top-8 right-0 z-10">
-                      <div className="bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full rounded-br-none flex items-baseline gap-1">
-                        <span className="text-xl font-bold text-white font-montserrat">
-                          {campaign.maxEarnings.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-white/80 font-montserrat">sek</span>
-                      </div>
-                    </div>
-
-                    {/* The line */}
-                    <div className="relative py-3">
-                      <div className="h-[2px] bg-white/50 w-full" />
-                      {/* Min marker */}
-                      <div className="absolute left-[12.5%] top-1/2 -translate-y-1/2">
-                        <div className="w-[2px] h-[8px] bg-white/70" />
-                        <div className="absolute -top-5 left-0 whitespace-nowrap">
-                          <span className="text-[10px] text-white/70 font-jakarta">min</span>
-                        </div>
-                        <div className="absolute top-3 left-0 whitespace-nowrap">
-                          <span className="text-[10px] text-white/70 font-jakarta">{minViews.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Views bubble */}
-                    <div className="absolute top-7 right-0 z-10">
-                      <div className="bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full rounded-tr-none flex items-baseline gap-1">
-                        <span className="text-sm font-normal text-white/90 font-jakarta">
-                          {totalViews.toLocaleString()}
-                        </span>
-                        <span className="text-[10px] text-white/70 font-jakarta">views</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="h-10" />
-                </div>
-
                 {/* Requirements */}
                 <div className="bg-white/10 rounded-xl p-4 mb-4">
-                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Requirements</h3>
+                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat drop-shadow-sm">Requirements</h3>
                   <ul className="space-y-1.5">
                     {campaign.guidelines.map((guideline, idx) => (
-                      <li key={idx} className="text-xs text-white/80 font-jakarta flex items-start gap-2">
-                        <span className="text-white/60">•</span>
+                      <li key={idx} className="text-xs text-white/90 font-jakarta flex items-start gap-2 drop-shadow-sm">
+                        <span className="text-white/70">•</span>
                         {guideline}
                       </li>
                     ))}
@@ -269,7 +220,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <div className="px-5 pb-4 pt-2">
                 <Button
                   size="lg"
-                  className="w-full py-4 text-sm font-bold rounded-full bg-white/90 hover:bg-white text-black"
+                  className="w-full py-4 text-sm font-bold rounded-full bg-white hover:bg-white/90 text-black"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Submit Content
