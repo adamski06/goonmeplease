@@ -51,7 +51,7 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'profile-feedback' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'profile-feedback' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete' | 'confirm-accounts';
 
 interface ChatMessage {
   id: string;
@@ -59,7 +59,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons' | 'profile-feedback-buttons';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons' | 'profile-feedback-buttons' | 'found-accounts' | 'confirm-accounts-button';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -579,42 +579,283 @@ const BusinessAuth: React.FC = () => {
     }, 300);
   };
 
-  // Start chat after company name
-  const startChat = () => {
+  // Start chat after company name - now auto-searches for company
+  const startChat = async () => {
     if (!companyName.trim()) return;
-    setIsTyping(true); // Show loading dots
-    setChatLoading(true); // Start with loading state
+    setIsTyping(true);
+    setChatLoading(true);
     
-    // Brief loading delay before transitioning to chat
     setTimeout(() => {
       setIsTyping(false);
       setMode('chat');
       
-      // Show loading spinner briefly, then reveal chat
       setTimeout(() => {
         setChatLoading(false);
         
         setTimeout(() => {
           addJarlaMessage(
             i18n.language === 'sv' 
-              ? `Trevligt att träffas, ${companyName}! Vi skulle vilja lära känna ert företag lite bättre.`
-              : `Nice to meet you, ${companyName}! We'd love to get to know your company a bit better.`,
+              ? `Trevligt att träffas, ${companyName}! Låt mig leta upp era konton...`
+              : `Nice to meet you, ${companyName}! Let me find your accounts...`,
             'text',
             () => {
+              // Show analyzing state
+              setChatStep('analyzing');
               setTimeout(() => {
-              addJarlaMessageWithInput(
-                  i18n.language === 'sv' 
-                    ? `Har ${companyName} en webbplats?`
-                    : `Does ${companyName} have a website?`,
-                  'https://yourcompany.com',
-                  'website'
+                addJarlaMessage(
+                  i18n.language === 'sv'
+                    ? 'Söker efter ert företag online...'
+                    : 'Searching for your company online...',
+                  'analyzing'
                 );
-              }, 500);
+                
+                // Call analysis to find company
+                searchForCompany();
+              }, 400);
             }
           );
         }, 300);
       }, 500);
     }, 300);
+  };
+
+  // Auto-search for company accounts
+  const searchForCompany = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-company', {
+        body: {
+          companyName,
+          language: i18n.language,
+          autoSearch: true
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.data) {
+        // Store found data
+        if (data.data.logo) setCompanyLogo(data.data.logo);
+        if (data.data.brandColor) setCompanyBrandColor(data.data.brandColor);
+        if (data.data.oneLiner) setCompanyOneLiner(data.data.oneLiner);
+        if (data.data.website) setWebsite(data.data.website);
+        if (data.data.summary) setCompanySummary(data.data.summary);
+        if (data.data.socialMedia) setSocialMedia(data.data.socialMedia);
+
+        // Build found accounts list
+        const foundAccounts: string[] = [];
+        if (data.data.website) foundAccounts.push(`Website: ${data.data.website}`);
+        if (data.data.socialMedia) {
+          Object.entries(data.data.socialMedia).forEach(([platform, url]) => {
+            if (url) foundAccounts.push(`${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${url}`);
+          });
+        }
+
+        // Show what was found with confirm button
+        setTimeout(() => {
+          if (foundAccounts.length > 0) {
+            addJarlaMessage(
+              i18n.language === 'sv'
+                ? `Jag hittade dessa konton för ${companyName}:`
+                : `I found these accounts for ${companyName}:`,
+              'text',
+              () => {
+                // Add found accounts as a list message
+                setTimeout(() => {
+                  setMessages(prev => [...prev, {
+                    id: `found-accounts-${Date.now()}`,
+                    role: 'jarla',
+                    content: foundAccounts.join('\n'),
+                    displayedContent: foundAccounts.join('\n'),
+                    type: 'found-accounts'
+                  }]);
+                  
+                  // Add confirm button
+                  setTimeout(() => {
+                    setMessages(prev => [...prev, {
+                      id: `confirm-accounts-${Date.now()}`,
+                      role: 'jarla',
+                      content: '',
+                      displayedContent: '',
+                      type: 'confirm-accounts-button'
+                    }]);
+                    setChatStep('confirm-accounts');
+                  }, 300);
+                }, 300);
+              }
+            );
+          } else {
+            // No accounts found, ask for website manually
+            addJarlaMessageWithInput(
+              i18n.language === 'sv'
+                ? `Jag kunde inte hitta ${companyName} online. Har ni en webbplats?`
+                : `I couldn't find ${companyName} online. Do you have a website?`,
+              'https://yourcompany.com',
+              'website'
+            );
+            setChatStep('website');
+          }
+        }, 500);
+      } else {
+        throw new Error('No data returned');
+      }
+    } catch (error) {
+      console.error('Company search error:', error);
+      // Fallback to manual website entry
+      setTimeout(() => {
+        addJarlaMessageWithInput(
+          i18n.language === 'sv'
+            ? `Jag kunde inte söka just nu. Har ${companyName} en webbplats?`
+            : `I couldn't search right now. Does ${companyName} have a website?`,
+          'https://yourcompany.com',
+          'website'
+        );
+        setChatStep('website');
+      }, 500);
+    }
+  };
+
+  // Handle confirming found accounts
+  const handleConfirmAccounts = () => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: i18n.language === 'sv' ? 'Det stämmer!' : "That's correct!"
+    }]);
+    
+    // Proceed to analysis
+    setChatStep('analyzing');
+    setTimeout(() => {
+      addJarlaMessage(
+        i18n.language === 'sv'
+          ? 'Perfekt! Låt mig analysera ert företag...'
+          : "Perfect! Let me analyze your company...",
+        'analyzing'
+      );
+      analyzeCompanyDetails();
+    }, 500);
+  };
+
+  // Handle rejecting found accounts - go to manual entry
+  const handleRejectAccounts = () => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: i18n.language === 'sv' ? 'Nej, det stämmer inte' : "No, that's not right"
+    }]);
+    
+    // Clear found data and ask for website
+    setWebsite('');
+    setSocialMedia({});
+    setChatStep('website');
+    setTimeout(() => {
+      addJarlaMessageWithInput(
+        i18n.language === 'sv'
+          ? 'Inga problem! Vad är er webbplats?'
+          : "No problem! What's your website?",
+        'https://yourcompany.com',
+        'website'
+      );
+    }, 500);
+  };
+
+  // Analyze company after confirmation
+  const analyzeCompanyDetails = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-company', {
+        body: {
+          website,
+          socialMedia,
+          companyName,
+          language: i18n.language
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.data?.summary) {
+        if (data.data.logo) setCompanyLogo(data.data.logo);
+        if (data.data.brandColor) setCompanyBrandColor(data.data.brandColor);
+        if (data.data.oneLiner) setCompanyOneLiner(data.data.oneLiner);
+        setCompanySummary(data.data.summary);
+        
+        const summary = data.data.summary;
+        const sections = summary.split(/\*\*(.+?)\*\*/).filter((s: string) => s.trim());
+        
+        const excludedHeadings = [
+          'Key Insights', 'Unique Value Proposition', 'One-Liner',
+          'Nyckelinsikter', 'Unik Värdeproposition', 'Kortbeskrivning'
+        ];
+        
+        const sectionPairs: { heading: string; content: string }[] = [];
+        for (let i = 0; i < sections.length; i += 2) {
+          if (sections[i] && sections[i + 1]) {
+            const heading = sections[i].trim();
+            if (!excludedHeadings.includes(heading)) {
+              sectionPairs.push({ heading, content: sections[i + 1].trim() });
+            }
+          }
+        }
+
+        let delay = 500;
+        setTimeout(() => {
+          addJarlaMessage(
+            i18n.language === 'sv'
+              ? 'Jag gjorde lite research! Här är vad jag hittade:'
+              : "I did some research! Here's what I found:",
+            'text',
+            () => {
+              let sectionDelay = 300;
+              sectionPairs.forEach((section, index) => {
+                setTimeout(() => {
+                  setMessages(prev => [...prev, {
+                    id: `section-${Date.now()}-${index}`,
+                    role: 'jarla',
+                    content: section.content,
+                    displayedContent: section.content,
+                    type: 'summary-section',
+                    heading: section.heading
+                  }]);
+                  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }, sectionDelay);
+                sectionDelay += 300;
+              });
+
+              setTimeout(() => {
+                addJarlaMessage(
+                  i18n.language === 'sv' ? 'Stämmer det här?' : 'Was this correct?',
+                  'confirm-buttons'
+                );
+                setChatStep('confirm-summary');
+              }, sectionDelay + 500);
+            }
+          );
+        }, delay);
+      } else {
+        throw new Error('No summary returned');
+      }
+    } catch (error) {
+      console.error('Analysis error:', error);
+      setTimeout(() => {
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Jag kunde inte analysera just nu. Låt oss fortsätta!'
+            : "I couldn't analyze right now. Let's continue!",
+          'text',
+          () => {
+            setTimeout(() => {
+              addJarlaMessageWithInput(
+                i18n.language === 'sv'
+                  ? `Berätta kort om ${companyName} - vad gör ni?`
+                  : `Tell me briefly about ${companyName} - what do you do?`,
+                i18n.language === 'sv' ? 'Beskriv ditt företag...' : 'Describe your company...',
+                'description'
+              );
+              setChatStep('description');
+            }, 500);
+          }
+        );
+      }, 1000);
+    }
   };
 
   // Handle general chat message (questions, etc) - now AI powered
@@ -2280,6 +2521,33 @@ const BusinessAuth: React.FC = () => {
                                 className="rounded-[3px] font-montserrat"
                               >
                                 {i18n.language === 'sv' ? 'Jag vill ändra' : "I'd like to change"}
+                              </Button>
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'found-accounts' && (
+                            <div className="mt-3 bg-muted/60 dark:bg-white/10 rounded-[3px] px-4 py-3" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              {msg.content.split('\n').map((line, idx) => (
+                                <div key={idx} className="font-geist text-sm py-1 flex items-center gap-2">
+                                  <Check className="h-4 w-4 text-primary shrink-0" />
+                                  <span>{line}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'confirm-accounts-button' && chatStep === 'confirm-accounts' && (
+                            <div className="flex gap-3 mt-4" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Button
+                                onClick={handleConfirmAccounts}
+                                className="rounded-[3px] font-montserrat bg-blue-600 hover:bg-blue-700 text-white"
+                              >
+                                {i18n.language === 'sv' ? 'Ja, det stämmer!' : "Yes, that's correct!"}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                onClick={handleRejectAccounts}
+                                className="rounded-[3px] font-montserrat"
+                              >
+                                {i18n.language === 'sv' ? 'Nej, det stämmer inte' : "No, that's wrong"}
                               </Button>
                             </div>
                           )}
