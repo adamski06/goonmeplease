@@ -847,15 +847,15 @@ const Campaigns: React.FC = () => {
           </div>
 
           {/* Right side icons with stats */}
-          <div className="absolute bottom-32 right-[15px] flex flex-col items-center gap-3 pointer-events-auto">
+          <div className="absolute bottom-48 right-[15px] flex flex-col items-center gap-3 pointer-events-auto">
             {/* Company logo */}
             <div
               key={`logo-${currentCampaign.id}`}
               className="w-12 h-12 rounded-full overflow-hidden animate-fade-in"
               style={{
                 background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(12px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                 border: '1px solid rgba(255, 255, 255, 0.3)',
               }}
             >
@@ -873,8 +873,8 @@ const Campaigns: React.FC = () => {
                 className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                 style={{
                   background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(12px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                 }}
               >
@@ -906,8 +906,8 @@ const Campaigns: React.FC = () => {
                 className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                 style={{
                   background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(12px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                 }}
               >
@@ -926,7 +926,7 @@ const Campaigns: React.FC = () => {
         {/* MOBILE GLASS NODE - Fixed position, content fades */}
         <div
           onClick={handleNodeClick}
-          className="md:hidden fixed left-3 right-3 rounded-[22px] overflow-hidden z-20 pointer-events-auto"
+          className="md:hidden fixed left-4 right-4 rounded-[22px] overflow-hidden z-20 pointer-events-auto"
           style={{
             bottom: '92px',
             maxHeight: isExpanded ? 'calc(100% - 172px)' : '72px',
