@@ -137,7 +137,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             /* Collapsed state - earnings info */
             <div className="px-5 py-4 flex items-center justify-between">
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-white font-montserrat drop-shadow-sm">
+                <span className="text-2xl font-bold text-white font-montserrat drop-shadow-sm">
                   {campaign.maxEarnings.toLocaleString()}
                 </span>
                 <span className="text-base font-semibold text-white/90 font-montserrat drop-shadow-sm">
