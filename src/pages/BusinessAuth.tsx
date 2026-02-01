@@ -51,7 +51,13 @@ const SOCIAL_PLATFORMS = [
   { id: 'snapchat', label: 'Snapchat', placeholder: 'https://snapchat.com/add/yourcompany' },
 ];
 
-type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'profile-feedback' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete' | 'confirm-accounts';
+type ChatStep = 'website' | 'socials' | 'analyzing' | 'confirm-summary' | 'edit-summary' | 'confirm-profile' | 'creating-profile' | 'profile-feedback' | 'description' | 'location' | 'products' | 'audience' | 'age-range' | 'reach' | 'credentials' | 'complete' | 'confirm-accounts' | 'confirm-description' | 'confirm-audience';
+
+interface TargetAudience {
+  ageRange: string;
+  gender: string;
+  interests: string[];
+}
 
 interface ChatMessage {
   id: string;
@@ -59,7 +65,7 @@ interface ChatMessage {
   content: string;
   displayedContent?: string;
   isTyping?: boolean;
-  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons' | 'profile-feedback-buttons' | 'found-accounts' | 'confirm-accounts-button';
+  type?: 'text' | 'text-input' | 'social-picker' | 'country-picker' | 'age-picker' | 'reach-picker' | 'credentials-form' | 'analyzing' | 'summary-section' | 'summary-heading' | 'summary-paragraph' | 'confirm-buttons' | 'profile-confirm-buttons' | 'profile-feedback-buttons' | 'found-accounts' | 'confirm-accounts-button' | 'editable-accounts' | 'company-description' | 'audience-guess' | 'audience-confirm-buttons';
   inputPlaceholder?: string;
   inputStep?: ChatStep;
   heading?: string;
@@ -224,7 +230,23 @@ const BusinessAuth: React.FC = () => {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [devMode, setDevMode] = useState(false);
   const [showPlatformDropdown, setShowPlatformDropdown] = useState(false);
-  const [showProfilePreview, setShowProfilePreview] = useState(savedSession?.mode === 'chat');
+  const [showProfilePreview, setShowProfilePreview] = useState(false);
+  
+  // Editable accounts state
+  const [editingAccountPlatform, setEditingAccountPlatform] = useState<string | null>(null);
+  const [editingAccountValue, setEditingAccountValue] = useState('');
+  
+  // Target audience state
+  const [targetAudience, setTargetAudience] = useState<TargetAudience>({
+    ageRange: '18-34',
+    gender: 'All',
+    interests: []
+  });
+  const [editingAudienceField, setEditingAudienceField] = useState<string | null>(null);
+  const [editingAudienceValue, setEditingAudienceValue] = useState('');
+  
+  // Company description for inline display
+  const [companyDescription, setCompanyDescription] = useState('');
   const [chatLoading, setChatLoading] = useState(!savedSession);
   const [profileLoading, setProfileLoading] = useState(!savedSession);
   const [profileVisible, setProfileVisible] = useState(!!savedSession?.companyName);
@@ -641,32 +663,24 @@ const BusinessAuth: React.FC = () => {
         if (data.data.summary) setCompanySummary(data.data.summary);
         if (data.data.socialMedia) setSocialMedia(data.data.socialMedia);
 
-        // Build found accounts list
-        const foundAccounts: string[] = [];
-        if (data.data.website) foundAccounts.push(`Website: ${data.data.website}`);
-        if (data.data.socialMedia) {
-          Object.entries(data.data.socialMedia).forEach(([platform, url]) => {
-            if (url) foundAccounts.push(`${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${url}`);
-          });
-        }
-
-        // Show what was found with confirm button
+        // Show what was found with editable accounts
         setTimeout(() => {
-          if (foundAccounts.length > 0) {
+          const hasAccounts = data.data.website || Object.keys(data.data.socialMedia || {}).length > 0;
+          if (hasAccounts) {
             addJarlaMessage(
               i18n.language === 'sv'
                 ? `Jag hittade dessa konton för ${companyName}:`
                 : `I found these accounts for ${companyName}:`,
               'text',
               () => {
-                // Add found accounts as a list message
+                // Add editable accounts message
                 setTimeout(() => {
                   setMessages(prev => [...prev, {
-                    id: `found-accounts-${Date.now()}`,
+                    id: `editable-accounts-${Date.now()}`,
                     role: 'jarla',
-                    content: foundAccounts.join('\n'),
-                    displayedContent: foundAccounts.join('\n'),
-                    type: 'found-accounts'
+                    content: '',
+                    displayedContent: '',
+                    type: 'editable-accounts'
                   }]);
                   
                   // Add confirm button
@@ -714,25 +728,196 @@ const BusinessAuth: React.FC = () => {
     }
   };
 
-  // Handle confirming found accounts
-  const handleConfirmAccounts = () => {
+  // Handle editing an account
+  const handleEditAccount = (platform: string, currentValue: string) => {
+    setEditingAccountPlatform(platform);
+    setEditingAccountValue(currentValue);
+  };
+
+  // Handle saving edited account
+  const handleSaveEditedAccount = (platform: string) => {
+    if (platform === 'website') {
+      setWebsite(editingAccountValue);
+    } else {
+      setSocialMedia(prev => ({
+        ...prev,
+        [platform]: editingAccountValue
+      }));
+    }
+    setEditingAccountPlatform(null);
+    setEditingAccountValue('');
+  };
+
+  // Handle removing an account
+  const handleRemoveAccount = (platform: string) => {
+    if (platform === 'website') {
+      setWebsite('');
+    } else {
+      setSocialMedia(prev => {
+        const updated = { ...prev };
+        delete updated[platform];
+        return updated;
+      });
+    }
+  };
+
+  // Handle confirming found accounts - now generates description + audience
+  const handleConfirmAccounts = async () => {
     setMessages(prev => [...prev, {
       id: Date.now().toString(),
       role: 'user',
       content: i18n.language === 'sv' ? 'Det stämmer!' : "That's correct!"
     }]);
     
-    // Proceed to analysis
+    // Show analyzing
     setChatStep('analyzing');
     setTimeout(() => {
       addJarlaMessage(
         i18n.language === 'sv'
-          ? 'Perfekt! Låt mig analysera ert företag...'
-          : "Perfect! Let me analyze your company...",
+          ? 'Perfekt! Låt mig lära mig mer om ert företag...'
+          : "Perfect! Let me learn more about your company...",
         'analyzing'
       );
-      analyzeCompanyDetails();
+    }, 300);
+    
+    // Call edge function to generate description and audience
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-company', {
+        body: {
+          companyName,
+          website,
+          socialMedia,
+          language: i18n.language,
+          generateDescription: true
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.data) {
+        const desc = data.data.description || '';
+        const audience = data.data.targetAudience || { ageRange: '18-34', gender: 'All', interests: [] };
+        
+        setCompanyDescription(desc);
+        setTargetAudience(audience);
+        
+        // Show company description inline
+        setTimeout(() => {
+          addJarlaMessage(
+            i18n.language === 'sv'
+              ? 'Bra! Här är vad jag lärde mig om ert företag:'
+              : "Great! Here's what I learned about your company:",
+            'text',
+            () => {
+              setTimeout(() => {
+                setMessages(prev => [...prev, {
+                  id: `company-description-${Date.now()}`,
+                  role: 'jarla',
+                  content: desc,
+                  displayedContent: desc,
+                  type: 'company-description'
+                }]);
+                
+                // Then show audience guess
+                setTimeout(() => {
+                  addJarlaMessage(
+                    i18n.language === 'sv'
+                      ? 'Jag tror att er målgrupp är:'
+                      : 'I think your target audience is:',
+                    'text',
+                    () => {
+                      setTimeout(() => {
+                        setMessages(prev => [...prev, {
+                          id: `audience-guess-${Date.now()}`,
+                          role: 'jarla',
+                          content: '',
+                          displayedContent: '',
+                          type: 'audience-guess'
+                        }]);
+                        
+                        // Add confirm buttons for audience
+                        setTimeout(() => {
+                          setMessages(prev => [...prev, {
+                            id: `audience-confirm-${Date.now()}`,
+                            role: 'jarla',
+                            content: '',
+                            displayedContent: '',
+                            type: 'audience-confirm-buttons'
+                          }]);
+                          setChatStep('confirm-audience');
+                        }, 300);
+                      }, 300);
+                    }
+                  );
+                }, 500);
+              }, 300);
+            }
+          );
+        }, 500);
+      } else {
+        throw new Error('No data returned');
+      }
+    } catch (error) {
+      console.error('Description generation error:', error);
+      // Fallback - proceed to credentials
+      setTimeout(() => {
+        setChatStep('credentials');
+        addJarlaMessage(
+          i18n.language === 'sv'
+            ? 'Nu behöver vi bara skapa ditt konto.'
+            : "Now we just need to create your account.",
+          'credentials-form'
+        );
+      }, 500);
+    }
+  };
+
+  // Handle audience confirmation
+  const handleAudienceConfirm = () => {
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      role: 'user',
+      content: i18n.language === 'sv' ? 'Det ser bra ut!' : "Looks good!"
+    }]);
+    
+    // Proceed to credentials
+    setChatStep('credentials');
+    setTimeout(() => {
+      addJarlaMessage(
+        i18n.language === 'sv'
+          ? 'Perfekt! Nu behöver vi bara skapa ditt konto.'
+          : "Perfect! Now we just need to create your account.",
+        'credentials-form'
+      );
     }, 500);
+  };
+
+  // Handle editing audience field
+  const handleEditAudienceField = (field: string) => {
+    setEditingAudienceField(field);
+    if (field === 'ageRange') {
+      setEditingAudienceValue(targetAudience.ageRange);
+    } else if (field === 'gender') {
+      setEditingAudienceValue(targetAudience.gender);
+    } else if (field === 'interests') {
+      setEditingAudienceValue(targetAudience.interests.join(', '));
+    }
+  };
+
+  // Handle saving audience field
+  const handleSaveAudienceField = () => {
+    if (editingAudienceField === 'ageRange') {
+      setTargetAudience(prev => ({ ...prev, ageRange: editingAudienceValue }));
+    } else if (editingAudienceField === 'gender') {
+      setTargetAudience(prev => ({ ...prev, gender: editingAudienceValue }));
+    } else if (editingAudienceField === 'interests') {
+      setTargetAudience(prev => ({ 
+        ...prev, 
+        interests: editingAudienceValue.split(',').map(i => i.trim()).filter(i => i) 
+      }));
+    }
+    setEditingAudienceField(null);
+    setEditingAudienceValue('');
   };
 
   // Handle rejecting found accounts - go to manual entry
@@ -1801,10 +1986,10 @@ const BusinessAuth: React.FC = () => {
   // Check if company details are complete (at minimum country is required)
   const isCompanyDetailsComplete = companyCountry.trim() !== '';
 
-  // Render credentials form
+  // Render credentials form - simplified without VAT/address
   const renderCredentialsForm = () => (
     <form onSubmit={handleFinalSubmit} className="space-y-4 mt-2">
-      {/* Company Registration Section */}
+      {/* Company Registration Section - Simplified */}
       <div className="bg-white dark:bg-white/5 rounded-[4px] p-4 border border-foreground/10">
         <div className="space-y-3">
           <h4 className="font-montserrat font-semibold text-sm text-foreground">
@@ -1834,74 +2019,16 @@ const BusinessAuth: React.FC = () => {
             </div>
           </div>
           
-          {/* Organization Number */}
+          {/* Organization Number - Optional */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.organizationNumber')}</Label>
+            <Label className="text-muted-foreground text-sm font-montserrat">
+              {t('businessAuth.organizationNumber')} <span className="text-muted-foreground/50">({i18n.language === 'sv' ? 'valfritt' : 'optional'})</span>
+            </Label>
             <Input
               type="text"
               placeholder={t('businessAuth.organizationNumberPlaceholder')}
               value={organizationNumber}
               onChange={(e) => setOrganizationNumber(e.target.value)}
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-            />
-          </div>
-          
-          {/* VAT Number */}
-          <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.vatNumber')}</Label>
-            <Input
-              type="text"
-              placeholder={t('businessAuth.vatNumberPlaceholder')}
-              value={vatNumber}
-              onChange={(e) => setVatNumber(e.target.value)}
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-            />
-          </div>
-          
-          {/* Address */}
-          <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyAddress')}</Label>
-            <Input
-              type="text"
-              placeholder={t('businessAuth.companyAddressPlaceholder')}
-              value={companyAddress}
-              onChange={(e) => setCompanyAddress(e.target.value)}
-              className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-            />
-          </div>
-          
-          {/* City and Postal Code */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
-              <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.city')}</Label>
-              <Input
-                type="text"
-                placeholder={t('businessAuth.cityPlaceholder')}
-                value={companyCity}
-                onChange={(e) => setCompanyCity(e.target.value)}
-                className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.postalCode')}</Label>
-              <Input
-                type="text"
-                placeholder={t('businessAuth.postalCodePlaceholder')}
-                value={companyPostalCode}
-                onChange={(e) => setCompanyPostalCode(e.target.value)}
-                className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
-              />
-            </div>
-          </div>
-          
-          {/* Phone */}
-          <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm font-montserrat">{t('businessAuth.companyPhone')}</Label>
-            <Input
-              type="tel"
-              placeholder={t('businessAuth.companyPhonePlaceholder')}
-              value={companyPhone}
-              onChange={(e) => setCompanyPhone(e.target.value)}
               className="bg-muted/50 dark:bg-white/10 border-foreground/20 text-foreground placeholder:text-muted-foreground/50 rounded-[3px] font-geist"
             />
           </div>
@@ -1980,6 +2107,205 @@ const BusinessAuth: React.FC = () => {
         </div>
       </div>
     </form>
+  );
+
+  // Render editable accounts inline
+  const renderEditableAccounts = () => {
+    const accounts: { platform: string; value: string }[] = [];
+    if (website) accounts.push({ platform: 'website', value: website });
+    Object.entries(socialMedia).forEach(([platform, url]) => {
+      if (url) accounts.push({ platform, value: url as string });
+    });
+
+    const getPlatformIcon = (platform: string) => {
+      switch (platform) {
+        case 'instagram': return <Instagram className="h-4 w-4" />;
+        case 'youtube': return <Youtube className="h-4 w-4" />;
+        case 'tiktok': return <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" className="h-4 w-4 dark:invert" />;
+        case 'website': return <span className="text-xs font-bold">🌐</span>;
+        default: return null;
+      }
+    };
+
+    const getPlatformLabel = (platform: string) => {
+      switch (platform) {
+        case 'website': return i18n.language === 'sv' ? 'Webbplats' : 'Website';
+        case 'instagram': return 'Instagram';
+        case 'youtube': return 'YouTube';
+        case 'tiktok': return 'TikTok';
+        default: return platform.charAt(0).toUpperCase() + platform.slice(1);
+      }
+    };
+
+    return (
+      <div className="mt-3 border border-foreground/10 rounded-[3px] p-3 space-y-2 bg-muted/30" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+        {accounts.map(({ platform, value }) => (
+          <div key={platform} className="flex items-center gap-3 py-1">
+            <div className="w-6 flex justify-center">{getPlatformIcon(platform)}</div>
+            {editingAccountPlatform === platform ? (
+              <div className="flex-1 flex items-center gap-2">
+                <Input
+                  value={editingAccountValue}
+                  onChange={(e) => setEditingAccountValue(e.target.value)}
+                  className="h-8 text-sm bg-background"
+                  autoFocus
+                />
+                <button
+                  onClick={() => handleSaveEditedAccount(platform)}
+                  className="p-1.5 rounded-[3px] bg-foreground text-background hover:opacity-80"
+                >
+                  <Check className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <>
+                <span className="flex-1 text-sm font-geist truncate">{value}</span>
+                <button
+                  onClick={() => handleEditAccount(platform, value)}
+                  className="p-1.5 rounded-[3px] hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Pencil className="h-3 w-3" />
+                </button>
+                <button
+                  onClick={() => handleRemoveAccount(platform)}
+                  className="p-1.5 rounded-[3px] hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Render company description card
+  const renderCompanyDescription = () => (
+    <div className="mt-3 bg-muted/60 dark:bg-white/10 rounded-[3px] p-4 max-w-md" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+      <div className="flex items-center gap-3 mb-3">
+        {companyLogo ? (
+          <img src={companyLogo} alt={companyName} className="w-10 h-10 rounded-[3px] object-contain bg-background/50" />
+        ) : (
+          <div className="w-10 h-10 rounded-[3px] bg-background/50 flex items-center justify-center">
+            <span className="text-lg font-bold text-muted-foreground">{companyName.charAt(0).toUpperCase()}</span>
+          </div>
+        )}
+        <h4 className="font-montserrat font-bold text-lg">{companyName}</h4>
+      </div>
+      <p className="text-sm text-foreground/80 font-geist leading-relaxed">
+        {companyDescription}
+      </p>
+    </div>
+  );
+
+  // Render audience guess with edit capability
+  const renderAudienceGuess = () => (
+    <div className="mt-3 border border-foreground/10 rounded-[3px] p-3 space-y-2 bg-muted/30" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+      {/* Age Range */}
+      <div className="flex items-center gap-3 py-1">
+        <span className="w-20 text-sm text-muted-foreground font-geist">{i18n.language === 'sv' ? 'Ålder' : 'Age'}:</span>
+        {editingAudienceField === 'ageRange' ? (
+          <div className="flex-1 flex items-center gap-2">
+            <Input
+              value={editingAudienceValue}
+              onChange={(e) => setEditingAudienceValue(e.target.value)}
+              className="h-8 text-sm bg-background"
+              placeholder="e.g. 18-34"
+              autoFocus
+            />
+            <button
+              onClick={handleSaveAudienceField}
+              className="p-1.5 rounded-[3px] bg-foreground text-background hover:opacity-80"
+            >
+              <Check className="h-3 w-3" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <span className="flex-1 text-sm font-geist">{targetAudience.ageRange}</span>
+            <button
+              onClick={() => handleEditAudienceField('ageRange')}
+              className="p-1.5 rounded-[3px] hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Pencil className="h-3 w-3" />
+            </button>
+          </>
+        )}
+      </div>
+      
+      {/* Gender */}
+      <div className="flex items-center gap-3 py-1">
+        <span className="w-20 text-sm text-muted-foreground font-geist">{i18n.language === 'sv' ? 'Kön' : 'Gender'}:</span>
+        {editingAudienceField === 'gender' ? (
+          <div className="flex-1 flex items-center gap-2">
+            <select
+              value={editingAudienceValue}
+              onChange={(e) => setEditingAudienceValue(e.target.value)}
+              className="flex-1 h-8 text-sm bg-background border border-foreground/20 rounded-[3px] px-2"
+            >
+              <option value="All">{i18n.language === 'sv' ? 'Alla' : 'All'}</option>
+              <option value="Women">{i18n.language === 'sv' ? 'Kvinnor' : 'Women'}</option>
+              <option value="Men">{i18n.language === 'sv' ? 'Män' : 'Men'}</option>
+            </select>
+            <button
+              onClick={handleSaveAudienceField}
+              className="p-1.5 rounded-[3px] bg-foreground text-background hover:opacity-80"
+            >
+              <Check className="h-3 w-3" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <span className="flex-1 text-sm font-geist">
+              {targetAudience.gender === 'All' ? (i18n.language === 'sv' ? 'Alla' : 'All') : 
+               targetAudience.gender === 'Women' ? (i18n.language === 'sv' ? 'Kvinnor' : 'Women') : 
+               targetAudience.gender === 'Men' ? (i18n.language === 'sv' ? 'Män' : 'Men') : targetAudience.gender}
+            </span>
+            <button
+              onClick={() => handleEditAudienceField('gender')}
+              className="p-1.5 rounded-[3px] hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Pencil className="h-3 w-3" />
+            </button>
+          </>
+        )}
+      </div>
+      
+      {/* Interests */}
+      <div className="flex items-center gap-3 py-1">
+        <span className="w-20 text-sm text-muted-foreground font-geist">{i18n.language === 'sv' ? 'Intressen' : 'Interests'}:</span>
+        {editingAudienceField === 'interests' ? (
+          <div className="flex-1 flex items-center gap-2">
+            <Input
+              value={editingAudienceValue}
+              onChange={(e) => setEditingAudienceValue(e.target.value)}
+              className="h-8 text-sm bg-background"
+              placeholder={i18n.language === 'sv' ? 'Sport, Mode, Teknik' : 'Sports, Fashion, Tech'}
+              autoFocus
+            />
+            <button
+              onClick={handleSaveAudienceField}
+              className="p-1.5 rounded-[3px] bg-foreground text-background hover:opacity-80"
+            >
+              <Check className="h-3 w-3" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <span className="flex-1 text-sm font-geist">
+              {targetAudience.interests.length > 0 ? targetAudience.interests.join(', ') : '-'}
+            </span>
+            <button
+              onClick={() => handleEditAudienceField('interests')}
+              className="p-1.5 rounded-[3px] hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Pencil className="h-3 w-3" />
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 
   // Login screen
@@ -2532,6 +2858,25 @@ const BusinessAuth: React.FC = () => {
                                   <span>{line}</span>
                                 </div>
                               ))}
+                            </div>
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'editable-accounts' && (
+                            renderEditableAccounts()
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'company-description' && (
+                            renderCompanyDescription()
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'audience-guess' && (
+                            renderAudienceGuess()
+                          )}
+                          {msg.role === 'jarla' && msg.type === 'audience-confirm-buttons' && chatStep === 'confirm-audience' && (
+                            <div className="flex gap-3 mt-4" style={{ animation: 'smoothFadeIn 0.3s ease-out forwards' }}>
+                              <Button
+                                onClick={handleAudienceConfirm}
+                                className="rounded-[3px] font-montserrat bg-blue-600 hover:bg-blue-700 text-white"
+                              >
+                                {i18n.language === 'sv' ? 'Ser bra ut!' : "Looks good!"}
+                              </Button>
                             </div>
                           )}
                           {msg.role === 'jarla' && msg.type === 'confirm-accounts-button' && chatStep === 'confirm-accounts' && (
