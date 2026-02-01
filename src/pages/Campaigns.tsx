@@ -969,33 +969,47 @@ const Campaigns: React.FC = () => {
             onScroll={handleScroll}
           >
             {campaigns.map((campaign, idx) => {
-              let touchStartX = 0;
-              let touchEndX = 0;
+              const [dragOffset, setDragOffset] = useState(0);
+              const [isDragging, setIsDragging] = useState(false);
+              const touchStartXRef = useRef(0);
               
               const handleTouchStart = (e: React.TouchEvent) => {
-                touchStartX = e.touches[0].clientX;
+                touchStartXRef.current = e.touches[0].clientX;
+                setIsDragging(true);
               };
               
-              const handleTouchEnd = (e: React.TouchEvent) => {
-                touchEndX = e.changedTouches[0].clientX;
-                const swipeDistance = touchStartX - touchEndX;
-                // Swipe left (finger moves right to left) to open details
-                if (swipeDistance > 80) {
+              const handleTouchMove = (e: React.TouchEvent) => {
+                const currentX = e.touches[0].clientX;
+                const offset = Math.max(0, touchStartXRef.current - currentX);
+                setDragOffset(offset);
+              };
+              
+              const handleTouchEnd = () => {
+                setIsDragging(false);
+                if (dragOffset > 80) {
                   handleSelectCampaign(campaign);
                 }
+                setDragOffset(0);
               };
+              
+              const isSaved = favorites.includes(campaign.id);
               
               return (
               <div 
                 key={campaign.id} 
                 className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8"
                 onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
                 {/* Full screen photo on mobile, left side on desktop */}
                 <div 
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative w-[calc(100%-24px)] h-[calc(100%-16px)] rounded-2xl overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] transition-all md:flex-shrink-0"
+                  className="relative w-[calc(100%-24px)] h-[calc(100%-16px)] rounded-2xl overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] md:flex-shrink-0"
+                  style={{
+                    transform: `translateX(${-dragOffset}px)`,
+                    transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+                  }}
                 >
                   <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
                   <div 
@@ -1004,29 +1018,52 @@ const Campaigns: React.FC = () => {
                       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     }}
                   />
-                  {/* Swipe hint */}
-                  <div className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-white/50">
-                    <svg className="h-5 w-5 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
+                  
+                  {/* Right side icons - Company logo + Save (mobile only) */}
+                  <div className="md:hidden absolute bottom-36 right-4 flex flex-col items-center gap-3">
+                    {/* Company profile icon */}
+                    <div 
+                      className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.2)',
+                        backdropFilter: 'blur(12px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                      }}
+                    >
+                      <img src={campaign.logo} alt={campaign.brand} className="w-7 h-7 object-contain" />
+                    </div>
+                    
+                    {/* Save button */}
+                    <button
+                      onClick={(e) => toggleFavorite(campaign.id, e)}
+                      className="flex items-center justify-center hover:scale-110 transition-transform"
+                    >
+                      <Bookmark 
+                        className={`h-7 w-7 ${isSaved ? 'fill-white text-white' : 'text-white/80'}`}
+                        strokeWidth={1.5}
+                      />
+                    </button>
                   </div>
-                  {/* Mobile overlay info */}
-                  <div className="md:hidden absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                    <div className="text-lg font-bold text-white font-jakarta line-clamp-1">{campaign.description}</div>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="inline-flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                        <span className="text-base font-semibold text-white/80 font-montserrat">sek</span>
-                      </div>
-                      <button
-                        onClick={(e) => toggleFavorite(campaign.id, e)}
-                        className="flex items-center justify-center hover:scale-110 transition-transform p-2"
-                      >
-                        <Bookmark 
-                          className={`h-7 w-7 ${favorites.includes(campaign.id) ? 'fill-white text-white' : 'text-white/70'}`}
-                          strokeWidth={1.5}
-                        />
-                      </button>
+                  
+                  {/* Apple Liquid Glass Earnings Node (mobile only) */}
+                  <div 
+                    className="md:hidden absolute bottom-4 right-4 px-4 py-3 rounded-[20px]"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      backdropFilter: 'blur(20px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
+                    }}
+                  >
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-lg font-bold text-white font-montserrat">{campaign.ratePerThousand}</span>
+                      <span className="text-xs font-medium text-white/80 font-montserrat">sek / 1000 views</span>
+                    </div>
+                    <div className="flex items-baseline gap-1 mt-0.5">
+                      <span className="text-xs font-medium text-white/70 font-montserrat">Up to</span>
+                      <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                      <span className="text-sm font-semibold text-white/90 font-montserrat">sek</span>
                     </div>
                   </div>
                 </div>
