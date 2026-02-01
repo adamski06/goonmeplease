@@ -11,6 +11,7 @@ interface AnalyzeRequest {
   companyName: string;
   language?: string;
   autoSearch?: boolean;
+  generateDescription?: boolean;
 }
 
 serve(async (req) => {
@@ -19,7 +20,7 @@ serve(async (req) => {
   }
 
   try {
-    const { website, socialMedia, companyName, language = 'en', autoSearch = false }: AnalyzeRequest = await req.json();
+    const { website, socialMedia, companyName, language = 'en', autoSearch = false, generateDescription = false }: AnalyzeRequest = await req.json();
 
     const isSwedish = language === 'sv';
     const firecrawlApiKey = Deno.env.get('FIRECRAWL_API_KEY');
@@ -41,27 +42,137 @@ serve(async (req) => {
       );
     }
 
+    // Generate description mode - after user confirms accounts
+    if (generateDescription) {
+      console.log('Generating description for company:', companyName);
+      
+      const descPrompt = isSwedish
+        ? `Du är en marknadsföringsexpert. Analysera företaget "${companyName}" och deras online-närvaro.
+
+Webbplats: ${website || 'Ingen'}
+Sociala medier: ${JSON.stringify(socialMedia || {})}
+
+Baserat på denna information, ge följande i JSON-format (ingen markdown):
+{
+  "description": "En kort beskrivning på 2-3 meningar skriven från företagets perspektiv (använd 'vi', 'vår', 'oss'). Fokusera på vad företaget gör och deras värde.",
+  "targetAudience": {
+    "ageRange": "t.ex. 18-34",
+    "gender": "Alla/Kvinnor/Män",
+    "interests": ["intresse1", "intresse2", "intresse3"]
+  }
+}`
+        : `You are a marketing expert. Analyze the company "${companyName}" and their online presence.
+
+Website: ${website || 'None'}
+Social media: ${JSON.stringify(socialMedia || {})}
+
+Based on this information, provide the following in JSON format (no markdown):
+{
+  "description": "A short description of 2-3 sentences written from the company's perspective (use 'we', 'our', 'us'). Focus on what the company does and their value.",
+  "targetAudience": {
+    "ageRange": "e.g. 18-34",
+    "gender": "All/Women/Men",
+    "interests": ["interest1", "interest2", "interest3"]
+  }
+}`;
+
+      try {
+        const descResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'You are a marketing expert. Return only valid JSON with no markdown or extra text.' },
+              { role: 'user', content: descPrompt }
+            ],
+          }),
+        });
+
+        if (!descResponse.ok) {
+          throw new Error('Description generation failed');
+        }
+
+        const descData = await descResponse.json();
+        const descResult = descData.choices?.[0]?.message?.content || '';
+        
+        console.log('Description result:', descResult);
+        
+        let parsed;
+        try {
+          const cleaned = descResult.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+          parsed = JSON.parse(cleaned);
+        } catch {
+          console.error('Failed to parse description result');
+          return new Response(
+            JSON.stringify({ 
+              success: true, 
+              data: {
+                description: isSwedish 
+                  ? `Vi på ${companyName} är ett innovativt företag som strävar efter att leverera kvalitet och värde till våra kunder.`
+                  : `At ${companyName}, we are an innovative company striving to deliver quality and value to our customers.`,
+                targetAudience: {
+                  ageRange: '18-44',
+                  gender: isSwedish ? 'Alla' : 'All',
+                  interests: isSwedish ? ['Livsstil', 'Kvalitet', 'Innovation'] : ['Lifestyle', 'Quality', 'Innovation']
+                }
+              }
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            data: {
+              description: parsed.description || '',
+              targetAudience: parsed.targetAudience || {
+                ageRange: '18-44',
+                gender: isSwedish ? 'Alla' : 'All',
+                interests: []
+              }
+            }
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch (error) {
+        console.error('Description generation error:', error);
+        return new Response(
+          JSON.stringify({ success: false, error: 'Description generation failed' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
     // If autoSearch mode, search for company using web search
     if (autoSearch) {
       console.log('Auto-searching for company:', companyName);
       
-      // Use AI to search for company info
-      const searchPrompt = `Find the official website and social media accounts for the company "${companyName}". 
-      
+      // Use AI to search for company info - specifically TikTok, Instagram, YouTube
+      const searchPrompt = `Find the official website and social media accounts for the company "${companyName}".
+
+IMPORTANT: Focus on finding these specific platforms:
+- Official website
+- TikTok account (@handle or full URL)
+- Instagram account (@handle or full URL)
+- YouTube channel (URL or @handle)
+
 Return ONLY a JSON object with no markdown formatting, like this:
 {
   "website": "https://example.com",
   "socialMedia": {
-    "instagram": "https://instagram.com/example",
-    "linkedin": "https://linkedin.com/company/example",
-    "twitter": "https://twitter.com/example",
-    "facebook": "https://facebook.com/example",
-    "tiktok": "https://tiktok.com/@example"
+    "tiktok": "@example or https://tiktok.com/@example",
+    "instagram": "@example or https://instagram.com/example",
+    "youtube": "https://youtube.com/@example or @example"
   },
   "confidence": "high/medium/low"
 }
 
-Only include social media accounts you're confident about. Use null for website if unsure.`;
+Only include accounts you're confident about. Use null for any you can't find.`;
 
       try {
         const searchResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
