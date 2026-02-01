@@ -1028,28 +1028,42 @@ const Campaigns: React.FC = () => {
                 className="relative flex flex-col items-center gap-4"
                 style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
               >
-                {/* Company Logo centered above first pill */}
+                {/* Company Logo - circular */}
                 <div 
                   onClick={() => setSelectedCampaign(currentCampaign)}
-                  className="absolute -top-32 w-40 h-40 bg-white shadow-lg flex items-center justify-center border-2 border-white/50 overflow-hidden p-4 cursor-pointer hover:scale-105 transition-transform"
+                  className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-300"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    backdropFilter: 'blur(12px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    transform: `scale(${scrollOpacity < 1 ? 0.85 + scrollOpacity * 0.15 : 1})`,
+                  }}
                 >
-                  <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-contain" />
+                  <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-cover rounded-full" />
                 </div>
 
-                {/* Spacer so pills stay visually centered while icon overlaps */}
-                <div className="h-8" />
-
-                {/* First pill: sek / views */}
-                <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-                  <span className="text-2xl font-bold">{currentCampaign.ratePerThousand} sek</span>
-                  <span className="text-xs font-semibold text-white/60">/ 1000 views</span>
-                </button>
-
-                {/* Second pill: max earnings */}
-                <button className="px-8 py-4 rounded-full bg-black text-white flex items-baseline justify-center hover:bg-black/80 transition-colors gap-1">
-                  <span className="text-xs font-semibold text-white/60">up to</span>
-                  <span className="text-2xl font-bold">{currentCampaign.maxEarnings.toLocaleString()} sek</span>
-                </button>
+                {/* Glass Node with pricing info */}
+                <div
+                  className="px-6 py-4 rounded-[22px] flex flex-col items-center gap-1 transition-transform duration-300"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    transform: `scale(${scrollOpacity < 1 ? 0.85 + scrollOpacity * 0.15 : 1})`,
+                  }}
+                >
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold text-white font-montserrat">{currentCampaign.ratePerThousand}</span>
+                    <span className="text-xs font-medium text-white/80 font-montserrat">sek / 1000 views</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xs font-medium text-white/70 font-montserrat">Up to</span>
+                    <span className="text-xl font-bold text-white font-montserrat">{currentCampaign.maxEarnings.toLocaleString()}</span>
+                    <span className="text-sm font-semibold text-white/90 font-montserrat">sek</span>
+                  </div>
+                </div>
               </div>
             </div>
           </>
