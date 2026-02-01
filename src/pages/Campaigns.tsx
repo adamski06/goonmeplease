@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { backgroundDelay } from '@/lib/backgroundDelay';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Bookmark } from 'lucide-react';
+import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Bookmark, Send } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ import redbullLogo from '@/assets/logos/redbull.png';
 import adobeLogo from '@/assets/logos/adobe.png';
 import CampaignDetailView from '@/components/CampaignDetailView';
 import CampaignCard from '@/components/CampaignCard';
+import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 
 // Campaign images
 import fitnessWorkout from '@/assets/campaigns/fitness-workout.jpg';
@@ -69,7 +71,11 @@ import starbucksExample1 from '@/assets/examples/starbucks-example-1.jpg';
 import playstationExample1 from '@/assets/examples/playstation-example-1.jpg';
 import hmExample1 from '@/assets/examples/hm-example-1.jpg';
 
-type FilterType = 'foryou' | 'featured';
+// Helper to generate pseudo-random stats based on campaign ID
+const getRandomStat = (campaignId: string, type: 'saves' | 'shares') => {
+  const seed = campaignId.charCodeAt(0) + campaignId.charCodeAt(campaignId.length - 1) + (type === 'shares' ? 100 : 0);
+  return 500 + (seed * 17) % 1500; // Returns 500-2000
+};
 
 // Extended mock campaign data
 const campaigns = [
@@ -526,40 +532,9 @@ const Campaigns: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [scrollOpacity, setScrollOpacity] = useState(1);
-  const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
-  const [viewMode, setViewMode] = useState<'scroll' | 'browse'>('browse');
-  const [activeFilter, setActiveFilter] = useState<'foryou' | 'featured'>('featured');
+  const [isExpanded, setIsExpanded] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
-  const featuredScrollRef = useRef<HTMLDivElement>(null);
-  const savedScrollPosition = useRef<number>(0);
-
-  // Save scroll position before showing detail, restore when going back
-  const handleSelectCampaign = (campaign: typeof campaigns[0]) => {
-    if (featuredScrollRef.current) {
-      savedScrollPosition.current = featuredScrollRef.current.scrollTop;
-    }
-    setSelectedCampaign(campaign);
-  };
-
-  const handleBackFromDetail = () => {
-    setSelectedCampaign(null);
-    // Restore scroll position after render
-    requestAnimationFrame(() => {
-      if (featuredScrollRef.current) {
-        featuredScrollRef.current.scrollTop = savedScrollPosition.current;
-      }
-    });
-  };
-
-  // Reset scroll position when switching to Featured mode
-  useEffect(() => {
-    if (activeFilter === 'featured' && featuredScrollRef.current && !selectedCampaign) {
-      featuredScrollRef.current.scrollTop = 0;
-      savedScrollPosition.current = 0;
-    }
-  }, [activeFilter]);
 
   // Fetch user favorites
   useEffect(() => {
@@ -585,7 +560,6 @@ const Campaigns: React.FC = () => {
     }
     
     if (favorites.includes(campaignId)) {
-      // Remove favorite
       await supabase
         .from('favorites')
         .delete()
@@ -593,15 +567,12 @@ const Campaigns: React.FC = () => {
         .eq('campaign_id', campaignId);
       setFavorites(favorites.filter(id => id !== campaignId));
     } else {
-      // Add favorite
       await supabase
         .from('favorites')
         .insert({ user_id: user.id, campaign_id: campaignId });
       setFavorites([...favorites, campaignId]);
     }
   };
-
-  // No longer redirect - allow browsing without login
 
   // Preload all campaign logos
   useEffect(() => {
@@ -616,70 +587,18 @@ const Campaigns: React.FC = () => {
     const scrollTop = container.scrollTop;
     const itemHeight = container.clientHeight;
     
-    // Calculate which video we're closest to
     const nearestIndex = Math.round(scrollTop / itemHeight);
     const clampedIndex = Math.max(0, Math.min(nearestIndex, campaigns.length - 1));
     
-    // Update index immediately so new campaign data is ready
     if (clampedIndex !== currentIndex) {
       setCurrentIndex(clampedIndex);
+      setIsExpanded(false); // Collapse when switching campaigns
     }
-    
-    // Calculate how far we are from the nearest snap point
-    const offset = Math.abs(scrollTop - (clampedIndex * itemHeight));
-    const progress = offset / itemHeight;
-    
-    // Fade based on distance from snap point
-    const opacity = 1 - Math.min(progress * 4, 1);
-    setScrollOpacity(Math.max(0, opacity));
   };
 
-  // Helper to check if a filter is active (avoids TypeScript narrowing issues)
-  const isFilterActive = (filter: FilterType) => activeFilter === filter;
-
-  const renderFilterButtons = (includeSort = false) => (
-    <div className="flex items-center gap-4 font-jakarta">
-      <button 
-        onClick={() => setActiveFilter('foryou')}
-        className={`px-5 py-2 rounded-full text-base font-medium transition-colors backdrop-blur-md ${isFilterActive('foryou') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
-      >
-        For you
-      </button>
-      <button 
-        onClick={() => setActiveFilter('featured')}
-        className={`px-5 py-2 rounded-full text-base font-medium transition-colors backdrop-blur-md ${isFilterActive('featured') ? 'bg-black text-white' : 'bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground hover:bg-white/50 dark:hover:bg-white/20'}`}
-      >
-        Featured
-      </button>
-      {includeSort && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="px-5 py-2 rounded-full backdrop-blur-md bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground text-base font-medium hover:bg-white/50 dark:hover:bg-white/20 transition-colors flex items-center gap-1">
-              Sort by
-              <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
-              </svg>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 bg-background border-border">
-            <DropdownMenuItem className="cursor-pointer">
-              Price: Low to High
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Price: High to Low
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              Newest First
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Deadline Soon
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-    </div>
-  );
+  const handleNodeClick = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
   const currentCampaign = campaigns[currentIndex];
@@ -692,14 +611,10 @@ const Campaigns: React.FC = () => {
     );
   }
 
-  const isMobileHomeMode = activeFilter === 'foryou' && !selectedCampaign;
-
   return (
     <div className="h-screen flex relative overflow-hidden">
-      {/* Mobile-only black background - only for Home/For you mode */}
-      {isMobileHomeMode && <div className="md:hidden absolute inset-0 bg-black" />}
-      {/* White background for mobile when not in Home mode */}
-      {!isMobileHomeMode && <div className="md:hidden absolute inset-0 bg-white" />}
+      {/* Mobile-only black background */}
+      <div className="md:hidden absolute inset-0 bg-black" />
       {/* Static Grainy Background - desktop only */}
       <div className="hidden md:block absolute inset-0 pointer-events-none grainy-background" />
       <div className="hidden md:block noise-layer absolute inset-0 pointer-events-none" />
@@ -841,45 +756,44 @@ const Campaigns: React.FC = () => {
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation Bar - hidden when in ad detail */}
-      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom ${selectedCampaign ? 'hidden' : ''} ${isMobileHomeMode ? 'bg-black border-t border-white/10' : 'bg-white border-t border-black/10'}`}>
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom bg-black border-t border-white/10">
         <div className="flex items-start justify-between h-full">
           <button 
-            onClick={() => setActiveFilter('foryou')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
-            <svg className={`h-6 w-6 ${activeFilter === 'foryou' ? (isMobileHomeMode ? 'text-white' : 'text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`} viewBox="0 0 24 24" fill="currentColor">
+            <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
               <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" />
             </svg>
-            <span className={`text-[10px] ${activeFilter === 'foryou' ? (isMobileHomeMode ? 'font-semibold text-white' : 'font-semibold text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`}>Home</span>
+            <span className="text-[10px] font-semibold text-white">Home</span>
           </button>
           <button 
-            onClick={() => setActiveFilter('featured')}
+            onClick={() => navigate('/discover')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
-            <svg className={`h-6 w-6 ${activeFilter === 'featured' ? (isMobileHomeMode ? 'text-white' : 'text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="h-6 w-6 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none" />
             </svg>
-            <span className={`text-[10px] ${activeFilter === 'featured' ? (isMobileHomeMode ? 'font-semibold text-white' : 'font-semibold text-black') : (isMobileHomeMode ? 'text-white/50' : 'text-black/40')}`}>Discover</span>
+            <span className="text-[10px] text-white/50">Discover</span>
           </button>
           <button 
             onClick={() => user ? navigate('/activity') : setShowAuthPrompt(true)}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
-            <svg className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} viewBox="0 0 24 24" fill="currentColor">
+            <svg className="h-6 w-6 text-white/50" viewBox="0 0 24 24" fill="currentColor">
               <path fillRule="evenodd" clipRule="evenodd" d="M4 4C4 2.89543 4.89543 2 6 2H18C19.1046 2 20 2.89543 20 4V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4ZM10 8C9.5 7.7 9 8 9 8.5V15.5C9 16 9.5 16.3 10 16L16 12.5C16.5 12.2 16.5 11.8 16 11.5L10 8Z" />
             </svg>
-            <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Action</span>
+            <span className="text-[10px] text-white/50">Action</span>
           </button>
           <button 
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
-            <svg className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="h-6 w-6 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
-            <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Alerts</span>
+            <span className="text-[10px] text-white/50">Alerts</span>
           </button>
           <button 
             onClick={() => user ? navigate('/profile') : setShowAuthPrompt(true)}
@@ -888,236 +802,242 @@ const Campaigns: React.FC = () => {
             {user ? (
               <Avatar className="h-6 w-6">
                 <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-                <AvatarFallback className={`text-[10px] font-medium ${isMobileHomeMode ? 'bg-white/20 text-white' : 'bg-black/10 text-black'}`}>
+                <AvatarFallback className="text-[10px] font-medium bg-white/20 text-white">
                   {firstName.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             ) : (
-              <User className={`h-6 w-6 ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`} />
+              <User className="h-6 w-6 text-white/50" />
             )}
-            <span className={`text-[10px] ${isMobileHomeMode ? 'text-white/50' : 'text-black/40'}`}>Profile</span>
+            <span className="text-[10px] text-white/50">Profile</span>
           </button>
         </div>
       </nav>
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* Desktop: conditional render */}
-        {selectedCampaign && (
-          <div className="hidden md:block flex-1 overflow-y-auto px-8 py-8 pb-8">
-            <CampaignDetailView
-              campaign={selectedCampaign}
-              onBack={handleBackFromDetail}
-              isSaved={favorites.includes(selectedCampaign.id)}
-              onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
+        {/* For You Feed - Full screen on mobile */}
+        <div 
+          className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40 h-[calc(100dvh-80px)] md:h-auto"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onScroll={handleScroll}
+        >
+          {campaigns.map((campaign) => (
+            <CampaignCard
+              key={campaign.id}
+              campaign={campaign}
+              isSaved={favorites.includes(campaign.id)}
+              onSelect={() => {}}
+              onToggleFavorite={toggleFavorite}
             />
-          </div>
-        )}
-        
-        {/* Mobile: Campaign detail slides over as overlay */}
-        {selectedCampaign && (
-          <div className="md:hidden fixed inset-0 z-50">
-            <CampaignDetailView
-              campaign={selectedCampaign}
-              onBack={handleBackFromDetail}
-              isSaved={favorites.includes(selectedCampaign.id)}
-              onToggleSave={(e) => toggleFavorite(selectedCampaign.id, e)}
-            />
-          </div>
-        )}
-        
-        {/* Feed content - stays visible on mobile (overlay covers it), hidden on desktop when detail selected */}
-        <div className={`flex-1 flex flex-col overflow-hidden ${selectedCampaign ? 'md:hidden' : ''}`}>
-        {/* Fixed overlay filter buttons */}
-        <div className="hidden md:flex absolute top-6 left-4 right-4 md:left-8 md:right-8 z-20 justify-between items-center">
-          <div className="flex items-center gap-4">
-            {renderFilterButtons(false)}
-          </div>
-          {activeFilter !== 'foryou' && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="px-5 py-2 rounded-full backdrop-blur-md bg-white/30 dark:bg-white/10 border border-white/40 dark:border-white/20 text-foreground text-base font-medium hover:bg-white/50 dark:hover:bg-white/20 transition-colors flex items-center gap-1 font-jakarta">
-                  Sort by
-                  <svg className="w-3 h-3 ml-1" viewBox="0 0 10 6" fill="none">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m1 1 4 4 4-4"/>
-                  </svg>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-background border-border">
-                <DropdownMenuItem className="cursor-pointer">
-                  Price: Low to High
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Price: High to Low
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  Newest First
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  Deadline Soon
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          ))}
         </div>
 
-        {activeFilter === 'foryou' ? (
-          /* For You - Full screen on mobile, photo left + info right on desktop */
+        {/* MOBILE PERSISTENT OVERLAY - stays in place during swipe */}
+        <div className={`md:hidden fixed inset-0 pointer-events-none z-20 transition-opacity duration-300 ${isExpanded ? 'opacity-0' : 'opacity-100'}`}>
+          {/* Description above node - max 3 lines */}
           <div 
-            className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40 h-[calc(100dvh-80px)] md:h-auto"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            onScroll={handleScroll}
+            key={`desc-${currentCampaign.id}`}
+            className="absolute left-6 right-20 animate-fade-in"
+            style={{ bottom: '100px' }}
           >
-            {campaigns.map((campaign) => (
-              <CampaignCard
-                key={campaign.id}
-                campaign={campaign}
-                isSaved={favorites.includes(campaign.id)}
-                onSelect={handleSelectCampaign}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
+            <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
+              {currentCampaign.description}
+            </p>
           </div>
-        ) : viewMode === 'scroll' ? (
-          <>
-            {/* Video Feed - Snap Scroll Container */}
-            <div 
-              className="fixed left-1/2 -translate-x-1/2 top-0 h-screen overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-none scroll-smooth"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapStop: 'always', scrollBehavior: 'auto' }}
-              onScroll={handleScroll}
+
+          {/* Right side icons with stats */}
+          <div className="absolute bottom-32 right-[15px] flex flex-col items-center gap-3 pointer-events-auto">
+            {/* Company logo */}
+            <div
+              key={`logo-${currentCampaign.id}`}
+              className="w-12 h-12 rounded-full overflow-hidden animate-fade-in"
+              style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(12px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+              }}
             >
-              {campaigns.map((campaign, idx) => (
-                <div key={campaign.id} className="h-screen flex items-center justify-center snap-center snap-always py-6">
-                  {/* Video Placeholder - 9:16 aspect ratio */}
-                  <div 
-                    onClick={() => handleSelectCampaign(campaign)}
-                    className="aspect-[9/16] h-[calc(100vh-48px)] border border-white/25 flex items-center justify-center relative overflow-hidden cursor-pointer transition-colors"
-                    style={{ backgroundColor: 'hsla(220, 70%, 55%, 0.18)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
-                  >
-                    {idx === 0 ? (
-                      <video 
-                        src={campaignVideoPlaceholder} 
-                        className="absolute inset-0 w-full h-full object-cover"
-                        autoPlay 
-                        loop 
-                        muted 
-                        playsInline
-                      />
-                    ) : (
-                      <span className="text-muted-foreground text-lg">Video {idx + 1}</span>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-                    
-                    {/* Video Info Overlay */}
-                    <div className="absolute bottom-4 left-4 right-4 text-white transition-opacity duration-300">
-                      <p className="font-bold text-lg">{campaign.brand}</p>
-                      <p className="text-sm text-white/80 mt-1">{campaign.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <img
+                src={currentCampaign.logo}
+                alt={currentCampaign.brand}
+                className="w-full h-full object-cover"
+              />
             </div>
 
-            {/* Icon + Action Bubbles - Right Side of Video */}
-            <div
-              className="fixed left-1/2 top-1/2 -translate-y-1/2"
-              style={{ marginLeft: 'calc((100vh - 48px) * 9 / 16 / 2 + 32px)' }}
-            >
-              <div 
-                className="relative flex flex-col items-center gap-4"
-                style={{ opacity: scrollOpacity, transition: 'opacity 50ms ease-out' }}
+            {/* Save button + count */}
+            <div className="flex flex-col items-center gap-1">
+              <button
+                onClick={(e) => toggleFavorite(currentCampaign.id, e)}
+                className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(12px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                }}
               >
-                {/* Company Logo - circular */}
-                <div 
-                  onClick={() => setSelectedCampaign(currentCampaign)}
-                  className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-300"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    backdropFilter: 'blur(12px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    transform: `scale(${scrollOpacity < 1 ? 0.85 + scrollOpacity * 0.15 : 1})`,
-                  }}
-                >
-                  <img src={currentCampaign.logo} alt={currentCampaign.brand} className="w-full h-full object-cover rounded-full" />
-                </div>
+                <Bookmark
+                  className={`h-6 w-6 ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white/90'}`}
+                  strokeWidth={1.5}
+                />
+              </button>
+              <span 
+                key={`saves-${currentCampaign.id}`}
+                className="text-xs text-white/90 font-medium drop-shadow-sm animate-fade-in"
+              >
+                {getRandomStat(currentCampaign.id, 'saves').toLocaleString()}
+              </span>
+            </div>
 
-                {/* Glass Node with pricing info */}
-                <div
-                  className="px-6 py-4 rounded-[22px] flex flex-col items-center gap-1 transition-transform duration-300"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.25)',
-                    transform: `scale(${scrollOpacity < 1 ? 0.85 + scrollOpacity * 0.15 : 1})`,
-                  }}
-                >
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-white font-montserrat">{currentCampaign.ratePerThousand}</span>
-                    <span className="text-xs font-medium text-white/80 font-montserrat">sek / 1000 views</span>
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs font-medium text-white/70 font-montserrat">Up to</span>
-                    <span className="text-xl font-bold text-white font-montserrat">{currentCampaign.maxEarnings.toLocaleString()}</span>
-                    <span className="text-sm font-semibold text-white/90 font-montserrat">sek</span>
-                  </div>
+            {/* Share button + count */}
+            <div className="flex flex-col items-center gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (navigator.share) {
+                    navigator.share({
+                      title: currentCampaign.brand,
+                      text: currentCampaign.description,
+                    });
+                  }
+                }}
+                className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(12px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                <Send className="h-5 w-5 text-white/90" strokeWidth={1.5} />
+              </button>
+              <span 
+                key={`shares-${currentCampaign.id}`}
+                className="text-xs text-white/90 font-medium drop-shadow-sm animate-fade-in"
+              >
+                {getRandomStat(currentCampaign.id, 'shares').toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* MOBILE GLASS NODE - Fixed position, content fades */}
+        <div
+          onClick={handleNodeClick}
+          className="md:hidden fixed left-3 right-3 rounded-[22px] overflow-hidden z-20 pointer-events-auto"
+          style={{
+            bottom: '92px',
+            maxHeight: isExpanded ? 'calc(100% - 172px)' : '72px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            transition: 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          }}
+        >
+          {!isExpanded ? (
+            /* Collapsed state - earnings info with fade transition */
+            <div 
+              key={`node-${currentCampaign.id}`}
+              className="px-5 py-4 flex items-center justify-between animate-fade-in"
+            >
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-white font-montserrat drop-shadow-sm">
+                  {currentCampaign.maxEarnings.toLocaleString()}
+                </span>
+                <span className="text-base font-semibold text-white/90 font-montserrat drop-shadow-sm">
+                  sek
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-white/80 font-montserrat drop-shadow-sm">
+                  Platform:
+                </span>
+                <div className="w-7 h-7 rounded-full overflow-hidden">
+                  <img
+                    src={tiktokPlatformLogo}
+                    alt="TikTok"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
-          </>
-        ) : (
-          /* Browse Mode - Horizontal List Layout */
-          <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-24 pb-24 md:pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-            <div className="px-4 md:pl-8 md:pr-8">
-              <div className="grid grid-cols-2 md:flex md:flex-wrap gap-3 md:gap-x-6 md:gap-y-8">
-              {campaigns.map((campaign, index) => {
-                return (
-                  <div
-                    key={campaign.id}
-                    onClick={() => handleSelectCampaign(campaign)}
-                    className="overflow-hidden cursor-pointer hover:scale-[1.02] transition-all group flex flex-col w-full md:w-[200px] rounded-[4px]"
-                  >
-                    {/* Top - Vertical Image */}
-                    <div className="relative w-full aspect-[3/4] overflow-hidden">
-                      <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-                      <div 
-                        className="absolute inset-0 opacity-50 mix-blend-overlay pointer-events-none"
-                        style={{
-                          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                        }}
-                      />
-                      {/* Brand name overlay */}
-                      <span className="absolute top-3 left-3 text-xs font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
-                    </div>
-                    
-                    {/* Bottom - White info section */}
-                    <div className="w-full bg-white md:dark:bg-dark-surface p-4 flex flex-col justify-between h-[100px]">
-                      <p className="text-sm font-bold text-black md:text-foreground font-jakarta leading-tight line-clamp-2">{campaign.title}</p>
-                      <div className="flex items-center justify-between mt-1">
-                        <div className="inline-flex items-baseline gap-0.5">
-                          <span className="text-xl font-bold text-black md:text-foreground font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                          <span className="text-xs font-semibold text-black md:text-foreground font-montserrat">sek</span>
+          ) : (
+            /* Expanded state - full campaign detail */
+            <div className="h-full flex flex-col overflow-hidden">
+              {/* Header with brand */}
+              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-white/10">
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                  <img
+                    src={currentCampaign.logo}
+                    alt={currentCampaign.brand}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h2 className="text-base font-bold text-white font-montserrat flex-1 drop-shadow-sm">
+                  {currentCampaign.brand}
+                </h2>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(currentCampaign.id, e);
+                  }}
+                  className="p-1"
+                >
+                  <Bookmark
+                    className={`h-5 w-5 drop-shadow-sm ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white/70'}`}
+                    strokeWidth={1.5}
+                  />
+                </button>
+              </div>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+                {/* Description */}
+                <p className="text-sm text-white font-jakarta leading-relaxed mb-5 drop-shadow-sm">
+                  {currentCampaign.description}
+                </p>
+
+                {/* Requirements */}
+                <div className="bg-white/10 rounded-xl p-4 mb-4">
+                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat drop-shadow-sm">Requirements</h3>
+                  <ul className="space-y-1.5">
+                    {currentCampaign.guidelines.map((guideline, idx) => (
+                      <li key={idx} className="text-xs text-white/90 font-jakarta flex items-start gap-2 drop-shadow-sm">
+                        <span className="text-white/70">•</span>
+                        {guideline}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Example images */}
+                  {currentCampaign.exampleImages && currentCampaign.exampleImages.length > 0 && (
+                    <div className="flex gap-2 mt-3">
+                      {currentCampaign.exampleImages.slice(0, 2).map((img, i) => (
+                        <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                          <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                         </div>
-                        <button
-                          onClick={(e) => toggleFavorite(campaign.id, e)}
-                          className="flex items-center justify-center hover:scale-110 transition-transform"
-                        >
-                          <Bookmark 
-                            className={`h-5 w-5 ${favorites.includes(campaign.id) ? 'fill-black md:fill-foreground text-black md:text-foreground' : 'text-black/25'}`}
-                            strokeWidth={1.5}
-                          />
-                        </button>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+              </div>
+
+              {/* Fixed CTA at bottom */}
+              <div className="px-5 pb-4 pt-2">
+                <Button
+                  size="lg"
+                  className="w-full py-4 text-sm font-bold rounded-full bg-white hover:bg-white/90 text-black"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Submit Content
+                </Button>
+              </div>
             </div>
-          </div>
-          </div>
-        )}
+          )}
         </div>
       </main>
 

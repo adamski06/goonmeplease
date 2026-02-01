@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import Auth from "./pages/Auth";
 import Campaigns from "./pages/Campaigns";
+import Discover from "./pages/Discover";
 import CampaignDetail from "./pages/CampaignDetail";
 import Activity from "./pages/Activity";
 import Profile from "./pages/Profile";
@@ -26,6 +27,7 @@ const App = () => (
             <ProfileProvider>
               <Routes>
                 <Route path="/" element={<Campaigns />} />
+                <Route path="/discover" element={<Discover />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/campaigns/:id" element={<CampaignDetail />} />
                 <Route path="/activity" element={<Activity />} />
