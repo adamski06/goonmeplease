@@ -83,10 +83,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         />
 
         {/* Right side icons - Company logo + Save (mobile only) */}
-        <div className="md:hidden absolute bottom-36 right-4 flex flex-col items-center gap-3">
+        <div className="md:hidden absolute bottom-28 right-4 flex flex-col items-center gap-3">
           {/* Company profile icon */}
           <div
-            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center"
+            className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center"
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(12px) saturate(180%)',
@@ -97,25 +97,31 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <img
               src={campaign.logo}
               alt={campaign.brand}
-              className="w-7 h-7 object-contain"
+              className="w-full h-full object-cover"
             />
           </div>
 
-          {/* Save button */}
+          {/* Save button in glass bubble */}
           <button
             onClick={(e) => onToggleFavorite(campaign.id, e)}
-            className="flex items-center justify-center hover:scale-110 transition-transform"
+            className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(12px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+            }}
           >
             <Bookmark
-              className={`h-7 w-7 ${isSaved ? 'fill-white text-white' : 'text-white/80'}`}
+              className={`h-6 w-6 ${isSaved ? 'fill-white text-white' : 'text-white/90'}`}
               strokeWidth={1.5}
             />
           </button>
         </div>
 
-        {/* Apple Liquid Glass Earnings Node (mobile only) */}
+        {/* Apple Liquid Glass Earnings Node - Full Width (mobile only) */}
         <div
-          className="md:hidden absolute bottom-4 right-4 px-4 py-3 rounded-[20px]"
+          className="md:hidden absolute bottom-4 left-4 right-4 px-5 py-3 rounded-[20px] flex items-center justify-between"
           style={{
             background: 'rgba(255, 255, 255, 0.15)',
             backdropFilter: 'blur(20px) saturate(180%)',
@@ -124,14 +130,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           }}
         >
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold text-white font-montserrat">
+            <span className="text-xl font-bold text-white font-montserrat">
               {campaign.ratePerThousand}
             </span>
             <span className="text-xs font-medium text-white/80 font-montserrat">
               sek / 1000 views
             </span>
           </div>
-          <div className="flex items-baseline gap-1 mt-0.5">
+          <div className="flex items-baseline gap-1">
             <span className="text-xs font-medium text-white/70 font-montserrat">
               Up to
             </span>
