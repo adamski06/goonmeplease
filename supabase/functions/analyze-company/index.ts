@@ -6,10 +6,11 @@ const corsHeaders = {
 };
 
 interface AnalyzeRequest {
-  website: string;
-  socialMedia: Record<string, string>;
+  website?: string;
+  socialMedia?: Record<string, string>;
   companyName: string;
   language?: string;
+  autoSearch?: boolean;
 }
 
 serve(async (req) => {
@@ -18,17 +19,9 @@ serve(async (req) => {
   }
 
   try {
-    const { website, socialMedia, companyName, language = 'en' }: AnalyzeRequest = await req.json();
-
-    if (!website && Object.keys(socialMedia || {}).length === 0) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Website or social media URLs are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const { website, socialMedia, companyName, language = 'en', autoSearch = false }: AnalyzeRequest = await req.json();
 
     const isSwedish = language === 'sv';
-
     const firecrawlApiKey = Deno.env.get('FIRECRAWL_API_KEY');
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
 
@@ -45,6 +38,105 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ success: false, error: 'AI service not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // If autoSearch mode, search for company using web search
+    if (autoSearch) {
+      console.log('Auto-searching for company:', companyName);
+      
+      // Use AI to search for company info
+      const searchPrompt = `Find the official website and social media accounts for the company "${companyName}". 
+      
+Return ONLY a JSON object with no markdown formatting, like this:
+{
+  "website": "https://example.com",
+  "socialMedia": {
+    "instagram": "https://instagram.com/example",
+    "linkedin": "https://linkedin.com/company/example",
+    "twitter": "https://twitter.com/example",
+    "facebook": "https://facebook.com/example",
+    "tiktok": "https://tiktok.com/@example"
+  },
+  "confidence": "high/medium/low"
+}
+
+Only include social media accounts you're confident about. Use null for website if unsure.`;
+
+      try {
+        const searchResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.5-flash',
+            messages: [
+              { role: 'system', content: 'You are a research assistant. Return only valid JSON with no markdown or extra text.' },
+              { role: 'user', content: searchPrompt }
+            ],
+          }),
+        });
+
+        if (!searchResponse.ok) {
+          throw new Error('Search failed');
+        }
+
+        const searchData = await searchResponse.json();
+        const searchResult = searchData.choices?.[0]?.message?.content || '';
+        
+        console.log('Search result:', searchResult);
+        
+        // Parse the JSON response
+        let parsed;
+        try {
+          // Clean up potential markdown formatting
+          const cleaned = searchResult.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+          parsed = JSON.parse(cleaned);
+        } catch {
+          console.error('Failed to parse search result');
+          return new Response(
+            JSON.stringify({ success: false, error: 'Could not find company information' }),
+            { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        // Filter out null/empty values from socialMedia
+        const foundSocialMedia: Record<string, string> = {};
+        if (parsed.socialMedia) {
+          for (const [platform, url] of Object.entries(parsed.socialMedia)) {
+            if (url && typeof url === 'string' && url.trim()) {
+              foundSocialMedia[platform] = url;
+            }
+          }
+        }
+
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            data: {
+              website: parsed.website || null,
+              socialMedia: foundSocialMedia,
+              confidence: parsed.confidence || 'medium'
+            }
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } catch (error) {
+        console.error('Auto-search error:', error);
+        return new Response(
+          JSON.stringify({ success: false, error: 'Search failed' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Regular analysis mode - requires website or social media
+    if (!website && Object.keys(socialMedia || {}).length === 0) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Website or social media URLs are required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
