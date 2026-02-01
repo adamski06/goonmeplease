@@ -136,23 +136,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             /* Collapsed state - earnings info */
             <div className="px-5 py-4 flex items-center justify-between">
               <div className="flex items-baseline gap-1">
-                <span className="text-xl font-bold text-white font-montserrat drop-shadow-sm">
-                  {campaign.ratePerThousand}
-                </span>
-                <span className="text-xs font-medium text-white/90 font-montserrat drop-shadow-sm">
-                  sek / 1000 views
-                </span>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xs font-medium text-white/80 font-montserrat drop-shadow-sm">
-                  Up to
-                </span>
-                <span className="text-xl font-bold text-white font-montserrat drop-shadow-sm">
+                <span className="text-2xl font-bold text-white font-montserrat drop-shadow-sm">
                   {campaign.maxEarnings.toLocaleString()}
                 </span>
                 <span className="text-sm font-semibold text-white/90 font-montserrat drop-shadow-sm">
                   sek
                 </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-white/80 font-montserrat drop-shadow-sm">
+                  Platform:
+                </span>
+                <img
+                  src="/src/assets/platforms/tiktok.png"
+                  alt="TikTok"
+                  className="w-5 h-5 object-contain"
+                />
               </div>
             </div>
           ) : (
