@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bookmark, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 
 interface Campaign {
   id: string;
@@ -135,23 +136,26 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           {!isExpanded ? (
             /* Collapsed state - earnings info */
             <div className="px-5 py-4 flex items-center justify-between">
-              <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-bold text-white font-montserrat drop-shadow-sm">
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-white font-montserrat drop-shadow-sm">
                   {campaign.maxEarnings.toLocaleString()}
                 </span>
-                <span className="text-sm font-semibold text-white/90 font-montserrat drop-shadow-sm">
+                <span className="text-base font-semibold text-white/90 font-montserrat drop-shadow-sm">
                   sek
                 </span>
               </div>
+
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-white/80 font-montserrat drop-shadow-sm">
+                <span className="text-sm font-medium text-white/80 font-montserrat drop-shadow-sm">
                   Platform:
                 </span>
-                <img
-                  src="/src/assets/platforms/tiktok.png"
-                  alt="TikTok"
-                  className="w-5 h-5 object-contain"
-                />
+                <div className="w-7 h-7 rounded-full overflow-hidden">
+                  <img
+                    src={tiktokPlatformLogo}
+                    alt="TikTok"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
             </div>
           ) : (
