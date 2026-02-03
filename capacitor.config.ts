@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.6cf7b67c09424df285dcf9bb2fed8e6b',
+  appId: 'app.lovable.jarla',
   appName: 'Jarla',
   webDir: 'dist',
   server: {
