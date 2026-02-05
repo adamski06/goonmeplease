@@ -385,9 +385,18 @@ const Discover: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {/* Mobile: Campaign detail as expanding pill overlay */}
         {selectedCampaign && (
-          <div className="md:hidden fixed inset-0 z-50 bg-black/60" onClick={handleBackFromDetail}>
-            {/* Full image background */}
-            <div className="absolute inset-0">
+          <div 
+            className="md:hidden fixed inset-0 z-50 animate-[fade-in_0.3s_ease-out]" 
+            style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+            onClick={handleBackFromDetail}
+          >
+            {/* Full image background with scale animation */}
+            <div 
+              className="absolute inset-0 rounded-[48px] overflow-hidden"
+              style={{
+                animation: 'expand-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              }}
+            >
               <img src={selectedCampaign.image} alt={selectedCampaign.brand} className="w-full h-full object-cover" />
               <div 
                 className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
@@ -397,17 +406,42 @@ const Discover: React.FC = () => {
               />
             </div>
             
-            {/* Expanded white pill */}
+            {/* Expanded white pill with scale animation */}
             <div 
-              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-20 animate-fade-in"
+              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-20"
               style={{
                 maxHeight: 'calc(100dvh - 136px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                animation: 'pill-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
               }}
               onClick={(e) => e.stopPropagation()}
             >
+              <style>{`
+                @keyframes expand-in {
+                  0% {
+                    transform: scale(0.3);
+                    opacity: 0;
+                    border-radius: 32px;
+                  }
+                  100% {
+                    transform: scale(1);
+                    opacity: 1;
+                    border-radius: 0;
+                  }
+                }
+                @keyframes pill-expand {
+                  0% {
+                    transform: scale(0.5) translateY(100px);
+                    opacity: 0;
+                  }
+                  100% {
+                    transform: scale(1) translateY(0);
+                    opacity: 1;
+                  }
+                }
+              `}</style>
               <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
                 {/* Drag handle indicator */}
                 <div className="flex justify-center pt-3 pb-1">
