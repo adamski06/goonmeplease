@@ -99,8 +99,8 @@ const Discover: React.FC = () => {
       <div className="hidden md:block absolute inset-0 pointer-events-none grainy-background" />
       <div className="hidden md:block noise-layer absolute inset-0 pointer-events-none" />
 
-      {/* Mobile Bottom Navigation Bar - hidden when in ad detail */}
-      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom bg-white border-t border-black/10 ${selectedCampaign ? 'hidden' : ''}`}>
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom bg-white border-t border-black/10">
         <div className="flex items-start justify-between h-full">
           <button 
             onClick={() => navigate('/')}
@@ -161,7 +161,7 @@ const Discover: React.FC = () => {
         {/* Mobile: Expanded campaign detail - matches Home layout exactly */}
         {selectedCampaign && (
           <div 
-            className="md:hidden fixed top-14 left-3 right-3 bottom-3 z-20"
+            className="md:hidden fixed inset-0 z-40"
             onClick={handleBackFromDetail}
           >
             <style>{`
@@ -176,9 +176,9 @@ const Discover: React.FC = () => {
                 }
               }
             `}</style>
-            {/* Full white pill that slides up from bottom - same as CampaignCard expanded */}
+            {/* Full white pill that slides up from bottom - slightly over the navbar */}
             <div 
-              className="absolute left-0 right-0 bottom-0 rounded-[48px] overflow-hidden"
+              className="absolute left-3 right-3 bottom-16 rounded-[48px] overflow-hidden z-[60]"
               style={{
                 maxHeight: 'calc(100dvh - 136px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
