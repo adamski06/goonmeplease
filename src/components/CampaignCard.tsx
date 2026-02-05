@@ -136,7 +136,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* White Node - pill with half-circle edges overlapping bottom of image */}
+      {/* White Node - pill with glass effect */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
@@ -149,11 +149,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           maxHeight: isExpanded ? `calc(100dvh - 136px)` : '96px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
-          background: 'linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(245,245,245,0.95))',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(0,0,0,0.08)',
-          boxShadow: '0 -4px 24px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+          border: '1.5px solid rgba(255,255,255,0.8)',
+          boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
         >
         {!isExpanded ? (
