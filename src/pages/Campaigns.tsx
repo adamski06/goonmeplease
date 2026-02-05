@@ -838,26 +838,20 @@ const Campaigns: React.FC = () => {
           {/* Description above node - max 3 lines */}
           <div 
             key={`desc-${currentCampaign.id}`}
-            className="absolute left-6 right-20 animate-fade-in"
-            style={{ bottom: '100px' }}
+            className="absolute left-4 right-16 animate-fade-in"
+            style={{ bottom: '148px' }}
           >
             <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
               {currentCampaign.description}
             </p>
           </div>
 
-          {/* Right side icons with stats */}
-          <div className="absolute bottom-48 right-[15px] flex flex-col items-center gap-3 pointer-events-auto">
+          {/* Right side icons - no circles, just white icons */}
+          <div className="absolute right-5 flex flex-col items-center gap-4 pointer-events-auto" style={{ bottom: '148px' }}>
             {/* Company logo */}
             <div
               key={`logo-${currentCampaign.id}`}
-              className="w-12 h-12 rounded-full overflow-hidden animate-fade-in"
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(20px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-              }}
+              className="w-10 h-10 rounded-full overflow-hidden animate-fade-in border border-white/30"
             >
               <img
                 src={currentCampaign.logo}
@@ -866,32 +860,26 @@ const Campaigns: React.FC = () => {
               />
             </div>
 
-            {/* Save button + count */}
+            {/* Save button + count - no circle */}
             <div className="flex flex-col items-center gap-1">
               <button
                 onClick={(e) => toggleFavorite(currentCampaign.id, e)}
-                className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                }}
+                className="flex items-center justify-center hover:scale-110 transition-transform"
               >
                 <Bookmark
-                  className={`h-6 w-6 ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white/90'}`}
+                  className={`h-7 w-7 drop-shadow-lg ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white'}`}
                   strokeWidth={1.5}
                 />
               </button>
               <span 
                 key={`saves-${currentCampaign.id}`}
-                className="text-xs text-white/90 font-medium drop-shadow-sm animate-fade-in"
+                className="text-xs text-white font-medium drop-shadow-lg animate-fade-in"
               >
                 {getRandomStat(currentCampaign.id, 'saves').toLocaleString()}
               </span>
             </div>
 
-            {/* Share button + count */}
+            {/* Share button + count - no circle */}
             <div className="flex flex-col items-center gap-1">
               <button
                 onClick={(e) => {
@@ -903,19 +891,13 @@ const Campaigns: React.FC = () => {
                     });
                   }
                 }}
-                className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                }}
+                className="flex items-center justify-center hover:scale-110 transition-transform"
               >
-                <Send className="h-5 w-5 text-white/90" strokeWidth={1.5} />
+                <Send className="h-6 w-6 text-white drop-shadow-lg" strokeWidth={1.5} />
               </button>
               <span 
                 key={`shares-${currentCampaign.id}`}
-                className="text-xs text-white/90 font-medium drop-shadow-sm animate-fade-in"
+                className="text-xs text-white font-medium drop-shadow-lg animate-fade-in"
               >
                 {getRandomStat(currentCampaign.id, 'shares').toLocaleString()}
               </span>
@@ -923,17 +905,13 @@ const Campaigns: React.FC = () => {
           </div>
         </div>
 
-        {/* MOBILE GLASS NODE - Fixed position, content fades */}
+        {/* MOBILE WHITE NODE - Fixed position, content fades */}
         <div
           onClick={handleNodeClick}
-          className="md:hidden fixed left-4 right-4 rounded-[22px] overflow-hidden z-20 pointer-events-auto"
+          className="md:hidden fixed left-3 right-3 rounded-[20px] overflow-hidden z-20 pointer-events-auto bg-white"
           style={{
-            bottom: '92px',
-            maxHeight: isExpanded ? 'calc(100% - 172px)' : '72px',
-            background: 'rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            bottom: '88px',
+            maxHeight: isExpanded ? 'calc(100% - 168px)' : '56px',
             transition: 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
@@ -941,22 +919,22 @@ const Campaigns: React.FC = () => {
             /* Collapsed state - earnings info with fade transition */
             <div 
               key={`node-${currentCampaign.id}`}
-              className="px-5 py-4 flex items-center justify-between animate-fade-in"
+              className="px-4 py-3 flex items-center justify-between animate-fade-in"
             >
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-white font-montserrat drop-shadow-sm">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-bold text-black font-montserrat">
                   {currentCampaign.maxEarnings.toLocaleString()}
                 </span>
-                <span className="text-base font-semibold text-white/90 font-montserrat drop-shadow-sm">
+                <span className="text-sm font-semibold text-black/70 font-montserrat">
                   sek
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-white/80 font-montserrat drop-shadow-sm">
+                <span className="text-xs font-medium text-black/60 font-montserrat">
                   Platform:
                 </span>
-                <div className="w-7 h-7 rounded-full overflow-hidden">
+                <div className="w-6 h-6 rounded-full overflow-hidden">
                   <img
                     src={tiktokPlatformLogo}
                     alt="TikTok"
@@ -966,10 +944,10 @@ const Campaigns: React.FC = () => {
               </div>
             </div>
           ) : (
-            /* Expanded state - full campaign detail */
+            /* Expanded state - full campaign detail - now white bg with dark text */
             <div className="h-full flex flex-col overflow-hidden">
               {/* Header with brand */}
-              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-white/10">
+              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                   <img
                     src={currentCampaign.logo}
@@ -977,7 +955,7 @@ const Campaigns: React.FC = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h2 className="text-base font-bold text-white font-montserrat flex-1 drop-shadow-sm">
+                <h2 className="text-base font-bold text-black font-montserrat flex-1">
                   {currentCampaign.brand}
                 </h2>
                 <button
@@ -988,7 +966,7 @@ const Campaigns: React.FC = () => {
                   className="p-1"
                 >
                   <Bookmark
-                    className={`h-5 w-5 drop-shadow-sm ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white/70'}`}
+                    className={`h-5 w-5 ${favorites.includes(currentCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
                     strokeWidth={1.5}
                   />
                 </button>
@@ -997,17 +975,17 @@ const Campaigns: React.FC = () => {
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
                 {/* Description */}
-                <p className="text-sm text-white font-jakarta leading-relaxed mb-5 drop-shadow-sm">
+                <p className="text-sm text-black/80 font-jakarta leading-relaxed mb-5">
                   {currentCampaign.description}
                 </p>
 
                 {/* Requirements */}
-                <div className="bg-white/10 rounded-xl p-4 mb-4">
-                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat drop-shadow-sm">Requirements</h3>
+                <div className="bg-black/5 rounded-xl p-4 mb-4">
+                  <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
                   <ul className="space-y-1.5">
                     {currentCampaign.guidelines.map((guideline, idx) => (
-                      <li key={idx} className="text-xs text-white/90 font-jakarta flex items-start gap-2 drop-shadow-sm">
-                        <span className="text-white/70">•</span>
+                      <li key={idx} className="text-xs text-black/70 font-jakarta flex items-start gap-2">
+                        <span className="text-black/40">•</span>
                         {guideline}
                       </li>
                     ))}
@@ -1030,7 +1008,7 @@ const Campaigns: React.FC = () => {
               <div className="px-5 pb-4 pt-2">
                 <Button
                   size="lg"
-                  className="w-full py-4 text-sm font-bold rounded-full bg-white hover:bg-white/90 text-black"
+                  className="w-full py-4 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Submit Content
