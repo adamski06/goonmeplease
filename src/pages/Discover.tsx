@@ -163,15 +163,27 @@ const Discover: React.FC = () => {
             className="md:hidden fixed inset-0 z-50" 
             onClick={handleBackFromDetail}
           >
-            {/* Card container matching Home layout */}
-            <div className="absolute top-14 left-3 right-3 bottom-3">
+            <style>{`
+              @keyframes slide-up-expand {
+                0% {
+                  transform: translateY(100%);
+                  opacity: 0;
+                }
+                100% {
+                  transform: translateY(0);
+                  opacity: 1;
+                }
+              }
+            `}</style>
+            {/* Card container matching Home layout - slides up from bottom */}
+            <div 
+              className="absolute top-14 left-3 right-3 bottom-3"
+              style={{
+                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              }}
+            >
               {/* Image section - fully rounded corners matching pill shape */}
-              <div
-                className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden"
-                style={{
-                  animation: 'expand-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-                }}
-              >
+              <div className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden">
                 <img src={selectedCampaign.image} alt={selectedCampaign.brand} className="w-full h-full object-cover" />
                 {/* Noise overlay */}
                 <div
@@ -182,7 +194,7 @@ const Discover: React.FC = () => {
                 />
               </div>
             
-              {/* Expanded white pill with scale animation */}
+              {/* Expanded white pill */}
               <div 
                 className="absolute left-0 right-0 bottom-0 rounded-[48px] overflow-hidden z-20"
               style={{
@@ -190,34 +202,9 @@ const Discover: React.FC = () => {
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                animation: 'pill-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <style>{`
-                @keyframes expand-in {
-                  0% {
-                    transform: scale(0.3);
-                    opacity: 0;
-                    border-radius: 32px;
-                  }
-                  100% {
-                    transform: scale(1);
-                    opacity: 1;
-                    border-radius: 0;
-                  }
-                }
-                @keyframes pill-expand {
-                  0% {
-                    transform: scale(0.5) translateY(100px);
-                    opacity: 0;
-                  }
-                  100% {
-                    transform: scale(1) translateY(0);
-                    opacity: 1;
-                  }
-                }
-              `}</style>
               <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
                 {/* Drag handle indicator */}
                 <div className="flex justify-center pt-3 pb-1">
