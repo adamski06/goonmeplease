@@ -33,10 +33,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen flex items-center justify-center md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Full screen photo on mobile (IMAGE ONLY), left side on desktop */}
-      {/* Mobile: image extends to overlap the node */}
+      {/* Mobile: image is cropped above the node, not overlapping */}
       <div
-        className="relative w-[calc(100%-24px)] h-[calc(100%-8px)] rounded-[20px] overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] md:flex-shrink-0"
-        style={{ marginBottom: '-40px' }}
+        className="relative w-[calc(100%-24px)] h-[calc(100%-160px)] rounded-[20px] overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] md:flex-shrink-0"
       >
         <img
           src={campaign.image}

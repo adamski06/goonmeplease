@@ -860,14 +860,14 @@ const Campaigns: React.FC = () => {
               />
             </div>
 
-            {/* Save button + count - no circle */}
+            {/* Save button + count - filled icon */}
             <div className="flex flex-col items-center gap-1">
               <button
                 onClick={(e) => toggleFavorite(currentCampaign.id, e)}
                 className="flex items-center justify-center hover:scale-110 transition-transform"
               >
                 <Bookmark
-                  className={`h-7 w-7 drop-shadow-lg ${favorites.includes(currentCampaign.id) ? 'fill-white text-white' : 'text-white'}`}
+                  className="h-7 w-7 fill-white text-white drop-shadow-lg"
                   strokeWidth={1.5}
                 />
               </button>
@@ -879,7 +879,7 @@ const Campaigns: React.FC = () => {
               </span>
             </div>
 
-            {/* Share button + count - no circle */}
+            {/* Share button + count - filled icon */}
             <div className="flex flex-col items-center gap-1">
               <button
                 onClick={(e) => {
@@ -893,7 +893,7 @@ const Campaigns: React.FC = () => {
                 }}
                 className="flex items-center justify-center hover:scale-110 transition-transform"
               >
-                <Send className="h-6 w-6 text-white drop-shadow-lg" strokeWidth={1.5} />
+                <Send className="h-6 w-6 fill-white text-white drop-shadow-lg" strokeWidth={1.5} />
               </button>
               <span 
                 key={`shares-${currentCampaign.id}`}
@@ -911,7 +911,7 @@ const Campaigns: React.FC = () => {
           className="md:hidden fixed left-3 right-3 rounded-[20px] overflow-hidden z-20 pointer-events-auto bg-white"
           style={{
             bottom: '88px',
-            maxHeight: isExpanded ? 'calc(100% - 168px)' : '56px',
+            maxHeight: isExpanded ? 'calc(100% - 168px)' : '68px',
             transition: 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
@@ -919,7 +919,7 @@ const Campaigns: React.FC = () => {
             /* Collapsed state - earnings info with fade transition */
             <div 
               key={`node-${currentCampaign.id}`}
-              className="px-4 py-3 flex items-center justify-between animate-fade-in"
+              className="px-4 py-4 flex items-center justify-between animate-fade-in h-[68px]"
             >
               <div className="flex items-baseline gap-1.5">
                 <span className="text-xl font-bold text-black font-montserrat">
