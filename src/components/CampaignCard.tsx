@@ -178,7 +178,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
         ) : (
           /* Expanded state - full campaign detail */
-          <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 100px)' }}>
+          <div className="h-full flex flex-col overflow-hidden animate-fade-in" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
             {/* Drag handle indicator */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 bg-black/20 rounded-full" />
@@ -205,8 +205,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 {campaign.description}
               </p>
 
-              {/* Requirements */}
-              <div className="bg-black/5 rounded-xl p-4 mb-4">
+              {/* Requirements - glass effect */}
+              <div 
+                className="rounded-xl p-4 mb-4"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                }}
+              >
                 <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
                 <ul className="space-y-1.5">
                   {campaign.guidelines.map((guideline, idx) => (
@@ -255,7 +262,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
 
             {/* Fixed CTA at bottom */}
-            <div className="px-5 pb-4 pt-2 flex items-center justify-center gap-3">
+            <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
               <Button
                 size="lg"
                 className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
@@ -269,7 +276,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   e.stopPropagation();
                   onToggleFavorite(campaign.id, e);
                 }}
-                className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center"
+                className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
               >
                 <Bookmark
                   className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
