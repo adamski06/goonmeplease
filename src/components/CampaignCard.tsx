@@ -88,12 +88,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   // Mobile card: image fills most of space, white node attached to bottom of image
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
-      {/* Mobile: Card container with image + attached white node */}
-      <div className="md:hidden absolute top-6 left-3 right-3 bottom-3 flex flex-col gap-2">
-        {/* Image section - takes remaining space above white node */}
+      {/* Mobile: Card container with image + separate white node below */}
+      <div className="md:hidden absolute top-4 left-3 right-3 bottom-[84px] flex flex-col">
+        {/* Image section - full rounded corners */}
         <div
           onClick={handlePictureClick}
-          className="flex-1 rounded-[20px] overflow-hidden cursor-pointer relative"
+          className="flex-1 rounded-[24px] overflow-hidden cursor-pointer relative"
         >
           <img
             src={campaign.image}
@@ -176,21 +176,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         </div>
+      </div>
 
-        {/* White Node - separate pill below image */}
-        <div
-          ref={nodeRef}
-          onClick={handleNodeClick}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          className={`rounded-[20px] overflow-hidden bg-white flex-shrink-0 ${isExpanded ? 'absolute inset-x-0 bottom-0 left-0 right-0 z-20' : ''}`}
-          style={{
-            height: isExpanded ? 'auto' : '68px',
-            maxHeight: isExpanded ? `calc(100dvh - 160px)` : '68px',
-            transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
-          }}
+      {/* White Node - separate pill positioned at bottom with gap */}
+      <div
+        ref={nodeRef}
+        onClick={handleNodeClick}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className={`md:hidden absolute left-3 right-3 rounded-[24px] overflow-hidden bg-white ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
+        style={{
+          height: isExpanded ? 'auto' : '68px',
+          maxHeight: isExpanded ? `calc(100dvh - 100px)` : '68px',
+          transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
+        }}
         >
         {!isExpanded ? (
           /* Collapsed state - earnings info */
@@ -320,9 +321,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         )}
-        </div>
       </div>
-
       {/* Desktop: Image container */}
       <div
         className="hidden md:block relative md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden cursor-pointer md:flex-shrink-0"
