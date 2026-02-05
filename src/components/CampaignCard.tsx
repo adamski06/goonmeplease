@@ -110,9 +110,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           />
           
           {/* Mobile overlay content - description + company logo */}
-          <div className={`absolute inset-x-0 bottom-[96px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className={`absolute inset-x-0 bottom-[88px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             {/* Gradient overlay */}
-            <div className="absolute inset-x-0 bottom-[-48px] h-[200px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
             
             {/* Content container */}
             <div className="relative flex items-start justify-between gap-3">
@@ -124,7 +124,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </div>
               
               {/* Company logo - vertically aligned with text */}
-              <div className="h-[36px] w-[36px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-0">
+              <div className="h-[36px] w-[36px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-1">
                 <img
                   src={campaign.logo}
                   alt={campaign.brand}
