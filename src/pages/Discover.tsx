@@ -159,45 +159,45 @@ const Discover: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {/* Mobile: Expanded campaign detail */}
         {selectedCampaign && (
-          <>
-            {/* Backdrop sits BEHIND the navbar so the navbar never disappears */}
+          <div className="md:hidden fixed inset-0 z-40">
+            {/* Backdrop sits BEHIND the navbar (navbar is z-50) */}
             <div
-              className="md:hidden fixed inset-0 z-40 bg-black/50"
+              className="absolute inset-0 bg-black/50"
               onClick={handleBackFromDetail}
             />
 
-            {/* The pill sits ABOVE the navbar, overlapping it slightly */}
-            <div>
-              <style>{`
-                @keyframes slide-up-expand {
-                  0% {
-                    transform: translateY(100%);
-                    opacity: 0;
-                  }
-                  100% {
-                    transform: translateY(0);
-                    opacity: 1;
-                  }
+            <style>{`
+              @keyframes slide-up-expand {
+                0% {
+                  transform: translateY(100%);
+                  opacity: 0;
                 }
-              `}</style>
+                100% {
+                  transform: translateY(0);
+                  opacity: 1;
+                }
+              }
+            `}</style>
 
-              <div
-                className="md:hidden fixed left-3 right-3 bottom-[72px] z-[60] rounded-[48px] overflow-hidden"
-                style={{
-                  maxHeight: 'calc(100dvh - 168px)',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
-                  border: '1.5px solid rgba(255,255,255,0.8)',
-                  boxShadow:
-                    '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                  animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 168px)' }}>
-                  {/* Drag handle indicator */}
-                  <div className="flex justify-center pt-3 pb-1">
-                    <div className="w-10 h-1 bg-black/20 rounded-full" />
-                  </div>
+            {/* Full white pill - same placement as Home (CampaignCard) */}
+            <div
+              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-10"
+              style={{
+                maxHeight: 'calc(100dvh - 136px)',
+                background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
+                border: '1.5px solid rgba(255,255,255,0.8)',
+                boxShadow:
+                  '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
+                {/* Drag handle indicator */}
+                <div className="flex justify-center pt-3 pb-1">
+                  <div className="w-10 h-1 bg-black/20 rounded-full" />
+                </div>
+
 
                   {/* Header with brand */}
                   <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
@@ -320,8 +320,8 @@ const Discover: React.FC = () => {
                 </div>
               </div>
             </div>
-          </>
         )}
+
 
 
         {/* Mobile Header Bar with safe area */}
