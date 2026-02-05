@@ -1021,11 +1021,11 @@ const Campaigns: React.FC = () => {
 
       {/* Auth Prompt Dialog */}
       <Dialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-sm bg-white border-0 rounded-[24px] p-6">
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Join Jarla</DialogTitle>
+            <DialogTitle className="text-center text-2xl font-bold text-black">Join Jarla</DialogTitle>
           </DialogHeader>
-          <p className="text-center text-muted-foreground mb-6">
+          <p className="text-center text-black/60 text-sm mb-6">
             Create an account to save campaigns, track your submissions, and start earning.
           </p>
           <div className="flex flex-col gap-3">
@@ -1034,7 +1034,7 @@ const Campaigns: React.FC = () => {
                 setShowAuthPrompt(false);
                 navigate('/auth?mode=signup');
               }}
-              className="w-full py-3 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="w-full py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-black/80 transition-colors"
             >
               Create account
             </button>
@@ -1043,7 +1043,7 @@ const Campaigns: React.FC = () => {
                 setShowAuthPrompt(false);
                 navigate('/auth?mode=login');
               }}
-              className="w-full py-3 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
+              className="w-full py-3 border border-black/20 text-black rounded-full text-sm font-medium hover:bg-black/5 transition-colors"
             >
               Log in
             </button>
