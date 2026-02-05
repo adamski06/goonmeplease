@@ -157,161 +157,172 @@ const Discover: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* Mobile: Campaign detail as expanding overlay - matches Home layout */}
-        {/* Mobile: Expanded campaign detail - matches Home layout exactly */}
+        {/* Mobile: Expanded campaign detail */}
         {selectedCampaign && (
-          <div 
-            className="md:hidden fixed inset-0 z-40"
-            onClick={handleBackFromDetail}
-          >
-            <style>{`
-              @keyframes slide-up-expand {
-                0% {
-                  transform: translateY(100%);
-                  opacity: 0;
-                }
-                100% {
-                  transform: translateY(0);
-                  opacity: 1;
-                }
-              }
-            `}</style>
-            {/* Full white pill that slides up from bottom - slightly over the navbar */}
-            <div 
-              className="absolute left-3 right-3 bottom-16 rounded-[48px] overflow-hidden z-[60]"
-              style={{
-                maxHeight: 'calc(100dvh - 136px)',
-                background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
-                border: '1.5px solid rgba(255,255,255,0.8)',
-                boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
-                {/* Drag handle indicator */}
-                <div className="flex justify-center pt-3 pb-1">
-                  <div className="w-10 h-1 bg-black/20 rounded-full" />
-                </div>
-                
-                {/* Header with brand */}
-                <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
-                  <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                    <img
-                      src={selectedCampaign.logo}
-                      alt={selectedCampaign.brand}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                    {selectedCampaign.brand}
-                  </h2>
-                </div>
+          <>
+            {/* Backdrop sits BEHIND the navbar so the navbar never disappears */}
+            <div
+              className="md:hidden fixed inset-0 z-40 bg-black/50"
+              onClick={handleBackFromDetail}
+            />
 
-                {/* Scrollable content */}
-                <div className="flex-1 overflow-y-auto px-5 py-4">
-                  {/* Campaign Image Node - glass effect like other nodes */}
-                  <div 
-                    className="rounded-xl overflow-hidden mb-4"
-                    style={{
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                      border: '1px solid rgba(0,0,0,0.06)',
-                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
-                    }}
-                  >
-                    <div className="aspect-[9/16] w-full overflow-hidden rounded-xl">
-                      <img 
-                        src={selectedCampaign.image}
-                        alt={selectedCampaign.brand} 
+            {/* The pill sits ABOVE the navbar, overlapping it slightly */}
+            <div>
+              <style>{`
+                @keyframes slide-up-expand {
+                  0% {
+                    transform: translateY(100%);
+                    opacity: 0;
+                  }
+                  100% {
+                    transform: translateY(0);
+                    opacity: 1;
+                  }
+                }
+              `}</style>
+
+              <div
+                className="md:hidden fixed left-3 right-3 bottom-[72px] z-[60] rounded-[48px] overflow-hidden"
+                style={{
+                  maxHeight: 'calc(100dvh - 168px)',
+                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  boxShadow:
+                    '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                  animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 168px)' }}>
+                  {/* Drag handle indicator */}
+                  <div className="flex justify-center pt-3 pb-1">
+                    <div className="w-10 h-1 bg-black/20 rounded-full" />
+                  </div>
+
+                  {/* Header with brand */}
+                  <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
+                    <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                      <img
+                        src={selectedCampaign.logo}
+                        alt={selectedCampaign.brand}
                         className="w-full h-full object-cover"
                       />
                     </div>
+                    <h2 className="text-base font-bold text-black font-montserrat flex-1">
+                      {selectedCampaign.brand}
+                    </h2>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
-                    {selectedCampaign.description}
-                  </p>
+                  {/* Scrollable content */}
+                  <div className="flex-1 overflow-y-auto px-5 py-4">
+                    {/* Campaign Image Node - smaller + centered */}
+                    <div
+                      className="rounded-xl p-3 mb-4"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                        border: '1px solid rgba(0,0,0,0.06)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      <div className="mx-auto w-full max-w-[220px] aspect-[9/16] overflow-hidden rounded-xl">
+                        <img
+                          src={selectedCampaign.image}
+                          alt={selectedCampaign.brand}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
 
-                  {/* Requirements - glass effect */}
-                  <div 
-                    className="rounded-xl p-4 mb-4"
-                    style={{
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                      border: '1px solid rgba(0,0,0,0.06)',
-                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
-                    }}
-                  >
-                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
-                    <ul className="space-y-1.5">
-                      {selectedCampaign.guidelines.map((guideline, idx) => (
-                        <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
-                          <span className="text-black/40">•</span>
-                          {guideline}
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Description */}
+                    <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
+                      {selectedCampaign.description}
+                    </p>
 
-                    {/* Example images */}
-                    {selectedCampaign.exampleImages && selectedCampaign.exampleImages.length > 0 && (
-                      <div className="flex gap-2 mt-3">
-                        {selectedCampaign.exampleImages.slice(0, 2).map((img, i) => (
-                          <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                          </div>
+                    {/* Requirements - glass effect */}
+                    <div
+                      className="rounded-xl p-4 mb-4"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                        border: '1px solid rgba(0,0,0,0.06)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                      }}
+                    >
+                      <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                      <ul className="space-y-1.5">
+                        {selectedCampaign.guidelines.map((guideline, idx) => (
+                          <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
+                            <span className="text-black/40">•</span>
+                            {guideline}
+                          </li>
                         ))}
-                      </div>
-                    )}
-                  </div>
+                      </ul>
 
-                  {/* Payment Details - green glass effect */}
-                  <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                    <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
-                        <span className="text-sm font-bold text-white font-montserrat">{selectedCampaign.maxEarnings.toLocaleString()} sek</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
-                        <span className="text-sm font-bold text-white font-montserrat">{selectedCampaign.ratePerThousand} sek</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/80 font-jakarta">Platform</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
-                          <div className="w-4 h-4 rounded-full overflow-hidden">
-                            <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
+                      {/* Example images */}
+                      {selectedCampaign.exampleImages && selectedCampaign.exampleImages.length > 0 && (
+                        <div className="flex gap-2 mt-3">
+                          {selectedCampaign.exampleImages.slice(0, 2).map((img, i) => (
+                            <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                              <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Payment Details - green glass effect */}
+                    <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                      <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
+                          <span className="text-sm font-bold text-white font-montserrat">
+                            {selectedCampaign.maxEarnings.toLocaleString()} sek
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
+                          <span className="text-sm font-bold text-white font-montserrat">
+                            {selectedCampaign.ratePerThousand} sek
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-white/80 font-jakarta">Platform</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
+                            <div className="w-4 h-4 rounded-full overflow-hidden">
+                              <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Fixed CTA at bottom */}
-                <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
-                  <Button
-                    size="lg"
-                    className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Submit Content
-                  </Button>
-                  <button
-                    onClick={(e) => toggleFavorite(selectedCampaign.id, e)}
-                    className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
-                  >
-                    <Bookmark
-                      className={`h-5 w-5 ${favorites.includes(selectedCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
-                      strokeWidth={1.5}
-                    />
-                  </button>
+                  {/* Fixed CTA at bottom */}
+                  <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
+                    <Button
+                      size="lg"
+                      className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Submit Content
+                    </Button>
+                    <button
+                      onClick={(e) => toggleFavorite(selectedCampaign.id, e)}
+                      className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
+                    >
+                      <Bookmark
+                        className={`h-5 w-5 ${favorites.includes(selectedCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
+                        strokeWidth={1.5}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
+
 
         {/* Mobile Header Bar with safe area */}
         <div className="md:hidden flex flex-col border-b border-black/10 bg-white safe-area-top">
