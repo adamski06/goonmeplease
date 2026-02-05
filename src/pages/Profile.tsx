@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, ArrowLeft } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import defaultAvatar from '@/assets/default-avatar.png';
 
 // Placeholder images for the grid
@@ -47,14 +47,11 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white pb-24">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-black/10">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2">
-          <ArrowLeft className="h-6 w-6 text-black" />
-        </button>
+      <div className="flex items-center justify-center px-4 py-3 border-b border-black/10">
         <span className="text-base font-semibold text-black">
           {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
         </span>
-        <button onClick={() => {}} className="p-2 -mr-2">
+        <button onClick={() => {}} className="absolute right-4 p-2">
           <Settings className="h-6 w-6 text-black" />
         </button>
       </div>
