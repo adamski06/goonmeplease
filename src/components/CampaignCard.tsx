@@ -188,7 +188,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden bg-white z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
         style={{
           height: isExpanded ? 'auto' : '96px',
-          maxHeight: isExpanded ? `calc(100dvh - 100px)` : '96px',
+          maxHeight: isExpanded ? `calc(100dvh - 136px)` : '96px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}
@@ -196,11 +196,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         {!isExpanded ? (
           /* Collapsed state - earnings info */
           <div className="px-6 py-6 flex items-center justify-between h-[96px]">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-bold text-black font-montserrat">
+            {/* Green pill for earnings */}
+            <div className="bg-emerald-700 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5">
+              <span className="text-xl font-bold text-white font-montserrat">
                 {campaign.maxEarnings.toLocaleString()}
               </span>
-              <span className="text-sm font-semibold text-black/70 font-montserrat">
+              <span className="text-sm font-semibold text-white/80 font-montserrat">
                 sek
               </span>
             </div>
