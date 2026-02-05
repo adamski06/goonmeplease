@@ -88,12 +88,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   // Mobile card: image fills most of space, white node attached to bottom of image
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
-      {/* Mobile: Card container with image + separate white node below */}
-      <div className="md:hidden absolute top-4 left-3 right-3 bottom-[84px] flex flex-col">
-        {/* Image section - full rounded corners */}
+      {/* Mobile: Card container with image + overlapping white node */}
+      <div className="md:hidden absolute top-4 left-3 right-3 bottom-3 flex flex-col">
+        {/* Image section - full rounded corners, extends behind the pill */}
         <div
           onClick={handlePictureClick}
-          className="flex-1 rounded-[24px] overflow-hidden cursor-pointer relative"
+          className="flex-1 rounded-[24px] overflow-hidden cursor-pointer relative mb-[-34px]"
         >
           <img
             src={campaign.image}
@@ -108,8 +108,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }}
           />
           
-          {/* Mobile overlay content - positioned at bottom of image */}
-          <div className={`absolute inset-x-0 bottom-0 p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          {/* Mobile overlay content - positioned above the pill overlap area */}
+          <div className={`absolute inset-x-0 bottom-[44px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             {/* Gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
             
@@ -178,14 +178,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* White Node - separate pill positioned at bottom with gap */}
+      {/* White Node - pill overlapping bottom of image */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[24px] overflow-hidden bg-white ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[24px] overflow-hidden bg-white z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
         style={{
           height: isExpanded ? 'auto' : '68px',
           maxHeight: isExpanded ? `calc(100dvh - 100px)` : '68px',
