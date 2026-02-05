@@ -86,11 +86,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   }, [campaign.id]);
 
   return (
-    <div className="h-[calc(100dvh-80px)] md:h-screen flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8 pt-2">
+    <div className="h-[calc(100dvh-80px)] md:h-screen flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8 pt-12 pb-24">
       {/* Mobile: Image container with overlaid content */}
       <div
         onClick={handlePictureClick}
-        className="relative w-[calc(100%-24px)] flex-1 rounded-[20px] overflow-hidden md:w-auto md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:flex-shrink-0"
+        className="relative w-[calc(100%-24px)] h-[calc(100%-80px)] rounded-[20px] overflow-hidden md:w-auto md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:flex-shrink-0"
       >
         <img
           src={campaign.image}
@@ -181,10 +181,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden w-[calc(100%-24px)] rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'absolute bottom-20 left-3 right-3 z-20' : 'mt-3'}`}
+        className={`md:hidden w-[calc(100%-24px)] rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'absolute bottom-24 left-3 right-3 z-20' : 'absolute bottom-24 left-3 right-3'}`}
         style={{
           height: isExpanded ? 'auto' : '68px',
-          maxHeight: isExpanded ? `calc(100dvh - 180px)` : '68px',
+          maxHeight: isExpanded ? `calc(100dvh - 200px)` : '68px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}

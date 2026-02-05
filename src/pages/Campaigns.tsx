@@ -746,8 +746,12 @@ const Campaigns: React.FC = () => {
             </svg>
             <span className="text-[10px] font-semibold text-white">Home</span>
           </button>
-          <button 
-            onClick={() => navigate('/discover')}
+          <a 
+            href="/discover"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/discover');
+            }}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className="h-6 w-6 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -755,7 +759,7 @@ const Campaigns: React.FC = () => {
               <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none" />
             </svg>
             <span className="text-[10px] text-white/50">Discover</span>
-          </button>
+          </a>
           <button 
             onClick={() => user ? navigate('/activity') : setShowAuthPrompt(true)}
             className="flex flex-col items-center gap-1 pt-1 w-12"
