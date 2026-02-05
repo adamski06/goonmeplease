@@ -196,8 +196,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         {!isExpanded ? (
           /* Collapsed state - earnings info */
           <div className="px-6 py-6 flex items-center justify-between h-[96px]">
-            {/* Green pill for earnings */}
-            <div className="bg-emerald-700 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5">
+            {/* Green pill for earnings with glass effect */}
+            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">
                 {campaign.maxEarnings.toLocaleString()}
               </span>
@@ -272,22 +272,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 )}
               </div>
 
-              {/* Payment Details */}
-              <div className="bg-black/5 rounded-xl p-4 mb-4">
-                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Payment Details</h3>
+              {/* Payment Details - green glass effect */}
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-black/70 font-jakarta">Max earnings</span>
-                    <span className="text-sm font-bold text-black font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
+                    <span className="text-xs text-white/70 font-jakarta">Max earnings</span>
+                    <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-black/70 font-jakarta">Rate per 1K views</span>
-                    <span className="text-sm font-bold text-black font-montserrat">{campaign.ratePerThousand} sek</span>
+                    <span className="text-xs text-white/70 font-jakarta">Rate per 1K views</span>
+                    <span className="text-sm font-bold text-white font-montserrat">{campaign.ratePerThousand} sek</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-black/70 font-jakarta">Platform</span>
+                    <span className="text-xs text-white/70 font-jakarta">Platform</span>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-medium text-black font-montserrat">TikTok</span>
+                      <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
                       <div className="w-4 h-4 rounded-full overflow-hidden">
                         <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
                       </div>
