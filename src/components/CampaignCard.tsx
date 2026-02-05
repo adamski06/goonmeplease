@@ -206,17 +206,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-black/60 font-montserrat">
-                Platform:
-              </span>
-              <div className="w-6 h-6 rounded-full overflow-hidden">
-                <img
-                  src={tiktokPlatformLogo}
-                  alt="TikTok"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            {/* TikTok logo with glass effect - same height as green pill */}
+            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-[24px] h-[52px] w-[52px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <img
+                src={tiktokPlatformLogo}
+                alt="TikTok"
+                className="w-7 h-7 object-contain"
+              />
             </div>
           </div>
         ) : (
@@ -301,7 +297,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <div className="px-5 pb-4 pt-2 flex items-center justify-center gap-3">
               <Button
                 size="lg"
-                className="py-4 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
+                className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Plus className="h-4 w-4" />
@@ -312,7 +308,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   e.stopPropagation();
                   onToggleFavorite(campaign.id, e);
                 }}
-                className="p-3 rounded-full bg-black/5"
+                className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center"
               >
                 <Bookmark
                   className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
