@@ -158,9 +158,10 @@ const Discover: React.FC = () => {
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         {/* Mobile: Campaign detail as expanding overlay - matches Home layout */}
+        {/* Mobile: Expanded campaign detail - matches Home layout exactly */}
         {selectedCampaign && (
           <div 
-            className="md:hidden fixed inset-0 z-50 bg-black/50" 
+            className="md:hidden fixed top-14 left-3 right-3 bottom-3 z-20"
             onClick={handleBackFromDetail}
           >
             <style>{`
@@ -175,11 +176,11 @@ const Discover: React.FC = () => {
                 }
               }
             `}</style>
-            {/* Full white pill that slides up from bottom */}
+            {/* Full white pill that slides up from bottom - same as CampaignCard expanded */}
             <div 
-              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden"
+              className="absolute left-0 right-0 bottom-0 rounded-[48px] overflow-hidden"
               style={{
-                maxHeight: 'calc(100dvh - 100px)',
+                maxHeight: 'calc(100dvh - 136px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
@@ -187,7 +188,7 @@ const Discover: React.FC = () => {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 100px)' }}>
+              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
                 {/* Drag handle indicator */}
                 <div className="flex justify-center pt-3 pb-1">
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
