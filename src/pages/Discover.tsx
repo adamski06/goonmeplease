@@ -160,7 +160,7 @@ const Discover: React.FC = () => {
         {/* Mobile: Campaign detail as expanding overlay - matches Home layout */}
         {selectedCampaign && (
           <div 
-            className="md:hidden fixed inset-0 z-50" 
+            className="md:hidden fixed inset-0 z-50 bg-black/50" 
             onClick={handleBackFromDetail}
           >
             <style>{`
@@ -175,37 +175,19 @@ const Discover: React.FC = () => {
                 }
               }
             `}</style>
-            {/* Card container matching Home layout - slides up from bottom */}
+            {/* Full white pill that slides up from bottom */}
             <div 
-              className="absolute top-14 left-3 right-3 bottom-3"
+              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden"
               style={{
-                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-              }}
-            >
-              {/* Image section - fully rounded corners matching pill shape */}
-              <div className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden">
-                <img src={selectedCampaign.image} alt={selectedCampaign.brand} className="w-full h-full object-cover" />
-                {/* Noise overlay */}
-                <div
-                  className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-                  }}
-                />
-              </div>
-            
-              {/* Expanded white pill */}
-              <div 
-                className="absolute left-0 right-0 bottom-0 rounded-[48px] overflow-hidden z-20"
-              style={{
-                maxHeight: 'calc(100dvh - 136px)',
+                maxHeight: 'calc(100dvh - 100px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
+              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 100px)' }}>
                 {/* Drag handle indicator */}
                 <div className="flex justify-center pt-3 pb-1">
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
@@ -227,6 +209,24 @@ const Discover: React.FC = () => {
 
                 {/* Scrollable content */}
                 <div className="flex-1 overflow-y-auto px-5 py-4">
+                  {/* Campaign Image Node - glass effect like other nodes */}
+                  <div 
+                    className="rounded-xl overflow-hidden mb-4"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                      border: '1px solid rgba(0,0,0,0.06)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    <div className="aspect-video w-full overflow-hidden rounded-xl">
+                      <img 
+                        src={selectedCampaign.image} 
+                        alt={selectedCampaign.brand} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
                   {/* Description */}
                   <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
                     {selectedCampaign.description}
@@ -308,7 +308,6 @@ const Discover: React.FC = () => {
                   </button>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         )}
