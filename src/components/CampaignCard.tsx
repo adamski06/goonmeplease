@@ -149,11 +149,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           maxHeight: isExpanded ? `calc(100dvh - 136px)` : '96px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
-          background: 'linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(250,250,250,0.98))',
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(245,245,245,0.95))',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.6)',
-          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.8), 0 4px 20px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.15), 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9)',
         }}
         >
         {!isExpanded ? (
