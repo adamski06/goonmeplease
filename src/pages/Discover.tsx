@@ -15,239 +15,13 @@ import {
 } from '@/components/ui/dialog';
 import defaultAvatar from '@/assets/default-avatar.png';
 import { Button } from '@/components/ui/button';
-
-// Campaign images
-import fitnessWorkout from '@/assets/campaigns/fitness-workout.jpg';
-import musicLifestyle from '@/assets/campaigns/music-lifestyle.jpg';
-import techUnboxing from '@/assets/campaigns/tech-unboxing.jpg';
-import extremeSports from '@/assets/campaigns/extreme-sports.jpg';
-import creativeDesign from '@/assets/campaigns/creative-design.jpg';
-import mobileCreative from '@/assets/campaigns/mobile-creative.jpg';
-import summerDrink from '@/assets/campaigns/summer-drink.jpg';
-import entertainment from '@/assets/campaigns/entertainment.jpg';
-import coffeeMoment from '@/assets/campaigns/coffee-moment.jpg';
-import fashionStyle from '@/assets/campaigns/fashion-style.jpg';
-import fastFood from '@/assets/campaigns/fast-food.jpg';
-import foodDelivery from '@/assets/campaigns/food-delivery.jpg';
-import homeInterior from '@/assets/campaigns/home-interior.jpg';
-
-// Logos
-import nikeLogo from '@/assets/logos/nike.png';
-import spotifyLogo from '@/assets/logos/spotify.png';
-import samsungLogo from '@/assets/logos/samsung.png';
-import redbullLogo from '@/assets/logos/redbull.png';
-import adobeLogo from '@/assets/logos/adobe.png';
-
-// Example images
-import spotifyExample1 from '@/assets/examples/spotify-example-1.jpg';
-import starbucksExample1 from '@/assets/examples/starbucks-example-1.jpg';
-import cocacolaExample1 from '@/assets/examples/cocacola-example-1.jpg';
-import redbullExample1 from '@/assets/examples/redbull-example-1.jpg';
-import netflixExample1 from '@/assets/examples/netflix-example-1.jpg';
-import goproExample1 from '@/assets/examples/gopro-example-1.jpg';
-import playstationExample1 from '@/assets/examples/playstation-example-1.jpg';
-
-// Mock campaign data (same as Campaigns.tsx)
-const campaigns = [
-  { 
-    id: '00000000-0000-0000-0000-000000000001', 
-    brand: 'Spotify', 
-    title: 'Share your music discovery moment',
-    description: 'We want to see how you discover new music on Spotify.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: spotifyLogo,
-    image: musicLifestyle,
-    contentType: 'Music Discovery/Reaction',
-    productVisibility: 'Spotify app interface must be visible for at least 3 seconds',
-    videoLength: '15-45 seconds',
-    guidelines: ['Show the Spotify app clearly on your phone screen', 'React genuinely to discovering a new song'],
-    tiers: [{ minViews: 0, maxViews: 5000, rate: 35 }, { minViews: 5000, maxViews: 50000, rate: 28 }],
-    exampleImages: [spotifyExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000002', 
-    brand: 'Starbucks', 
-    title: 'Film your morning coffee run',
-    description: 'Show us your morning Starbucks run.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: nikeLogo,
-    image: coffeeMoment,
-    contentType: 'Lifestyle/Morning Routine',
-    productVisibility: 'Starbucks cup with logo clearly visible',
-    videoLength: '15-30 seconds',
-    guidelines: ['Cup must be recognizable as Starbucks', 'Show your drink order'],
-    tiers: [{ minViews: 0, maxViews: 5000, rate: 32 }],
-    exampleImages: [starbucksExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000003', 
-    brand: 'McDonald\'s', 
-    title: 'Try our new menu items',
-    description: 'We\'re promoting our new menu items.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000,
-    logo: nikeLogo,
-    image: fastFood,
-    contentType: 'Food Review/Reaction',
-    productVisibility: 'McDonald\'s packaging visible',
-    videoLength: '15-45 seconds',
-    guidelines: ['Show the McDonald\'s bag or packaging', 'Give your honest first-bite reaction'],
-    tiers: [{ minViews: 0, maxViews: 8000, rate: 38 }],
-    exampleImages: [cocacolaExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000004', 
-    brand: 'Red Bull', 
-    title: 'Show us what gives you wings',
-    description: 'Film yourself cracking open a Red Bull.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: redbullLogo,
-    image: extremeSports,
-    contentType: 'Energy/Lifestyle',
-    productVisibility: 'Red Bull can visible',
-    videoLength: '15-30 seconds',
-    guidelines: ['Capture the can crack sound if possible', 'Show yourself drinking before an activity'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 42 }],
-    exampleImages: [redbullExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000005', 
-    brand: 'Adobe', 
-    title: 'Show your creative editing process',
-    description: 'Show your creative process using any Adobe app.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: adobeLogo,
-    image: creativeDesign,
-    contentType: 'Creative Process/Tutorial',
-    productVisibility: 'Adobe software interface visible',
-    videoLength: '15-45 seconds',
-    guidelines: ['Show the Adobe app interface clearly', 'Include a before/after transformation'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 55 }],
-    exampleImages: [adobeLogo]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000006', 
-    brand: 'Uber Eats', 
-    title: 'Film your food delivery experience',
-    description: 'Film your next Uber Eats order.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: spotifyLogo,
-    image: foodDelivery,
-    contentType: 'Food Delivery/Lifestyle',
-    productVisibility: 'Show Uber Eats app',
-    videoLength: '20-45 seconds',
-    guidelines: ['Show the ordering process in the app', 'Capture the delivery arrival moment'],
-    tiers: [{ minViews: 0, maxViews: 8000, rate: 40 }],
-    exampleImages: [cocacolaExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000007', 
-    brand: 'Coca-Cola', 
-    title: 'Capture a refreshing moment',
-    description: 'Grab a Coke and film a chill moment.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: spotifyLogo,
-    image: summerDrink,
-    contentType: 'Lifestyle/Refreshment',
-    productVisibility: 'Coca-Cola bottle or can clearly visible',
-    videoLength: '10-25 seconds',
-    guidelines: ['Show the Coca-Cola product clearly', 'Capture the fizz or first sip'],
-    tiers: [{ minViews: 0, maxViews: 8000, rate: 36 }],
-    exampleImages: [cocacolaExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000008', 
-    brand: 'Netflix', 
-    title: 'React to your favorite show',
-    description: 'We want genuine show reactions.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: samsungLogo,
-    image: entertainment,
-    contentType: 'Entertainment/Reaction',
-    productVisibility: 'Netflix interface visible',
-    videoLength: '15-45 seconds',
-    guidelines: ['Show Netflix interface briefly', 'React genuinely to a moment'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 44 }],
-    exampleImages: [netflixExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000009', 
-    brand: 'Duolingo', 
-    title: 'Show your language learning streak',
-    description: 'Show your Duolingo streak or study session.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: redbullLogo,
-    image: mobileCreative,
-    contentType: 'Education/Lifestyle',
-    productVisibility: 'Duolingo app visible',
-    videoLength: '15-30 seconds',
-    guidelines: ['Show the Duolingo app interface', 'Lean into the Duolingo owl humor'],
-    tiers: [{ minViews: 0, maxViews: 8000, rate: 38 }],
-    exampleImages: [adobeLogo]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000010', 
-    brand: 'IKEA', 
-    title: 'Take us on your IKEA trip',
-    description: 'Film your IKEA trip or show off a haul.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: adobeLogo,
-    image: homeInterior,
-    contentType: 'Home/Shopping',
-    productVisibility: 'IKEA store, products visible',
-    videoLength: '20-60 seconds',
-    guidelines: ['Show IKEA store visit or products at home', 'Assembly content is a plus'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 45 }],
-    exampleImages: [goproExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000012', 
-    brand: 'Notion', 
-    title: 'Show how you organize your life',
-    description: 'Show us how you organize with Notion.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: spotifyLogo,
-    image: mobileCreative,
-    contentType: 'Productivity/Tech',
-    productVisibility: 'Notion interface visible',
-    videoLength: '20-45 seconds',
-    guidelines: ['Show your actual Notion setup', 'Walk through your workflow'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 48 }],
-    exampleImages: [playstationExample1]
-  },
-  { 
-    id: '00000000-0000-0000-0000-000000000013', 
-    brand: 'H&M', 
-    title: 'Style an affordable outfit',
-    description: 'Film a haul video from your recent H&M shopping trip.', 
-    ratePerThousand: 40, 
-    maxEarnings: 1000, 
-    logo: samsungLogo,
-    image: fashionStyle,
-    contentType: 'Fashion/Haul',
-    productVisibility: 'H&M clothing with tags',
-    videoLength: '20-45 seconds',
-    guidelines: ['Show the clothing items clearly', 'Mention prices when possible'],
-    tiers: [{ minViews: 0, maxViews: 10000, rate: 42 }],
-    exampleImages: []
-  },
-];
+import { campaigns, Campaign } from '@/data/campaigns';
 
 const Discover: React.FC = () => {
   const { user, loading } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
-  const [selectedCampaign, setSelectedCampaign] = useState<typeof campaigns[0] | null>(null);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
@@ -383,32 +157,34 @@ const Discover: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* Mobile: Campaign detail as expanding pill overlay */}
+        {/* Mobile: Campaign detail as expanding overlay - matches Home layout */}
         {selectedCampaign && (
           <div 
-            className="md:hidden fixed inset-0 z-50 animate-[fade-in_0.3s_ease-out]" 
-            style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+            className="md:hidden fixed inset-0 z-50" 
             onClick={handleBackFromDetail}
           >
-            {/* Full image background with scale animation */}
-            <div 
-              className="absolute inset-0 rounded-[48px] overflow-hidden"
-              style={{
-                animation: 'expand-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-              }}
-            >
-              <img src={selectedCampaign.image} alt={selectedCampaign.brand} className="w-full h-full object-cover" />
-              <div 
-                className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+            {/* Card container matching Home layout */}
+            <div className="absolute top-14 left-3 right-3 bottom-3">
+              {/* Image section - fully rounded corners matching pill shape */}
+              <div
+                className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                  animation: 'expand-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
                 }}
-              />
-            </div>
+              >
+                <img src={selectedCampaign.image} alt={selectedCampaign.brand} className="w-full h-full object-cover" />
+                {/* Noise overlay */}
+                <div
+                  className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                  }}
+                />
+              </div>
             
-            {/* Expanded white pill with scale animation */}
-            <div 
-              className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-20"
+              {/* Expanded white pill with scale animation */}
+              <div 
+                className="absolute left-0 right-0 bottom-0 rounded-[48px] overflow-hidden z-20"
               style={{
                 maxHeight: 'calc(100dvh - 136px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -545,6 +321,7 @@ const Discover: React.FC = () => {
                   </button>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         )}
