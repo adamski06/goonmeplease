@@ -89,11 +89,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Card container with image + overlapping white node */}
-      <div className="md:hidden absolute top-4 left-3 right-3 bottom-3">
-        {/* Image section - bottom aligns with bottom of pill, matches pill's rounded corners */}
+      <div className="md:hidden absolute top-14 left-3 right-3 bottom-3">
+        {/* Image section - fully rounded corners matching pill shape */}
         <div
           onClick={handlePictureClick}
-          className="absolute inset-x-0 top-0 bottom-0 rounded-t-[24px] rounded-b-[48px] overflow-hidden cursor-pointer"
+          className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
           <img
             src={campaign.image}
