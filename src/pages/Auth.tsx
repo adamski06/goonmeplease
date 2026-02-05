@@ -200,8 +200,8 @@ const Auth: React.FC = () => {
         console.error('Error adding creator role:', roleError);
       }
 
-      // Move to step 2 (TikTok connect)
-      setSignUpStep(2);
+      // Navigate to home after successful signup
+      navigate('/');
     } catch (error: any) {
       toast({
         title: t('auth.signUpFailed'),
@@ -292,61 +292,26 @@ const Auth: React.FC = () => {
       {/* Main content centered */}
       <div className="flex-1 flex items-center justify-center px-6">
         <div className="w-full max-w-sm">
-          {signUpStep === 2 ? (
-            // Step 2: Connect TikTok
-            <div className="space-y-8">
-              {/* Logos */}
-              <div className="flex flex-col items-center justify-center gap-4 py-4">
-                <div className="relative h-16 w-[180px]">
-                  <div 
-                    className="absolute inset-0 bg-black"
-                    style={{
-                      WebkitMaskImage: `url(${jarlaLogo})`,
-                      maskImage: `url(${jarlaLogo})`,
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'center',
-                      maskPosition: 'center'
-                    }} 
-                  />
-                </div>
-                <Link className="w-5 h-5 text-black/40" />
-                <img src={tiktokLogo} alt="TikTok" className="h-16 object-contain" />
-              </div>
-              
-              {/* Connect button */}
-              <div className="flex justify-center">
-                <Button 
-                  onClick={handleConnectTikTok}
-                  className="px-8 py-3 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-base font-semibold"
-                >
-                  Connect
-                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert" />
-                </Button>
-              </div>
-              
-              {/* Skip option with step indicator */}
-              <div className="text-center space-y-2">
-                <button
-                  type="button"
-                  onClick={handleSkipTikTok}
-                  className="text-black underline hover:text-black/70 text-sm"
-                >
-                  Skip for now
-                </button>
-                <p className="text-black/40 text-sm">2/2</p>
-              </div>
+          {/* Logo as title */}
+          <div className="flex justify-center mb-8">
+            <div className="relative h-12 w-[160px]">
+              <div 
+                className="absolute inset-0 bg-black"
+                style={{
+                  WebkitMaskImage: `url(${jarlaLogo})`,
+                  maskImage: `url(${jarlaLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center'
+                }} 
+              />
             </div>
-          ) : (
-            <>
-              {/* Title */}
-              <h1 className="text-4xl font-bold text-black text-center mb-8">
-                {isSignUp ? "Let's start!" : 'Welcome back'}
-              </h1>
-              
-              {isSignUp ? (
+          </div>
+          
+          {isSignUp ? (
                 <form onSubmit={handleSignUp} className="space-y-5">
                   <div className="space-y-1.5">
                     <Label htmlFor="signup-name" className="text-black text-sm font-medium">Full Name</Label>
@@ -450,8 +415,6 @@ const Auth: React.FC = () => {
                   </p>
                 </form>
               )}
-            </>
-          )}
         </div>
       </div>
     </div>
