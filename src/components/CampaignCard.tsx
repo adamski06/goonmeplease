@@ -198,7 +198,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             {/* Scrollable content */}
             <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
               {/* Description */}
-              <p className="text-sm text-black/80 font-jakarta leading-relaxed mb-5">
+              <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
                 {campaign.description}
               </p>
 
@@ -207,7 +207,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
                 <ul className="space-y-1.5">
                   {campaign.guidelines.map((guideline, idx) => (
-                    <li key={idx} className="text-xs text-black/70 font-jakarta flex items-start gap-2">
+                    <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
                       <span className="text-black/40">•</span>
                       {guideline}
                     </li>
@@ -231,15 +231,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-white/70 font-jakarta">Max earnings</span>
+                    <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
                     <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-white/70 font-jakarta">Rate per 1K views</span>
+                    <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
                     <span className="text-sm font-bold text-white font-montserrat">{campaign.ratePerThousand} sek</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-white/70 font-jakarta">Platform</span>
+                    <span className="text-sm text-white/80 font-jakarta">Platform</span>
                     <div className="flex items-center gap-1.5">
                       <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
                       <div className="w-4 h-4 rounded-full overflow-hidden">
