@@ -393,9 +393,12 @@ const Discover: React.FC = () => {
           </div>
         )}
 
-        {/* Mobile Header Bar */}
-        <div className="md:hidden flex items-center justify-center px-4 py-3 border-b border-black/10 bg-white">
-          <span className="text-base font-semibold text-black">Discover</span>
+        {/* Mobile Header Bar with safe area */}
+        <div className="md:hidden flex flex-col border-b border-black/10 bg-white">
+          <div className="h-[env(safe-area-inset-top)]" />
+          <div className="flex items-center justify-center px-4 py-3">
+            <span className="text-base font-semibold text-black">Discover</span>
+          </div>
         </div>
 
         {/* Browse Mode - Grid Layout */}

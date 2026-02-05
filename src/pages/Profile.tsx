@@ -38,14 +38,17 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-center px-4 py-3 border-b border-black/10">
-        <span className="text-base font-semibold text-black">
-          {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
-        </span>
-        <button onClick={() => {}} className="absolute right-4 p-2">
-          <Settings className="h-6 w-6 text-black" />
-        </button>
+      {/* Header with safe area */}
+      <div className="flex flex-col border-b border-black/10">
+        <div className="h-[env(safe-area-inset-top)]" />
+        <div className="flex items-center justify-center px-4 py-3 relative">
+          <span className="text-base font-semibold text-black">
+            {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
+          </span>
+          <button onClick={() => {}} className="absolute right-4 p-2">
+            <Settings className="h-6 w-6 text-black" />
+          </button>
+        </div>
       </div>
 
       {/* Profile Info - TikTok style centered */}
