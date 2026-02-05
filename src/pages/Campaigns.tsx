@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, LayoutGrid, Play, Menu, Settings, LogOut, User, Moon, Bookmark, Send } from 'lucide-react';
+import { Menu, Settings, LogOut, User, Moon, Bookmark } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
@@ -829,81 +829,12 @@ const Campaigns: React.FC = () => {
               isSaved={favorites.includes(campaign.id)}
               onSelect={() => {}}
               onToggleFavorite={toggleFavorite}
+              isExpanded={isExpanded && campaign.id === currentCampaign.id}
             />
           ))}
         </div>
 
-        {/* MOBILE PERSISTENT OVERLAY - stays in place during swipe */}
-        <div className={`md:hidden fixed inset-0 pointer-events-none z-20 transition-opacity duration-300 ${isExpanded ? 'opacity-0' : 'opacity-100'}`}>
-          {/* Description above node - max 3 lines */}
-          <div 
-            key={`desc-${currentCampaign.id}`}
-            className="absolute left-4 right-16 animate-fade-in"
-            style={{ bottom: '148px' }}
-          >
-            <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
-              {currentCampaign.description}
-            </p>
-          </div>
-
-          {/* Right side icons - no circles, just white icons */}
-          <div className="absolute right-5 flex flex-col items-center gap-4 pointer-events-auto" style={{ bottom: '148px' }}>
-            {/* Company logo */}
-            <div
-              key={`logo-${currentCampaign.id}`}
-              className="w-10 h-10 rounded-full overflow-hidden animate-fade-in border border-white/30"
-            >
-              <img
-                src={currentCampaign.logo}
-                alt={currentCampaign.brand}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Save button + count - filled icon */}
-            <div className="flex flex-col items-center gap-1">
-              <button
-                onClick={(e) => toggleFavorite(currentCampaign.id, e)}
-                className="flex items-center justify-center hover:scale-110 transition-transform"
-              >
-                <Bookmark
-                  className="h-7 w-7 fill-white text-white drop-shadow-lg"
-                  strokeWidth={1.5}
-                />
-              </button>
-              <span 
-                key={`saves-${currentCampaign.id}`}
-                className="text-xs text-white font-medium drop-shadow-lg animate-fade-in"
-              >
-                {getRandomStat(currentCampaign.id, 'saves').toLocaleString()}
-              </span>
-            </div>
-
-            {/* Share button + count - filled icon */}
-            <div className="flex flex-col items-center gap-1">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (navigator.share) {
-                    navigator.share({
-                      title: currentCampaign.brand,
-                      text: currentCampaign.description,
-                    });
-                  }
-                }}
-                className="flex items-center justify-center hover:scale-110 transition-transform"
-              >
-                <Send className="h-6 w-6 fill-white text-white drop-shadow-lg" strokeWidth={1.5} />
-              </button>
-              <span 
-                key={`shares-${currentCampaign.id}`}
-                className="text-xs text-white font-medium drop-shadow-lg animate-fade-in"
-              >
-                {getRandomStat(currentCampaign.id, 'shares').toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* Mobile overlay removed - content now lives inside CampaignCard */}
 
         {/* MOBILE WHITE NODE - Fixed position, content fades */}
         <div
