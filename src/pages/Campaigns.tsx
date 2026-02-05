@@ -531,8 +531,6 @@ const Campaigns: React.FC = () => {
   const { profile } = useProfile();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
 
@@ -582,26 +580,7 @@ const Campaigns: React.FC = () => {
     });
   }, []);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const container = e.currentTarget;
-    const scrollTop = container.scrollTop;
-    const itemHeight = container.clientHeight;
-    
-    const nearestIndex = Math.round(scrollTop / itemHeight);
-    const clampedIndex = Math.max(0, Math.min(nearestIndex, campaigns.length - 1));
-    
-    if (clampedIndex !== currentIndex) {
-      setCurrentIndex(clampedIndex);
-      setIsExpanded(false); // Collapse when switching campaigns
-    }
-  };
-
-  const handleNodeClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
-  const currentCampaign = campaigns[currentIndex];
 
   if (loading) {
     return (
@@ -820,7 +799,6 @@ const Campaigns: React.FC = () => {
         <div 
           className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide md:pt-40 h-[calc(100dvh-80px)] md:h-auto"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          onScroll={handleScroll}
         >
           {campaigns.map((campaign) => (
             <CampaignCard
@@ -829,124 +807,8 @@ const Campaigns: React.FC = () => {
               isSaved={favorites.includes(campaign.id)}
               onSelect={() => {}}
               onToggleFavorite={toggleFavorite}
-              isExpanded={isExpanded && campaign.id === currentCampaign.id}
             />
           ))}
-        </div>
-
-        {/* Mobile overlay removed - content now lives inside CampaignCard */}
-
-        {/* MOBILE WHITE NODE - Fixed position, content fades */}
-        <div
-          onClick={handleNodeClick}
-          className="md:hidden fixed left-3 right-3 rounded-[20px] overflow-hidden z-20 pointer-events-auto bg-white"
-          style={{
-            bottom: '88px',
-            maxHeight: isExpanded ? 'calc(100% - 168px)' : '68px',
-            transition: 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-          }}
-        >
-          {!isExpanded ? (
-            /* Collapsed state - earnings info with fade transition */
-            <div 
-              key={`node-${currentCampaign.id}`}
-              className="px-4 py-4 flex items-center justify-between animate-fade-in h-[68px]"
-            >
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-bold text-black font-montserrat">
-                  {currentCampaign.maxEarnings.toLocaleString()}
-                </span>
-                <span className="text-sm font-semibold text-black/70 font-montserrat">
-                  sek
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-black/60 font-montserrat">
-                  Platform:
-                </span>
-                <div className="w-6 h-6 rounded-full overflow-hidden">
-                  <img
-                    src={tiktokPlatformLogo}
-                    alt="TikTok"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* Expanded state - full campaign detail - now white bg with dark text */
-            <div className="h-full flex flex-col overflow-hidden">
-              {/* Header with brand */}
-              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
-                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                  <img
-                    src={currentCampaign.logo}
-                    alt={currentCampaign.brand}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                  {currentCampaign.brand}
-                </h2>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleFavorite(currentCampaign.id, e);
-                  }}
-                  className="p-1"
-                >
-                  <Bookmark
-                    className={`h-5 w-5 ${favorites.includes(currentCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
-                    strokeWidth={1.5}
-                  />
-                </button>
-              </div>
-
-              {/* Scrollable content */}
-              <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
-                {/* Description */}
-                <p className="text-sm text-black/80 font-jakarta leading-relaxed mb-5">
-                  {currentCampaign.description}
-                </p>
-
-                {/* Requirements */}
-                <div className="bg-black/5 rounded-xl p-4 mb-4">
-                  <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
-                  <ul className="space-y-1.5">
-                    {currentCampaign.guidelines.map((guideline, idx) => (
-                      <li key={idx} className="text-xs text-black/70 font-jakarta flex items-start gap-2">
-                        <span className="text-black/40">•</span>
-                        {guideline}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Example images */}
-                  {currentCampaign.exampleImages && currentCampaign.exampleImages.length > 0 && (
-                    <div className="flex gap-2 mt-3">
-                      {currentCampaign.exampleImages.slice(0, 2).map((img, i) => (
-                        <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                          <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Fixed CTA at bottom */}
-              <div className="px-5 pb-4 pt-2">
-                <Button
-                  size="lg"
-                  className="w-full py-4 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Submit Content
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
       </main>
 
