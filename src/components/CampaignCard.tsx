@@ -145,8 +145,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchEnd={handleTouchEnd}
         className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
         style={{
-          height: isExpanded ? 'auto' : '96px',
-          maxHeight: isExpanded ? `calc(100dvh - 136px)` : '96px',
+          height: isExpanded ? 'auto' : '80px',
+          maxHeight: isExpanded ? `calc(100dvh - 136px)` : '80px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -156,7 +156,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         >
         {!isExpanded ? (
           /* Collapsed state - earnings on left, TikTok on right */
-          <div className="px-6 py-4 flex items-center justify-between h-[96px]">
+          <div className="px-6 flex items-center justify-between h-[80px]">
             {/* Green pill for earnings with glass effect */}
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">

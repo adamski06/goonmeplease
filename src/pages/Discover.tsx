@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Bookmark, User } from 'lucide-react';
+import { User } from 'lucide-react';
+import tiktokIcon from '@/assets/tiktok-icon.png';
 import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
@@ -408,50 +409,45 @@ const Discover: React.FC = () => {
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full md:w-[200px] rounded-[24px] aspect-[3/4]"
+                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full md:w-[200px] rounded-[32px] aspect-[3/4]"
                 >
                   {/* Full image background */}
-                  <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover" />
+                  <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[32px]" />
                   
                   {/* Noise overlay */}
                   <div 
-                    className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
+                    className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[32px]"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     }}
                   />
                   
-                  {/* Gradient overlay for text */}
-                  <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
-                  
                   {/* Brand name top left */}
                   <span className="absolute top-3 left-3 text-[10px] font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   
-                  {/* Bottom pill - scaled down Home-style */}
+                  {/* Bottom pill - half-circle edges like Home */}
                   <div 
-                    className="absolute bottom-2 left-2 right-2 rounded-[16px] px-3 py-2 flex items-center justify-between"
+                    className="absolute bottom-0 left-0 right-0 h-[56px] rounded-[32px] px-3 flex items-center justify-between"
                     style={{
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,240,240,0.95) 100%)',
-                      border: '1px solid rgba(255,255,255,0.8)',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                      border: '1.5px solid rgba(255,255,255,0.8)',
                       boxShadow: '0 -4px 20px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1)',
                     }}
                   >
                     {/* Green earnings pill */}
-                    <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[12px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40">
+                    <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[16px] px-3 py-1.5 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                       <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                       <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
                     </div>
                     
-                    {/* Save button */}
-                    <button
-                      onClick={(e) => toggleFavorite(campaign.id, e)}
-                      className="h-7 w-7 rounded-full bg-black/5 flex items-center justify-center"
-                    >
-                      <Bookmark 
-                        className={`h-3.5 w-3.5 ${favorites.includes(campaign.id) ? 'fill-black text-black' : 'text-black/40'}`}
-                        strokeWidth={1.5}
+                    {/* TikTok logo */}
+                    <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-8 w-8 flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                      <img
+                        src={tiktokIcon}
+                        alt="TikTok"
+                        className="w-4 h-4 object-contain"
                       />
-                    </button>
+                    </div>
                   </div>
                 </div>
               ))}
