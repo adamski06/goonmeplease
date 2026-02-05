@@ -115,16 +115,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <div className="absolute inset-x-0 bottom-[-48px] h-[200px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
             
             {/* Content container */}
-            <div className="relative flex items-end justify-between gap-4">
+            <div className="relative flex items-end justify-between gap-2">
               {/* Description - left side */}
-              <div className="flex-1 pr-2">
+              <div className="flex-1">
                 <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
                   {campaign.description}
                 </p>
               </div>
               
               {/* Company logo - aligned with TikTok in pill below */}
-              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
+              <div className="h-[36px] w-[36px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
                 <img
                   src={campaign.logo}
                   alt={campaign.brand}
