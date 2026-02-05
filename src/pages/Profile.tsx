@@ -74,22 +74,6 @@ const ProfilePage: React.FC = () => {
           <p className="text-sm text-black/50 mt-0.5">@{profile.username}</p>
         )}
 
-        {/* Stats row */}
-        <div className="flex items-center gap-8 mt-5">
-          <div className="flex flex-col items-center">
-            <span className="text-lg font-bold text-black">0</span>
-            <span className="text-xs text-black/50">Following</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-lg font-bold text-black">0</span>
-            <span className="text-xs text-black/50">Followers</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-lg font-bold text-black">0</span>
-            <span className="text-xs text-black/50">Likes</span>
-          </div>
-        </div>
-
         {/* Bio */}
         {profile?.bio && (
           <p className="text-sm text-black text-center px-8 mt-4 max-w-xs">{profile.bio}</p>
@@ -101,43 +85,27 @@ const ProfilePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-black/10">
-        <button className="flex-1 py-3 text-center border-b-2 border-black">
-          <svg className="h-5 w-5 mx-auto text-black" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
-          </svg>
-        </button>
-        <button className="flex-1 py-3 text-center">
-          <svg className="h-5 w-5 mx-auto text-black/30" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-          </svg>
-        </button>
-        <button className="flex-1 py-3 text-center">
-          <svg className="h-5 w-5 mx-auto text-black/30" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-          </svg>
-        </button>
-      </div>
-
       {/* Ads Grid - 3 columns TikTok style */}
-      <div className="grid grid-cols-3 gap-0.5">
-        {mockAds.map((ad) => (
-          <div key={ad.id} className="relative aspect-[9/16] bg-black/5">
-            <img
-              src={ad.image}
-              alt="Ad content"
-              className="w-full h-full object-cover"
-            />
-            {/* Views overlay */}
-            <div className="absolute bottom-1 left-1 flex items-center gap-1">
-              <svg className="h-3 w-3 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span className="text-xs text-white font-medium drop-shadow">{ad.views}</span>
+      <div className="px-0.5">
+        <h3 className="text-sm font-semibold text-black/60 px-4 py-3">Ads Created</h3>
+        <div className="grid grid-cols-3 gap-0.5">
+          {mockAds.map((ad) => (
+            <div key={ad.id} className="relative aspect-[9/16] bg-black/5">
+              <img
+                src={ad.image}
+                alt="Ad content"
+                className="w-full h-full object-cover"
+              />
+              {/* Views overlay */}
+              <div className="absolute bottom-1 left-1 flex items-center gap-1">
+                <svg className="h-3 w-3 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span className="text-xs text-white font-medium drop-shadow">{ad.views}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
