@@ -273,8 +273,13 @@ const Activity: React.FC = () => {
         </div>
       </nav>
 
+      {/* Mobile Header Bar */}
+      <div className="md:hidden flex items-center justify-center px-4 py-3 border-b border-black/10 bg-white relative z-10">
+        <span className="text-base font-semibold text-black">Action</span>
+      </div>
+
       {/* Main Content */}
-      <main className="flex-1 px-6 py-8 pb-24 md:pb-8 relative z-10 overflow-y-auto">
+      <main className="flex-1 px-6 py-6 pb-24 md:py-8 md:pb-8 relative z-10 overflow-y-auto">
         <h1 className="text-3xl font-bold text-black md:text-foreground mb-6">Saved</h1>
         
         {favoriteCampaigns.length === 0 ? (

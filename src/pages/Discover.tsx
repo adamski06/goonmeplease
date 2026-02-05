@@ -393,8 +393,13 @@ const Discover: React.FC = () => {
           </div>
         )}
 
+        {/* Mobile Header Bar */}
+        <div className="md:hidden flex items-center justify-center px-4 py-3 border-b border-black/10 bg-white">
+          <span className="text-base font-semibold text-black">Discover</span>
+        </div>
+
         {/* Browse Mode - Grid Layout */}
-        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-6 pb-24 md:pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 md:pt-6 md:pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
           <div className="px-4 md:pl-8 md:pr-8">
             <div className="grid grid-cols-2 md:flex md:flex-wrap gap-3 md:gap-x-6 md:gap-y-8">
               {campaigns.map((campaign) => (
