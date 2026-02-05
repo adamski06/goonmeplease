@@ -90,7 +90,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       {/* Mobile: Image container with overlaid content */}
       <div
         onClick={handlePictureClick}
-        className="relative w-[calc(100%-24px)] h-[calc(100%-180px)] rounded-[20px] overflow-hidden md:w-auto md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:hover:scale-[1.01] md:flex-shrink-0"
+        className="relative w-[calc(100%-24px)] flex-1 rounded-[20px] overflow-hidden md:w-auto md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:flex-shrink-0"
       >
         <img
           src={campaign.image}
@@ -137,7 +137,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     e.stopPropagation();
                     onToggleFavorite(campaign.id, e);
                   }}
-                  className="flex items-center justify-center hover:scale-110 transition-transform"
+                  className="flex items-center justify-center"
                 >
                   <Bookmark
                     className="h-7 w-7 fill-white text-white drop-shadow-lg"
@@ -161,7 +161,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                       });
                     }
                   }}
-                  className="flex items-center justify-center hover:scale-110 transition-transform"
+                  className="flex items-center justify-center"
                 >
                   <Send className="h-6 w-6 fill-white text-white drop-shadow-lg" strokeWidth={1.5} />
                 </button>
@@ -174,17 +174,18 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* Mobile White Node - positioned below image, expands on tap */}
+      {/* Mobile White Node - positioned below image, expands over image */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="md:hidden w-[calc(100%-24px)] rounded-[20px] overflow-hidden bg-white mt-3"
+        className={`md:hidden w-[calc(100%-24px)] rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'absolute bottom-20 left-3 right-3 z-20' : 'mt-3'}`}
         style={{
+          height: isExpanded ? 'auto' : '68px',
           maxHeight: isExpanded ? `calc(100dvh - 180px)` : '68px',
-          transition: isDragging ? 'none' : 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}
       >
@@ -315,7 +316,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
           <button
             onClick={(e) => onToggleFavorite(campaign.id, e)}
-            className="flex items-center justify-center hover:scale-110 transition-transform p-2"
+            className="flex items-center justify-center p-2"
           >
             <Bookmark
               className={`h-8 w-8 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
