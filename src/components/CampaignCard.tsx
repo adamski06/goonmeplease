@@ -89,11 +89,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Card container with image + attached white node */}
-      <div className="md:hidden absolute top-3 left-3 right-3 bottom-3 flex flex-col">
+      <div className="md:hidden absolute top-6 left-3 right-3 bottom-3 flex flex-col gap-2">
         {/* Image section - takes remaining space above white node */}
         <div
           onClick={handlePictureClick}
-          className="flex-1 rounded-t-[20px] overflow-hidden cursor-pointer relative"
+          className="flex-1 rounded-[20px] overflow-hidden cursor-pointer relative"
         >
           <img
             src={campaign.image}
@@ -108,8 +108,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }}
           />
           
-          {/* Mobile overlay content - positioned higher up on image */}
-          <div className={`absolute inset-x-0 bottom-4 p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          {/* Mobile overlay content - positioned at bottom of image */}
+          <div className={`absolute inset-x-0 bottom-0 p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             {/* Gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
             
@@ -177,14 +177,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
         </div>
 
-        {/* White Node - attached to bottom of image */}
+        {/* White Node - separate pill below image */}
         <div
           ref={nodeRef}
           onClick={handleNodeClick}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className={`rounded-b-[20px] overflow-hidden bg-white ${isExpanded ? 'absolute inset-x-0 bottom-0 left-0 right-0 z-20 rounded-[20px]' : ''}`}
+          className={`rounded-[20px] overflow-hidden bg-white flex-shrink-0 ${isExpanded ? 'absolute inset-x-0 bottom-0 left-0 right-0 z-20' : ''}`}
           style={{
             height: isExpanded ? 'auto' : '68px',
             maxHeight: isExpanded ? `calc(100dvh - 160px)` : '68px',
