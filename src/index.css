@@ -112,6 +112,15 @@
   }
 }
 
+/* Safe area utilities */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top, 0px), 12px);
+}
+
 /* Aurora gradient layers - always mounted, toggled via opacity */
 .aurora-gradient-creator,
 .aurora-gradient-business {
