@@ -1,26 +1,32 @@
 import React, { useEffect } from 'react';
-import { backgroundDelay } from '@/lib/backgroundDelay';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Activity, Menu, User, Settings, Moon, LogOut } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import jarlaLogo from '@/assets/jarla-logo.png';
+import { Settings, ArrowLeft } from 'lucide-react';
 import defaultAvatar from '@/assets/default-avatar.png';
+
+// Placeholder images for the grid
+import ugc1 from '@/assets/ugc/ugc-placeholder-1.jpg';
+import ugc2 from '@/assets/ugc/ugc-placeholder-2.jpg';
+import ugc3 from '@/assets/ugc/ugc-placeholder-3.jpg';
+import ugc4 from '@/assets/ugc/ugc-placeholder-4.jpg';
+import ugc5 from '@/assets/ugc/ugc-placeholder-5.jpg';
+import ugc6 from '@/assets/ugc/ugc-placeholder-6.jpg';
+
+const mockAds = [
+  { id: '1', image: ugc1, views: '12.3K' },
+  { id: '2', image: ugc2, views: '8.7K' },
+  { id: '3', image: ugc3, views: '45.2K' },
+  { id: '4', image: ugc4, views: '3.1K' },
+  { id: '5', image: ugc5, views: '67.8K' },
+  { id: '6', image: ugc6, views: '22.4K' },
+];
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -32,122 +38,113 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-pulse text-black/40">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex relative overflow-hidden">
-      {/* Mobile-only white background */}
-      <div className="md:hidden absolute inset-0 bg-white" />
-      {/* Static Grainy Background - desktop only */}
-      <div className="hidden md:block absolute inset-0 pointer-events-none grainy-background" />
-      <div className="hidden md:block noise-layer absolute inset-0 pointer-events-none" />
-      
-      {/* Left Sidebar - Desktop only */}
-      <aside className="hidden md:flex w-56 lg:w-52 flex-col relative z-10 backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface font-jakarta">
-        {/* Logo */}
-        <div className="px-6 pt-6 pb-4">
-          <button onClick={() => navigate('/')} className="relative h-10 w-[120px]">
-            <div 
-              className="absolute inset-0 bg-foreground"
-              style={{
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'left center',
-                maskPosition: 'left center'
-              }} 
+    <div className="min-h-screen bg-white pb-24">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-black/10">
+        <button onClick={() => navigate(-1)} className="p-2 -ml-2">
+          <ArrowLeft className="h-6 w-6 text-black" />
+        </button>
+        <span className="text-base font-semibold text-black">
+          {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
+        </span>
+        <button onClick={() => {}} className="p-2 -mr-2">
+          <Settings className="h-6 w-6 text-black" />
+        </button>
+      </div>
+
+      {/* Profile Info - TikTok style centered */}
+      <div className="flex flex-col items-center pt-6 pb-4">
+        {/* Avatar */}
+        <Avatar className="h-24 w-24 mb-3">
+          <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+          <AvatarFallback className="bg-black/10 text-black text-2xl font-medium">
+            {firstName.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+
+        {/* Name */}
+        <h1 className="text-lg font-bold text-black">{profile?.full_name || 'User'}</h1>
+        
+        {/* Username if different */}
+        {profile?.username && (
+          <p className="text-sm text-black/50 mt-0.5">@{profile.username}</p>
+        )}
+
+        {/* Stats row */}
+        <div className="flex items-center gap-8 mt-5">
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-black">0</span>
+            <span className="text-xs text-black/50">Following</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-black">0</span>
+            <span className="text-xs text-black/50">Followers</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-black">0</span>
+            <span className="text-xs text-black/50">Likes</span>
+          </div>
+        </div>
+
+        {/* Bio */}
+        {profile?.bio && (
+          <p className="text-sm text-black text-center px-8 mt-4 max-w-xs">{profile.bio}</p>
+        )}
+
+        {/* Edit Profile Button */}
+        <button className="mt-4 px-6 py-2 bg-black/5 rounded-md text-sm font-semibold text-black">
+          Edit profile
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-black/10">
+        <button className="flex-1 py-3 text-center border-b-2 border-black">
+          <svg className="h-5 w-5 mx-auto text-black" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zm10-10h8v8h-8V3zm0 10h8v8h-8v-8z" />
+          </svg>
+        </button>
+        <button className="flex-1 py-3 text-center">
+          <svg className="h-5 w-5 mx-auto text-black/30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+          </svg>
+        </button>
+        <button className="flex-1 py-3 text-center">
+          <svg className="h-5 w-5 mx-auto text-black/30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Ads Grid - 3 columns TikTok style */}
+      <div className="grid grid-cols-3 gap-0.5">
+        {mockAds.map((ad) => (
+          <div key={ad.id} className="relative aspect-[9/16] bg-black/5">
+            <img
+              src={ad.image}
+              alt="Ad content"
+              className="w-full h-full object-cover"
             />
-          </button>
-          <span className="text-base font-bold text-black dark:text-white mt-1 block w-[120px] text-center">Creator</span>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex flex-col px-3 gap-4 mt-8">
-          <button 
-            onClick={() => navigate('/')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-colors flex items-center gap-3"
-          >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-                fill="currentColor"
-              />
-              <rect x="10.5" y="15" width="3" height="6" rx="0.5" fill="hsl(210, 30%, 88%)" />
-            </svg>
-            Home
-          </button>
-          <button 
-            onClick={() => navigate('/activity')}
-            className="text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3"
-          >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-              <path fillRule="evenodd" clipRule="evenodd" d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V20C19 21.1046 18.1046 22 17 22H7C5.89543 22 5 21.1046 5 20V4ZM10.5 8.5C10 8.2 9.5 8.5 9.5 9V15C9.5 15.5 10 15.8 10.5 15.5L15.5 12.5C16 12.2 16 11.8 15.5 11.5L10.5 8.5Z" />
-            </svg>
-            Action
-          </button>
-          <button className="text-lg lg:text-base font-bold text-foreground px-3 py-1.5 text-left transition-all flex items-center gap-3">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-muted text-foreground text-[10px] font-medium">
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            Profile
-          </button>
-        </nav>
-
-        {/* More Menu at bottom */}
-        <div className="mt-auto px-3 py-4 border-t border-black/10 dark:border-white/20">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="w-full text-lg lg:text-base font-medium text-foreground hover:font-semibold px-3 py-1.5 text-left transition-all flex items-center gap-3">
-                <Menu className="h-6 w-6" />
-                More
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              side="top" 
-              align="start" 
-              className="w-48 bg-background border-border"
-            >
-              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
-                <User className="mr-2 h-4 w-4" />
-                My Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onSelect={(e) => {
-                  e.preventDefault();
-                  setTheme(theme === 'dark' ? 'light' : 'dark');
-                }} 
-                className="cursor-pointer"
-              >
-                <Moon className="mr-2 h-4 w-4" />
-                <span className="flex-1">Theme</span>
-                <span className="text-muted-foreground text-xs">{theme === 'dark' ? 'on' : 'off'}</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-red-500 focus:text-red-500">
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </aside>
+            {/* Views overlay */}
+            <div className="absolute bottom-1 left-1 flex items-center gap-1">
+              <svg className="h-3 w-3 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span className="text-xs text-white font-medium drop-shadow">{ad.views}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
         <div className="flex items-start justify-between h-full">
           <button 
             onClick={() => navigate('/')}
@@ -185,7 +182,7 @@ const ProfilePage: React.FC = () => {
             <span className="text-[10px] text-black/40">Alerts</span>
           </button>
           <button className="flex flex-col items-center gap-1 pt-1 w-12">
-            <Avatar className="h-6 w-6">
+            <Avatar className="h-6 w-6 ring-2 ring-black">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
               <AvatarFallback className="bg-black/10 text-black text-[10px] font-medium">
                 {firstName.charAt(0).toUpperCase()}
@@ -195,29 +192,6 @@ const ProfilePage: React.FC = () => {
           </button>
         </div>
       </nav>
-
-      {/* Main Content */}
-      <main className="flex-1 px-6 py-8 pb-24 md:pb-8 relative z-10">
-        <div className="max-w-2xl">
-          <div className="flex items-center gap-6 mb-8">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-black/10 md:bg-muted text-black md:text-foreground text-2xl font-medium">
-                {firstName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-3xl font-bold text-black md:text-foreground">{profile?.full_name || 'User'}</h1>
-              {profile?.username && (
-                <p className="text-black/60 md:text-muted-foreground">@{profile.username}</p>
-              )}
-            </div>
-          </div>
-          {profile?.bio && (
-            <p className="text-black md:text-foreground">{profile.bio}</p>
-          )}
-        </div>
-      </main>
     </div>
   );
 };
