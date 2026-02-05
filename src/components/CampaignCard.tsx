@@ -109,16 +109,28 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }}
           />
           
-          {/* Mobile overlay content - description only */}
+          {/* Mobile overlay content - description + company logo */}
           <div className={`absolute inset-x-0 bottom-[96px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             {/* Gradient overlay */}
             <div className="absolute inset-x-0 bottom-[-48px] h-[200px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
             
-            {/* Description */}
-            <div className="relative">
-              <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
-                {campaign.description}
-              </p>
+            {/* Content container */}
+            <div className="relative flex items-end justify-between gap-4">
+              {/* Description - left side */}
+              <div className="flex-1 pr-2">
+                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
+                  {campaign.description}
+                </p>
+              </div>
+              
+              {/* Company logo - aligned with TikTok in pill below */}
+              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-white/30 mr-[52px]">
+                <img
+                  src={campaign.logo}
+                  alt={campaign.brand}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -140,7 +152,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         }}
         >
         {!isExpanded ? (
-          /* Collapsed state - earnings info + icons on right */
+          /* Collapsed state - earnings on left, TikTok on right */
           <div className="px-6 py-4 flex items-center justify-between h-[96px]">
             {/* Green pill for earnings with glass effect */}
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
@@ -152,25 +164,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </span>
             </div>
 
-            {/* Right side: TikTok + Company logo aligned */}
-            <div className="flex items-center gap-2">
-              {/* TikTok logo with glass effect */}
-              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <img
-                  src={tiktokIcon}
-                  alt="TikTok"
-                  className="w-6 h-6 object-contain"
-                />
-              </div>
-
-              {/* Company logo - same size */}
-              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-black/10">
-                <img
-                  src={campaign.logo}
-                  alt={campaign.brand}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+            {/* TikTok logo with glass effect */}
+            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <img
+                src={tiktokIcon}
+                alt="TikTok"
+                className="w-6 h-6 object-contain"
+              />
             </div>
           </div>
         ) : (
