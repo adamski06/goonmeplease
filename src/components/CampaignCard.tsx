@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Bookmark, Send } from 'lucide-react';
+import { Bookmark, Send, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 
@@ -85,14 +85,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setIsExpanded(false);
   }, [campaign.id]);
 
-  // Nav bar = 80px, node = 68px, gap between image and node = 6px
+  // Nav bar = 80px, node = 68px, no gap between node and nav bar
   // Image bottom = 80 + 68 + 6 = 154px from bottom
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Image container with overlaid content */}
       <div
         onClick={handlePictureClick}
-        className="md:hidden absolute top-3 left-3 right-3 bottom-[154px] rounded-[20px] overflow-hidden cursor-pointer"
+        className="md:hidden absolute top-3 left-3 right-3 bottom-[148px] rounded-[20px] overflow-hidden cursor-pointer"
       >
         <img
           src={campaign.image}
@@ -187,17 +187,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         />
       </div>
 
-      {/* Mobile White Node - positioned above nav bar with 8px gap */}
+      {/* Mobile White Node - positioned flush against nav bar */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'bottom-[80px] z-20' : 'bottom-[80px]'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'bottom-0 z-20' : 'bottom-0'}`}
         style={{
           height: isExpanded ? 'auto' : '68px',
-          maxHeight: isExpanded ? `calc(100dvh - 180px)` : '68px',
+          maxHeight: isExpanded ? `calc(100dvh - 100px)` : '68px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}
@@ -229,7 +229,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
         ) : (
           /* Expanded state - full campaign detail */
-          <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 180px)' }}>
+          <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 100px)' }}>
             {/* Drag handle indicator */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 bg-black/20 rounded-full" />
@@ -247,18 +247,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <h2 className="text-base font-bold text-black font-montserrat flex-1">
                 {campaign.brand}
               </h2>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleFavorite(campaign.id, e);
-                }}
-                className="p-1"
-              >
-                <Bookmark
-                  className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
-                  strokeWidth={1.5}
-                />
-              </button>
             </div>
 
             {/* Scrollable content */}
@@ -291,17 +279,54 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   </div>
                 )}
               </div>
+
+              {/* Payment Details */}
+              <div className="bg-black/5 rounded-xl p-4 mb-4">
+                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Payment Details</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-black/70 font-jakarta">Max earnings</span>
+                    <span className="text-sm font-bold text-black font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-black/70 font-jakarta">Rate per 1K views</span>
+                    <span className="text-sm font-bold text-black font-montserrat">{campaign.ratePerThousand} sek</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-black/70 font-jakarta">Platform</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-medium text-black font-montserrat">TikTok</span>
+                      <div className="w-4 h-4 rounded-full overflow-hidden">
+                        <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Fixed CTA at bottom */}
-            <div className="px-5 pb-4 pt-2">
+            <div className="px-5 pb-4 pt-2 flex items-center justify-center gap-3">
               <Button
                 size="lg"
-                className="w-full py-4 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white"
+                className="py-4 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
               >
+                <Plus className="h-4 w-4" />
                 Submit Content
               </Button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFavorite(campaign.id, e);
+                }}
+                className="p-3 rounded-full bg-black/5"
+              >
+                <Bookmark
+                  className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
+                  strokeWidth={1.5}
+                />
+              </button>
             </div>
           </div>
         )}
