@@ -85,14 +85,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setIsExpanded(false);
   }, [campaign.id]);
 
-  // Nav bar = 80px, node = 68px, gap = 4px each
-  // Image bottom = 80 + 4 + 68 + 4 = 156px from bottom
+  // Nav bar = 80px, node = 68px, gap between image and node = 6px
+  // Image bottom = 80 + 68 + 6 = 154px from bottom
   return (
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Image container with overlaid content */}
       <div
         onClick={handlePictureClick}
-        className="md:hidden absolute top-3 left-3 right-3 bottom-[156px] rounded-[20px] overflow-hidden cursor-pointer"
+        className="md:hidden absolute top-3 left-3 right-3 bottom-[154px] rounded-[20px] overflow-hidden cursor-pointer"
       >
         <img
           src={campaign.image}
@@ -194,7 +194,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'bottom-[84px] z-20' : 'bottom-[84px]'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'bottom-[80px] z-20' : 'bottom-[80px]'}`}
         style={{
           height: isExpanded ? 'auto' : '68px',
           maxHeight: isExpanded ? `calc(100dvh - 180px)` : '68px',
