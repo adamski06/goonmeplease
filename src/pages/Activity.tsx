@@ -28,9 +28,12 @@ const Activity: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-center px-4 py-3 border-b border-black/10">
-        <span className="text-base font-semibold text-black">Action</span>
+      {/* Header with safe area */}
+      <div className="flex flex-col border-b border-black/10">
+        <div className="h-[env(safe-area-inset-top)]" />
+        <div className="flex items-center justify-center px-4 py-3">
+          <span className="text-base font-semibold text-black">Action</span>
+        </div>
       </div>
 
       {/* Content */}
