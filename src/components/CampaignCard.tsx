@@ -156,7 +156,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         >
         {!isExpanded ? (
           /* Collapsed state - earnings on left, TikTok on right */
-          <div className="px-6 flex items-center justify-between h-[80px]">
+          <div className="px-5 flex items-center justify-between h-[80px]">
             {/* Green pill for earnings with glass effect */}
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">
