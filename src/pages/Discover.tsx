@@ -425,9 +425,9 @@ const Discover: React.FC = () => {
                   {/* Brand name top left */}
                   <span className="absolute top-3 left-3 text-[10px] font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   
-                  {/* Bottom pill - half-circle edges like Home */}
+                  {/* Bottom pill - with margin from edges */}
                   <div 
-                    className="absolute bottom-0 left-0 right-0 h-[56px] rounded-[32px] px-3 flex items-center justify-between"
+                    className="absolute bottom-2 left-2 right-2 h-[52px] rounded-[26px] px-3 flex items-center justify-between"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.8)',

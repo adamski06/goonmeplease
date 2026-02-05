@@ -143,7 +143,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
+        className={`md:hidden absolute left-4 right-4 rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'bottom-4 z-20' : 'bottom-4'}`}
         style={{
           height: isExpanded ? 'auto' : '80px',
           maxHeight: isExpanded ? `calc(100dvh - 136px)` : '80px',
