@@ -218,9 +218,9 @@ const Discover: React.FC = () => {
                       boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
                     }}
                   >
-                    <div className="aspect-video w-full overflow-hidden rounded-xl">
+                    <div className="aspect-[9/16] w-full overflow-hidden rounded-xl">
                       <img 
-                        src={selectedCampaign.image} 
+                        src={selectedCampaign.image}
                         alt={selectedCampaign.brand} 
                         className="w-full h-full object-cover"
                       />
@@ -327,7 +327,7 @@ const Discover: React.FC = () => {
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full md:w-[200px] rounded-[32px] aspect-[3/4]"
+                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full md:w-[200px] rounded-[32px] aspect-[9/16]"
                 >
                   {/* Full image background */}
                   <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[32px]" />
