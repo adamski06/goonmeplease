@@ -235,13 +235,13 @@ const Auth: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-white">
       {/* Dev mode toggle - top right */}
       <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
         <button
           onClick={() => setDevMode(!devMode)}
           className={`px-3 py-1 text-xs rounded-full transition-all ${
-            devMode ? 'bg-green-500 text-white' : 'bg-white/20 text-white/60 hover:bg-white/30'
+            devMode ? 'bg-green-500 text-white' : 'bg-black/10 text-black/60 hover:bg-black/20'
           }`}
         >
           Dev Mode
@@ -250,19 +250,19 @@ const Auth: React.FC = () => {
           <div className="flex gap-1">
             <button
               onClick={() => { setSignUpStep(1); setIsSignUp(true); }}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && isSignUp ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && isSignUp ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
             >
               Sign Up
             </button>
             <button
               onClick={() => { setSignUpStep(1); setIsSignUp(false); }}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && !isSignUp ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && !isSignUp ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
             >
               Log In
             </button>
             <button
               onClick={() => setSignUpStep(2)}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 2 ? 'bg-white text-black' : 'bg-white/20 text-white'}`}
+              className={`px-2 py-1 text-xs rounded ${signUpStep === 2 ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
             >
               TikTok
             </button>
@@ -270,15 +270,11 @@ const Auth: React.FC = () => {
         )}
       </div>
 
-      {/* Static Grainy Background */}
-      <div className="absolute inset-0 grainy-background" />
-      <div className="noise-layer" />
-      
       {/* Logo in top left corner */}
       <div className="absolute top-6 left-6 z-20">
         <div className="relative h-10 w-[130px]">
           <div 
-            className="absolute inset-0 bg-foreground"
+            className="absolute inset-0 bg-black"
             style={{
               WebkitMaskImage: `url(${jarlaLogo})`,
               maskImage: `url(${jarlaLogo})`,
@@ -293,16 +289,17 @@ const Auth: React.FC = () => {
         </div>
       </div>
       
-      <Card className="w-full max-w-md bg-black/5 dark:bg-white/10 backdrop-blur-md border-black/10 dark:border-white/20 shadow-lg relative z-10 rounded-none">
-        {signUpStep === 2 ? (
-          // Step 2: Connect TikTok - no header title
-          <CardContent className="pt-12 pb-8">
+      {/* Main content centered */}
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="w-full max-w-sm">
+          {signUpStep === 2 ? (
+            // Step 2: Connect TikTok
             <div className="space-y-8">
               {/* Logos */}
               <div className="flex flex-col items-center justify-center gap-4 py-4">
-                <div className="relative h-20 w-[220px]">
+                <div className="relative h-16 w-[180px]">
                   <div 
-                    className="absolute inset-0 bg-foreground"
+                    className="absolute inset-0 bg-black"
                     style={{
                       WebkitMaskImage: `url(${jarlaLogo})`,
                       maskImage: `url(${jarlaLogo})`,
@@ -315,44 +312,44 @@ const Auth: React.FC = () => {
                     }} 
                   />
                 </div>
-                <Link className="w-5 h-5 text-muted-foreground" />
-                <img src={tiktokLogo} alt="TikTok" className="h-20 object-contain dark:invert" />
+                <Link className="w-5 h-5 text-black/40" />
+                <img src={tiktokLogo} alt="TikTok" className="h-16 object-contain" />
               </div>
               
               {/* Connect button */}
               <div className="flex justify-center">
                 <Button 
                   onClick={handleConnectTikTok}
-                  className="px-6 py-2 h-auto rounded-full bg-foreground text-background hover:bg-foreground/80 flex items-center justify-center gap-2 text-base"
+                  className="px-8 py-3 h-auto rounded-full bg-black text-white hover:bg-black/80 flex items-center justify-center gap-2 text-base font-semibold"
                 >
                   Connect
-                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert dark:invert-0" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-5 object-contain invert" />
                 </Button>
               </div>
               
               {/* Skip option with step indicator */}
-              <div className="text-center space-y-1">
+              <div className="text-center space-y-2">
                 <button
                   type="button"
                   onClick={handleSkipTikTok}
-                  className="text-foreground underline hover:text-foreground/80 text-sm"
+                  className="text-black underline hover:text-black/70 text-sm"
                 >
                   Skip for now
                 </button>
-                <p className="text-muted-foreground text-sm">2/2</p>
+                <p className="text-black/40 text-sm">2/2</p>
               </div>
             </div>
-          </CardContent>
-        ) : (
-          <>
-            <CardHeader className="text-center py-8">
-              <CardTitle className="text-5xl font-bold text-foreground">Let's start!</CardTitle>
-            </CardHeader>
-            <CardContent>
+          ) : (
+            <>
+              {/* Title */}
+              <h1 className="text-4xl font-bold text-black text-center mb-8">
+                {isSignUp ? "Let's start!" : 'Welcome back'}
+              </h1>
+              
               {isSignUp ? (
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name" className="text-foreground">Full Name</Label>
+                <form onSubmit={handleSignUp} className="space-y-5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-name" className="text-black text-sm font-medium">Full Name</Label>
                     <Input
                       id="signup-name"
                       type="text"
@@ -360,11 +357,11 @@ const Auth: React.FC = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       autoComplete="name"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                      className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="text-foreground">Email</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-email" className="text-black text-sm font-medium">Email</Label>
                     <Input
                       id="signup-email"
                       type="email"
@@ -373,11 +370,11 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                      className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password" className="text-foreground">Password</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-password" className="text-black text-sm font-medium">Password</Label>
                     <Input
                       id="signup-password"
                       type="password"
@@ -386,30 +383,32 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="new-password"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                      className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
                     />
                   </div>
-                  <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
-                    {isLoading ? 'Creating account...' : 'Create Account'}
-                  </Button>
-                  <div className="text-center space-y-1 mt-4">
-                    <p className="text-muted-foreground text-sm">
+                  <div className="pt-4">
+                    <Button type="submit" className="w-full py-3 h-auto rounded-full bg-black text-white hover:bg-black/80 font-semibold" disabled={isLoading}>
+                      {isLoading ? 'Creating account...' : 'Create Account'}
+                    </Button>
+                  </div>
+                  <div className="text-center space-y-2 pt-2">
+                    <p className="text-black/60 text-sm">
                       Already have an account?{' '}
                       <button
                         type="button"
                         onClick={() => setIsSignUp(false)}
-                        className="text-foreground underline hover:text-foreground/80"
+                        className="text-black underline hover:text-black/70"
                       >
                         Log in
                       </button>
                     </p>
-                    <p className="text-muted-foreground text-sm">1/2</p>
+                    <p className="text-black/40 text-sm">1/2</p>
                   </div>
                 </form>
               ) : (
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-email" className="text-foreground">Email</Label>
+                <form onSubmit={handleSignIn} className="space-y-5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signin-email" className="text-black text-sm font-medium">Email</Label>
                     <Input
                       id="signin-email"
                       type="email"
@@ -418,11 +417,11 @@ const Auth: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       autoComplete="email"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                      className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signin-password" className="text-foreground">Password</Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signin-password" className="text-black text-sm font-medium">Password</Label>
                     <Input
                       id="signin-password"
                       type="password"
@@ -431,28 +430,30 @@ const Auth: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="current-password"
-                      className="bg-black/5 dark:bg-white/10 border-black/10 dark:border-white/20 text-foreground placeholder:text-muted-foreground rounded-none"
+                      className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
                     />
                   </div>
-                  <Button type="submit" className="w-full rounded-full" disabled={isLoading}>
-                    {isLoading ? 'Signing in...' : 'Sign In'}
-                  </Button>
-                  <p className="text-center text-muted-foreground text-sm mt-4">
+                  <div className="pt-4">
+                    <Button type="submit" className="w-full py-3 h-auto rounded-full bg-black text-white hover:bg-black/80 font-semibold" disabled={isLoading}>
+                      {isLoading ? 'Signing in...' : 'Sign In'}
+                    </Button>
+                  </div>
+                  <p className="text-center text-black/60 text-sm pt-2">
                     Don't have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setIsSignUp(true)}
-                      className="text-foreground underline hover:text-foreground/80"
+                      className="text-black underline hover:text-black/70"
                     >
                       Sign up
                     </button>
                   </p>
                 </form>
               )}
-            </CardContent>
-          </>
-        )}
-      </Card>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
