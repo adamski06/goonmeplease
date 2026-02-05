@@ -124,7 +124,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </div>
               
               {/* Company logo - aligned with TikTok in pill below */}
-              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-white/30 mr-[52px]">
+              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
                 <img
                   src={campaign.logo}
                   alt={campaign.brand}
