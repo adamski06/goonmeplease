@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Bookmark, Send, Plus } from 'lucide-react';
+import { Bookmark, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
+import tiktokIcon from '@/assets/tiktok-icon.png';
 
 interface Campaign {
   id: string;
@@ -122,55 +123,24 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 </p>
               </div>
               
-              {/* Icons - right side */}
+              {/* Icons - right side: TikTok glass button + Company logo aligned */}
               <div className="flex flex-col items-center gap-3">
-                {/* Company logo */}
-                <div className="w-10 h-10 rounded-full overflow-hidden border border-white/30">
+                {/* TikTok logo with glass effect */}
+                <div className="w-[52px] h-[52px] rounded-full bg-gradient-to-b from-gray-700 to-gray-900 flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                  <img
+                    src={tiktokIcon}
+                    alt="TikTok"
+                    className="w-7 h-7 object-contain"
+                  />
+                </div>
+
+                {/* Company logo - same size as TikTok button */}
+                <div className="w-[52px] h-[52px] rounded-full overflow-hidden border border-white/30">
                   <img
                     src={campaign.logo}
                     alt={campaign.brand}
                     className="w-full h-full object-cover"
                   />
-                </div>
-
-                {/* Save button + count */}
-                <div className="flex flex-col items-center gap-1">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onToggleFavorite(campaign.id, e);
-                    }}
-                    className="flex items-center justify-center"
-                  >
-                    <Bookmark
-                      className="h-7 w-7 fill-white text-white drop-shadow-lg"
-                      strokeWidth={1.5}
-                    />
-                  </button>
-                  <span className="text-xs text-white font-medium drop-shadow-lg">
-                    {getRandomStat(campaign.id, 'saves').toLocaleString()}
-                  </span>
-                </div>
-
-                {/* Share button + count */}
-                <div className="flex flex-col items-center gap-1">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (navigator.share) {
-                        navigator.share({
-                          title: campaign.brand,
-                          text: campaign.description,
-                        });
-                      }
-                    }}
-                    className="flex items-center justify-center"
-                  >
-                    <Send className="h-6 w-6 fill-white text-white drop-shadow-lg" strokeWidth={1.5} />
-                  </button>
-                  <span className="text-xs text-white font-medium drop-shadow-lg">
-                    {getRandomStat(campaign.id, 'shares').toLocaleString()}
-                  </span>
                 </div>
               </div>
             </div>
