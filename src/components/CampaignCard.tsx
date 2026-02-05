@@ -109,40 +109,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }}
           />
           
-          {/* Mobile overlay content - base sits at top of white pill */}
+          {/* Mobile overlay content - description only */}
           <div className={`absolute inset-x-0 bottom-[96px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            {/* Gradient overlay - starts at middle of pill area */}
+            {/* Gradient overlay */}
             <div className="absolute inset-x-0 bottom-[-48px] h-[200px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
             
-            {/* Content container */}
-            <div className="relative flex items-end justify-between gap-4">
-              {/* Description - left side */}
-              <div className="flex-1 pr-2">
-                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
-                  {campaign.description}
-                </p>
-              </div>
-              
-              {/* Icons - right side: TikTok glass button + Company logo aligned */}
-              <div className="flex flex-col items-center gap-3">
-                {/* TikTok logo with glass effect */}
-                <div className="w-[52px] h-[52px] rounded-full bg-gradient-to-b from-gray-700 to-gray-900 flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                  <img
-                    src={tiktokIcon}
-                    alt="TikTok"
-                    className="w-7 h-7 object-contain"
-                  />
-                </div>
-
-                {/* Company logo - same size as TikTok button */}
-                <div className="w-[52px] h-[52px] rounded-full overflow-hidden border border-white/30">
-                  <img
-                    src={campaign.logo}
-                    alt={campaign.brand}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+            {/* Description */}
+            <div className="relative">
+              <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
+                {campaign.description}
+              </p>
             </div>
           </div>
         </div>
@@ -164,8 +140,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         }}
         >
         {!isExpanded ? (
-          /* Collapsed state - earnings info */
-          <div className="px-6 py-6 flex items-center justify-between h-[96px]">
+          /* Collapsed state - earnings info + icons on right */
+          <div className="px-6 py-4 flex items-center justify-between h-[96px]">
             {/* Green pill for earnings with glass effect */}
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">
@@ -176,13 +152,25 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </span>
             </div>
 
-            {/* TikTok logo with glass effect - same height as green pill */}
-            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-[24px] h-[52px] w-[52px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <img
-                src={tiktokPlatformLogo}
-                alt="TikTok"
-                className="w-7 h-7 object-contain"
-              />
+            {/* Right side: TikTok + Company logo aligned */}
+            <div className="flex items-center gap-2">
+              {/* TikTok logo with glass effect */}
+              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <img
+                  src={tiktokIcon}
+                  alt="TikTok"
+                  className="w-6 h-6 object-contain"
+                />
+              </div>
+
+              {/* Company logo - same size */}
+              <div className="h-[44px] w-[44px] rounded-full overflow-hidden border border-black/10">
+                <img
+                  src={campaign.logo}
+                  alt={campaign.brand}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         ) : (
