@@ -39,8 +39,7 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white pb-24">
       {/* Header with safe area */}
-      <div className="flex flex-col border-b border-black/10">
-        <div className="h-[env(safe-area-inset-top)]" />
+      <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center justify-center px-4 py-3 relative">
           <span className="text-base font-semibold text-black">
             {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
