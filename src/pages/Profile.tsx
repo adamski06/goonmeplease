@@ -6,21 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings } from 'lucide-react';
 import defaultAvatar from '@/assets/default-avatar.png';
 
-// Placeholder images for the grid
-import ugc1 from '@/assets/ugc/ugc-placeholder-1.jpg';
-import ugc2 from '@/assets/ugc/ugc-placeholder-2.jpg';
-import ugc3 from '@/assets/ugc/ugc-placeholder-3.jpg';
-import ugc4 from '@/assets/ugc/ugc-placeholder-4.jpg';
-import ugc5 from '@/assets/ugc/ugc-placeholder-5.jpg';
-import ugc6 from '@/assets/ugc/ugc-placeholder-6.jpg';
-
 const mockAds = [
-  { id: '1', image: ugc1, views: '12.3K' },
-  { id: '2', image: ugc2, views: '8.7K' },
-  { id: '3', image: ugc3, views: '45.2K' },
-  { id: '4', image: ugc4, views: '3.1K' },
-  { id: '5', image: ugc5, views: '67.8K' },
-  { id: '6', image: ugc6, views: '22.4K' },
+  { id: '1', views: '12.3K' },
+  { id: '2', views: '8.7K' },
+  { id: '3', views: '45.2K' },
+  { id: '4', views: '3.1K' },
+  { id: '5', views: '67.8K' },
+  { id: '6', views: '22.4K' },
 ];
 
 const ProfilePage: React.FC = () => {
@@ -90,18 +82,13 @@ const ProfilePage: React.FC = () => {
         <h3 className="text-sm font-semibold text-black/60 px-4 py-3">Ads Created</h3>
         <div className="grid grid-cols-3 gap-0.5">
           {mockAds.map((ad) => (
-            <div key={ad.id} className="relative aspect-[9/16] bg-black/5">
-              <img
-                src={ad.image}
-                alt="Ad content"
-                className="w-full h-full object-cover"
-              />
+            <div key={ad.id} className="relative aspect-[9/16] bg-black/[0.03]">
               {/* Views overlay */}
               <div className="absolute bottom-1 left-1 flex items-center gap-1">
-                <svg className="h-3 w-3 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="h-3 w-3 text-black/30" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z" />
                 </svg>
-                <span className="text-xs text-white font-medium drop-shadow">{ad.views}</span>
+                <span className="text-xs text-black/30 font-medium">{ad.views}</span>
               </div>
             </div>
           ))}
@@ -139,7 +126,10 @@ const ProfilePage: React.FC = () => {
             </svg>
             <span className="text-[10px] text-black/40">Action</span>
           </button>
-          <button className="flex flex-col items-center gap-1 pt-1 w-12">
+          <button 
+            onClick={() => navigate('/alerts')}
+            className="flex flex-col items-center gap-1 pt-1 w-12"
+          >
             <svg className="h-6 w-6 text-black/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
