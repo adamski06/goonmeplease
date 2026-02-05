@@ -85,12 +85,14 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setIsExpanded(false);
   }, [campaign.id]);
 
+  // Nav bar = 80px, node = 68px, gap between node and nav = 8px, gap between image and node = 8px
+  // So image bottom = 80 + 8 + 68 + 8 = 164px from bottom
   return (
-    <div className="h-[calc(100dvh-80px)] md:h-screen flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8 pt-12 pb-24">
+    <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Image container with overlaid content */}
       <div
         onClick={handlePictureClick}
-        className="relative w-[calc(100%-24px)] h-[calc(100%-80px)] rounded-[20px] overflow-hidden md:w-auto md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] md:rounded-none cursor-pointer md:flex-shrink-0"
+        className="md:hidden absolute top-3 left-3 right-3 bottom-[164px] rounded-[20px] overflow-hidden cursor-pointer"
       >
         <img
           src={campaign.image}
@@ -174,17 +176,28 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* Mobile White Node - positioned below image, expands over image */}
+      {/* Desktop: Image container */}
+      <div
+        className="hidden md:block relative md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden cursor-pointer md:flex-shrink-0"
+      >
+        <img
+          src={campaign.image}
+          alt={campaign.brand}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Mobile White Node - positioned above nav bar with 8px gap */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden w-[calc(100%-24px)] rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'absolute bottom-24 left-3 right-3 z-20' : 'absolute bottom-24 left-3 right-3'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[20px] overflow-hidden bg-white ${isExpanded ? 'bottom-[88px] z-20' : 'bottom-[88px]'}`}
         style={{
           height: isExpanded ? 'auto' : '68px',
-          maxHeight: isExpanded ? `calc(100dvh - 200px)` : '68px',
+          maxHeight: isExpanded ? `calc(100dvh - 180px)` : '68px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}
