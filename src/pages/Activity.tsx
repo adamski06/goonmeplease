@@ -280,39 +280,9 @@ const Activity: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 px-6 py-6 pb-24 md:py-8 md:pb-8 relative z-10 overflow-y-auto">
-        <h1 className="text-3xl font-bold text-black md:text-foreground mb-6">Saved</h1>
-        
-        {favoriteCampaigns.length === 0 ? (
-          <p className="text-black/60 md:text-muted-foreground">No saved campaigns yet. Save some campaigns to see them here!</p>
-        ) : (
-          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-            {favoriteCampaigns.map((campaign) => (
-              <div 
-                key={campaign.id}
-                className="flex-shrink-0 w-24 cursor-pointer group"
-                onClick={() => navigate('/')}
-              >
-                {/* Image */}
-                <div className="relative aspect-[9/16] rounded overflow-hidden mb-1">
-                  <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-                  {/* Remove button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeFavorite(campaign.id);
-                    }}
-                    className="absolute top-1 right-1 h-5 w-5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center hover:bg-white/30 transition-colors opacity-0 group-hover:opacity-100"
-                  >
-                    <Bookmark className="h-3 w-3 fill-foreground text-foreground" />
-                  </button>
-                </div>
-                {/* Brand name */}
-                <p className="text-xs font-semibold text-foreground truncate">{campaign.brand}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col items-center justify-center h-full text-center">
+          <p className="text-black/40 md:text-muted-foreground">No activity yet</p>
+        </div>
       </main>
     </div>
   );
