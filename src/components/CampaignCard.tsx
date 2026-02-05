@@ -143,12 +143,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden bg-white z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
         style={{
           height: isExpanded ? 'auto' : '96px',
           maxHeight: isExpanded ? `calc(100dvh - 136px)` : '96px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(250,250,250,0.98))',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.6)',
+          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.8), 0 4px 20px rgba(0,0,0,0.1)',
         }}
         >
         {!isExpanded ? (
