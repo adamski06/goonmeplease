@@ -90,10 +90,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
       {/* Mobile: Card container with image + overlapping white node */}
       <div className="md:hidden absolute top-4 left-3 right-3 bottom-3">
-        {/* Image section - bottom aligns with bottom of pill */}
+        {/* Image section - bottom aligns with bottom of pill, matches pill's rounded corners */}
         <div
           onClick={handlePictureClick}
-          className="absolute inset-x-0 top-0 bottom-0 rounded-[24px] overflow-hidden cursor-pointer"
+          className="absolute inset-x-0 top-0 bottom-0 rounded-t-[24px] rounded-b-[48px] overflow-hidden cursor-pointer"
         >
           <img
             src={campaign.image}
@@ -109,9 +109,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           />
           
           {/* Mobile overlay content - base sits at top of white pill */}
-          <div className={`absolute inset-x-0 bottom-[68px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            {/* Gradient overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
+          <div className={`absolute inset-x-0 bottom-[96px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            {/* Gradient overlay - starts at middle of pill area */}
+            <div className="absolute inset-x-0 bottom-[-48px] h-[200px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
             
             {/* Content container */}
             <div className="relative flex items-end justify-between gap-4">
@@ -178,24 +178,24 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* White Node - pill overlapping bottom of image */}
+      {/* White Node - pill with half-circle edges overlapping bottom of image */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute left-3 right-3 rounded-[24px] overflow-hidden bg-white z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
+        className={`md:hidden absolute left-3 right-3 rounded-[48px] overflow-hidden bg-white z-10 ${isExpanded ? 'bottom-3 z-20' : 'bottom-3'}`}
         style={{
-          height: isExpanded ? 'auto' : '68px',
-          maxHeight: isExpanded ? `calc(100dvh - 100px)` : '68px',
+          height: isExpanded ? 'auto' : '96px',
+          maxHeight: isExpanded ? `calc(100dvh - 100px)` : '96px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
         }}
         >
         {!isExpanded ? (
           /* Collapsed state - earnings info */
-          <div className="px-4 py-4 flex items-center justify-between h-[68px]">
+          <div className="px-6 py-6 flex items-center justify-between h-[96px]">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-bold text-black font-montserrat">
                 {campaign.maxEarnings.toLocaleString()}
