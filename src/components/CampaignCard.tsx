@@ -17,10 +17,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   onToggleFavorite,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
   const nodeRef = useRef<HTMLDivElement>(null);
+
+  const isVisuallyExpanded = isExpanded && !isClosing;
+
+  const triggerClose = () => {
+    if (!isExpanded || isClosing) return;
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsExpanded(false);
+      setIsClosing(false);
+    }, 500);
+  };
 
   // Handle drag to close
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -42,7 +54,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     if (!isDragging) return;
     setIsDragging(false);
     if (dragY > 100) {
-      setIsExpanded(false);
+      triggerClose();
     }
     setDragY(0);
   };
@@ -55,12 +67,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   // Handle node tap to toggle
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsExpanded(!isExpanded);
+    if (isExpanded) {
+      triggerClose();
+    } else {
+      setIsExpanded(true);
+    }
   };
 
   // Close expanded state when scrolling away
   useEffect(() => {
     setIsExpanded(false);
+    setIsClosing(false);
   }, [campaign.id]);
 
   return (
@@ -113,10 +130,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`absolute rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
+        className={`absolute rounded-[48px] overflow-hidden z-10 ${isVisuallyExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
         style={{
-          height: isExpanded ? 'auto' : '80px',
-          maxHeight: isExpanded ? `calc(100dvh - 148px)` : '80px',
+          maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '80px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -144,8 +160,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         ) : (
-          /* Expanded state */
-          <div className="h-full flex flex-col overflow-hidden animate-fade-in" style={{ maxHeight: 'calc(100dvh - 148px)' }}>
+          /* Expanded state (stays rendered during closing for smooth animation) */
+          <div
+            className="h-full flex flex-col overflow-hidden"
+            style={{
+              maxHeight: 'calc(100dvh - 148px)',
+              opacity: isClosing ? 0 : 1,
+              transition: 'opacity 0.35s ease-out',
+            }}
+          >
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 bg-black/20 rounded-full" />
             </div>
@@ -217,8 +240,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </div>
             </div>
 
-            {/* Fixed CTA at bottom - glass styled */}
-            <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
+            {/* Fixed CTA at bottom - centered vertically */}
+            <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
               <button
                 className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
