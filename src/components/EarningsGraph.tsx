@@ -76,16 +76,13 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
     return { dx: dx / len, dy: dy / len };
   };
 
-  const waypoints = dataPoints.map((p) => {
-    const t = p.views / maxV;
+  const waypoints = dataPoints.map((p, i) => {
+    // First/middle point always at t=0.5 on the curve, last point at t=1.0
+    const isLast = i === dataPoints.length - 1;
+    const t = isLast ? 1.0 : 0.5;
     const pos = quadBezier(t);
-    const tan = quadTangent(t);
-    // Normal perpendicular to tangent (pointing upward/left from the curve)
-    const nx = -tan.dy;
-    const ny = tan.dx;
     return {
       ...pos,
-      nx, ny,
       earnings: p.earnings,
       views: p.views,
     };
@@ -154,9 +151,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Earnings label */}
               <text
                 x={textX}
-                y={ly - 6}
+                y={ly - 10}
                 fill="white"
-                fontSize="15"
+                fontSize="22"
                 fontWeight="600"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
@@ -166,9 +163,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Views label */}
               <text
                 x={textX}
-                y={ly + 8}
+                y={ly + 12}
                 fill="rgba(255,255,255,0.6)"
-                fontSize="13"
+                fontSize="18"
                 fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
