@@ -23,23 +23,43 @@ const formatEarnings = (amount: number): string => {
 };
 
 const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => {
-  // Calculate cumulative earnings at each tier boundary
-  const dataPoints: { views: number; earnings: number }[] = [];
-  let cumEarnings = 0;
+  // Calculate first tier boundary and final max point
+  const firstTier = tiers[0];
+  let firstEarnings = 0;
+  let firstViews = 0;
+  if (firstTier && firstTier.maxViews) {
+    const tierViews = firstTier.maxViews - firstTier.minViews;
+    firstEarnings = (tierViews / 1000) * firstTier.rate;
+    firstViews = firstTier.maxViews;
+  }
 
+  // Calculate total views needed to reach maxEarnings
+  let cumEarnings = 0;
+  let totalViews = 0;
   for (const tier of tiers) {
     if (tier.maxViews) {
       const tierViews = tier.maxViews - tier.minViews;
-      cumEarnings += (tierViews / 1000) * tier.rate;
-      dataPoints.push({ views: tier.maxViews, earnings: Math.min(cumEarnings, maxEarnings) });
+      const tierEarnings = (tierViews / 1000) * tier.rate;
+      if (cumEarnings + tierEarnings >= maxEarnings) {
+        const remaining = maxEarnings - cumEarnings;
+        totalViews = tier.minViews + (remaining / tier.rate) * 1000;
+        break;
+      }
+      cumEarnings += tierEarnings;
+      totalViews = tier.maxViews;
     } else {
       const remaining = maxEarnings - cumEarnings;
-      const addViews = (remaining / tier.rate) * 1000;
-      dataPoints.push({ views: tier.minViews + addViews, earnings: maxEarnings });
+      totalViews = tier.minViews + (remaining / tier.rate) * 1000;
     }
   }
 
-  const maxV = dataPoints[dataPoints.length - 1]?.views || 1;
+  // Two data points: first tier boundary (middle) and max (end)
+  const dataPoints = [
+    { views: firstViews, earnings: Math.min(firstEarnings, maxEarnings) },
+    { views: totalViews, earnings: maxEarnings },
+  ];
+
+  const maxV = totalViews || 1;
 
   // Graph dimensions
   const pad = { top: 38, right: 8, bottom: 8, left: 8 };
