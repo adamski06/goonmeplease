@@ -145,7 +145,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         {/* Waypoint dots + leader lines + labels */}
         {waypoints.map((p, i) => {
           const isLast = i === waypoints.length - 1;
-          const leaderLen = 34;
+          const leaderLen = 50;
 
           // Both points: leader goes straight left
           const lx = p.x - leaderLen;
