@@ -166,21 +166,14 @@ const Discover: React.FC = () => {
             />
 
             <style>{`
-              @keyframes pill-expand-up {
+              @keyframes pill-slide-up {
                 0% {
-                  transform: translateY(60px) scaleY(0.3);
+                  transform: translateY(100%);
                   opacity: 0;
-                  border-radius: 48px;
-                }
-                40% {
-                  transform: translateY(20px) scaleY(0.6);
-                  opacity: 1;
-                  border-radius: 48px;
                 }
                 100% {
-                  transform: translateY(0) scaleY(1);
+                  transform: translateY(0);
                   opacity: 1;
-                  border-radius: 48px;
                 }
               }
             `}</style>
@@ -194,8 +187,7 @@ const Discover: React.FC = () => {
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow:
                   '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                animation: 'pill-expand-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
-                transformOrigin: 'bottom center',
+                animation: 'pill-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
               }}
               onClick={(e) => e.stopPropagation()}
             >
