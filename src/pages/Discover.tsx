@@ -23,6 +23,7 @@ const Discover: React.FC = () => {
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const [showPicture, setShowPicture] = useState(false);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const savedScrollPosition = useRef<number>(0);
 
@@ -30,11 +31,13 @@ const Discover: React.FC = () => {
     if (featuredScrollRef.current) {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
+    setShowPicture(false);
     setSelectedCampaign(campaign);
   };
 
   const handleBackFromDetail = () => {
     setSelectedCampaign(null);
+    setShowPicture(false);
     requestAnimationFrame(() => {
       if (featuredScrollRef.current) {
         featuredScrollRef.current.scrollTop = savedScrollPosition.current;
@@ -163,14 +166,21 @@ const Discover: React.FC = () => {
             />
 
             <style>{`
-              @keyframes slide-up-expand {
+              @keyframes pill-expand-up {
                 0% {
-                  transform: translateY(100%);
+                  transform: translateY(60px) scaleY(0.3);
                   opacity: 0;
+                  border-radius: 48px;
+                }
+                40% {
+                  transform: translateY(20px) scaleY(0.6);
+                  opacity: 1;
+                  border-radius: 48px;
                 }
                 100% {
-                  transform: translateY(0);
+                  transform: translateY(0) scaleY(1);
                   opacity: 1;
+                  border-radius: 48px;
                 }
               }
             `}</style>
@@ -184,7 +194,8 @@ const Discover: React.FC = () => {
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow:
                   '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                animation: 'slide-up-expand 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+                animation: 'pill-expand-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+                transformOrigin: 'bottom center',
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -194,31 +205,36 @@ const Discover: React.FC = () => {
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
                 </div>
 
-                  {/* Header with brand */}
-                  <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
-                    <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                      <img
-                        src={selectedCampaign.logo}
-                        alt={selectedCampaign.brand}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                      {selectedCampaign.brand}
-                    </h2>
+                {/* Header with brand - logo to right of name */}
+                <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
+                  <h2 className="text-base font-bold text-black font-montserrat flex-1">
+                    {selectedCampaign.brand}
+                  </h2>
+                  <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                    <img
+                      src={selectedCampaign.logo}
+                      alt={selectedCampaign.brand}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                </div>
 
-                  {/* Scrollable content */}
-                  <div className="flex-1 overflow-y-auto px-5 py-4">
-                    {/* Campaign Image Node - smaller + centered */}
-                    <div
-                      className="rounded-xl p-3 mb-4"
+                {/* Scrollable content */}
+                <div className="flex-1 overflow-y-auto px-5 py-4">
+                  {/* Show Picture toggle pill */}
+                  {!showPicture ? (
+                    <button
+                      onClick={() => setShowPicture(true)}
+                      className="w-full mb-4 h-10 rounded-full text-xs font-semibold text-black/60 font-montserrat flex items-center justify-center gap-1.5"
                       style={{
                         background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
                         border: '1px solid rgba(0,0,0,0.06)',
-                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
                       }}
                     >
+                      Show picture
+                    </button>
+                  ) : (
+                    <div className="mb-4 overflow-hidden rounded-xl animate-fade-in">
                       <div className="mx-auto w-full max-w-[220px] aspect-[9/16] overflow-hidden rounded-xl">
                         <img
                           src={selectedCampaign.image}
@@ -227,100 +243,106 @@ const Discover: React.FC = () => {
                         />
                       </div>
                     </div>
+                  )}
 
-                    {/* Description */}
-                    <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
-                      {selectedCampaign.description}
-                    </p>
+                  {/* Description */}
+                  <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
+                    {selectedCampaign.description}
+                  </p>
 
-                    {/* Requirements - glass effect */}
-                    <div
-                      className="rounded-xl p-4 mb-4"
-                      style={{
-                        background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                        border: '1px solid rgba(0,0,0,0.06)',
-                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
-                      }}
-                    >
-                      <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
-                      <ul className="space-y-1.5">
-                        {selectedCampaign.guidelines.map((guideline, idx) => (
-                          <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
-                            <span className="text-black/40">•</span>
-                            {guideline}
-                          </li>
+                  {/* Requirements - glass effect */}
+                  <div
+                    className="rounded-xl p-4 mb-4"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                      border: '1px solid rgba(0,0,0,0.06)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                    }}
+                  >
+                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                    <ul className="space-y-1.5">
+                      {selectedCampaign.guidelines.map((guideline, idx) => (
+                        <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
+                          <span className="text-black/40">•</span>
+                          {guideline}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Example images */}
+                    {selectedCampaign.exampleImages && selectedCampaign.exampleImages.length > 0 && (
+                      <div className="flex gap-2 mt-3">
+                        {selectedCampaign.exampleImages.slice(0, 2).map((img, i) => (
+                          <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                          </div>
                         ))}
-                      </ul>
+                      </div>
+                    )}
+                  </div>
 
-                      {/* Example images */}
-                      {selectedCampaign.exampleImages && selectedCampaign.exampleImages.length > 0 && (
-                        <div className="flex gap-2 mt-3">
-                          {selectedCampaign.exampleImages.slice(0, 2).map((img, i) => (
-                            <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                              <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Payment Details - green glass effect */}
-                    <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                      <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
-                          <span className="text-sm font-bold text-white font-montserrat">
-                            {selectedCampaign.maxEarnings.toLocaleString()} sek
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
-                          <span className="text-sm font-bold text-white font-montserrat">
-                            {selectedCampaign.ratePerThousand} sek
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-white/80 font-jakarta">Platform</span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
-                            <div className="w-4 h-4 rounded-full overflow-hidden">
-                              <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
-                            </div>
+                  {/* Payment Details - green glass effect */}
+                  <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                    <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
+                        <span className="text-sm font-bold text-white font-montserrat">
+                          {selectedCampaign.maxEarnings.toLocaleString()} sek
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
+                        <span className="text-sm font-bold text-white font-montserrat">
+                          {selectedCampaign.ratePerThousand} sek
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-white/80 font-jakarta">Platform</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
+                          <div className="w-4 h-4 rounded-full overflow-hidden">
+                            <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Fixed CTA at bottom - glass styled */}
-                  <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
-                    <button
-                      className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
-                      style={{
-                        background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
-                        border: '1.5px solid rgba(255,255,255,0.9)',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                        backdropFilter: 'blur(12px)',
-                        color: 'black',
-                      }}
-                    >
-                      <Plus className="h-4 w-4" />
-                      Submit Content
-                    </button>
-                    <button
-                      onClick={(e) => toggleFavorite(selectedCampaign.id, e)}
-                      className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
-                    >
-                      <Bookmark
-                        className={`h-5 w-5 ${favorites.includes(selectedCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
-                        strokeWidth={1.5}
-                      />
-                    </button>
-                  </div>
+                {/* Fixed CTA at bottom - blue Submit, white glass Save */}
+                <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
+                  <button
+                    className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                    style={{
+                      background: 'linear-gradient(180deg, hsl(217, 91%, 55%) 0%, hsl(217, 91%, 45%) 100%)',
+                      border: '1.5px solid hsl(217, 91%, 65%)',
+                      boxShadow: '0 4px 20px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                      color: 'white',
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                    Submit Content
+                  </button>
+                  <button
+                    onClick={(e) => toggleFavorite(selectedCampaign.id, e)}
+                    className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                      border: '1.5px solid rgba(255,255,255,0.9)',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                      backdropFilter: 'blur(12px)',
+                    }}
+                  >
+                    <Bookmark
+                      className={`h-5 w-5 ${favorites.includes(selectedCampaign.id) ? 'fill-black text-black' : 'text-black/50'}`}
+                      strokeWidth={1.5}
+                    />
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
         )}
 
         {/* Header Bar with safe area */}
@@ -353,6 +375,14 @@ const Discover: React.FC = () => {
                   
                   {/* Brand name top left */}
                   <span className="absolute top-3 left-3 text-[10px] font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
+                  
+                  {/* Description text above pill */}
+                  <div className="absolute inset-x-0 bottom-[56px] px-3">
+                    <div className="absolute inset-x-0 bottom-[-10px] h-[80px] bg-gradient-to-t from-black/60 via-black/30 to-transparent pointer-events-none" />
+                    <p className="relative text-[10px] text-white font-medium font-jakarta line-clamp-2 drop-shadow-lg">
+                      {campaign.description}
+                    </p>
+                  </div>
                   
                   {/* Bottom pill */}
                   <div 
