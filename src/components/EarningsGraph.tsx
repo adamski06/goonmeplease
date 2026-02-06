@@ -45,9 +45,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
 
   // Simple graph: straight line from first tier endpoint to last
   // Graph drawing area with padding for labels
-  const pad = { top: 28, right: 8, bottom: 8, left: 8 };
+  const pad = { top: 32, right: 8, bottom: 8, left: 8 };
   const w = 300;
-  const h = 160;
+  const h = 260;
   const gw = w - pad.left - pad.right;
   const gh = h - pad.top - pad.bottom;
 
@@ -80,7 +80,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         Earnings by views
       </h4>
 
-      <svg viewBox={`0 0 ${w} ${h}`} className="w-full block" style={{ height: 160 }}>
+      <svg viewBox={`0 0 ${w} ${h}`} className="w-full block" style={{ height: 260 }}>
         <defs>
           <linearGradient id="egFill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
@@ -114,9 +114,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               <circle cx={p.x} cy={p.y} r="2" fill="white" />
               <text
                 x={labelX}
-                y={p.y - 5}
+                y={p.y - 7}
                 fill="white"
-                fontSize="10"
+                fontSize="14"
                 fontWeight="700"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
@@ -125,9 +125,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               </text>
               <text
                 x={labelX}
-                y={p.y + 6}
+                y={p.y + 7}
                 fill="rgba(255,255,255,0.5)"
-                fontSize="8"
+                fontSize="11"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
               >
