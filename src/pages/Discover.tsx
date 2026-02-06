@@ -14,7 +14,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import defaultAvatar from '@/assets/default-avatar.png';
-import { Button } from '@/components/ui/button';
 import { campaigns, Campaign } from '@/data/campaigns';
 
 const Discover: React.FC = () => {
@@ -27,7 +26,7 @@ const Discover: React.FC = () => {
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const savedScrollPosition = useRef<number>(0);
 
-  const handleSelectCampaign = (campaign: typeof campaigns[0]) => {
+  const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
@@ -93,14 +92,11 @@ const Discover: React.FC = () => {
 
   return (
     <div className="h-screen flex relative overflow-hidden">
-      {/* White background for mobile */}
-      <div className="md:hidden absolute inset-0 bg-white" />
-      {/* Static Grainy Background - desktop only */}
-      <div className="hidden md:block absolute inset-0 pointer-events-none grainy-background" />
-      <div className="hidden md:block noise-layer absolute inset-0 pointer-events-none" />
+      {/* White background */}
+      <div className="absolute inset-0 bg-white" />
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom bg-white border-t border-black/10">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 px-4 pt-2 pb-2 h-20 safe-area-bottom bg-white border-t border-black/10">
         <div className="flex items-start justify-between h-full">
           <button 
             onClick={() => navigate('/')}
@@ -157,10 +153,10 @@ const Discover: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* Mobile: Expanded campaign detail */}
+        {/* Expanded campaign detail */}
         {selectedCampaign && (
-          <div className="md:hidden fixed inset-0 z-40">
-            {/* Backdrop sits BEHIND the navbar (navbar is z-50) */}
+          <div className="fixed inset-0 z-40">
+            {/* Backdrop */}
             <div
               className="absolute inset-0 bg-black/50"
               onClick={handleBackFromDetail}
@@ -181,7 +177,7 @@ const Discover: React.FC = () => {
 
             {/* Full white pill - same placement as Home (CampaignCard) */}
             <div
-              className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-10"
+              className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
               style={{
                 maxHeight: 'calc(100dvh - 136px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
@@ -197,7 +193,6 @@ const Discover: React.FC = () => {
                 <div className="flex justify-center pt-3 pb-1">
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
                 </div>
-
 
                   {/* Header with brand */}
                   <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
@@ -298,15 +293,21 @@ const Discover: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Fixed CTA at bottom */}
+                  {/* Fixed CTA at bottom - glass styled */}
                   <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
-                    <Button
-                      size="lg"
-                      className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
+                    <button
+                      className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                        border: '1.5px solid rgba(255,255,255,0.9)',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                        backdropFilter: 'blur(12px)',
+                        color: 'black',
+                      }}
                     >
                       <Plus className="h-4 w-4" />
                       Submit Content
-                    </Button>
+                    </button>
                     <button
                       onClick={(e) => toggleFavorite(selectedCampaign.id, e)}
                       className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
@@ -322,24 +323,22 @@ const Discover: React.FC = () => {
             </div>
         )}
 
-
-
-        {/* Mobile Header Bar with safe area */}
-        <div className="md:hidden flex flex-col border-b border-black/10 bg-white safe-area-top">
+        {/* Header Bar with safe area */}
+        <div className="flex flex-col border-b border-black/10 bg-white safe-area-top">
           <div className="flex items-center justify-center px-4 py-3">
             <span className="text-base font-semibold text-black">Discover</span>
           </div>
         </div>
 
-        {/* Browse Mode - Grid Layout with Home-style cards */}
-        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 md:pt-6 md:pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-          <div className="px-3 md:pl-8 md:pr-8">
-            <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2.5 md:gap-x-6 md:gap-y-8">
+        {/* Browse Mode - Grid Layout */}
+        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          <div className="px-3">
+            <div className="grid grid-cols-2 gap-2.5">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full md:w-[200px] rounded-[32px] aspect-[9/16]"
+                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full rounded-[32px] aspect-[9/16]"
                 >
                   {/* Full image background */}
                   <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[32px]" />
@@ -355,7 +354,7 @@ const Discover: React.FC = () => {
                   {/* Brand name top left */}
                   <span className="absolute top-3 left-3 text-[10px] font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   
-                  {/* Bottom pill - with margin from edges */}
+                  {/* Bottom pill */}
                   <div 
                     className="absolute bottom-2 left-2 right-2 h-[52px] rounded-[26px] px-3 flex items-center justify-between"
                     style={{
@@ -366,17 +365,17 @@ const Discover: React.FC = () => {
                   >
                     {/* Green earnings pill */}
                     <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[16px] px-3 py-1.5 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                      <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                      <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
+                      <span className="text-sm font-bold text-white font-montserrat">
+                        {campaign.maxEarnings.toLocaleString()}
+                      </span>
+                      <span className="text-[10px] font-semibold text-white/80 font-montserrat">
+                        sek
+                      </span>
                     </div>
-                    
-                    {/* TikTok logo */}
-                    <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-8 w-8 flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                      <img
-                        src={tiktokIcon}
-                        alt="TikTok"
-                        className="w-4 h-4 object-contain"
-                      />
+
+                    {/* TikTok icon */}
+                    <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                      <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
                     </div>
                   </div>
                 </div>
@@ -388,11 +387,11 @@ const Discover: React.FC = () => {
 
       {/* Auth Prompt Dialog */}
       <Dialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-sm bg-white border-0 rounded-[24px] p-6">
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Join Jarla</DialogTitle>
+            <DialogTitle className="text-center text-2xl font-bold text-black">Join Jarla</DialogTitle>
           </DialogHeader>
-          <p className="text-center text-muted-foreground mb-6">
+          <p className="text-center text-black/60 text-sm mb-6">
             Create an account to save campaigns, track your submissions, and start earning.
           </p>
           <div className="flex flex-col gap-3">
@@ -401,7 +400,7 @@ const Discover: React.FC = () => {
                 setShowAuthPrompt(false);
                 navigate('/auth?mode=signup');
               }}
-              className="w-full py-3 bg-foreground text-background rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="w-full py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-black/80 transition-colors"
             >
               Create account
             </button>
@@ -410,7 +409,7 @@ const Discover: React.FC = () => {
                 setShowAuthPrompt(false);
                 navigate('/auth?mode=login');
               }}
-              className="w-full py-3 border border-foreground/20 rounded-full text-sm font-medium hover:bg-foreground/5 transition-colors"
+              className="w-full py-3 border border-black/20 text-black rounded-full text-sm font-medium hover:bg-black/5 transition-colors"
             >
               Log in
             </button>

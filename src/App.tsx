@@ -23,6 +23,17 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        {/* Portrait orientation lock overlay */}
+        <div className="landscape-lock-overlay fixed inset-0 z-[9999] bg-black items-center justify-center hidden">
+          <div className="text-center text-white px-8">
+            <svg className="h-16 w-16 mx-auto mb-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+              <line x1="12" y1="18" x2="12" y2="18" />
+            </svg>
+            <p className="text-lg font-semibold font-montserrat">Rotate your phone</p>
+            <p className="text-sm text-white/60 mt-1 font-jakarta">This app works best in portrait mode</p>
+          </div>
+        </div>
         <BrowserRouter>
           <AuthProvider>
             <ProfileProvider>

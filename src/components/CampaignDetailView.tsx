@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { ArrowLeft, Bookmark, ChevronLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { ChevronLeft, Bookmark, Plus } from 'lucide-react';
 
 interface CampaignTier {
   minViews: number;
@@ -37,9 +36,6 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   isSaved, 
   onToggleSave 
 }) => {
-  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-
   const totalViews = (campaign.maxEarnings / campaign.ratePerThousand) * 1000;
 
   // Swipe back handling for mobile
@@ -50,29 +46,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
   const handleTouchEnd = (e: React.TouchEvent) => {
     const touchEndX = e.changedTouches[0].clientX;
     const swipeDistance = touchEndX - touchStartX;
-    // Swipe right to go back
     if (swipeDistance > 100) {
       onBack();
     }
-  };
-
-  const handleLineMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (lineRef.current) {
-      const rect = lineRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      setHoverPosition(Math.max(percentage, 12.5));
-    }
-  };
-
-  const handleLineMouseLeave = () => {
-    setHoverPosition(null);
-  };
-
-  const getValuesAtPosition = (percentage: number) => {
-    const views = Math.round((percentage / 100) * totalViews);
-    const earnings = Math.round((views / 1000) * campaign.ratePerThousand);
-    return { views, earnings };
   };
 
   return (
@@ -81,9 +57,9 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Mobile Layout - slides in from right */}
-      <div className="md:hidden h-full flex flex-col bg-white animate-slide-in-right">
-        {/* White top bar with back button - thick for notch */}
+      {/* Mobile Layout */}
+      <div className="h-full flex flex-col bg-white animate-slide-in-right">
+        {/* White top bar with back button */}
         <div className="flex items-center gap-3 px-4 pt-12 pb-3 bg-white border-b border-black/5">
           <button 
             onClick={onBack}
@@ -114,320 +90,96 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
+          {/* Description */}
+          <p className="text-base text-black font-jakarta leading-relaxed mb-6">{campaign.description}</p>
 
-        {/* Description */}
-        <p className="text-base text-black font-jakarta leading-relaxed mb-6">{campaign.description}</p>
-
-        {/* Earnings Display - Monet style scaled for mobile */}
-        <div className="mb-6 relative">
-          {/* Rate per view */}
-          <div className="flex items-baseline gap-1 mb-2">
-            <span className="text-lg font-bold text-black font-montserrat">{campaign.ratePerThousand}</span>
-            <span className="text-sm font-bold text-black font-jakarta">sek</span>
-            <span className="text-xs font-bold text-black font-jakarta">/ 1000 views</span>
-          </div>
-
-          {/* Line and bubbles */}
-          <div className="relative mt-4">
-            {/* Earnings bubble - above line */}
-            <div className="absolute -top-10 right-0 pointer-events-none z-20">
-              <div className="bg-black px-4 py-2 flex items-baseline gap-1 rounded-full rounded-br-none">
-                <span className="text-2xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                <span className="text-sm text-white font-montserrat">sek</span>
-              </div>
+          {/* Earnings Display */}
+          <div className="mb-6 relative">
+            <div className="flex items-baseline gap-1 mb-2">
+              <span className="text-lg font-bold text-black font-montserrat">{campaign.ratePerThousand}</span>
+              <span className="text-sm font-bold text-black font-jakarta">sek</span>
+              <span className="text-xs font-bold text-black font-jakarta">/ 1000 views</span>
             </div>
 
-            {/* The line */}
-            <div className="relative py-4">
-              <div className="h-[2px] bg-black w-full" />
-              
-            {/* Min marker */}
-            {(() => {
-              const minViews = Math.round(totalViews * 0.125);
-              return (
-                <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
-                  <div className="w-[2px] h-[10px] bg-black" />
-                  <div className="absolute -top-6 left-0 pointer-events-none">
-                    <span className="text-xs text-black font-jakarta">min</span>
-                  </div>
-                  <div className="absolute top-3 left-0 pointer-events-none whitespace-nowrap">
-                    <span className="text-xs text-black font-jakarta">{minViews.toLocaleString()}</span>
-                  </div>
+            <div className="relative mt-4">
+              <div className="absolute -top-10 right-0 pointer-events-none z-20">
+                <div className="bg-black px-4 py-2 flex items-baseline gap-1 rounded-full rounded-br-none">
+                  <span className="text-2xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                  <span className="text-sm text-white font-montserrat">sek</span>
                 </div>
-              );
-            })()}
-            </div>
-
-            {/* Views bubble - below line */}
-            <div className="absolute top-10 right-0 pointer-events-none z-20">
-              <div className="bg-white border border-black/10 px-3 py-1.5 flex items-baseline gap-1 rounded-full rounded-tr-none">
-                <span className="text-base font-normal text-black font-jakarta">{totalViews.toLocaleString()}</span>
-                <span className="text-xs text-black font-jakarta">views</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Spacer for bubbles */}
-          <div className="h-12" />
-        </div>
-
-        {/* Requirements */}
-        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 rounded-xl p-4 mb-6 -mx-2">
-          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Requirements</h3>
-          <ul className="space-y-2 mb-4">
-            {campaign.guidelines.map((guideline, idx) => (
-              <li key={idx} className="text-sm text-black font-jakarta flex items-start gap-2">
-                <span className="text-black">•</span>
-                {guideline}
-              </li>
-            ))}
-          </ul>
-          
-          {/* Example images inline */}
-          {campaign.exampleImages && campaign.exampleImages.length > 0 && (
-            <div className="flex gap-2">
-              {campaign.exampleImages.slice(0, 2).map((img, i) => (
-                <div key={i} className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                  <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        </div>
-
-        {/* Fixed CTA */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-white via-white to-transparent">
-          <Button 
-            size="lg" 
-            className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
-          >
-            Submit Content
-          </Button>
-        </div>
-      </div>
-
-      {/* Desktop Layout */}
-      <div className="hidden md:block px-8">
-        {/* Back button */}
-        <button 
-          onClick={onBack}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-jakarta"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span className="text-base font-medium">Back to ads</span>
-        </button>
-
-        <div className="flex flex-col gap-6">
-          {/* Main info block - Logo, description, and image together */}
-          <div className="flex gap-10 items-start">
-            <div className="max-w-xl">
-              {/* Header - Logo, company name, and content type */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-md bg-muted flex items-center justify-center flex-shrink-0 overflow-hidden border border-border">
-                  {campaign.logo ? (
-                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-contain p-2" />
-                  ) : (
-                    <span className="text-xl font-bold text-foreground">
-                      {campaign.brand.charAt(0).toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-baseline gap-3">
-                  <h1 className="text-2xl font-bold text-foreground font-montserrat">{campaign.brand}</h1>
-                  <p className="text-lg text-foreground font-montserrat">- {campaign.contentType}</p>
-                </div>
-                <button
-                  onClick={onToggleSave}
-                  className="flex items-center justify-center hover:scale-110 transition-transform ml-auto"
-                >
-                  <Bookmark 
-                    className={`h-5 w-5 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
-                    strokeWidth={1.5}
-                  />
-                </button>
               </div>
 
-              {/* Description */}
-              <p className="text-xl text-foreground font-jakarta leading-relaxed">{campaign.description}</p>
-            </div>
-              
-            {/* Campaign image */}
-            <div className="relative w-44 aspect-[9/16] overflow-hidden flex-shrink-0">
-              <img 
-                src={campaign.image} 
-                alt={campaign.brand} 
-                className="w-full h-full object-cover" 
-              />
-            </div>
-          </div>
-
-        </div>
-
-        {/* Earnings Display - Full width */}
-        <div className="mb-6 mt-16 max-w-[calc(36rem+2.5rem+11rem)] relative">
-          {/* Rate per view - left */}
-          <div className="relative flex items-baseline gap-1 mb-2 -translate-y-14">
-            <span className="text-xl font-bold text-foreground font-montserrat">{campaign.ratePerThousand}</span>
-            <span className="text-sm font-bold text-foreground font-jakarta">sek</span>
-            <span className="text-xs font-bold text-foreground font-jakarta">/ 1000 views</span>
-          </div>
-
-          {/* Line and bubbles container */}
-          <div className="relative mt-6">
-            {/* Earnings bubble - above line, right side when not hovering */}
-            {(() => {
-              const maxPillPosition = 85;
-              const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-              
-              return (
-                <div 
-                  className="absolute -top-12 pointer-events-none z-20"
-                  style={pillPosition !== null ? { 
-                    left: `${pillPosition}%`,
-                    transform: 'translateX(-50%)'
-                  } : {
-                    right: 0,
-                    transform: 'translateX(0)'
-                  }}
-                >
-                  <div className={`bg-black px-6 py-3 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-br-none'}`}>
-                    <span className="text-4xl font-bold text-white font-montserrat">
-                      {hoverPosition !== null 
-                        ? getValuesAtPosition(hoverPosition).earnings.toLocaleString()
-                        : campaign.maxEarnings.toLocaleString()}
-                    </span>
-                    <span className="text-lg text-white font-montserrat">sek</span>
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Interactive line */}
-            <div 
-              ref={lineRef}
-              className="relative py-8 -my-8 cursor-pointer"
-              onMouseMove={handleLineMouseMove}
-              onMouseLeave={handleLineMouseLeave}
-            >
-              {/* The actual line */}
-              <div className="h-[2px] bg-black w-full" />
-
-              {/* Min marker */}
-              {(() => {
-                const minViews = Math.round(totalViews * 0.125);
-                const minPosition = 12.5;
-                return (
-                  <div className="absolute z-20" style={{ left: `${minPosition}%`, top: '50%', transform: 'translateY(-50%)' }}>
-                    {/* Vertical tick */}
-                    <div className="w-[2px] h-[12px] bg-black -translate-x-1/2" />
-                    {/* Minimum text above */}
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none">
-                      <span className="text-sm text-black font-jakarta">minimum</span>
+              <div className="relative py-4">
+                <div className="h-[2px] bg-black w-full" />
+                {(() => {
+                  const minViews = Math.round(totalViews * 0.125);
+                  return (
+                    <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
+                      <div className="w-[2px] h-[10px] bg-black" />
+                      <div className="absolute -top-6 left-0 pointer-events-none">
+                        <span className="text-xs text-black font-jakarta">min</span>
+                      </div>
+                      <div className="absolute top-3 left-0 pointer-events-none whitespace-nowrap">
+                        <span className="text-xs text-black font-jakarta">{minViews.toLocaleString()}</span>
+                      </div>
                     </div>
-                    {/* Views text below */}
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap">
-                      <span className="text-sm text-black font-jakarta">{minViews.toLocaleString()} views</span>
-                    </div>
-                  </div>
-                );
-              })()}
+                  );
+                })()}
+              </div>
+
+              <div className="absolute top-10 right-0 pointer-events-none z-20">
+                <div className="bg-white border border-black/10 px-3 py-1.5 flex items-baseline gap-1 rounded-full rounded-tr-none">
+                  <span className="text-base font-normal text-black font-jakarta">{totalViews.toLocaleString()}</span>
+                  <span className="text-xs text-black font-jakarta">views</span>
+                </div>
+              </div>
             </div>
 
-            {/* Views bubble - below line, right side when not hovering */}
-            {(() => {
-              const maxPillPosition = 85;
-              const pillPosition = hoverPosition !== null ? Math.min(hoverPosition, maxPillPosition) : null;
-              
-              return (
-                <div 
-                  className="absolute top-12 pointer-events-none z-20"
-                  style={pillPosition !== null ? { 
-                    left: `${pillPosition}%`,
-                    transform: 'translateX(-50%)'
-                  } : {
-                    right: 0,
-                    transform: 'translateX(0)'
-                  }}
-                >
-                  <div className={`bg-white border border-black/10 px-5 py-2 flex items-baseline gap-1.5 min-w-[180px] justify-center ${hoverPosition !== null ? 'rounded-full' : 'rounded-full rounded-tr-none'}`}>
-                    <span className="text-xl font-normal text-black font-jakarta">
-                      {hoverPosition !== null 
-                        ? getValuesAtPosition(hoverPosition).views.toLocaleString()
-                        : totalViews.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-black font-jakarta">views</span>
-                  </div>
-                </div>
-              );
-            })()}
+            <div className="h-12" />
           </div>
 
-          {/* Spacer for the bubbles */}
-          <div className="h-16" />
-        </div>
-
-        {/* Requirements - card style */}
-        <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 dark:from-dark-surface dark:to-dark-surface rounded-2xl p-6 -ml-6 max-w-[calc(36rem+2.5rem+11rem+1.5rem)] mb-6">
-          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Requirements</h3>
-          
-          <div className="flex gap-6">
-            {/* Bullet points */}
-            <ul className="space-y-2">
+          {/* Requirements */}
+          <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 rounded-xl p-4 mb-6 -mx-2">
+            <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Requirements</h3>
+            <ul className="space-y-2 mb-4">
               {campaign.guidelines.map((guideline, idx) => (
-                <li key={idx} className="text-base text-foreground font-jakarta flex items-start gap-2">
-                  <span className="text-foreground">•</span>
+                <li key={idx} className="text-sm text-black font-jakarta flex items-start gap-2">
+                  <span className="text-black">•</span>
                   {guideline}
                 </li>
               ))}
             </ul>
-
-            {/* Example pictures - always show 2 slots */}
-            <div className="flex gap-2 flex-shrink-0">
-              {[0, 1].map((i) => {
-                const img = campaign.exampleImages?.[i];
-                return img ? (
-                  <div 
-                    key={i}
-                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg overflow-hidden"
-                  >
+            
+            {campaign.exampleImages && campaign.exampleImages.length > 0 && (
+              <div className="flex gap-2">
+                {campaign.exampleImages.slice(0, 2).map((img, i) => (
+                  <div key={i} className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                     <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
                   </div>
-                ) : (
-                  <div 
-                    key={i}
-                    className="w-28 h-28 lg:w-36 lg:h-36 rounded-lg bg-muted/50 flex items-center justify-center"
-                  >
-                    <span className="text-sm text-foreground/60">Example {i + 1}</span>
-                  </div>
-                );
-              })}
-            </div>
-        </div>
-        </div>
-
-        {/* Inspiration TikTok Videos */}
-        <div className="mt-6 mb-6">
-          <h3 className="text-base font-semibold text-foreground mb-4 font-montserrat">Inspiration</h3>
-          <div className="flex gap-3">
-            {[0, 1, 2].map((i) => (
-              <div 
-                key={i}
-                className="w-24 aspect-[9/16] rounded-lg bg-muted/50 flex items-center justify-center border border-border/50"
-              >
-                <span className="text-xs text-foreground/60 text-center px-1">TikTok {i + 1}</span>
+                ))}
               </div>
-            ))}
+            )}
           </div>
         </div>
 
-        {/* CTA */}
-        <Button 
-          size="lg" 
-          className="w-full py-5 text-base font-bold rounded-full bg-black hover:bg-black/80 text-white"
-        >
-          Submit Content
-        </Button>
+        {/* Fixed CTA - glass styled */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-gradient-to-t from-white via-white to-transparent">
+          <div className="flex items-center justify-center gap-3">
+            <button 
+              className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2 flex-1"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                border: '1.5px solid rgba(255,255,255,0.9)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                backdropFilter: 'blur(12px)',
+                color: 'black',
+              }}
+            >
+              <Plus className="h-4 w-4" />
+              Submit Content
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,25 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Bookmark, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
-
-interface Campaign {
-  id: string;
-  brand: string;
-  title: string;
-  description: string;
-  ratePerThousand: number;
-  maxEarnings: number;
-  logo: string;
-  image: string;
-  contentType: string;
-  productVisibility: string;
-  videoLength: string;
-  guidelines: string[];
-  tiers: { minViews: number; maxViews: number | null; rate: number }[];
-  exampleImages?: string[];
-}
+import { Campaign } from '@/data/campaigns';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -27,12 +10,6 @@ interface CampaignCardProps {
   onSelect: (campaign: Campaign) => void;
   onToggleFavorite: (campaignId: string, e: React.MouseEvent) => void;
 }
-
-// Helper to generate pseudo-random stats based on campaign ID
-const getRandomStat = (campaignId: string, type: 'saves' | 'shares') => {
-  const seed = campaignId.charCodeAt(0) + campaignId.charCodeAt(campaignId.length - 1) + (type === 'shares' ? 100 : 0);
-  return 500 + (seed * 17) % 1500;
-};
 
 const CampaignCard: React.FC<CampaignCardProps> = ({
   campaign,
@@ -86,12 +63,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setIsExpanded(false);
   }, [campaign.id]);
 
-  // Mobile card: image fills most of space, white node attached to bottom of image
   return (
-    <div className="h-[calc(100dvh-80px)] md:h-screen relative flex flex-col items-center justify-start md:flex-row md:items-center md:justify-start snap-start snap-always md:py-6 md:pl-16 md:gap-8">
-      {/* Mobile: Card container with image + overlapping white node */}
-      <div className="md:hidden absolute top-14 left-3 right-3 bottom-3">
-        {/* Image section - fully rounded corners matching pill shape */}
+    <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
+      {/* Card container with image + overlapping white node */}
+      <div className="absolute top-14 left-3 right-3 bottom-3">
+        {/* Image section */}
         <div
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
@@ -111,19 +87,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           
           {/* Mobile overlay content - description + company logo */}
           <div className={`absolute inset-x-0 bottom-[88px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            {/* Gradient overlay */}
             <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
-            
-            {/* Content container */}
             <div className="relative flex items-start justify-between gap-3">
-              {/* Description - left side */}
               <div className="flex-1">
                 <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
                   {campaign.description}
                 </p>
               </div>
-              
-              {/* Company logo - vertically aligned with text */}
               <div className="h-[36px] w-[36px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-1">
                 <img
                   src={campaign.logo}
@@ -143,7 +113,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`md:hidden absolute rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
+        className={`absolute rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
         style={{
           height: isExpanded ? 'auto' : '80px',
           maxHeight: isExpanded ? `calc(100dvh - 136px)` : '80px',
@@ -153,11 +123,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           border: '1.5px solid rgba(255,255,255,0.8)',
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
-        >
+      >
         {!isExpanded ? (
-          /* Collapsed state - earnings on left, TikTok on right */
+          /* Collapsed state */
           <div className="px-4 flex items-center justify-between h-[80px]">
-            {/* Green pill for earnings with glass effect */}
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">
                 {campaign.maxEarnings.toLocaleString()}
@@ -166,8 +135,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 sek
               </span>
             </div>
-
-            {/* TikTok logo with glass effect */}
             <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <img
                 src={tiktokIcon}
@@ -177,35 +144,26 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         ) : (
-          /* Expanded state - full campaign detail */
+          /* Expanded state */
           <div className="h-full flex flex-col overflow-hidden animate-fade-in" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
-            {/* Drag handle indicator */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 bg-black/20 rounded-full" />
             </div>
             
-            {/* Header with brand */}
             <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
               <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                <img
-                  src={campaign.logo}
-                  alt={campaign.brand}
-                  className="w-full h-full object-cover"
-                />
+                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
               </div>
               <h2 className="text-base font-bold text-black font-montserrat flex-1">
                 {campaign.brand}
               </h2>
             </div>
 
-            {/* Scrollable content */}
             <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
-              {/* Description */}
               <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
                 {campaign.description}
               </p>
 
-              {/* Requirements - glass effect */}
               <div 
                 className="rounded-xl p-4 mb-4"
                 style={{
@@ -224,7 +182,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   ))}
                 </ul>
 
-                {/* Example images */}
                 {campaign.exampleImages && campaign.exampleImages.length > 0 && (
                   <div className="flex gap-2 mt-3">
                     {campaign.exampleImages.slice(0, 2).map((img, i) => (
@@ -236,7 +193,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 )}
               </div>
 
-              {/* Payment Details - green glass effect */}
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
                 <div className="space-y-2">
@@ -261,16 +217,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </div>
             </div>
 
-            {/* Fixed CTA at bottom */}
+            {/* Fixed CTA at bottom - glass styled */}
             <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
-              <Button
-                size="lg"
-                className="h-12 px-8 text-sm font-bold rounded-full bg-black hover:bg-black/90 text-white flex items-center gap-2"
+              <button
+                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.9)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                  backdropFilter: 'blur(12px)',
+                  color: 'black',
+                }}
               >
                 <Plus className="h-4 w-4" />
                 Submit Content
-              </Button>
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -286,47 +248,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         )}
-      </div>
-      {/* Desktop: Image container */}
-      <div
-        className="hidden md:block relative md:flex-none md:h-[calc(100vh-48px)] md:aspect-[9/16] overflow-hidden cursor-pointer md:flex-shrink-0"
-      >
-        <img
-          src={campaign.image}
-          alt={campaign.brand}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      {/* Right side - Campaign info (desktop only) */}
-      <div className="hidden md:flex h-[calc(100vh-48px)] flex-col justify-between min-w-[280px] py-4">
-        <div>
-          <span className="text-sm font-medium text-muted-foreground font-montserrat">
-            {campaign.brand}
-          </span>
-          <p className="text-2xl font-bold text-foreground mt-2 font-jakarta">
-            {campaign.description}
-          </p>
-        </div>
-
-        <div className="flex items-end justify-between">
-          <div className="inline-flex items-baseline gap-1">
-            <span className="text-5xl font-bold text-foreground font-montserrat">
-              {campaign.maxEarnings.toLocaleString()}
-            </span>
-            <span className="text-xl font-semibold text-foreground font-montserrat">
-              sek
-            </span>
-          </div>
-          <button
-            onClick={(e) => onToggleFavorite(campaign.id, e)}
-            className="flex items-center justify-center p-2"
-          >
-            <Bookmark
-              className={`h-8 w-8 ${isSaved ? 'fill-foreground text-foreground' : 'text-muted-foreground'}`}
-              strokeWidth={1.5}
-            />
-          </button>
-        </div>
       </div>
     </div>
   );
