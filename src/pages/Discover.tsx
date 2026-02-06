@@ -21,6 +21,7 @@ const Discover: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [isClosingDetail, setIsClosingDetail] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
@@ -36,13 +37,18 @@ const Discover: React.FC = () => {
   };
 
   const handleBackFromDetail = () => {
-    setSelectedCampaign(null);
-    setShowPicture(false);
-    requestAnimationFrame(() => {
-      if (featuredScrollRef.current) {
-        featuredScrollRef.current.scrollTop = savedScrollPosition.current;
-      }
-    });
+    if (isClosingDetail) return;
+    setIsClosingDetail(true);
+    setTimeout(() => {
+      setSelectedCampaign(null);
+      setIsClosingDetail(false);
+      setShowPicture(false);
+      requestAnimationFrame(() => {
+        if (featuredScrollRef.current) {
+          featuredScrollRef.current.scrollTop = savedScrollPosition.current;
+        }
+      });
+    }, 400);
   };
 
   // Fetch user favorites
@@ -162,6 +168,10 @@ const Discover: React.FC = () => {
             {/* Backdrop */}
             <div
               className="absolute inset-0 bg-black/50"
+              style={{
+                opacity: isClosingDetail ? 0 : 1,
+                transition: 'opacity 0.4s ease-out',
+              }}
               onClick={handleBackFromDetail}
             />
 
@@ -172,6 +182,14 @@ const Discover: React.FC = () => {
                 }
                 100% {
                   transform: translateY(0);
+                }
+              }
+              @keyframes pill-slide-down {
+                0% {
+                  transform: translateY(0);
+                }
+                100% {
+                  transform: translateY(100%);
                 }
               }
             `}</style>
@@ -185,7 +203,9 @@ const Discover: React.FC = () => {
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow:
                   '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                animation: 'pill-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+                animation: isClosingDetail
+                  ? 'pill-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
+                  : 'pill-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -301,7 +321,7 @@ const Discover: React.FC = () => {
                 </div>
 
                 {/* Fixed CTA at bottom - blue Submit, white glass Save */}
-                <div className="px-5 pb-8 pt-3 flex items-center justify-center gap-3 flex-shrink-0">
+                <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
                   <button
                     className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                     style={{
@@ -363,12 +383,15 @@ const Discover: React.FC = () => {
                     }}
                   />
                   
-                  {/* Brand name + logo at top */}
+                  {/* Top shadow gradient for text readability */}
+                  <div className="absolute inset-x-0 top-0 h-[80px] bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none rounded-t-[32px]" />
+                  
+                  {/* Brand name + logo at top - logo on left */}
                   <div className="absolute top-3 left-3 right-3 flex items-center gap-2">
-                    <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                     <div className="h-[22px] w-[22px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
                       <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
                     </div>
+                    <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   </div>
                   
                   {/* Description text above pill */}
