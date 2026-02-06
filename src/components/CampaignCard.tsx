@@ -116,7 +116,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         className={`absolute rounded-[48px] overflow-hidden z-10 ${isExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
         style={{
           height: isExpanded ? 'auto' : '80px',
-          maxHeight: isExpanded ? `calc(100dvh - 136px)` : '80px',
+          maxHeight: isExpanded ? `calc(100dvh - 148px)` : '80px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -145,7 +145,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
         ) : (
           /* Expanded state */
-          <div className="h-full flex flex-col overflow-hidden animate-fade-in" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
+          <div className="h-full flex flex-col overflow-hidden animate-fade-in" style={{ maxHeight: 'calc(100dvh - 148px)' }}>
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 bg-black/20 rounded-full" />
             </div>
