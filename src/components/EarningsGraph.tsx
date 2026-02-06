@@ -17,6 +17,11 @@ const formatViews = (views: number): string => {
   return views.toString();
 };
 
+const formatEarnings = (amount: number): string => {
+  if (amount >= 1000) return `${(amount / 1000).toFixed(1)}K`;
+  return amount.toLocaleString();
+};
+
 const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => {
   // Calculate cumulative earnings at each tier boundary
   const points: { views: number; earnings: number; rate: number }[] = [];
@@ -42,24 +47,27 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   }
 
   const maxViews = points[points.length - 1].views;
-  
-  // Chart dimensions
-  const chartHeight = 120;
-  const chartWidth = 100; // percentage
-  
-  // Generate SVG path
+  const chartHeight = 100;
+
+  // SVG uses viewBox 0 0 100 100, Y goes down.
+  // earnings=0 → y=100 (bottom), earnings=max → y=0 (top)
   const svgPoints = points.map((p) => ({
     x: maxViews > 0 ? (p.views / maxViews) * 100 : 0,
-    y: maxEarnings > 0 ? ((1 - p.earnings / maxEarnings) * 100) : 100,
+    y: maxEarnings > 0 ? (1 - p.earnings / maxEarnings) * 100 : 100,
+    earnings: p.earnings,
+    views: p.views,
   }));
 
-  // Create the line path
+  // Line path
   const linePath = svgPoints
     .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
     .join(' ');
 
-  // Create the fill path (closed area under curve)
+  // Fill under the line
   const fillPath = `${linePath} L ${svgPoints[svgPoints.length - 1].x} 100 L 0 100 Z`;
+
+  // Unique gradient ID per instance
+  const gradientId = `earningsGrad-${maxEarnings}`;
 
   return (
     <div
@@ -75,17 +83,16 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
 
       {/* Chart */}
       <div className="relative" style={{ height: chartHeight }}>
-        {/* Horizontal grid lines */}
-        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => (
-          <div
-            key={fraction}
-            className="absolute left-0 right-0"
-            style={{
-              top: `${(1 - fraction) * 100}%`,
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
-            }}
-          />
-        ))}
+        {/* Bottom axis line */}
+        <div
+          className="absolute left-0 right-0 bottom-0"
+          style={{ borderBottom: '1px solid rgba(255,255,255,0.15)' }}
+        />
+        {/* Right axis line */}
+        <div
+          className="absolute top-0 bottom-0 right-0"
+          style={{ borderRight: '1px solid rgba(255,255,255,0.15)' }}
+        />
 
         {/* SVG Chart */}
         <svg
@@ -94,61 +101,47 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
           className="absolute inset-0 w-full h-full"
           style={{ overflow: 'visible' }}
         >
-          {/* Gradient fill */}
           <defs>
-            <linearGradient id="earningsGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
               <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
             </linearGradient>
           </defs>
-          <path d={fillPath} fill="url(#earningsGradient)" />
+          <path d={fillPath} fill={`url(#${gradientId})`} />
           <path d={linePath} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
-          
-          {/* Data points */}
-          {svgPoints.map((p, i) => (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r="3"
-              fill="white"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
         </svg>
-      </div>
 
-      {/* Labels */}
-      <div className="flex justify-between mt-2">
-        {points.map((p, i) => (
-          <div key={i} className="flex flex-col items-center" style={{ minWidth: 0 }}>
-            <span className="text-[10px] font-bold text-white/90 font-montserrat">
-              {p.earnings.toLocaleString()}
-            </span>
-            <span className="text-[9px] text-white/50 font-jakarta">
-              {formatViews(p.views)}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Rate tiers legend */}
-      <div className="flex gap-2 mt-3 flex-wrap">
-        {tiers.map((tier, i) => (
+        {/* Waypoint dots with labels */}
+        {svgPoints.map((p, i) => (
           <div
             key={i}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+            className="absolute flex flex-col items-center"
             style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              transform: 'translate(-50%, -50%)',
             }}
           >
-            <span className="text-[10px] font-medium text-white/90 font-montserrat">
-              {tier.rate} sek/1K
-            </span>
-            <span className="text-[9px] text-white/50 font-jakarta">
-              {formatViews(tier.minViews)}-{tier.maxViews ? formatViews(tier.maxViews) : '∞'}
-            </span>
+            {/* Dot */}
+            <div
+              className="w-2 h-2 rounded-full bg-white flex-shrink-0"
+              style={{ boxShadow: '0 0 6px rgba(255,255,255,0.5)' }}
+            />
+            {/* Label - position above for most, below for first */}
+            <div
+              className="absolute flex flex-col items-center whitespace-nowrap"
+              style={{
+                bottom: i === 0 ? 'auto' : '12px',
+                top: i === 0 ? '12px' : 'auto',
+              }}
+            >
+              <span className="text-[10px] font-bold text-white font-montserrat leading-none">
+                {formatEarnings(p.earnings)} sek
+              </span>
+              <span className="text-[9px] text-white/50 font-jakarta leading-none mt-0.5">
+                {formatViews(p.views)} views
+              </span>
+            </div>
           </div>
         ))}
       </div>
