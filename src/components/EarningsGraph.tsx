@@ -18,8 +18,8 @@ const formatViews = (views: number): string => {
 };
 
 const formatEarnings = (amount: number): string => {
-  if (amount >= 1000) return `${(amount / 1000).toFixed(1)}K`;
-  return amount.toLocaleString();
+  if (amount >= 1000000) return `${(amount / 1000000).toFixed(1)}M`;
+  return amount.toLocaleString('sv-SE', { maximumFractionDigits: 0 });
 };
 
 const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => {
@@ -151,24 +151,26 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Earnings label */}
               <text
                 x={textX}
-                y={ly - 10}
+                y={ly - 4}
                 fill="white"
                 fontSize="22"
                 fontWeight="600"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
+                dominantBaseline="auto"
               >
                 {formatEarnings(p.earnings)} sek
               </text>
               {/* Views label */}
               <text
                 x={textX}
-                y={ly + 12}
+                y={ly + 18}
                 fill="rgba(255,255,255,0.6)"
                 fontSize="18"
                 fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
+                dominantBaseline="auto"
               >
                 {formatViews(p.views)} views
               </text>
