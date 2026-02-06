@@ -198,12 +198,55 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
           );
         })}
       </svg>
-
-      <p className="text-xs text-white/50 font-jakarta px-4 pb-3 pt-1 leading-relaxed">
-        You earn {formatEarnings(dataPoints[0].earnings)} sek when you first reach {formatViews(dataPoints[0].views)} views and {formatEarnings(dataPoints[1].earnings)} sek when you reach {formatViews(dataPoints[1].views)} views.
-      </p>
     </div>
   );
+};
+
+// Export helper to calculate earnings data for external use
+export const calculateEarningsData = (tiers: Tier[], maxEarnings: number) => {
+  const firstTier = tiers[0];
+  let firstEarnings = 0;
+  let firstViews = 0;
+  if (firstTier && firstTier.maxViews) {
+    const tierViews = firstTier.maxViews - firstTier.minViews;
+    firstEarnings = (tierViews / 1000) * firstTier.rate;
+    firstViews = firstTier.maxViews;
+  }
+
+  let cumEarnings = 0;
+  let totalViews = 0;
+  for (const tier of tiers) {
+    if (tier.maxViews) {
+      const tierViews = tier.maxViews - tier.minViews;
+      const tierEarnings = (tierViews / 1000) * tier.rate;
+      if (cumEarnings + tierEarnings >= maxEarnings) {
+        const remaining = maxEarnings - cumEarnings;
+        totalViews = tier.minViews + (remaining / tier.rate) * 1000;
+        break;
+      }
+      cumEarnings += tierEarnings;
+      totalViews = tier.maxViews;
+    } else {
+      const remaining = maxEarnings - cumEarnings;
+      totalViews = tier.minViews + (remaining / tier.rate) * 1000;
+    }
+  }
+
+  return {
+    first: { views: firstViews, earnings: Math.min(firstEarnings, maxEarnings) },
+    max: { views: totalViews, earnings: maxEarnings },
+  };
+};
+
+export const formatViewsForNote = (views: number): string => {
+  if (views >= 1000000) return `${(views / 1000000).toFixed(0)}M`;
+  if (views >= 1000) return `${(views / 1000).toFixed(0)}K`;
+  return views.toString();
+};
+
+export const formatEarningsForNote = (amount: number): string => {
+  if (amount >= 1000000) return `${(amount / 1000000).toFixed(1)}M`;
+  return amount.toLocaleString('sv-SE', { maximumFractionDigits: 0 });
 };
 
 export default EarningsGraph;
