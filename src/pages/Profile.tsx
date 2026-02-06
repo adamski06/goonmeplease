@@ -45,7 +45,7 @@ const ProfilePage: React.FC = () => {
       <div className="px-4 pt-5 space-y-4">
         {/* Profile Node */}
         <div
-          className="rounded-xl p-4 relative"
+          className="rounded-[32px] p-5 relative"
           style={{
             background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
             border: '1px solid rgba(0,0,0,0.06)',
@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
         >
           {/* Edit profile button - top right */}
           <button
-            className="absolute top-3 right-3 h-8 w-8 rounded-full flex items-center justify-center"
+            className="absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center"
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
               border: '1px solid rgba(0,0,0,0.08)',
@@ -65,39 +65,38 @@ const ProfilePage: React.FC = () => {
             <Pencil className="h-3.5 w-3.5 text-black/60" />
           </button>
 
-          <div className="flex items-center gap-3 mb-3">
-            <Avatar className="h-14 w-14">
+          {/* Centered avatar */}
+          <div className="flex flex-col items-center">
+            <Avatar className="h-[100px] w-[100px] mb-3">
               <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-black/10 text-black text-lg font-medium">
+              <AvatarFallback className="bg-black/10 text-black text-2xl font-medium">
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
-              {profile?.username && (
-                <p className="text-sm text-black/50 font-jakarta">@{profile.username}</p>
-              )}
-            </div>
-          </div>
-          {profile?.bio && (
-            <p className="text-sm text-black/70 font-jakarta leading-relaxed mb-3">{profile.bio}</p>
-          )}
-          
-          {/* Stats */}
-          <div className="flex gap-6 mt-2">
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-black font-montserrat">0</span>
-              <span className="text-xs text-black/50 font-jakarta">Videos made</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-black font-montserrat">0</span>
-              <span className="text-xs text-black/50 font-jakarta">Total views</span>
+            <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+            {profile?.username && (
+              <p className="text-sm text-black/50 font-jakarta mt-0.5">@{profile.username}</p>
+            )}
+            {profile?.bio && (
+              <p className="text-sm text-black/70 font-jakarta leading-relaxed mt-2 text-center">{profile.bio}</p>
+            )}
+            
+            {/* Stats - centered */}
+            <div className="flex gap-8 mt-4">
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold text-black font-montserrat">0</span>
+                <span className="text-xs text-black/50 font-jakarta">Videos made</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold text-black font-montserrat">0</span>
+                <span className="text-xs text-black/50 font-jakarta">Total views</span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Earnings Node - green */}
-        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-xl p-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
           <h3 className="text-sm font-semibold text-white mb-3 font-montserrat">Earnings</h3>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
