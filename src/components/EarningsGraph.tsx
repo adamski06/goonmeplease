@@ -42,7 +42,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const maxV = dataPoints[dataPoints.length - 1]?.views || 1;
 
   // Graph dimensions
-  const pad = { top: 32, right: 8, bottom: 8, left: 8 };
+  const pad = { top: 38, right: 8, bottom: 8, left: 8 };
   const w = 300;
   const h = 260;
   const gw = w - pad.left - pad.right;
@@ -128,21 +128,13 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         {/* Waypoint dots + leader lines + labels */}
         {waypoints.map((p, i) => {
           const isLast = i === waypoints.length - 1;
-          const leaderLen = 24;
+          const leaderLen = 34;
 
-          // First point: leader goes straight up; Last point: leader goes straight left
-          let lx: number, ly: number, anchor: string, textX: number;
-          if (isLast) {
-            lx = p.x - leaderLen;
-            ly = p.y;
-            anchor = 'end';
-            textX = lx - 4;
-          } else {
-            lx = p.x;
-            ly = p.y - leaderLen;
-            anchor = 'start';
-            textX = lx + 4;
-          }
+          // Both points: leader goes straight left
+          const lx = p.x - leaderLen;
+          const ly = p.y;
+          const anchor = 'end';
+          const textX = lx - 5;
 
           return (
             <g key={i}>
@@ -154,17 +146,17 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
                 strokeWidth="0.8"
               />
               {/* Dot glow */}
-              <circle cx={p.x} cy={p.y} r="4" fill="rgba(255,255,255,0.2)" />
+              <circle cx={p.x} cy={p.y} r="5.5" fill="rgba(255,255,255,0.2)" />
               {/* Dot */}
-              <circle cx={p.x} cy={p.y} r="2" fill="white" />
+              <circle cx={p.x} cy={p.y} r="3" fill="white" />
               {/* Leader end dot */}
               <circle cx={lx} cy={ly} r="1.5" fill="rgba(255,255,255,0.4)" />
               {/* Earnings label */}
               <text
                 x={textX}
-                y={isLast ? ly - 6 : ly - 4}
+                y={ly - 6}
                 fill="white"
-                fontSize="14"
+                fontSize="15"
                 fontWeight="600"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
@@ -174,9 +166,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Views label */}
               <text
                 x={textX}
-                y={isLast ? ly + 7 : ly + 9}
+                y={ly + 8}
                 fill="rgba(255,255,255,0.6)"
-                fontSize="12"
+                fontSize="13"
                 fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
