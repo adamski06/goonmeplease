@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import defaultAvatar from '@/assets/default-avatar.png';
 import { campaigns, Campaign } from '@/data/campaigns';
+import EarningsGraph from '@/components/EarningsGraph';
 
 const Discover: React.FC = () => {
   const { user, loading } = useAuth();
@@ -327,6 +328,9 @@ const Discover: React.FC = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Earnings Graph */}
+                    <EarningsGraph tiers={selectedCampaign.tiers} maxEarnings={selectedCampaign.maxEarnings} />
                   </div>
                 </div>
 

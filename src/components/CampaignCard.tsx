@@ -3,6 +3,7 @@ import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
+import EarningsGraph from '@/components/EarningsGraph';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -248,6 +249,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Earnings Graph */}
+                <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
               </div>
             </div>
 
