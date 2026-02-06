@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Bookmark, Plus, User } from 'lucide-react';
+import { Bookmark, Plus, User, X } from 'lucide-react';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import { supabase } from '@/integrations/supabase/client';
@@ -210,13 +210,23 @@ const Discover: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 148px)' }}>
-                {/* Drag handle indicator */}
-                <div className="flex justify-center pt-3 pb-1">
-                  <div className="w-10 h-1 bg-black/20 rounded-full" />
-                </div>
+                {/* X close button - top right */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBackFromDetail();
+                  }}
+                  className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
+                    border: '1px solid rgba(0,0,0,0.06)',
+                  }}
+                >
+                  <X className="h-4 w-4 text-black/60" />
+                </button>
 
                 {/* Header with brand - logo left of name */}
-                <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
+                <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
                   <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                     <img
                       src={selectedCampaign.logo}
