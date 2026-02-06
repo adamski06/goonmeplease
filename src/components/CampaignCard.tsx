@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Bookmark, Plus } from 'lucide-react';
+import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
@@ -169,11 +169,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               transition: 'opacity 0.35s ease-out',
             }}
           >
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 bg-black/20 rounded-full" />
-            </div>
+            {/* X close button - top right */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                triggerClose();
+              }}
+              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <X className="h-4 w-4 text-black/60" />
+            </button>
             
-            <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
+            <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
               <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                 <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
               </div>

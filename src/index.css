@@ -114,7 +114,7 @@
 
 /* Safe area utilities */
 .safe-area-top {
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: max(env(safe-area-inset-top, 0px), 20px);
 }
 
 .pt-safe {
