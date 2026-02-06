@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, User } from 'lucide-react';
+import { Settings, Pencil } from 'lucide-react';
 import defaultAvatar from '@/assets/default-avatar.png';
 
 const ProfilePage: React.FC = () => {
@@ -45,41 +45,53 @@ const ProfilePage: React.FC = () => {
       <div className="px-4 pt-5 space-y-4">
         {/* Profile Node */}
         <div
-          className="rounded-xl p-4"
+          className="rounded-xl p-4 relative"
           style={{
             background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
           }}
         >
-          <div className="flex items-start gap-3">
-            <User className="h-5 w-5 text-black/40 mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <Avatar className="h-14 w-14">
-                  <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-                  <AvatarFallback className="bg-black/10 text-black text-lg font-medium">
-                    {firstName.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
-                  {profile?.username && (
-                    <p className="text-sm text-black/50 font-jakarta">@{profile.username}</p>
-                  )}
-                </div>
-              </div>
-              {profile?.bio && (
-                <p className="text-sm text-black/70 font-jakarta leading-relaxed mb-3">{profile.bio}</p>
+          {/* Edit profile button - top right */}
+          <button
+            className="absolute top-3 right-3 h-8 w-8 rounded-full flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+              border: '1px solid rgba(0,0,0,0.08)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1)',
+              backdropFilter: 'blur(12px)',
+            }}
+          >
+            <Pencil className="h-3.5 w-3.5 text-black/60" />
+          </button>
+
+          <div className="flex items-center gap-3 mb-3">
+            <Avatar className="h-14 w-14">
+              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+              <AvatarFallback className="bg-black/10 text-black text-lg font-medium">
+                {firstName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+              {profile?.username && (
+                <p className="text-sm text-black/50 font-jakarta">@{profile.username}</p>
               )}
-              <button className="px-5 py-2 rounded-full text-xs font-semibold text-black/60 font-montserrat"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                Edit profile
-              </button>
+            </div>
+          </div>
+          {profile?.bio && (
+            <p className="text-sm text-black/70 font-jakarta leading-relaxed mb-3">{profile.bio}</p>
+          )}
+          
+          {/* Stats */}
+          <div className="flex gap-6 mt-2">
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-black font-montserrat">0</span>
+              <span className="text-xs text-black/50 font-jakarta">Videos made</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-black font-montserrat">0</span>
+              <span className="text-xs text-black/50 font-jakarta">Total views</span>
             </div>
           </div>
         </div>
