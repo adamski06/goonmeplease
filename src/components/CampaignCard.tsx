@@ -223,11 +223,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
                 style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
-                  border: '1.5px solid rgba(255,255,255,0.9)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                  backdropFilter: 'blur(12px)',
-                  color: 'black',
+                  background: 'linear-gradient(180deg, hsl(217, 91%, 55%) 0%, hsl(217, 91%, 45%) 100%)',
+                  border: '1.5px solid hsl(217, 91%, 65%)',
+                  boxShadow: '0 4px 20px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                  color: 'white',
                 }}
               >
                 <Plus className="h-4 w-4" />
@@ -238,7 +237,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   e.stopPropagation();
                   onToggleFavorite(campaign.id, e);
                 }}
-                className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center flex-shrink-0"
+                className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.9)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                  backdropFilter: 'blur(12px)',
+                }}
               >
                 <Bookmark
                   className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
