@@ -23,55 +23,51 @@ const formatEarnings = (amount: number): string => {
 };
 
 const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => {
-  const points: { views: number; earnings: number }[] = [];
-  let cumulativeEarnings = 0;
+  // Calculate data points from tiers (skip 0,0 origin label)
+  const dataPoints: { views: number; earnings: number }[] = [];
+  let cumEarnings = 0;
 
   for (const tier of tiers) {
     if (tier.maxViews) {
       const tierViews = tier.maxViews - tier.minViews;
-      const tierEarnings = (tierViews / 1000) * tier.rate;
-      cumulativeEarnings += tierEarnings;
-      points.push({ views: tier.maxViews, earnings: Math.min(cumulativeEarnings, maxEarnings) });
+      cumEarnings += (tierViews / 1000) * tier.rate;
+      dataPoints.push({ views: tier.maxViews, earnings: Math.min(cumEarnings, maxEarnings) });
     } else {
-      const remainingEarnings = maxEarnings - cumulativeEarnings;
-      const additionalViews = (remainingEarnings / tier.rate) * 1000;
-      const totalViews = tier.minViews + additionalViews;
-      points.push({ views: totalViews, earnings: maxEarnings });
+      const remaining = maxEarnings - cumEarnings;
+      const addViews = (remaining / tier.rate) * 1000;
+      dataPoints.push({ views: tier.minViews + addViews, earnings: maxEarnings });
     }
   }
 
-  const maxViewsVal = points[points.length - 1]?.views || 1;
-  const chartHeight = 200;
+  const maxV = dataPoints[dataPoints.length - 1]?.views || 1;
 
-  // Add padding so dots/labels aren't clipped
-  const padLeft = 8;
-  const padRight = 8;
-  const padTop = 8;
-  const padBottom = 8;
-  const plotW = 100 - padLeft - padRight;
-  const plotH = 100 - padTop - padBottom;
-
-  // Map data to SVG coordinates (Y: 0=top, 100=bottom → earnings go UP)
-  const svgPoints = points.map((p) => ({
-    x: padLeft + (p.views / maxViewsVal) * plotW,
-    y: padTop + (1 - p.earnings / maxEarnings) * plotH,
+  // Convert to 0-1 range (x: left→right, y: 0=bottom, 1=top)
+  const normalized = dataPoints.map((p) => ({
+    nx: p.views / maxV,
+    ny: p.earnings / maxEarnings,
     earnings: p.earnings,
     views: p.views,
   }));
 
-  // Start line from bottom-left of plot area
-  const originX = padLeft;
-  const originY = padTop + plotH; // bottom
+  // SVG viewBox: 0,0 is top-left. We use a 200x200 viewBox for precision.
+  const vw = 200;
+  const vh = 200;
+  const margin = { top: 10, right: 10, bottom: 10, left: 10 };
+  const pw = vw - margin.left - margin.right;
+  const ph = vh - margin.top - margin.bottom;
 
-  const allPoints = [{ x: originX, y: originY }, ...svgPoints];
+  const toSvg = (nx: number, ny: number) => ({
+    sx: margin.left + nx * pw,
+    sy: margin.top + (1 - ny) * ph, // flip Y
+  });
 
-  const linePath = allPoints
-    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
-    .join(' ');
+  const origin = toSvg(0, 0);
+  const svgPts = normalized.map((p) => ({ ...toSvg(p.nx, p.ny), ...p }));
 
-  const fillPath = `${linePath} L ${allPoints[allPoints.length - 1].x} ${originY} L ${originX} ${originY} Z`;
-
-  const gradientId = `earningsGrad-${maxEarnings}-${tiers.length}`;
+  // Build paths
+  const lineCoords = [origin, ...svgPts.map((p) => ({ sx: p.sx, sy: p.sy }))];
+  const linePath = lineCoords.map((c, i) => `${i === 0 ? 'M' : 'L'}${c.sx},${c.sy}`).join(' ');
+  const fillPath = `${linePath} L${lineCoords[lineCoords.length - 1].sx},${origin.sy} L${origin.sx},${origin.sy} Z`;
 
   return (
     <div
@@ -85,68 +81,64 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         Earnings by views
       </h4>
 
-      <div className="relative" style={{ height: chartHeight }}>
+      <svg viewBox={`0 0 ${vw} ${vh}`} className="w-full" style={{ height: 200, display: 'block' }}>
+        <defs>
+          <linearGradient id="egFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.2)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+          </linearGradient>
+        </defs>
+
         {/* Bottom axis */}
-        <div className="absolute left-0 right-0 bottom-0" style={{ borderBottom: '1px solid rgba(255,255,255,0.15)' }} />
+        <line x1={margin.left} y1={origin.sy} x2={vw - margin.right} y2={origin.sy} stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
         {/* Right axis */}
-        <div className="absolute top-0 bottom-0 right-0" style={{ borderRight: '1px solid rgba(255,255,255,0.15)' }} />
+        <line x1={vw - margin.right} y1={margin.top} x2={vw - margin.right} y2={origin.sy} stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
 
-        {/* SVG */}
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="absolute inset-0 w-full h-full"
-          style={{ overflow: 'visible' }}
-        >
-          <defs>
-            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.2)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
-            </linearGradient>
-          </defs>
-          <path d={fillPath} fill={`url(#${gradientId})`} />
-          <path d={linePath} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
-        </svg>
+        {/* Fill area */}
+        <path d={fillPath} fill="url(#egFill)" />
+        {/* Line */}
+        <path d={linePath} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" />
 
-        {/* Waypoint dots with labels (skip origin, only show tier boundaries) */}
-        {svgPoints.map((p, i) => {
-          // Position label: last point → left side, others → right side
-          const isLast = i === svgPoints.length - 1;
+        {/* Waypoint dots + labels */}
+        {svgPts.map((p, i) => {
+          const isLast = i === svgPts.length - 1;
+          // Label position: place to the left for last point, right for others
+          const labelX = isLast ? p.sx - 4 : p.sx + 4;
+          const anchor = isLast ? 'end' : 'start';
+
           return (
-            <div
-              key={i}
-              className="absolute"
-              style={{
-                left: `${p.x}%`,
-                top: `${p.y}%`,
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
+            <g key={i}>
+              {/* Glow */}
+              <circle cx={p.sx} cy={p.sy} r="4" fill="rgba(255,255,255,0.15)" />
               {/* Dot */}
-              <div
-                className="w-2.5 h-2.5 rounded-full bg-white"
-                style={{ boxShadow: '0 0 8px rgba(255,255,255,0.4)' }}
-              />
-              {/* Label */}
-              <div
-                className="absolute whitespace-nowrap flex flex-col"
-                style={{
-                  ...(isLast
-                    ? { right: '16px', top: '50%', transform: 'translateY(-50%)', alignItems: 'flex-end' }
-                    : { left: '16px', top: '50%', transform: 'translateY(-50%)', alignItems: 'flex-start' }),
-                }}
+              <circle cx={p.sx} cy={p.sy} r="2.5" fill="white" />
+              {/* Earnings label */}
+              <text
+                x={labelX}
+                y={p.sy - 4}
+                fill="white"
+                fontSize="7"
+                fontWeight="700"
+                fontFamily="Montserrat, sans-serif"
+                textAnchor={anchor}
               >
-                <span className="text-[11px] font-bold text-white font-montserrat leading-none">
-                  {formatEarnings(p.earnings)} sek
-                </span>
-                <span className="text-[9px] text-white/50 font-jakarta leading-none mt-0.5">
-                  {formatViews(p.views)} views
-                </span>
-              </div>
-            </div>
+                {formatEarnings(p.earnings)} sek
+              </text>
+              {/* Views label */}
+              <text
+                x={labelX}
+                y={p.sy + 5}
+                fill="rgba(255,255,255,0.5)"
+                fontSize="5.5"
+                fontFamily="Plus Jakarta Sans, sans-serif"
+                textAnchor={anchor}
+              >
+                {formatViews(p.views)} views
+              </text>
+            </g>
           );
         })}
-      </div>
+      </svg>
     </div>
   );
 };
