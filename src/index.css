@@ -562,3 +562,16 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Portrait orientation lock overlay */
+@media (orientation: landscape) and (max-height: 600px) {
+  .landscape-lock-overlay {
+    display: flex !important;
+  }
+}
+
+@media (orientation: portrait), (min-height: 601px) {
+  .landscape-lock-overlay {
+    display: none !important;
+  }
+}
