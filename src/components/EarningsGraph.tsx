@@ -51,20 +51,41 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const ox = pad.left;
   const oy = pad.top + gh;
 
-  // End point of the straight line (max earnings, max views) — top-right area
+  // End point (max earnings, max views) — top-right area
   const endX = pad.left + gw;
   const endY = pad.top;
 
-  // ONE straight line from origin to end
-  const linePath = `M${ox},${oy} L${endX},${endY}`;
-  const fillPath = `${linePath} L${endX},${oy} Z`;
+  // Curved line using quadratic bezier — control point pulls curve down-right for a nice arc
+  const cpX = ox + gw * 0.65;
+  const cpY = oy - gh * 0.15;
+  const curvePath = `M${ox},${oy} Q${cpX},${cpY} ${endX},${endY}`;
+  const fillPath = `${curvePath} L${endX},${oy} Z`;
 
-  // Place waypoints ON the straight line at each tier's proportional position
+  // Place waypoints ON the curve using quadratic bezier interpolation
+  const quadBezier = (t: number) => {
+    const x = (1 - t) * (1 - t) * ox + 2 * (1 - t) * t * cpX + t * t * endX;
+    const y = (1 - t) * (1 - t) * oy + 2 * (1 - t) * t * cpY + t * t * endY;
+    return { x, y };
+  };
+
+  // Tangent direction at point t (for the leader line direction)
+  const quadTangent = (t: number) => {
+    const dx = 2 * (1 - t) * (cpX - ox) + 2 * t * (endX - cpX);
+    const dy = 2 * (1 - t) * (cpY - oy) + 2 * t * (endY - cpY);
+    const len = Math.sqrt(dx * dx + dy * dy);
+    return { dx: dx / len, dy: dy / len };
+  };
+
   const waypoints = dataPoints.map((p) => {
-    const t = p.views / maxV; // 0-1 along the line
+    const t = p.views / maxV;
+    const pos = quadBezier(t);
+    const tan = quadTangent(t);
+    // Normal perpendicular to tangent (pointing upward/left from the curve)
+    const nx = -tan.dy;
+    const ny = tan.dx;
     return {
-      x: ox + t * (endX - ox),
-      y: oy + t * (endY - oy),
+      ...pos,
+      nx, ny,
       earnings: p.earnings,
       views: p.views,
     };
@@ -97,39 +118,57 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
 
         {/* Fill */}
         <path d={fillPath} fill="url(#egFill)" />
-        {/* Line */}
-        <path d={linePath} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
+        {/* Curved line */}
+        <path d={curvePath} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
 
         {/* Origin dot - no label */}
         <circle cx={ox} cy={oy} r="3" fill="rgba(255,255,255,0.2)" />
         <circle cx={ox} cy={oy} r="1.5" fill="white" />
 
-        {/* Waypoint dots + labels */}
+        {/* Waypoint dots + leader lines + labels */}
         {waypoints.map((p, i) => {
           const isLast = i === waypoints.length - 1;
-          const labelX = isLast ? p.x - 8 : p.x + 8;
+          // Leader line: extend from dot along the normal (perpendicular to curve)
+          const leaderLen = 22;
+          const lx = p.x + p.nx * leaderLen;
+          const ly = p.y + p.ny * leaderLen;
+          // Labels at end of leader
           const anchor = isLast ? 'end' : 'start';
+          const textX = isLast ? lx - 4 : lx + 4;
 
           return (
             <g key={i}>
+              {/* Leader line */}
+              <line
+                x1={p.x} y1={p.y}
+                x2={lx} y2={ly}
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="0.8"
+              />
+              {/* Dot glow */}
               <circle cx={p.x} cy={p.y} r="4" fill="rgba(255,255,255,0.2)" />
+              {/* Dot */}
               <circle cx={p.x} cy={p.y} r="2" fill="white" />
+              {/* Leader end dot */}
+              <circle cx={lx} cy={ly} r="1.5" fill="rgba(255,255,255,0.4)" />
+              {/* Earnings label */}
               <text
-                x={labelX}
-                y={p.y - 7}
+                x={textX}
+                y={ly - 5}
                 fill="white"
-                fontSize="14"
+                fontSize="13"
                 fontWeight="700"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
               >
                 {formatEarnings(p.earnings)} sek
               </text>
+              {/* Views label */}
               <text
-                x={labelX}
-                y={p.y + 7}
+                x={textX}
+                y={ly + 7}
                 fill="rgba(255,255,255,0.5)"
-                fontSize="11"
+                fontSize="10"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
               >
