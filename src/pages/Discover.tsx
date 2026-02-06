@@ -169,11 +169,9 @@ const Discover: React.FC = () => {
               @keyframes pill-slide-up {
                 0% {
                   transform: translateY(100%);
-                  opacity: 0;
                 }
                 100% {
                   transform: translateY(0);
-                  opacity: 1;
                 }
               }
             `}</style>
@@ -182,7 +180,7 @@ const Discover: React.FC = () => {
             <div
               className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
               style={{
-                maxHeight: 'calc(100dvh - 136px)',
+                maxHeight: 'calc(100dvh - 148px)',
                 background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
                 border: '1.5px solid rgba(255,255,255,0.8)',
                 boxShadow:
@@ -191,7 +189,7 @@ const Discover: React.FC = () => {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 136px)' }}>
+              <div className="h-full flex flex-col overflow-hidden" style={{ maxHeight: 'calc(100dvh - 148px)' }}>
                 {/* Drag handle indicator */}
                 <div className="flex justify-center pt-3 pb-1">
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
