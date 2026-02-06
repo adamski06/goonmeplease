@@ -128,13 +128,21 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         {/* Waypoint dots + leader lines + labels */}
         {waypoints.map((p, i) => {
           const isLast = i === waypoints.length - 1;
-          // Leader line: extend from dot along the normal (perpendicular to curve)
-          const leaderLen = 22;
-          const lx = p.x + p.nx * leaderLen;
-          const ly = p.y + p.ny * leaderLen;
-          // Labels at end of leader
-          const anchor = isLast ? 'end' : 'start';
-          const textX = isLast ? lx - 4 : lx + 4;
+          const leaderLen = 24;
+
+          // First point: leader goes straight up; Last point: leader goes straight left
+          let lx: number, ly: number, anchor: string, textX: number;
+          if (isLast) {
+            lx = p.x - leaderLen;
+            ly = p.y;
+            anchor = 'end';
+            textX = lx - 4;
+          } else {
+            lx = p.x;
+            ly = p.y - leaderLen;
+            anchor = 'start';
+            textX = lx + 4;
+          }
 
           return (
             <g key={i}>
@@ -154,10 +162,10 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Earnings label */}
               <text
                 x={textX}
-                y={ly - 5}
+                y={isLast ? ly - 6 : ly - 4}
                 fill="white"
-                fontSize="13"
-                fontWeight="700"
+                fontSize="14"
+                fontWeight="600"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor={anchor}
               >
@@ -166,9 +174,10 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Views label */}
               <text
                 x={textX}
-                y={ly + 7}
-                fill="rgba(255,255,255,0.5)"
-                fontSize="10"
+                y={isLast ? ly + 7 : ly + 9}
+                fill="rgba(255,255,255,0.6)"
+                fontSize="12"
+                fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor={anchor}
               >
