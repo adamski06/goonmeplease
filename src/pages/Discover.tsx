@@ -315,9 +315,9 @@ const Discover: React.FC = () => {
                   <button
                     className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                     style={{
-                      background: 'linear-gradient(180deg, hsl(217, 91%, 55%) 0%, hsl(217, 91%, 45%) 100%)',
-                      border: '1.5px solid hsl(217, 91%, 65%)',
-                      boxShadow: '0 4px 20px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                      background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+                      border: '1.5px solid rgba(60,60,60,0.6)',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)',
                       color: 'white',
                     }}
                   >
@@ -373,22 +373,20 @@ const Discover: React.FC = () => {
                     }}
                   />
                   
-                  {/* Brand name top left */}
-                  <span className="absolute top-3 left-3 text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
-                  
-                  {/* Description + company logo above pill */}
-                  <div className="absolute inset-x-0 bottom-[60px] px-3">
-                    <div className="absolute inset-x-0 bottom-[-14px] h-[90px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
-                    <div className="relative flex items-start gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg">
-                          {campaign.description}
-                        </p>
-                      </div>
-                      <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-0.5">
-                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-                      </div>
+                  {/* Brand name + logo at top */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center gap-2">
+                    <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
+                    <div className="h-[22px] w-[22px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
+                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
                     </div>
+                  </div>
+                  
+                  {/* Description text above pill */}
+                  <div className="absolute inset-x-0 bottom-[62px] px-3">
+                    <div className="absolute inset-x-0 bottom-[-14px] h-[90px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
+                    <p className="relative text-sm font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg">
+                      {campaign.description}
+                    </p>
                   </div>
                   
                   {/* Bottom pill */}
