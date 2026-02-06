@@ -205,11 +205,8 @@ const Discover: React.FC = () => {
                   <div className="w-10 h-1 bg-black/20 rounded-full" />
                 </div>
 
-                {/* Header with brand - logo to right of name */}
+                {/* Header with brand - logo left of name */}
                 <div className="flex items-center gap-3 px-5 pt-2 pb-3 border-b border-black/10">
-                  <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                    {selectedCampaign.brand}
-                  </h2>
                   <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                     <img
                       src={selectedCampaign.logo}
@@ -217,6 +214,9 @@ const Discover: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
+                  <h2 className="text-base font-bold text-black font-montserrat flex-1">
+                    {selectedCampaign.brand}
+                  </h2>
                 </div>
 
                 {/* Scrollable content */}
@@ -374,14 +374,21 @@ const Discover: React.FC = () => {
                   />
                   
                   {/* Brand name top left */}
-                  <span className="absolute top-3 left-3 text-[10px] font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
+                  <span className="absolute top-3 left-3 text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   
-                  {/* Description text above pill */}
-                  <div className="absolute inset-x-0 bottom-[56px] px-3">
-                    <div className="absolute inset-x-0 bottom-[-10px] h-[80px] bg-gradient-to-t from-black/60 via-black/30 to-transparent pointer-events-none" />
-                    <p className="relative text-[10px] text-white font-medium font-jakarta line-clamp-2 drop-shadow-lg">
-                      {campaign.description}
-                    </p>
+                  {/* Description + company logo above pill */}
+                  <div className="absolute inset-x-0 bottom-[60px] px-3">
+                    <div className="absolute inset-x-0 bottom-[-14px] h-[90px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
+                    <div className="relative flex items-start gap-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg">
+                          {campaign.description}
+                        </p>
+                      </div>
+                      <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-0.5">
+                        <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                      </div>
+                    </div>
                   </div>
                   
                   {/* Bottom pill */}
