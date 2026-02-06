@@ -235,19 +235,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                     <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
                     <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
-                    <span className="text-sm font-bold text-white font-montserrat">{campaign.ratePerThousand} sek</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-white/80 font-jakarta">Platform</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
-                      <div className="w-4 h-4 rounded-full overflow-hidden">
-                        <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Earnings Graph */}
