@@ -3,17 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings } from 'lucide-react';
+import { Settings, User } from 'lucide-react';
 import defaultAvatar from '@/assets/default-avatar.png';
-
-const mockAds = [
-  { id: '1', views: '12.3K' },
-  { id: '2', views: '8.7K' },
-  { id: '3', views: '45.2K' },
-  { id: '4', views: '3.1K' },
-  { id: '5', views: '67.8K' },
-  { id: '6', views: '22.4K' },
-];
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
@@ -50,50 +41,75 @@ const ProfilePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Profile Info - TikTok style centered */}
-      <div className="flex flex-col items-center pt-6 pb-4">
-        {/* Avatar */}
-        <Avatar className="h-24 w-24 mb-3">
-          <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-          <AvatarFallback className="bg-black/10 text-black text-2xl font-medium">
-            {firstName.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+      {/* Content */}
+      <div className="px-4 pt-5 space-y-4">
+        {/* Profile Node */}
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <User className="h-5 w-5 text-black/40 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <Avatar className="h-14 w-14">
+                  <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+                  <AvatarFallback className="bg-black/10 text-black text-lg font-medium">
+                    {firstName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+                  {profile?.username && (
+                    <p className="text-sm text-black/50 font-jakarta">@{profile.username}</p>
+                  )}
+                </div>
+              </div>
+              {profile?.bio && (
+                <p className="text-sm text-black/70 font-jakarta leading-relaxed mb-3">{profile.bio}</p>
+              )}
+              <button className="px-5 py-2 rounded-full text-xs font-semibold text-black/60 font-montserrat"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                }}
+              >
+                Edit profile
+              </button>
+            </div>
+          </div>
+        </div>
 
-        {/* Name */}
-        <h1 className="text-lg font-bold text-black">{profile?.full_name || 'User'}</h1>
-        
-        {/* Username if different */}
-        {profile?.username && (
-          <p className="text-sm text-black/50 mt-0.5">@{profile.username}</p>
-        )}
-
-        {/* Bio */}
-        {profile?.bio && (
-          <p className="text-sm text-black text-center px-8 mt-4 max-w-xs">{profile.bio}</p>
-        )}
-
-        {/* Edit Profile Button */}
-        <button className="mt-4 px-6 py-2 bg-black/5 rounded-md text-sm font-semibold text-black">
-          Edit profile
-        </button>
-      </div>
-
-      {/* Ads Grid - 3 columns TikTok style */}
-      <div className="px-0.5">
-        <h3 className="text-sm font-semibold text-black/60 px-4 py-3">Ads Created</h3>
-        <div className="grid grid-cols-3 gap-0.5">
-          {mockAds.map((ad) => (
-            <div key={ad.id} className="relative aspect-[9/16] bg-black/[0.03]">
-              {/* Views overlay */}
-              <div className="absolute bottom-1 left-1 flex items-center gap-1">
-                <svg className="h-3 w-3 text-black/30" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                <span className="text-xs text-black/30 font-medium">{ad.views}</span>
+        {/* Earnings Node - green */}
+        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-xl p-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+          <h3 className="text-sm font-semibold text-white mb-3 font-montserrat">Earnings</h3>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-white/80 font-jakarta">Total earned</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold text-white font-montserrat">0</span>
+                <span className="text-sm text-white/80 font-montserrat">sek</span>
               </div>
             </div>
-          ))}
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-white/80 font-jakarta">Pending</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-base font-bold text-white font-montserrat">0</span>
+                <span className="text-sm text-white/80 font-montserrat">sek</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-white/80 font-jakarta">Paid out</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-base font-bold text-white font-montserrat">0</span>
+                <span className="text-sm text-white/80 font-montserrat">sek</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -110,7 +126,7 @@ const ProfilePage: React.FC = () => {
             <span className="text-[10px] text-black/40">Home</span>
           </button>
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/discover')}
             className="flex flex-col items-center gap-1 pt-1 w-12"
           >
             <svg className="h-6 w-6 text-black/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
