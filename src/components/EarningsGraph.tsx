@@ -198,6 +198,10 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
           );
         })}
       </svg>
+
+      <p className="text-xs text-white/50 font-jakarta px-4 pb-3 pt-1 leading-relaxed">
+        You earn {formatEarnings(dataPoints[0].earnings)} sek when you first reach {formatViews(dataPoints[0].views)} views and {formatEarnings(dataPoints[1].earnings)} sek when you reach {formatViews(dataPoints[1].views)} views.
+      </p>
     </div>
   );
 };
