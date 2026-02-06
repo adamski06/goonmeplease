@@ -40,33 +40,35 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   }
 
   const maxV = dataPoints[dataPoints.length - 1]?.views || 1;
-  const lastPoint = dataPoints[dataPoints.length - 1];
-  const firstPoint = dataPoints[0];
 
-  // Simple graph: straight line from first tier endpoint to last
-  // Graph drawing area with padding for labels
+  // Graph dimensions
   const pad = { top: 32, right: 8, bottom: 8, left: 8 };
   const w = 300;
   const h = 260;
   const gw = w - pad.left - pad.right;
   const gh = h - pad.top - pad.bottom;
 
-  // Origin at bottom-left, first point somewhere up-left, last point at top-right
   const ox = pad.left;
-  const oy = pad.top + gh; // bottom
+  const oy = pad.top + gh;
 
-  // Normalize points
-  const pts = dataPoints.map((p) => ({
-    x: pad.left + (p.views / maxV) * gw,
-    y: pad.top + (1 - p.earnings / maxEarnings) * gh,
-    earnings: p.earnings,
-    views: p.views,
-  }));
+  // End point of the straight line (max earnings, max views) — top-right area
+  const endX = pad.left + gw;
+  const endY = pad.top;
 
-  // Line from origin to each point
-  const allPts = [{ x: ox, y: oy }, ...pts];
-  const linePath = allPts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
-  const fillPath = `${linePath} L${allPts[allPts.length - 1].x},${oy} L${ox},${oy} Z`;
+  // ONE straight line from origin to end
+  const linePath = `M${ox},${oy} L${endX},${endY}`;
+  const fillPath = `${linePath} L${endX},${oy} Z`;
+
+  // Place waypoints ON the straight line at each tier's proportional position
+  const waypoints = dataPoints.map((p) => {
+    const t = p.views / maxV; // 0-1 along the line
+    return {
+      x: ox + t * (endX - ox),
+      y: oy + t * (endY - oy),
+      earnings: p.earnings,
+      views: p.views,
+    };
+  });
 
   return (
     <div
@@ -103,9 +105,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         <circle cx={ox} cy={oy} r="1.5" fill="white" />
 
         {/* Waypoint dots + labels */}
-        {pts.map((p, i) => {
-          const isLast = i === pts.length - 1;
-          const labelX = isLast ? p.x - 6 : p.x + 6;
+        {waypoints.map((p, i) => {
+          const isLast = i === waypoints.length - 1;
+          const labelX = isLast ? p.x - 8 : p.x + 8;
           const anchor = isLast ? 'end' : 'start';
 
           return (
