@@ -5,6 +5,7 @@ import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, Pencil, X } from 'lucide-react';
 import ProfileEditContent from '@/components/ProfileEditContent';
+import WithdrawContent from '@/components/WithdrawContent';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
@@ -26,6 +27,9 @@ const ProfilePage: React.FC = () => {
   const [profileReady, setProfileReady] = useState(false);
   const [profileStartTop, setProfileStartTop] = useState(0);
   const [profileStartBottom, setProfileStartBottom] = useState(0);
+  const [withdrawMode, setWithdrawMode] = useState(false);
+  const [withdrawSliding, setWithdrawSliding] = useState(false);
+  const [withdrawSlidingBack, setWithdrawSlidingBack] = useState(false);
 
   const openEarnings = () => {
     if (earningsRef.current) {
@@ -55,6 +59,9 @@ const ProfilePage: React.FC = () => {
     setTimeout(() => {
       setEarningsExpanded(false);
       setEarningsClosing(false);
+      setWithdrawMode(false);
+      setWithdrawSliding(false);
+      setWithdrawSlidingBack(false);
     }, 520);
   };
 
@@ -124,7 +131,7 @@ const ProfilePage: React.FC = () => {
         {/* Profile Node */}
         <div
           ref={profileRef}
-          className="rounded-[32px] p-5 relative"
+          className="rounded-[48px] p-5 relative"
           style={{
             visibility: profileExpanded ? 'hidden' : 'visible',
             background: 'linear-gradient(180deg, rgb(240,240,240) 0%, rgb(230,230,230) 100%)',
@@ -238,7 +245,7 @@ const ProfilePage: React.FC = () => {
 
           {/* Expanded content - fades in */}
           <div
-            className="h-full flex flex-col overflow-hidden"
+            className="h-full flex flex-col overflow-hidden relative"
             style={{
               opacity: earningsReady && !earningsClosing ? 1 : 0,
               transition: earningsReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
@@ -248,7 +255,16 @@ const ProfilePage: React.FC = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                closeEarnings();
+                if (withdrawMode) {
+                  // Go back from withdraw to balance view
+                  setWithdrawSlidingBack(true);
+                  setTimeout(() => {
+                    setWithdrawMode(false);
+                    setWithdrawSlidingBack(false);
+                  }, 300);
+                } else {
+                  closeEarnings();
+                }
               }}
               className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
@@ -259,49 +275,90 @@ const ProfilePage: React.FC = () => {
               <X className="h-4 w-4 text-white" />
             </button>
 
-            {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
-              <div className="flex flex-col items-center mt-4">
-                <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-                  <span className="text-2xl text-white/60 font-montserrat">sek</span>
+            {/* Balance view */}
+            <div
+              className="absolute inset-0 flex flex-col"
+              style={{
+                transform: !withdrawMode && !withdrawSliding ? 'translateX(0)' : 'translateX(-100%)',
+                opacity: !withdrawMode && !withdrawSliding ? 1 : 0,
+                transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                pointerEvents: !withdrawMode ? 'auto' : 'none',
+              }}
+            >
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
+                <div className="flex flex-col items-center mt-4">
+                  <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                    <span className="text-2xl text-white/60 font-montserrat">sek</span>
+                  </div>
                 </div>
+
+                <div className="w-full space-y-3 mt-8">
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Total earned</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Pending</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
+                  </div>
+                </div>
+
+                <div className="flex-1" />
               </div>
 
-              <div className="w-full space-y-3 mt-8">
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Total earned</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
-                </div>
-                <div className="h-px bg-white/10" />
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Pending</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
-                </div>
-                <div className="h-px bg-white/10" />
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
-                </div>
+              {/* Fixed withdraw button at bottom - pill shaped */}
+              <div className="px-6 py-5 flex-shrink-0">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setWithdrawSliding(true);
+                    setTimeout(() => {
+                      setWithdrawMode(true);
+                      setWithdrawSliding(false);
+                    }, 300);
+                  }}
+                  className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                    color: '#065f46',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                  }}
+                >
+                  Withdraw
+                </button>
               </div>
-
-              <div className="flex-1" />
             </div>
 
-            {/* Fixed withdraw button at bottom */}
-            <div className="px-6 py-5 flex-shrink-0">
-              <button
-                onClick={(e) => e.stopPropagation()}
-                className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-                  color: '#065f46',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+            {/* Withdraw view */}
+            <div
+              className="absolute inset-0"
+              style={{
+                transform: withdrawMode && !withdrawSlidingBack ? 'translateX(0)' : 'translateX(100%)',
+                opacity: withdrawMode && !withdrawSlidingBack ? 1 : 0,
+                transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                pointerEvents: withdrawMode ? 'auto' : 'none',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <WithdrawContent
+                balance={4350}
+                onBack={() => {
+                  setWithdrawSlidingBack(true);
+                  setTimeout(() => {
+                    setWithdrawMode(false);
+                    setWithdrawSlidingBack(false);
+                  }, 300);
                 }}
-              >
-                Withdraw
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -310,7 +367,7 @@ const ProfilePage: React.FC = () => {
       {/* Profile expanded overlay - fixed, animates from captured position */}
       {profileExpanded && (
         <div
-          className="fixed left-3 right-3 z-50 rounded-[32px] overflow-hidden"
+          className="fixed left-3 right-3 z-50 rounded-[48px] overflow-hidden"
           style={{
             top: profileReady ? '80px' : `${profileStartTop}px`,
             bottom: profileReady ? '88px' : `${profileStartBottom}px`,
