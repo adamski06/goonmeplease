@@ -4,23 +4,34 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, Pencil, X } from 'lucide-react';
+import ProfileEditContent from '@/components/ProfileEditContent';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+
+  // Earnings expansion state
   const earningsRef = useRef<HTMLDivElement>(null);
   const [earningsExpanded, setEarningsExpanded] = useState(false);
   const [earningsClosing, setEarningsClosing] = useState(false);
   const [earningsReady, setEarningsReady] = useState(false);
-  const [startTop, setStartTop] = useState(0);
-  const [startBottom, setStartBottom] = useState(0);
+  const [earningsStartTop, setEarningsStartTop] = useState(0);
+  const [earningsStartBottom, setEarningsStartBottom] = useState(0);
+
+  // Profile expansion state
+  const profileRef = useRef<HTMLDivElement>(null);
+  const [profileExpanded, setProfileExpanded] = useState(false);
+  const [profileClosing, setProfileClosing] = useState(false);
+  const [profileReady, setProfileReady] = useState(false);
+  const [profileStartTop, setProfileStartTop] = useState(0);
+  const [profileStartBottom, setProfileStartBottom] = useState(0);
 
   const openEarnings = () => {
     if (earningsRef.current) {
       const rect = earningsRef.current.getBoundingClientRect();
-      setStartTop(rect.top);
-      setStartBottom(window.innerHeight - rect.bottom);
+      setEarningsStartTop(rect.top);
+      setEarningsStartBottom(window.innerHeight - rect.bottom);
     }
     setEarningsExpanded(true);
     setEarningsReady(false);
@@ -38,6 +49,31 @@ const ProfilePage: React.FC = () => {
     setTimeout(() => {
       setEarningsExpanded(false);
       setEarningsClosing(false);
+    }, 500);
+  };
+
+  const openProfile = () => {
+    if (profileRef.current) {
+      const rect = profileRef.current.getBoundingClientRect();
+      setProfileStartTop(rect.top);
+      setProfileStartBottom(window.innerHeight - rect.bottom);
+    }
+    setProfileExpanded(true);
+    setProfileReady(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setProfileReady(true);
+      });
+    });
+  };
+
+  const closeProfile = () => {
+    if (!profileExpanded || profileClosing) return;
+    setProfileReady(false);
+    setProfileClosing(true);
+    setTimeout(() => {
+      setProfileExpanded(false);
+      setProfileClosing(false);
     }, 500);
   };
 
@@ -75,8 +111,10 @@ const ProfilePage: React.FC = () => {
       <div className="px-4 pt-5 space-y-4">
         {/* Profile Node */}
         <div
+          ref={profileRef}
           className="rounded-[32px] p-5 relative"
           style={{
+            visibility: profileExpanded ? 'hidden' : 'visible',
             background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
@@ -84,7 +122,7 @@ const ProfilePage: React.FC = () => {
         >
           {/* Edit profile button - top right */}
           <button
-            onClick={() => navigate('/edit-profile')}
+            onClick={openProfile}
             className="absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center"
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
@@ -163,8 +201,8 @@ const ProfilePage: React.FC = () => {
           onClick={closeEarnings}
           className="fixed left-3 right-3 z-50 rounded-[48px] overflow-hidden cursor-pointer"
           style={{
-            top: earningsReady ? '80px' : `${startTop}px`,
-            bottom: earningsReady ? '88px' : `${startBottom}px`,
+            top: earningsReady ? '80px' : `${earningsStartTop}px`,
+            bottom: earningsReady ? '88px' : `${earningsStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
             border: '1.5px solid rgba(52,211,153,0.4)',
@@ -253,6 +291,71 @@ const ProfilePage: React.FC = () => {
                 Withdraw
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile expanded overlay - fixed, animates from captured position */}
+      {profileExpanded && (
+        <div
+          className="fixed left-3 right-3 z-50 rounded-[32px] overflow-hidden"
+          style={{
+            top: profileReady ? '80px' : `${profileStartTop}px`,
+            bottom: profileReady ? '88px' : `${profileStartBottom}px`,
+            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            background: 'linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(235,235,235,0.98) 100%)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8)',
+          }}
+        >
+          {/* Collapsed content - fades out as node expands */}
+          <div
+            className="absolute inset-x-0 top-0 p-5 pointer-events-none"
+            style={{
+              opacity: profileReady && !profileClosing ? 0 : 1,
+              transition: 'opacity 0.25s ease-out',
+            }}
+          >
+            <div className="flex flex-col items-center">
+              <Avatar className="h-[100px] w-[100px] mb-3">
+                {profile?.avatar_url ? (
+                  <AvatarImage src={profile.avatar_url} alt={firstName} />
+                ) : null}
+                <AvatarFallback
+                  className="text-2xl font-medium font-montserrat"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.15) 100%)',
+                    color: 'rgba(0,0,0,0.4)',
+                  }}
+                >
+                  {firstName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+            </div>
+          </div>
+
+          {/* Expanded content - fades in */}
+          <div
+            className="h-full flex flex-col overflow-hidden"
+            style={{
+              opacity: profileReady && !profileClosing ? 1 : 0,
+              transition: profileReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={closeProfile}
+              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <X className="h-4 w-4 text-black/60" />
+            </button>
+
+            <ProfileEditContent onSaved={closeProfile} />
           </div>
         </div>
       )}
