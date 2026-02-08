@@ -35,7 +35,7 @@ const ProfilePage: React.FC = () => {
           <span className="text-base font-semibold text-black">
             {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
           </span>
-          <button onClick={() => {}} className="absolute right-4 p-2">
+          <button onClick={() => navigate('/settings')} className="absolute right-4 p-2">
             <Settings className="h-6 w-6 text-black" />
           </button>
         </div>

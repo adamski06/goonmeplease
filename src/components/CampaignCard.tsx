@@ -3,7 +3,7 @@ import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
-import EarningsGraph from '@/components/EarningsGraph';
+import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -239,6 +239,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
                 {/* Earnings Graph */}
                 <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
+
+                {/* Summary note - inside payment node, below graph */}
+                {(() => {
+                  const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
+                  return (
+                    <p className="text-xs text-white/50 font-jakarta mt-3 leading-relaxed">
+                      You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
+                    </p>
+                  );
+                })()}
               </div>
             </div>
 

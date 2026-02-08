@@ -142,16 +142,20 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         <circle cx={ox} cy={oy} r="3" fill="rgba(255,255,255,0.2)" />
         <circle cx={ox} cy={oy} r="1.5" fill="white" />
 
-        {/* Waypoint dots + leader lines + labels */}
+        {/* Waypoint dots + leader lines + small badge nodes */}
         {waypoints.map((p, i) => {
-          const isLast = i === waypoints.length - 1;
           const leaderLen = 50;
 
-          // Both points: leader goes straight left
+          // Leader goes straight left
           const lx = p.x - leaderLen;
           const ly = p.y;
-          const anchor = 'end';
-          const textX = lx - 5;
+
+          // Badge dimensions
+          const badgeW = 90;
+          const badgeH = 36;
+          const badgeX = lx - badgeW - 2;
+          const badgeY = ly - badgeH / 2;
+          const badgeR = 10;
 
           return (
             <g key={i}>
@@ -168,28 +172,40 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               <circle cx={p.x} cy={p.y} r="3" fill="white" />
               {/* Leader end dot */}
               <circle cx={lx} cy={ly} r="1.5" fill="rgba(255,255,255,0.4)" />
-              {/* Earnings label */}
+              {/* Small badge node */}
+              <rect
+                x={badgeX}
+                y={badgeY}
+                width={badgeW}
+                height={badgeH}
+                rx={badgeR}
+                ry={badgeR}
+                fill="rgba(255,255,255,0.12)"
+                stroke="rgba(255,255,255,0.2)"
+                strokeWidth="0.8"
+              />
+              {/* Earnings in badge */}
               <text
-                x={textX}
-                y={ly - 4}
+                x={badgeX + badgeW / 2}
+                y={ly - 2}
                 fill="white"
-                fontSize="22"
-                fontWeight="600"
+                fontSize="14"
+                fontWeight="700"
                 fontFamily="Montserrat, sans-serif"
-                textAnchor={anchor}
+                textAnchor="middle"
                 dominantBaseline="auto"
               >
                 {formatEarnings(p.earnings)} sek
               </text>
-              {/* Views label */}
+              {/* Views in badge */}
               <text
-                x={textX}
-                y={ly + 18}
+                x={badgeX + badgeW / 2}
+                y={ly + 12}
                 fill="rgba(255,255,255,0.6)"
-                fontSize="18"
+                fontSize="10"
                 fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
-                textAnchor={anchor}
+                textAnchor="middle"
                 dominantBaseline="auto"
               >
                 {formatViews(p.views)} views
@@ -198,10 +214,6 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
           );
         })}
       </svg>
-
-      <p className="text-xs text-white/50 font-jakarta px-4 pb-3 pt-1 leading-relaxed">
-        You earn {formatEarnings(dataPoints[0].earnings)} sek when you first reach {formatViews(dataPoints[0].views)} views and {formatEarnings(dataPoints[1].earnings)} sek when you reach {formatViews(dataPoints[1].views)} views.
-      </p>
     </div>
   );
 };

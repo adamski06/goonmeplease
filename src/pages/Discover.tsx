@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import defaultAvatar from '@/assets/default-avatar.png';
 import { campaigns, Campaign } from '@/data/campaigns';
-import EarningsGraph from '@/components/EarningsGraph';
+import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 
 const Discover: React.FC = () => {
   const { user, loading } = useAuth();
@@ -312,25 +312,20 @@ const Discover: React.FC = () => {
                           {selectedCampaign.maxEarnings.toLocaleString()} sek
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/80 font-jakarta">Rate per 1K views</span>
-                        <span className="text-sm font-bold text-white font-montserrat">
-                          {selectedCampaign.ratePerThousand} sek
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/80 font-jakarta">Platform</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-medium text-white font-montserrat">TikTok</span>
-                          <div className="w-4 h-4 rounded-full overflow-hidden">
-                            <img src={tiktokPlatformLogo} alt="TikTok" className="w-full h-full object-cover" />
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
                     {/* Earnings Graph */}
                     <EarningsGraph tiers={selectedCampaign.tiers} maxEarnings={selectedCampaign.maxEarnings} />
+
+                    {/* Summary note - inside payment node, below graph */}
+                    {(() => {
+                      const data = calculateEarningsData(selectedCampaign.tiers, selectedCampaign.maxEarnings);
+                      return (
+                        <p className="text-xs text-white/50 font-jakarta mt-3 leading-relaxed">
+                          You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
+                        </p>
+                      );
+                    })()}
                   </div>
                 </div>
 
