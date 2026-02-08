@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 
 const MIN_AGE = 16;
 const MAX_AGE = 100;
-const ITEM_HEIGHT = 44;
+const ITEM_HEIGHT = 40;
 const VISIBLE_ITEMS = 5;
 
 interface AgeStepProps {
@@ -13,7 +13,6 @@ interface AgeStepProps {
 const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
   const [selectedAge, setSelectedAge] = useState(18);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const isScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout>();
 
   const ages = Array.from({ length: MAX_AGE - MIN_AGE + 1 }, (_, i) => MIN_AGE + i);
@@ -30,7 +29,6 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
   }, []);
 
   useEffect(() => {
-    // Initial scroll to default age
     setTimeout(() => scrollToAge(18, false), 50);
   }, [scrollToAge]);
 
@@ -41,8 +39,6 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
       clearTimeout(scrollTimeoutRef.current);
     }
 
-    isScrollingRef.current = true;
-
     const scrollTop = scrollRef.current.scrollTop;
     const index = Math.round(scrollTop / ITEM_HEIGHT);
     const clampedIndex = Math.max(0, Math.min(index, ages.length - 1));
@@ -51,9 +47,8 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
     setSelectedAge(newAge);
 
     scrollTimeoutRef.current = setTimeout(() => {
-      isScrollingRef.current = false;
       scrollToAge(newAge, true);
-    }, 100);
+    }, 80);
   };
 
   const halfVisible = Math.floor(VISIBLE_ITEMS / 2);
@@ -61,54 +56,74 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-2">
+      <div className="text-center">
         <h2 className="text-xl font-semibold text-foreground">How old are you?</h2>
-        <p className="text-sm text-muted-foreground">You must be at least 16 to use Jarla</p>
       </div>
 
-      {/* iOS-style scroll picker */}
-      <div className="relative mx-auto w-full max-w-[200px]">
-        {/* Fade overlays */}
-        <div className="absolute top-0 left-0 right-0 h-[88px] bg-gradient-to-b from-white/90 to-transparent z-10 pointer-events-none rounded-t-2xl" />
-        <div className="absolute bottom-0 left-0 right-0 h-[88px] bg-gradient-to-t from-white/90 to-transparent z-10 pointer-events-none rounded-b-2xl" />
+      {/* Native iOS-style picker */}
+      <div className="relative mx-auto w-full">
+        {/* Top/bottom fade masks */}
+        <div 
+          className="absolute top-0 left-0 right-0 z-10 pointer-events-none" 
+          style={{ 
+            height: halfVisible * ITEM_HEIGHT,
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 60%, rgba(255,255,255,0) 100%)'
+          }} 
+        />
+        <div 
+          className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none" 
+          style={{ 
+            height: halfVisible * ITEM_HEIGHT,
+            background: 'linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 60%, rgba(255,255,255,0) 100%)'
+          }} 
+        />
 
-        {/* Selection highlight */}
+        {/* Selection row highlight — thin separator lines like iOS */}
         <div
-          className="absolute left-2 right-2 z-[5] rounded-xl bg-black/5 border border-black/10"
+          className="absolute left-0 right-0 z-[5] pointer-events-none"
           style={{
             top: halfVisible * ITEM_HEIGHT,
             height: ITEM_HEIGHT,
           }}
-        />
+        >
+          <div className="absolute top-0 left-4 right-4 h-px bg-black/12" />
+          <div className="absolute bottom-0 left-4 right-4 h-px bg-black/12" />
+        </div>
 
-        {/* Scrollable area */}
+        {/* Scroll container */}
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="overflow-y-auto scrollbar-hide"
+          className="overflow-y-auto"
           style={{
             height: containerHeight,
             scrollSnapType: 'y mandatory',
+            WebkitOverflowScrolling: 'touch',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
           }}
         >
-          {/* Top padding */}
+          <style>{`div::-webkit-scrollbar { display: none; }`}</style>
+
+          {/* Top spacer */}
           <div style={{ height: halfVisible * ITEM_HEIGHT }} />
 
           {ages.map((age) => {
-            const isSelected = age === selectedAge;
+            const distance = Math.abs(age - selectedAge);
             return (
               <div
                 key={age}
-                className={`flex items-center justify-center transition-all duration-150 cursor-pointer select-none ${
-                  isSelected
-                    ? 'text-foreground font-semibold text-2xl'
-                    : Math.abs(age - selectedAge) === 1
-                    ? 'text-muted-foreground text-lg'
-                    : 'text-muted-foreground/40 text-base'
-                }`}
+                className="flex items-center justify-center select-none"
                 style={{
                   height: ITEM_HEIGHT,
                   scrollSnapAlign: 'center',
+                  fontSize: distance === 0 ? '22px' : distance === 1 ? '18px' : '16px',
+                  fontWeight: distance === 0 ? 600 : 400,
+                  color: distance === 0 ? 'hsl(220, 20%, 10%)' : distance === 1 ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.18)',
+                  transition: 'font-size 0.1s ease, color 0.1s ease, font-weight 0.1s ease',
+                  cursor: 'pointer',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif',
+                  letterSpacing: '-0.02em',
                 }}
                 onClick={() => {
                   setSelectedAge(age);
@@ -120,14 +135,20 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
             );
           })}
 
-          {/* Bottom padding */}
+          {/* Bottom spacer */}
           <div style={{ height: halfVisible * ITEM_HEIGHT }} />
         </div>
       </div>
 
       <Button
         onClick={() => onNext(selectedAge)}
-        className="w-full py-3 h-auto rounded-full bg-foreground text-background hover:bg-foreground/80 font-semibold"
+        className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg"
+        style={{
+          background: 'linear-gradient(180deg, rgba(60, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          boxShadow: '0 4px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+        }}
       >
         Continue
       </Button>
