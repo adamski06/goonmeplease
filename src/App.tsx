@@ -13,6 +13,7 @@ import CampaignDetail from "./pages/CampaignDetail";
 import Activity from "./pages/Activity";
 import Alerts from "./pages/Alerts";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/alerts" element={<Alerts />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </ProfileProvider>
