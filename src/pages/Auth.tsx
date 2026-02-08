@@ -235,63 +235,10 @@ const Auth: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Dev mode toggle - top right */}
-      <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
-        <button
-          onClick={() => setDevMode(!devMode)}
-          className={`px-3 py-1 text-xs rounded-full transition-all ${
-            devMode ? 'bg-green-500 text-white' : 'bg-black/10 text-black/60 hover:bg-black/20'
-          }`}
-        >
-          Dev Mode
-        </button>
-        {devMode && (
-          <div className="flex gap-1">
-            <button
-              onClick={() => { setSignUpStep(1); setIsSignUp(true); }}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && isSignUp ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
-            >
-              Sign Up
-            </button>
-            <button
-              onClick={() => { setSignUpStep(1); setIsSignUp(false); }}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 1 && !isSignUp ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
-            >
-              Log In
-            </button>
-            <button
-              onClick={() => setSignUpStep(2)}
-              className={`px-2 py-1 text-xs rounded ${signUpStep === 2 ? 'bg-black text-white' : 'bg-black/10 text-black'}`}
-            >
-              TikTok
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Logo in top left corner */}
-      <div className="absolute top-6 left-6 z-20">
-        <div className="relative h-10 w-[130px]">
-          <div 
-            className="absolute inset-0 bg-black"
-            style={{
-              WebkitMaskImage: `url(${jarlaLogo})`,
-              maskImage: `url(${jarlaLogo})`,
-              WebkitMaskSize: 'contain',
-              maskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'center',
-              maskPosition: 'center'
-            }} 
-          />
-        </div>
-      </div>
-      
+    <div className="min-h-screen flex flex-col bg-black/40 backdrop-blur-sm">
       {/* Main content centered */}
-      <div className="flex-1 flex items-center justify-center px-6">
-        <div className="w-full max-w-sm">
+      <div className="flex-1 flex items-center justify-center px-6 py-8">
+        <div className="w-full max-w-sm bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/40">
           {/* Logo as title */}
           <div className="flex justify-center mb-8">
             <div className="relative h-12 w-[160px]">
