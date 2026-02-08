@@ -49,7 +49,7 @@ const ProfilePage: React.FC = () => {
     setTimeout(() => {
       setEarningsExpanded(false);
       setEarningsClosing(false);
-    }, 500);
+    }, 550);
   };
 
   const openProfile = () => {
@@ -74,7 +74,7 @@ const ProfilePage: React.FC = () => {
     setTimeout(() => {
       setProfileExpanded(false);
       setProfileClosing(false);
-    }, 500);
+    }, 550);
   };
 
   useEffect(() => {
@@ -303,7 +303,7 @@ const ProfilePage: React.FC = () => {
             top: profileReady ? '80px' : `${profileStartTop}px`,
             bottom: profileReady ? '88px' : `${profileStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            background: 'linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(235,235,235,0.98) 100%)',
+            background: 'linear-gradient(180deg, rgb(245,245,245) 0%, rgb(235,235,235) 100%)',
             border: '1px solid rgba(0,0,0,0.08)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8)',
           }}
