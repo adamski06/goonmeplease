@@ -7,11 +7,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface UsernameStepProps {
   userId: string;
+  fullName?: string;
   onComplete: () => void;
 }
 
-const UsernameStep: React.FC<UsernameStepProps> = ({ userId, onComplete }) => {
-  const [username, setUsername] = useState('');
+const UsernameStep: React.FC<UsernameStepProps> = ({ userId, fullName, onComplete }) => {
+  const defaultUsername = fullName
+    ? fullName.toLowerCase().replace(/[^a-z0-9]/g, '')
+    : '';
+  const [username, setUsername] = useState(defaultUsername);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 

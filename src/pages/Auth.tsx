@@ -23,6 +23,7 @@ const Auth: React.FC = () => {
   const [selectedAge, setSelectedAge] = useState<number>(18);
   const [isLoading, setIsLoading] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
+  const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [viewState, setViewState] = useState<ViewState>('loading');
   const transitionKey = useRef(0);
 
@@ -91,6 +92,7 @@ const Auth: React.FC = () => {
     setIsLoading(true);
 
     try {
+      setSignUpFullName(data.fullName || '');
       if (data.method === 'email' && data.email) {
         const { error } = await signUp(data.email, data.password, data.fullName);
         if (error) {
@@ -262,7 +264,7 @@ const Auth: React.FC = () => {
                   />
                 )}
                 {signUpStep === 'username' && newUserId && (
-                  <UsernameStep userId={newUserId} onComplete={handleUsernameComplete} />
+                  <UsernameStep userId={newUserId} fullName={signUpFullName} onComplete={handleUsernameComplete} />
                 )}
 
                 {/* Step indicator */}
