@@ -104,30 +104,11 @@ const ProfilePage: React.FC = () => {
         </div>
 
         {/* Earnings Node - green */}
-        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-          <h3 className="text-sm font-semibold text-white mb-3 font-montserrat">Earnings</h3>
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-white/80 font-jakarta">Total earned</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-bold text-white font-montserrat">0</span>
-                <span className="text-sm text-white/80 font-montserrat">sek</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-white/80 font-jakarta">Pending</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-base font-bold text-white font-montserrat">0</span>
-                <span className="text-sm text-white/80 font-montserrat">sek</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-white/80 font-jakarta">Paid out</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-base font-bold text-white font-montserrat">0</span>
-                <span className="text-sm text-white/80 font-montserrat">sek</span>
-              </div>
-            </div>
+        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-6 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+          <p className="text-sm text-white/60 font-jakarta mb-1">Balance</p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-5xl font-bold text-white font-montserrat tracking-tight">0</span>
+            <span className="text-xl text-white/70 font-montserrat">sek</span>
           </div>
         </div>
       </div>
