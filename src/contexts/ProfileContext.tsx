@@ -25,7 +25,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [loading, setLoading] = useState(true);
   const fetchedUserIdRef = useRef<string | null>(null);
 
-  const fetchProfile = useCallback(async () => {
+  const fetchProfile = useCallback(async (force = false) => {
     if (!user) {
       setProfile(null);
       setLoading(false);
@@ -33,8 +33,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return;
     }
 
-    // Skip if we already fetched for this user
-    if (fetchedUserIdRef.current === user.id) {
+    // Skip if we already fetched for this user (unless forced)
+    if (!force && fetchedUserIdRef.current === user.id) {
       return;
     }
 
@@ -57,8 +57,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const refetchProfile = useCallback(async () => {
     if (!user) return;
-    fetchedUserIdRef.current = null; // Reset to force refetch
-    await fetchProfile();
+    await fetchProfile(true);
   }, [user, fetchProfile]);
 
   return (

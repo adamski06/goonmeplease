@@ -44,12 +44,18 @@ const ProfilePage: React.FC = () => {
 
   const closeEarnings = () => {
     if (!earningsExpanded || earningsClosing) return;
+    // Re-capture position for accurate close animation
+    if (earningsRef.current) {
+      const rect = earningsRef.current.getBoundingClientRect();
+      setEarningsStartTop(rect.top);
+      setEarningsStartBottom(window.innerHeight - rect.bottom);
+    }
     setEarningsReady(false);
     setEarningsClosing(true);
     setTimeout(() => {
       setEarningsExpanded(false);
       setEarningsClosing(false);
-    }, 550);
+    }, 520);
   };
 
   const openProfile = () => {
@@ -69,12 +75,18 @@ const ProfilePage: React.FC = () => {
 
   const closeProfile = () => {
     if (!profileExpanded || profileClosing) return;
+    // Re-capture position for accurate close animation
+    if (profileRef.current) {
+      const rect = profileRef.current.getBoundingClientRect();
+      setProfileStartTop(rect.top);
+      setProfileStartBottom(window.innerHeight - rect.bottom);
+    }
     setProfileReady(false);
     setProfileClosing(true);
     setTimeout(() => {
       setProfileExpanded(false);
       setProfileClosing(false);
-    }, 550);
+    }, 520);
   };
 
   useEffect(() => {
@@ -115,7 +127,7 @@ const ProfilePage: React.FC = () => {
           className="rounded-[32px] p-5 relative"
           style={{
             visibility: profileExpanded ? 'hidden' : 'visible',
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+            background: 'linear-gradient(180deg, rgb(240,240,240) 0%, rgb(230,230,230) 100%)',
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
           }}
@@ -303,7 +315,7 @@ const ProfilePage: React.FC = () => {
             top: profileReady ? '80px' : `${profileStartTop}px`,
             bottom: profileReady ? '88px' : `${profileStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            background: 'linear-gradient(180deg, rgb(245,245,245) 0%, rgb(235,235,235) 100%)',
+            background: 'linear-gradient(180deg, rgb(240,240,240) 0%, rgb(230,230,230) 100%)',
             border: '1px solid rgba(0,0,0,0.08)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8)',
           }}
@@ -343,18 +355,6 @@ const ProfilePage: React.FC = () => {
               transition: profileReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
             }}
           >
-            {/* Close button */}
-            <button
-              onClick={closeProfile}
-              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
-                border: '1px solid rgba(0,0,0,0.06)',
-              }}
-            >
-              <X className="h-4 w-4 text-black/60" />
-            </button>
-
             <ProfileEditContent onSaved={closeProfile} />
           </div>
         </div>

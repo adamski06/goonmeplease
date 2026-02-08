@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera } from 'lucide-react';
+import { Camera, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ProfileEditContentProps {
@@ -129,15 +129,20 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
     <div className="h-full flex flex-col">
       {/* Save button header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-black/10">
+        <button onClick={onSaved} className="p-1 -ml-1">
+          <ChevronLeft className="h-5 w-5 text-black/60" />
+        </button>
         <h2 className="text-base font-bold text-black font-montserrat">Edit Profile</h2>
         <button
           onClick={handleSave}
           disabled={saving}
           className="text-sm font-semibold font-montserrat px-4 py-1.5 rounded-full"
           style={{
-            background: saving ? 'rgba(0,0,0,0.05)' : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
-            color: saving ? 'rgba(0,0,0,0.3)' : 'white',
-            boxShadow: saving ? 'none' : '0 2px 8px rgba(0,0,0,0.2)',
+            background: saving ? 'rgba(0,0,0,0.05)' : 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+            color: saving ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.7)',
+            boxShadow: saving ? 'none' : '0 2px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1)',
+            border: saving ? 'none' : '1px solid rgba(0,0,0,0.08)',
+            backdropFilter: 'blur(12px)',
           }}
         >
           {saving ? 'Saving...' : 'Save'}
