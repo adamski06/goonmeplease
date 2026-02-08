@@ -10,6 +10,18 @@ const ProfilePage: React.FC = () => {
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [earningsExpanded, setEarningsExpanded] = useState(false);
+  const [earningsClosing, setEarningsClosing] = useState(false);
+
+  const isEarningsVisuallyExpanded = earningsExpanded && !earningsClosing;
+
+  const triggerEarningsClose = () => {
+    if (!earningsExpanded || earningsClosing) return;
+    setEarningsClosing(true);
+    setTimeout(() => {
+      setEarningsExpanded(false);
+      setEarningsClosing(false);
+    }, 500);
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -104,39 +116,56 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Earnings Node - green, expandable in-place */}
+        {/* Earnings Node - collapsed pill (always visible as anchor) */}
+        {!earningsExpanded && (
+          <div
+            onClick={() => setEarningsExpanded(true)}
+            className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-6 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] cursor-pointer active:scale-[0.98] transition-transform"
+          >
+            <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+              <span className="text-xl text-white/70 font-montserrat">sek</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Expanded Earnings Overlay - fixed position like campaign cards */}
+      {earningsExpanded && (
         <div
-          onClick={() => !earningsExpanded && setEarningsExpanded(true)}
-          className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] cursor-pointer overflow-hidden"
+          className={`fixed left-3 right-3 bottom-3 z-50 rounded-[48px] overflow-hidden ${isEarningsVisuallyExpanded ? 'z-50' : ''}`}
           style={{
-            height: earningsExpanded ? 'calc(100dvh - 148px)' : undefined,
-            transition: 'height 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            maxHeight: isEarningsVisuallyExpanded ? 'calc(100dvh - 148px)' : '0px',
+            transition: 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1.5px solid rgba(52,211,153,0.4)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
           }}
         >
-          {!earningsExpanded ? (
-            <div className="p-6">
-              <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-                <span className="text-xl text-white/70 font-montserrat">sek</span>
-              </div>
-            </div>
-          ) : (
-            <div className="p-8 flex flex-col h-full relative">
-              {/* Close button */}
-              <button
-                onClick={(e) => { e.stopPropagation(); setEarningsExpanded(false); }}
-                className="absolute top-5 right-5 z-10 h-9 w-9 rounded-full flex items-center justify-center"
-                style={{
-                  background: 'rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                }}
-              >
-                <X className="h-4 w-4 text-white" />
-              </button>
+          <div
+            className="h-full flex flex-col overflow-hidden"
+            style={{
+              maxHeight: 'calc(100dvh - 148px)',
+              opacity: earningsClosing ? 0 : 1,
+              transition: 'opacity 0.35s ease-out',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={triggerEarningsClose}
+              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+              style={{
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.2)',
+              }}
+            >
+              <X className="h-4 w-4 text-white" />
+            </button>
 
-              <div className="flex flex-col items-center mt-6">
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col">
+              <div className="flex flex-col items-center mt-4">
                 <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
@@ -162,9 +191,11 @@ const ProfilePage: React.FC = () => {
               </div>
 
               <div className="flex-1" />
+            </div>
 
+            {/* Fixed withdraw button at bottom */}
+            <div className="px-6 py-5 flex-shrink-0">
               <button
-                onClick={(e) => e.stopPropagation()}
                 className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
                 style={{
                   background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
@@ -175,11 +206,9 @@ const ProfilePage: React.FC = () => {
                 Withdraw
               </button>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-
-      {/* Mobile Bottom Navigation Bar */}
+      )}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
         <div className="flex items-start justify-between h-full">
           <button 
