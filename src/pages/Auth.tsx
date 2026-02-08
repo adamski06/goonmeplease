@@ -32,15 +32,21 @@ const Auth: React.FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  // Show loading splash then reveal content
+  const prevStepRef = useRef(signUpStep);
+  const prevIsSignUpRef = useRef(isSignUp);
+
+  // Show loading splash then reveal content — only on actual step/mode changes
   useEffect(() => {
-    transitionKey.current += 1;
-    setViewState('loading');
-    const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
-    return () => clearTimeout(timer);
+    if (prevStepRef.current !== signUpStep || prevIsSignUpRef.current !== isSignUp) {
+      prevStepRef.current = signUpStep;
+      prevIsSignUpRef.current = isSignUp;
+      setViewState('loading');
+      const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
+      return () => clearTimeout(timer);
+    }
   }, [signUpStep, isSignUp]);
 
-  // Initial page load also gets a splash
+  // Initial page load splash
   useEffect(() => {
     setViewState('loading');
     const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
@@ -229,7 +235,7 @@ const Auth: React.FC = () => {
           <div
             className="w-full max-w-sm rounded-3xl shadow-2xl p-8 border border-white/30 animate-fade-in"
             style={{
-              background: 'rgba(255, 255, 255, 0.72)',
+              background: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(24px) saturate(180%)',
               WebkitBackdropFilter: 'blur(24px) saturate(180%)',
             }}
