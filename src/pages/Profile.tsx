@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -9,13 +9,31 @@ const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const earningsRef = useRef<HTMLDivElement>(null);
   const [earningsExpanded, setEarningsExpanded] = useState(false);
   const [earningsClosing, setEarningsClosing] = useState(false);
+  const [earningsReady, setEarningsReady] = useState(false);
+  const [startTop, setStartTop] = useState(0);
+  const [startBottom, setStartBottom] = useState(0);
 
-  const isEarningsVisuallyExpanded = earningsExpanded && !earningsClosing;
+  const openEarnings = () => {
+    if (earningsRef.current) {
+      const rect = earningsRef.current.getBoundingClientRect();
+      setStartTop(rect.top);
+      setStartBottom(window.innerHeight - rect.bottom);
+    }
+    setEarningsExpanded(true);
+    setEarningsReady(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setEarningsReady(true);
+      });
+    });
+  };
 
-  const triggerEarningsClose = () => {
+  const closeEarnings = () => {
     if (!earningsExpanded || earningsClosing) return;
+    setEarningsReady(false);
     setEarningsClosing(true);
     setTimeout(() => {
       setEarningsExpanded(false);
@@ -116,114 +134,128 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Earnings Node - always rendered, expands like campaign cards */}
+        {/* Earnings Node - inline placeholder */}
         <div
-          onClick={() => {
-            if (earningsExpanded) {
-              triggerEarningsClose();
-            } else {
-              setEarningsExpanded(true);
-            }
-          }}
-          className={`rounded-[48px] overflow-hidden cursor-pointer ${
-            isEarningsVisuallyExpanded
-              ? 'fixed left-3 right-3 bottom-[88px] z-50'
-              : 'relative'
-          }`}
+          ref={earningsRef}
+          onClick={() => !earningsExpanded && openEarnings()}
+          className="rounded-[48px] overflow-hidden cursor-pointer"
           style={{
-            maxHeight: isEarningsVisuallyExpanded ? 'calc(100dvh - 148px)' : '110px',
-            transition: 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            height: '110px',
+            visibility: earningsExpanded ? 'hidden' : 'visible',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
-            border: isEarningsVisuallyExpanded
-              ? '1.5px solid rgba(52,211,153,0.4)'
-              : '1px solid rgba(52,211,153,0.4)',
-            boxShadow: isEarningsVisuallyExpanded
-              ? '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)'
-              : 'inset 0 1px 1px rgba(255,255,255,0.2)',
+            border: '1px solid rgba(52,211,153,0.4)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
           }}
         >
-          {!earningsExpanded ? (
-            /* Collapsed state */
-            <div className="p-6">
-              <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-                <span className="text-xl text-white/70 font-montserrat">sek</span>
-              </div>
+          <div className="p-6">
+            <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+              <span className="text-xl text-white/70 font-montserrat">sek</span>
             </div>
-          ) : (
-            /* Expanded state */
-            <div
-              className="h-full flex flex-col overflow-hidden"
-              style={{
-                maxHeight: 'calc(100dvh - 148px)',
-                opacity: earningsClosing ? 0 : 1,
-                transition: 'opacity 0.35s ease-out',
-              }}
-            >
-              {/* Close button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  triggerEarningsClose();
-                }}
-                className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
-                style={{
-                  background: 'rgba(255,255,255,0.15)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                }}
-              >
-                <X className="h-4 w-4 text-white" />
-              </button>
-
-              {/* Scrollable content */}
-              <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
-                <div className="flex flex-col items-center mt-4">
-                  <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-                    <span className="text-2xl text-white/60 font-montserrat">sek</span>
-                  </div>
-                </div>
-
-                <div className="w-full space-y-3 mt-8">
-                  <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-white/60 font-jakarta">Total earned</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
-                  </div>
-                  <div className="h-px bg-white/10" />
-                  <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-white/60 font-jakarta">Pending</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
-                  </div>
-                  <div className="h-px bg-white/10" />
-                  <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
-                  </div>
-                </div>
-
-                <div className="flex-1" />
-              </div>
-
-              {/* Fixed withdraw button at bottom */}
-              <div className="px-6 py-5 flex-shrink-0">
-                <button
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-                    color: '#065f46',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
-                  }}
-                >
-                  Withdraw
-                </button>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* Earnings expanded overlay - fixed, animates from captured position */}
+      {earningsExpanded && (
+        <div
+          onClick={closeEarnings}
+          className="fixed left-3 right-3 z-50 rounded-[48px] overflow-hidden cursor-pointer"
+          style={{
+            top: earningsReady ? '80px' : `${startTop}px`,
+            bottom: earningsReady ? '88px' : `${startBottom}px`,
+            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1.5px solid rgba(52,211,153,0.4)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
+          }}
+        >
+          {/* Collapsed content - fades out as node expands */}
+          <div
+            className="absolute inset-x-0 top-0 p-6 pointer-events-none"
+            style={{
+              opacity: earningsReady && !earningsClosing ? 0 : 1,
+              transition: 'opacity 0.25s ease-out',
+            }}
+          >
+            <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+              <span className="text-xl text-white/70 font-montserrat">sek</span>
+            </div>
+          </div>
+
+          {/* Expanded content - fades in */}
+          <div
+            className="h-full flex flex-col overflow-hidden"
+            style={{
+              opacity: earningsReady && !earningsClosing ? 1 : 0,
+              transition: earningsReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                closeEarnings();
+              }}
+              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+              style={{
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.2)',
+              }}
+            >
+              <X className="h-4 w-4 text-white" />
+            </button>
+
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
+              <div className="flex flex-col items-center mt-4">
+                <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                  <span className="text-2xl text-white/60 font-montserrat">sek</span>
+                </div>
+              </div>
+
+              <div className="w-full space-y-3 mt-8">
+                <div className="flex justify-between items-center px-2">
+                  <span className="text-sm text-white/60 font-jakarta">Total earned</span>
+                  <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
+                </div>
+                <div className="h-px bg-white/10" />
+                <div className="flex justify-between items-center px-2">
+                  <span className="text-sm text-white/60 font-jakarta">Pending</span>
+                  <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
+                </div>
+                <div className="h-px bg-white/10" />
+                <div className="flex justify-between items-center px-2">
+                  <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
+                  <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
+                </div>
+              </div>
+
+              <div className="flex-1" />
+            </div>
+
+            {/* Fixed withdraw button at bottom */}
+            <div className="px-6 py-5 flex-shrink-0">
+              <button
+                onClick={(e) => e.stopPropagation()}
+                className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                  color: '#065f46',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                }}
+              >
+                Withdraw
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
