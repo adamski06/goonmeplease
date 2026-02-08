@@ -38,14 +38,18 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return;
     }
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('full_name, avatar_url, username, bio, phone_number, username_changed_at')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
 
     if (data) {
       setProfile(data);
+      fetchedUserIdRef.current = user.id;
+    } else if (!error) {
+      // Profile doesn't exist yet
+      setProfile(null);
       fetchedUserIdRef.current = user.id;
     }
     setLoading(false);
