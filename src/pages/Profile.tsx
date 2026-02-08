@@ -116,98 +116,116 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Earnings Node - collapsed pill (always visible as anchor) */}
-        {!earningsExpanded && (
-          <div
-            onClick={() => setEarningsExpanded(true)}
-            className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-6 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] cursor-pointer active:scale-[0.98] transition-transform"
-          >
-            <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-              <span className="text-xl text-white/70 font-montserrat">sek</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Expanded Earnings Overlay - fixed position like campaign cards */}
-      {earningsExpanded && (
+        {/* Earnings Node - always rendered, expands like campaign cards */}
         <div
-          className="fixed left-3 right-3 bottom-[88px] z-50 rounded-[48px] overflow-hidden"
+          onClick={() => {
+            if (earningsExpanded) {
+              triggerEarningsClose();
+            } else {
+              setEarningsExpanded(true);
+            }
+          }}
+          className={`rounded-[48px] overflow-hidden cursor-pointer ${
+            isEarningsVisuallyExpanded
+              ? 'fixed left-3 right-3 bottom-[88px] z-50'
+              : 'relative'
+          }`}
           style={{
-            top: isEarningsVisuallyExpanded ? '80px' : 'calc(100dvh - 6px)',
-            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            maxHeight: isEarningsVisuallyExpanded ? 'calc(100dvh - 148px)' : '110px',
+            transition: 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
-            border: '1.5px solid rgba(52,211,153,0.4)',
-            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
+            border: isEarningsVisuallyExpanded
+              ? '1.5px solid rgba(52,211,153,0.4)'
+              : '1px solid rgba(52,211,153,0.4)',
+            boxShadow: isEarningsVisuallyExpanded
+              ? '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)'
+              : 'inset 0 1px 1px rgba(255,255,255,0.2)',
           }}
         >
-          <div
-            className="h-full flex flex-col overflow-hidden"
-            style={{
-              opacity: earningsClosing ? 0 : 1,
-              transition: 'opacity 0.35s ease-out',
-            }}
-          >
-            {/* Close button */}
-            <button
-              onClick={triggerEarningsClose}
-              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+          {!earningsExpanded ? (
+            /* Collapsed state */
+            <div className="p-6">
+              <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                <span className="text-xl text-white/70 font-montserrat">sek</span>
+              </div>
+            </div>
+          ) : (
+            /* Expanded state */
+            <div
+              className="h-full flex flex-col overflow-hidden"
               style={{
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                maxHeight: 'calc(100dvh - 148px)',
+                opacity: earningsClosing ? 0 : 1,
+                transition: 'opacity 0.35s ease-out',
               }}
             >
-              <X className="h-4 w-4 text-white" />
-            </button>
-
-            {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col">
-              <div className="flex flex-col items-center mt-4">
-                <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
-                  <span className="text-2xl text-white/60 font-montserrat">sek</span>
-                </div>
-              </div>
-
-              <div className="w-full space-y-3 mt-8">
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Total earned</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
-                </div>
-                <div className="h-px bg-white/10" />
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Pending</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
-                </div>
-                <div className="h-px bg-white/10" />
-                <div className="flex justify-between items-center px-2">
-                  <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
-                  <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
-                </div>
-              </div>
-
-              <div className="flex-1" />
-            </div>
-
-            {/* Fixed withdraw button at bottom */}
-            <div className="px-6 py-5 flex-shrink-0">
+              {/* Close button */}
               <button
-                className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  triggerEarningsClose();
+                }}
+                className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-                  color: '#065f46',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.2)',
                 }}
               >
-                Withdraw
+                <X className="h-4 w-4 text-white" />
               </button>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
+                <div className="flex flex-col items-center mt-4">
+                  <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                    <span className="text-2xl text-white/60 font-montserrat">sek</span>
+                  </div>
+                </div>
+
+                <div className="w-full space-y-3 mt-8">
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Total earned</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Pending</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
+                  </div>
+                </div>
+
+                <div className="flex-1" />
+              </div>
+
+              {/* Fixed withdraw button at bottom */}
+              <div className="px-6 py-5 flex-shrink-0">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                    color: '#065f46',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                  }}
+                >
+                  Withdraw
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
+
+      {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-black/10 px-4 pt-2 pb-2 h-20 safe-area-bottom">
         <div className="flex items-start justify-between h-full">
           <button 
