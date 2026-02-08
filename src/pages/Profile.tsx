@@ -134,7 +134,7 @@ const ProfilePage: React.FC = () => {
       {/* Expanded Earnings Overlay - fixed position like campaign cards */}
       {earningsExpanded && (
         <div
-          className="fixed left-3 right-3 bottom-3 z-50 rounded-[48px] overflow-hidden"
+          className="fixed left-3 right-3 bottom-[88px] z-50 rounded-[48px] overflow-hidden"
           style={{
             top: isEarningsVisuallyExpanded ? '80px' : 'calc(100dvh - 6px)',
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
