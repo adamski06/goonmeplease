@@ -8,18 +8,14 @@ import { z } from 'zod';
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
-type Method = 'email' | 'phone';
-
 interface CredentialsStepProps {
-  onNext: (data: { method: Method; email?: string; phone?: string; password: string; fullName: string }) => void;
+  onNext: (data: { method: 'email'; email: string; password: string; fullName: string }) => void;
   onSwitchToLogin: () => void;
   isLoading: boolean;
 }
 
 const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLogin, isLoading }) => {
-  const [method, setMethod] = useState<Method>('email');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const { toast } = useToast();
@@ -27,60 +23,22 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (method === 'email') {
-      try {
-        emailSchema.parse(email);
-        passwordSchema.parse(password);
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          toast({ title: 'Validation Error', description: error.errors[0].message, variant: 'destructive' });
-        }
-        return;
+    try {
+      emailSchema.parse(email);
+      passwordSchema.parse(password);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast({ title: 'Validation Error', description: error.errors[0].message, variant: 'destructive' });
       }
-      onNext({ method: 'email', email, password, fullName });
-    } else {
-      if (!phone.trim()) {
-        toast({ title: 'Validation Error', description: 'Please enter your phone number', variant: 'destructive' });
-        return;
-      }
-      try {
-        passwordSchema.parse(password);
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          toast({ title: 'Validation Error', description: error.errors[0].message, variant: 'destructive' });
-        }
-        return;
-      }
-      onNext({ method: 'phone', phone, password, fullName });
+      return;
     }
+    onNext({ method: 'email', email, password, fullName });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center space-y-2">
         <h2 className="text-xl font-semibold text-black">Create your account</h2>
-      </div>
-
-      {/* Method toggle */}
-      <div className="flex rounded-full bg-black/5 p-1">
-        <button
-          type="button"
-          onClick={() => setMethod('email')}
-          className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            method === 'email' ? 'bg-black text-white shadow-sm' : 'text-black/50'
-          }`}
-        >
-          Email
-        </button>
-        <button
-          type="button"
-          onClick={() => setMethod('phone')}
-          className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            method === 'phone' ? 'bg-black text-white shadow-sm' : 'text-black/50'
-          }`}
-        >
-          Phone
-        </button>
       </div>
 
       <div className="space-y-1.5">
@@ -96,35 +54,19 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
         />
       </div>
 
-      {method === 'email' ? (
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-email" className="text-black text-sm font-medium">Email</Label>
-          <Input
-            id="signup-email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
-          />
-        </div>
-      ) : (
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-phone" className="text-black text-sm font-medium">Phone Number</Label>
-          <Input
-            id="signup-phone"
-            type="tel"
-            placeholder="+46 70 123 4567"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            autoComplete="tel"
-            className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
-          />
-        </div>
-      )}
+      <div className="space-y-1.5">
+        <Label htmlFor="signup-email" className="text-black text-sm font-medium">Email</Label>
+        <Input
+          id="signup-email"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
+        />
+      </div>
 
       <div className="space-y-1.5">
         <Label htmlFor="signup-password" className="text-black text-sm font-medium">Password</Label>
