@@ -134,10 +134,10 @@ const ProfilePage: React.FC = () => {
       {/* Expanded Earnings Overlay - fixed position like campaign cards */}
       {earningsExpanded && (
         <div
-          className={`fixed left-3 right-3 bottom-3 z-50 rounded-[48px] overflow-hidden ${isEarningsVisuallyExpanded ? 'z-50' : ''}`}
+          className="fixed left-3 right-3 bottom-3 z-50 rounded-[48px] overflow-hidden"
           style={{
-            maxHeight: isEarningsVisuallyExpanded ? 'calc(100dvh - 148px)' : '0px',
-            transition: 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            top: isEarningsVisuallyExpanded ? '80px' : 'calc(100dvh - 6px)',
+            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
             border: '1.5px solid rgba(52,211,153,0.4)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
@@ -146,7 +146,6 @@ const ProfilePage: React.FC = () => {
           <div
             className="h-full flex flex-col overflow-hidden"
             style={{
-              maxHeight: 'calc(100dvh - 148px)',
               opacity: earningsClosing ? 0 : 1,
               transition: 'opacity 0.35s ease-out',
             }}
