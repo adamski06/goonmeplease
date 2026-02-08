@@ -186,18 +186,55 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-black/40 backdrop-blur-sm">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
-        <div
-          className="w-full max-w-sm rounded-3xl shadow-2xl p-8 border border-white/30"
-          style={{
-            background: 'rgba(255, 255, 255, 0.72)',
-            backdropFilter: 'blur(24px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          }}
-        >
-          {viewState === 'loading' ? (
-            /* Loading splash — logo + LinkedIn-style progress bar */
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="relative h-10 w-[140px] mb-6">
+        {viewState === 'loading' ? (
+          /* Full-screen loading — white logo + white bar expanding from center */
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative h-10 w-[140px] mb-6">
+              <div
+                className="absolute inset-0 bg-white"
+                style={{
+                  WebkitMaskImage: `url(${jarlaLogo})`,
+                  maskImage: `url(${jarlaLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
+            </div>
+
+            {/* Bar loading from center outward */}
+            <div className="w-32 h-[3px] rounded-full bg-white/20 overflow-hidden flex items-center justify-center">
+              <div
+                className="h-full rounded-full bg-white/80"
+                style={{
+                  animation: 'expandCenter 0.5s ease-out forwards',
+                }}
+              />
+            </div>
+
+            <style>{`
+              @keyframes expandCenter {
+                0% { width: 0%; }
+                100% { width: 100%; }
+              }
+            `}</style>
+          </div>
+        ) : (
+          /* Card content */
+          <div
+            className="w-full max-w-sm rounded-3xl shadow-2xl p-8 border border-white/30 animate-fade-in"
+            style={{
+              background: 'rgba(255, 255, 255, 0.72)',
+              backdropFilter: 'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            }}
+          >
+            {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <div className="relative h-12 w-[160px]">
                 <div
                   className="absolute inset-0 bg-black"
                   style={{
@@ -212,83 +249,43 @@ const Auth: React.FC = () => {
                   }}
                 />
               </div>
-
-              {/* LinkedIn-style shimmer bar */}
-              <div className="w-32 h-[3px] rounded-full bg-black/10 overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, rgba(60,130,246,0.8), rgba(37,99,235,1), rgba(60,130,246,0.8))',
-                    animation: 'shimmerBar 0.5s ease-in-out forwards',
-                  }}
-                />
-              </div>
-
-              <style>{`
-                @keyframes shimmerBar {
-                  0% { width: 0%; }
-                  100% { width: 100%; }
-                }
-              `}</style>
             </div>
-          ) : (
-            /* Actual content with fade-in */
-            <div className="animate-fade-in">
-              {/* Logo */}
-              <div className="flex justify-center mb-8">
-                <div className="relative h-12 w-[160px]">
-                  <div
-                    className="absolute inset-0 bg-black"
-                    style={{
-                      WebkitMaskImage: `url(${jarlaLogo})`,
-                      maskImage: `url(${jarlaLogo})`,
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'center',
-                      maskPosition: 'center',
-                    }}
+
+            {isSignUp ? (
+              <>
+                {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
+                {signUpStep === 'credentials' && (
+                  <CredentialsStep
+                    onNext={handleCredentialsNext}
+                    onSwitchToLogin={() => { setIsSignUp(false); setSignUpStep('age'); }}
+                    isLoading={isLoading}
                   />
-                </div>
-              </div>
+                )}
+                {signUpStep === 'username' && newUserId && (
+                  <UsernameStep userId={newUserId} onComplete={handleUsernameComplete} />
+                )}
 
-              {isSignUp ? (
-                <>
-                  {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
-                  {signUpStep === 'credentials' && (
-                    <CredentialsStep
-                      onNext={handleCredentialsNext}
-                      onSwitchToLogin={() => { setIsSignUp(false); setSignUpStep('age'); }}
-                      isLoading={isLoading}
+                {/* Step indicator */}
+                <div className="flex justify-center gap-2 mt-6">
+                  {[1, 2, 3].map((s) => (
+                    <div
+                      key={s}
+                      className={`h-1.5 rounded-full transition-all ${
+                        s === stepNumber ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
+                      }`}
                     />
-                  )}
-                  {signUpStep === 'username' && newUserId && (
-                    <UsernameStep userId={newUserId} onComplete={handleUsernameComplete} />
-                  )}
-
-                  {/* Step indicator */}
-                  <div className="flex justify-center gap-2 mt-6">
-                    {[1, 2, 3].map((s) => (
-                      <div
-                        key={s}
-                        className={`h-1.5 rounded-full transition-all ${
-                          s === stepNumber ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <LoginForm
-                  onSubmit={handleLogin}
-                  onSwitchToSignUp={() => { setIsSignUp(true); setSignUpStep('age'); }}
-                  isLoading={isLoading}
-                />
-              )}
-            </div>
-          )}
-        </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <LoginForm
+                onSubmit={handleLogin}
+                onSwitchToSignUp={() => { setIsSignUp(true); setSignUpStep('age'); }}
+                isLoading={isLoading}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
