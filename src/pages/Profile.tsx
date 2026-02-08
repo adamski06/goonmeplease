@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, Pencil } from 'lucide-react';
+import { Settings, Pencil, X } from 'lucide-react';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const [earningsExpanded, setEarningsExpanded] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -103,14 +104,89 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Earnings Node - green */}
-        <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-6 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-          <p className="text-sm text-white/60 font-jakarta mb-1">Balance</p>
+        {/* Earnings Node - green, expandable */}
+        <div
+          onClick={() => setEarningsExpanded(true)}
+          className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[32px] p-6 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] cursor-pointer active:scale-[0.98] transition-transform"
+        >
+          <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-bold text-white font-montserrat tracking-tight">0</span>
+            <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
             <span className="text-xl text-white/70 font-montserrat">sek</span>
           </div>
         </div>
+
+        {/* Expanded Earnings Overlay */}
+        {earningsExpanded && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => setEarningsExpanded(false)}
+            />
+            {/* Panel */}
+            <div
+              className="relative w-full mx-3 mb-3 rounded-[48px] overflow-hidden bg-gradient-to-b from-emerald-600 to-emerald-900 border border-emerald-400/30 shadow-2xl"
+              style={{
+                maxHeight: 'calc(100dvh - 148px)',
+                animation: 'slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1)',
+              }}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setEarningsExpanded(false)}
+                className="absolute top-5 right-5 z-10 h-9 w-9 rounded-full flex items-center justify-center"
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                }}
+              >
+                <X className="h-4 w-4 text-white" />
+              </button>
+
+              <div className="p-8 flex flex-col items-center gap-6 h-full">
+                <div className="flex flex-col items-center mt-6">
+                  <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                    <span className="text-2xl text-white/60 font-montserrat">sek</span>
+                  </div>
+                </div>
+
+                <div className="w-full space-y-3 mt-4">
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Total earned</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Pending</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
+                  </div>
+                  <div className="h-px bg-white/10" />
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
+                  </div>
+                </div>
+
+                <div className="flex-1" />
+
+                <button
+                  className="w-full py-4 rounded-2xl text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                    color: '#065f46',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+                  }}
+                >
+                  Withdraw
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
