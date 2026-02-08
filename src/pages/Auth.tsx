@@ -238,7 +238,7 @@ const Auth: React.FC = () => {
               background: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(24px) saturate(180%)',
               WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-              boxShadow: '0 0 40px rgba(255,255,255,0.35), 0 0 80px rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.08)',
+              boxShadow: '0 0 60px rgba(255,255,255,0.2), 0 0 120px rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.06)',
             }}
           >
             {/* Logo */}
