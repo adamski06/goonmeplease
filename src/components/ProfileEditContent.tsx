@@ -108,8 +108,7 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
 
       const { error } = await supabase
         .from('profiles')
-        .update(updates)
-        .eq('user_id', user.id);
+        .upsert({ ...updates, user_id: user.id }, { onConflict: 'user_id' });
 
       if (error) throw error;
 
