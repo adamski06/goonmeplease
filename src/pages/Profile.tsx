@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Settings, Pencil } from 'lucide-react';
-import defaultAvatar from '@/assets/default-avatar.png';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
@@ -54,6 +53,7 @@ const ProfilePage: React.FC = () => {
         >
           {/* Edit profile button - top right */}
           <button
+            onClick={() => navigate('/edit-profile')}
             className="absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center"
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
@@ -68,8 +68,16 @@ const ProfilePage: React.FC = () => {
           {/* Centered avatar */}
           <div className="flex flex-col items-center">
             <Avatar className="h-[100px] w-[100px] mb-3">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-black/10 text-black text-2xl font-medium">
+              {profile?.avatar_url ? (
+                <AvatarImage src={profile.avatar_url} alt={firstName} />
+              ) : null}
+              <AvatarFallback
+                className="text-2xl font-medium font-montserrat"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.15) 100%)',
+                  color: 'rgba(0,0,0,0.4)',
+                }}
+              >
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -165,10 +173,18 @@ const ProfilePage: React.FC = () => {
             </svg>
             <span className="text-[10px] text-black/40">Alerts</span>
           </button>
-          <button className="flex flex-col items-center gap-1 pt-1 w-12">
+          <button onClick={() => navigate('/profile')} className="flex flex-col items-center gap-1 pt-1 w-12">
             <Avatar className="h-6 w-6 ring-2 ring-black">
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
-              <AvatarFallback className="bg-black/10 text-black text-[10px] font-medium">
+              {profile?.avatar_url ? (
+                <AvatarImage src={profile.avatar_url} alt={firstName} />
+              ) : null}
+              <AvatarFallback
+                className="text-[10px] font-medium"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%)',
+                  color: 'rgba(0,0,0,0.5)',
+                }}
+              >
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>

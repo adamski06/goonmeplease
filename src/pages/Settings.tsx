@@ -24,7 +24,7 @@ const Settings: React.FC = () => {
     {
       title: 'Account',
       items: [
-        { icon: User, label: 'Edit Profile', action: () => {} },
+        { icon: User, label: 'Edit Profile', action: () => navigate('/edit-profile') },
         { icon: Bell, label: 'Notifications', action: () => {} },
         { icon: Shield, label: 'Privacy & Security', action: () => {} },
       ],
