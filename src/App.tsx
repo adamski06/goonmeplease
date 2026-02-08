@@ -14,6 +14,7 @@ import Activity from "./pages/Activity";
 import Alerts from "./pages/Alerts";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/alerts" element={<Alerts />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
