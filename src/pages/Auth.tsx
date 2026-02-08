@@ -171,7 +171,7 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-black/40 backdrop-blur-sm">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
-        <div className="w-full max-w-sm bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/40">
+        <div className="w-full max-w-sm bg-white backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/40">
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="relative h-12 w-[160px]">

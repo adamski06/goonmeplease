@@ -58,7 +58,7 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center space-y-2">
-        <h2 className="text-xl font-semibold text-foreground">Create your account</h2>
+        <h2 className="text-xl font-semibold text-black">Create your account</h2>
       </div>
 
       {/* Method toggle */}
@@ -67,7 +67,7 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
           type="button"
           onClick={() => setMethod('email')}
           className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            method === 'email' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground'
+            method === 'email' ? 'bg-black text-white shadow-sm' : 'text-black/50'
           }`}
         >
           Email
@@ -76,7 +76,7 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
           type="button"
           onClick={() => setMethod('phone')}
           className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-            method === 'phone' ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground'
+            method === 'phone' ? 'bg-black text-white shadow-sm' : 'text-black/50'
           }`}
         >
           Phone
@@ -84,7 +84,7 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="signup-name" className="text-foreground text-sm font-medium">Full Name</Label>
+        <Label htmlFor="signup-name" className="text-black text-sm font-medium">Full Name</Label>
         <Input
           id="signup-name"
           type="text"
@@ -92,13 +92,13 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           autoComplete="name"
-          className="bg-transparent border-0 border-b border-foreground/20 rounded-none px-0 py-2 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-foreground"
+          className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
         />
       </div>
 
       {method === 'email' ? (
         <div className="space-y-1.5">
-          <Label htmlFor="signup-email" className="text-foreground text-sm font-medium">Email</Label>
+          <Label htmlFor="signup-email" className="text-black text-sm font-medium">Email</Label>
           <Input
             id="signup-email"
             type="email"
@@ -107,12 +107,12 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="bg-transparent border-0 border-b border-foreground/20 rounded-none px-0 py-2 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-foreground"
+            className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
           />
         </div>
       ) : (
         <div className="space-y-1.5">
-          <Label htmlFor="signup-phone" className="text-foreground text-sm font-medium">Phone Number</Label>
+          <Label htmlFor="signup-phone" className="text-black text-sm font-medium">Phone Number</Label>
           <Input
             id="signup-phone"
             type="tel"
@@ -121,13 +121,13 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
             onChange={(e) => setPhone(e.target.value)}
             required
             autoComplete="tel"
-            className="bg-transparent border-0 border-b border-foreground/20 rounded-none px-0 py-2 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-foreground"
+            className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
           />
         </div>
       )}
 
       <div className="space-y-1.5">
-        <Label htmlFor="signup-password" className="text-foreground text-sm font-medium">Password</Label>
+        <Label htmlFor="signup-password" className="text-black text-sm font-medium">Password</Label>
         <Input
           id="signup-password"
           type="password"
@@ -136,23 +136,29 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="new-password"
-          className="bg-transparent border-0 border-b border-foreground/20 rounded-none px-0 py-2 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-foreground"
+          className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
         />
       </div>
 
       <div className="pt-2">
         <Button
           type="submit"
-          className="w-full py-3 h-auto rounded-full bg-foreground text-background hover:bg-foreground/80 font-semibold"
+          className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
+          style={{
+            background: 'linear-gradient(180deg, rgba(60, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            boxShadow: '0 4px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+          }}
           disabled={isLoading}
         >
           {isLoading ? 'Creating account...' : 'Continue'}
         </Button>
       </div>
 
-      <p className="text-center text-muted-foreground text-sm pt-1">
+      <p className="text-center text-black/50 text-sm pt-1">
         Already have an account?{' '}
-        <button type="button" onClick={onSwitchToLogin} className="text-foreground underline hover:text-foreground/70">
+        <button type="button" onClick={onSwitchToLogin} className="text-black underline hover:text-black/70">
           Log in
         </button>
       </p>

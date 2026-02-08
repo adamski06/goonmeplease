@@ -70,14 +70,14 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ userId, onComplete }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-center space-y-2">
-        <h2 className="text-xl font-semibold text-foreground">Choose a username</h2>
-        <p className="text-sm text-muted-foreground">This is how others will find you</p>
+        <h2 className="text-xl font-semibold text-black">Choose a username</h2>
+        <p className="text-sm text-black/50">This is how others will find you</p>
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="username" className="text-foreground text-sm font-medium">Username</Label>
+        <Label htmlFor="username" className="text-black text-sm font-medium">Username</Label>
         <div className="relative">
-          <span className="absolute left-0 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">@</span>
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 text-black/40 text-sm">@</span>
           <Input
             id="username"
             type="text"
@@ -86,15 +86,21 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ userId, onComplete }) => {
             onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, ''))}
             required
             autoComplete="username"
-            className="bg-transparent border-0 border-b border-foreground/20 rounded-none pl-5 pr-0 py-2 text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:border-foreground"
+            className="bg-transparent border-0 border-b border-black/20 rounded-none pl-5 pr-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
           />
         </div>
-        <p className="text-xs text-muted-foreground">Letters, numbers, dots and underscores only</p>
+        <p className="text-xs text-black/40">Letters, numbers, dots and underscores only</p>
       </div>
 
       <Button
         type="submit"
-        className="w-full py-3 h-auto rounded-full bg-foreground text-background hover:bg-foreground/80 font-semibold"
+        className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
+        style={{
+          background: 'linear-gradient(180deg, rgba(60, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          boxShadow: '0 4px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+        }}
         disabled={isLoading || !username.trim()}
       >
         {isLoading ? 'Setting up...' : 'Get Started'}
