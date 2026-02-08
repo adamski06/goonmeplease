@@ -233,11 +233,12 @@ const Auth: React.FC = () => {
         ) : (
           /* Card content */
           <div
-            className="w-full max-w-sm rounded-3xl shadow-2xl p-8 border border-white/30 animate-fade-in"
+            className="w-full max-w-sm rounded-3xl p-8 border border-white/40 animate-fade-in"
             style={{
               background: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(24px) saturate(180%)',
               WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              boxShadow: '0 0 40px rgba(255,255,255,0.35), 0 0 80px rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.08)',
             }}
           >
             {/* Logo */}
