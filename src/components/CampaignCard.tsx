@@ -208,8 +208,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           onClick={closeNode}
           className="fixed left-0 right-0 z-50 rounded-[48px] overflow-hidden"
           style={{
-            top: expandReady ? '12px' : `${startTop}px`,
-            bottom: expandReady ? '88px' : `${startBottom}px`,
+            top: expandReady ? '56px' : `${startTop}px`,
+            bottom: expandReady ? '92px' : `${startBottom}px`,
             left: expandReady ? '12px' : `${startLeft}px`,
             right: expandReady ? '12px' : `${startRight}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1), left 0.5s cubic-bezier(0.32, 0.72, 0, 1), right 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
