@@ -186,7 +186,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           height: 'calc(100dvh - 148px)',
           clipPath: isVisuallyExpanded 
             ? 'inset(0 0 0 0 round 48px)' 
-            : 'inset(calc(100% - 180px) 0 0 0 round 48px)',
+            : 'inset(calc(100% - 180px) 8px 12px 8px round 48px)',
           transition: isDragging ? 'none' : 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           zIndex: isVisuallyExpanded ? 20 : 10,
@@ -200,7 +200,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           className="absolute bottom-0 left-0 right-0 px-4 flex flex-col h-[180px]"
           style={{
             opacity: isExpanded ? 0 : 1,
-            transition: 'opacity 0.35s ease-out',
+            transition: isExpanded ? 'opacity 0.2s ease-out' : 'opacity 0.3s ease-out 0.2s',
             pointerEvents: isExpanded ? 'none' : 'auto',
           }}
         >
@@ -242,7 +242,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               maxHeight: 'calc(100dvh - 148px)',
               height: 'calc(100dvh - 148px)',
               opacity: isClosing ? 0 : 1,
-              transition: 'opacity 0.35s ease-out',
+              transition: isClosing ? 'opacity 0.2s ease-out' : 'opacity 0.3s ease-out 0.15s',
             }}
           >
             {/* X close button - always visible */}
