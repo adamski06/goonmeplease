@@ -152,36 +152,45 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        {!isExpanded ? (
-          /* Collapsed state */
-          <div className="px-4 flex flex-col h-[180px]">
-            {/* Brand logo + name */}
-            <div className="flex items-center gap-2.5 pt-4 pb-1">
-              <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-              </div>
-              <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+        {/* Collapsed state - always rendered, fades in/out */}
+        <div
+          className="px-4 flex flex-col h-[180px]"
+          style={{
+            opacity: isExpanded ? 0 : 1,
+            transition: 'opacity 0.35s ease-out',
+            pointerEvents: isExpanded ? 'none' : 'auto',
+            position: isExpanded ? 'absolute' : 'relative',
+            inset: isExpanded ? 0 : undefined,
+          }}
+        >
+          {/* Brand logo + name */}
+          <div className="flex items-center gap-2.5 pt-4 pb-1">
+            <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
             </div>
-            {/* Description text */}
-            <div className="pb-2">
-              <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
+            <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+          </div>
+          {/* Description text */}
+          <div className="pb-2">
+            <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
+          </div>
+          {/* Original earnings + tiktok row */}
+          <div className="flex items-center justify-between flex-1 pb-3">
+            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <span className="text-xl font-bold text-white font-montserrat">
+                {campaign.maxEarnings.toLocaleString()}
+              </span>
+              <span className="text-sm font-semibold text-white/80 font-montserrat">
+                sek
+              </span>
             </div>
-            {/* Original earnings + tiktok row */}
-            <div className="flex items-center justify-between flex-1 pb-3">
-              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <span className="text-xl font-bold text-white font-montserrat">
-                  {campaign.maxEarnings.toLocaleString()}
-                </span>
-                <span className="text-sm font-semibold text-white/80 font-montserrat">
-                  sek
-                </span>
-              </div>
-              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
-              </div>
+            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
             </div>
           </div>
-        ) : (
+        </div>
+
+        {isExpanded && (
           /* Expanded state (stays rendered during closing for smooth animation) */
           <div
             className="h-full flex flex-col overflow-hidden relative"
