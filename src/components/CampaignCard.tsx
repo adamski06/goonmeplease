@@ -197,15 +197,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       >
         {/* Collapsed state - anchored at bottom of full-height container */}
         <div
-          className="absolute bottom-0 left-0 right-0 px-4 flex flex-col h-[180px]"
+          className="absolute bottom-0 left-0 right-0 px-6 flex flex-col h-[180px]"
           style={{
             opacity: isExpanded ? 0 : 1,
-            transition: isExpanded ? 'opacity 0.2s ease-out' : 'opacity 0.3s ease-out 0.2s',
+            transition: isExpanded ? 'opacity 0.1s ease-out' : 'opacity 0.25s ease-out 0.25s',
             pointerEvents: isExpanded ? 'none' : 'auto',
           }}
         >
           {/* Brand logo + name */}
-          <div className="flex items-center gap-2.5 pt-4 pb-1">
+          <div className="flex items-center gap-2.5 pt-5 pb-1">
             <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
             </div>
@@ -216,7 +216,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
           </div>
           {/* Original earnings + tiktok row */}
-          <div className="flex items-center justify-between flex-1 pb-3">
+          <div className="flex items-center justify-between flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-xl font-bold text-white font-montserrat">
                 {campaign.maxEarnings.toLocaleString()}
@@ -242,7 +242,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               maxHeight: 'calc(100dvh - 148px)',
               height: 'calc(100dvh - 148px)',
               opacity: isClosing ? 0 : 1,
-              transition: isClosing ? 'opacity 0.2s ease-out' : 'opacity 0.3s ease-out 0.15s',
+              transition: isClosing ? 'opacity 0.1s ease-out' : 'opacity 0.3s ease-out 0.2s',
             }}
           >
             {/* X close button - always visible */}
