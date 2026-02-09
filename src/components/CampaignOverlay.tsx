@@ -89,12 +89,12 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 
       <style>{`
         @keyframes pill-slide-up {
-          0% { transform: translateY(100%); }
+          0% { transform: translateY(calc(100% + 92px)); }
           100% { transform: translateY(0); }
         }
         @keyframes pill-slide-down {
           0% { transform: translateY(0); }
-          100% { transform: translateY(100%); }
+          100% { transform: translateY(calc(100% + 92px)); }
         }
       `}</style>
 
