@@ -151,7 +151,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
-          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" loading="lazy" />
           <div
             className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
             style={{
@@ -208,7 +208,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           onClick={closeNode}
           className="fixed left-0 right-0 z-50 rounded-[48px] overflow-hidden"
           style={{
-            top: expandReady ? '80px' : `${startTop}px`,
+            top: expandReady ? '12px' : `${startTop}px`,
             bottom: expandReady ? '88px' : `${startBottom}px`,
             left: expandReady ? '12px' : `${startLeft}px`,
             right: expandReady ? '12px' : `${startRight}px`,
