@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import SubmissionGuide from '@/components/SubmissionGuide';
+import SubmitDraft from '@/components/SubmitDraft';
 import CampaignOverlay from '@/components/CampaignOverlay';
 import { Campaign } from '@/data/campaigns';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
@@ -15,6 +16,8 @@ const Activity: React.FC = () => {
   const [activeCampaign, setActiveCampaign] = useState<Campaign | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const [submitSliding, setSubmitSliding] = useState(false);
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const recentCampaigns = useRecentCampaigns();
@@ -46,6 +49,27 @@ const Activity: React.FC = () => {
       setShowGuide(false);
       setActiveCampaign(null);
       setGuideSliding(false);
+    }, 300);
+  };
+
+  const handleGuideComplete = () => {
+    setGuideSliding(true);
+    setTimeout(() => {
+      setShowGuide(false);
+      setGuideSliding(false);
+      setSubmitSliding(true);
+      setTimeout(() => {
+        setShowSubmit(true);
+        setSubmitSliding(false);
+      }, 300);
+    }, 300);
+  };
+
+  const handleBackFromSubmit = () => {
+    setSubmitSliding(true);
+    setTimeout(() => {
+      setShowSubmit(false);
+      setSubmitSliding(false);
     }, 300);
   };
 
@@ -139,7 +163,20 @@ const Activity: React.FC = () => {
                   pointerEvents: showGuide && !guideSliding ? 'auto' : 'none',
                 }}
               >
-                <SubmissionGuide campaign={activeCampaign} onBack={handleCloseGuide} />
+                <SubmissionGuide campaign={activeCampaign} onBack={handleCloseGuide} onComplete={handleGuideComplete} />
+              </div>
+
+              {/* Submit Draft panel */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  transform: showSubmit && !submitSliding ? 'translateX(0)' : 'translateX(100%)',
+                  opacity: showSubmit && !submitSliding ? 1 : 0,
+                  transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                  pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
+                }}
+              >
+                <SubmitDraft campaign={activeCampaign} onBack={handleBackFromSubmit} />
               </div>
             </div>
           </div>
