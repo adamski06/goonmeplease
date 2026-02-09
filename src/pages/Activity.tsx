@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import SubmissionGuide from '@/components/SubmissionGuide';
-import CampaignDetailView from '@/components/CampaignDetailView';
+import CampaignOverlay from '@/components/CampaignOverlay';
 import { Campaign } from '@/data/campaigns';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
 import { ChevronRight, X } from 'lucide-react';
@@ -16,9 +16,9 @@ const Activity: React.FC = () => {
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
+  const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const recentCampaigns = useRecentCampaigns();
 
-  // Check if a campaign was passed via navigation state
   useEffect(() => {
     const state = location.state as { campaign?: Campaign } | null;
     if (state?.campaign) {
@@ -51,6 +51,15 @@ const Activity: React.FC = () => {
 
   const handleRecentCampaignClick = (campaign: Campaign) => {
     setSelectedRecentCampaign(campaign);
+  };
+
+  const handleCloseOverlay = () => {
+    if (isClosingOverlay) return;
+    setIsClosingOverlay(true);
+    setTimeout(() => {
+      setSelectedRecentCampaign(null);
+      setIsClosingOverlay(false);
+    }, 400);
   };
 
   if (loading) {
@@ -93,7 +102,6 @@ const Activity: React.FC = () => {
             }}
           >
             <div className="relative overflow-hidden" style={{ height: 'calc(100dvh - 280px)' }}>
-              {/* Campaign summary */}
               <div
                 className="absolute inset-0 flex flex-col overflow-hidden"
                 style={{
@@ -122,7 +130,6 @@ const Activity: React.FC = () => {
                 </div>
               </div>
 
-              {/* Guide */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -176,9 +183,7 @@ const Activity: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                    <span className="text-xs font-bold text-white font-montserrat">
-                      {campaign.maxEarnings.toLocaleString()}
-                    </span>
+                    <span className="text-xs font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
                     <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-black/30" />
@@ -189,11 +194,12 @@ const Activity: React.FC = () => {
         )}
       </div>
 
-      {/* Campaign Detail Overlay (opens like home page) */}
+      {/* Campaign detail overlay — same as Discover */}
       {selectedRecentCampaign && (
-        <CampaignDetailView
+        <CampaignOverlay
           campaign={selectedRecentCampaign}
-          onBack={() => setSelectedRecentCampaign(null)}
+          isClosing={isClosingOverlay}
+          onClose={handleCloseOverlay}
           isSaved={false}
           onToggleSave={() => {}}
         />
