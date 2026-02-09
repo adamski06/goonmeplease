@@ -5,6 +5,7 @@ import { Campaign } from '@/data/campaigns';
 interface SubmissionGuideProps {
   campaign: Campaign;
   onBack: () => void;
+  onComplete: () => void;
 }
 
 const steps = [
@@ -22,16 +23,17 @@ const steps = [
   },
   {
     number: 3,
-    title: 'Submit your link',
-    description: 'Paste your TikTok video link here. We\'ll review your content and start tracking views once approved.',
+    title: 'Submit for review',
+    description: 'Upload your video draft here for review. Once approved, post it on TikTok and we\'ll start tracking your views.',
     icon: CheckCircle,
   },
 ];
 
-const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack }) => {
+const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [sliding, setSliding] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'forward' | 'back'>('forward');
+  const [dontShowAgain, setDontShowAgain] = useState(false);
 
   const goToStep = (nextStep: number) => {
     if (nextStep === currentStep || sliding) return;
@@ -42,6 +44,21 @@ const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack }) =
       setSliding(false);
     }, 300);
   };
+
+  const handleContinue = () => {
+    if (dontShowAgain) {
+      try {
+        const skipped = JSON.parse(localStorage.getItem('skippedGuides') || '[]');
+        if (!skipped.includes(campaign.id)) {
+          skipped.push(campaign.id);
+          localStorage.setItem('skippedGuides', JSON.stringify(skipped));
+        }
+      } catch {}
+    }
+    onComplete();
+  };
+
+  const isLastStep = currentStep === steps.length - 1;
 
   return (
     <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
@@ -91,19 +108,13 @@ const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack }) =
             opacity = 0;
           }
 
-          // The next step sliding in
-          if (sliding && idx === (slideDirection === 'forward' ? currentStep + 1 : currentStep - 1)) {
-            // This is a placeholder — handled by the timeout transition
-          }
-
-          // Show the incoming step
           const isIncoming = sliding && (
             (slideDirection === 'forward' && idx === currentStep + 1) ||
             (slideDirection === 'back' && idx === currentStep - 1)
           );
 
           if (isIncoming) {
-            transform = slideDirection === 'forward' ? 'translateX(0)' : 'translateX(0)';
+            transform = 'translateX(0)';
             opacity = 1;
           }
 
@@ -145,32 +156,39 @@ const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack }) =
 
       {/* CTA at bottom */}
       <div className="px-5 py-5 flex-shrink-0">
-        {currentStep < steps.length - 1 ? (
-          <button
-            onClick={() => goToStep(currentStep + 1)}
-            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
-            style={{
-              background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
-              border: '1.5px solid rgba(60,60,60,0.6)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1)',
-              color: 'white',
-            }}
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
-            style={{
-              background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
-              border: '1.5px solid rgba(60,60,60,0.6)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1)',
-              color: 'white',
-            }}
-          >
-            Submit your TikTok link
-          </button>
+        {isLastStep && (
+          <label className="flex items-center gap-2.5 mb-4 px-1 cursor-pointer">
+            <div
+              onClick={() => setDontShowAgain(!dontShowAgain)}
+              className="h-5 w-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
+              style={{
+                background: dontShowAgain
+                  ? 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)'
+                  : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                border: dontShowAgain ? '1.5px solid rgba(60,60,60,0.6)' : '1.5px solid rgba(0,0,0,0.15)',
+              }}
+            >
+              {dontShowAgain && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
+            <span className="text-xs font-medium text-black/50 font-jakarta">Don't show this again</span>
+          </label>
         )}
+        <button
+          onClick={isLastStep ? handleContinue : () => goToStep(currentStep + 1)}
+          className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+          style={{
+            background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+            border: '1.5px solid rgba(60,60,60,0.6)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1)',
+            color: 'white',
+          }}
+        >
+          {isLastStep ? 'Continue' : 'Next'}
+        </button>
       </div>
     </div>
   );

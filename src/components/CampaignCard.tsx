@@ -4,6 +4,7 @@ import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
+import SubmitDraft from '@/components/SubmitDraft';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 
 interface CampaignCardProps {
@@ -22,6 +23,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   const [isClosing, setIsClosing] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const [submitSliding, setSubmitSliding] = useState(false);
   
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -32,6 +35,18 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   const handleContinue = () => {
     addRecentCampaign(campaign.id);
+    // Check if guide should be skipped
+    try {
+      const skipped = JSON.parse(localStorage.getItem('skippedGuides') || '[]');
+      if (skipped.includes(campaign.id)) {
+        setSubmitSliding(true);
+        setTimeout(() => {
+          setShowSubmit(true);
+          setSubmitSliding(false);
+        }, 300);
+        return;
+      }
+    } catch {}
     setGuideSliding(true);
     setTimeout(() => {
       setShowGuide(true);
@@ -47,6 +62,27 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
+  const handleGuideComplete = () => {
+    setGuideSliding(true);
+    setTimeout(() => {
+      setShowGuide(false);
+      setGuideSliding(false);
+      setSubmitSliding(true);
+      setTimeout(() => {
+        setShowSubmit(true);
+        setSubmitSliding(false);
+      }, 300);
+    }, 300);
+  };
+
+  const handleBackFromSubmit = () => {
+    setSubmitSliding(true);
+    setTimeout(() => {
+      setShowSubmit(false);
+      setSubmitSliding(false);
+    }, 300);
+  };
+
   const triggerClose = () => {
     if (!isExpanded || isClosing) return;
     setIsClosing(true);
@@ -55,6 +91,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       setIsClosing(false);
       setShowGuide(false);
       setGuideSliding(false);
+      setShowSubmit(false);
+      setSubmitSliding(false);
     }, 500);
   };
 
@@ -340,7 +378,20 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 pointerEvents: showGuide && !guideSliding ? 'auto' : 'none',
               }}
             >
-              <SubmissionGuide campaign={campaign} onBack={handleBackFromGuide} />
+              <SubmissionGuide campaign={campaign} onBack={handleBackFromGuide} onComplete={handleGuideComplete} />
+            </div>
+
+            {/* Submit Draft panel */}
+            <div
+              className="absolute inset-0"
+              style={{
+                transform: showSubmit && !submitSliding ? 'translateX(0)' : 'translateX(100%)',
+                opacity: showSubmit && !submitSliding ? 1 : 0,
+                transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
+              }}
+            >
+              <SubmitDraft campaign={campaign} onBack={handleBackFromSubmit} />
             </div>
           </div>
         )}

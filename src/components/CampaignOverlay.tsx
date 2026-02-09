@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
+import SubmitDraft from '@/components/SubmitDraft';
 import { Campaign } from '@/data/campaigns';
 
 interface CampaignOverlayProps {
@@ -22,8 +23,22 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
   const [showPicture, setShowPicture] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const [submitSliding, setSubmitSliding] = useState(false);
 
   const handleContinue = () => {
+    // Check if guide should be skipped
+    try {
+      const skipped = JSON.parse(localStorage.getItem('skippedGuides') || '[]');
+      if (skipped.includes(campaign.id)) {
+        setSubmitSliding(true);
+        setTimeout(() => {
+          setShowSubmit(true);
+          setSubmitSliding(false);
+        }, 300);
+        return;
+      }
+    } catch {}
     setGuideSliding(true);
     setTimeout(() => {
       setShowGuide(true);
@@ -36,6 +51,27 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
     setTimeout(() => {
       setShowGuide(false);
       setGuideSliding(false);
+    }, 300);
+  };
+
+  const handleGuideComplete = () => {
+    setGuideSliding(true);
+    setTimeout(() => {
+      setShowGuide(false);
+      setGuideSliding(false);
+      setSubmitSliding(true);
+      setTimeout(() => {
+        setShowSubmit(true);
+        setSubmitSliding(false);
+      }, 300);
+    }, 300);
+  };
+
+  const handleBackFromSubmit = () => {
+    setSubmitSliding(true);
+    setTimeout(() => {
+      setShowSubmit(false);
+      setSubmitSliding(false);
     }, 300);
   };
 
@@ -234,7 +270,20 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
               pointerEvents: showGuide && !guideSliding ? 'auto' : 'none',
             }}
           >
-            <SubmissionGuide campaign={campaign} onBack={handleBackFromGuide} />
+            <SubmissionGuide campaign={campaign} onBack={handleBackFromGuide} onComplete={handleGuideComplete} />
+          </div>
+
+          {/* Submit Draft panel */}
+          <div
+            className="absolute inset-0"
+            style={{
+              transform: showSubmit && !submitSliding ? 'translateX(0)' : 'translateX(100%)',
+              opacity: showSubmit && !submitSliding ? 1 : 0,
+              transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+              pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
+            }}
+          >
+            <SubmitDraft campaign={campaign} onBack={handleBackFromSubmit} />
           </div>
         </div>
       </div>
