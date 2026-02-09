@@ -184,8 +184,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 sek
               </span>
             </div>
-            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
+              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
+              </div>
             </div>
           </div>
         </div>

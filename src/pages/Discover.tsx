@@ -134,14 +134,14 @@ const Discover: React.FC = () => {
                     </div>
                     <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   </div>
-                  <div className="absolute inset-x-0 bottom-[62px] px-3">
+                  <div className="absolute inset-x-0 bottom-[72px] px-3">
                     <div className="absolute inset-x-0 bottom-[-14px] h-[90px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
-                    <p className="relative text-sm font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg">
+                    <p className="relative text-xs font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg leading-relaxed">
                       {campaign.description}
                     </p>
                   </div>
                   <div
-                    className="absolute bottom-2 left-2 right-2 h-[52px] rounded-[26px] px-3 flex items-center justify-between"
+                    className="absolute bottom-2 left-2 right-2 h-[62px] rounded-[26px] px-3 flex items-center justify-between"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.8)',
