@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
@@ -17,6 +18,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   isSaved,
   onToggleFavorite,
 }) => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [dragY, setDragY] = useState(0);
@@ -256,7 +258,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
               <button
                 className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/activity', { state: { campaign } });
+                }}
                 style={{
                   background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
                   border: '1.5px solid rgba(60,60,60,0.6)',
@@ -265,7 +270,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 }}
               >
                 <Plus className="h-4 w-4" />
-                Submit Content
+                Continue
               </button>
               <button
                 onClick={(e) => {

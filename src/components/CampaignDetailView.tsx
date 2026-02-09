@@ -176,7 +176,7 @@ const CampaignDetailView: React.FC<CampaignDetailViewProps> = ({
               }}
             >
               <Plus className="h-4 w-4" />
-              Submit Content
+              Continue
             </button>
           </div>
         </div>
