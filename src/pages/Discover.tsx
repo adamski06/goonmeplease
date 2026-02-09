@@ -113,29 +113,30 @@ const Discover: React.FC = () => {
         {/* Grid */}
         <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
           <div className="px-3">
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-2">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-all w-full rounded-[32px] aspect-[9/16]"
+                  className="relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform w-full rounded-[28px] aspect-[9/14] select-none"
+                  style={{ WebkitUserDrag: 'none' } as React.CSSProperties}
                 >
-                  <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[32px]" />
+                  <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
                   <div
-                    className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[32px]"
+                    className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[28px]"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     }}
                   />
-                  <div className="absolute inset-x-0 top-0 h-[80px] bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none rounded-t-[32px]" />
-                  <div className="absolute top-3 left-3 right-3 flex items-center gap-2">
-                    <div className="h-[22px] w-[22px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
-                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                  <div className="absolute inset-x-0 top-0 h-[70px] bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none rounded-t-[28px]" />
+                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center gap-1.5">
+                    <div className="h-[20px] w-[20px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
+                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />
                     </div>
                     <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   </div>
                   <div
-                    className="absolute bottom-2 left-2 right-2 rounded-[26px] px-3 pt-2.5 pb-2.5 flex flex-col gap-1.5"
+                    className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.8)',
@@ -151,7 +152,7 @@ const Discover: React.FC = () => {
                         <span className="text-[10px] font-semibold text-white/80 font-montserrat">sek</span>
                       </div>
                       <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                        <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
+                        <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain pointer-events-none" draggable={false} />
                       </div>
                     </div>
                   </div>
