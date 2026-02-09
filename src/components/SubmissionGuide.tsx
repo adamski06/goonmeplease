@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Video, Upload, CheckCircle } from 'lucide-react';
-import { Campaign } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
 
 interface SubmissionGuideProps {
   campaign: Campaign;

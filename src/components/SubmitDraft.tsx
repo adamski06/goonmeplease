@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, Film, Upload, X } from 'lucide-react';
-import { Campaign } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
 
 interface SubmitDraftProps {
   campaign: Campaign;

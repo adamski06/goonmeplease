@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -11,7 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { campaigns, Campaign } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
+import { useCampaigns } from '@/hooks/useCampaigns';
 import BottomNav from '@/components/BottomNav';
 import CampaignOverlay from '@/components/CampaignOverlay';
 
@@ -25,6 +26,7 @@ const Discover: React.FC = () => {
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const savedScrollPosition = useRef<number>(0);
+  const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
 
   const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
@@ -78,6 +80,15 @@ const Discover: React.FC = () => {
     }
   };
 
+  // Load more on scroll
+  const handleScroll = useCallback(() => {
+    if (!featuredScrollRef.current || !hasMore) return;
+    const { scrollTop, scrollHeight, clientHeight } = featuredScrollRef.current;
+    if (scrollHeight - scrollTop - clientHeight < clientHeight) {
+      loadMore();
+    }
+  }, [hasMore, loadMore]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -92,7 +103,6 @@ const Discover: React.FC = () => {
       <BottomNav onAuthRequired={() => setShowAuthPrompt(true)} />
 
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* Campaign detail overlay */}
         {selectedCampaign && (
           <CampaignOverlay
             campaign={selectedCampaign}
@@ -103,15 +113,18 @@ const Discover: React.FC = () => {
           />
         )}
 
-        {/* Header */}
         <div className="flex flex-col border-b border-black/10 bg-white safe-area-top">
           <div className="flex items-center justify-center px-4 py-3">
             <span className="text-base font-semibold text-black">Discover</span>
           </div>
         </div>
 
-        {/* Grid */}
-        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide overscroll-contain" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+        <div
+          ref={featuredScrollRef}
+          onScroll={handleScroll}
+          className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide overscroll-contain"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+        >
           <div className="px-3">
             <div className="grid grid-cols-2 gap-x-2 gap-y-4">
               {campaigns.map((campaign) => (
@@ -159,11 +172,20 @@ const Discover: React.FC = () => {
                 </div>
               ))}
             </div>
+            {campaignsLoading && (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-pulse text-black/40 text-sm">Loading...</div>
+              </div>
+            )}
+            {!campaignsLoading && campaigns.length === 0 && (
+              <div className="flex items-center justify-center py-20">
+                <p className="text-black/40 text-sm">No campaigns available</p>
+              </div>
+            )}
           </div>
         </div>
       </main>
 
-      {/* Auth Prompt Dialog */}
       <Dialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
         <DialogContent className="sm:max-w-sm bg-white border-0 rounded-[24px] p-6">
           <DialogHeader>

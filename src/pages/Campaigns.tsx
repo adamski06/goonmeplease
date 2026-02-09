@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import CampaignCard from '@/components/CampaignCard';
 import BottomNav from '@/components/BottomNav';
-import { campaigns } from '@/data/campaigns';
+import { useCampaigns } from '@/hooks/useCampaigns';
 
 const Campaigns: React.FC = () => {
   const { user, loading } = useAuth();
@@ -19,6 +19,8 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Fetch user favorites
   useEffect(() => {
@@ -58,15 +60,15 @@ const Campaigns: React.FC = () => {
     }
   };
 
-  // Preload all campaign logos
-  useEffect(() => {
-    campaigns.forEach((campaign) => {
-      const img = new Image();
-      img.src = campaign.logo;
-    });
-  }, []);
-
-  const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  // Load more when scrolling near the end
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current || !hasMore) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    // Load more when within 2 screens of the bottom
+    if (scrollHeight - scrollTop - clientHeight < clientHeight * 2) {
+      loadMore();
+    }
+  }, [hasMore, loadMore]);
 
   if (loading) {
     return (
@@ -78,15 +80,13 @@ const Campaigns: React.FC = () => {
 
   return (
     <div className="h-screen flex relative overflow-hidden">
-      {/* Mobile-only black background */}
       <div className="absolute inset-0 bg-black" />
-
       <BottomNav variant="dark" onAuthRequired={() => setShowAuthPrompt(true)} />
 
-      {/* Main Content */}
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
-        {/* For You Feed - Full screen on mobile */}
         <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
           className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
@@ -99,10 +99,19 @@ const Campaigns: React.FC = () => {
               onToggleFavorite={toggleFavorite}
             />
           ))}
+          {campaignsLoading && campaigns.length === 0 && (
+            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
+              <div className="animate-pulse text-white/40">Loading campaigns...</div>
+            </div>
+          )}
+          {!campaignsLoading && campaigns.length === 0 && (
+            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
+              <div className="text-white/40">No campaigns available</div>
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Auth Prompt Dialog */}
       <Dialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
         <DialogContent className="sm:max-w-sm bg-white border-0 rounded-[24px] p-6">
           <DialogHeader>
@@ -113,19 +122,13 @@ const Campaigns: React.FC = () => {
           </p>
           <div className="flex flex-col gap-3">
             <button 
-              onClick={() => {
-                setShowAuthPrompt(false);
-                navigate('/auth?mode=signup');
-              }}
+              onClick={() => { setShowAuthPrompt(false); navigate('/auth?mode=signup'); }}
               className="w-full py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-black/80 transition-colors"
             >
               Create account
             </button>
             <button 
-              onClick={() => {
-                setShowAuthPrompt(false);
-                navigate('/auth?mode=login');
-              }}
+              onClick={() => { setShowAuthPrompt(false); navigate('/auth?mode=login'); }}
               className="w-full py-3 border border-black/20 text-black rounded-full text-sm font-medium hover:bg-black/5 transition-colors"
             >
               Log in

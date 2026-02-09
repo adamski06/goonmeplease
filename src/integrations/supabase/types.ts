@@ -110,16 +110,21 @@ export type Database = {
           brand_name: string
           business_id: string
           category: string | null
+          cover_image_url: string | null
           created_at: string
           deadline: string | null
           description: string | null
-          guidelines: string | null
+          example_image_urls: string[] | null
+          guidelines: string[] | null
           id: string
           is_active: boolean | null
+          max_earnings: number | null
+          product_visibility: string | null
           status: string | null
           title: string
           total_budget: number | null
           updated_at: string
+          video_length: string | null
         }
         Insert: {
           assets_urls?: string[] | null
@@ -127,16 +132,21 @@ export type Database = {
           brand_name: string
           business_id: string
           category?: string | null
+          cover_image_url?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
-          guidelines?: string | null
+          example_image_urls?: string[] | null
+          guidelines?: string[] | null
           id?: string
           is_active?: boolean | null
+          max_earnings?: number | null
+          product_visibility?: string | null
           status?: string | null
           title: string
           total_budget?: number | null
           updated_at?: string
+          video_length?: string | null
         }
         Update: {
           assets_urls?: string[] | null
@@ -144,16 +154,21 @@ export type Database = {
           brand_name?: string
           business_id?: string
           category?: string | null
+          cover_image_url?: string | null
           created_at?: string
           deadline?: string | null
           description?: string | null
-          guidelines?: string | null
+          example_image_urls?: string[] | null
+          guidelines?: string[] | null
           id?: string
           is_active?: boolean | null
+          max_earnings?: number | null
+          product_visibility?: string | null
           status?: string | null
           title?: string
           total_budget?: number | null
           updated_at?: string
+          video_length?: string | null
         }
         Relationships: []
       }
