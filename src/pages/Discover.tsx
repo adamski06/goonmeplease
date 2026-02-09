@@ -111,15 +111,15 @@ const Discover: React.FC = () => {
         </div>
 
         {/* Grid */}
-        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+        <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide overscroll-contain" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
           <div className="px-3">
             <div className="grid grid-cols-2 gap-x-2 gap-y-4">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
-                  className="relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform w-full rounded-[28px] aspect-[9/14] select-none"
-                  style={{ WebkitUserDrag: 'none' } as React.CSSProperties}
+                  className="relative overflow-hidden w-full rounded-[28px] aspect-[9/14] select-none"
+                  style={{ WebkitUserDrag: 'none', touchAction: 'pan-y' } as React.CSSProperties}
                 >
                   <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
                   <div

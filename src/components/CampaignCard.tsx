@@ -187,7 +187,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           clipPath: isVisuallyExpanded 
             ? 'inset(0 0 0 0 round 48px)' 
             : 'inset(calc(100% - 180px) 8px 12px 8px round 48px)',
-          transition: isDragging ? 'none' : 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          transition: isDragging ? 'none' : 'clip-path 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           zIndex: isVisuallyExpanded ? 20 : 10,
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
