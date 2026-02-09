@@ -192,14 +192,14 @@ const Auth: React.FC = () => {
   const stepNumber = signUpStep === 'age' ? 1 : signUpStep === 'credentials' ? 2 : 3;
 
   return (
-    <div className="min-h-screen flex flex-col bg-black/40 backdrop-blur-sm">
+    <div className="min-h-screen flex flex-col bg-white">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         {viewState === 'loading' ? (
           /* Full-screen loading — white logo + white bar expanding from center */
           <div className="flex flex-col items-center justify-center">
             <div className="relative h-10 w-[140px] mb-6">
               <div
-                className="absolute inset-0 bg-white"
+                className="absolute inset-0 bg-black"
                 style={{
                   WebkitMaskImage: `url(${jarlaLogo})`,
                   maskImage: `url(${jarlaLogo})`,
@@ -214,9 +214,9 @@ const Auth: React.FC = () => {
             </div>
 
             {/* Bar loading from center outward */}
-            <div className="w-32 h-[3px] rounded-full bg-white/20 overflow-hidden flex items-center justify-center">
+            <div className="w-32 h-[3px] rounded-full bg-black/10 overflow-hidden flex items-center justify-center">
               <div
-                className="h-full rounded-full bg-white/80"
+                className="h-full rounded-full bg-black/40"
                 style={{
                   animation: 'expandCenter 0.5s ease-out forwards',
                 }}
