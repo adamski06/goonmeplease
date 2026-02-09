@@ -100,7 +100,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 
       {/* Full white pill */}
       <div
-        className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-[60]"
+        className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
         style={{
           maxHeight: 'calc(100dvh - 148px)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',

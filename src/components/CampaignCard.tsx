@@ -182,29 +182,26 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchEnd={handleTouchEnd}
         className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-10"
         style={{
-          willChange: 'transform',
+          willChange: 'clip-path',
           height: 'calc(100dvh - 148px)',
-          transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-          transform: isDragging 
-            ? `translateY(${dragY}px)` 
-            : isVisuallyExpanded 
-              ? 'translateY(0)' 
-              : `translateY(calc(100% - 180px))`,
+          clipPath: isVisuallyExpanded 
+            ? 'inset(0 0 0 0 round 48px)' 
+            : 'inset(calc(100% - 180px) 0 0 0 round 48px)',
+          transition: isDragging ? 'none' : 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           zIndex: isVisuallyExpanded ? 20 : 10,
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        {/* Collapsed state - always rendered, fades in/out */}
+        {/* Collapsed state - anchored at bottom of full-height container */}
         <div
-          className="px-4 flex flex-col h-[180px]"
+          className="absolute bottom-0 left-0 right-0 px-4 flex flex-col h-[180px]"
           style={{
             opacity: isExpanded ? 0 : 1,
             transition: 'opacity 0.35s ease-out',
             pointerEvents: isExpanded ? 'none' : 'auto',
-            position: isExpanded ? 'absolute' : 'relative',
-            inset: isExpanded ? 0 : undefined,
           }}
         >
           {/* Brand logo + name */}
