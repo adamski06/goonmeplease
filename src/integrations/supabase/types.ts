@@ -242,6 +242,42 @@ export type Database = {
           },
         ]
       }
+      creator_stats: {
+        Row: {
+          created_at: string
+          id: string
+          pending_balance: number
+          total_balance: number
+          total_earnings: number
+          total_videos: number
+          total_views: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pending_balance?: number
+          total_balance?: number
+          total_earnings?: number
+          total_videos?: number
+          total_views?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pending_balance?: number
+          total_balance?: number
+          total_earnings?: number
+          total_videos?: number
+          total_views?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       earnings: {
         Row: {
           amount: number
