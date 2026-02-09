@@ -134,26 +134,25 @@ const Discover: React.FC = () => {
                     </div>
                     <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                   </div>
-                  <div className="absolute inset-x-0 bottom-[72px] px-3">
-                    <div className="absolute inset-x-0 bottom-[-14px] h-[90px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
-                    <p className="relative text-xs font-medium text-white font-jakarta line-clamp-2 drop-shadow-lg leading-relaxed">
-                      {campaign.description}
-                    </p>
-                  </div>
                   <div
-                    className="absolute bottom-2 left-2 right-2 h-[62px] rounded-[26px] px-3 flex items-center justify-between"
+                    className="absolute bottom-2 left-2 right-2 rounded-[26px] px-3 pt-2.5 pb-2.5 flex flex-col gap-1.5"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.8)',
                       boxShadow: '0 -4px 20px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,1)',
                     }}
                   >
-                    <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[16px] px-3 py-1.5 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                      <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                      <span className="text-[10px] font-semibold text-white/80 font-montserrat">sek</span>
-                    </div>
-                    <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                      <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
+                    <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5">
+                      {campaign.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[16px] px-3 py-1.5 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                        <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                        <span className="text-[10px] font-semibold text-white/80 font-montserrat">sek</span>
+                      </div>
+                      <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                        <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
+                      </div>
                     </div>
                   </div>
                 </div>
