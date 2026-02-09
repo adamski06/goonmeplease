@@ -59,6 +59,7 @@ const Activity: React.FC = () => {
   const [submitSliding, setSubmitSliding] = useState(false);
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
+  const [showAllRecent, setShowAllRecent] = useState(false);
   const recentCampaigns = useRecentCampaigns();
   const favoriteCampaigns = useFavorites();
 
@@ -241,7 +242,21 @@ const Activity: React.FC = () => {
                 <p className="text-black/40 font-jakarta text-sm">No recent campaigns</p>
               </div>
             ) : (
-              <CampaignList campaigns={recentCampaigns.slice(0, 3)} onSelect={handleRecentCampaignClick} />
+              <>
+                <CampaignList campaigns={showAllRecent ? recentCampaigns : recentCampaigns.slice(0, 3)} onSelect={handleRecentCampaignClick} />
+                {!showAllRecent && recentCampaigns.length > 3 && (
+                  <button
+                    onClick={() => setShowAllRecent(true)}
+                    className="w-full mt-3 py-2.5 rounded-full text-xs font-semibold font-montserrat text-black/50 active:scale-[0.98] transition-all"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                      border: '1.5px solid rgba(0,0,0,0.06)',
+                    }}
+                  >
+                    Show more
+                  </button>
+                )}
+              </>
             )}
           </TabsContent>
 
@@ -251,7 +266,7 @@ const Activity: React.FC = () => {
                 <p className="text-black/40 font-jakarta text-sm">No favourite campaigns</p>
               </div>
             ) : (
-              <CampaignList campaigns={favoriteCampaigns.slice(0, 3)} onSelect={handleRecentCampaignClick} />
+              <CampaignList campaigns={favoriteCampaigns} onSelect={handleRecentCampaignClick} />
             )}
           </TabsContent>
         </Tabs>
