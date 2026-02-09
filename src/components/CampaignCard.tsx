@@ -180,11 +180,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`absolute rounded-[48px] overflow-hidden z-10 ${isVisuallyExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
+        className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-10"
         style={{
+          willChange: 'transform, opacity',
           maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '180px',
-          transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-          transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
+          transition: isDragging ? 'none' : 'max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1), transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: isDragging 
+            ? `translateY(${dragY}px)` 
+            : isVisuallyExpanded 
+              ? 'translateY(0) scale(1)' 
+              : 'translateY(-12px) scale(0.94)',
+          zIndex: isVisuallyExpanded ? 20 : 10,
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
