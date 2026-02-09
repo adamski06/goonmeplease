@@ -144,7 +144,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchEnd={handleTouchEnd}
         className={`absolute rounded-[48px] overflow-hidden z-10 ${isVisuallyExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
         style={{
-          maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '150px',
+          maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '180px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -154,13 +154,20 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       >
         {!isExpanded ? (
           /* Collapsed state */
-          <div className="px-4 flex flex-col h-[150px]">
-            {/* Description text at top */}
-            <div className="pt-3.5 pb-2">
-              <p className="text-xs text-black/50 font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
+          <div className="px-4 flex flex-col h-[180px]">
+            {/* Brand logo + name */}
+            <div className="flex items-center gap-2.5 pt-4 pb-1">
+              <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
+                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+            </div>
+            {/* Description text */}
+            <div className="pb-2">
+              <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
             </div>
             {/* Original earnings + tiktok row */}
-            <div className="flex items-center justify-between flex-1">
+            <div className="flex items-center justify-between flex-1 pb-3">
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <span className="text-xl font-bold text-white font-montserrat">
                   {campaign.maxEarnings.toLocaleString()}
