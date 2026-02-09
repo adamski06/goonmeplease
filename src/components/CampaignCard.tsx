@@ -21,21 +21,21 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [expandReady, setExpandReady] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
-  
-  const [dragY, setDragY] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartY = useRef(0);
-  const nodeRef = useRef<HTMLDivElement>(null);
 
-  const isVisuallyExpanded = isExpanded && !isClosing;
+  const [startTop, setStartTop] = useState(0);
+  const [startBottom, setStartBottom] = useState(0);
+  const [startLeft, setStartLeft] = useState(0);
+  const [startRight, setStartRight] = useState(0);
+
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContinue = () => {
     addRecentCampaign(campaign.id);
-    // Check if guide should be skipped
     try {
       const skipped = JSON.parse(localStorage.getItem('skippedGuides') || '[]');
       if (skipped.includes(campaign.id)) {
@@ -83,8 +83,35 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
-  const triggerClose = () => {
+  const openNode = () => {
+    if (nodeRef.current) {
+      const rect = nodeRef.current.getBoundingClientRect();
+      setStartTop(rect.top);
+      setStartBottom(window.innerHeight - rect.bottom);
+      setStartLeft(rect.left);
+      setStartRight(window.innerWidth - rect.right);
+    }
+    setIsExpanded(true);
+    setExpandReady(false);
+    addRecentCampaign(campaign.id);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setExpandReady(true);
+      });
+    });
+  };
+
+  const closeNode = () => {
     if (!isExpanded || isClosing) return;
+    // Re-capture position for accurate close
+    if (nodeRef.current) {
+      const rect = nodeRef.current.getBoundingClientRect();
+      setStartTop(rect.top);
+      setStartBottom(window.innerHeight - rect.bottom);
+      setStartLeft(rect.left);
+      setStartRight(window.innerWidth - rect.right);
+    }
+    setExpandReady(false);
     setIsClosing(true);
     setTimeout(() => {
       setIsExpanded(false);
@@ -93,137 +120,77 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       setGuideSliding(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 500);
+    }, 520);
   };
 
-  // Handle drag to close
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (!isExpanded) return;
-    dragStartY.current = e.touches[0].clientY;
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || !isExpanded) return;
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - dragStartY.current;
-    if (diff > 0) {
-      setDragY(diff);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    if (dragY > 100) {
-      triggerClose();
-    }
-    setDragY(0);
-  };
-
-  // Handle picture tap to expand
   const handlePictureClick = () => {
-    setIsExpanded(true);
-    addRecentCampaign(campaign.id);
+    openNode();
   };
 
-  // Handle node tap to toggle
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (showGuide || guideSliding) return; // Don't close when guide is showing
+    if (showGuide || guideSliding) return;
     if (isExpanded) {
-      triggerClose();
+      closeNode();
     } else {
-      setIsExpanded(true);
+      openNode();
     }
   };
 
-  // Close expanded state when scrolling away
   useEffect(() => {
     setIsExpanded(false);
     setIsClosing(false);
+    setExpandReady(false);
   }, [campaign.id]);
 
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
-      {/* Card container with image + overlapping white node */}
+      {/* Card container with image */}
       <div className="absolute top-14 left-3 right-3 bottom-3">
-        {/* Image section */}
         <div
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
-          <img
-            src={campaign.image}
-            alt={campaign.brand}
-            className="w-full h-full object-cover"
-          />
-          {/* Noise overlay */}
+          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
           <div
             className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
             }}
           />
-          
-          {/* Mobile overlay content - company logo only (description moved to node) */}
           <div className={`absolute inset-x-0 bottom-[148px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
           </div>
         </div>
       </div>
 
-      {/* White Node - pill with glass effect */}
+      {/* Collapsed White Node - stays in place, hidden when expanded overlay is shown */}
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-10"
+        className="absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden z-10"
         style={{
-          willChange: 'clip-path',
-          height: 'calc(100dvh - 148px)',
-          clipPath: isVisuallyExpanded 
-            ? 'inset(0 0 0 0 round 48px)' 
-            : 'inset(calc(100% - 180px) 8px 12px 8px round 48px)',
-          transition: isDragging ? 'none' : 'clip-path 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
-          transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
-          zIndex: isVisuallyExpanded ? 20 : 10,
+          height: '180px',
+          visibility: isExpanded ? 'hidden' : 'visible',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        {/* Collapsed state - anchored at bottom of full-height container */}
-        <div
-          className="absolute bottom-0 left-0 right-0 px-6 flex flex-col h-[180px]"
-          style={{
-            opacity: isExpanded ? 0 : 1,
-            transition: isExpanded ? 'opacity 0.1s ease-out' : 'opacity 0.25s ease-out 0.25s',
-            pointerEvents: isExpanded ? 'none' : 'auto',
-          }}
-        >
-          {/* Brand logo + name */}
+        <div className="px-6 flex flex-col h-[180px]">
           <div className="flex items-center gap-2.5 pt-5 pb-1">
             <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
             </div>
             <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
           </div>
-          {/* Description text */}
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
           </div>
-          {/* Original earnings + tiktok row */}
           <div className="flex items-center justify-between flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">
-                {campaign.maxEarnings.toLocaleString()}
-              </span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">
-                sek
-              </span>
+              <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+              <span className="text-sm font-semibold text-white/80 font-montserrat">sek</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
@@ -233,23 +200,68 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         </div>
+      </div>
 
-        {isExpanded && (
-          /* Expanded state (stays rendered during closing for smooth animation) */
+      {/* Expanded overlay - fixed, animates from captured position (same pattern as profile page) */}
+      {isExpanded && (
+        <div
+          onClick={closeNode}
+          className="fixed left-0 right-0 z-50 rounded-[48px] overflow-hidden"
+          style={{
+            top: expandReady ? '80px' : `${startTop}px`,
+            bottom: expandReady ? '88px' : `${startBottom}px`,
+            left: expandReady ? '12px' : `${startLeft}px`,
+            right: expandReady ? '12px' : `${startRight}px`,
+            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1), left 0.5s cubic-bezier(0.32, 0.72, 0, 1), right 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+            border: '1.5px solid rgba(255,255,255,0.8)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+          }}
+        >
+          {/* Collapsed content ghost - fades out */}
+          <div
+            className="absolute inset-x-0 bottom-0 px-6 flex flex-col h-[180px] pointer-events-none"
+            style={{
+              opacity: expandReady && !isClosing ? 0 : 1,
+              transition: 'opacity 0.25s ease-out',
+            }}
+          >
+            <div className="flex items-center gap-2.5 pt-5 pb-1">
+              <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
+                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+            </div>
+            <div className="pb-2">
+              <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
+            </div>
+            <div className="flex items-center justify-between flex-1 pb-5">
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                <span className="text-sm font-semibold text-white/80 font-montserrat">sek</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
+                <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                  <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Expanded content - fades in */}
           <div
             className="h-full flex flex-col overflow-hidden relative"
             style={{
-              maxHeight: 'calc(100dvh - 148px)',
-              height: 'calc(100dvh - 148px)',
-              opacity: isClosing ? 0 : 1,
-              transition: isClosing ? 'opacity 0.1s ease-out' : 'opacity 0.3s ease-out 0.2s',
+              opacity: expandReady && !isClosing ? 1 : 0,
+              transition: expandReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
             }}
           >
-            {/* X close button - always visible */}
+            {/* X close button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                triggerClose();
+                closeNode();
               }}
               className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
@@ -274,17 +286,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
                   <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
                 </div>
-                <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                  {campaign.brand}
-                </h2>
+                <h2 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h2>
               </div>
 
               <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
-                <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
-                  {campaign.description}
-                </p>
+                <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">{campaign.description}</p>
 
-                <div 
+                <div
                   className="rounded-xl p-4 mb-4"
                   style={{
                     background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
@@ -371,7 +379,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               </div>
             </div>
 
-            {/* Submission Guide panel - slides in from right */}
+            {/* Submission Guide panel */}
             <div
               className="absolute inset-0"
               style={{
@@ -397,8 +405,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <SubmitDraft campaign={campaign} onBack={handleBackFromSubmit} />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
