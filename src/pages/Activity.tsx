@@ -129,10 +129,10 @@ const Activity: React.FC = () => {
               <div
                 className="absolute inset-0 flex flex-col overflow-hidden"
                 style={{
-                  transform: showGuide || guideSliding ? 'translateX(-100%)' : 'translateX(0)',
-                  opacity: showGuide || guideSliding ? 0 : 1,
+                  transform: (showGuide || guideSliding || showSubmit || submitSliding) ? 'translateX(-100%)' : 'translateX(0)',
+                  opacity: (showGuide || guideSliding || showSubmit || submitSliding) ? 0 : 1,
                   transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
-                  pointerEvents: !showGuide && !guideSliding ? 'auto' : 'none',
+                  pointerEvents: (!showGuide && !guideSliding && !showSubmit && !submitSliding) ? 'auto' : 'none',
                 }}
               >
                 <button
