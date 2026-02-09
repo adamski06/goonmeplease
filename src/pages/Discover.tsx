@@ -113,7 +113,7 @@ const Discover: React.FC = () => {
         {/* Grid */}
         <div ref={featuredScrollRef} className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
           <div className="px-3">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-x-2 gap-y-4">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign.id}
