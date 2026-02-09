@@ -92,6 +92,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   // Handle node tap to toggle
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (showGuide || guideSliding) return; // Don't close when guide is showing
     if (isExpanded) {
       triggerClose();
     } else {

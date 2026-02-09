@@ -44,7 +44,7 @@ const SubmissionGuide: React.FC<SubmissionGuideProps> = ({ campaign, onBack }) =
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden relative">
+    <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
       {/* Header */}
       <div className="flex items-center px-5 pt-5 pb-3 border-b border-black/10 flex-shrink-0">
         <button onClick={currentStep === 0 ? onBack : () => goToStep(currentStep - 1)} className="p-1 -ml-1">
