@@ -6,6 +6,7 @@ import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import { supabase } from '@/integrations/supabase/client';
+import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ const Discover: React.FC = () => {
     }
     setShowPicture(false);
     setSelectedCampaign(campaign);
+    addRecentCampaign(campaign.id);
   };
 
   const handleBackFromDetail = () => {
