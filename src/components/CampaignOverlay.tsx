@@ -79,10 +79,10 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
     <div className="fixed inset-0 z-40">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-black/60"
         style={{
           opacity: isClosing ? 0 : 1,
-          transition: 'opacity 0.4s ease-out',
+          transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
       />
@@ -100,7 +100,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 
       {/* Full white pill */}
       <div
-        className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
+        className="absolute left-3 right-3 bottom-3 rounded-[48px] overflow-hidden z-[60]"
         style={{
           maxHeight: 'calc(100dvh - 148px)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
