@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Bookmark, Plus, X } from 'lucide-react';
-import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
+import SubmissionGuide from '@/components/SubmissionGuide';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 
 interface CampaignCardProps {
@@ -19,9 +18,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   isSaved,
   onToggleFavorite,
 }) => {
-  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideSliding, setGuideSliding] = useState(false);
+  
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartY = useRef(0);
@@ -29,12 +30,31 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   const isVisuallyExpanded = isExpanded && !isClosing;
 
+  const handleContinue = () => {
+    addRecentCampaign(campaign.id);
+    setGuideSliding(true);
+    setTimeout(() => {
+      setShowGuide(true);
+      setGuideSliding(false);
+    }, 300);
+  };
+
+  const handleBackFromGuide = () => {
+    setGuideSliding(true);
+    setTimeout(() => {
+      setShowGuide(false);
+      setGuideSliding(false);
+    }, 300);
+  };
+
   const triggerClose = () => {
     if (!isExpanded || isClosing) return;
     setIsClosing(true);
     setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
+      setShowGuide(false);
+      setGuideSliding(false);
     }, 500);
   };
 
@@ -167,20 +187,21 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         ) : (
           /* Expanded state (stays rendered during closing for smooth animation) */
           <div
-            className="h-full flex flex-col overflow-hidden"
+            className="h-full flex flex-col overflow-hidden relative"
             style={{
               maxHeight: 'calc(100dvh - 148px)',
+              height: 'calc(100dvh - 148px)',
               opacity: isClosing ? 0 : 1,
               transition: 'opacity 0.35s ease-out',
             }}
           >
-            {/* X close button - top right */}
+            {/* X close button - always visible */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 triggerClose();
               }}
-              className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
+              className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
                 background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
                 border: '1px solid rgba(0,0,0,0.06)',
@@ -188,111 +209,129 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             >
               <X className="h-4 w-4 text-black/60" />
             </button>
-            
-            <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
-              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+
+            {/* Campaign details panel */}
+            <div
+              className="flex flex-col overflow-hidden h-full"
+              style={{
+                transform: showGuide || guideSliding ? 'translateX(-100%)' : 'translateX(0)',
+                opacity: showGuide || guideSliding ? 0 : 1,
+                transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                pointerEvents: !showGuide && !guideSliding ? 'auto' : 'none',
+              }}
+            >
+              <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                </div>
+                <h2 className="text-base font-bold text-black font-montserrat flex-1">
+                  {campaign.brand}
+                </h2>
               </div>
-              <h2 className="text-base font-bold text-black font-montserrat flex-1">
-                {campaign.brand}
-              </h2>
-            </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
-              <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
-                {campaign.description}
-              </p>
+              <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+                <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
+                  {campaign.description}
+                </p>
 
-              <div 
-                className="rounded-xl p-4 mb-4"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
-                }}
-              >
-                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
-                <ul className="space-y-1.5">
-                  {campaign.guidelines.map((guideline, idx) => (
-                    <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
-                      <span className="text-black/40">•</span>
-                      {guideline}
-                    </li>
-                  ))}
-                </ul>
-
-                {campaign.exampleImages && campaign.exampleImages.length > 0 && (
-                  <div className="flex gap-2 mt-3">
-                    {campaign.exampleImages.slice(0, 2).map((img, i) => (
-                      <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
-                      </div>
+                <div 
+                  className="rounded-xl p-4 mb-4"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                    border: '1px solid rgba(0,0,0,0.06)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
+                  }}
+                >
+                  <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                  <ul className="space-y-1.5">
+                    {campaign.guidelines.map((guideline, idx) => (
+                      <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
+                        <span className="text-black/40">•</span>
+                        {guideline}
+                      </li>
                     ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
-                    <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
-                  </div>
+                  </ul>
+                  {campaign.exampleImages && campaign.exampleImages.length > 0 && (
+                    <div className="flex gap-2 mt-3">
+                      {campaign.exampleImages.slice(0, 2).map((img, i) => (
+                        <div key={i} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                          <img src={img} alt={`Example ${i + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                {/* Earnings Graph */}
-                <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
+                <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
+                      <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
+                    </div>
+                  </div>
+                  <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
+                  {(() => {
+                    const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
+                    return (
+                      <p className="text-xs text-white/50 font-jakarta mt-3 leading-relaxed">
+                        You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
+                      </p>
+                    );
+                  })()}
+                </div>
+              </div>
 
-                {/* Summary note - inside payment node, below graph */}
-                {(() => {
-                  const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
-                  return (
-                    <p className="text-xs text-white/50 font-jakarta mt-3 leading-relaxed">
-                      You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
-                    </p>
-                  );
-                })()}
+              {/* CTA */}
+              <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
+                <button
+                  className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleContinue();
+                  }}
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+                    border: '1.5px solid rgba(60,60,60,0.6)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                    color: 'white',
+                  }}
+                >
+                  <Plus className="h-4 w-4" />
+                  Continue
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(campaign.id, e);
+                  }}
+                  className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
+                    border: '1.5px solid rgba(255,255,255,0.9)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                    backdropFilter: 'blur(12px)',
+                  }}
+                >
+                  <Bookmark
+                    className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
+                    strokeWidth={1.5}
+                  />
+                </button>
               </div>
             </div>
 
-            {/* Fixed CTA at bottom - centered vertically */}
-            <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
-              <button
-                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addRecentCampaign(campaign.id);
-                  navigate('/activity', { state: { campaign } });
-                }}
-                style={{
-                  background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
-                  border: '1.5px solid rgba(60,60,60,0.6)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)',
-                  color: 'white',
-                }}
-              >
-                <Plus className="h-4 w-4" />
-                Continue
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleFavorite(campaign.id, e);
-                }}
-                className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.85) 100%)',
-                  border: '1.5px solid rgba(255,255,255,0.9)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                  backdropFilter: 'blur(12px)',
-                }}
-              >
-                <Bookmark
-                  className={`h-5 w-5 ${isSaved ? 'fill-black text-black' : 'text-black/50'}`}
-                  strokeWidth={1.5}
-                />
-              </button>
+            {/* Submission Guide panel - slides in from right */}
+            <div
+              className="absolute inset-0"
+              style={{
+                transform: showGuide && !guideSliding ? 'translateX(0)' : 'translateX(100%)',
+                opacity: showGuide && !guideSliding ? 1 : 0,
+                transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
+                pointerEvents: showGuide && !guideSliding ? 'auto' : 'none',
+              }}
+            >
+              <SubmissionGuide campaign={campaign} onBack={handleBackFromGuide} />
             </div>
           </div>
         )}
