@@ -77,7 +77,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="h-full flex flex-col overflow-hidden relative" style={{ maxHeight: 'calc(100dvh - 148px)' }}>
+        <div className="h-full flex flex-col overflow-hidden relative" style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
           {/* X close button - always visible */}
           <button
             onClick={(e) => {
@@ -95,7 +95,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 
           {/* Campaign details panel */}
           <div
-            className="absolute inset-0 flex flex-col overflow-hidden"
+            className="flex flex-col overflow-hidden h-full"
             style={{
               transform: showGuide || guideSliding ? 'translateX(-100%)' : 'translateX(0)',
               opacity: showGuide || guideSliding ? 0 : 1,
