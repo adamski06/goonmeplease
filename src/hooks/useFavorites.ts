@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Campaign, campaigns } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
+import { fetchCampaignsByIds } from '@/hooks/useCampaigns';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function useFavorites() {
@@ -17,11 +18,10 @@ export function useFavorites() {
         .from('favorites')
         .select('campaign_id')
         .eq('user_id', user.id);
-      if (data) {
-        const favCampaigns = data
-          .map(f => campaigns.find(c => c.id === f.campaign_id))
-          .filter((c): c is Campaign => !!c);
-        setFavoriteCampaigns(favCampaigns);
+      if (data && data.length > 0) {
+        const ids = data.map(f => f.campaign_id);
+        const campaigns = await fetchCampaignsByIds(ids);
+        setFavoriteCampaigns(campaigns);
       }
     };
     fetchFavorites();

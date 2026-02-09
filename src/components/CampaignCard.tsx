@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokIcon from '@/assets/tiktok-icon.png';
-import { Campaign } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';

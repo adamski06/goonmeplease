@@ -3,7 +3,7 @@ import { Bookmark, Plus, X } from 'lucide-react';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
-import { Campaign } from '@/data/campaigns';
+import { Campaign } from '@/types/campaign';
 
 interface CampaignOverlayProps {
   campaign: Campaign;
