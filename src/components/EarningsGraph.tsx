@@ -62,9 +62,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const maxV = totalViews || 1;
 
   // Graph dimensions
-  const pad = { top: 38, right: 8, bottom: 8, left: 8 };
+  const pad = { top: 50, right: 8, bottom: 8, left: 8 };
   const w = 300;
-  const h = 260;
+  const h = 280;
   const gw = w - pad.left - pad.right;
   const gh = h - pad.top - pad.bottom;
 
@@ -120,7 +120,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         Earnings by views
       </h4>
 
-      <svg viewBox={`0 0 ${w} ${h}`} className="w-full block" style={{ height: 260 }}>
+      <svg viewBox={`0 0 ${w} ${h}`} className="w-full block" style={{ height: 280 }}>
         <defs>
           <linearGradient id="egFill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
@@ -145,17 +145,15 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         {/* Waypoint dots + leader lines + small badge nodes */}
         {waypoints.map((p, i) => {
           const leaderLen = 50;
-
-          // Leader goes straight left
           const lx = p.x - leaderLen;
           const ly = p.y;
 
-          // Badge dimensions
-          const badgeW = 90;
-          const badgeH = 36;
+          // Badge dimensions - same size for both
+          const badgeW = 110;
+          const badgeH = 48;
           const badgeX = lx - badgeW - 2;
           const badgeY = ly - badgeH / 2;
-          const badgeR = 10;
+          const badgeR = 12;
 
           return (
             <g key={i}>
@@ -189,7 +187,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
                 x={badgeX + badgeW / 2}
                 y={ly - 2}
                 fill="white"
-                fontSize="14"
+                fontSize="22"
                 fontWeight="700"
                 fontFamily="Montserrat, sans-serif"
                 textAnchor="middle"
@@ -200,9 +198,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               {/* Views in badge */}
               <text
                 x={badgeX + badgeW / 2}
-                y={ly + 12}
+                y={ly + 14}
                 fill="rgba(255,255,255,0.6)"
-                fontSize="10"
+                fontSize="11"
                 fontWeight="500"
                 fontFamily="Plus Jakarta Sans, sans-serif"
                 textAnchor="middle"
