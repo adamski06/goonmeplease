@@ -5,6 +5,7 @@ import tiktokPlatformLogo from '@/assets/platforms/tiktok.png';
 import tiktokIcon from '@/assets/tiktok-icon.png';
 import { Campaign } from '@/data/campaigns';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
+import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -65,6 +66,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   // Handle picture tap to expand
   const handlePictureClick = () => {
     setIsExpanded(true);
+    addRecentCampaign(campaign.id);
   };
 
   // Handle node tap to toggle
@@ -260,6 +262,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
+                  addRecentCampaign(campaign.id);
                   navigate('/activity', { state: { campaign } });
                 }}
                 style={{
