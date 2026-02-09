@@ -8,6 +8,45 @@ import CampaignOverlay from '@/components/CampaignOverlay';
 import { Campaign } from '@/data/campaigns';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
 import { ChevronRight, X } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { useFavorites } from '@/hooks/useFavorites';
+
+const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) => void }> = ({ campaigns, onSelect }) => (
+  <div className="space-y-2.5">
+    {campaigns.map((campaign) => (
+      <button
+        key={campaign.id}
+        onClick={() => onSelect(campaign)}
+        className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
+        style={{
+          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+          border: '1.5px solid rgba(255,255,255,0.8)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+        }}
+      >
+        <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0">
+          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+            </div>
+            <span className="text-sm font-bold text-black font-montserrat truncate">{campaign.brand}</span>
+          </div>
+          <p className="text-xs text-black/50 font-jakarta line-clamp-1">{campaign.description}</p>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+            <span className="text-xs font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+            <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
+          </div>
+          <ChevronRight className="h-4 w-4 text-black/30" />
+        </div>
+      </button>
+    ))}
+  </div>
+);
 
 const Activity: React.FC = () => {
   const { user, loading } = useAuth();
@@ -21,6 +60,7 @@ const Activity: React.FC = () => {
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const recentCampaigns = useRecentCampaigns();
+  const favoriteCampaigns = useFavorites();
 
   useEffect(() => {
     const state = location.state as { campaign?: Campaign } | null;
@@ -183,52 +223,38 @@ const Activity: React.FC = () => {
         </div>
       )}
 
-      {/* Recent Section */}
-      <div className="px-4 pt-5 pb-1">
-        <h2 className="text-sm font-bold text-black font-montserrat">Recent</h2>
-      </div>
+      {/* Recent / Favourites Tabs */}
+      <div className="px-3 pt-4">
+        <Tabs defaultValue="recent">
+          <TabsList className="w-full bg-black/5 rounded-full p-0.5 h-9">
+            <TabsTrigger value="recent" className="flex-1 rounded-full text-xs font-semibold font-montserrat data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm text-black/50 h-8">
+              Recent
+            </TabsTrigger>
+            <TabsTrigger value="favourites" className="flex-1 rounded-full text-xs font-semibold font-montserrat data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-sm text-black/50 h-8">
+              Favourites
+            </TabsTrigger>
+          </TabsList>
 
-      <div className="px-3 pt-2">
-        {recentCampaigns.length === 0 ? (
-          <div className="flex items-center justify-center px-6 py-10">
-            <p className="text-black/40 font-jakarta text-sm">No recent campaigns</p>
-          </div>
-        ) : (
-          <div className="space-y-2.5">
-            {recentCampaigns.map((campaign) => (
-              <button
-                key={campaign.id}
-                onClick={() => handleRecentCampaignClick(campaign)}
-                className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
-                  border: '1.5px solid rgba(255,255,255,0.8)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-                }}
-              >
-                <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0">
-                  <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
-                      <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-                    </div>
-                    <span className="text-sm font-bold text-black font-montserrat truncate">{campaign.brand}</span>
-                  </div>
-                  <p className="text-xs text-black/50 font-jakarta line-clamp-1">{campaign.description}</p>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                    <span className="text-xs font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                    <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-black/30" />
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
+          <TabsContent value="recent" className="mt-3">
+            {recentCampaigns.length === 0 ? (
+              <div className="flex items-center justify-center px-6 py-10">
+                <p className="text-black/40 font-jakarta text-sm">No recent campaigns</p>
+              </div>
+            ) : (
+              <CampaignList campaigns={recentCampaigns.slice(0, 3)} onSelect={handleRecentCampaignClick} />
+            )}
+          </TabsContent>
+
+          <TabsContent value="favourites" className="mt-3">
+            {favoriteCampaigns.length === 0 ? (
+              <div className="flex items-center justify-center px-6 py-10">
+                <p className="text-black/40 font-jakarta text-sm">No favourite campaigns</p>
+              </div>
+            ) : (
+              <CampaignList campaigns={favoriteCampaigns.slice(0, 3)} onSelect={handleRecentCampaignClick} />
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Campaign detail overlay — same as Discover */}
