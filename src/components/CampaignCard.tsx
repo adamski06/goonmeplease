@@ -128,23 +128,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             }}
           />
           
-          {/* Mobile overlay content - description + company logo */}
-          <div className={`absolute inset-x-0 bottom-[88px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          {/* Mobile overlay content - company logo only (description moved to node) */}
+          <div className={`absolute inset-x-0 bottom-[148px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
-            <div className="relative flex items-start justify-between gap-3">
-              <div className="flex-1">
-                <p className="text-white text-sm font-medium line-clamp-3 drop-shadow-lg font-jakarta">
-                  {campaign.description}
-                </p>
-              </div>
-              <div className="h-[36px] w-[36px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 mt-1">
-                <img
-                  src={campaign.logo}
-                  alt={campaign.brand}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -158,7 +144,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onTouchEnd={handleTouchEnd}
         className={`absolute rounded-[48px] overflow-hidden z-10 ${isVisuallyExpanded ? 'left-3 right-3 bottom-3 z-20' : 'left-5 right-5 bottom-6'}`}
         style={{
-          maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '80px',
+          maxHeight: isVisuallyExpanded ? `calc(100dvh - 148px)` : '140px',
           transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
           transform: isDragging ? `translateY(${dragY}px)` : 'translateY(0)',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -168,21 +154,24 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       >
         {!isExpanded ? (
           /* Collapsed state */
-          <div className="px-4 flex items-center justify-between h-[80px]">
-            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">
-                {campaign.maxEarnings.toLocaleString()}
-              </span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">
-                sek
-              </span>
+          <div className="px-4 flex flex-col justify-center h-[140px] gap-2.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="h-[32px] w-[32px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
+                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                </div>
+                <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+              </div>
+              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[36px] w-[36px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <img src={tiktokIcon} alt="TikTok" className="w-5 h-5 object-contain" />
+              </div>
             </div>
-            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <img
-                src={tiktokIcon}
-                alt="TikTok"
-                className="w-6 h-6 object-contain"
-              />
+            <p className="text-xs text-black/50 font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-3 py-1 flex items-baseline gap-1 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                <span className="text-[10px] font-semibold text-white/80 font-montserrat">sek</span>
+              </div>
             </div>
           </div>
         ) : (
