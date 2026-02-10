@@ -169,11 +169,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       <div
         ref={nodeRef}
         onClick={handleNodeClick}
-        className="absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden z-10"
+        className={`absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden ${isClosing ? 'z-[60]' : 'z-10'}`}
         style={{
           height: '180px',
-          opacity: isExpanded && !isClosing ? 0 : 1,
-          transition: isClosing ? 'opacity 0.3s ease-out 0.1s' : isExpanded ? 'none' : 'opacity 0.2s ease-out',
+          opacity: isClosing ? 1 : isExpanded ? 0 : 1,
+          transition: isClosing ? 'opacity 0.35s ease-out 0.15s' : 'none',
           pointerEvents: isExpanded ? 'none' : 'auto',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
