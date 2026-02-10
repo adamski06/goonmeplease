@@ -181,8 +181,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         <div
           className="px-6 flex flex-col h-[180px]"
           style={{
-            opacity: isExpanded && !isClosing ? 0 : 1,
-            transition: isClosing ? 'opacity 0.3s ease-out 0.2s' : 'opacity 0.15s ease-out',
+            opacity: isExpanded ? 0 : 1,
+            transition: isExpanded ? 'none' : 'opacity 0.25s ease-out',
           }}
         >
           <div className="flex items-center gap-2.5 pt-5 pb-1">
