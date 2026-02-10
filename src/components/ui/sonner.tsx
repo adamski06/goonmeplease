@@ -11,18 +11,20 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       position="top-center"
-      style={{ top: 'max(env(safe-area-inset-top, 0px), 20px)' }}
+      offset={60}
       toastOptions={{
         classNames: {
           toast:
-            "group toast !rounded-3xl !border !border-white/80 !shadow-[0_8px_32px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.8)] !backdrop-blur-[24px]",
+            "group toast !rounded-3xl !border !border-white/40 !shadow-[0_8px_32px_rgba(0,0,0,0.15),0_0_0_1px_rgba(255,255,255,0.5)] !backdrop-blur-[20px]",
           description: "group-[.toast]:text-muted-foreground",
           actionButton: "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
         },
         style: {
-          background: 'rgba(255, 255, 255, 0.95)',
+          background: 'rgba(255, 255, 255, 0.55)',
           color: '#000',
+          WebkitBackdropFilter: 'blur(20px)',
+          backdropFilter: 'blur(20px)',
         },
       }}
       {...props}
