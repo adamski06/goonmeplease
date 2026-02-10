@@ -172,8 +172,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         className="absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden z-10"
         style={{
           height: '180px',
-          opacity: isExpanded ? 0 : 1,
-          transition: isExpanded ? 'none' : 'opacity 0.25s ease-out',
+          opacity: isExpanded && !isClosing ? 0 : 1,
+          transition: isClosing ? 'opacity 0.3s ease-out 0.1s' : isExpanded ? 'none' : 'opacity 0.2s ease-out',
           pointerEvents: isExpanded ? 'none' : 'auto',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
