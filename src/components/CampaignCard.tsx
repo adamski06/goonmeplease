@@ -178,7 +178,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        <div className="px-6 flex flex-col h-[180px]">
+        <div
+          className="px-6 flex flex-col h-[180px]"
+          style={{
+            opacity: isExpanded && !isClosing ? 0 : 1,
+            transition: isClosing ? 'opacity 0.3s ease-out 0.2s' : 'opacity 0.15s ease-out',
+          }}
+        >
           <div className="flex items-center gap-2.5 pt-5 pb-1">
             <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
               <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
