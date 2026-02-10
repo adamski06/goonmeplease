@@ -27,11 +27,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
 
-  const [startTop, setStartTop] = useState(0);
-  const [startBottom, setStartBottom] = useState(0);
-  const [startLeft, setStartLeft] = useState(0);
-  const [startRight, setStartRight] = useState(0);
-
   const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContinue = () => {
@@ -83,14 +78,35 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
+  // Compute the transform needed to morph from final position back to node position
+  const getTransformOrigin = () => {
+    if (!nodeRef.current) return { tx: 0, ty: 0, sx: 1, sy: 1 };
+    const rect = nodeRef.current.getBoundingClientRect();
+    // Final overlay position
+    const finalTop = 56;
+    const finalBottom = 92;
+    const finalLeft = 12;
+    const finalRight = 12;
+    const finalW = window.innerWidth - finalLeft - finalRight;
+    const finalH = window.innerHeight - finalTop - finalBottom;
+    // Scale from node size to final size
+    const sx = rect.width / finalW;
+    const sy = rect.height / finalH;
+    // Translate: center of node vs center of final
+    const nodeCx = rect.left + rect.width / 2;
+    const nodeCy = rect.top + rect.height / 2;
+    const finalCx = finalLeft + finalW / 2;
+    const finalCy = finalTop + finalH / 2;
+    const tx = nodeCx - finalCx;
+    const ty = nodeCy - finalCy;
+    return { tx, ty, sx, sy };
+  };
+
+  const [initTransform, setInitTransform] = useState('');
+
   const openNode = () => {
-    if (nodeRef.current) {
-      const rect = nodeRef.current.getBoundingClientRect();
-      setStartTop(rect.top);
-      setStartBottom(window.innerHeight - rect.bottom);
-      setStartLeft(rect.left);
-      setStartRight(window.innerWidth - rect.right);
-    }
+    const { tx, ty, sx, sy } = getTransformOrigin();
+    setInitTransform(`translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`);
     setIsExpanded(true);
     setExpandReady(false);
     addRecentCampaign(campaign.id);
@@ -103,14 +119,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   const closeNode = () => {
     if (!isExpanded || isClosing) return;
-    // Re-capture position for accurate close
-    if (nodeRef.current) {
-      const rect = nodeRef.current.getBoundingClientRect();
-      setStartTop(rect.top);
-      setStartBottom(window.innerHeight - rect.bottom);
-      setStartLeft(rect.left);
-      setStartRight(window.innerWidth - rect.right);
-    }
+    // Re-capture transform for accurate close
+    const { tx, ty, sx, sy } = getTransformOrigin();
+    setInitTransform(`translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`);
     setExpandReady(false);
     setIsClosing(true);
     setTimeout(() => {
@@ -206,13 +217,16 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       {isExpanded && (
         <div
           onClick={closeNode}
-          className="fixed left-0 right-0 z-50 rounded-[48px] overflow-hidden"
+          className="fixed z-50 rounded-[48px] overflow-hidden"
           style={{
-            top: expandReady ? '56px' : `${startTop}px`,
-            bottom: expandReady ? '92px' : `${startBottom}px`,
-            left: expandReady ? '12px' : `${startLeft}px`,
-            right: expandReady ? '12px' : `${startRight}px`,
-            transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1), left 0.5s cubic-bezier(0.32, 0.72, 0, 1), right 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            top: '56px',
+            bottom: '92px',
+            left: '12px',
+            right: '12px',
+            transform: expandReady ? 'translate(0, 0) scale(1, 1)' : initTransform,
+            transformOrigin: 'center center',
+            willChange: 'transform',
+            transition: 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
             background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
             border: '1.5px solid rgba(255,255,255,0.8)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
