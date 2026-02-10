@@ -306,11 +306,27 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   </div>
                   <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
                   {(() => {
-                    const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
+                  const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
+                    const potAmount = campaign.pot || 100000;
                     return (
-                      <p className="text-xs text-white/50 font-jakarta mt-3 leading-relaxed">
-                        You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
-                      </p>
+                      <>
+                        <div className="flex items-baseline justify-between mt-3 mb-1">
+                          <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pot</span>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-lg font-bold text-white font-montserrat">{potAmount.toLocaleString()}</span>
+                            <span className="text-xs text-white/60 font-jakarta">sek</span>
+                          </div>
+                        </div>
+                        <div className="w-full h-[3px] rounded-full bg-white/10 mb-2">
+                          <div className="h-full rounded-full bg-white/40" style={{ width: `${Math.min((campaign.maxEarnings / potAmount) * 100, 100)}%` }} />
+                        </div>
+                        <p className="text-xs text-white/50 font-jakarta leading-relaxed">
+                          You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views.
+                        </p>
+                        <p className="text-[10px] text-white/35 font-jakarta mt-2 leading-relaxed">
+                          When the pot is fully claimed, earnings stop — your views will convert to score instead. <span className="underline">Learn more</span>
+                        </p>
+                      </>
                     );
                   })()}
                 </div>

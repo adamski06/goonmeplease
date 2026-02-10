@@ -18,4 +18,5 @@ export interface Campaign {
   guidelines: string[];
   tiers: CampaignTier[];
   exampleImages?: string[];
+  pot?: number;
 }
