@@ -78,35 +78,27 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
-  // Compute the transform needed to morph from final position back to node position
-  const getTransformOrigin = () => {
-    if (!nodeRef.current) return { tx: 0, ty: 0, sx: 1, sy: 1 };
+  // Compute clip-path inset to clip overlay down to the node's bounds
+  const getClipInset = () => {
+    if (!nodeRef.current) return 'inset(0)';
     const rect = nodeRef.current.getBoundingClientRect();
-    // Final overlay position
+    // The overlay is fixed at top:56 bottom:92 left:12 right:12
     const finalTop = 56;
-    const finalBottom = 92;
     const finalLeft = 12;
-    const finalRight = 12;
-    const finalW = window.innerWidth - finalLeft - finalRight;
-    const finalH = window.innerHeight - finalTop - finalBottom;
-    // Scale from node size to final size
-    const sx = rect.width / finalW;
-    const sy = rect.height / finalH;
-    // Translate: center of node vs center of final
-    const nodeCx = rect.left + rect.width / 2;
-    const nodeCy = rect.top + rect.height / 2;
-    const finalCx = finalLeft + finalW / 2;
-    const finalCy = finalTop + finalH / 2;
-    const tx = nodeCx - finalCx;
-    const ty = nodeCy - finalCy;
-    return { tx, ty, sx, sy };
+    const finalW = window.innerWidth - 24;
+    const finalH = window.innerHeight - 148;
+    // Inset values relative to the overlay's own bounds
+    const top = rect.top - finalTop;
+    const left = rect.left - finalLeft;
+    const bottom = finalH - (rect.bottom - finalTop);
+    const right = finalW - (rect.right - finalLeft);
+    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
   };
 
-  const [initTransform, setInitTransform] = useState('');
+  const [initClip, setInitClip] = useState('inset(0)');
 
   const openNode = () => {
-    const { tx, ty, sx, sy } = getTransformOrigin();
-    setInitTransform(`translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`);
+    setInitClip(getClipInset());
     setIsExpanded(true);
     setExpandReady(false);
     addRecentCampaign(campaign.id);
@@ -119,9 +111,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   const closeNode = () => {
     if (!isExpanded || isClosing) return;
-    // Re-capture transform for accurate close
-    const { tx, ty, sx, sy } = getTransformOrigin();
-    setInitTransform(`translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`);
+    setInitClip(getClipInset());
     setExpandReady(false);
     setIsClosing(true);
     setTimeout(() => {
@@ -223,10 +213,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             bottom: '92px',
             left: '12px',
             right: '12px',
-            transform: expandReady ? 'translate(0, 0) scale(1, 1)' : initTransform,
-            transformOrigin: 'center center',
-            willChange: 'transform',
-            transition: 'transform 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
+            clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
+            willChange: 'clip-path',
+            transition: 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
             background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
             border: '1.5px solid rgba(255,255,255,0.8)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
