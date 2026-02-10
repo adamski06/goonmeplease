@@ -172,7 +172,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         className="absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden z-10"
         style={{
           height: '180px',
-          visibility: (expandReady && !isClosing) ? 'hidden' : 'visible',
+          pointerEvents: isExpanded ? 'none' : 'auto',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
@@ -221,37 +221,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
           }}
         >
-          {/* Collapsed content ghost - fades out */}
-          <div
-            className="absolute inset-x-0 bottom-0 px-6 flex flex-col h-[180px] pointer-events-none"
-            style={{
-              opacity: expandReady && !isClosing ? 0 : 1,
-              transition: 'opacity 0.25s ease-out',
-            }}
-          >
-            <div className="flex items-center gap-2.5 pt-5 pb-1">
-              <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-              </div>
-              <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
-            </div>
-            <div className="pb-2">
-              <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
-            </div>
-            <div className="flex items-center justify-between flex-1 pb-5">
-              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                <span className="text-sm font-semibold text-white/80 font-montserrat">sek</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
-                <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                  <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Expanded content - fades in */}
           <div
             className="h-full flex flex-col overflow-hidden relative"
