@@ -170,40 +170,28 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
               <circle cx={p.x} cy={p.y} r="3" fill="white" />
               {/* Leader end dot */}
               <circle cx={lx} cy={ly} r="1.5" fill="rgba(255,255,255,0.4)" />
-              {/* Small badge node */}
-              <rect
-                x={badgeX}
-                y={badgeY}
-                width={badgeW}
-                height={badgeH}
-                rx={badgeR}
-                ry={badgeR}
-                fill="rgba(255,255,255,0.12)"
-                stroke="rgba(255,255,255,0.2)"
-                strokeWidth="0.8"
-              />
-              {/* Earnings in badge */}
+              {/* Earnings */}
               <text
-                x={badgeX + badgeW / 2}
-                y={ly - 2}
+                x={lx - 4}
+                y={ly - 4}
                 fill="white"
-                fontSize="22"
+                fontSize="16"
                 fontWeight="700"
                 fontFamily="Montserrat, sans-serif"
-                textAnchor="middle"
+                textAnchor="end"
                 dominantBaseline="auto"
               >
                 {formatEarnings(p.earnings)} sek
               </text>
-              {/* Views in badge */}
+              {/* Views */}
               <text
-                x={badgeX + badgeW / 2}
+                x={lx - 4}
                 y={ly + 14}
                 fill="rgba(255,255,255,0.6)"
-                fontSize="11"
-                fontWeight="500"
-                fontFamily="Plus Jakarta Sans, sans-serif"
-                textAnchor="middle"
+                fontSize="16"
+                fontWeight="600"
+                fontFamily="Montserrat, sans-serif"
+                textAnchor="end"
                 dominantBaseline="auto"
               >
                 {formatViews(p.views)} views
