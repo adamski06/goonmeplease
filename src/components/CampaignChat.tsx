@@ -35,6 +35,7 @@ interface FormUpdates {
   total_budget?: number;
   deadline?: string;
   requirements?: string[];
+  audience?: string;
 }
 
 interface CampaignChatProps {
@@ -42,13 +43,17 @@ interface CampaignChatProps {
   requirements?: string[];
   onFormUpdate?: (updates: Partial<FormData>) => void;
   onRequirementsUpdate?: (requirements: string[]) => void;
+  onAudienceUpdate?: (value: string) => void;
+  currentStep?: number;
 }
 
 const CampaignChat: React.FC<CampaignChatProps> = ({ 
   formData, 
   requirements,
   onFormUpdate, 
-  onRequirementsUpdate 
+  onRequirementsUpdate,
+  onAudienceUpdate,
+  currentStep = 0
 }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -57,6 +62,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
+  const stepTriggeredRef = useRef<Set<number>>(new Set());
 
   // Typewriter effect helper
   const typewriterEffect = (messageId: string, content: string) => {
@@ -124,6 +130,15 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
     }
   }, [messages]);
 
+  // Auto-trigger chat on step changes
+  useEffect(() => {
+    if (currentStep === 1 && !stepTriggeredRef.current.has(1) && businessProfile) {
+      stepTriggeredRef.current.add(1);
+      // Auto-suggest target audience
+      handleSendWithContent('Now suggest a target audience for this campaign and fill in the audience field.');
+    }
+  }, [currentStep, businessProfile]);
+
   const typeOutField = (value: string, setter: (val: string) => void, speed = 18): Promise<void> => {
     return new Promise((resolve) => {
       let i = 0;
@@ -172,6 +187,12 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
         }, 10);
         await new Promise(res => setTimeout(res, 200));
       }
+    }
+
+    // Type out audience
+    if (updates.audience !== undefined && onAudienceUpdate) {
+      await typeOutField(updates.audience, (val) => onAudienceUpdate(val), 15);
+      await new Promise(r => setTimeout(r, 300));
     }
   };
 

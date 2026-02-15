@@ -54,6 +54,10 @@ const CreateCampaign: React.FC = () => {
     setGuidelinesList(requirements.length > 0 ? requirements : ['']);
   };
 
+  const handleAudienceUpdate = (value: string) => {
+    setAudience(value);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const { data: { user } } = await supabase.auth.getUser();
@@ -102,12 +106,14 @@ const CreateCampaign: React.FC = () => {
           requirements={guidelinesList.filter(g => g.trim())}
           onFormUpdate={handleFormUpdate}
           onRequirementsUpdate={handleRequirementsUpdate}
+          onAudienceUpdate={handleAudienceUpdate}
+          currentStep={step}
         />
       </div>
 
       {/* Form panel */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-xl mx-auto px-6 py-10">
+      <div className="flex-1 overflow-y-auto flex flex-col">
+        <div className="max-w-xl mx-auto px-6 flex-1 flex flex-col justify-center w-full">
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -159,8 +165,12 @@ const CreateCampaign: React.FC = () => {
           {/* Step 2: Audience */}
           {step === 1 && (
             <div className="space-y-5">
-              <h2 className="text-xl font-bold text-foreground font-montserrat">Target audience</h2>
-
+              <div className="flex items-center gap-3 mb-2">
+                <button onClick={() => setStep(0)} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <ArrowLeft className="h-4 w-4" />
+                </button>
+                <h2 className="text-xl font-bold text-foreground font-montserrat">Target audience</h2>
+              </div>
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Who should see this campaign?</Label>
                 <Input
@@ -176,7 +186,12 @@ const CreateCampaign: React.FC = () => {
           {/* Step 3: Budget */}
           {step === 2 && (
             <div className="space-y-5">
-              <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
+              <div className="flex items-center gap-3 mb-2">
+                <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <ArrowLeft className="h-4 w-4" />
+                </button>
+                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
+              </div>
 
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Max earnings per creator (SEK)</Label>
