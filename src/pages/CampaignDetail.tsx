@@ -132,7 +132,7 @@ const CampaignDetail: React.FC = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/user/auth');
     }
   }, [user, loading, navigate]);
 
@@ -169,7 +169,7 @@ const CampaignDetail: React.FC = () => {
       <aside className="w-64 flex flex-col relative z-10">
         {/* Logo */}
         <div className="px-6 py-4">
-          <button onClick={() => navigate('/')} className="relative h-8 w-[120px]">
+          <button onClick={() => navigate('/user')} className="relative h-8 w-[120px]">
             <div 
               className="absolute inset-0 bg-foreground"
               style={{
@@ -189,7 +189,7 @@ const CampaignDetail: React.FC = () => {
         {/* Navigation */}
         <nav className="flex-1 flex flex-col justify-center px-4 gap-1">
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/user')}
             className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
             <svg className="h-6 w-6 group-hover:text-blue-800" viewBox="0 0 24 24" fill="none">
@@ -202,14 +202,14 @@ const CampaignDetail: React.FC = () => {
             Home
           </button>
           <button 
-            onClick={() => navigate('/activity')}
+            onClick={() => navigate('/user/activity')}
             className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
             <Activity className="h-6 w-6 group-hover:text-blue-800" />
             Activity
           </button>
           <button 
-            onClick={() => navigate('/profile')}
+            onClick={() => navigate('/user/profile')}
             className="text-2xl font-bold text-foreground hover:bg-gradient-to-r hover:from-blue-900 hover:to-blue-400 hover:bg-clip-text hover:text-transparent px-3 py-2 text-left transition-all flex items-center gap-3 group"
           >
             <Avatar className="h-6 w-6">
@@ -241,7 +241,7 @@ const CampaignDetail: React.FC = () => {
         <div className="max-w-4xl mx-auto px-8 py-8">
           {/* Back Button */}
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/user')}
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="h-5 w-5" />

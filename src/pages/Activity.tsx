@@ -80,7 +80,7 @@ const Activity: React.FC = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/user/auth');
     }
   }, [user, loading, navigate]);
 

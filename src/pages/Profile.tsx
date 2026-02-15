@@ -99,7 +99,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/auth');
+      navigate('/user/auth');
     }
   }, [user, loading, navigate]);
 
@@ -121,7 +121,7 @@ const ProfilePage: React.FC = () => {
           <span className="text-base font-semibold text-black">
             {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
           </span>
-          <button onClick={() => navigate('/settings')} className="absolute right-4 p-2">
+          <button onClick={() => navigate('/user/settings')} className="absolute right-4 p-2">
             <Settings className="h-6 w-6 text-black" />
           </button>
         </div>

@@ -115,7 +115,7 @@ const EditProfile: React.FC = () => {
 
       await refetchProfile();
       toast({ title: 'Profile updated', description: 'Your changes have been saved.' });
-      navigate('/profile');
+      navigate('/user/profile');
     } catch (error: any) {
       toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
     } finally {
@@ -130,7 +130,7 @@ const EditProfile: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
-          <button onClick={() => navigate('/profile')} className="p-1 -ml-1">
+          <button onClick={() => navigate('/user/profile')} className="p-1 -ml-1">
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
           <span className="text-base font-semibold text-black flex-1 text-center pr-6 font-montserrat">
