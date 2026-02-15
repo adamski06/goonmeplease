@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Plus, X } from 'lucide-react';
 
 const steps = ['Ad Details', 'Target Audience', 'Budget'];
 
@@ -18,10 +18,8 @@ const CreateCampaign: React.FC = () => {
 
   // Step 1: Ad details
   const [title, setTitle] = useState('');
-  const [brandName, setBrandName] = useState('');
   const [description, setDescription] = useState('');
-  const [guidelines, setGuidelines] = useState('');
-  const [videoLength, setVideoLength] = useState('');
+  const [guidelinesList, setGuidelinesList] = useState<string[]>(['']);
 
   // Step 2: Audience
   const [category, setCategory] = useState('');
@@ -32,10 +30,18 @@ const CreateCampaign: React.FC = () => {
   const [totalBudget, setTotalBudget] = useState('');
 
   const canProceed = () => {
-    if (step === 0) return title.trim() && brandName.trim();
+    if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
     if (step === 2) return true;
     return false;
+  };
+
+  const addGuideline = () => setGuidelinesList([...guidelinesList, '']);
+  const removeGuideline = (i: number) => setGuidelinesList(guidelinesList.filter((_, idx) => idx !== i));
+  const updateGuideline = (i: number, val: string) => {
+    const updated = [...guidelinesList];
+    updated[i] = val;
+    setGuidelinesList(updated);
   };
 
   const handleSubmit = async () => {
@@ -43,13 +49,15 @@ const CreateCampaign: React.FC = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const guidelinesArray = guidelines.split('\n').map((g) => g.trim()).filter(Boolean);
+    const guidelinesArray = guidelinesList.map((g) => g.trim()).filter(Boolean);
+
+    // Use company name from business profile as brand_name
+    const { data: bp } = await supabase.from('business_profiles').select('company_name').eq('user_id', user.id).maybeSingle();
 
     const { error } = await supabase.from('campaigns').insert({
       title: title.trim(),
-      brand_name: brandName.trim(),
+      brand_name: bp?.company_name || 'My Brand',
       description: description.trim() || null,
-      video_length: videoLength.trim() || null,
       max_earnings: maxEarnings ? parseFloat(maxEarnings) : null,
       total_budget: totalBudget ? parseFloat(totalBudget) : null,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
@@ -105,10 +113,7 @@ const CreateCampaign: React.FC = () => {
       {/* Step 1: Ad Details */}
       {step === 0 && (
         <div className="space-y-5">
-          <div>
-            <h2 className="text-xl font-bold text-foreground font-montserrat">Create your ad</h2>
-            <p className="text-sm text-muted-foreground mt-1">Start with the basics — what's the campaign about?</p>
-          </div>
+          <h2 className="text-xl font-bold text-foreground font-montserrat">Create your ad</h2>
 
           <div className="space-y-1.5">
             <Label className="text-sm font-medium">Campaign title *</Label>
@@ -116,24 +121,30 @@ const CreateCampaign: React.FC = () => {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Brand name *</Label>
-            <Input value={brandName} onChange={(e) => setBrandName(e.target.value)} placeholder="Your brand" className="h-10" />
-          </div>
-
-          <div className="space-y-1.5">
             <Label className="text-sm font-medium">Description</Label>
             <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
           </div>
 
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Video length</Label>
-            <Input value={videoLength} onChange={(e) => setVideoLength(e.target.value)} placeholder="15-60s" className="h-10" />
-          </div>
-
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label className="text-sm font-medium">Guidelines</Label>
-            <Textarea value={guidelines} onChange={(e) => setGuidelines(e.target.value)} placeholder={"One per line\ne.g. Show the product within 3 seconds\nUse trending audio"} rows={4} />
-            <p className="text-xs text-muted-foreground">One guideline per line</p>
+            {guidelinesList.map((g, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={g}
+                  onChange={(e) => updateGuideline(i, e.target.value)}
+                  placeholder={`Guideline ${i + 1}`}
+                  className="h-9 text-sm"
+                />
+                {guidelinesList.length > 1 && (
+                  <button onClick={() => removeGuideline(i)} className="text-muted-foreground hover:text-destructive transition-colors shrink-0">
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            <button onClick={addGuideline} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">
+              <Plus className="h-3.5 w-3.5" /> Add guideline
+            </button>
           </div>
         </div>
       )}
