@@ -87,7 +87,10 @@ serve(async (req) => {
       contextAddition += `- Company: ${businessContext.company_name || companyName || 'Unknown'}\n`;
       if (businessContext.website) contextAddition += `- Website: ${businessContext.website}\n`;
       if (businessContext.description) contextAddition += `- Description: ${businessContext.description}\n`;
-      contextAddition += `\nUse this knowledge to give personalized campaign advice. Reference their specific business when relevant.`;
+      if (businessContext.industry) contextAddition += `- Industry: ${businessContext.industry}\n`;
+      if (businessContext.target_audience) contextAddition += `- Target Audience: ${businessContext.target_audience}\n`;
+      if (businessContext.brand_values) contextAddition += `- Brand Values: ${businessContext.brand_values}\n`;
+      contextAddition += `\nYou already know this company well from their profile. Use this knowledge to give smart, personalized campaign suggestions. You know their products, audience, and brand — reference specifics, don't ask for info you already have.`;
     } else if (companyName) {
       contextAddition = `\n\nYou're currently helping ${companyName}.`;
     }
