@@ -276,7 +276,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                       }}
                       className={`text-xs px-4 py-1.5 rounded-lg font-geist transition-all ${
                         reply === 'Yes' 
-                          ? 'bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/30' 
+                          ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30 hover:bg-blue-600' 
                           : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
                       }`}
                     >
