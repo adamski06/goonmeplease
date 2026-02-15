@@ -8,12 +8,16 @@ interface Message {
   role: 'user' | 'jarla';
   content: string;
   displayedContent?: string;
+  quickReplies?: string[];
 }
 
 interface BusinessProfile {
   company_name: string;
   description: string | null;
   website: string | null;
+  industry: string | null;
+  target_audience: string | null;
+  brand_values: string | null;
 }
 
 interface FormData {
@@ -77,16 +81,20 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
 
       const { data } = await supabase
         .from('business_profiles')
-        .select('company_name, description, website')
+        .select('company_name, description, website, industry, target_audience, brand_values')
         .eq('user_id', user.id)
         .single();
 
       let greeting: string;
+      let quickReplies: string[] | undefined;
       if (data) {
         setBusinessProfile(data);
-        greeting = `Hey! Ready to create a new campaign for ${data.company_name}? Tell me what you want and I'll fill in the form for you.`;
+        // Build a product suggestion from company knowledge
+        const productHint = data.description || data.industry || data.company_name;
+        greeting = `What product or service do you want people to know about? Is it related to ${productHint}?`;
+        quickReplies = [`Yes, ${data.company_name}`, 'Something else'];
       } else {
-        greeting = "Hey! I can help you design your campaign. Tell me what you're promoting and I'll set everything up.";
+        greeting = "What product or service do you want people to know about?";
       }
 
       const messageId = '1';
@@ -94,7 +102,8 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
         id: messageId,
         role: 'jarla',
         content: greeting,
-        displayedContent: ''
+        displayedContent: '',
+        quickReplies
       }]);
       setIsTyping(true);
       
@@ -131,24 +140,15 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
     }
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+  const handleSendWithContent = async (content: string) => {
+    if (!content.trim() || isTyping) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: input.trim()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    const currentInput = input.trim();
-    setInput('');
     setIsTyping(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('jarla-chat', {
         body: { 
-          message: currentInput,
+          message: content.trim(),
           companyName: businessProfile?.company_name,
           businessContext: businessProfile,
           conversationHistory: messages.slice(-6),
@@ -163,7 +163,6 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
 
       const responseContent = data?.response || "I'd love to help with that! Could you tell me more?";
       
-      // Apply any form updates from the AI
       if (data?.formUpdates) {
         applyFormUpdates(data.formUpdates);
       }
@@ -189,8 +188,8 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
           setIsTyping(false);
         }
       }, 8);
-    } catch (error) {
-      console.error('Chat error:', error);
+    } catch (err) {
+      console.error('Chat error:', err);
       setIsTyping(false);
       
       const errorMessage: Message = {
@@ -201,6 +200,22 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
       };
       setMessages(prev => [...prev, errorMessage]);
     }
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || isTyping) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: input.trim()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    const currentInput = input.trim();
+    setInput('');
+
+    await handleSendWithContent(currentInput);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -245,6 +260,25 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                   </div>
                 )}
               </div>
+              {/* Quick reply buttons */}
+              {msg.role === 'jarla' && msg.quickReplies && msg.displayedContent === msg.content && !isTyping && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {msg.quickReplies.map((reply) => (
+                    <button
+                      key={reply}
+                      onClick={() => {
+                        setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, quickReplies: undefined } : m));
+                        const userMsg: Message = { id: Date.now().toString(), role: 'user', content: reply };
+                        setMessages(prev => [...prev, userMsg]);
+                        handleSendWithContent(reply);
+                      }}
+                      className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-foreground hover:bg-muted transition-colors font-geist"
+                    >
+                      {reply}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           );
           })}
