@@ -109,22 +109,18 @@ const CreateCampaign: React.FC = () => {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-xl mx-auto px-6 py-10">
           {/* Progress bar */}
-          <div className="mb-8">
+          <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${((step + 1) / steps.length) * 100}%` }}
               />
             </div>
-            <p className="text-xs text-muted-foreground mt-2 font-geist">
-              Step {step + 1} of {steps.length} — {steps[step]}
-            </p>
           </div>
 
           {/* Step 1: Ad Details */}
           {step === 0 && (
             <div className="space-y-5">
-              <h2 className="text-xl font-bold text-foreground font-montserrat">Create your ad</h2>
 
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Campaign title *</Label>
