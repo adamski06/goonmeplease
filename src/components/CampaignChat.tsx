@@ -9,6 +9,7 @@ interface Message {
   content: string;
   displayedContent?: string;
   quickReplies?: string[];
+  selectedReply?: string;
 }
 
 interface BusinessProfile {
@@ -295,25 +296,33 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                 )}
               </div>
               {/* Quick reply buttons */}
-              {msg.role === 'jarla' && msg.quickReplies && msg.displayedContent === msg.content && !isTyping && (
+              {msg.role === 'jarla' && msg.quickReplies && msg.displayedContent === msg.content && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {msg.quickReplies.map((reply) => (
-                    <button
-                      key={reply}
-                      onClick={() => {
-                        // Just remove the buttons and send — no user bubble for button clicks
-                        setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, quickReplies: undefined } : m));
-                        handleSendWithContent(reply);
-                      }}
-                      className={`text-sm px-5 py-2.5 rounded-xl font-geist font-medium transition-all ${
-                        reply === 'Yes' 
-                          ? 'bg-blue-600/80 backdrop-blur-md text-white border border-blue-400/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] hover:bg-blue-600/90' 
-                          : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
-                      }`}
-                    >
-                      {reply}
-                    </button>
-                  ))}
+                  {msg.quickReplies.map((reply) => {
+                    const isSelected = msg.selectedReply === reply;
+                    const hasSelection = !!msg.selectedReply;
+                    return (
+                      <button
+                        key={reply}
+                        disabled={hasSelection}
+                        onClick={() => {
+                          setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, selectedReply: reply } : m));
+                          handleSendWithContent(reply);
+                        }}
+                        className={`text-xs px-3.5 py-1.5 rounded-lg font-geist font-medium transition-all ${
+                          isSelected
+                            ? 'bg-blue-600 text-white border border-blue-500'
+                            : hasSelection
+                            ? 'border border-border bg-muted/30 text-muted-foreground/50 opacity-50'
+                            : reply === 'Yes'
+                            ? 'bg-blue-600/80 backdrop-blur-md text-white border border-blue-400/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] hover:bg-blue-600/90'
+                            : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
+                        }`}
+                      >
+                        {reply}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
