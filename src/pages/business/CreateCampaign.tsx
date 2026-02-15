@@ -33,24 +33,12 @@ const CreateCampaign: React.FC = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Get business profile id
-    const { data: bp } = await supabase
-      .from('business_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (!bp) {
-      toast({ title: 'Error', description: 'Business profile not found.', variant: 'destructive' });
-      setIsSubmitting(false);
-      return;
-    }
-
     const guidelinesArray = guidelines
       .split('\n')
       .map((g) => g.trim())
       .filter(Boolean);
 
+    // business_id = auth.uid() per RLS policy
     const { error } = await supabase.from('campaigns').insert({
       title: title.trim(),
       brand_name: brandName.trim(),
@@ -59,7 +47,7 @@ const CreateCampaign: React.FC = () => {
       max_earnings: maxEarnings ? parseFloat(maxEarnings) : null,
       total_budget: totalBudget ? parseFloat(totalBudget) : null,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
-      business_id: bp.id,
+      business_id: user.id,
       is_active: true,
       status: 'active',
     });
