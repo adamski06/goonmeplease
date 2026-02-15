@@ -40,15 +40,15 @@ const App = () => (
           <AuthProvider>
             <ProfileProvider>
               <Routes>
-                <Route path="/" element={<Campaigns />} />
-                <Route path="/discover" element={<Discover />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/campaigns/:id" element={<CampaignDetail />} />
-                <Route path="/activity" element={<Activity />} />
-                <Route path="/alerts" element={<Alerts />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/edit-profile" element={<EditProfile />} />
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/user" element={<Campaigns />} />
+                <Route path="/user/discover" element={<Discover />} />
+                <Route path="/user/auth" element={<Auth />} />
+                <Route path="/user/campaigns/:id" element={<CampaignDetail />} />
+                <Route path="/user/activity" element={<Activity />} />
+                <Route path="/user/alerts" element={<Alerts />} />
+                <Route path="/user/profile" element={<Profile />} />
+                <Route path="/user/edit-profile" element={<EditProfile />} />
+                <Route path="/user/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </ProfileProvider>

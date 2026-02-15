@@ -122,13 +122,13 @@ const Campaigns: React.FC = () => {
           </p>
           <div className="flex flex-col gap-3">
             <button 
-              onClick={() => { setShowAuthPrompt(false); navigate('/auth?mode=signup'); }}
+              onClick={() => { setShowAuthPrompt(false); navigate('/user/auth?mode=signup'); }}
               className="w-full py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-black/80 transition-colors"
             >
               Create account
             </button>
             <button 
-              onClick={() => { setShowAuthPrompt(false); navigate('/auth?mode=login'); }}
+              onClick={() => { setShowAuthPrompt(false); navigate('/user/auth?mode=login'); }}
               className="w-full py-3 border border-black/20 text-black rounded-full text-sm font-medium hover:bg-black/5 transition-colors"
             >
               Log in

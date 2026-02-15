@@ -13,7 +13,7 @@ const Settings: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    navigate('/user/auth');
     toast({
       title: 'Signed out',
       description: 'You have been signed out successfully.',
@@ -24,7 +24,7 @@ const Settings: React.FC = () => {
     {
       title: 'Account',
       items: [
-        { icon: User, label: 'Edit Profile', action: () => navigate('/edit-profile') },
+        { icon: User, label: 'Edit Profile', action: () => navigate('/user/edit-profile') },
         { icon: Bell, label: 'Notifications', action: () => {} },
         { icon: Shield, label: 'Privacy & Security', action: () => {} },
       ],
@@ -43,7 +43,7 @@ const Settings: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
-          <button onClick={() => navigate('/profile')} className="p-1 -ml-1">
+          <button onClick={() => navigate('/user/profile')} className="p-1 -ml-1">
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
           <span className="text-base font-semibold text-black flex-1 text-center pr-6">Settings</span>

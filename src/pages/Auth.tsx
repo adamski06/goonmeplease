@@ -80,7 +80,7 @@ const Auth: React.FC = () => {
       return;
     }
 
-    navigate('/');
+    navigate('/user');
   };
 
   const handleAgeNext = (age: number) => {
@@ -143,7 +143,7 @@ const Auth: React.FC = () => {
   };
 
   const handleUsernameComplete = () => {
-    navigate('/');
+    navigate('/user');
   };
 
   const handleLogin = async (email: string, password: string) => {
@@ -178,7 +178,7 @@ const Auth: React.FC = () => {
         return;
       }
     }
-    navigate('/');
+    navigate('/user');
   };
 
   if (loading) {
