@@ -108,36 +108,17 @@ const CreateCampaign: React.FC = () => {
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-xl mx-auto px-6 py-10">
-          {/* Step indicator */}
-          <div className="flex items-center gap-2 mb-8">
-            {steps.map((label, i) => (
-              <React.Fragment key={label}>
-                <button
-                  onClick={() => i < step && setStep(i)}
-                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                    i === step
-                      ? 'text-foreground'
-                      : i < step
-                      ? 'text-muted-foreground hover:text-foreground cursor-pointer'
-                      : 'text-muted-foreground/40'
-                  }`}
-                >
-                  <span className={`h-6 w-6 rounded-full text-xs flex items-center justify-center font-semibold ${
-                    i < step
-                      ? 'bg-foreground text-background'
-                      : i === step
-                      ? 'bg-foreground text-background'
-                      : 'bg-muted text-muted-foreground'
-                  }`}>
-                    {i < step ? <Check className="h-3 w-3" /> : i + 1}
-                  </span>
-                  <span className="hidden sm:inline">{label}</span>
-                </button>
-                {i < steps.length - 1 && (
-                  <div className={`flex-1 h-px ${i < step ? 'bg-foreground' : 'bg-border'}`} />
-                )}
-              </React.Fragment>
-            ))}
+          {/* Progress bar */}
+          <div className="mb-8">
+            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2 font-geist">
+              Step {step + 1} of {steps.length} — {steps[step]}
+            </p>
           </div>
 
           {/* Step 1: Ad Details */}
@@ -216,25 +197,15 @@ const CreateCampaign: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => step === 0 ? navigate('/business') : setStep(step - 1)}
-              className="gap-1.5"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              {step === 0 ? 'Cancel' : 'Back'}
-            </Button>
-
+          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border">
             {step < steps.length - 1 ? (
               <Button
                 size="sm"
                 onClick={() => setStep(step + 1)}
                 disabled={!canProceed()}
-                className="gap-1.5"
+                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
               >
-                Next
+                Continue
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             ) : (
@@ -242,7 +213,7 @@ const CreateCampaign: React.FC = () => {
                 size="sm"
                 onClick={handleSubmit}
                 disabled={isSubmitting || !canProceed()}
-                className="gap-1.5"
+                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {isSubmitting ? 'Creating...' : 'Create Campaign'}
                 <Check className="h-3.5 w-3.5" />
