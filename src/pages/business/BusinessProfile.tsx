@@ -60,9 +60,11 @@ const BusinessProfile: React.FC = () => {
     setLoading(false);
   };
 
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const needsOnboarding = profile && !profile.onboarding_complete;
 
   const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
     fetchData();
   };
 
@@ -104,11 +106,10 @@ const BusinessProfile: React.FC = () => {
     );
   }
 
-  // Show onboarding chat full-width when profile isn't complete
-  if (needsOnboarding) {
+  // Show onboarding chat when triggered
+  if (showOnboarding || needsOnboarding) {
     return (
       <div className="h-full flex">
-        {/* Left: minimal welcome */}
         <div className="w-80 border-r border-border flex flex-col items-center justify-center p-8 shrink-0">
           <div className="h-24 w-24 rounded-full bg-muted flex items-center justify-center mb-4">
             <span className="text-3xl font-bold text-muted-foreground/60 font-montserrat">{initial}</span>
@@ -116,7 +117,6 @@ const BusinessProfile: React.FC = () => {
           <h2 className="text-lg font-bold text-foreground font-montserrat text-center">Welcome to Jarla</h2>
           <p className="text-sm text-muted-foreground text-center mt-2">Let's set up your business profile with the help of AI.</p>
         </div>
-        {/* Right: chat */}
         <div className="flex-1 min-w-0">
           <ProfileOnboardingChat onComplete={handleOnboardingComplete} />
         </div>
@@ -153,6 +153,20 @@ const BusinessProfile: React.FC = () => {
             </Button>
             <Button variant="outline" size="icon" className="h-8 w-8">
               <Settings className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 text-xs h-8 border-dashed text-muted-foreground"
+              onClick={async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                  await supabase.from('business_profiles').update({ onboarding_complete: false }).eq('user_id', user.id);
+                  setShowOnboarding(true);
+                }
+              }}
+            >
+              🔧 Dev: Reset Onboarding
             </Button>
             {profile?.website && (
               <a
