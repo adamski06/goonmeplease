@@ -123,22 +123,54 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
     }
   }, [messages]);
 
-  const applyFormUpdates = (updates: FormUpdates) => {
+  const typeOutField = (value: string, setter: (val: string) => void, speed = 18): Promise<void> => {
+    return new Promise((resolve) => {
+      let i = 0;
+      const interval = setInterval(() => {
+        i++;
+        setter(value.slice(0, i));
+        if (i >= value.length) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, speed);
+    });
+  };
+
+  const applyFormUpdates = async (updates: FormUpdates) => {
     if (!updates) return;
-    
-    const formUpdates: Partial<FormData> = {};
-    
-    if (updates.title !== undefined) formUpdates.title = updates.title;
-    if (updates.description !== undefined) formUpdates.description = updates.description;
-    if (updates.total_budget !== undefined) formUpdates.total_budget = updates.total_budget;
-    if (updates.deadline !== undefined) formUpdates.deadline = updates.deadline;
-    
-    if (Object.keys(formUpdates).length > 0 && onFormUpdate) {
-      onFormUpdate(formUpdates);
+
+    // Type out title
+    if (updates.title !== undefined && onFormUpdate) {
+      await typeOutField(updates.title, (val) => onFormUpdate({ title: val }), 20);
+      await new Promise(r => setTimeout(r, 300));
     }
-    
+
+    // Type out description
+    if (updates.description !== undefined && onFormUpdate) {
+      await typeOutField(updates.description, (val) => onFormUpdate({ description: val }), 8);
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    // Type out budget
+    if (updates.total_budget !== undefined && onFormUpdate) {
+      const budgetStr = String(updates.total_budget);
+      await typeOutField(budgetStr, (val) => onFormUpdate({ total_budget: Number(val) || 0 }), 40);
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    // Type out requirements one by one
     if (updates.requirements && onRequirementsUpdate) {
-      onRequirementsUpdate(updates.requirements);
+      const reqs: string[] = [];
+      for (let r = 0; r < updates.requirements.length; r++) {
+        reqs.push('');
+        onRequirementsUpdate([...reqs]);
+        await typeOutField(updates.requirements[r], (val) => {
+          reqs[r] = val;
+          onRequirementsUpdate([...reqs]);
+        }, 10);
+        await new Promise(res => setTimeout(res, 200));
+      }
     }
   };
 
@@ -273,9 +305,9 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                         setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, quickReplies: undefined } : m));
                         handleSendWithContent(reply);
                       }}
-                      className={`text-xs px-4 py-1.5 rounded-lg font-geist transition-all ${
+                      className={`text-sm px-5 py-2.5 rounded-xl font-geist font-medium transition-all ${
                         reply === 'Yes' 
-                          ? 'bg-[#5B4AE4] text-white hover:bg-[#4F3ED9]' 
+                          ? 'bg-blue-600/80 backdrop-blur-md text-white border border-blue-400/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] hover:bg-blue-600/90' 
                           : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
                       }`}
                     >
