@@ -89,13 +89,11 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
       let quickReplies: string[] | undefined;
       if (data) {
         setBusinessProfile(data);
-        // Use company knowledge to suggest their product/service
-        const productGuess = data.description 
-          ? data.description.split('.')[0] // First sentence of description
-          : data.industry 
-            ? `your ${data.industry.toLowerCase()} products` 
-            : data.company_name;
-        greeting = `What do you want to promote? Is it ${productGuess}?`;
+        // Smart short product guess from industry
+        const product = data.industry
+          ? `your ${data.industry.toLowerCase()} service`
+          : 'your product';
+        greeting = `Hey ${data.company_name}, what do you want to promote — is it ${product}?`;
         quickReplies = ['Yes', 'Something else'];
       } else {
         greeting = "What product or service do you want to promote?";
@@ -276,7 +274,11 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                         setMessages(prev => [...prev, userMsg]);
                         handleSendWithContent(reply);
                       }}
-                      className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-foreground hover:bg-muted transition-colors font-geist"
+                      className={`text-xs px-4 py-1.5 rounded-lg font-geist transition-all ${
+                        reply === 'Yes' 
+                          ? 'bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-600 dark:text-blue-400 hover:bg-blue-500/30' 
+                          : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
+                      }`}
                     >
                       {reply}
                     </button>
