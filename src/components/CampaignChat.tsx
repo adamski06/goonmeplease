@@ -89,12 +89,16 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
       let quickReplies: string[] | undefined;
       if (data) {
         setBusinessProfile(data);
-        // Build a product suggestion from company knowledge
-        const productHint = data.description || data.industry || data.company_name;
-        greeting = `What product or service do you want people to know about? Is it related to ${productHint}?`;
-        quickReplies = [`Yes, ${data.company_name}`, 'Something else'];
+        // Use company knowledge to suggest their product/service
+        const productGuess = data.description 
+          ? data.description.split('.')[0] // First sentence of description
+          : data.industry 
+            ? `your ${data.industry.toLowerCase()} products` 
+            : data.company_name;
+        greeting = `What do you want to promote? Is it ${productGuess}?`;
+        quickReplies = ['Yes', 'Something else'];
       } else {
-        greeting = "What product or service do you want people to know about?";
+        greeting = "What product or service do you want to promote?";
       }
 
       const messageId = '1';
