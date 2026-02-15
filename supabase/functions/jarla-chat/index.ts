@@ -57,6 +57,8 @@ Respond with ONLY a valid JSON object:
   }
 }
 
+CRITICAL: When you fill the form, your "message" must be SHORT (1 sentence max). Do NOT repeat or describe the form values in your message — the user can already see them in the form on the right. Just say something like "I've filled everything in — take a look and tweak anything you want!" or "All set! Check the form and adjust if needed."
+
 Only include formUpdates when updating the form. For normal chat:
 {
   "message": "Your response"
