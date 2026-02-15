@@ -215,9 +215,8 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
       {/* Messages - centered vertically when few messages */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-5 flex flex-col"
+        className="flex-1 overflow-y-auto px-5 flex flex-col justify-center"
       >
-        <div className="flex-1" />
         <div className="space-y-4 py-6 max-w-full">
           {messages.map((msg, index) => {
             if (msg.role === 'jarla' && !msg.displayedContent) return null;
