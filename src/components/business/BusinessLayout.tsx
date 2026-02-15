@@ -5,26 +5,42 @@ import BusinessSidebar from './BusinessSidebar';
 
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+    const checkAccess = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
       if (!session) {
         navigate('/business/auth');
-      } else {
-        setAuthenticated(true);
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-    });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
+      // Check if user has business role
+      const { data: hasRole } = await supabase.rpc('has_role', {
+        _user_id: session.user.id,
+        _role: 'business',
+      });
+
+      if (!hasRole) {
+        // Logged in but not a business user — sign them out and redirect
+        await supabase.auth.signOut();
         navigate('/business/auth');
       } else {
-        setAuthenticated(true);
+        setAuthorized(true);
       }
       setLoading(false);
+    };
+
+    checkAccess();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        setAuthorized(false);
+        navigate('/business/auth');
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -38,7 +54,7 @@ const BusinessLayout: React.FC = () => {
     );
   }
 
-  if (!authenticated) return null;
+  if (!authorized) return null;
 
   return (
     <div className="min-h-screen flex bg-background">
