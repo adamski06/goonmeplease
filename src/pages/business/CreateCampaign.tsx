@@ -173,11 +173,11 @@ const CreateCampaign: React.FC = () => {
               </div>
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Who should see this campaign?</Label>
-                <Input
+                <Textarea
                   value={audience}
                   onChange={(e) => setAudience(e.target.value)}
-                  placeholder="e.g. Gen Z fashion lovers in Scandinavia"
-                  className="h-10"
+                  placeholder="e.g. 18-35 year olds interested in fitness, lifestyle, health & wellness. Broad reach across Scandinavia."
+                  rows={6}
                 />
               </div>
             </div>

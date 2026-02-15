@@ -45,7 +45,7 @@ Generate:
 - total_budget: A sensible budget (15000-30000 SEK for starters)
 - requirements: 3-5 loose, creator-friendly guidelines that maximize creative freedom. Focus on what TO do, not restrictions. Example: "Show yourself genuinely using the product", "Keep it authentic — no scripts", "Film vertically for TikTok"
 
-When the user asks about target audience (or the system tells you to suggest one), include an "audience" field in formUpdates with a short audience description.
+When the user asks about target audience (or the system tells you to suggest one), include an "audience" field in formUpdates with a DETAILED, multi-line audience description. Think BROAD — most brands benefit from wide reach. Include: age range (usually wide like 18-45), interests/keywords, geographic scope, lifestyle traits, and platforms. Format it with line breaks and bullet-style details. Example: "Ages 18-40 • Scandinavia & Nordics\nInterests: lifestyle, wellness, everyday routines, self-care\nKeywords: authentic, relatable, daily life, feel-good\nBroad reach — anyone who enjoys genuine lifestyle content"
 
 ## Form Editing Format
 Respond with ONLY a valid JSON object:
