@@ -17,16 +17,20 @@ export type Database = {
       business_profiles: {
         Row: {
           address: string | null
+          brand_values: string | null
           city: string | null
           company_name: string
           country: string | null
           created_at: string
           description: string | null
           id: string
+          industry: string | null
           logo_url: string | null
+          onboarding_complete: boolean | null
           organization_number: string | null
           phone_number: string | null
           postal_code: string | null
+          target_audience: string | null
           updated_at: string
           user_id: string
           vat_number: string | null
@@ -34,16 +38,20 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          brand_values?: string | null
           city?: string | null
           company_name: string
           country?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          industry?: string | null
           logo_url?: string | null
+          onboarding_complete?: boolean | null
           organization_number?: string | null
           phone_number?: string | null
           postal_code?: string | null
+          target_audience?: string | null
           updated_at?: string
           user_id: string
           vat_number?: string | null
@@ -51,16 +59,20 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          brand_values?: string | null
           city?: string | null
           company_name?: string
           country?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          industry?: string | null
           logo_url?: string | null
+          onboarding_complete?: boolean | null
           organization_number?: string | null
           phone_number?: string | null
           postal_code?: string | null
+          target_audience?: string | null
           updated_at?: string
           user_id?: string
           vat_number?: string | null
