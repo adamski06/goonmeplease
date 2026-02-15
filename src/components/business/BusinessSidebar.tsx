@@ -1,0 +1,68 @@
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { User, PlusCircle, LogOut } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import jarlaLogo from '@/assets/jarla-logo.png';
+import { cn } from '@/lib/utils';
+
+const navItems = [
+  { label: 'Profile', icon: User, path: '/business' },
+  { label: 'Create Campaign', icon: PlusCircle, path: '/business/create' },
+];
+
+const BusinessSidebar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/business/auth');
+  };
+
+  return (
+    <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0">
+      {/* Logo */}
+      <div className="px-5 py-5 flex items-center gap-2.5 border-b border-border">
+        <img src={jarlaLogo} alt="Jarla" className="h-6" />
+        <span className="text-xs font-semibold text-muted-foreground font-montserrat tracking-widest uppercase">
+          Business
+        </span>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-1">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                isActive
+                  ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                  : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+              )}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Sign out */}
+      <div className="px-3 py-4 border-t border-border">
+        <button
+          onClick={handleSignOut}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-destructive transition-colors"
+        >
+          <LogOut className="h-4 w-4" />
+          Sign out
+        </button>
+      </div>
+    </aside>
+  );
+};
+
+export default BusinessSidebar;

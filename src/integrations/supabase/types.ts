@@ -513,6 +513,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      register_as_business: {
+        Args: { p_company_name?: string }
+        Returns: undefined
+      }
       store_tiktok_tokens: {
         Args: {
           p_access_token: string

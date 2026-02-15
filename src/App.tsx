@@ -16,6 +16,10 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
+import BusinessAuth from "./pages/business/BusinessAuth";
+import BusinessLayout from "./components/business/BusinessLayout";
+import BusinessProfile from "./pages/business/BusinessProfile";
+import CreateCampaign from "./pages/business/CreateCampaign";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,12 @@ const App = () => (
                 <Route path="/user/profile" element={<Profile />} />
                 <Route path="/user/edit-profile" element={<EditProfile />} />
                 <Route path="/user/settings" element={<Settings />} />
+                {/* Business routes */}
+                <Route path="/business/auth" element={<BusinessAuth />} />
+                <Route path="/business" element={<BusinessLayout />}>
+                  <Route index element={<BusinessProfile />} />
+                  <Route path="create" element={<CreateCampaign />} />
+                </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </ProfileProvider>
