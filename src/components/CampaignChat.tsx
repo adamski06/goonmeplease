@@ -309,11 +309,11 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
                           setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, selectedReply: reply } : m));
                           handleSendWithContent(reply);
                         }}
-                        className={`text-xs px-3.5 py-1.5 rounded-lg font-geist font-medium transition-all ${
+                        className={`text-xs px-3.5 py-1.5 rounded-lg font-geist font-medium transition-all duration-300 ${
                           isSelected
-                            ? 'bg-blue-600 text-white border border-blue-500'
+                            ? 'bg-blue-600/60 text-white/70 border border-blue-500/40'
                             : hasSelection
-                            ? 'border border-border bg-muted/30 text-muted-foreground/50 opacity-50'
+                            ? 'border border-border bg-muted/20 text-muted-foreground/40 opacity-40'
                             : reply === 'Yes'
                             ? 'bg-blue-600/80 backdrop-blur-md text-white border border-blue-400/30 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)] hover:bg-blue-600/90'
                             : 'border border-border bg-muted/50 text-foreground hover:bg-muted'
