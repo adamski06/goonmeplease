@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Check, Plus, X } from 'lucide-react';
+import CampaignChat from '@/components/CampaignChat';
 
 const steps = ['Ad Details', 'Target Audience', 'Budget'];
 
@@ -22,8 +23,7 @@ const CreateCampaign: React.FC = () => {
   const [guidelinesList, setGuidelinesList] = useState<string[]>(['']);
 
   // Step 2: Audience
-  const [category, setCategory] = useState('');
-  const [reach, setReach] = useState('worldwide');
+  const [audience, setAudience] = useState('');
 
   // Step 3: Budget
   const [maxEarnings, setMaxEarnings] = useState('');
@@ -44,6 +44,16 @@ const CreateCampaign: React.FC = () => {
     setGuidelinesList(updated);
   };
 
+  const handleFormUpdate = (updates: Partial<{ brand_name: string; title: string; description: string; deadline: string; total_budget: number }>) => {
+    if (updates.title !== undefined) setTitle(updates.title);
+    if (updates.description !== undefined) setDescription(updates.description);
+    if (updates.total_budget !== undefined) setTotalBudget(String(updates.total_budget));
+  };
+
+  const handleRequirementsUpdate = (requirements: string[]) => {
+    setGuidelinesList(requirements.length > 0 ? requirements : ['']);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const { data: { user } } = await supabase.auth.getUser();
@@ -51,7 +61,6 @@ const CreateCampaign: React.FC = () => {
 
     const guidelinesArray = guidelinesList.map((g) => g.trim()).filter(Boolean);
 
-    // Use company name from business profile as brand_name
     const { data: bp } = await supabase.from('business_profiles').select('company_name').eq('user_id', user.id).maybeSingle();
 
     const { error } = await supabase.from('campaigns').insert({
@@ -61,7 +70,7 @@ const CreateCampaign: React.FC = () => {
       max_earnings: maxEarnings ? parseFloat(maxEarnings) : null,
       total_budget: totalBudget ? parseFloat(totalBudget) : null,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
-      category: category.trim() || null,
+      category: audience.trim() || null,
       business_id: user.id,
       is_active: true,
       status: 'active',
@@ -76,168 +85,171 @@ const CreateCampaign: React.FC = () => {
     setIsSubmitting(false);
   };
 
+  const formData = {
+    brand_name: '',
+    title,
+    description,
+    deadline: '',
+    total_budget: totalBudget ? parseFloat(totalBudget) : 0,
+  };
+
   return (
-    <div className="max-w-xl mx-auto px-6 py-10">
-      {/* Step indicator */}
-      <div className="flex items-center gap-2 mb-8">
-        {steps.map((label, i) => (
-          <React.Fragment key={label}>
-            <button
-              onClick={() => i < step && setStep(i)}
-              className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                i === step
-                  ? 'text-foreground'
-                  : i < step
-                  ? 'text-muted-foreground hover:text-foreground cursor-pointer'
-                  : 'text-muted-foreground/40'
-              }`}
-            >
-              <span className={`h-6 w-6 rounded-full text-xs flex items-center justify-center font-semibold ${
-                i < step
-                  ? 'bg-foreground text-background'
-                  : i === step
-                  ? 'bg-foreground text-background'
-                  : 'bg-muted text-muted-foreground'
-              }`}>
-                {i < step ? <Check className="h-3 w-3" /> : i + 1}
-              </span>
-              <span className="hidden sm:inline">{label}</span>
-            </button>
-            {i < steps.length - 1 && (
-              <div className={`flex-1 h-px ${i < step ? 'bg-foreground' : 'bg-border'}`} />
-            )}
-          </React.Fragment>
-        ))}
+    <div className="flex h-[calc(100vh)] overflow-hidden">
+      {/* Chat panel */}
+      <div className="w-[340px] shrink-0 border-r border-border h-full">
+        <CampaignChat
+          formData={formData}
+          requirements={guidelinesList.filter(g => g.trim())}
+          onFormUpdate={handleFormUpdate}
+          onRequirementsUpdate={handleRequirementsUpdate}
+        />
       </div>
 
-      {/* Step 1: Ad Details */}
-      {step === 0 && (
-        <div className="space-y-5">
-          <h2 className="text-xl font-bold text-foreground font-montserrat">Create your ad</h2>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Campaign title *</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Description</Label>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
-          </div>
-
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Guidelines</Label>
-            {guidelinesList.map((g, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <Input
-                  value={g}
-                  onChange={(e) => updateGuideline(i, e.target.value)}
-                  placeholder={`Guideline ${i + 1}`}
-                  className="h-9 text-sm"
-                />
-                {guidelinesList.length > 1 && (
-                  <button onClick={() => removeGuideline(i)} className="text-muted-foreground hover:text-destructive transition-colors shrink-0">
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button onClick={addGuideline} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">
-              <Plus className="h-3.5 w-3.5" /> Add guideline
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Audience */}
-      {step === 1 && (
-        <div className="space-y-5">
-          <div>
-            <h2 className="text-xl font-bold text-foreground font-montserrat">Target audience</h2>
-            <p className="text-sm text-muted-foreground mt-1">Who should see this campaign?</p>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Category</Label>
-            <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="e.g. Fashion, Tech, Food" className="h-10" />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Reach</Label>
-            <div className="flex gap-2">
-              {['worldwide', 'nordic', 'local'].map((r) => (
+      {/* Form panel */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-xl mx-auto px-6 py-10">
+          {/* Step indicator */}
+          <div className="flex items-center gap-2 mb-8">
+            {steps.map((label, i) => (
+              <React.Fragment key={label}>
                 <button
-                  key={r}
-                  onClick={() => setReach(r)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors capitalize ${
-                    reach === r
-                      ? 'bg-foreground text-background border-foreground'
-                      : 'bg-card text-muted-foreground border-border hover:border-foreground/30'
+                  onClick={() => i < step && setStep(i)}
+                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                    i === step
+                      ? 'text-foreground'
+                      : i < step
+                      ? 'text-muted-foreground hover:text-foreground cursor-pointer'
+                      : 'text-muted-foreground/40'
                   }`}
                 >
-                  {r}
+                  <span className={`h-6 w-6 rounded-full text-xs flex items-center justify-center font-semibold ${
+                    i < step
+                      ? 'bg-foreground text-background'
+                      : i === step
+                      ? 'bg-foreground text-background'
+                      : 'bg-muted text-muted-foreground'
+                  }`}>
+                    {i < step ? <Check className="h-3 w-3" /> : i + 1}
+                  </span>
+                  <span className="hidden sm:inline">{label}</span>
                 </button>
-              ))}
+                {i < steps.length - 1 && (
+                  <div className={`flex-1 h-px ${i < step ? 'bg-foreground' : 'bg-border'}`} />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+
+          {/* Step 1: Ad Details */}
+          {step === 0 && (
+            <div className="space-y-5">
+              <h2 className="text-xl font-bold text-foreground font-montserrat">Create your ad</h2>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-medium">Campaign title *</Label>
+                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-medium">Description</Label>
+                <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Guidelines</Label>
+                {guidelinesList.map((g, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input
+                      value={g}
+                      onChange={(e) => updateGuideline(i, e.target.value)}
+                      placeholder={`Guideline ${i + 1}`}
+                      className="h-9 text-sm"
+                    />
+                    {guidelinesList.length > 1 && (
+                      <button onClick={() => removeGuideline(i)} className="text-muted-foreground hover:text-destructive transition-colors shrink-0">
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button onClick={addGuideline} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors mt-1">
+                  <Plus className="h-3.5 w-3.5" /> Add guideline
+                </button>
+              </div>
             </div>
+          )}
+
+          {/* Step 2: Audience */}
+          {step === 1 && (
+            <div className="space-y-5">
+              <h2 className="text-xl font-bold text-foreground font-montserrat">Target audience</h2>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-medium">Who should see this campaign?</Label>
+                <Input
+                  value={audience}
+                  onChange={(e) => setAudience(e.target.value)}
+                  placeholder="e.g. Gen Z fashion lovers in Scandinavia"
+                  className="h-10"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Budget */}
+          {step === 2 && (
+            <div className="space-y-5">
+              <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-medium">Max earnings per creator (SEK)</Label>
+                <Input type="number" value={maxEarnings} onChange={(e) => setMaxEarnings(e.target.value)} placeholder="5000" className="h-10" />
+                <p className="text-xs text-muted-foreground">The maximum a single creator can earn</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm font-medium">Total campaign budget (SEK)</Label>
+                <Input type="number" value={totalBudget} onChange={(e) => setTotalBudget(e.target.value)} placeholder="50000" className="h-10" />
+                <p className="text-xs text-muted-foreground">Total amount allocated for this campaign</p>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => step === 0 ? navigate('/business') : setStep(step - 1)}
+              className="gap-1.5"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              {step === 0 ? 'Cancel' : 'Back'}
+            </Button>
+
+            {step < steps.length - 1 ? (
+              <Button
+                size="sm"
+                onClick={() => setStep(step + 1)}
+                disabled={!canProceed()}
+                className="gap-1.5"
+              >
+                Next
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !canProceed()}
+                className="gap-1.5"
+              >
+                {isSubmitting ? 'Creating...' : 'Create Campaign'}
+                <Check className="h-3.5 w-3.5" />
+              </Button>
+            )}
           </div>
         </div>
-      )}
-
-      {/* Step 3: Budget */}
-      {step === 2 && (
-        <div className="space-y-5">
-          <div>
-            <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
-            <p className="text-sm text-muted-foreground mt-1">How much do you want to spend?</p>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Max earnings per creator (SEK)</Label>
-            <Input type="number" value={maxEarnings} onChange={(e) => setMaxEarnings(e.target.value)} placeholder="5000" className="h-10" />
-            <p className="text-xs text-muted-foreground">The maximum a single creator can earn</p>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Total campaign budget (SEK)</Label>
-            <Input type="number" value={totalBudget} onChange={(e) => setTotalBudget(e.target.value)} placeholder="50000" className="h-10" />
-            <p className="text-xs text-muted-foreground">Total amount allocated for this campaign</p>
-          </div>
-        </div>
-      )}
-
-      {/* Navigation */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => step === 0 ? navigate('/business') : setStep(step - 1)}
-          className="gap-1.5"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          {step === 0 ? 'Cancel' : 'Back'}
-        </Button>
-
-        {step < steps.length - 1 ? (
-          <Button
-            size="sm"
-            onClick={() => setStep(step + 1)}
-            disabled={!canProceed()}
-            className="gap-1.5"
-          >
-            Next
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
-        ) : (
-          <Button
-            size="sm"
-            onClick={handleSubmit}
-            disabled={isSubmitting || !canProceed()}
-            className="gap-1.5"
-          >
-            {isSubmitting ? 'Creating...' : 'Create Campaign'}
-            <Check className="h-3.5 w-3.5" />
-          </Button>
-        )}
       </div>
     </div>
   );
