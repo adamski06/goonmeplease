@@ -194,51 +194,63 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Choose your plan</h2>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-4">
                 {/* Base */}
                 <button
                   onClick={() => { setSelectedPackage('base'); setCustomBudget(''); }}
-                  className={`rounded-xl border p-4 text-left transition-all ${
+                  className={`rounded-xl border px-5 py-8 text-left transition-all flex flex-col justify-between min-h-[240px] ${
                     selectedPackage === 'base'
                       ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
                       : 'border-border hover:border-foreground/20'
                   }`}
                 >
-                  <div className="text-xs text-muted-foreground font-medium mb-1">Base</div>
-                  <div className="text-2xl font-bold text-foreground">$1,000</div>
-                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
-                  <div className="text-xs text-muted-foreground/70 mt-0.5">Total: $1,100</div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-medium mb-2">Base</div>
+                    <div className="text-2xl font-bold text-foreground">$1,000</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-foreground leading-tight">1M – 3M</div>
+                    <div className="text-sm text-muted-foreground mt-1">guaranteed views</div>
+                  </div>
                 </button>
 
                 {/* Pro */}
                 <button
                   onClick={() => { setSelectedPackage('pro'); setCustomBudget(''); }}
-                  className={`rounded-xl border p-4 text-left transition-all relative ${
+                  className={`rounded-xl border px-5 py-8 text-left transition-all relative flex flex-col justify-between min-h-[240px] ${
                     selectedPackage === 'pro'
                       ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
                       : 'border-border hover:border-foreground/20'
                   }`}
                 >
                   <div className="absolute -top-2 right-3 text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium">Popular</div>
-                  <div className="text-xs text-muted-foreground font-medium mb-1">Pro</div>
-                  <div className="text-2xl font-bold text-foreground">$5,000</div>
-                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
-                  <div className="text-xs text-muted-foreground/70 mt-0.5">Total: $5,500</div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-medium mb-2">Pro</div>
+                    <div className="text-2xl font-bold text-foreground">$5,000</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-foreground leading-tight">5M – 15M</div>
+                    <div className="text-sm text-muted-foreground mt-1">guaranteed views</div>
+                  </div>
                 </button>
 
                 {/* Custom */}
                 <button
                   onClick={() => setSelectedPackage('custom')}
-                  className={`rounded-xl border p-4 text-left transition-all ${
+                  className={`rounded-xl border px-5 py-8 text-left transition-all flex flex-col justify-between min-h-[240px] ${
                     selectedPackage === 'custom'
                       ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
                       : 'border-border hover:border-foreground/20'
                   }`}
                 >
-                  <div className="text-xs text-muted-foreground font-medium mb-1">Custom</div>
-                  <div className="text-2xl font-bold text-foreground">Custom</div>
-                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
-                  <div className="text-xs text-muted-foreground/70 mt-0.5">You decide</div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-medium mb-2">Custom</div>
+                    <div className="text-2xl font-bold text-foreground">Custom</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">You set the budget,</div>
+                    <div className="text-sm text-muted-foreground">we deliver the views</div>
+                  </div>
                 </button>
               </div>
 
