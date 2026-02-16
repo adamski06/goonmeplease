@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
@@ -63,6 +63,7 @@ const App = () => (
                   <Route path="campaigns/new" element={<CreateCampaign />} />
                   <Route path="campaigns/:id" element={<BusinessCampaignDetail />} />
                 </Route>
+                <Route path="/" element={<Navigate to="/user" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </ProfileProvider>
