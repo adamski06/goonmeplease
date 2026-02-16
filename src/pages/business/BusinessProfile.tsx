@@ -244,12 +244,13 @@ const BusinessProfile: React.FC = () => {
             </button>
 
             {campaigns.map((c) => (
-              <div
+              <button
                 key={c.id}
-                className="aspect-square rounded-xl border border-border bg-card overflow-hidden flex flex-col"
+                onClick={() => navigate(`/business/campaigns/${c.id}`)}
+                className="aspect-[9/14] rounded-[28px] border border-border bg-card overflow-hidden flex flex-col text-left transition-colors hover:bg-accent/50"
               >
                 {c.cover_image_url ? (
-                  <img src={c.cover_image_url} alt="" className="flex-1 object-cover" />
+                  <img src={c.cover_image_url} alt="" className="flex-1 w-full object-cover" />
                 ) : (
                   <div className="flex-1 bg-muted flex items-center justify-center">
                     <span className="text-2xl font-bold text-muted-foreground/40 font-montserrat">
@@ -261,7 +262,7 @@ const BusinessProfile: React.FC = () => {
                   <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
                   <p className="text-xs text-muted-foreground">{c.brand_name}</p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
