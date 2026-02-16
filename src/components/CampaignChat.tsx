@@ -134,8 +134,17 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
   useEffect(() => {
     if (currentStep === 1 && !stepTriggeredRef.current.has(1) && businessProfile) {
       stepTriggeredRef.current.add(1);
-      // Auto-suggest target audience
-      handleSendWithContent('We are now on the target audience step. First explain your thinking about who the ideal audience is for this campaign and why you recommend going broad. Then in your next message, fill in the audience field.');
+      const msgId = (Date.now() + 100).toString();
+      const suggestion = `I'd suggest going broad here — wider audiences tend to perform much better with UGC. Want me to fill in a target audience based on what I know about ${businessProfile.company_name}?`;
+      setMessages(prev => [...prev, {
+        id: msgId,
+        role: 'jarla',
+        content: suggestion,
+        displayedContent: '',
+        quickReplies: ['Yes', 'No, I\'ll write it'],
+      }]);
+      setIsTyping(true);
+      setTimeout(() => typewriterEffect(msgId, suggestion), 300);
     }
   }, [currentStep, businessProfile]);
 
