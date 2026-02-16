@@ -85,7 +85,7 @@ const CreateCampaign: React.FC = () => {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
     } else {
       toast({ title: 'Campaign created' });
-      navigate('/business');
+      navigate('/business/campaigns');
     }
     setIsSubmitting(false);
   };

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, PlusCircle, LogOut } from 'lucide-react';
+import { User, Megaphone, LogOut } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Profile', icon: User, path: '/business' },
-  { label: 'Create Campaign', icon: PlusCircle, path: '/business/create' },
+  { label: 'Campaigns', icon: Megaphone, path: '/business/campaigns' },
 ];
 
 const BusinessSidebar: React.FC = () => {
@@ -32,7 +32,7 @@ const BusinessSidebar: React.FC = () => {
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path || (item.path !== '/business' && location.pathname.startsWith(item.path));
           return (
             <button
               key={item.path}
