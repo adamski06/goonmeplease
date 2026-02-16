@@ -137,7 +137,7 @@ const BusinessCampaigns: React.FC = () => {
                 className="w-full flex items-center gap-4 rounded-xl border border-border bg-card p-4 hover:bg-accent/50 transition-colors text-left"
               >
                 {/* Thumbnail */}
-                <div className="h-14 w-14 rounded-lg bg-muted shrink-0 overflow-hidden">
+                <div className="h-20 w-20 rounded-lg bg-muted shrink-0 overflow-hidden">
                   {c.cover_image_url ? (
                     <img src={c.cover_image_url} alt="" className="h-full w-full object-cover" />
                   ) : (

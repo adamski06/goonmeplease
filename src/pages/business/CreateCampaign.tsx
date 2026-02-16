@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Check, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
 
-const steps = ['Ad Details', 'Target Audience', 'Budget'];
+const steps = ['Ad Details', 'Target Audience', 'Budget', 'Checkout'];
 
 const CreateCampaign: React.FC = () => {
   const [step, setStep] = useState(0);
@@ -28,10 +28,22 @@ const CreateCampaign: React.FC = () => {
   // Step 3: Budget package
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [customBudget, setCustomBudget] = useState('');
+
+  const getBudgetAmount = () => {
+    if (selectedPackage === 'base') return 1000;
+    if (selectedPackage === 'pro') return 5000;
+    if (selectedPackage === 'custom' && customBudget) return parseFloat(customBudget);
+    return 0;
+  };
+
+  const getFee = () => getBudgetAmount() * 0.1;
+  const getTotal = () => getBudgetAmount() + getFee();
+
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
-    if (step === 2) return true;
+    if (step === 2) return selectedPackage !== null && (selectedPackage !== 'custom' || (customBudget && parseFloat(customBudget) > 0));
+    if (step === 3) return true;
     return false;
   };
 
@@ -56,38 +68,64 @@ const CreateCampaign: React.FC = () => {
     setAudience(value);
   };
 
-  const handleSubmit = async () => {
+  const handleCheckout = async () => {
     setIsSubmitting(true);
+
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      toast({ title: 'Error', description: 'Not authenticated', variant: 'destructive' });
+      setIsSubmitting(false);
+      return;
+    }
 
     const guidelinesArray = guidelinesList.map((g) => g.trim()).filter(Boolean);
-
     const { data: bp } = await supabase.from('business_profiles').select('company_name').eq('user_id', user.id).maybeSingle();
 
-    const budgetAmount = selectedPackage === 'base' ? 1000 : selectedPackage === 'pro' ? 5000 : customBudget ? parseFloat(customBudget) : null;
-    const totalWithFee = budgetAmount ? budgetAmount * 1.1 : null;
-
-    const { error } = await supabase.from('campaigns').insert({
+    const campaignData = {
       title: title.trim(),
       brand_name: bp?.company_name || 'My Brand',
       description: description.trim() || null,
-      max_earnings: null,
-      total_budget: totalWithFee,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
       category: audience.trim() || null,
+      total_budget: getTotal(),
+    };
+
+    const { data, error } = await supabase.functions.invoke('create-campaign-checkout', {
+      body: {
+        amount: getTotal(),
+        campaignTitle: title.trim(),
+        campaignData,
+      },
+    });
+
+    if (error || !data?.url) {
+      toast({ title: 'Error', description: error?.message || 'Could not create checkout session', variant: 'destructive' });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Also create the campaign in the database before redirecting
+    const { error: insertError } = await supabase.from('campaigns').insert({
+      title: campaignData.title,
+      brand_name: campaignData.brand_name,
+      description: campaignData.description,
+      max_earnings: null,
+      total_budget: campaignData.total_budget,
+      guidelines: campaignData.guidelines,
+      category: campaignData.category,
       business_id: user.id,
       is_active: true,
       status: 'active',
     });
 
-    if (error) {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
-    } else {
-      toast({ title: 'Campaign created' });
-      navigate('/business/campaigns');
+    if (insertError) {
+      toast({ title: 'Error', description: insertError.message, variant: 'destructive' });
+      setIsSubmitting(false);
+      return;
     }
-    setIsSubmitting(false);
+
+    // Redirect to Stripe checkout
+    window.location.href = data.url;
   };
 
   const formData = {
@@ -95,7 +133,7 @@ const CreateCampaign: React.FC = () => {
     title,
     description,
     deadline: '',
-    total_budget: selectedPackage === 'base' ? 1000 : selectedPackage === 'pro' ? 5000 : customBudget ? parseFloat(customBudget) : 0,
+    total_budget: getBudgetAmount(),
   };
 
   return (
@@ -128,17 +166,14 @@ const CreateCampaign: React.FC = () => {
           {/* Step 1: Ad Details */}
           {step === 0 && (
             <div className="space-y-5">
-
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Campaign title *</Label>
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
               </div>
-
               <div className="space-y-1.5">
                 <Label className="text-sm font-medium">Description</Label>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
               </div>
-
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Guidelines</Label>
                 {guidelinesList.map((g, i) => (
@@ -255,13 +290,60 @@ const CreateCampaign: React.FC = () => {
                     placeholder="Enter amount"
                     className="h-10"
                   />
-                  {customBudget && (
-                    <p className="text-xs text-muted-foreground">
-                      Total with fee: ${(parseFloat(customBudget) * 1.1).toLocaleString()}
-                    </p>
-                  )}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Step 4: Checkout */}
+          {step === 3 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <button onClick={() => setStep(2)} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <ArrowLeft className="h-4 w-4" />
+                </button>
+                <h2 className="text-xl font-bold text-foreground font-montserrat">Review & Pay</h2>
+              </div>
+
+              {/* Summary card */}
+              <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Campaign</p>
+                  <p className="text-sm font-semibold text-foreground">{title}</p>
+                </div>
+                {description && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Description</p>
+                    <p className="text-sm text-foreground">{description}</p>
+                  </div>
+                )}
+                {audience && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Audience</p>
+                    <p className="text-sm text-foreground">{audience}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Plan</p>
+                  <p className="text-sm font-semibold text-foreground capitalize">{selectedPackage}</p>
+                </div>
+              </div>
+
+              {/* Price breakdown */}
+              <div className="rounded-xl border border-border bg-card p-6 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Campaign budget</span>
+                  <span className="text-sm font-medium text-foreground">${getBudgetAmount().toLocaleString()}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Jarla service fee (10%)</span>
+                  <span className="text-sm font-medium text-foreground">${getFee().toLocaleString()}</span>
+                </div>
+                <div className="border-t border-border pt-3 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-foreground">Total</span>
+                  <span className="text-lg font-bold text-foreground">${getTotal().toLocaleString()}</span>
+                </div>
+              </div>
             </div>
           )}
 
@@ -280,12 +362,12 @@ const CreateCampaign: React.FC = () => {
             ) : (
               <Button
                 size="sm"
-                onClick={handleSubmit}
-                disabled={isSubmitting || !canProceed()}
+                onClick={handleCheckout}
+                disabled={isSubmitting}
                 className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
               >
-                {isSubmitting ? 'Creating...' : 'Create Campaign'}
-                <Check className="h-3.5 w-3.5" />
+                {isSubmitting ? 'Processing...' : 'Proceed to Payment'}
+                <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             )}
           </div>
