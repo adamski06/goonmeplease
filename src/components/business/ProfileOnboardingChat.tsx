@@ -87,6 +87,10 @@ const ProfileCard: React.FC<{
 
   const displayData = doneTyping ? editData : typed;
   const logoUrl = data.logo_url;
+  // Derive a fallback logo from website domain
+  const websiteDomain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+  const fallbackLogo = websiteDomain ? `https://www.google.com/s2/favicons?domain=${websiteDomain}&sz=128` : null;
+  const effectiveLogo = logoUrl || fallbackLogo;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
@@ -96,13 +100,21 @@ const ProfileCard: React.FC<{
       }`}
     >
       <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
-        {logoUrl && (
+        {effectiveLogo && (
           <div className="flex items-center gap-3 pb-2 mb-2 border-b border-border/50">
             <img
-              src={logoUrl}
+              src={effectiveLogo}
               alt="Company logo"
               className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                // Try fallback if primary fails
+                if (fallbackLogo && img.src !== fallbackLogo) {
+                  img.src = fallbackLogo;
+                } else {
+                  img.style.display = 'none';
+                }
+              }}
             />
             <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
           </div>
@@ -276,11 +288,18 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     setSaving(true);
     setConfirmed(true);
 
+    // Ensure logo_url has a value — use Google favicon fallback if AI didn't provide one
+    const dataToSave = { ...editedData };
+    if (!dataToSave.logo_url && dataToSave.website) {
+      const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      if (domain) dataToSave.logo_url = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+    }
+
     try {
       const { error } = await supabase.functions.invoke('company-research', {
         body: {
           action: 'save',
-          profileUpdates: editedData,
+          profileUpdates: dataToSave,
           message: '',
           conversationHistory: []
         }
