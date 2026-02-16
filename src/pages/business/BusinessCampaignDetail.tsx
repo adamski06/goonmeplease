@@ -1,0 +1,177 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { ArrowLeft, Eye, CheckCircle2, Clock, XCircle, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+
+interface CampaignData {
+  id: string;
+  title: string;
+  brand_name: string;
+  description: string | null;
+  cover_image_url: string | null;
+  is_active: boolean | null;
+  status: string | null;
+  total_budget: number | null;
+  created_at: string;
+  guidelines: string[] | null;
+  category: string | null;
+  video_length: string | null;
+}
+
+interface Submission {
+  id: string;
+  tiktok_video_url: string;
+  status: string;
+  current_views: number | null;
+  created_at: string;
+  creator_id: string;
+}
+
+const BusinessCampaignDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [campaign, setCampaign] = useState<CampaignData | null>(null);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+    const load = async () => {
+      const [campRes, subRes] = await Promise.all([
+        supabase.from('campaigns').select('*').eq('id', id).maybeSingle(),
+        supabase.from('content_submissions').select('id, tiktok_video_url, status, current_views, created_at, creator_id').eq('campaign_id', id).order('created_at', { ascending: false }),
+      ]);
+      if (campRes.data) setCampaign(campRes.data);
+      setSubmissions(subRes.data || []);
+      setLoading(false);
+    };
+    load();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="h-6 w-6 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!campaign) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <p className="text-muted-foreground">Campaign not found</p>
+        <Button variant="outline" onClick={() => navigate('/business/campaigns')}>Go back</Button>
+      </div>
+    );
+  }
+
+  const statusLabel = campaign.is_active ? 'Active' : 'Ended';
+  const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
+  const approvedCount = submissions.filter(s => s.status === 'approved' || s.status === 'paid').length;
+  const pendingCount = submissions.filter(s => s.status === 'pending_review').length;
+
+  const statusBadge: Record<string, string> = {
+    pending_review: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+    approved: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+    denied: 'bg-red-500/10 text-red-600 border-red-500/20',
+    paid: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-6 py-10">
+      {/* Header */}
+      <button onClick={() => navigate('/business/campaigns')} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
+        <ArrowLeft className="h-4 w-4" />
+        Back to campaigns
+      </button>
+
+      <div className="flex items-start gap-6 mb-8">
+        <div className="h-20 w-20 rounded-xl bg-muted shrink-0 overflow-hidden">
+          {campaign.cover_image_url ? (
+            <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <span className="text-2xl font-bold text-muted-foreground/40 font-montserrat">{campaign.brand_name.charAt(0).toUpperCase()}</span>
+            </div>
+          )}
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
+            <Badge variant="outline" className={campaign.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
+              {statusLabel}
+            </Badge>
+          </div>
+          {campaign.description && <p className="text-sm text-muted-foreground mt-1">{campaign.description}</p>}
+          <p className="text-xs text-muted-foreground mt-2">Created {new Date(campaign.created_at).toLocaleDateString()}</p>
+        </div>
+      </div>
+
+      {/* Stats cards */}
+      <div className="grid grid-cols-4 gap-4 mb-10">
+        {[
+          { label: 'Submissions', value: submissions.length, icon: Users },
+          { label: 'Approved', value: approvedCount, icon: CheckCircle2 },
+          { label: 'Pending', value: pendingCount, icon: Clock },
+          { label: 'Total Views', value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews, icon: Eye },
+        ].map((stat) => (
+          <div key={stat.label} className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <stat.icon className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">{stat.label}</span>
+            </div>
+            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Guidelines */}
+      {campaign.guidelines && campaign.guidelines.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-sm font-semibold text-foreground mb-3">Guidelines</h3>
+          <ul className="space-y-1.5">
+            {campaign.guidelines.map((g, i) => (
+              <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                <span className="text-foreground/40 mt-0.5">•</span>
+                {g}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Submissions */}
+      <div>
+        <h3 className="text-sm font-semibold text-foreground mb-3">Submissions ({submissions.length})</h3>
+        {submissions.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border p-8 text-center">
+            <p className="text-sm text-muted-foreground">No submissions yet</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {submissions.map((sub) => (
+              <div key={sub.id} className="flex items-center gap-4 rounded-lg border border-border bg-card p-3">
+                <div className="flex-1 min-w-0">
+                  <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-sm text-foreground hover:underline truncate block">
+                    {sub.tiktok_video_url}
+                  </a>
+                  <p className="text-xs text-muted-foreground mt-0.5">{new Date(sub.created_at).toLocaleDateString()}</p>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="text-sm text-muted-foreground">{sub.current_views || 0} views</span>
+                  <Badge variant="outline" className={`text-[10px] ${statusBadge[sub.status] || ''}`}>
+                    {sub.status.replace('_', ' ')}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BusinessCampaignDetail;

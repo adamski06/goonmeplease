@@ -20,6 +20,8 @@ import BusinessAuth from "./pages/business/BusinessAuth";
 import BusinessLayout from "./components/business/BusinessLayout";
 import BusinessProfile from "./pages/business/BusinessProfile";
 import CreateCampaign from "./pages/business/CreateCampaign";
+import BusinessCampaigns from "./pages/business/BusinessCampaigns";
+import BusinessCampaignDetail from "./pages/business/BusinessCampaignDetail";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +59,9 @@ const App = () => (
                 <Route path="/business/auth" element={<BusinessAuth />} />
                 <Route path="/business" element={<BusinessLayout />}>
                   <Route index element={<BusinessProfile />} />
-                  <Route path="create" element={<CreateCampaign />} />
+                  <Route path="campaigns" element={<BusinessCampaigns />} />
+                  <Route path="campaigns/new" element={<CreateCampaign />} />
+                  <Route path="campaigns/:id" element={<BusinessCampaignDetail />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

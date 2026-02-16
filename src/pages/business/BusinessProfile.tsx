@@ -234,7 +234,7 @@ const BusinessProfile: React.FC = () => {
         <div className="border-t border-border pt-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <button
-              onClick={() => navigate('/business/create')}
+              onClick={() => navigate('/business/campaigns/new')}
               className="aspect-square rounded-xl border border-dashed border-border bg-card hover:bg-accent/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
               <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
