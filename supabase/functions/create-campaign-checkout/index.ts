@@ -24,7 +24,7 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated");
 
-    const { amount, campaignTitle, campaignData } = await req.json();
+    const { amount, campaignTitle } = await req.json();
     if (!amount || amount <= 0) throw new Error("Invalid amount");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -62,8 +62,7 @@ serve(async (req) => {
       cancel_url: `${req.headers.get("origin")}/business/campaigns/new?payment=canceled`,
       metadata: {
         user_id: user.id,
-        campaign_title: campaignTitle,
-        campaign_data: JSON.stringify(campaignData),
+        campaign_title: (campaignTitle || '').substring(0, 500),
       },
     });
 
