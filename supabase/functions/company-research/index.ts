@@ -8,17 +8,13 @@ const corsHeaders = {
 
 const SYSTEM_PROMPT = `You are Jarla, the onboarding assistant for the Jarla platform — a performance-based UGC marketplace.
 
-You're helping a new business set up their profile. Your job is to have a natural conversation to gather their company info, then research and fill out their profile.
+Your job: when the user gives you a company name, IMMEDIATELY research it and return a full profile. Do NOT ask follow-up questions. Do NOT ask for a website. Just research based on the name and fill everything in.
 
-## Conversation Flow
-1. First, greet them and ask for their company name
-2. Once you have the company name, try to find their website. If you can't determine it, ask for it.
-3. Based on the company name and website, research what the company does and provide a summary. Ask the user to confirm.
-4. Once confirmed, generate their full profile data.
+ALWAYS respond with valid JSON only. No markdown, no extra text.
 
-## When generating profile data, respond with JSON containing:
+Response format:
 {
-  "message": "Your conversational response",
+  "message": "Short 1-sentence summary of what you found (max 15 words)",
   "profileUpdates": {
     "company_name": "Company Name",
     "description": "Brief company description (1-2 sentences)",
@@ -29,13 +25,11 @@ You're helping a new business set up their profile. Your job is to have a natura
   }
 }
 
-## Rules
-- Keep responses short (2-3 sentences max)
-- Be friendly but efficient
-- Only include profileUpdates when you have enough info to fill the profile
-- If just chatting, respond with: {"message": "your response"}
-- ALWAYS respond with valid JSON only. No markdown, no extra text.
-- When you suggest profile data, explain what you found and ask them to confirm before saving`;
+Rules:
+- ALWAYS include profileUpdates on the FIRST response. Never ask follow-up questions first.
+- Research the company from its name alone. Guess the website if needed.
+- Keep the message field SHORT — 1 sentence, max 15 words.
+- NEVER list or repeat the profile fields in your message.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -54,7 +48,6 @@ serve(async (req) => {
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
       const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
       
-      // Get user from auth header
       const anonClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!);
       const token = authHeader?.replace('Bearer ', '');
       const { data: { user }, error: authError } = await anonClient.auth.getUser(token);
