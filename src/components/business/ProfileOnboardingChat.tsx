@@ -95,18 +95,27 @@ const ProfileCard: React.FC<{
         {activeFields.map(({ key, label }) => (
           <div key={key} className="flex items-baseline gap-2">
             <span className="text-xs text-muted-foreground shrink-0 w-20">{label}</span>
-            {doneTyping && !confirmed ? (
-              <input
-                value={editData[key] || ''}
-                onChange={(e) => updateField(key, e.target.value)}
-                className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors"
-              />
-            ) : (
-              <span className={`text-sm text-foreground ${key === 'company_name' ? 'font-medium' : ''}`}>
-                {displayData[key] || ''}
-                {!doneTyping && <span className="inline-block w-[1px] h-3.5 bg-foreground/60 ml-0.5 animate-pulse" />}
+            <div className="relative flex-1 min-w-0">
+              {/* Invisible full text to reserve height */}
+              <span className="text-sm invisible whitespace-pre-wrap" aria-hidden="true">
+                {data[key] || '\u00A0'}
               </span>
-            )}
+              {/* Visible layer */}
+              <div className="absolute inset-0">
+                {doneTyping && !confirmed ? (
+                  <input
+                    value={editData[key] || ''}
+                    onChange={(e) => updateField(key, e.target.value)}
+                    className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors"
+                  />
+                ) : (
+                  <span className={`text-sm text-foreground ${key === 'company_name' ? 'font-medium' : ''}`}>
+                    {displayData[key] || ''}
+                    {!doneTyping && <span className="inline-block w-[1px] h-3.5 bg-foreground/60 ml-0.5 animate-pulse" />}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </div>
