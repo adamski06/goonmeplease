@@ -208,10 +208,7 @@ const CreateCampaign: React.FC = () => {
                     <div className="text-xs text-muted-foreground font-medium mb-1">Base</div>
                     <div className="text-2xl font-bold text-foreground">$1,000</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-foreground leading-tight">1,000,000 – 3,000,000</div>
-                    <div className="text-sm text-muted-foreground mt-1">guaranteed views</div>
-                  </div>
+                  <div className="text-2xl font-bold text-foreground">1,000,000 – 3,000,000 <span className="text-sm font-medium text-muted-foreground">views</span></div>
                 </button>
 
                 {/* Pro */}
@@ -228,10 +225,7 @@ const CreateCampaign: React.FC = () => {
                     <div className="text-xs text-muted-foreground font-medium mb-1">Pro</div>
                     <div className="text-2xl font-bold text-foreground">$5,000</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-foreground leading-tight">5,000,000 – 15,000,000</div>
-                    <div className="text-sm text-muted-foreground mt-1">guaranteed views</div>
-                  </div>
+                  <div className="text-2xl font-bold text-foreground">5,000,000 – 15,000,000 <span className="text-sm font-medium text-muted-foreground">views</span></div>
                 </button>
 
                 {/* Custom */}
@@ -247,10 +241,7 @@ const CreateCampaign: React.FC = () => {
                     <div className="text-xs text-muted-foreground font-medium mb-1">Custom</div>
                     <div className="text-2xl font-bold text-foreground">Custom</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-sm text-muted-foreground">You set the budget,</div>
-                    <div className="text-sm text-muted-foreground">we deliver the views</div>
-                  </div>
+                  <div className="text-sm text-muted-foreground">You set the budget, we deliver the views</div>
                 </button>
               </div>
 
