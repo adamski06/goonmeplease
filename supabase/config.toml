@@ -1,1 +1,4 @@
 project_id = "ktnqolddfsqkbqhmmiiz"
+
+[functions.create-campaign-checkout]
+verify_jwt = false

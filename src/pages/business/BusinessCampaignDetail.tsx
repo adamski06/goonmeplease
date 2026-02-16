@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, CheckCircle2, Clock, XCircle, Users } from 'lucide-react';
+import { ArrowLeft, Eye, CheckCircle2, Clock, XCircle, Users, Upload, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 interface CampaignData {
   id: string;
@@ -32,9 +33,12 @@ interface Submission {
 const BusinessCampaignDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -49,6 +53,40 @@ const BusinessCampaignDetail: React.FC = () => {
     };
     load();
   }, [id]);
+
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !id) return;
+
+    setUploading(true);
+    const ext = file.name.split('.').pop();
+    const path = `thumbnails/${id}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('campaign-assets')
+      .upload(path, file, { upsert: true });
+
+    if (uploadError) {
+      toast({ title: 'Upload failed', description: uploadError.message, variant: 'destructive' });
+      setUploading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from('campaign-assets').getPublicUrl(path);
+
+    const { error: updateError } = await supabase
+      .from('campaigns')
+      .update({ cover_image_url: urlData.publicUrl })
+      .eq('id', id);
+
+    if (updateError) {
+      toast({ title: 'Error', description: updateError.message, variant: 'destructive' });
+    } else {
+      setCampaign(prev => prev ? { ...prev, cover_image_url: urlData.publicUrl } : prev);
+      toast({ title: 'Thumbnail updated' });
+    }
+    setUploading(false);
+  };
 
   if (loading) {
     return (
@@ -88,15 +126,37 @@ const BusinessCampaignDetail: React.FC = () => {
       </button>
 
       <div className="flex items-start gap-6 mb-8">
-        <div className="h-20 w-20 rounded-xl bg-muted shrink-0 overflow-hidden">
-          {campaign.cover_image_url ? (
-            <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="h-full w-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-muted-foreground/40 font-montserrat">{campaign.brand_name.charAt(0).toUpperCase()}</span>
-            </div>
-          )}
+        {/* Thumbnail with upload */}
+        <div className="relative group">
+          <div className="h-20 w-20 rounded-xl bg-muted shrink-0 overflow-hidden">
+            {campaign.cover_image_url ? (
+              <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center">
+                <span className="text-2xl font-bold text-muted-foreground/40 font-montserrat">{campaign.brand_name.charAt(0).toUpperCase()}</span>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="absolute inset-0 rounded-xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+          >
+            {uploading ? (
+              <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4 text-white" />
+            )}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleThumbnailUpload}
+            className="hidden"
+          />
         </div>
+
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
