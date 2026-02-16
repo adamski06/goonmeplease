@@ -59,7 +59,7 @@ const BusinessLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex bg-background">
       <BusinessSidebar />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto h-screen">
         <Outlet />
       </main>
     </div>

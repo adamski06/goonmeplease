@@ -20,7 +20,7 @@ const BusinessSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0">
+    <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0 sticky top-0">
       {/* Logo */}
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-border">
         <img src={jarlaLogo} alt="Jarla" className="h-6" />
