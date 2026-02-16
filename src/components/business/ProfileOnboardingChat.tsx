@@ -18,6 +18,7 @@ interface ProfileUpdates {
   industry?: string;
   target_audience?: string;
   brand_values?: string;
+  logo_url?: string;
 }
 
 interface ProfileOnboardingChatProps {
@@ -45,6 +46,8 @@ const ProfileCard: React.FC<{
     { key: 'target_audience', label: 'Audience' },
     { key: 'brand_values', label: 'Values' },
   ];
+
+  
 
   useEffect(() => {
     if (startedRef.current) return;
@@ -83,6 +86,7 @@ const ProfileCard: React.FC<{
   };
 
   const displayData = doneTyping ? editData : typed;
+  const logoUrl = data.logo_url;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
@@ -92,6 +96,17 @@ const ProfileCard: React.FC<{
       }`}
     >
       <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
+        {logoUrl && (
+          <div className="flex items-center gap-3 pb-2 mb-2 border-b border-border/50">
+            <img
+              src={logoUrl}
+              alt="Company logo"
+              className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+            <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
+          </div>
+        )}
         {activeFields.map(({ key, label }) => (
           <div key={key} className="flex gap-2">
             <span className="text-xs text-muted-foreground shrink-0 w-20 pt-0.5">{label}</span>

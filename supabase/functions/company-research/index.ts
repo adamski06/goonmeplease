@@ -21,7 +21,8 @@ Response format:
     "website": "https://company.com",
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
-    "brand_values": "e.g. Sustainability, authenticity, inclusivity"
+    "brand_values": "e.g. Sustainability, authenticity, inclusivity",
+    "logo_url": "Direct URL to the company's official logo image (favicon, CDN, or public logo). Use the format https://logo.clearbit.com/domain.com or https://www.google.com/s2/favicons?domain=domain.com&sz=128 based on the website domain. If you know the website domain, ALWAYS provide a logo_url."
   }
 }
 
@@ -29,7 +30,8 @@ Rules:
 - ALWAYS include profileUpdates on the FIRST response. Never ask follow-up questions first.
 - Research the company from its name alone. Guess the website if needed.
 - Keep the message field SHORT — 1 sentence, max 15 words.
-- NEVER list or repeat the profile fields in your message.`;
+- NEVER list or repeat the profile fields in your message.
+- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format based on the company website.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -67,6 +69,7 @@ serve(async (req) => {
       if (profileUpdates.industry) updateData.industry = profileUpdates.industry;
       if (profileUpdates.target_audience) updateData.target_audience = profileUpdates.target_audience;
       if (profileUpdates.brand_values) updateData.brand_values = profileUpdates.brand_values;
+      if (profileUpdates.logo_url) updateData.logo_url = profileUpdates.logo_url;
 
       const { error } = await adminClient
         .from('business_profiles')
