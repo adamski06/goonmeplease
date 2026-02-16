@@ -73,7 +73,7 @@ const ProfileCard: React.FC<{
         setEditData({ ...data });
         setDoneTyping(true);
       }
-    }, 12);
+    }, 5);
 
     return () => clearInterval(interval);
   }, [data]);
@@ -93,28 +93,34 @@ const ProfileCard: React.FC<{
     >
       <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
         {activeFields.map(({ key, label }) => (
-          <div key={key} className="flex items-baseline gap-2">
-            <span className="text-xs text-muted-foreground shrink-0 w-20">{label}</span>
-            <div className="relative flex-1 min-w-0">
-              {/* Invisible full text to reserve height */}
-              <span className="text-sm invisible whitespace-pre-wrap" aria-hidden="true">
-                {data[key] || '\u00A0'}
-              </span>
-              {/* Visible layer */}
-              <div className="absolute inset-0">
-                {doneTyping && !confirmed ? (
-                  <input
-                    value={editData[key] || ''}
-                    onChange={(e) => updateField(key, e.target.value)}
-                    className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors"
-                  />
-                ) : (
-                  <span className={`text-sm text-foreground ${key === 'company_name' ? 'font-medium' : ''}`}>
-                    {displayData[key] || ''}
-                    {!doneTyping && <span className="inline-block w-[1px] h-3.5 bg-foreground/60 ml-0.5 animate-pulse" />}
-                  </span>
-                )}
-              </div>
+          <div key={key} className="flex gap-2">
+            <span className="text-xs text-muted-foreground shrink-0 w-20 pt-0.5">{label}</span>
+            <div className="flex-1 min-w-0">
+              {doneTyping && !confirmed ? (
+                <textarea
+                  value={editData[key] || ''}
+                  onChange={(e) => updateField(key, e.target.value)}
+                  rows={1}
+                  className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors resize-none"
+                  style={{ height: 'auto' }}
+                  onInput={(e) => {
+                    const t = e.target as HTMLTextAreaElement;
+                    t.style.height = 'auto';
+                    t.style.height = t.scrollHeight + 'px';
+                  }}
+                  ref={(el) => {
+                    if (el) {
+                      el.style.height = 'auto';
+                      el.style.height = el.scrollHeight + 'px';
+                    }
+                  }}
+                />
+              ) : (
+                <p className={`text-sm text-foreground leading-relaxed ${key === 'company_name' ? 'font-medium' : ''}`}>
+                  {displayData[key] || ''}
+                  {!doneTyping && <span className="inline-block w-[1px] h-3.5 bg-foreground/60 ml-0.5 animate-pulse" />}
+                </p>
+              )}
             </div>
           </div>
         ))}
