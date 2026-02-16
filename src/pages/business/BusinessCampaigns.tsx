@@ -137,12 +137,12 @@ const BusinessCampaigns: React.FC = () => {
                 className="w-full flex items-center gap-4 rounded-xl border border-border bg-card p-4 hover:bg-accent/50 transition-colors text-left"
               >
                 {/* Thumbnail bubble – matches mobile app card style */}
-                <div className="h-24 w-[62px] rounded-2xl bg-muted shrink-0 overflow-hidden">
+                <div className="h-[72px] w-[46px] rounded-[14px] bg-muted shrink-0 overflow-hidden shadow-sm border border-border">
                   {c.cover_image_url ? (
                     <img src={c.cover_image_url} alt="" className="h-full w-full object-cover" />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center">
-                      <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">
+                    <div className="h-full w-full flex items-center justify-center bg-gradient-to-b from-muted to-muted/80">
+                      <span className="text-xs font-bold text-muted-foreground/40 font-montserrat">
                         {c.brand_name.charAt(0).toUpperCase()}
                       </span>
                     </div>
