@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowUp, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
@@ -23,6 +23,112 @@ interface ProfileUpdates {
 interface ProfileOnboardingChatProps {
   onComplete: () => void;
 }
+
+// Editable profile card with typewriter effect on all fields simultaneously
+const ProfileCard: React.FC<{
+  data: ProfileUpdates;
+  onConfirm: (edited: ProfileUpdates) => void;
+  saving: boolean;
+  confirmed: boolean;
+}> = ({ data, onConfirm, saving, confirmed }) => {
+  const [editData, setEditData] = useState<ProfileUpdates>({});
+  const [typed, setTyped] = useState<ProfileUpdates>({});
+  const [doneTyping, setDoneTyping] = useState(false);
+  const [cardVisible, setCardVisible] = useState(false);
+  const startedRef = useRef(false);
+
+  const fields: { key: keyof ProfileUpdates; label: string }[] = [
+    { key: 'company_name', label: 'Company' },
+    { key: 'website', label: 'Website' },
+    { key: 'industry', label: 'Industry' },
+    { key: 'description', label: 'About' },
+    { key: 'target_audience', label: 'Audience' },
+    { key: 'brand_values', label: 'Values' },
+  ];
+
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
+    // Animate card in
+    requestAnimationFrame(() => setCardVisible(true));
+
+    // Type all fields simultaneously
+    const activeFields = fields.filter(f => data[f.key]);
+    const maxLen = Math.max(...activeFields.map(f => (data[f.key] || '').length));
+    let i = 0;
+
+    const interval = setInterval(() => {
+      i++;
+      const next: ProfileUpdates = {};
+      let allDone = true;
+      for (const f of activeFields) {
+        const val = data[f.key] || '';
+        next[f.key] = val.slice(0, i);
+        if (i < val.length) allDone = false;
+      }
+      setTyped(next);
+      if (allDone) {
+        clearInterval(interval);
+        setEditData({ ...data });
+        setDoneTyping(true);
+      }
+    }, 12);
+
+    return () => clearInterval(interval);
+  }, [data]);
+
+  const updateField = (key: keyof ProfileUpdates, value: string) => {
+    setEditData(prev => ({ ...prev, [key]: value }));
+  };
+
+  const displayData = doneTyping ? editData : typed;
+  const activeFields = fields.filter(f => data[f.key]);
+
+  return (
+    <div
+      className={`mt-3 space-y-3 max-w-[85%] transition-all duration-500 ease-out ${
+        cardVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+      }`}
+    >
+      <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
+        {activeFields.map(({ key, label }) => (
+          <div key={key} className="flex items-baseline gap-2">
+            <span className="text-xs text-muted-foreground shrink-0 w-20">{label}</span>
+            {doneTyping && !confirmed ? (
+              <input
+                value={editData[key] || ''}
+                onChange={(e) => updateField(key, e.target.value)}
+                className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors"
+              />
+            ) : (
+              <span className={`text-sm text-foreground ${key === 'company_name' ? 'font-medium' : ''}`}>
+                {displayData[key] || ''}
+                {!doneTyping && <span className="inline-block w-[1px] h-3.5 bg-foreground/60 ml-0.5 animate-pulse" />}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+      {doneTyping && !confirmed && (
+        <button
+          onClick={() => onConfirm(editData)}
+          disabled={saving}
+          className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50 animate-fade-in"
+        >
+          <Check className="h-3.5 w-3.5" />
+          {saving ? 'Saving...' : "That's correct"}
+        </button>
+      )}
+      {confirmed && (
+        <div className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600/60 text-white/70 w-fit">
+          <Check className="h-3.5 w-3.5" />
+          Confirmed
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplete }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -136,8 +242,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     }
   };
 
-  const handleConfirmProfile = async () => {
-    if (!pendingUpdates) return;
+  const handleConfirmProfile = async (editedData: ProfileUpdates) => {
     setSaving(true);
     setConfirmed(true);
 
@@ -145,7 +250,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
       const { error } = await supabase.functions.invoke('company-research', {
         body: {
           action: 'save',
-          profileUpdates: pendingUpdates,
+          profileUpdates: editedData,
           message: '',
           conversationHistory: []
         }
@@ -212,64 +317,14 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
                   )}
                 </div>
 
-                {/* Profile preview card with blue confirm button */}
+                {/* Profile card with typewriter + inline editing */}
                 {msg.role === 'jarla' && msg.profileUpdates && msg.displayedContent === msg.content && (
-                  <div className="mt-3 space-y-3 max-w-[85%]">
-                    <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
-                      {msg.profileUpdates.company_name && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">Company</span>
-                          <span className="text-sm text-foreground font-medium">{msg.profileUpdates.company_name}</span>
-                        </div>
-                      )}
-                      {msg.profileUpdates.website && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">Website</span>
-                          <span className="text-sm text-foreground">{msg.profileUpdates.website}</span>
-                        </div>
-                      )}
-                      {msg.profileUpdates.industry && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">Industry</span>
-                          <span className="text-sm text-foreground">{msg.profileUpdates.industry}</span>
-                        </div>
-                      )}
-                      {msg.profileUpdates.description && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">About</span>
-                          <span className="text-sm text-foreground">{msg.profileUpdates.description}</span>
-                        </div>
-                      )}
-                      {msg.profileUpdates.target_audience && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">Audience</span>
-                          <span className="text-sm text-foreground">{msg.profileUpdates.target_audience}</span>
-                        </div>
-                      )}
-                      {msg.profileUpdates.brand_values && (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs text-muted-foreground shrink-0 w-20">Values</span>
-                          <span className="text-sm text-foreground">{msg.profileUpdates.brand_values}</span>
-                        </div>
-                      )}
-                    </div>
-                    {!confirmed && (
-                      <button
-                        onClick={handleConfirmProfile}
-                        disabled={saving}
-                        className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                        {saving ? 'Saving...' : "That's correct"}
-                      </button>
-                    )}
-                    {confirmed && (
-                      <div className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600/60 text-white/70 w-fit">
-                        <Check className="h-3.5 w-3.5" />
-                        Confirmed
-                      </div>
-                    )}
-                  </div>
+                  <ProfileCard
+                    data={msg.profileUpdates}
+                    onConfirm={handleConfirmProfile}
+                    saving={saving}
+                    confirmed={confirmed}
+                  />
                 )}
               </div>
             );
