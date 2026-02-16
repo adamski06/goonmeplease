@@ -25,10 +25,9 @@ const CreateCampaign: React.FC = () => {
   // Step 2: Audience
   const [audience, setAudience] = useState('');
 
-  // Step 3: Budget
-  const [maxEarnings, setMaxEarnings] = useState('');
-  const [totalBudget, setTotalBudget] = useState('');
-
+  // Step 3: Budget package
+  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
+  const [customBudget, setCustomBudget] = useState('');
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
@@ -47,7 +46,6 @@ const CreateCampaign: React.FC = () => {
   const handleFormUpdate = (updates: Partial<{ brand_name: string; title: string; description: string; deadline: string; total_budget: number }>) => {
     if (updates.title !== undefined) setTitle(updates.title);
     if (updates.description !== undefined) setDescription(updates.description);
-    if (updates.total_budget !== undefined) setTotalBudget(String(updates.total_budget));
   };
 
   const handleRequirementsUpdate = (requirements: string[]) => {
@@ -67,12 +65,15 @@ const CreateCampaign: React.FC = () => {
 
     const { data: bp } = await supabase.from('business_profiles').select('company_name').eq('user_id', user.id).maybeSingle();
 
+    const budgetAmount = selectedPackage === 'base' ? 1000 : selectedPackage === 'pro' ? 5000 : customBudget ? parseFloat(customBudget) : null;
+    const totalWithFee = budgetAmount ? budgetAmount * 1.1 : null;
+
     const { error } = await supabase.from('campaigns').insert({
       title: title.trim(),
       brand_name: bp?.company_name || 'My Brand',
       description: description.trim() || null,
-      max_earnings: maxEarnings ? parseFloat(maxEarnings) : null,
-      total_budget: totalBudget ? parseFloat(totalBudget) : null,
+      max_earnings: null,
+      total_budget: totalWithFee,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
       category: audience.trim() || null,
       business_id: user.id,
@@ -94,7 +95,7 @@ const CreateCampaign: React.FC = () => {
     title,
     description,
     deadline: '',
-    total_budget: totalBudget ? parseFloat(totalBudget) : 0,
+    total_budget: selectedPackage === 'base' ? 1000 : selectedPackage === 'pro' ? 5000 : customBudget ? parseFloat(customBudget) : 0,
   };
 
   return (
@@ -190,20 +191,74 @@ const CreateCampaign: React.FC = () => {
                 <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
+                <h2 className="text-xl font-bold text-foreground font-montserrat">Choose your plan</h2>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Max earnings per creator (SEK)</Label>
-                <Input type="number" value={maxEarnings} onChange={(e) => setMaxEarnings(e.target.value)} placeholder="5000" className="h-10" />
-                <p className="text-xs text-muted-foreground">The maximum a single creator can earn</p>
+              <div className="grid grid-cols-3 gap-3">
+                {/* Base */}
+                <button
+                  onClick={() => { setSelectedPackage('base'); setCustomBudget(''); }}
+                  className={`rounded-xl border p-4 text-left transition-all ${
+                    selectedPackage === 'base'
+                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
+                      : 'border-border hover:border-foreground/20'
+                  }`}
+                >
+                  <div className="text-xs text-muted-foreground font-medium mb-1">Base</div>
+                  <div className="text-2xl font-bold text-foreground">$1,000</div>
+                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
+                  <div className="text-xs text-muted-foreground/70 mt-0.5">Total: $1,100</div>
+                </button>
+
+                {/* Pro */}
+                <button
+                  onClick={() => { setSelectedPackage('pro'); setCustomBudget(''); }}
+                  className={`rounded-xl border p-4 text-left transition-all relative ${
+                    selectedPackage === 'pro'
+                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
+                      : 'border-border hover:border-foreground/20'
+                  }`}
+                >
+                  <div className="absolute -top-2 right-3 text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium">Popular</div>
+                  <div className="text-xs text-muted-foreground font-medium mb-1">Pro</div>
+                  <div className="text-2xl font-bold text-foreground">$5,000</div>
+                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
+                  <div className="text-xs text-muted-foreground/70 mt-0.5">Total: $5,500</div>
+                </button>
+
+                {/* Custom */}
+                <button
+                  onClick={() => setSelectedPackage('custom')}
+                  className={`rounded-xl border p-4 text-left transition-all ${
+                    selectedPackage === 'custom'
+                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
+                      : 'border-border hover:border-foreground/20'
+                  }`}
+                >
+                  <div className="text-xs text-muted-foreground font-medium mb-1">Custom</div>
+                  <div className="text-2xl font-bold text-foreground">Custom</div>
+                  <div className="text-xs text-muted-foreground mt-1">+ 10% Jarla fee</div>
+                  <div className="text-xs text-muted-foreground/70 mt-0.5">You decide</div>
+                </button>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Total campaign budget (SEK)</Label>
-                <Input type="number" value={totalBudget} onChange={(e) => setTotalBudget(e.target.value)} placeholder="50000" className="h-10" />
-                <p className="text-xs text-muted-foreground">Total amount allocated for this campaign</p>
-              </div>
+              {selectedPackage === 'custom' && (
+                <div className="space-y-1.5 pt-2">
+                  <Label className="text-sm font-medium">Your budget (USD)</Label>
+                  <Input
+                    type="number"
+                    value={customBudget}
+                    onChange={(e) => setCustomBudget(e.target.value)}
+                    placeholder="Enter amount"
+                    className="h-10"
+                  />
+                  {customBudget && (
+                    <p className="text-xs text-muted-foreground">
+                      Total with fee: ${(parseFloat(customBudget) * 1.1).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

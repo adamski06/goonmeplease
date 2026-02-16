@@ -135,7 +135,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
     if (currentStep === 1 && !stepTriggeredRef.current.has(1) && businessProfile) {
       stepTriggeredRef.current.add(1);
       // Auto-suggest target audience
-      handleSendWithContent('Now suggest a target audience for this campaign and fill in the audience field.');
+      handleSendWithContent('We are now on the target audience step. First explain your thinking about who the ideal audience is for this campaign and why you recommend going broad. Then in your next message, fill in the audience field.');
     }
   }, [currentStep, businessProfile]);
 
