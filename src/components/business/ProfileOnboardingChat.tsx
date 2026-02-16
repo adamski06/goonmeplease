@@ -30,6 +30,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
   const [isTyping, setIsTyping] = useState(false);
   const [pendingUpdates, setPendingUpdates] = useState<ProfileUpdates | null>(null);
   const [saving, setSaving] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
 
@@ -53,7 +54,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    const greeting = "Hey! I'm Jarla — let's get your business profile set up. What's your company name?";
+    const greeting = "What's your company name?";
     const messageId = '1';
     setMessages([{
       id: messageId,
@@ -138,9 +139,10 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
   const handleConfirmProfile = async () => {
     if (!pendingUpdates) return;
     setSaving(true);
+    setConfirmed(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('company-research', {
+      const { error } = await supabase.functions.invoke('company-research', {
         body: {
           action: 'save',
           profileUpdates: pendingUpdates,
@@ -154,7 +156,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
       const doneMsg: Message = {
         id: Date.now().toString(),
         role: 'jarla',
-        content: "All set! Your profile is ready. Let's create your first campaign! 🚀",
+        content: "You're all set! Let's create your first campaign 🚀",
         displayedContent: ''
       };
       setMessages(prev => [...prev, doneMsg]);
@@ -164,6 +166,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
       setTimeout(() => onComplete(), 2000);
     } catch (error) {
       console.error('Save error:', error);
+      setConfirmed(false);
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         role: 'jarla',
@@ -209,34 +212,63 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
                   )}
                 </div>
 
-                {/* Profile preview card */}
+                {/* Profile preview card with blue confirm button */}
                 {msg.role === 'jarla' && msg.profileUpdates && msg.displayedContent === msg.content && (
-                  <div className="mt-3 rounded-lg border border-border bg-card p-4 max-w-[85%] space-y-2">
-                    <h4 className="text-xs font-semibold text-foreground font-montserrat">Profile Preview</h4>
-                    {msg.profileUpdates.company_name && (
-                      <div><span className="text-xs text-muted-foreground">Company:</span> <span className="text-xs text-foreground">{msg.profileUpdates.company_name}</span></div>
-                    )}
-                    {msg.profileUpdates.description && (
-                      <div><span className="text-xs text-muted-foreground">About:</span> <span className="text-xs text-foreground">{msg.profileUpdates.description}</span></div>
-                    )}
-                    {msg.profileUpdates.website && (
-                      <div><span className="text-xs text-muted-foreground">Website:</span> <span className="text-xs text-foreground">{msg.profileUpdates.website}</span></div>
-                    )}
-                    {msg.profileUpdates.industry && (
-                      <div><span className="text-xs text-muted-foreground">Industry:</span> <span className="text-xs text-foreground">{msg.profileUpdates.industry}</span></div>
-                    )}
-                    {msg.profileUpdates.target_audience && (
-                      <div><span className="text-xs text-muted-foreground">Target Audience:</span> <span className="text-xs text-foreground">{msg.profileUpdates.target_audience}</span></div>
-                    )}
-                    {msg.profileUpdates.brand_values && (
-                      <div><span className="text-xs text-muted-foreground">Brand Values:</span> <span className="text-xs text-foreground">{msg.profileUpdates.brand_values}</span></div>
-                    )}
-                    <div className="flex gap-2 pt-2">
-                      <Button size="sm" className="h-7 text-xs gap-1" onClick={handleConfirmProfile} disabled={saving}>
-                        <Check className="h-3 w-3" />
-                        {saving ? 'Saving...' : 'Looks good, save it'}
-                      </Button>
+                  <div className="mt-3 space-y-3 max-w-[85%]">
+                    <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
+                      {msg.profileUpdates.company_name && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">Company</span>
+                          <span className="text-sm text-foreground font-medium">{msg.profileUpdates.company_name}</span>
+                        </div>
+                      )}
+                      {msg.profileUpdates.website && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">Website</span>
+                          <span className="text-sm text-foreground">{msg.profileUpdates.website}</span>
+                        </div>
+                      )}
+                      {msg.profileUpdates.industry && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">Industry</span>
+                          <span className="text-sm text-foreground">{msg.profileUpdates.industry}</span>
+                        </div>
+                      )}
+                      {msg.profileUpdates.description && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">About</span>
+                          <span className="text-sm text-foreground">{msg.profileUpdates.description}</span>
+                        </div>
+                      )}
+                      {msg.profileUpdates.target_audience && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">Audience</span>
+                          <span className="text-sm text-foreground">{msg.profileUpdates.target_audience}</span>
+                        </div>
+                      )}
+                      {msg.profileUpdates.brand_values && (
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xs text-muted-foreground shrink-0 w-20">Values</span>
+                          <span className="text-sm text-foreground">{msg.profileUpdates.brand_values}</span>
+                        </div>
+                      )}
                     </div>
+                    {!confirmed && (
+                      <button
+                        onClick={handleConfirmProfile}
+                        disabled={saving}
+                        className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50"
+                      >
+                        <Check className="h-3.5 w-3.5" />
+                        {saving ? 'Saving...' : "That's correct"}
+                      </button>
+                    )}
+                    {confirmed && (
+                      <div className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600/60 text-white/70 w-fit">
+                        <Check className="h-3.5 w-3.5" />
+                        Confirmed
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -255,7 +287,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
         </div>
       </div>
 
-      {/* Input - matching CampaignChat style */}
+      {/* Input */}
       <div className="p-4">
         <div className="relative rounded-xl border border-border bg-muted/50 shadow-sm focus-within:border-foreground/30 focus-within:shadow-md transition-all">
           <textarea
@@ -267,8 +299,8 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
                 handleSend();
               }
             }}
-            placeholder="Type here..."
-            disabled={isTyping || saving}
+            placeholder="Type your company name..."
+            disabled={isTyping || saving || confirmed}
             rows={1}
             className="w-full resize-none bg-transparent px-4 py-3 pr-12 text-sm font-geist text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
             style={{ minHeight: '44px', maxHeight: '120px' }}
@@ -280,7 +312,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
           />
           <button
             onClick={handleSend}
-            disabled={!input.trim() || isTyping || saving}
+            disabled={!input.trim() || isTyping || saving || confirmed}
             className="absolute right-2 bottom-2 h-7 w-7 flex items-center justify-center rounded-lg bg-foreground text-background disabled:opacity-20 transition-opacity hover:opacity-90"
           >
             <ArrowUp className="h-3.5 w-3.5" />
