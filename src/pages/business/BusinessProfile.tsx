@@ -119,12 +119,28 @@ const BusinessProfile: React.FC = () => {
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Profile header */}
       <div className="flex items-start gap-8 mb-10">
-        <div className="h-36 w-36 rounded-full bg-muted flex items-center justify-center shrink-0">
+        <div className="h-36 w-36 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
           {profile?.logo_url ? (
-            <img src={profile.logo_url} alt="" className="h-full w-full rounded-full object-cover" />
-          ) : (
-            <span className="text-5xl font-bold text-muted-foreground/60 font-montserrat">{initial}</span>
-          )}
+            <img
+              src={profile.logo_url}
+              alt=""
+              className="h-full w-full rounded-full object-contain p-4"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                // Try Google favicon fallback
+                const domain = (profile.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+                const fallback = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : '';
+                if (fallback && img.src !== fallback) {
+                  img.src = fallback;
+                } else {
+                  img.style.display = 'none';
+                  // Show initial instead
+                  img.parentElement?.querySelector('span')?.classList.remove('hidden');
+                }
+              }}
+            />
+          ) : null}
+          <span className={`text-5xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
         </div>
 
         <div className="flex-1 pt-2">
