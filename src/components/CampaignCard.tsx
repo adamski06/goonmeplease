@@ -304,13 +304,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 </div>
 
                 <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                  <h3 className="text-sm font-semibold text-white mb-2 font-montserrat">Payment Details</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-white/80 font-jakarta">Max earnings</span>
-                      <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()} sek</span>
-                    </div>
-                  </div>
                   <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
                   {(() => {
                   const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
