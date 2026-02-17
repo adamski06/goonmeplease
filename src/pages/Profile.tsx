@@ -17,6 +17,9 @@ const ProfilePage: React.FC = () => {
   // Creator stats
   const [totalVideos, setTotalVideos] = useState(0);
   const [totalViews, setTotalViews] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [totalEarnings, setTotalEarnings] = useState(0);
+  const [pendingBalance, setPendingBalance] = useState(0);
 
   // Earnings expansion state
   const earningsRef = useRef<HTMLDivElement>(null);
@@ -108,7 +111,7 @@ const ProfilePage: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  // Fetch real creator stats from submissions
+  // Fetch real creator stats from submissions + balance
   useEffect(() => {
     if (!user) return;
     const fetchStats = async () => {
@@ -119,6 +122,17 @@ const ProfilePage: React.FC = () => {
       if (data) {
         setTotalVideos(data.length);
         setTotalViews(data.reduce((sum, s) => sum + (s.current_views || 0), 0));
+      }
+
+      const { data: stats } = await supabase
+        .from('creator_stats')
+        .select('total_balance, total_earnings, pending_balance')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (stats) {
+        setBalance(Number(stats.total_balance) || 0);
+        setTotalEarnings(Number(stats.total_earnings) || 0);
+        setPendingBalance(Number(stats.pending_balance) || 0);
       }
     };
     fetchStats();
@@ -229,7 +243,7 @@ const ProfilePage: React.FC = () => {
           <div className="p-6">
             <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
               <span className="text-xl text-white/70 font-montserrat">sek</span>
             </div>
           </div>
@@ -260,7 +274,7 @@ const ProfilePage: React.FC = () => {
           >
             <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
               <span className="text-xl text-white/70 font-montserrat">sek</span>
             </div>
           </div>
@@ -312,7 +326,7 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col items-center mt-4">
                   <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">4 350</span>
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
                     <span className="text-2xl text-white/60 font-montserrat">sek</span>
                   </div>
                 </div>
@@ -320,17 +334,17 @@ const ProfilePage: React.FC = () => {
                 <div className="w-full space-y-3 mt-8">
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Total earned</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">4 350 sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{totalEarnings.toLocaleString()} sek</span>
                   </div>
                   <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Pending</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">850 sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{pendingBalance.toLocaleString()} sek</span>
                   </div>
                   <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">0 sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{Math.max(0, totalEarnings - balance - pendingBalance).toLocaleString()} sek</span>
                   </div>
                 </div>
 
@@ -372,7 +386,7 @@ const ProfilePage: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <WithdrawContent
-                balance={4350}
+                balance={balance}
                 onBack={() => {
                   setWithdrawSlidingBack(true);
                   setTimeout(() => {
