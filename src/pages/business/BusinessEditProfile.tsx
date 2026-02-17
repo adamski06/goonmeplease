@@ -15,6 +15,7 @@ interface EditData {
   industry: string | null;
   target_audience: string | null;
   brand_values: string | null;
+  email: string;
 }
 
 const BusinessEditProfile: React.FC = () => {
@@ -35,7 +36,7 @@ const BusinessEditProfile: React.FC = () => {
         .select('company_name, description, website, logo_url, industry, target_audience, brand_values')
         .eq('user_id', user.id)
         .maybeSingle();
-      if (profile) setData(profile);
+      if (profile) setData({ ...profile, email: user.email || '' });
       setLoading(false);
     };
     load();
@@ -129,12 +130,26 @@ const BusinessEditProfile: React.FC = () => {
             className="relative"
             disabled={uploading}
           >
-            <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+            <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
               {data.logo_url ? (
-                <img src={data.logo_url} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-3xl font-bold text-muted-foreground/60 font-montserrat">{initial}</span>
-              )}
+                <img
+                  src={data.logo_url}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    const domain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+                    const fallback = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : '';
+                    if (fallback && img.src !== fallback) {
+                      img.src = fallback;
+                    } else {
+                      img.style.display = 'none';
+                      img.parentElement?.querySelector('span')?.classList.remove('hidden');
+                    }
+                  }}
+                />
+              ) : null}
+              <span className={`text-3xl font-bold text-muted-foreground/60 font-montserrat ${data.logo_url ? 'hidden' : ''}`}>{initial}</span>
             </div>
             <div className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-card border border-border shadow-sm flex items-center justify-center">
               <Camera className="h-3.5 w-3.5 text-muted-foreground" />
@@ -174,6 +189,10 @@ const BusinessEditProfile: React.FC = () => {
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat">Brand Values</Label>
             <Input value={data.brand_values || ''} onChange={e => setData({ ...data, brand_values: e.target.value })} className="h-10 text-sm" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat">Email</Label>
+            <Input value={data.email} disabled className="h-10 text-sm disabled:opacity-60" />
           </div>
         </div>
       </div>
