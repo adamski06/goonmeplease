@@ -95,23 +95,25 @@ const Activity: React.FC = () => {
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
 
   const fetchActiveSubmissions = useCallback(async () => {
-    if (!user) return;
+    if (!user) { setSubmissionsLoading(false); return; }
+    setSubmissionsLoading(true);
     const { data, error } = await supabase
       .from('content_submissions')
       .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
       .eq('creator_id', user.id)
       .order('created_at', { ascending: false });
 
-    if (error || !data) return;
+    if (error || !data) { setSubmissionsLoading(false); return; }
 
-    // Fetch campaign details for each submission
     const campaignIds = [...new Set(data.map(s => s.campaign_id))];
     if (campaignIds.length === 0) {
       setActiveSubmissions([]);
+      setSubmissionsLoading(false);
       return;
     }
 
@@ -140,6 +142,7 @@ const Activity: React.FC = () => {
     });
 
     setActiveSubmissions(submissions);
+    setSubmissionsLoading(false);
   }, [user]);
 
   useEffect(() => {
@@ -236,7 +239,12 @@ const Activity: React.FC = () => {
       </div>
 
       {/* Active submissions list */}
-      {activeSubmissions.length > 0 && !activeCampaign && (
+      {submissionsLoading && !activeCampaign && (
+        <div className="px-3 pt-2">
+          <CampaignListSkeleton count={2} />
+        </div>
+      )}
+      {!submissionsLoading && activeSubmissions.length > 0 && !activeCampaign && (
         <div className="px-3 pt-2 space-y-2.5">
           {activeSubmissions.map(sub => (
             <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
@@ -312,7 +320,7 @@ const Activity: React.FC = () => {
         </div>
       )}
 
-      {!activeCampaign && activeSubmissions.length === 0 && (
+      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && (
         <div className="flex items-center justify-center px-6 py-10">
           <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
