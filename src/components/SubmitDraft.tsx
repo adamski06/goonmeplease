@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, Link2, Upload, X, CheckCircle, Loader2 } from 'lucide-react';
 import { Campaign } from '@/types/campaign';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,7 +16,13 @@ const extractTikTokVideoId = (url: string): string | null => {
 };
 
 const isValidTikTokUrl = (url: string): boolean => {
-  return /tiktok\.com\/.+\/video\/\d+/.test(url) || /vm\.tiktok\.com\/\w+/.test(url);
+  try {
+    const u = new URL(url.trim());
+    const host = u.hostname.toLowerCase();
+    return host === 'www.tiktok.com' || host === 'tiktok.com' || host === 'vm.tiktok.com' || host === 'm.tiktok.com';
+  } catch {
+    return false;
+  }
 };
 
 const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
@@ -26,17 +32,50 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
   const [confirmed, setConfirmed] = useState(false);
   const [guidelinesConfirmed, setGuidelinesConfirmed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [resolving, setResolving] = useState(false);
+  const [urlValid, setUrlValid] = useState(false);
+
+  const resolveVideoId = useCallback(async (url: string) => {
+    // First try direct extraction
+    const directId = extractTikTokVideoId(url);
+    if (directId) {
+      setVideoId(directId);
+      return;
+    }
+
+    // For short URLs, try oEmbed to resolve
+    setResolving(true);
+    try {
+      const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url.trim())}`;
+      const res = await fetch(oembedUrl);
+      if (res.ok) {
+        const data = await res.json();
+        const embedMatch = data.html?.match(/video\/(\d+)/);
+        if (embedMatch) {
+          setVideoId(embedMatch[1]);
+        } else if (data.embed_product_id) {
+          setVideoId(data.embed_product_id);
+        }
+      }
+    } catch (e) {
+      console.error('oEmbed resolve failed:', e);
+    }
+    setResolving(false);
+  }, []);
 
   useEffect(() => {
-    if (isValidTikTokUrl(tiktokUrl)) {
-      const id = extractTikTokVideoId(tiktokUrl);
-      setVideoId(id);
+    const trimmed = tiktokUrl.trim();
+    const valid = isValidTikTokUrl(trimmed);
+    setUrlValid(valid);
+    
+    if (valid) {
       setConfirmed(false);
+      resolveVideoId(trimmed);
     } else {
       setVideoId(null);
       setConfirmed(false);
     }
-  }, [tiktokUrl]);
+  }, [tiktokUrl, resolveVideoId]);
 
   const handleClear = () => {
     setTiktokUrl('');
@@ -45,7 +84,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
   };
 
   const handleSubmit = async () => {
-    if (!user || !videoId || !confirmed || !guidelinesConfirmed) return;
+    if (!user || !urlValid || !confirmed || !guidelinesConfirmed) return;
 
     setSubmitting(true);
     try {
@@ -98,7 +137,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
     }
   };
 
-  const canSubmit = videoId && confirmed && guidelinesConfirmed && !submitting;
+  const canSubmit = urlValid && confirmed && guidelinesConfirmed && !submitting && !resolving;
 
   return (
     <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
@@ -133,39 +172,38 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                 className="w-full h-12 pl-10 pr-10 rounded-xl text-sm font-jakarta text-black placeholder:text-black/30 outline-none transition-all"
                 style={{
                   background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                  border: videoId ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
+                  border: urlValid ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
                 }}
               />
-              {tiktokUrl && !videoId && (
-                <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <X className="h-4 w-4 text-black/40" />
-                </button>
-              )}
-              {videoId && (
+              {tiktokUrl && (
                 <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
                   <X className="h-4 w-4 text-black/40" />
                 </button>
               )}
             </div>
             <button
-              disabled={!videoId}
+              disabled={!urlValid || resolving}
               onClick={() => setConfirmed(true)}
               className="h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-[0.95]"
               style={{
-                background: videoId
+                background: urlValid
                   ? confirmed
                     ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
                     : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)'
                   : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                border: videoId
+                border: urlValid
                   ? confirmed
                     ? '1.5px solid rgba(52,211,153,0.5)'
                     : '1.5px solid rgba(60,60,60,0.6)'
                   : '1.5px solid rgba(0,0,0,0.1)',
-                boxShadow: videoId ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
+                boxShadow: urlValid ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
               }}
             >
-              <CheckCircle className={`h-5 w-5 ${videoId ? 'text-white' : 'text-black/20'}`} />
+              {resolving ? (
+                <Loader2 className="h-5 w-5 text-black/40 animate-spin" />
+              ) : (
+                <CheckCircle className={`h-5 w-5 ${urlValid ? 'text-white' : 'text-black/20'}`} />
+              )}
             </button>
           </div>
         </div>
