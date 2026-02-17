@@ -497,6 +497,10 @@ export type Database = {
       }
     }
     Functions: {
+      get_or_create_tiktok_account: {
+        Args: { p_tiktok_username: string }
+        Returns: string
+      }
       get_tiktok_tokens: {
         Args: { p_tiktok_account_id: string }
         Returns: {
