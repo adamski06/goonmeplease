@@ -93,15 +93,24 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                 boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
               }}
             >
-              {/* Video embed — ~40% width, no scroll, show full content */}
+              {/* Video embed — scaled down to fit without cropping */}
               <div
-                className="flex-shrink-0 rounded-xl overflow-hidden relative"
-                style={{ width: '40%', height: '280px', border: '1px solid rgba(0,0,0,0.06)' }}
+                className="flex-shrink-0 rounded-xl overflow-hidden"
+                style={{
+                  width: '40%',
+                  height: '360px',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                }}
               >
                 <iframe
                   src={`https://www.tiktok.com/embed/v2/${videoId}`}
-                  className="absolute inset-0 w-full h-full"
-                  style={{ border: 'none' }}
+                  style={{
+                    width: '208%',
+                    height: '750px',
+                    border: 'none',
+                    transform: 'scale(0.48)',
+                    transformOrigin: 'top left',
+                  }}
                   allowFullScreen
                   allow="encrypted-media"
                 />
