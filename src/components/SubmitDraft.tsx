@@ -91,7 +91,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div style={{
                 transform: 'scale(0.75)',
                 transformOrigin: 'top center',
-                height: '540px',
+                height: '555px',
                 overflow: 'hidden',
                 borderRadius: '12px',
               }}>
