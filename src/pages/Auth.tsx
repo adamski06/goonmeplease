@@ -123,13 +123,7 @@ const Auth: React.FC = () => {
       const currentUserId = session.session.user.id;
       setNewUserId(currentUserId);
 
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({ user_id: currentUserId, role: 'creator' });
-
-      if (roleError && !roleError.message.includes('duplicate')) {
-        console.error('Error adding creator role:', roleError);
-      }
+      // Role is auto-created by the handle_new_user trigger, no need to insert manually
 
       // After account creation, go to age step
       setSignUpStep('age');
