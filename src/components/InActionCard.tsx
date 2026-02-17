@@ -8,6 +8,7 @@ export interface ActiveSubmission {
   tiktok_video_id: string | null;
   status: 'pending_review' | 'approved' | 'denied' | 'paid';
   current_views: number;
+  current_likes: number;
   created_at: string;
   campaign_title: string;
   campaign_brand: string;

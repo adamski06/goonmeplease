@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, CheckCircle2, Clock, XCircle, Users, Upload, Image } from 'lucide-react';
+import { ArrowLeft, Eye, Heart, CheckCircle2, Clock, XCircle, Users, Upload, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -27,6 +27,7 @@ interface Submission {
   tiktok_video_id: string | null;
   status: string;
   current_views: number | null;
+  current_likes: number | null;
   created_at: string;
   creator_id: string;
 }
@@ -46,11 +47,32 @@ const BusinessCampaignDetail: React.FC = () => {
     const load = async () => {
       const [campRes, subRes] = await Promise.all([
         supabase.from('campaigns').select('*').eq('id', id).maybeSingle(),
-        supabase.from('content_submissions').select('id, tiktok_video_url, tiktok_video_id, status, current_views, created_at, creator_id').eq('campaign_id', id).order('created_at', { ascending: false }),
+        supabase.from('content_submissions').select('id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at, creator_id').eq('campaign_id', id).order('created_at', { ascending: false }),
       ]);
       if (campRes.data) setCampaign(campRes.data);
-      setSubmissions(subRes.data || []);
+      const subs = subRes.data || [];
+      setSubmissions(subs);
       setLoading(false);
+
+      // Fetch live TikTok stats
+      if (subs.length > 0) {
+        try {
+          const { data, error } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { submission_ids: subs.map(s => s.id) },
+          });
+          if (!error && data?.results) {
+            setSubmissions(prev => prev.map(s => {
+              const r = data.results[s.id];
+              if (r) {
+                return { ...s, current_views: r.views || s.current_views, current_likes: r.likes || s.current_likes };
+              }
+              return s;
+            }));
+          }
+        } catch (e) {
+          console.error('Failed to fetch TikTok stats:', e);
+        }
+      }
     };
     load();
   }, [id]);
@@ -252,6 +274,11 @@ const BusinessCampaignDetail: React.FC = () => {
                       <Eye className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-semibold text-foreground">{(sub.current_views || 0).toLocaleString()}</span>
                       <span className="text-xs text-muted-foreground">views</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Heart className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-semibold text-foreground">{(sub.current_likes || 0).toLocaleString()}</span>
+                      <span className="text-xs text-muted-foreground">likes</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">

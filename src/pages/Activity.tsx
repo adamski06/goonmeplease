@@ -75,7 +75,7 @@ const Activity: React.FC = () => {
     if (!user) return;
     const { data, error } = await supabase
       .from('content_submissions')
-      .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, created_at')
+      .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
       .eq('creator_id', user.id)
       .order('created_at', { ascending: false });
 
@@ -104,6 +104,7 @@ const Activity: React.FC = () => {
         tiktok_video_id: s.tiktok_video_id,
         status: s.status,
         current_views: s.current_views || 0,
+        current_likes: s.current_likes || 0,
         created_at: s.created_at,
         campaign_title: campaign?.title || '',
         campaign_brand: campaign?.brand_name || '',
