@@ -87,11 +87,12 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         {videoId && (
           <div className="mb-5">
             {/* Scaled-down TikTok embed */}
-            <div className="flex justify-center mb-2">
+            <div className="flex justify-center mb-0">
               <div style={{
                 transform: 'scale(0.75)',
                 transformOrigin: 'top center',
                 height: '565px',
+                marginBottom: '-140px',
                 overflow: 'hidden',
                 borderRadius: '12px',
               }}>
