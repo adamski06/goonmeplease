@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ChevronLeft, Eye, Heart, Clock, CheckCircle } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
+import EarningsGraph from '@/components/EarningsGraph';
+import { CampaignTier } from '@/types/campaign';
 
 interface InActionDetailProps {
   submission: ActiveSubmission;
@@ -9,10 +11,30 @@ interface InActionDetailProps {
 }
 
 const statusConfig = {
-  pending_review: { label: 'Under Review', color: 'text-amber-600', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.3)', icon: Clock },
-  approved: { label: 'Approved', color: 'text-emerald-600', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.3)', icon: CheckCircle },
-  denied: { label: 'Denied', color: 'text-red-500', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.3)', icon: Clock },
-  paid: { label: 'Paid', color: 'text-emerald-600', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.3)', icon: CheckCircle },
+  pending_review: {
+    label: 'Under Review',
+    gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)',
+    border: 'rgba(252,211,77,0.5)',
+    icon: Clock,
+  },
+  approved: {
+    label: 'Approved',
+    gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
+    border: 'rgba(52,211,153,0.5)',
+    icon: CheckCircle,
+  },
+  denied: {
+    label: 'Denied',
+    gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)',
+    border: 'rgba(252,165,165,0.5)',
+    icon: Clock,
+  },
+  paid: {
+    label: 'Paid',
+    gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
+    border: 'rgba(52,211,153,0.5)',
+    icon: CheckCircle,
+  },
 };
 
 const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) => {
@@ -21,6 +43,8 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const [views, setViews] = useState(submission.current_views || 0);
   const [likes, setLikes] = useState(submission.current_likes || 0);
   const [refreshing, setRefreshing] = useState(false);
+  const [campaignTiers, setCampaignTiers] = useState<CampaignTier[]>([]);
+  const [maxEarnings, setMaxEarnings] = useState(0);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -39,8 +63,32 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
       }
       setRefreshing(false);
     };
+
+    const fetchCampaignData = async () => {
+      const { data: campaign } = await supabase
+        .from('campaigns')
+        .select('max_earnings')
+        .eq('id', submission.campaign_id)
+        .maybeSingle();
+      if (campaign?.max_earnings) setMaxEarnings(campaign.max_earnings);
+
+      const { data: tiers } = await supabase
+        .from('campaign_tiers')
+        .select('min_views, max_views, rate_per_view')
+        .eq('campaign_id', submission.campaign_id)
+        .order('min_views', { ascending: true });
+      if (tiers) {
+        setCampaignTiers(tiers.map(t => ({
+          minViews: t.min_views,
+          maxViews: t.max_views,
+          rate: t.rate_per_view,
+        })));
+      }
+    };
+
     fetchStats();
-  }, [submission.id]);
+    fetchCampaignData();
+  }, [submission.id, submission.campaign_id]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
@@ -61,14 +109,17 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-5 py-4">
-        {/* Status badge */}
+        {/* Status badge - glassy */}
         <div className="flex justify-center mb-4">
           <div
-            className="flex items-center gap-2 px-4 py-2 rounded-full"
-            style={{ background: status.bg, border: `1.5px solid ${status.border}` }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-[14px]"
+            style={{
+              background: status.gradient,
+              border: `1px solid ${status.border}`,
+              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
+            }}
           >
-            <StatusIcon className={`h-4 w-4 ${status.color}`} />
-            <span className={`text-sm font-semibold font-montserrat ${status.color}`}>{status.label}</span>
+            <span className="text-sm font-bold text-white font-montserrat">{status.label}</span>
           </div>
         </div>
 
@@ -147,6 +198,13 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
             </div>
           </div>
         </div>
+
+        {/* Earnings tracking */}
+        {campaignTiers.length > 0 && maxEarnings > 0 && (
+          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mt-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+            <EarningsGraph tiers={campaignTiers} maxEarnings={maxEarnings} />
+          </div>
+        )}
       </div>
     </div>
   );
