@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Campaign, CampaignTier } from '@/types/campaign';
 
-const BATCH_SIZE = 6;
+const DEFAULT_BATCH_SIZE = 6;
 
 interface UseCampaignsReturn {
   campaigns: Campaign[];
@@ -38,7 +38,7 @@ function mapDbCampaign(
   };
 }
 
-export function useCampaigns(): UseCampaignsReturn {
+export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaignsReturn {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -52,14 +52,14 @@ export function useCampaigns(): UseCampaignsReturn {
       .select('*')
       .eq('is_active', true)
       .order('created_at', { ascending: false })
-      .range(offset, offset + BATCH_SIZE - 1);
+      .range(offset, offset + batchSize - 1);
 
     if (error || !rows) {
       setHasMore(false);
       return [];
     }
 
-    if (rows.length < BATCH_SIZE) {
+    if (rows.length < batchSize) {
       setHasMore(false);
     }
 

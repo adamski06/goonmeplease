@@ -20,7 +20,7 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
-  const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
+  const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns(2);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Fetch user favorites
@@ -65,8 +65,8 @@ const Campaigns: React.FC = () => {
   const handleScroll = useCallback(() => {
     if (!scrollRef.current || !hasMore) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-    // Load more when within 2 screens of the bottom
-    if (scrollHeight - scrollTop - clientHeight < clientHeight * 2) {
+    // Load 2 more when within 1 card of the bottom
+    if (scrollHeight - scrollTop - clientHeight < clientHeight) {
       loadMore();
     }
   }, [hasMore, loadMore]);
