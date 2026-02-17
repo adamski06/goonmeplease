@@ -91,7 +91,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div style={{
                 transform: 'scale(0.75)',
                 transformOrigin: 'top center',
-                height: '450px',
+                height: '470px',
                 overflow: 'hidden',
                 borderRadius: '12px',
               }}>
@@ -101,11 +101,9 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                     width: '325px',
                     height: '580px',
                     border: 'none',
-                    pointerEvents: 'none',
                   }}
                   allowFullScreen
                   allow="encrypted-media"
-                  scrolling="no"
                 />
               </div>
             </div>
