@@ -12,6 +12,7 @@ import {
 import CampaignCard from '@/components/CampaignCard';
 import BottomNav from '@/components/BottomNav';
 import { useCampaigns } from '@/hooks/useCampaigns';
+import jarlaLogo from '@/assets/jarla-logo.png';
 
 const Campaigns: React.FC = () => {
   const { user, loading } = useAuth();
@@ -100,8 +101,34 @@ const Campaigns: React.FC = () => {
             />
           ))}
           {campaignsLoading && campaigns.length === 0 && (
-            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
-              <div className="animate-pulse text-white/40">Loading campaigns...</div>
+            <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start">
+              <div className="relative h-10 w-[140px] mb-6">
+                <div
+                  className="absolute inset-0 bg-white"
+                  style={{
+                    WebkitMaskImage: `url(${jarlaLogo})`,
+                    maskImage: `url(${jarlaLogo})`,
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center',
+                  }}
+                />
+              </div>
+              <div className="w-32 h-[3px] rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
+                <div
+                  className="h-full rounded-full bg-white/40"
+                  style={{ animation: 'expandCenter 0.5s ease-out forwards' }}
+                />
+              </div>
+              <style>{`
+                @keyframes expandCenter {
+                  0% { width: 0%; }
+                  100% { width: 100%; }
+                }
+              `}</style>
             </div>
           )}
           {!campaignsLoading && campaigns.length === 0 && (
