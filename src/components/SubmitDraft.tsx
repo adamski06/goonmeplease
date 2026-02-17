@@ -109,7 +109,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
             </div>
 
             {/* Confirmation */}
-            <div className="flex items-center justify-between px-4 py-3 rounded-2xl"
+            <div className="flex items-center justify-between px-4 py-3 rounded-2xl -mt-2"
               style={{
                 background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
                 border: '1.5px solid rgba(0,0,0,0.08)',
