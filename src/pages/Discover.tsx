@@ -118,6 +118,18 @@ const Discover: React.FC = () => {
           <div className="flex items-center justify-center px-4 py-3">
             <span className="text-base font-semibold text-black">Discover</span>
           </div>
+          <div className="px-4 pb-3">
+            <div className="relative">
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search campaigns..."
+                className="w-full h-10 pl-10 pr-4 rounded-full bg-black/5 text-sm text-black placeholder:text-black/40 outline-none focus:ring-2 focus:ring-black/10 transition-all"
+              />
+            </div>
+          </div>
         </div>
 
         <div
@@ -127,6 +139,26 @@ const Discover: React.FC = () => {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
         >
           <div className="px-3">
+            {campaignsLoading && campaigns.length === 0 ? (
+              <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="relative w-full rounded-[28px] aspect-[9/14] bg-black/[0.06] animate-pulse">
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <div className="h-5 w-5 rounded-full bg-black/10" />
+                      <div className="h-3 w-16 rounded-full bg-black/10" />
+                    </div>
+                    <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 bg-black/[0.04]">
+                      <div className="h-3 w-full rounded-full bg-black/10 mb-2" />
+                      <div className="h-3 w-3/4 rounded-full bg-black/10 mb-3" />
+                      <div className="flex items-center justify-between">
+                        <div className="h-8 w-20 rounded-[16px] bg-black/10" />
+                        <div className="h-8 w-8 rounded-full bg-black/10" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
             <div className="grid grid-cols-2 gap-x-2 gap-y-4">
               {campaigns.map((campaign) => (
                 <div
@@ -173,7 +205,8 @@ const Discover: React.FC = () => {
                 </div>
               ))}
             </div>
-            {campaignsLoading && (
+            )}
+            {campaignsLoading && campaigns.length > 0 && (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-pulse text-black/40 text-sm">Loading...</div>
               </div>
