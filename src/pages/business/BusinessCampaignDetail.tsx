@@ -24,6 +24,7 @@ interface CampaignData {
 interface Submission {
   id: string;
   tiktok_video_url: string;
+  tiktok_video_id: string | null;
   status: string;
   current_views: number | null;
   created_at: string;
@@ -45,7 +46,7 @@ const BusinessCampaignDetail: React.FC = () => {
     const load = async () => {
       const [campRes, subRes] = await Promise.all([
         supabase.from('campaigns').select('*').eq('id', id).maybeSingle(),
-        supabase.from('content_submissions').select('id, tiktok_video_url, status, current_views, created_at, creator_id').eq('campaign_id', id).order('created_at', { ascending: false }),
+        supabase.from('content_submissions').select('id, tiktok_video_url, tiktok_video_id, status, current_views, created_at, creator_id').eq('campaign_id', id).order('created_at', { ascending: false }),
       ]);
       if (campRes.data) setCampaign(campRes.data);
       setSubmissions(subRes.data || []);
@@ -210,20 +211,55 @@ const BusinessCampaignDetail: React.FC = () => {
             <p className="text-sm text-muted-foreground">No submissions yet</p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {submissions.map((sub) => (
-              <div key={sub.id} className="flex items-center gap-4 rounded-lg border border-border bg-card p-3">
-                <div className="flex-1 min-w-0">
-                  <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-sm text-foreground hover:underline truncate block">
-                    {sub.tiktok_video_url}
-                  </a>
-                  <p className="text-xs text-muted-foreground mt-0.5">{new Date(sub.created_at).toLocaleDateString()}</p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm text-muted-foreground">{sub.current_views || 0} views</span>
-                  <Badge variant="outline" className={`text-[10px] ${statusBadge[sub.status] || ''}`}>
-                    {sub.status.replace('_', ' ')}
-                  </Badge>
+              <div key={sub.id} className="rounded-xl border border-border bg-card overflow-hidden">
+                {/* TikTok Embed */}
+                {sub.tiktok_video_id ? (
+                  <div className="flex justify-center bg-muted/30 py-4">
+                    <div style={{
+                      transform: 'scale(0.65)',
+                      transformOrigin: 'top center',
+                      height: '490px',
+                      marginBottom: '-120px',
+                      overflow: 'hidden',
+                      borderRadius: '12px',
+                    }}>
+                      <iframe
+                        src={`https://www.tiktok.com/embed/v2/${sub.tiktok_video_id}`}
+                        style={{
+                          width: '325px',
+                          height: '720px',
+                          border: 'none',
+                        }}
+                        allowFullScreen
+                        allow="encrypted-media"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-muted/30 p-6 text-center">
+                    <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline truncate block">
+                      {sub.tiktok_video_url}
+                    </a>
+                  </div>
+                )}
+
+                {/* Stats bar */}
+                <div className="p-4 flex items-center justify-between border-t border-border">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-semibold text-foreground">{(sub.current_views || 0).toLocaleString()}</span>
+                      <span className="text-xs text-muted-foreground">views</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</span>
+                    <Badge variant="outline" className={`text-[10px] ${statusBadge[sub.status] || ''}`}>
+                      {sub.status.replace('_', ' ')}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             ))}
