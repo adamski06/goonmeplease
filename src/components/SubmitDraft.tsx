@@ -49,21 +49,38 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
 
     setSubmitting(true);
     try {
-      // Get user's TikTok account
-      const { data: accounts, error: accountError } = await supabase
-        .rpc('get_user_tiktok_accounts', { p_user_id: user.id });
+      // Extract TikTok username from URL for now (no account linking required)
+      const usernameMatch = tiktokUrl.match(/tiktok\.com\/@([^/]+)/);
+      const tiktokUsername = usernameMatch ? usernameMatch[1] : 'unknown';
 
-      if (accountError) throw accountError;
+      // Find or create a basic tiktok_accounts row so the FK is satisfied
+      let accountId: string;
+      const { data: existingAccounts } = await supabase
+        .from('tiktok_accounts')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
 
-      if (!accounts || accounts.length === 0) {
-        toast.error('Please link your TikTok account first');
-        setSubmitting(false);
-        return;
+      if (existingAccounts && existingAccounts.length > 0) {
+        accountId = existingAccounts[0].id;
+      } else {
+        const { data: newAccount, error: accountError } = await supabase
+          .from('tiktok_accounts')
+          .insert({
+            user_id: user.id,
+            tiktok_user_id: tiktokUsername,
+            tiktok_username: tiktokUsername,
+            is_active: true,
+          })
+          .select('id')
+          .single();
+
+        if (accountError || !newAccount) {
+          throw accountError || new Error('Could not create TikTok account reference');
+        }
+        accountId = newAccount.id;
       }
 
-      const tiktokAccount = accounts[0];
-
-      // Check for duplicate submission
       const { data: existing } = await supabase
         .from('content_submissions')
         .select('id')
@@ -83,7 +100,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         .insert({
           campaign_id: campaign.id,
           creator_id: user.id,
-          tiktok_account_id: tiktokAccount.id,
+          tiktok_account_id: accountId,
           tiktok_video_url: tiktokUrl,
           tiktok_video_id: videoId,
           status: 'pending_review',
