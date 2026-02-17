@@ -83,80 +83,65 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         </div>
 
         {/* TikTok embed preview */}
+        {/* TikTok embed preview */}
         {videoId && (
           <div className="mb-5">
-            <div
-              className="flex items-stretch gap-4 rounded-2xl overflow-hidden p-3"
+            {/* Scaled-down TikTok embed */}
+            <div className="flex justify-center mb-4">
+              <div style={{
+                transform: 'scale(0.75)',
+                transformOrigin: 'top center',
+                height: '435px',
+                overflow: 'hidden',
+                borderRadius: '12px',
+              }}>
+                <iframe
+                  src={`https://www.tiktok.com/embed/v2/${videoId}`}
+                  style={{
+                    width: '325px',
+                    height: '580px',
+                    border: 'none',
+                  }}
+                  allowFullScreen
+                  allow="encrypted-media"
+                />
+              </div>
+            </div>
+
+            {/* Confirmation */}
+            <div className="flex items-center justify-between px-4 py-3 rounded-2xl"
               style={{
                 background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
                 border: '1.5px solid rgba(0,0,0,0.08)',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
               }}
             >
-              {/* Video embed — scaled down to fit without cropping */}
-              <div
-                className="flex-shrink-0 rounded-xl overflow-hidden"
+              <p className="text-sm font-semibold text-black font-montserrat">Is this your video?</p>
+              <button
+                onClick={() => setConfirmed(!confirmed)}
+                className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
                 style={{
-                  width: '45%',
-                  height: '300px',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                  position: 'relative',
+                  background: confirmed
+                    ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
+                    : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                  border: confirmed
+                    ? '1.5px solid rgba(16,185,129,0.4)'
+                    : '1.5px solid rgba(0,0,0,0.1)',
                 }}
               >
-                <div style={{
-                  width: '325px',
-                  height: '580px',
-                  transform: 'scale(0.5)',
-                  transformOrigin: 'top center',
-                  position: 'absolute',
-                  top: 0,
-                  left: '50%',
-                  marginLeft: '-162.5px',
-                }}>
-                  <iframe
-                    src={`https://www.tiktok.com/embed/v2/${videoId}`}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                    }}
-                    allowFullScreen
-                    allow="encrypted-media"
-                  />
-                </div>
-              </div>
-
-              {/* Right side — confirmation */}
-              <div className="flex-1 flex flex-col items-start justify-center gap-3">
-                <p className="text-sm font-semibold text-black font-montserrat">Is this your video?</p>
-                <p className="text-xs text-black/50 font-jakarta">Make sure this is the correct TikTok before submitting.</p>
-                <button
-                  onClick={() => setConfirmed(!confirmed)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
+                <div
+                  className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
                   style={{
                     background: confirmed
-                      ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
-                      : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                    border: confirmed
-                      ? '1.5px solid rgba(16,185,129,0.4)'
-                      : '1.5px solid rgba(0,0,0,0.1)',
+                      ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                      : 'rgba(0,0,0,0.1)',
                   }}
                 >
-                  <div
-                    className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-                    style={{
-                      background: confirmed
-                        ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
-                        : 'rgba(0,0,0,0.1)',
-                    }}
-                  >
-                    {confirmed && <CheckCircle className="h-3 w-3 text-white" />}
-                  </div>
-                  <span className={`text-xs font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
-                    Yes, confirm
-                  </span>
-                </button>
-              </div>
+                  {confirmed && <CheckCircle className="h-3 w-3 text-white" />}
+                </div>
+                <span className={`text-xs font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
+                  Yes, confirm
+                </span>
+              </button>
             </div>
           </div>
         )}
