@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { ChevronLeft, Film, Upload, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, Link2, Upload, X, CheckCircle } from 'lucide-react';
 import { Campaign } from '@/types/campaign';
 
 interface SubmitDraftProps {
@@ -7,29 +7,36 @@ interface SubmitDraftProps {
   onBack: () => void;
 }
 
+const extractTikTokVideoId = (url: string): string | null => {
+  // Match patterns like tiktok.com/@user/video/1234567890
+  const match = url.match(/video\/(\d+)/);
+  return match ? match[1] : null;
+};
+
+const isValidTikTokUrl = (url: string): boolean => {
+  return /tiktok\.com\/.+\/video\/\d+/.test(url) || /vm\.tiktok\.com\/\w+/.test(url);
+};
+
 const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
-  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
-  const [videoPreview, setVideoPreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [tiktokUrl, setTiktokUrl] = useState('');
+  const [videoId, setVideoId] = useState<string | null>(null);
+  const [confirmed, setConfirmed] = useState(false);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedVideo(file);
-      const url = URL.createObjectURL(file);
-      setVideoPreview(url);
+  useEffect(() => {
+    if (isValidTikTokUrl(tiktokUrl)) {
+      const id = extractTikTokVideoId(tiktokUrl);
+      setVideoId(id);
+      setConfirmed(false);
+    } else {
+      setVideoId(null);
+      setConfirmed(false);
     }
-  };
+  }, [tiktokUrl]);
 
-  const handleRemoveVideo = () => {
-    setSelectedVideo(null);
-    if (videoPreview) {
-      URL.revokeObjectURL(videoPreview);
-      setVideoPreview(null);
-    }
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+  const handleClear = () => {
+    setTiktokUrl('');
+    setVideoId(null);
+    setConfirmed(false);
   };
 
   return (
@@ -43,70 +50,115 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
           <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
           </div>
-          <h2 className="text-sm font-bold text-black font-montserrat">Submit draft</h2>
+          <h2 className="text-sm font-bold text-black font-montserrat">Submit TikTok</h2>
         </div>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-5 py-4">
-        {/* Video upload area */}
+        {/* Link input */}
         <div className="mb-5">
-          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Your video</h3>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="video/*"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-
-          {!selectedVideo ? (
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full aspect-[9/14] rounded-2xl flex flex-col items-center justify-center gap-3 transition-all active:scale-[0.98]"
+          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Your TikTok link</h3>
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+              <Link2 className="h-4 w-4 text-black/40" />
+            </div>
+            <input
+              type="url"
+              value={tiktokUrl}
+              onChange={(e) => setTiktokUrl(e.target.value)}
+              placeholder="https://www.tiktok.com/@user/video/..."
+              className="w-full h-12 pl-10 pr-10 rounded-xl text-sm font-jakarta text-black placeholder:text-black/30 outline-none transition-all"
               style={{
                 background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                border: '2px dashed rgba(0,0,0,0.15)',
+                border: videoId ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
+              }}
+            />
+            {tiktokUrl && (
+              <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
+                <X className="h-4 w-4 text-black/40" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* TikTok embed preview */}
+        {videoId && (
+          <div className="mb-5">
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{
+                border: '1px solid rgba(0,0,0,0.08)',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+              }}
+            >
+              <iframe
+                src={`https://www.tiktok.com/embed/v2/${videoId}`}
+                className="w-full"
+                style={{ height: '500px', border: 'none' }}
+                allowFullScreen
+                allow="encrypted-media"
+              />
+            </div>
+
+            {/* Confirmation */}
+            <button
+              onClick={() => setConfirmed(!confirmed)}
+              className="flex items-center gap-3 mt-4 w-full px-4 py-3 rounded-xl transition-all active:scale-[0.98]"
+              style={{
+                background: confirmed
+                  ? 'linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.14) 100%)'
+                  : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+                border: confirmed
+                  ? '1.5px solid rgba(16,185,129,0.3)'
+                  : '1.5px solid rgba(0,0,0,0.08)',
               }}
             >
               <div
-                className="w-14 h-14 rounded-full flex items-center justify-center"
+                className="h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
+                  background: confirmed
+                    ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                    : 'rgba(0,0,0,0.08)',
                 }}
               >
-                <Film className="h-6 w-6 text-black/40" strokeWidth={1.5} />
+                {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
               </div>
-              <div className="text-center">
-                <p className="text-sm font-semibold text-black/60 font-montserrat">Choose from library</p>
-                <p className="text-xs text-black/40 font-jakarta mt-1">MP4, MOV • Max 3 min</p>
-              </div>
+              <span className={`text-sm font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
+                Yes, this is the correct video
+              </span>
             </button>
-          ) : (
-            <div className="relative w-full aspect-[9/14] rounded-2xl overflow-hidden">
-              <video
-                src={videoPreview || undefined}
-                className="w-full h-full object-cover"
-                controls
-              />
-              <button
-                onClick={handleRemoveVideo}
-                className="absolute top-3 right-3 h-8 w-8 rounded-full flex items-center justify-center"
-                style={{
-                  background: 'rgba(0,0,0,0.6)',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <X className="h-4 w-4 text-white" />
-              </button>
+          </div>
+        )}
+
+        {/* Show placeholder when no link */}
+        {!videoId && (
+          <div
+            className="w-full aspect-[9/14] rounded-2xl flex flex-col items-center justify-center gap-3"
+            style={{
+              background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+              border: '2px dashed rgba(0,0,0,0.1)',
+            }}
+          >
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <Link2 className="h-6 w-6 text-black/40" strokeWidth={1.5} />
             </div>
-          )}
-        </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-black/60 font-montserrat">Paste your TikTok link</p>
+              <p className="text-xs text-black/40 font-jakarta mt-1">The video will appear here</p>
+            </div>
+          </div>
+        )}
 
         {/* Requirements */}
         <div
-          className="rounded-xl p-4 mb-4"
+          className="rounded-xl p-4 mt-5"
           style={{
             background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
             border: '1px solid rgba(0,0,0,0.06)',
@@ -128,7 +180,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
       {/* Submit button */}
       <div className="px-5 py-5 flex-shrink-0">
         <button
-          disabled={!selectedVideo}
+          disabled={!videoId || !confirmed}
           className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] disabled:opacity-40 disabled:active:scale-100"
           style={{
             background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
@@ -139,7 +191,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         >
           <span className="flex items-center justify-center gap-2">
             <Upload className="h-4 w-4" />
-            Submit draft
+            Submit
           </span>
         </button>
       </div>
