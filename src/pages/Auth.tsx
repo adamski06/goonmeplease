@@ -10,22 +10,33 @@ import AgeStep from '@/components/auth/AgeStep';
 import CredentialsStep from '@/components/auth/CredentialsStep';
 import UsernameStep from '@/components/auth/UsernameStep';
 import LoginForm from '@/components/auth/LoginForm';
+import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
 
-type SignUpStep = 'age' | 'credentials' | 'username';
+// Signup flow: credentials → age → phone → username
+type SignUpStep = 'credentials' | 'age' | 'phone' | 'username';
 type ViewState = 'loading' | 'ready';
 
-const TRANSITION_DELAY = 500; // ms
+const TRANSITION_DELAY = 500;
+const TOTAL_STEPS = 4;
+
+const stepNumber = (step: SignUpStep) => {
+  switch (step) {
+    case 'credentials': return 1;
+    case 'age': return 2;
+    case 'phone': return 3;
+    case 'username': return 4;
+  }
+};
 
 const Auth: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(searchParams.get('mode') !== 'login');
-  const [signUpStep, setSignUpStep] = useState<SignUpStep>('age');
+  const [signUpStep, setSignUpStep] = useState<SignUpStep>('credentials');
   const [selectedAge, setSelectedAge] = useState<number>(18);
   const [isLoading, setIsLoading] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
   const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [viewState, setViewState] = useState<ViewState>('loading');
-  const transitionKey = useRef(0);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -35,7 +46,6 @@ const Auth: React.FC = () => {
   const prevStepRef = useRef(signUpStep);
   const prevIsSignUpRef = useRef(isSignUp);
 
-  // Show loading splash then reveal content — only on actual step/mode changes
   useEffect(() => {
     if (prevStepRef.current !== signUpStep || prevIsSignUpRef.current !== isSignUp) {
       prevStepRef.current = signUpStep;
@@ -46,7 +56,6 @@ const Auth: React.FC = () => {
     }
   }, [signUpStep, isSignUp]);
 
-  // Initial page load splash
   useEffect(() => {
     setViewState('loading');
     const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
@@ -54,7 +63,7 @@ const Auth: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && user && signUpStep !== 'username') {
+    if (!loading && user && signUpStep !== 'username' && signUpStep !== 'age' && signUpStep !== 'phone') {
       checkCreatorRole();
     }
   }, [user, loading, signUpStep]);
@@ -83,15 +92,9 @@ const Auth: React.FC = () => {
     navigate('/user');
   };
 
-  const handleAgeNext = (age: number) => {
-    setSelectedAge(age);
-    setSignUpStep('credentials');
-  };
-
   const handleCredentialsNext = async (data: {
-    method: 'email' | 'phone';
-    email?: string;
-    phone?: string;
+    method: 'email';
+    email: string;
     password: string;
     fullName: string;
   }) => {
@@ -99,19 +102,13 @@ const Auth: React.FC = () => {
 
     try {
       setSignUpFullName(data.fullName || '');
-      if (data.method === 'email' && data.email) {
-        const { error } = await signUp(data.email, data.password, data.fullName);
-        if (error) {
-          if (error.message.includes('already registered')) {
-            toast({ title: t('auth.accountExists'), description: t('auth.accountExistsDesc'), variant: 'destructive' });
-          } else {
-            toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
-          }
-          setIsLoading(false);
-          return;
+      const { error } = await signUp(data.email, data.password, data.fullName);
+      if (error) {
+        if (error.message.includes('already registered')) {
+          toast({ title: t('auth.accountExists'), description: t('auth.accountExistsDesc'), variant: 'destructive' });
+        } else {
+          toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
         }
-      } else if (data.method === 'phone' && data.phone) {
-        toast({ title: 'Coming soon', description: 'Phone signup will be available soon. Please use email.' });
         setIsLoading(false);
         return;
       }
@@ -134,12 +131,22 @@ const Auth: React.FC = () => {
         console.error('Error adding creator role:', roleError);
       }
 
-      setSignUpStep('username');
+      // After account creation, go to age step
+      setSignUpStep('age');
     } catch (error: any) {
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAgeNext = (age: number) => {
+    setSelectedAge(age);
+    setSignUpStep('phone');
+  };
+
+  const handlePhoneNext = () => {
+    setSignUpStep('username');
   };
 
   const handleUsernameComplete = () => {
@@ -189,13 +196,12 @@ const Auth: React.FC = () => {
     );
   }
 
-  const stepNumber = signUpStep === 'age' ? 1 : signUpStep === 'credentials' ? 2 : 3;
+  const currentStep = stepNumber(signUpStep);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         {viewState === 'loading' ? (
-          /* Full-screen loading — white logo + white bar expanding from center */
           <div className="flex flex-col items-center justify-center">
             <div className="relative h-10 w-[140px] mb-6">
               <div
@@ -212,17 +218,12 @@ const Auth: React.FC = () => {
                 }}
               />
             </div>
-
-            {/* Bar loading from center outward */}
             <div className="w-32 h-[3px] rounded-full bg-black/10 overflow-hidden flex items-center justify-center">
               <div
                 className="h-full rounded-full bg-black/40"
-                style={{
-                  animation: 'expandCenter 0.5s ease-out forwards',
-                }}
+                style={{ animation: 'expandCenter 0.5s ease-out forwards' }}
               />
             </div>
-
             <style>{`
               @keyframes expandCenter {
                 0% { width: 0%; }
@@ -231,7 +232,6 @@ const Auth: React.FC = () => {
             `}</style>
           </div>
         ) : (
-          /* Card content */
           <div
             className="w-full max-w-sm rounded-3xl p-8 border border-white/40 animate-fade-in"
             style={{
@@ -262,13 +262,16 @@ const Auth: React.FC = () => {
 
             {isSignUp ? (
               <>
-                {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
                 {signUpStep === 'credentials' && (
                   <CredentialsStep
                     onNext={handleCredentialsNext}
-                    onSwitchToLogin={() => { setIsSignUp(false); setSignUpStep('age'); }}
+                    onSwitchToLogin={() => { setIsSignUp(false); setSignUpStep('credentials'); }}
                     isLoading={isLoading}
                   />
+                )}
+                {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
+                {signUpStep === 'phone' && newUserId && (
+                  <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
                 )}
                 {signUpStep === 'username' && newUserId && (
                   <UsernameStep userId={newUserId} fullName={signUpFullName} onComplete={handleUsernameComplete} />
@@ -276,11 +279,11 @@ const Auth: React.FC = () => {
 
                 {/* Step indicator */}
                 <div className="flex justify-center gap-2 mt-6">
-                  {[1, 2, 3].map((s) => (
+                  {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
                     <div
                       key={s}
                       className={`h-1.5 rounded-full transition-all ${
-                        s === stepNumber ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
+                        s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
                       }`}
                     />
                   ))}
@@ -289,7 +292,7 @@ const Auth: React.FC = () => {
             ) : (
               <LoginForm
                 onSubmit={handleLogin}
-                onSwitchToSignUp={() => { setIsSignUp(true); setSignUpStep('age'); }}
+                onSwitchToSignUp={() => { setIsSignUp(true); setSignUpStep('credentials'); }}
                 isLoading={isLoading}
               />
             )}
