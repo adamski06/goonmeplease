@@ -50,7 +50,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         </div>
 
         {/* Clean vertical bar (center) */}
-        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -40 }}>
+        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: 8, marginBottom: 8 }}>
           {/* Track */}
           <div className="absolute inset-0 rounded-full bg-white/10" />
           {/* Fill from bottom */}
