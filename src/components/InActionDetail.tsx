@@ -1,6 +1,7 @@
-import React from 'react';
-import { ChevronLeft, Eye, Clock, CheckCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
+import { supabase } from '@/integrations/supabase/client';
 
 interface InActionDetailProps {
   submission: ActiveSubmission;
@@ -17,6 +18,29 @@ const statusConfig = {
 const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) => {
   const status = statusConfig[submission.status];
   const StatusIcon = status.icon;
+  const [views, setViews] = useState(submission.current_views || 0);
+  const [likes, setLikes] = useState(submission.current_likes || 0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      setRefreshing(true);
+      try {
+        const { data, error } = await supabase.functions.invoke('fetch-tiktok-stats', {
+          body: { submission_ids: [submission.id] },
+        });
+        if (!error && data?.results?.[submission.id]) {
+          const r = data.results[submission.id];
+          if (r.views > 0) setViews(r.views);
+          if (r.likes > 0) setLikes(r.likes);
+        }
+      } catch (e) {
+        console.error('Failed to fetch TikTok stats:', e);
+      }
+      setRefreshing(false);
+    };
+    fetchStats();
+  }, [submission.id]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
@@ -82,8 +106,13 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
           }}
         >
-          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Performance</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-black font-montserrat">Performance</h3>
+            {refreshing && (
+              <div className="h-3 w-3 border border-black/20 border-t-black/60 rounded-full animate-spin" />
+            )}
+          </div>
+          <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl p-3 text-center"
               style={{
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
@@ -91,8 +120,18 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               }}
             >
               <Eye className="h-4 w-4 text-black/40 mx-auto mb-1" />
-              <p className="text-lg font-bold text-black font-montserrat">{(submission.current_views || 0).toLocaleString()}</p>
+              <p className="text-lg font-bold text-black font-montserrat">{views.toLocaleString()}</p>
               <p className="text-[11px] text-black/50 font-jakarta">Views</p>
+            </div>
+            <div className="rounded-xl p-3 text-center"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <Heart className="h-4 w-4 text-black/40 mx-auto mb-1" />
+              <p className="text-lg font-bold text-black font-montserrat">{likes.toLocaleString()}</p>
+              <p className="text-[11px] text-black/50 font-jakarta">Likes</p>
             </div>
             <div className="rounded-xl p-3 text-center"
               style={{

@@ -189,6 +189,7 @@ export type Database = {
           campaign_id: string
           created_at: string
           creator_id: string
+          current_likes: number | null
           current_views: number | null
           id: string
           review_notes: string | null
@@ -204,6 +205,7 @@ export type Database = {
           campaign_id: string
           created_at?: string
           creator_id: string
+          current_likes?: number | null
           current_views?: number | null
           id?: string
           review_notes?: string | null
@@ -219,6 +221,7 @@ export type Database = {
           campaign_id?: string
           created_at?: string
           creator_id?: string
+          current_likes?: number | null
           current_views?: number | null
           id?: string
           review_notes?: string | null

@@ -1,0 +1,1 @@
+ALTER TABLE public.content_submissions ADD COLUMN IF NOT EXISTS current_likes integer DEFAULT 0;
