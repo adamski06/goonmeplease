@@ -34,8 +34,8 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const firstViewsFraction = Math.min(points[0].views / maxViews, 1);
 
   return (
-    <div className="my-8">
-      <h4 className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider mb-5">
+    <div className="mt-2 mb-4">
+      <h4 className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider mb-4">
         Earnings
       </h4>
       <div className="flex items-center justify-center">
@@ -50,7 +50,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         </div>
 
         {/* Clean vertical bar (center) */}
-        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: 52, marginBottom: -8 }}>
+        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -8 }}>
           {/* Track */}
           <div className="absolute inset-0 rounded-full bg-white/10" />
           {/* Fill from bottom */}
