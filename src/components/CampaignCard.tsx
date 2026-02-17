@@ -185,10 +185,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           <div className="flex items-center gap-2.5 pt-5 pb-1">
             <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0 flex items-center justify-center bg-black/5">
               {campaign.logo ? (
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-xs font-bold text-black/40">{campaign.brand.charAt(0)}</span>
-              )}
+                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling && ((e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex'); }} />
+              ) : null}
+              <span className="text-xs font-bold text-black/40" style={{ display: campaign.logo ? 'none' : 'flex' }}>{campaign.brand.charAt(0)}</span>
             </div>
             <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
           </div>
@@ -266,10 +265,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center bg-black/5">
                   {campaign.logo ? (
-                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-xs font-bold text-black/40">{campaign.brand.charAt(0)}</span>
-                  )}
+                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling && ((e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex'); }} />
+                  ) : null}
+                  <span className="text-xs font-bold text-black/40" style={{ display: campaign.logo ? 'none' : 'flex' }}>{campaign.brand.charAt(0)}</span>
                 </div>
                 <h2 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h2>
               </div>
