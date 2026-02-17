@@ -69,6 +69,7 @@ const Activity: React.FC = () => {
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
+  const [isClosingSubmission, setIsClosingSubmission] = useState(false);
 
   const fetchActiveSubmissions = useCallback(async () => {
     if (!user) return;
@@ -206,24 +207,16 @@ const Activity: React.FC = () => {
         <h2 className="text-sm font-bold text-black font-montserrat">In Action</h2>
       </div>
 
-      {/* Active submission detail overlay */}
-      {selectedSubmission ? (
-        <div className="px-3 pt-2">
-          <div
-            className="rounded-[36px] overflow-hidden"
-            style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
-              border: '1.5px solid rgba(255,255,255,0.8)',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-              maxHeight: 'calc(100dvh - 280px)',
-            }}
-          >
-            <div style={{ height: 'calc(100dvh - 280px)' }}>
-              <InActionDetail submission={selectedSubmission} onBack={() => setSelectedSubmission(null)} />
-            </div>
-          </div>
+      {/* Active submissions list */}
+      {activeSubmissions.length > 0 && !activeCampaign && (
+        <div className="px-3 pt-2 space-y-2.5">
+          {activeSubmissions.map(sub => (
+            <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
+          ))}
         </div>
-      ) : activeCampaign ? (
+      )}
+
+      {activeCampaign && (
         <div className="px-3 pt-2">
           <div
             className="rounded-[36px] overflow-hidden"
@@ -289,13 +282,9 @@ const Activity: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : activeSubmissions.length > 0 ? (
-        <div className="px-3 pt-2 space-y-2.5">
-          {activeSubmissions.map(sub => (
-            <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
-          ))}
-        </div>
-      ) : (
+      )}
+
+      {!activeCampaign && activeSubmissions.length === 0 && (
         <div className="flex items-center justify-center px-6 py-10">
           <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
@@ -358,6 +347,66 @@ const Activity: React.FC = () => {
           isSaved={false}
           onToggleSave={() => {}}
         />
+      )}
+
+      {/* In Action detail overlay */}
+      {selectedSubmission && (
+        <div className="fixed inset-0 z-40">
+          <div
+            className="absolute inset-0 bg-black/60"
+            style={{
+              opacity: isClosingSubmission ? 0 : 1,
+              transition: 'opacity 0.35s ease-out',
+            }}
+            onClick={() => {
+              if (isClosingSubmission) return;
+              setIsClosingSubmission(true);
+              setTimeout(() => {
+                setSelectedSubmission(null);
+                setIsClosingSubmission(false);
+              }, 400);
+            }}
+          />
+
+          <style>{`
+            @keyframes action-slide-up {
+              0% { transform: translateY(calc(100% + 92px)); }
+              100% { transform: translateY(0); }
+            }
+            @keyframes action-slide-down {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(calc(100% + 92px)); }
+            }
+          `}</style>
+
+          <div
+            className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
+            style={{
+              maxHeight: 'calc(100dvh - 148px)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
+              border: '1.5px solid rgba(255,255,255,0.8)',
+              boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+              animation: isClosingSubmission
+                ? 'action-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
+                : 'action-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
+              <InActionDetail
+                submission={selectedSubmission}
+                onBack={() => {
+                  if (isClosingSubmission) return;
+                  setIsClosingSubmission(true);
+                  setTimeout(() => {
+                    setSelectedSubmission(null);
+                    setIsClosingSubmission(false);
+                  }, 400);
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       <BottomNav />
