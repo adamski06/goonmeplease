@@ -105,7 +105,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                 <iframe
                   src={`https://www.tiktok.com/embed/v2/${videoId}`}
                   style={{
-                    width: '208%',
+                    width: '260%',
                     height: '750px',
                     border: 'none',
                     transform: 'scale(0.48)',
