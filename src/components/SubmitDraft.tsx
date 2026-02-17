@@ -86,48 +86,60 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         {videoId && (
           <div className="mb-5">
             <div
-              className="rounded-2xl overflow-hidden"
+              className="flex items-stretch gap-4 rounded-2xl overflow-hidden p-3"
               style={{
-                border: '1px solid rgba(0,0,0,0.08)',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+                border: '1.5px solid rgba(0,0,0,0.08)',
                 boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
               }}
             >
-              <iframe
-                src={`https://www.tiktok.com/embed/v2/${videoId}`}
-                className="w-full"
-                style={{ height: '500px', border: 'none' }}
-                allowFullScreen
-                allow="encrypted-media"
-              />
-            </div>
-
-            {/* Confirmation */}
-            <button
-              onClick={() => setConfirmed(!confirmed)}
-              className="flex items-center gap-3 mt-4 w-full px-4 py-3 rounded-xl transition-all active:scale-[0.98]"
-              style={{
-                background: confirmed
-                  ? 'linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.14) 100%)'
-                  : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                border: confirmed
-                  ? '1.5px solid rgba(16,185,129,0.3)'
-                  : '1.5px solid rgba(0,0,0,0.08)',
-              }}
-            >
+              {/* Video embed — 1/3 width, fixed aspect, no scroll */}
               <div
-                className="h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-                style={{
-                  background: confirmed
-                    ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
-                    : 'rgba(0,0,0,0.08)',
-                }}
+                className="w-1/3 flex-shrink-0 rounded-xl overflow-hidden relative"
+                style={{ aspectRatio: '9/16', border: '1px solid rgba(0,0,0,0.06)' }}
               >
-                {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
+                <iframe
+                  src={`https://www.tiktok.com/embed/v2/${videoId}`}
+                  className="absolute inset-0 w-full h-full"
+                  style={{ border: 'none', overflow: 'hidden' }}
+                  scrolling="no"
+                  allowFullScreen
+                  allow="encrypted-media"
+                />
               </div>
-              <span className={`text-sm font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
-                Yes, this is the correct video
-              </span>
-            </button>
+
+              {/* Right side — confirmation */}
+              <div className="flex-1 flex flex-col items-start justify-center gap-3">
+                <p className="text-sm font-semibold text-black font-montserrat">Is this your video?</p>
+                <p className="text-xs text-black/50 font-jakarta">Make sure this is the correct TikTok before submitting.</p>
+                <button
+                  onClick={() => setConfirmed(!confirmed)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
+                  style={{
+                    background: confirmed
+                      ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
+                      : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                    border: confirmed
+                      ? '1.5px solid rgba(16,185,129,0.4)'
+                      : '1.5px solid rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <div
+                    className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+                    style={{
+                      background: confirmed
+                        ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                        : 'rgba(0,0,0,0.1)',
+                    }}
+                  >
+                    {confirmed && <CheckCircle className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className={`text-xs font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
+                    Yes, confirm
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
