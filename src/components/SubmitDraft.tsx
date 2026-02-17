@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Link2, Upload, X, CheckCircle } from 'lucide-react';
+import { ChevronLeft, Link2, Upload, X, CheckCircle, Loader2 } from 'lucide-react';
 import { Campaign } from '@/types/campaign';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface SubmitDraftProps {
   campaign: Campaign;
@@ -8,7 +11,6 @@ interface SubmitDraftProps {
 }
 
 const extractTikTokVideoId = (url: string): string | null => {
-  // Match patterns like tiktok.com/@user/video/1234567890
   const match = url.match(/video\/(\d+)/);
   return match ? match[1] : null;
 };
@@ -18,9 +20,12 @@ const isValidTikTokUrl = (url: string): boolean => {
 };
 
 const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
+  const { user } = useAuth();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [guidelinesConfirmed, setGuidelinesConfirmed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (isValidTikTokUrl(tiktokUrl)) {
@@ -38,6 +43,65 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
     setVideoId(null);
     setConfirmed(false);
   };
+
+  const handleSubmit = async () => {
+    if (!user || !videoId || !confirmed || !guidelinesConfirmed) return;
+
+    setSubmitting(true);
+    try {
+      // Get user's TikTok account
+      const { data: accounts, error: accountError } = await supabase
+        .rpc('get_user_tiktok_accounts', { p_user_id: user.id });
+
+      if (accountError) throw accountError;
+
+      if (!accounts || accounts.length === 0) {
+        toast.error('Please link your TikTok account first');
+        setSubmitting(false);
+        return;
+      }
+
+      const tiktokAccount = accounts[0];
+
+      // Check for duplicate submission
+      const { data: existing } = await supabase
+        .from('content_submissions')
+        .select('id')
+        .eq('campaign_id', campaign.id)
+        .eq('creator_id', user.id)
+        .maybeSingle();
+
+      if (existing) {
+        toast.error('You have already submitted to this campaign');
+        setSubmitting(false);
+        return;
+      }
+
+      // Insert submission
+      const { error: insertError } = await supabase
+        .from('content_submissions')
+        .insert({
+          campaign_id: campaign.id,
+          creator_id: user.id,
+          tiktok_account_id: tiktokAccount.id,
+          tiktok_video_url: tiktokUrl,
+          tiktok_video_id: videoId,
+          status: 'pending_review',
+        });
+
+      if (insertError) throw insertError;
+
+      toast.success('Submission sent! The brand will review your video.');
+      onBack();
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      toast.error('Failed to submit. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const canSubmit = videoId && confirmed && guidelinesConfirmed && !submitting;
 
   return (
     <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
@@ -83,10 +147,8 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         </div>
 
         {/* TikTok embed preview */}
-        {/* TikTok embed preview */}
         {videoId && (
           <div className="mb-5">
-            {/* Scaled-down TikTok embed */}
             <div className="flex justify-center mb-0">
               <div style={{
                 transform: 'scale(0.75)',
@@ -191,12 +253,49 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
             ))}
           </ul>
         </div>
+
+        {/* Guidelines confirmation */}
+        <div className="flex items-center justify-between px-4 py-3 rounded-2xl mt-3"
+          style={{
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+            border: guidelinesConfirmed ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.08)',
+          }}
+        >
+          <p className="text-sm font-semibold text-black font-montserrat">I followed all requirements</p>
+          <button
+            onClick={() => setGuidelinesConfirmed(!guidelinesConfirmed)}
+            className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
+            style={{
+              background: guidelinesConfirmed
+                ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
+                : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+              border: guidelinesConfirmed
+                ? '1.5px solid rgba(16,185,129,0.4)'
+                : '1.5px solid rgba(0,0,0,0.1)',
+            }}
+          >
+            <div
+              className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+              style={{
+                background: guidelinesConfirmed
+                  ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                  : 'rgba(0,0,0,0.1)',
+              }}
+            >
+              {guidelinesConfirmed && <CheckCircle className="h-3 w-3 text-white" />}
+            </div>
+            <span className={`text-xs font-medium font-jakarta ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/60'}`}>
+              Confirm
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Submit button */}
       <div className="px-5 py-5 flex-shrink-0">
         <button
-          disabled={!videoId || !confirmed}
+          disabled={!canSubmit}
+          onClick={handleSubmit}
           className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] disabled:opacity-40 disabled:active:scale-100"
           style={{
             background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
@@ -206,8 +305,12 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
           }}
         >
           <span className="flex items-center justify-center gap-2">
-            <Upload className="h-4 w-4" />
-            Submit
+            {submitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
+            {submitting ? 'Submitting...' : 'Submit'}
           </span>
         </button>
       </div>
