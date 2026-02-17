@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import CampaignOverlay from '@/components/CampaignOverlay';
+import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
+import InActionDetail from '@/components/InActionDetail';
 import { Campaign } from '@/types/campaign';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
 import { ChevronRight, X } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useFavorites } from '@/hooks/useFavorites';
+import { supabase } from '@/integrations/supabase/client';
 
 const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) => void }> = ({ campaigns, onSelect }) => (
   <div className="space-y-2.5">
@@ -63,6 +66,57 @@ const Activity: React.FC = () => {
   const recentCampaigns = useRecentCampaigns();
   const favoriteCampaigns = useFavorites();
 
+  // In Action state
+  const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
+
+  const fetchActiveSubmissions = useCallback(async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('content_submissions')
+      .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, created_at')
+      .eq('creator_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error || !data) return;
+
+    // Fetch campaign details for each submission
+    const campaignIds = [...new Set(data.map(s => s.campaign_id))];
+    if (campaignIds.length === 0) {
+      setActiveSubmissions([]);
+      return;
+    }
+
+    const { data: campaigns } = await supabase
+      .from('campaigns')
+      .select('id, title, brand_name, brand_logo_url')
+      .in('id', campaignIds);
+
+    const campaignMap = new Map((campaigns || []).map(c => [c.id, c]));
+
+    const submissions: ActiveSubmission[] = data.map(s => {
+      const campaign = campaignMap.get(s.campaign_id);
+      return {
+        id: s.id,
+        campaign_id: s.campaign_id,
+        tiktok_video_url: s.tiktok_video_url,
+        tiktok_video_id: s.tiktok_video_id,
+        status: s.status,
+        current_views: s.current_views || 0,
+        created_at: s.created_at,
+        campaign_title: campaign?.title || '',
+        campaign_brand: campaign?.brand_name || '',
+        campaign_logo: campaign?.brand_logo_url || '',
+      };
+    });
+
+    setActiveSubmissions(submissions);
+  }, [user]);
+
+  useEffect(() => {
+    fetchActiveSubmissions();
+  }, [fetchActiveSubmissions]);
+
   useEffect(() => {
     const state = location.state as { campaign?: Campaign } | null;
     if (state?.campaign) {
@@ -111,6 +165,9 @@ const Activity: React.FC = () => {
     setTimeout(() => {
       setShowSubmit(false);
       setSubmitSliding(false);
+      setActiveCampaign(null);
+      // Refresh submissions list
+      fetchActiveSubmissions();
     }, 300);
   };
 
@@ -149,13 +206,24 @@ const Activity: React.FC = () => {
         <h2 className="text-sm font-bold text-black font-montserrat">In Action</h2>
       </div>
 
-      {!activeCampaign && (
-        <div className="flex items-center justify-center px-6 py-10">
-          <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
+      {/* Active submission detail overlay */}
+      {selectedSubmission ? (
+        <div className="px-3 pt-2">
+          <div
+            className="rounded-[36px] overflow-hidden"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+              border: '1.5px solid rgba(255,255,255,0.8)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+              maxHeight: 'calc(100dvh - 280px)',
+            }}
+          >
+            <div style={{ height: 'calc(100dvh - 280px)' }}>
+              <InActionDetail submission={selectedSubmission} onBack={() => setSelectedSubmission(null)} />
+            </div>
+          </div>
         </div>
-      )}
-
-      {activeCampaign && (
+      ) : activeCampaign ? (
         <div className="px-3 pt-2">
           <div
             className="rounded-[36px] overflow-hidden"
@@ -207,7 +275,6 @@ const Activity: React.FC = () => {
                 <SubmissionGuide campaign={activeCampaign} onBack={handleCloseGuide} onComplete={handleGuideComplete} />
               </div>
 
-              {/* Submit Draft panel */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -221,6 +288,16 @@ const Activity: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      ) : activeSubmissions.length > 0 ? (
+        <div className="px-3 pt-2 space-y-2.5">
+          {activeSubmissions.map(sub => (
+            <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center px-6 py-10">
+          <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
       )}
 
@@ -272,7 +349,7 @@ const Activity: React.FC = () => {
         </Tabs>
       </div>
 
-      {/* Campaign detail overlay — same as Discover */}
+      {/* Campaign detail overlay */}
       {selectedRecentCampaign && (
         <CampaignOverlay
           campaign={selectedRecentCampaign}
