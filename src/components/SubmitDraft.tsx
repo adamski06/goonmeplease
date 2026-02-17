@@ -120,26 +120,53 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         {/* Link input */}
         <div className="mb-5">
           <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Your TikTok link</h3>
-          <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2">
-              <Link2 className="h-4 w-4 text-black/40" />
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                <Link2 className="h-4 w-4 text-black/40" />
+              </div>
+              <input
+                type="url"
+                value={tiktokUrl}
+                onChange={(e) => setTiktokUrl(e.target.value)}
+                placeholder="https://www.tiktok.com/@user/video/..."
+                className="w-full h-12 pl-10 pr-10 rounded-xl text-sm font-jakarta text-black placeholder:text-black/30 outline-none transition-all"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+                  border: videoId ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
+                }}
+              />
+              {tiktokUrl && !videoId && (
+                <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <X className="h-4 w-4 text-black/40" />
+                </button>
+              )}
+              {videoId && (
+                <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <X className="h-4 w-4 text-black/40" />
+                </button>
+              )}
             </div>
-            <input
-              type="url"
-              value={tiktokUrl}
-              onChange={(e) => setTiktokUrl(e.target.value)}
-              placeholder="https://www.tiktok.com/@user/video/..."
-              className="w-full h-12 pl-10 pr-10 rounded-xl text-sm font-jakarta text-black placeholder:text-black/30 outline-none transition-all"
+            <button
+              disabled={!videoId}
+              onClick={() => setConfirmed(true)}
+              className="h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-[0.95]"
               style={{
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                border: videoId ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
+                background: videoId
+                  ? confirmed
+                    ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                    : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)'
+                  : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                border: videoId
+                  ? confirmed
+                    ? '1.5px solid rgba(52,211,153,0.5)'
+                    : '1.5px solid rgba(60,60,60,0.6)'
+                  : '1.5px solid rgba(0,0,0,0.1)',
+                boxShadow: videoId ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
               }}
-            />
-            {tiktokUrl && (
-              <button onClick={handleClear} className="absolute right-3 top-1/2 -translate-y-1/2">
-                <X className="h-4 w-4 text-black/40" />
-              </button>
-            )}
+            >
+              <CheckCircle className={`h-5 w-5 ${videoId ? 'text-white' : 'text-black/20'}`} />
+            </button>
           </div>
         </div>
 
