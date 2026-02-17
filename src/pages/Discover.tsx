@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -134,7 +135,7 @@ const Discover: React.FC = () => {
                   className="relative overflow-hidden w-full rounded-[28px] aspect-[9/14] select-none"
                   style={{ WebkitUserDrag: 'none', touchAction: 'pan-y' } as React.CSSProperties}
                 >
-                  <img src={campaign.image} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
+                  <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
                   <div
                     className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[28px]"
                     style={{

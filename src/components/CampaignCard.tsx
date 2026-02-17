@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
 import tiktokIcon from '@/assets/tiktok-icon.png';
+import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
@@ -152,7 +153,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
-          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" loading="lazy" />
+          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" loading="lazy" />
           <div
             className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
             style={{
@@ -182,8 +183,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       >
         <div className="px-6 flex flex-col h-[180px]">
           <div className="flex items-center gap-2.5 pt-5 pb-1">
-            <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0">
-              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+            <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0 flex items-center justify-center bg-black/5">
+              {campaign.logo ? (
+                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-xs font-bold text-black/40">{campaign.brand.charAt(0)}</span>
+              )}
             </div>
             <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
           </div>
@@ -259,8 +264,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               }}
             >
               <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
-                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center bg-black/5">
+                  {campaign.logo ? (
+                    <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-xs font-bold text-black/40">{campaign.brand.charAt(0)}</span>
+                  )}
                 </div>
                 <h2 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h2>
               </div>

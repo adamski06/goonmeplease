@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Bookmark, Plus, X } from 'lucide-react';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
@@ -141,8 +142,12 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
           >
             {/* Header with brand */}
             <div className="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-black/10">
-              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center bg-black/5">
+                {campaign.logo ? (
+                  <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xs font-bold text-black/40">{campaign.brand.charAt(0)}</span>
+                )}
               </div>
               <h2 className="text-base font-bold text-black font-montserrat flex-1">
                 {campaign.brand}
@@ -166,7 +171,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
               ) : (
                 <div className="mb-4 overflow-hidden rounded-xl animate-fade-in">
                   <div className="mx-auto w-full max-w-[220px] aspect-[9/16] overflow-hidden rounded-xl">
-                    <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+                    <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" />
                   </div>
                 </div>
               )}

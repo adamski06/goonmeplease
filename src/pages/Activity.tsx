@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
@@ -28,7 +29,7 @@ const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) =>
         }}
       >
         <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0">
-          <img src={campaign.image} alt={campaign.brand} className="w-full h-full object-cover" />
+          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">

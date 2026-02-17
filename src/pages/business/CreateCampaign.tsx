@@ -79,7 +79,7 @@ const CreateCampaign: React.FC = () => {
     }
 
     const guidelinesArray = guidelinesList.map((g) => g.trim()).filter(Boolean);
-    const { data: bp } = await supabase.from('business_profiles').select('company_name').eq('user_id', user.id).maybeSingle();
+    const { data: bp } = await supabase.from('business_profiles').select('company_name, logo_url').eq('user_id', user.id).maybeSingle();
 
     const campaignData = {
       title: title.trim(),
@@ -114,6 +114,7 @@ const CreateCampaign: React.FC = () => {
       guidelines: campaignData.guidelines,
       category: campaignData.category,
       business_id: user.id,
+      brand_logo_url: bp?.logo_url || null,
       is_active: true,
       status: 'active',
     });
