@@ -30,55 +30,56 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   ];
 
   return (
-    <div className="mt-3">
-      <div className="flex items-center justify-end gap-0">
+    <div className="mt-4 mb-1">
+      <div className="flex items-center justify-center gap-0">
         {/* Views column (left of pills) */}
-        <div className="flex flex-col items-end gap-6 pr-3 py-1">
-          {[...points].reverse().map((p, i) => (
-            <span key={i} className="text-xs font-medium text-white/50 font-montserrat leading-[40px]">
-              {formatViews(p.views)} views
-            </span>
-          ))}
+        <div className="flex flex-col items-end pr-4" style={{ gap: 28 }}>
+          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[48px]">
+            {formatViews(points[1].views)} views
+          </span>
+          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[48px]">
+            {formatViews(points[0].views)} views
+          </span>
         </div>
 
         {/* Line + Pills */}
-        <div className="relative flex flex-col items-center gap-6 py-1">
-          {/* Vertical line going through pills */}
+        <div className="relative flex flex-col items-center" style={{ gap: 28 }}>
+          {/* Vertical line — only visible between pills */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full bg-white/20"
-            style={{ top: -8, bottom: -8 }}
+            className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full bg-white/25"
+            style={{ top: 48, bottom: 48 }}
           />
 
           {/* Top pill (max) */}
           <div
-            className="relative z-10 rounded-[18px] px-4 py-2.5 flex items-baseline gap-1"
+            className="relative z-10 rounded-full px-5 py-2.5 flex items-baseline gap-1"
             style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
             }}
           >
-            <span className="text-base font-bold text-white font-montserrat">
+            <span className="text-xl font-bold text-white font-montserrat">
               {formatEarnings(points[1].earnings)}
             </span>
-            <span className="text-[11px] font-semibold text-white/70 font-montserrat">
+            <span className="text-xs font-semibold text-white/70 font-montserrat">
               sek
             </span>
           </div>
 
           {/* Bottom pill (first tier) */}
           <div
-            className="relative z-10 rounded-[18px] px-4 py-2.5 flex items-baseline gap-1"
+            className="relative z-10 rounded-full px-5 py-2.5 flex items-baseline gap-1"
             style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
             }}
           >
-            <span className="text-base font-bold text-white font-montserrat">
+            <span className="text-xl font-bold text-white font-montserrat">
               {formatEarnings(points[0].earnings)}
             </span>
-            <span className="text-[11px] font-semibold text-white/70 font-montserrat">
+            <span className="text-xs font-semibold text-white/70 font-montserrat">
               sek
             </span>
           </div>
