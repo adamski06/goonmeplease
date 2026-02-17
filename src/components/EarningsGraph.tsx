@@ -34,13 +34,13 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const firstViewsFraction = Math.min(points[0].views / maxViews, 1);
 
   return (
-    <div className="mt-2 mb-4">
+    <div className="mt-2 mb-10">
       <h4 className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider mb-4">
         Earnings
       </h4>
       <div className="flex items-center justify-center">
         {/* Views (left) */}
-        <div className="flex flex-col items-end" style={{ gap: 56 }}>
+        <div className="flex flex-col items-end" style={{ gap: 84 }}>
           <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
             {formatViews(points[1].views)} views
           </span>
@@ -50,7 +50,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         </div>
 
         {/* Clean vertical bar (center) */}
-        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -8 }}>
+        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -40 }}>
           {/* Track */}
           <div className="absolute inset-0 rounded-full bg-white/10" />
           {/* Fill from bottom */}
@@ -61,7 +61,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         </div>
 
         {/* Pills (right) */}
-        <div className="flex flex-col items-start" style={{ gap: 56 }}>
+        <div className="flex flex-col items-start" style={{ gap: 84 }}>
           <div
             className="rounded-full px-5 py-3 flex items-baseline gap-1"
             style={{
