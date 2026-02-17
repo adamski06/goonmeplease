@@ -91,8 +91,8 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div style={{
                 transform: 'scale(0.75)',
                 transformOrigin: 'top center',
-                height: '460px',
-                overflow: 'auto',
+                height: '450px',
+                overflow: 'hidden',
                 borderRadius: '12px',
               }}>
                 <iframe
