@@ -82,16 +82,15 @@ const InActionCard: React.FC<InActionCardProps> = ({ submission, onClick }) => {
         </div>
       </div>
 
-      {/* Status badge - glassy pill */}
+      {/* Status badge - glassy pill matching emerald earnings style */}
       <div
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full flex-shrink-0"
+        className="flex items-center gap-1.5 rounded-[14px] px-2.5 py-1 flex-shrink-0"
         style={{
           background: status.gradient,
           border: `1px solid ${status.border}`,
-          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
+          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
         }}
       >
-        <span className="text-[10px] font-semibold text-white/80 font-montserrat">Status:</span>
         <span className="text-[10px] font-bold text-white font-montserrat">{status.label}</span>
       </div>
     </button>

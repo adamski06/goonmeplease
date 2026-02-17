@@ -29,30 +29,53 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
     { earnings: data.max.earnings, views: data.max.views },
   ];
 
+  // Calculate progress percentage for bar fill (first tier as fraction of max views)
+  const maxViews = points[1].views || 1;
+  const firstViewsFraction = Math.min(points[0].views / maxViews, 1);
+
   return (
-    <div className="mt-4 mb-1">
-      <div className="flex items-center justify-center gap-0">
-        {/* Views column (left of pills) */}
-        <div className="flex flex-col items-end pr-4" style={{ gap: 28 }}>
-          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[48px]">
+    <div className="my-6">
+      <div className="flex items-stretch gap-0">
+        {/* Views (left) */}
+        <div className="flex flex-col items-end justify-between pr-4 py-1" style={{ gap: 40 }}>
+          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[52px]">
             {formatViews(points[1].views)} views
           </span>
-          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[48px]">
+          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[52px]">
             {formatViews(points[0].views)} views
           </span>
         </div>
 
-        {/* Line + Pills */}
-        <div className="relative flex flex-col items-center" style={{ gap: 28 }}>
-          {/* Vertical line — only visible between pills */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full bg-white/25"
-            style={{ top: 48, bottom: 48 }}
-          />
+        {/* Progress bar (center) */}
+        <div className="flex flex-col items-center justify-between py-1" style={{ gap: 40 }}>
+          {/* Bar aligned to pill centers */}
+          <div className="relative flex flex-col items-center" style={{ gap: 40 }}>
+            {/* Background bar track */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-[4px] rounded-full bg-white/10"
+              style={{ top: 0, bottom: 0 }}
+            />
+            {/* Filled portion — from bottom up to first tier */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-[4px] rounded-full bg-white/35"
+              style={{ bottom: 0, height: `${firstViewsFraction * 100}%` }}
+            />
 
-          {/* Top pill (max) */}
+            {/* Top dot */}
+            <div className="relative z-10 w-3 h-3 rounded-full bg-white/20 border border-white/30 flex items-center justify-center" style={{ height: 52 }}>
+              <div className="w-2 h-2 rounded-full bg-white/40" />
+            </div>
+            {/* Bottom dot */}
+            <div className="relative z-10 w-3 h-3 rounded-full bg-white/30 border border-white/40 flex items-center justify-center" style={{ height: 52 }}>
+              <div className="w-2 h-2 rounded-full bg-white/50" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pills (right) */}
+        <div className="flex flex-col items-start justify-between pl-4 py-1" style={{ gap: 40 }}>
           <div
-            className="relative z-10 rounded-full px-5 py-2.5 flex items-baseline gap-1"
+            className="rounded-full px-5 py-3 flex items-baseline gap-1"
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
               border: '1px solid rgba(255,255,255,0.25)',
@@ -67,9 +90,8 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
             </span>
           </div>
 
-          {/* Bottom pill (first tier) */}
           <div
-            className="relative z-10 rounded-full px-5 py-2.5 flex items-baseline gap-1"
+            className="rounded-full px-5 py-3 flex items-baseline gap-1"
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
               border: '1px solid rgba(255,255,255,0.25)',
