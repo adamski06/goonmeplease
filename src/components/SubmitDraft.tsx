@@ -97,23 +97,33 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div
                 className="flex-shrink-0 rounded-xl overflow-hidden"
                 style={{
-                  width: '50%',
-                  height: '360px',
+                  width: '45%',
+                  height: '300px',
                   border: '1px solid rgba(0,0,0,0.06)',
+                  position: 'relative',
                 }}
               >
-                <iframe
-                  src={`https://www.tiktok.com/embed/v2/${videoId}`}
-                  style={{
-                    width: '340%',
-                    height: '750px',
-                    border: 'none',
-                    transform: 'scale(0.48)',
-                    transformOrigin: 'top left',
-                  }}
-                  allowFullScreen
-                  allow="encrypted-media"
-                />
+                <div style={{
+                  width: '325px',
+                  height: '580px',
+                  transform: 'scale(0.5)',
+                  transformOrigin: 'top center',
+                  position: 'absolute',
+                  top: 0,
+                  left: '50%',
+                  marginLeft: '-162.5px',
+                }}>
+                  <iframe
+                    src={`https://www.tiktok.com/embed/v2/${videoId}`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      border: 'none',
+                    }}
+                    allowFullScreen
+                    allow="encrypted-media"
+                  />
+                </div>
               </div>
 
               {/* Right side — confirmation */}
