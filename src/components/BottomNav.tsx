@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from 'lucide-react';
-import defaultAvatar from '@/assets/default-avatar.png';
+
 
 interface BottomNavProps {
   variant?: 'light' | 'dark';
@@ -134,7 +134,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
         >
           {user ? (
             <Avatar className={`h-6 w-6 ${isActive('/user/profile') ? 'ring-2 ring-black' : ''}`}>
-              <AvatarImage src={profile?.avatar_url || defaultAvatar} alt={firstName} />
+              {profile?.avatar_url && <AvatarImage src={profile.avatar_url} alt={firstName} />}
               <AvatarFallback
                 className={`text-[10px] font-medium ${
                   isDark ? 'bg-white/20 text-white' : 'bg-black/10 text-black'
