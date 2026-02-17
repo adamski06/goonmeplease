@@ -21,10 +21,30 @@ interface InActionCardProps {
 }
 
 const statusConfig = {
-  pending_review: { label: 'Under Review', color: 'text-amber-600', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.3)', icon: Clock },
-  approved: { label: 'Approved', color: 'text-emerald-600', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.3)', icon: CheckCircle },
-  denied: { label: 'Denied', color: 'text-red-500', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.3)', icon: Clock },
-  paid: { label: 'Paid', color: 'text-emerald-600', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.3)', icon: CheckCircle },
+  pending_review: {
+    label: 'Under Review',
+    gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)',
+    border: 'rgba(252,211,77,0.5)',
+    icon: Clock,
+  },
+  approved: {
+    label: 'Approved',
+    gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
+    border: 'rgba(52,211,153,0.5)',
+    icon: CheckCircle,
+  },
+  denied: {
+    label: 'Denied',
+    gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)',
+    border: 'rgba(252,165,165,0.5)',
+    icon: Clock,
+  },
+  paid: {
+    label: 'Paid',
+    gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
+    border: 'rgba(52,211,153,0.5)',
+    icon: CheckCircle,
+  },
 };
 
 const InActionCard: React.FC<InActionCardProps> = ({ submission, onClick }) => {
@@ -62,13 +82,17 @@ const InActionCard: React.FC<InActionCardProps> = ({ submission, onClick }) => {
         </div>
       </div>
 
-      {/* Status badge */}
+      {/* Status badge - glassy pill */}
       <div
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full flex-shrink-0"
-        style={{ background: status.bg, border: `1px solid ${status.border}` }}
+        style={{
+          background: status.gradient,
+          border: `1px solid ${status.border}`,
+          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
+        }}
       >
-        <StatusIcon className={`h-3 w-3 ${status.color}`} />
-        <span className={`text-[10px] font-semibold font-montserrat ${status.color}`}>{status.label}</span>
+        <span className="text-[10px] font-semibold text-white/80 font-montserrat">Status:</span>
+        <span className="text-[10px] font-bold text-white font-montserrat">{status.label}</span>
       </div>
     </button>
   );

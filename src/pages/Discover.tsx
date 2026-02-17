@@ -140,9 +140,10 @@ const Discover: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search campaigns..."
-              className="w-full h-10 pl-10 pr-4 rounded-full text-sm text-black placeholder:text-black/35 outline-none border border-black/8 transition-all focus:border-black/20"
+              className="w-full h-10 pl-10 pr-4 rounded-full text-sm text-black placeholder:text-black/35 outline-none transition-all focus:border-black/15"
               style={{
-                background: 'rgba(0,0,0,0.05)',
+                background: 'rgba(0,0,0,0.04)',
+                border: '1px solid rgba(0,0,0,0.06)',
               }}
             />
           </div>
