@@ -97,7 +97,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div
                 className="flex-shrink-0 rounded-xl overflow-hidden"
                 style={{
-                  width: '40%',
+                  width: '50%',
                   height: '360px',
                   border: '1px solid rgba(0,0,0,0.06)',
                 }}
@@ -105,7 +105,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                 <iframe
                   src={`https://www.tiktok.com/embed/v2/${videoId}`}
                   style={{
-                    width: '260%',
+                    width: '340%',
                     height: '750px',
                     border: 'none',
                     transform: 'scale(0.48)',
