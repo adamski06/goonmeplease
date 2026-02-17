@@ -91,7 +91,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
               <div style={{
                 transform: 'scale(0.75)',
                 transformOrigin: 'top center',
-                height: '470px',
+                height: '525px',
                 overflow: 'hidden',
                 borderRadius: '12px',
               }}>
@@ -99,7 +99,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
                   src={`https://www.tiktok.com/embed/v2/${videoId}`}
                   style={{
                     width: '325px',
-                    height: '580px',
+                    height: '700px',
                     border: 'none',
                   }}
                   allowFullScreen
