@@ -7,13 +7,16 @@ import { useAuth } from '@/contexts/AuthContext';
 export function useFavorites() {
   const { user } = useAuth();
   const [favoriteCampaigns, setFavoriteCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
       setFavoriteCampaigns([]);
+      setLoading(false);
       return;
     }
     const fetchFavorites = async () => {
+      setLoading(true);
       const { data } = await supabase
         .from('favorites')
         .select('campaign_id')
@@ -23,9 +26,10 @@ export function useFavorites() {
         const campaigns = await fetchCampaignsByIds(ids);
         setFavoriteCampaigns(campaigns);
       }
+      setLoading(false);
     };
     fetchFavorites();
   }, [user]);
 
-  return favoriteCampaigns;
+  return { campaigns: favoriteCampaigns, loading };
 }
