@@ -49,36 +49,16 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
 
     setSubmitting(true);
     try {
-      // Extract TikTok username from URL for now (no account linking required)
+      // Extract TikTok username from URL
       const usernameMatch = tiktokUrl.match(/tiktok\.com\/@([^/]+)/);
       const tiktokUsername = usernameMatch ? usernameMatch[1] : 'unknown';
 
-      // Find or create a basic tiktok_accounts row so the FK is satisfied
-      let accountId: string;
-      const { data: existingAccounts } = await supabase
-        .from('tiktok_accounts')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1);
+      // Get or create tiktok account via security definer function
+      const { data: accountId, error: accountError } = await supabase
+        .rpc('get_or_create_tiktok_account', { p_tiktok_username: tiktokUsername });
 
-      if (existingAccounts && existingAccounts.length > 0) {
-        accountId = existingAccounts[0].id;
-      } else {
-        const { data: newAccount, error: accountError } = await supabase
-          .from('tiktok_accounts')
-          .insert({
-            user_id: user.id,
-            tiktok_user_id: tiktokUsername,
-            tiktok_username: tiktokUsername,
-            is_active: true,
-          })
-          .select('id')
-          .single();
-
-        if (accountError || !newAccount) {
-          throw accountError || new Error('Could not create TikTok account reference');
-        }
-        accountId = newAccount.id;
+      if (accountError || !accountId) {
+        throw accountError || new Error('Could not resolve TikTok account');
       }
 
       const { data: existing } = await supabase
