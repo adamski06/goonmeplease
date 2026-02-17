@@ -101,10 +101,10 @@ const Campaigns: React.FC = () => {
             />
           ))}
           {campaignsLoading && campaigns.length === 0 && (
-            <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start">
+            <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start bg-black">
               <div className="relative h-10 w-[140px] mb-6">
                 <div
-                  className="absolute inset-0 bg-white"
+                  className="absolute inset-0 bg-white/20"
                   style={{
                     WebkitMaskImage: `url(${jarlaLogo})`,
                     maskImage: `url(${jarlaLogo})`,
@@ -119,7 +119,7 @@ const Campaigns: React.FC = () => {
               </div>
               <div className="w-32 h-[3px] rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
                 <div
-                  className="h-full rounded-full bg-white/40"
+                  className="h-full rounded-full bg-white/20"
                   style={{ animation: 'expandCenter 0.5s ease-out forwards' }}
                 />
               </div>

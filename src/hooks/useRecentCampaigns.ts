@@ -16,18 +16,19 @@ export function addRecentCampaign(campaignId: string) {
   } catch {}
 }
 
-export function useRecentCampaigns(): Campaign[] {
+export function useRecentCampaigns(): { campaigns: Campaign[]; loading: boolean } {
   const [recentCampaigns, setRecentCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return;
+      if (!stored) { setLoading(false); return; }
       const ids: string[] = JSON.parse(stored);
-      if (ids.length === 0) return;
-      fetchCampaignsByIds(ids).then(setRecentCampaigns);
-    } catch {}
+      if (ids.length === 0) { setLoading(false); return; }
+      fetchCampaignsByIds(ids).then(c => { setRecentCampaigns(c); setLoading(false); });
+    } catch { setLoading(false); }
   }, []);
 
-  return recentCampaigns;
+  return { campaigns: recentCampaigns, loading };
 }

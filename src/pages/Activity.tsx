@@ -52,6 +52,32 @@ const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) =>
   </div>
 );
 
+const CampaignListSkeleton: React.FC<{ count: number }> = ({ count }) => (
+  <div className="space-y-2.5">
+    {Array.from({ length: count }).map((_, i) => (
+      <div
+        key={i}
+        className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 relative"
+        style={{
+          background: 'linear-gradient(180deg, #f0f0f0 0%, #e8e8e8 100%)',
+          border: '1.5px solid rgba(255,255,255,0.8)',
+        }}
+      >
+        <div className="absolute inset-0 skeleton-shimmer rounded-[28px]" />
+        <div className="w-14 h-14 rounded-[18px] bg-black/[0.06] flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="w-5 h-5 rounded-full bg-black/[0.06]" />
+            <div className="h-3 w-20 rounded-full bg-black/[0.06]" />
+          </div>
+          <div className="h-2.5 w-3/4 rounded-full bg-black/[0.06]" />
+        </div>
+        <div className="h-7 w-16 rounded-[14px] bg-black/[0.06] flex-shrink-0" />
+      </div>
+    ))}
+  </div>
+);
+
 const Activity: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -64,8 +90,8 @@ const Activity: React.FC = () => {
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
-  const recentCampaigns = useRecentCampaigns();
-  const favoriteCampaigns = useFavorites();
+  const { campaigns: recentCampaigns, loading: recentLoading } = useRecentCampaigns();
+  const { campaigns: favoriteCampaigns, loading: favoritesLoading } = useFavorites();
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
@@ -305,7 +331,9 @@ const Activity: React.FC = () => {
           </TabsList>
 
           <TabsContent value="recent" className="mt-3">
-            {recentCampaigns.length === 0 ? (
+            {recentLoading ? (
+              <CampaignListSkeleton count={3} />
+            ) : recentCampaigns.length === 0 ? (
               <div className="flex items-center justify-center px-6 py-10">
                 <p className="text-black/40 font-jakarta text-sm">No recent campaigns</p>
               </div>
@@ -329,7 +357,9 @@ const Activity: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="favourites" className="mt-3">
-            {favoriteCampaigns.length === 0 ? (
+            {favoritesLoading ? (
+              <CampaignListSkeleton count={3} />
+            ) : favoriteCampaigns.length === 0 ? (
               <div className="flex items-center justify-center px-6 py-10">
                 <p className="text-black/40 font-jakarta text-sm">No favourite campaigns</p>
               </div>
