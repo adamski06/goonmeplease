@@ -25,9 +25,18 @@ const Discover: React.FC = () => {
   const [isClosingDetail, setIsClosingDetail] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const featuredScrollRef = useRef<HTMLDivElement>(null);
   const savedScrollPosition = useRef<number>(0);
   const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
+
+  const filteredCampaigns = searchQuery.trim()
+    ? campaigns.filter(c =>
+        c.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : campaigns;
 
   const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
@@ -122,18 +131,18 @@ const Discover: React.FC = () => {
 
         <div className="px-3 pt-2 pb-1 bg-white">
           <div className="relative">
-            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black/60 z-10" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
             </svg>
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search campaigns..."
-              className="w-full h-10 pl-10 pr-4 rounded-full text-sm text-black placeholder:text-black/35 outline-none border border-white/60 transition-all focus:border-black/15"
+              className="w-full h-10 pl-10 pr-4 rounded-full text-sm text-black placeholder:text-black/35 outline-none border border-black/8 transition-all focus:border-black/20"
               style={{
-                background: 'rgba(0,0,0,0.04)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.04), 0 1px 0 rgba(255,255,255,0.6)',
+                background: 'rgba(0,0,0,0.05)',
               }}
             />
           </div>
@@ -168,7 +177,7 @@ const Discover: React.FC = () => {
               </div>
             ) : (
             <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-              {campaigns.map((campaign) => (
+              {filteredCampaigns.map((campaign) => (
                 <div
                   key={campaign.id}
                   onClick={() => handleSelectCampaign(campaign)}
@@ -219,9 +228,9 @@ const Discover: React.FC = () => {
                 <div className="animate-pulse text-black/40 text-sm">Loading...</div>
               </div>
             )}
-            {!campaignsLoading && campaigns.length === 0 && (
+            {!campaignsLoading && filteredCampaigns.length === 0 && (
               <div className="flex items-center justify-center py-20">
-                <p className="text-black/40 text-sm">No campaigns available</p>
+                <p className="text-black/40 text-sm">{searchQuery.trim() ? 'No campaigns found' : 'No campaigns available'}</p>
               </div>
             )}
           </div>
