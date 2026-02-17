@@ -95,7 +95,7 @@ const Activity: React.FC = () => {
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const { campaigns: recentCampaigns, loading: recentLoading } = useRecentCampaigns();
-  const { campaigns: favoriteCampaigns, loading: favoritesLoading } = useFavorites();
+  const { campaigns: favoriteCampaigns, loading: favoritesLoading, favoriteIds, toggleFavorite } = useFavorites();
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
@@ -388,8 +388,8 @@ const Activity: React.FC = () => {
           campaign={selectedRecentCampaign}
           isClosing={isClosingOverlay}
           onClose={handleCloseOverlay}
-          isSaved={false}
-          onToggleSave={() => {}}
+          isSaved={favoriteIds.includes(selectedRecentCampaign.id)}
+          onToggleSave={(e) => { e.stopPropagation(); toggleFavorite(selectedRecentCampaign.id); }}
         />
       )}
 
