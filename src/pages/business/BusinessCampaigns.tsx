@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Eye, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Plus, Eye, Clock, CheckCircle2, XCircle, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -75,6 +76,18 @@ const BusinessCampaigns: React.FC = () => {
     };
     load();
   }, []);
+
+  const handleDelete = async (e: React.MouseEvent, campaignId: string) => {
+    e.stopPropagation();
+    if (!confirm('Are you sure you want to delete this campaign? This cannot be undone.')) return;
+    const { error } = await supabase.from('campaigns').delete().eq('id', campaignId);
+    if (error) {
+      toast.error('Failed to delete campaign');
+      return;
+    }
+    setCampaigns(prev => prev.filter(c => c.id !== campaignId));
+    toast.success('Campaign deleted');
+  };
 
   const getStatus = (c: CampaignItem) => {
     if (c.status && statusConfig[c.status]) return c.status;
@@ -183,6 +196,13 @@ const BusinessCampaigns: React.FC = () => {
                       <p className="text-[10px] text-muted-foreground">Budget</p>
                     </div>
                   )}
+                  <button
+                    onClick={(e) => handleDelete(e, c.id)}
+                    className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
+                    title="Delete campaign"
+                  >
+                    <Trash2 className="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+                  </button>
                 </div>
               </button>
             );

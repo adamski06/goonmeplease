@@ -28,8 +28,12 @@ const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) =>
           boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0">
-          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" />
+        <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+          {campaign.logo ? (
+            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-lg font-bold text-black/30">{campaign.brand?.[0]}</span>
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
