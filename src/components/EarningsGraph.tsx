@@ -38,7 +38,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
       <h4 className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider mb-4">
         Earnings
       </h4>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center py-4">
         {/* Views (left) */}
         <div className="flex flex-col items-end" style={{ gap: 84 }}>
           <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
@@ -50,7 +50,7 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         </div>
 
         {/* Clean vertical bar (center) */}
-        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: 8, marginBottom: 8 }}>
+        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -40 }}>
           {/* Track */}
           <div className="absolute inset-0 rounded-full bg-white/10" />
           {/* Fill from bottom */}
