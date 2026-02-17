@@ -7,11 +7,16 @@ import { Settings, Pencil, X } from 'lucide-react';
 import ProfileEditContent from '@/components/ProfileEditContent';
 import WithdrawContent from '@/components/WithdrawContent';
 import BottomNav from '@/components/BottomNav';
+import { supabase } from '@/integrations/supabase/client';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+
+  // Creator stats
+  const [totalVideos, setTotalVideos] = useState(0);
+  const [totalViews, setTotalViews] = useState(0);
 
   // Earnings expansion state
   const earningsRef = useRef<HTMLDivElement>(null);
@@ -103,6 +108,22 @@ const ProfilePage: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
+  // Fetch real creator stats from submissions
+  useEffect(() => {
+    if (!user) return;
+    const fetchStats = async () => {
+      const { data } = await supabase
+        .from('content_submissions')
+        .select('current_views')
+        .eq('creator_id', user.id);
+      if (data) {
+        setTotalVideos(data.length);
+        setTotalViews(data.reduce((sum, s) => sum + (s.current_views || 0), 0));
+      }
+    };
+    fetchStats();
+  }, [user]);
+
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
   if (loading) {
@@ -181,11 +202,11 @@ const ProfilePage: React.FC = () => {
             {/* Stats - centered */}
             <div className="flex gap-8 mt-4">
               <div className="flex flex-col items-center">
-                <span className="text-lg font-bold text-black font-montserrat">0</span>
+                <span className="text-lg font-bold text-black font-montserrat">{totalVideos}</span>
                 <span className="text-xs text-black/50 font-jakarta">Videos made</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-lg font-bold text-black font-montserrat">0</span>
+                <span className="text-lg font-bold text-black font-montserrat">{totalViews.toLocaleString()}</span>
                 <span className="text-xs text-black/50 font-jakarta">Total views</span>
               </div>
             </div>
