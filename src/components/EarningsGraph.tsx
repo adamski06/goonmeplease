@@ -34,46 +34,31 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const firstViewsFraction = Math.min(points[0].views / maxViews, 1);
 
   return (
-    <div className="my-6">
-      <div className="flex items-stretch gap-0">
+    <div className="my-8">
+      <div className="flex items-stretch">
         {/* Views (left) */}
-        <div className="flex flex-col items-end justify-between pr-4 py-1" style={{ gap: 40 }}>
-          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[52px]">
+        <div className="flex flex-col items-end justify-between pr-4">
+          <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
             {formatViews(points[1].views)} views
           </span>
-          <span className="text-sm font-semibold text-white/50 font-montserrat leading-[52px]">
+          <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
             {formatViews(points[0].views)} views
           </span>
         </div>
 
-        {/* Progress bar (center) */}
-        <div className="flex flex-col items-center justify-between py-1" style={{ gap: 40 }}>
-          {/* Bar aligned to pill centers */}
-          <div className="relative flex flex-col items-center" style={{ gap: 40 }}>
-            {/* Background bar track */}
-            <div
-              className="absolute left-1/2 -translate-x-1/2 w-[4px] rounded-full bg-white/10"
-              style={{ top: 0, bottom: 0 }}
-            />
-            {/* Filled portion — from bottom up to first tier */}
-            <div
-              className="absolute left-1/2 -translate-x-1/2 w-[4px] rounded-full bg-white/35"
-              style={{ bottom: 0, height: `${firstViewsFraction * 100}%` }}
-            />
-
-            {/* Top dot */}
-            <div className="relative z-10 w-3 h-3 rounded-full bg-white/20 border border-white/30 flex items-center justify-center" style={{ height: 52 }}>
-              <div className="w-2 h-2 rounded-full bg-white/40" />
-            </div>
-            {/* Bottom dot */}
-            <div className="relative z-10 w-3 h-3 rounded-full bg-white/30 border border-white/40 flex items-center justify-center" style={{ height: 52 }}>
-              <div className="w-2 h-2 rounded-full bg-white/50" />
-            </div>
-          </div>
+        {/* Clean vertical bar (center) */}
+        <div className="relative flex flex-col justify-between" style={{ width: 4 }}>
+          {/* Track */}
+          <div className="absolute inset-0 rounded-full bg-white/10" />
+          {/* Fill from bottom */}
+          <div
+            className="absolute bottom-0 left-0 right-0 rounded-full bg-white/35"
+            style={{ height: `${firstViewsFraction * 100}%` }}
+          />
         </div>
 
         {/* Pills (right) */}
-        <div className="flex flex-col items-start justify-between pl-4 py-1" style={{ gap: 40 }}>
+        <div className="flex flex-col items-start justify-between pl-4" style={{ gap: 56 }}>
           <div
             className="rounded-full px-5 py-3 flex items-baseline gap-1"
             style={{
