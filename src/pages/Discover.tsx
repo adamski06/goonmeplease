@@ -120,10 +120,10 @@ const Discover: React.FC = () => {
           </div>
         </div>
 
-        <div className="px-4 py-3 bg-white">
+        <div className="px-3 pt-2 pb-1 bg-white">
           <div className="relative">
-            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
@@ -142,7 +142,7 @@ const Discover: React.FC = () => {
         <div
           ref={featuredScrollRef}
           onScroll={handleScroll}
-          className="relative flex-1 overflow-y-auto pt-4 pb-24 scrollbar-hide overscroll-contain"
+          className="relative flex-1 overflow-y-auto pt-2 pb-24 scrollbar-hide overscroll-contain"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
         >
           <div className="px-3">
