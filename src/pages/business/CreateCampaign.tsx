@@ -173,7 +173,7 @@ const CreateCampaign: React.FC = () => {
           {step === 0 && (
             <div className="space-y-5">
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Campaign title *</Label>
+                <Label className="text-sm font-medium">Ad title *</Label>
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
               </div>
               <div className="space-y-1.5">
@@ -404,7 +404,7 @@ const CreateCampaign: React.FC = () => {
               {/* Summary card */}
               <div className="rounded-xl border border-border bg-card p-6 space-y-4">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Campaign</p>
+                  <p className="text-xs text-muted-foreground mb-1">Ad</p>
                   <p className="text-sm font-semibold text-foreground">{title}</p>
                 </div>
                 {description && (
