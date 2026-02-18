@@ -31,12 +31,12 @@ const CreateCampaign: React.FC = () => {
 
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
-  const [customBudget, setCustomBudget] = useState('');
+
+  const [customBudgetSlider, setCustomBudgetSlider] = useState(5000);
 
   const getBudget = () => {
     if (budgetOption === 'preset') return 10000;
-    const parsed = parseInt(customBudget.replace(/\D/g, ''), 10);
-    return isNaN(parsed) ? 0 : Math.max(parsed, 10000);
+    return customBudgetSlider;
   };
 
   const getBudgetAmount = () => getBudget();
@@ -47,14 +47,7 @@ const CreateCampaign: React.FC = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
     if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null;
-    if (step === 3) {
-      if (budgetOption === 'preset') return true;
-      if (budgetOption === 'custom') {
-        const val = parseInt(customBudget.replace(/\D/g, ''), 10);
-        return !isNaN(val) && val >= 10000;
-      }
-      return false;
-    }
+    if (step === 3) return budgetOption !== null;
     if (step === 4) return true;
     return false;
   };
@@ -328,57 +321,71 @@ const CreateCampaign: React.FC = () => {
                 <button
                   onClick={() => setBudgetOption('preset')}
                   className="flex-1 rounded-2xl border p-6 flex flex-col gap-2 text-left transition-all"
-                  style={budgetOption === 'preset' ? {
-                    background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                    boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                    border: '1px solid hsl(142 60% 45% / 0.5)',
-                  } : {
-                    background: 'transparent',
-                    border: '1px solid hsl(var(--border))',
+                  style={{
+                    minHeight: '230px',
+                    ...(budgetOption === 'preset' ? {
+                      background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                      boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
+                      border: '1px solid hsl(142 60% 45% / 0.5)',
+                    } : {
+                      background: 'transparent',
+                      border: '1px solid hsl(var(--border))',
+                    })
                   }}
                 >
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Standard</p>
-                  <p className="text-4xl font-bold text-foreground">$10,000</p>
-                  <p className="text-xs text-muted-foreground mt-1">Fixed budget, ready to launch</p>
+                  <p className="text-4xl font-bold text-foreground mt-auto">$10,000</p>
+                  <p className="text-xs text-muted-foreground">Fixed budget, ready to launch</p>
                 </button>
 
                 {/* Custom node */}
                 <button
                   onClick={() => setBudgetOption('custom')}
                   className="flex-1 rounded-2xl border p-6 flex flex-col gap-2 text-left transition-all"
-                  style={budgetOption === 'custom' ? {
-                    background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                    boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                    border: '1px solid hsl(142 60% 45% / 0.5)',
-                  } : {
-                    background: 'transparent',
-                    border: '1px solid hsl(var(--border))',
+                  style={{
+                    minHeight: '230px',
+                    ...(budgetOption === 'custom' ? {
+                      background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                      boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
+                      border: '1px solid hsl(142 60% 45% / 0.5)',
+                    } : {
+                      background: 'transparent',
+                      border: '1px solid hsl(var(--border))',
+                    })
                   }}
                 >
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Custom</p>
-                  <p className="text-4xl font-bold text-foreground">Custom</p>
-                  <p className="text-xs text-muted-foreground mt-1">Min. $10,000 USD</p>
+                  <p className="text-4xl font-bold text-foreground mt-auto">${customBudgetSlider.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">Min. $5,000 USD</p>
                 </button>
               </div>
 
+              {/* Custom slider — shown below when custom is selected */}
               {budgetOption === 'custom' && (
-                <div className="rounded-2xl border border-border bg-card p-6 space-y-3">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Enter amount</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-muted-foreground">$</span>
-                    <input
-                      type="number"
-                      min={10000}
-                      placeholder="10,000"
-                      value={customBudget}
-                      onChange={(e) => setCustomBudget(e.target.value)}
-                      className="flex-1 bg-transparent text-3xl font-bold text-foreground outline-none placeholder:text-muted-foreground/40"
-                    />
-                    <span className="text-sm text-muted-foreground">USD</span>
+                <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Adjust budget</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-foreground">${customBudgetSlider.toLocaleString()}</span>
+                    <span className="text-base text-muted-foreground">USD</span>
                   </div>
-                  {customBudget && parseInt(customBudget.replace(/\D/g, ''), 10) < 10000 && (
-                    <p className="text-xs text-destructive">Minimum budget is $10,000</p>
-                  )}
+                  <div className="w-full">
+                    <input
+                      type="range"
+                      min={5000}
+                      max={100000}
+                      step={5000}
+                      value={customBudgetSlider}
+                      onChange={(e) => setCustomBudgetSlider(Number(e.target.value))}
+                      className="rate-slider w-full"
+                      style={{
+                        background: `linear-gradient(to right, hsl(0 0% 10%) ${((customBudgetSlider - 5000) / 95000) * 100}%, hsl(var(--border)) ${((customBudgetSlider - 5000) / 95000) * 100}%)`,
+                      }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>$5,000</span>
+                    <span>$100,000</span>
+                  </div>
                 </div>
               )}
             </div>
