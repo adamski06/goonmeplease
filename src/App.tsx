@@ -27,6 +27,7 @@ import BusinessSettings from "./pages/business/BusinessSettings";
 import BusinessDeals from "./pages/business/BusinessDeals";
 import CreateDeal from "./pages/business/CreateDeal";
 import BusinessDealDetail from "./pages/business/BusinessDealDetail";
+import CreateCampaignChooser from "./pages/business/CreateCampaignChooser";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
                 <Route path="/business/auth" element={<BusinessAuth />} />
                 <Route path="/business" element={<BusinessLayout />}>
                   <Route index element={<BusinessProfile />} />
+                  <Route path="new" element={<CreateCampaignChooser />} />
                   <Route path="edit-profile" element={<BusinessEditProfile />} />
                   <Route path="campaigns" element={<BusinessCampaigns />} />
                   <Route path="campaigns/new" element={<CreateCampaign />} />

@@ -1,26 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, Megaphone, LogOut, Settings, Handshake } from 'lucide-react';
+import { User, LogOut, Settings, Plus, Megaphone, Handshake } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 
-const navItems = [
-  { label: 'Profile', icon: User, path: '/business' },
-  { label: 'Spread', icon: Megaphone, path: '/business/campaigns' },
-  { label: 'Deals', icon: Handshake, path: '/business/deals' },
-];
+interface SidebarItem {
+  id: string;
+  title: string;
+  type: 'spread' | 'deal';
+}
 
 const BusinessSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
+  const [items, setItems] = useState<SidebarItem[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const [{ data: campaigns }, { data: deals }] = await Promise.all([
+        supabase
+          .from('campaigns')
+          .select('id, title')
+          .eq('business_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('deals')
+          .select('id, title')
+          .eq('business_id', user.id)
+          .order('created_at', { ascending: false }),
+      ]);
+
+      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' }));
+      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' }));
+      setItems([...spreadItems, ...dealItems]);
+    };
+    load();
+  }, [location.pathname]); // re-fetch when route changes (e.g. after creating a campaign)
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/business/auth');
   };
+
+  const getItemPath = (item: SidebarItem) =>
+    item.type === 'spread' ? `/business/campaigns/${item.id}` : `/business/deals/${item.id}`;
+
+  const spreadItems = items.filter(i => i.type === 'spread');
+  const dealItems = items.filter(i => i.type === 'deal');
 
   return (
     <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0 sticky top-0">
@@ -35,28 +67,93 @@ const BusinessSidebar: React.FC = () => {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path || (item.path !== '/business' && location.pathname.startsWith(item.path));
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                  : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-              )}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </button>
-          );
-        })}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4 min-h-0">
+        {/* Profile */}
+        <button
+          onClick={() => navigate('/business')}
+          className={cn(
+            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+            location.pathname === '/business'
+              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+          )}
+        >
+          <User className="h-4 w-4 shrink-0" />
+          Profile
+        </button>
+
+        {/* New Campaign */}
+        <button
+          onClick={() => navigate('/business/new')}
+          className={cn(
+            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+            location.pathname === '/business/new'
+              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+          )}
+        >
+          <Plus className="h-4 w-4 shrink-0" />
+          New Campaign
+        </button>
+
+        {/* Spread campaigns */}
+        {spreadItems.length > 0 && (
+          <div className="space-y-0.5">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+              Spread
+            </p>
+            {spreadItems.map(item => {
+              const path = getItemPath(item);
+              const isActive = location.pathname === path;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => navigate(path)}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left',
+                    isActive
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+                      : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+                  )}
+                >
+                  <Megaphone className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{item.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Deal items */}
+        {dealItems.length > 0 && (
+          <div className="space-y-0.5">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+              Deals
+            </p>
+            {dealItems.map(item => {
+              const path = getItemPath(item);
+              const isActive = location.pathname === path;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => navigate(path)}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left',
+                    isActive
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
+                      : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+                  )}
+                >
+                  <Handshake className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{item.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </nav>
 
-      {/* Settings (above border) */}
+      {/* Settings */}
       <div className="px-3 pb-2 space-y-1">
         <button
           onClick={() => navigate('/business/settings')}
