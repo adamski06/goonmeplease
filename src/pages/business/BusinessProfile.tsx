@@ -96,9 +96,9 @@ const BusinessProfile: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Profile header — no card node */}
-      <div className="mb-10 flex items-center gap-6">
-        {/* Logo / Avatar */}
-        <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+      <div className="mb-10 flex items-start gap-6">
+        {/* Logo / Avatar — 1.5x bigger */}
+        <div className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
               src={profile.logo_url}
@@ -117,18 +117,19 @@ const BusinessProfile: React.FC = () => {
               }}
             />
           ) : null}
-          <span className={`text-4xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
+          <span className={`text-5xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
         </div>
 
         {/* Info */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 pt-1">
           <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-1">
             {profile?.company_name || 'Your Company'}
           </h1>
           {profile?.description && (
             <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2 mb-3">{profile.description}</p>
           )}
-          <div className="flex items-center gap-3 flex-wrap">
+          {/* Buttons + stats all in one row */}
+          <div className="flex items-center gap-4 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
               className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
@@ -152,27 +153,27 @@ const BusinessProfile: React.FC = () => {
                 {profile.website.replace(/^https?:\/\//, '')}
               </a>
             )}
-          </div>
-        </div>
-
-        {/* Stats — right side, numbers centered above labels */}
-        <div className="flex items-center gap-6 shrink-0 pr-2">
-          <div className="flex flex-col items-center gap-0.5">
-            <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
-            <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <span className="text-xl font-bold text-foreground font-montserrat leading-none">
-              {totalViews >= 1000000
-                ? `${(totalViews / 1000000).toFixed(1)}M`
-                : totalViews >= 1000
-                ? `${(totalViews / 1000).toFixed(1)}K`
-                : totalViews}
-            </span>
-            <span className="text-xs text-muted-foreground font-jakarta">Views</span>
+            {/* Stats inline */}
+            <div className="flex items-center gap-4 ml-1">
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
+                <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="text-xl font-bold text-foreground font-montserrat leading-none">
+                  {totalViews >= 1000000
+                    ? `${(totalViews / 1000000).toFixed(1)}M`
+                    : totalViews >= 1000
+                    ? `${(totalViews / 1000).toFixed(1)}K`
+                    : totalViews}
+                </span>
+                <span className="text-xs text-muted-foreground font-jakarta">Views</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
 
 
       {/* Ads section */}
