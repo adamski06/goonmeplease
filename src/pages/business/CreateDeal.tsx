@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
 
-const steps = ['Ad Details', 'Target Audience', 'Rate', 'Budget', 'Review'];
+const steps = ['Ad Details', 'Target Audience', 'Rate', 'Review'];
 
 const CreateDeal: React.FC = () => {
   const [step, setStep] = useState(0);
@@ -29,21 +29,11 @@ const CreateDeal: React.FC = () => {
   const [ratePerThousand, setRatePerThousand] = useState(1);
   const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50 | null>(null);
 
-  // Step 4: Budget
-  const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
-  const [customBudgetSlider, setCustomBudgetSlider] = useState(5000);
-
-  const getBudget = () => {
-    if (budgetOption === 'preset') return 10000;
-    return customBudgetSlider;
-  };
-
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
     if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null;
-    if (step === 3) return budgetOption !== null;
-    if (step === 4) return true;
+    if (step === 3) return true;
     return false;
   };
 
@@ -95,7 +85,7 @@ const CreateDeal: React.FC = () => {
       category: audience.trim() || null,
       rate_per_view: ratePerThousand,
       max_earnings: maxPayoutPerCreator,
-      total_budget: getBudget(),
+      total_budget: null,
       is_active: true,
       status: 'active',
     });
@@ -115,7 +105,7 @@ const CreateDeal: React.FC = () => {
     title,
     description,
     deadline: '',
-    total_budget: getBudget(),
+    total_budget: 0,
   };
 
   return (
@@ -282,96 +272,11 @@ const CreateDeal: React.FC = () => {
             </div>
           )}
 
-          {/* Step 4: Budget */}
+          {/* Step 4: Review */}
           {step === 3 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(2)} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your budget</h2>
-              </div>
-
-              <div className="flex gap-3">
-                {/* $10,000 preset node */}
-                <button
-                  onClick={() => setBudgetOption('preset')}
-                  className="flex-1 rounded-2xl border p-6 flex flex-col gap-2 text-left transition-all"
-                  style={{
-                    minHeight: '230px',
-                    ...(budgetOption === 'preset' ? {
-                      background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                      boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                      border: '1px solid hsl(142 60% 45% / 0.5)',
-                    } : {
-                      background: 'transparent',
-                      border: '1px solid hsl(var(--border))',
-                    })
-                  }}
-                >
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Standard</p>
-                  <p className="text-4xl font-bold text-foreground mt-auto">$10,000</p>
-                  <p className="text-xs text-muted-foreground">Fixed budget, ready to launch</p>
-                </button>
-
-                {/* Custom node */}
-                <button
-                  onClick={() => setBudgetOption('custom')}
-                  className="flex-1 rounded-2xl border p-6 flex flex-col gap-2 text-left transition-all"
-                  style={{
-                    minHeight: '230px',
-                    ...(budgetOption === 'custom' ? {
-                      background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                      boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                      border: '1px solid hsl(142 60% 45% / 0.5)',
-                    } : {
-                      background: 'transparent',
-                      border: '1px solid hsl(var(--border))',
-                    })
-                  }}
-                >
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Custom</p>
-                  <p className="text-4xl font-bold text-foreground mt-auto">${customBudgetSlider.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">Min. $5,000 USD</p>
-                </button>
-              </div>
-
-              {/* Custom slider */}
-              {budgetOption === 'custom' && (
-                <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Adjust budget</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-foreground">${customBudgetSlider.toLocaleString()}</span>
-                    <span className="text-base text-muted-foreground">USD</span>
-                  </div>
-                  <div className="w-full">
-                    <input
-                      type="range"
-                      min={5000}
-                      max={100000}
-                      step={5000}
-                      value={customBudgetSlider}
-                      onChange={(e) => setCustomBudgetSlider(Number(e.target.value))}
-                      className="rate-slider w-full"
-                      style={{
-                        background: `linear-gradient(to right, hsl(0 0% 10%) ${((customBudgetSlider - 5000) / 95000) * 100}%, hsl(var(--border)) ${((customBudgetSlider - 5000) / 95000) * 100}%)`,
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>$5,000</span>
-                    <span>$100,000</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Step 5: Review */}
-          {step === 4 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(3)} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => setStep(2)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Review & Launch</h2>
@@ -403,10 +308,6 @@ const CreateDeal: React.FC = () => {
                   <p className="text-xs text-muted-foreground mb-1">Max payout per creator</p>
                   <p className="text-sm font-semibold text-foreground">${maxPayoutPerCreator}</p>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Budget</p>
-                  <p className="text-sm font-semibold text-foreground">${getBudget().toLocaleString()}</p>
-                </div>
               </div>
 
               {/* How Deals work */}
@@ -415,23 +316,15 @@ const CreateDeal: React.FC = () => {
                 <p>Creators browse your deal and send a collaboration request. You review and accept or reject each one. Accepted creators then film and post their content.</p>
               </div>
 
-              {/* Price breakdown */}
+              {/* Rate breakdown */}
               <div className="rounded-xl border border-border bg-card p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Rate per 1,000 views</span>
                   <span className="text-sm font-medium text-foreground">${ratePerThousand}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Max payout per creator</span>
-                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Deal budget</span>
-                  <span className="text-sm font-medium text-foreground">${getBudget().toLocaleString()}</span>
-                </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-foreground">Total</span>
-                  <span className="text-lg font-bold text-foreground">${getBudget().toLocaleString()}</span>
+                  <span className="text-sm font-semibold text-foreground">Max payout per creator</span>
+                  <span className="text-lg font-bold text-foreground">${maxPayoutPerCreator}</span>
                 </div>
               </div>
             </div>
