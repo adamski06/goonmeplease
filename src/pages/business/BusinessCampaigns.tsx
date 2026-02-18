@@ -147,7 +147,12 @@ const BusinessCampaigns: React.FC = () => {
               <button
                 key={c.id}
                 onClick={() => navigate(`/business/campaigns/${c.id}`)}
-                className="w-full flex items-center gap-4 rounded-xl border border-border bg-card p-4 hover:bg-accent/50 transition-colors text-left"
+                className="w-full flex items-center gap-4 rounded-[28px] p-4 transition-all text-left active:scale-[0.99]"
+                style={{
+                  background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+                  border: '1px solid hsl(var(--border))',
+                  boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
+                }}
               >
                 {/* Thumbnail bubble – matches mobile app card style */}
                 <div className="h-[72px] w-[46px] rounded-[14px] bg-muted shrink-0 overflow-hidden shadow-sm border border-border">
