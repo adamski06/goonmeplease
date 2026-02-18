@@ -444,7 +444,7 @@ const CreateDeal: React.FC = () => {
                 size="sm"
                 onClick={() => setStep(step + 1)}
                 disabled={!canProceed()}
-                className="gap-1.5 bg-foreground hover:bg-foreground/90 text-background"
+                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Continue
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -454,7 +454,7 @@ const CreateDeal: React.FC = () => {
                 size="sm"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="gap-1.5 bg-foreground hover:bg-foreground/90 text-background"
+                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {isSubmitting ? 'Launching...' : 'Launch Deal'}
                 <ArrowRight className="h-3.5 w-3.5" />
