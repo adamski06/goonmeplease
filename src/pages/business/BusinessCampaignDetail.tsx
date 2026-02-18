@@ -195,7 +195,15 @@ const BusinessCampaignDetail: React.FC = () => {
           { label: 'Submissions', value: submissions.length, icon: Users },
           { label: 'Total Views', value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews, icon: Eye },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-border bg-card p-4">
+          <div
+            key={stat.label}
+            className="rounded-[28px] p-5"
+            style={{
+              background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+              border: '1px solid hsl(var(--border))',
+              boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
+            }}
+          >
             <div className="flex items-center gap-2 mb-2">
               <stat.icon className="h-4 w-4 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">{stat.label}</span>
