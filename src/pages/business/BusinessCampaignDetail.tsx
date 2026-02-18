@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, Heart, CheckCircle2, Clock, XCircle, Users, Upload, Image } from 'lucide-react';
+import { ArrowLeft, Eye, CheckCircle2, Clock, Users, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -187,7 +187,6 @@ const BusinessCampaignDetail: React.FC = () => {
               {statusLabel}
             </Badge>
           </div>
-          {campaign.description && <p className="text-sm text-muted-foreground mt-1">{campaign.description}</p>}
           <p className="text-xs text-muted-foreground mt-2">Created {new Date(campaign.created_at).toLocaleDateString()}</p>
         </div>
       </div>
@@ -209,6 +208,14 @@ const BusinessCampaignDetail: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Description above guidelines */}
+      {campaign.description && (
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-foreground mb-2">Description</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">{campaign.description}</p>
+        </div>
+      )}
 
       {/* Guidelines */}
       {campaign.guidelines && campaign.guidelines.length > 0 && (
@@ -233,60 +240,51 @@ const BusinessCampaignDetail: React.FC = () => {
             <p className="text-sm text-muted-foreground">No submissions yet</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {submissions.map((sub) => (
-              <div key={sub.id} className="rounded-xl border border-border bg-card overflow-hidden">
-                {/* TikTok Embed */}
+              <div
+                key={sub.id}
+                className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col"
+                style={{ width: '210px', justifySelf: 'center' }}
+              >
+                {/* TikTok Embed — sized to match the embed */}
                 {sub.tiktok_video_id ? (
-                  <div className="flex justify-center bg-muted/30 py-4">
-                    <div style={{
-                      transform: 'scale(0.65)',
-                      transformOrigin: 'top center',
-                      height: '490px',
-                      marginBottom: '-120px',
-                      overflow: 'hidden',
-                      borderRadius: '12px',
-                    }}>
-                      <iframe
-                        src={`https://www.tiktok.com/embed/v2/${sub.tiktok_video_id}`}
-                        style={{
-                          width: '325px',
-                          height: '720px',
-                          border: 'none',
-                        }}
-                        allowFullScreen
-                        allow="encrypted-media"
-                      />
-                    </div>
+                  <div
+                    className="overflow-hidden rounded-t-2xl bg-muted/20"
+                    style={{ width: '210px', height: '375px', flexShrink: 0 }}
+                  >
+                    <iframe
+                      src={`https://www.tiktok.com/embed/v2/${sub.tiktok_video_id}`}
+                      style={{
+                        width: '325px',
+                        height: '580px',
+                        border: 'none',
+                        transform: 'scale(0.645)',
+                        transformOrigin: 'top left',
+                        display: 'block',
+                      }}
+                      allowFullScreen
+                      allow="encrypted-media"
+                    />
                   </div>
                 ) : (
-                  <div className="bg-muted/30 p-6 text-center">
-                    <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline truncate block">
+                  <div className="bg-muted/30 p-4 text-center" style={{ height: '375px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline truncate block">
                       {sub.tiktok_video_url}
                     </a>
                   </div>
                 )}
 
-                {/* Stats bar */}
-                <div className="p-4 flex items-center justify-between border-t border-border">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5">
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-semibold text-foreground">{(sub.current_views || 0).toLocaleString()}</span>
-                      <span className="text-xs text-muted-foreground">views</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Heart className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-semibold text-foreground">{(sub.current_likes || 0).toLocaleString()}</span>
-                      <span className="text-xs text-muted-foreground">likes</span>
-                    </div>
+                {/* Stats bar — views only */}
+                <div className="px-3 py-2.5 flex items-center justify-between border-t border-border" style={{ width: '210px' }}>
+                  <div className="flex items-center gap-1.5">
+                    <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-sm font-semibold text-foreground">{(sub.current_views || 0).toLocaleString()}</span>
+                    <span className="text-xs text-muted-foreground">views</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</span>
-                    <Badge variant="outline" className={`text-[10px] ${statusBadge[sub.status] || ''}`}>
-                      {sub.status.replace('_', ' ')}
-                    </Badge>
-                  </div>
+                  <Badge variant="outline" className={`text-[10px] ${statusBadge[sub.status] || ''}`}>
+                    {sub.status.replace('_', ' ')}
+                  </Badge>
                 </div>
               </div>
             ))}
