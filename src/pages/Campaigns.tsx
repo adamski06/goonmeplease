@@ -10,8 +10,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import CampaignCard from '@/components/CampaignCard';
+import DealCard from '@/components/DealCard';
 import BottomNav from '@/components/BottomNav';
 import { useCampaigns } from '@/hooks/useCampaigns';
+import { useDeals } from '@/hooks/useDeals';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const Campaigns: React.FC = () => {
@@ -21,7 +23,26 @@ const Campaigns: React.FC = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns(2);
+  const { deals } = useDeals();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Interleave deals into campaign feed (1 deal every 3 campaigns)
+  const feedItems = React.useMemo(() => {
+    const items: Array<{ type: 'campaign' | 'deal'; data: typeof campaigns[0] }> = [];
+    let dealIdx = 0;
+    campaigns.forEach((campaign, i) => {
+      items.push({ type: 'campaign', data: campaign });
+      // Insert a deal after every 3rd campaign
+      if ((i + 1) % 3 === 0 && dealIdx < deals.length) {
+        items.push({ type: 'deal', data: deals[dealIdx++] });
+      }
+    });
+    // Append remaining deals
+    while (dealIdx < deals.length) {
+      items.push({ type: 'deal', data: deals[dealIdx++] });
+    }
+    return items;
+  }, [campaigns, deals]);
 
   // Fetch user favorites
   useEffect(() => {
@@ -91,15 +112,24 @@ const Campaigns: React.FC = () => {
           className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {campaigns.map((campaign) => (
-            <CampaignCard
-              key={campaign.id}
-              campaign={campaign}
-              isSaved={favorites.includes(campaign.id)}
-              onSelect={() => {}}
-              onToggleFavorite={toggleFavorite}
-            />
-          ))}
+          {feedItems.map((item) =>
+            item.type === 'deal' ? (
+              <DealCard
+                key={`deal-${item.data.id}`}
+                deal={item.data}
+                isSaved={false}
+                onToggleFavorite={() => {}}
+              />
+            ) : (
+              <CampaignCard
+                key={`campaign-${item.data.id}`}
+                campaign={item.data}
+                isSaved={favorites.includes(item.data.id)}
+                onSelect={() => {}}
+                onToggleFavorite={toggleFavorite}
+              />
+            )
+          )}
           {campaignsLoading && campaigns.length === 0 && (
             <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start bg-black">
               <div className="relative h-10 w-[140px] mb-6">
