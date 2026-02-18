@@ -225,13 +225,7 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Rate node */}
-              <div
-                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{
-                  background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                  boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
-                }}
-              >
+              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold text-foreground">${ratePerThousand.toFixed(1)}</span>
@@ -258,13 +252,7 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Max payout node */}
-              <div
-                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{
-                  background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                  boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
-                }}
-              >
+              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</p>
                 <div className="flex gap-3 flex-1 items-stretch">
                   {([10, 25, 50] as const).map((amount) => (
@@ -277,8 +265,9 @@ const CreateCampaign: React.FC = () => {
                         border: '1.5px solid hsl(217 80% 50%)',
                         color: 'hsl(0 0% 100%)',
                       } : {
-                        background: 'transparent',
-                        border: '1.5px solid hsl(var(--border))',
+                        background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+                        boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+                        border: '1px solid hsl(var(--border))',
                         color: 'hsl(var(--foreground))',
                       }}
                     >
