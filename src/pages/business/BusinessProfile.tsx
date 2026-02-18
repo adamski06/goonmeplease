@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Pencil, Settings, ExternalLink, Plus } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
+import tiktokIcon from '@/assets/tiktok-icon.png';
 
 interface BusinessProfileData {
   company_name: string;
@@ -161,9 +162,6 @@ const BusinessProfile: React.FC = () => {
             <p className="text-sm text-muted-foreground mt-2 max-w-md">{profile.description}</p>
           )}
 
-          {profile?.target_audience && (
-            <p className="text-xs text-muted-foreground/70 mt-1">Target: {profile.target_audience}</p>
-          )}
         </div>
       </div>
 
@@ -172,34 +170,70 @@ const BusinessProfile: React.FC = () => {
         <h2 className="text-base font-bold text-foreground font-montserrat mb-4">Campaigns</h2>
         <div className="border-t border-border pt-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* New Campaign card */}
             <button
               onClick={() => navigate('/business/campaigns/new')}
-              className="aspect-[9/14] rounded-[28px] border border-dashed border-border bg-card hover:bg-accent/50 flex flex-col items-center justify-center gap-2 transition-colors"
+              className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
+              style={{
+                background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+                border: '1.5px dashed hsl(var(--border))',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+              }}
             >
-              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+              <div
+                className="h-10 w-10 rounded-full flex items-center justify-center"
+                style={{
+                  background: 'hsl(var(--muted))',
+                  border: '1px solid hsl(var(--border))',
+                }}
+              >
                 <Plus className="h-5 w-5 text-muted-foreground" />
               </div>
-              <span className="text-sm text-muted-foreground">New Campaign</span>
+              <span className="text-sm font-medium text-muted-foreground font-jakarta">New Campaign</span>
             </button>
 
             {campaigns.map((c) => (
               <button
                 key={c.id}
                 onClick={() => navigate(`/business/campaigns/${c.id}`)}
-                className="aspect-[9/14] rounded-[28px] border border-border bg-card overflow-hidden flex flex-col text-left transition-colors hover:bg-accent/50"
+                className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col text-left transition-all active:scale-[0.98] relative"
+                style={{
+                  background: 'hsl(var(--card))',
+                  border: '1.5px solid hsl(var(--border))',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                }}
               >
+                {/* Cover image */}
                 {c.cover_image_url ? (
                   <img src={c.cover_image_url} alt="" className="flex-1 w-full object-cover" />
                 ) : (
-                  <div className="flex-1 bg-muted flex items-center justify-center">
-                    <span className="text-2xl font-bold text-muted-foreground/40 font-montserrat">
+                  <div
+                    className="flex-1 flex items-center justify-center"
+                    style={{ background: 'hsl(var(--muted))' }}
+                  >
+                    <span className="text-3xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.4)' }}>
                       {c.brand_name.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
-                <div className="p-3">
-                  <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
-                  <p className="text-xs text-muted-foreground">{c.brand_name}</p>
+
+                {/* Bottom node — mimics the mobile white node */}
+                <div
+                  className="px-4 pt-3 pb-4 flex-shrink-0"
+                  style={{
+                    background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+                    borderTop: '1px solid hsl(var(--border))',
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-1">
+                    {/* Status dot */}
+                    <span
+                      className="h-1.5 w-1.5 rounded-full flex-shrink-0"
+                      style={{ background: c.is_active ? 'hsl(142 70% 45%)' : 'hsl(var(--muted-foreground))' }}
+                    />
+                    <p className="text-xs font-bold text-foreground font-montserrat truncate">{c.brand_name}</p>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground font-jakarta line-clamp-2 leading-snug">{c.title}</p>
                 </div>
               </button>
             ))}
