@@ -225,14 +225,11 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Rate node */}
-              <div
-                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{ background: 'linear-gradient(180deg, hsl(217 100% 97%) 0%, hsl(217 100% 93%) 100%)' }}
-              >
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'hsl(217 60% 55%)' }}>Rate</p>
+              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold" style={{ color: 'hsl(217 80% 30%)' }}>${ratePerThousand.toFixed(1)}</span>
-                  <span className="text-base" style={{ color: 'hsl(217 60% 55%)' }}>/ 1,000 views</span>
+                  <span className="text-5xl font-bold text-foreground">${ratePerThousand.toFixed(1)}</span>
+                  <span className="text-base text-muted-foreground">/ 1,000 views</span>
                 </div>
                 <div className="w-full">
                   <input
@@ -244,22 +241,19 @@ const CreateCampaign: React.FC = () => {
                     onChange={(e) => setRatePerThousand(Number(e.target.value))}
                     className="rate-slider w-full"
                     style={{
-                      background: `linear-gradient(to right, hsl(217 80% 50%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(217 60% 80%) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
+                      background: `linear-gradient(to right, hsl(217 80% 50%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(var(--border)) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-xs" style={{ color: 'hsl(217 60% 55%)' }}>
+                <div className="flex justify-between text-xs text-muted-foreground">
                   <span>$0.50</span>
                   <span>$3.00</span>
                 </div>
               </div>
 
               {/* Max payout node */}
-              <div
-                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{ background: 'linear-gradient(180deg, hsl(217 100% 97%) 0%, hsl(217 100% 93%) 100%)' }}
-              >
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'hsl(217 60% 55%)' }}>Max payout per creator</p>
+              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</p>
                 <div className="flex gap-3 flex-1 items-stretch">
                   {([10, 25, 50] as const).map((amount) => (
                     <button
@@ -272,8 +266,8 @@ const CreateCampaign: React.FC = () => {
                         color: 'hsl(0 0% 100%)',
                       } : {
                         background: 'transparent',
-                        border: '1.5px solid hsl(217 60% 75%)',
-                        color: 'hsl(217 80% 40%)',
+                        border: '1.5px solid hsl(var(--border))',
+                        color: 'hsl(var(--foreground))',
                       }}
                     >
                       ${amount}
