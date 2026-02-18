@@ -122,32 +122,12 @@ const BusinessProfile: React.FC = () => {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-0.5">
+          <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-1">
             {profile?.company_name || 'Your Company'}
           </h1>
           {profile?.description && (
             <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2 mb-3">{profile.description}</p>
           )}
-
-          {/* Stats row — right after description */}
-          <div className="flex items-center gap-5 mb-3">
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
-              <span className="text-[11px] text-muted-foreground font-jakarta mt-0.5">Ads</span>
-            </div>
-            <div className="h-6 w-px bg-border" />
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-foreground font-montserrat leading-none">
-                {totalViews >= 1000000
-                  ? `${(totalViews / 1000000).toFixed(1)}M`
-                  : totalViews >= 1000
-                  ? `${(totalViews / 1000).toFixed(1)}K`
-                  : totalViews}
-              </span>
-              <span className="text-[11px] text-muted-foreground font-jakarta mt-0.5">Views</span>
-            </div>
-          </div>
-
           <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
@@ -174,7 +154,26 @@ const BusinessProfile: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Stats — right side, numbers centered above labels */}
+        <div className="flex items-center gap-6 shrink-0 pr-2">
+          <div className="flex flex-col items-center gap-0.5">
+            <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
+            <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <span className="text-xl font-bold text-foreground font-montserrat leading-none">
+              {totalViews >= 1000000
+                ? `${(totalViews / 1000000).toFixed(1)}M`
+                : totalViews >= 1000
+                ? `${(totalViews / 1000).toFixed(1)}K`
+                : totalViews}
+            </span>
+            <span className="text-xs text-muted-foreground font-jakarta">Views</span>
+          </div>
+        </div>
       </div>
+
 
       {/* Ads section */}
       <div>
