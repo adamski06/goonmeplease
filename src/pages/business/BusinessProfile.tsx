@@ -35,6 +35,8 @@ const BusinessProfile: React.FC = () => {
     fetchData();
   }, []);
 
+  const [totalViews, setTotalViews] = useState<number>(0);
+
   const fetchData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
@@ -48,7 +50,20 @@ const BusinessProfile: React.FC = () => {
       setProfile(profileRes.data);
     }
 
-    setCampaigns(campaignsRes.data || []);
+    const fetchedCampaigns = campaignsRes.data || [];
+    setCampaigns(fetchedCampaigns);
+
+    // Fetch total views across all submissions for this business's campaigns
+    if (fetchedCampaigns.length > 0) {
+      const campaignIds = fetchedCampaigns.map(c => c.id);
+      const { data: submissions } = await supabase
+        .from('content_submissions')
+        .select('current_views')
+        .in('campaign_id', campaignIds);
+      const views = (submissions || []).reduce((sum, s) => sum + (s.current_views || 0), 0);
+      setTotalViews(views);
+    }
+
     setLoading(false);
   };
 
@@ -80,15 +95,8 @@ const BusinessProfile: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* Profile header node — phone-ad style */}
-      <div
-        className="rounded-[32px] p-6 mb-10 flex items-center gap-6"
-        style={{
-          background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-          border: '1px solid hsl(var(--border))',
-          boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 4px 20px hsl(var(--foreground) / 0.05)',
-        }}
-      >
+      {/* Profile header — no card node */}
+      <div className="mb-10 flex items-center gap-6">
         {/* Logo / Avatar */}
         <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
@@ -118,15 +126,34 @@ const BusinessProfile: React.FC = () => {
             {profile?.company_name || 'Your Company'}
           </h1>
           {profile?.description && (
-            <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2">{profile.description}</p>
+            <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2 mb-3">{profile.description}</p>
           )}
 
-          <div className="flex items-center gap-3 mt-3 flex-wrap">
+          {/* Stats row — right after description */}
+          <div className="flex items-center gap-5 mb-3">
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
+              <span className="text-[11px] text-muted-foreground font-jakarta mt-0.5">Ads</span>
+            </div>
+            <div className="h-6 w-px bg-border" />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground font-montserrat leading-none">
+                {totalViews >= 1000000
+                  ? `${(totalViews / 1000000).toFixed(1)}M`
+                  : totalViews >= 1000
+                  ? `${(totalViews / 1000).toFixed(1)}K`
+                  : totalViews}
+              </span>
+              <span className="text-[11px] text-muted-foreground font-jakarta mt-0.5">Views</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
               className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
               style={{
-                background: 'hsl(var(--background))',
+                background: 'hsl(var(--muted))',
                 border: '1px solid hsl(var(--border))',
                 color: 'hsl(var(--foreground))',
               }}
@@ -147,20 +174,14 @@ const BusinessProfile: React.FC = () => {
             )}
           </div>
         </div>
-
-        {/* Campaign count pill */}
-        <div className="flex flex-col items-center shrink-0 pr-2">
-          <span className="text-2xl font-bold text-foreground font-montserrat">{campaigns.length}</span>
-          <span className="text-xs text-muted-foreground font-jakarta">Campaigns</span>
-        </div>
       </div>
 
-      {/* Campaigns section */}
+      {/* Ads section */}
       <div>
-        <h2 className="text-base font-bold text-foreground font-montserrat mb-4">Campaigns</h2>
+        <h2 className="text-base font-bold text-foreground font-montserrat mb-4">Ads</h2>
         <div className="border-t border-border pt-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {/* New Campaign card */}
+            {/* New Ad card */}
             <button
               onClick={() => navigate('/business/campaigns/new')}
               className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
