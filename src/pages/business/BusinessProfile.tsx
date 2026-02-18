@@ -90,7 +90,7 @@ const BusinessProfile: React.FC = () => {
         }}
       >
         {/* Logo / Avatar */}
-        <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+        <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
               src={profile.logo_url}
@@ -109,7 +109,7 @@ const BusinessProfile: React.FC = () => {
               }}
             />
           ) : null}
-          <span className={`text-3xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
+          <span className={`text-4xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
         </div>
 
         {/* Info */}
@@ -117,9 +117,6 @@ const BusinessProfile: React.FC = () => {
           <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-0.5">
             {profile?.company_name || 'Your Company'}
           </h1>
-          {profile?.industry && (
-            <p className="text-xs text-muted-foreground font-jakarta mb-2">{profile.industry}</p>
-          )}
           {profile?.description && (
             <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2">{profile.description}</p>
           )}
@@ -152,7 +149,7 @@ const BusinessProfile: React.FC = () => {
         </div>
 
         {/* Campaign count pill */}
-        <div className="flex flex-col items-center shrink-0">
+        <div className="flex flex-col items-center shrink-0 pr-2">
           <span className="text-2xl font-bold text-foreground font-montserrat">{campaigns.length}</span>
           <span className="text-xs text-muted-foreground font-jakarta">Campaigns</span>
         </div>
