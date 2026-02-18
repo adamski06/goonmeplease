@@ -241,7 +241,7 @@ const CreateCampaign: React.FC = () => {
                     onChange={(e) => setRatePerThousand(Number(e.target.value))}
                     className="rate-slider w-full"
                     style={{
-                      background: `linear-gradient(to right, hsl(217 80% 50%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(var(--border)) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
+                      background: `linear-gradient(to right, hsl(0 0% 10%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(var(--border)) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
                     }}
                   />
                 </div>
@@ -256,23 +256,39 @@ const CreateCampaign: React.FC = () => {
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</p>
                 <div className="flex gap-3 flex-1 items-stretch">
                   {([10, 25, 50] as const).map((amount) => (
-                    <button
-                      key={amount}
-                      onClick={() => setMaxPayoutPerCreator(maxPayoutPerCreator === amount ? null : amount)}
-                      className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
-                      style={maxPayoutPerCreator === amount ? {
-                        background: 'hsl(217 80% 50%)',
-                        border: '1.5px solid hsl(217 80% 50%)',
-                        color: 'hsl(0 0% 100%)',
-                      } : {
-                        background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                        boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
-                        border: '1px solid hsl(var(--border))',
-                        color: 'hsl(var(--foreground))',
-                      }}
-                    >
-                      ${amount}
-                    </button>
+                    <div key={amount} className="flex-1 relative flex flex-col">
+                      {amount === 25 && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                          <span
+                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                            style={{
+                              background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                              border: '1px solid hsl(142 60% 45% / 0.4)',
+                              color: 'hsl(142 60% 35%)',
+                              backdropFilter: 'blur(8px)',
+                            }}
+                          >
+                            Popular
+                          </span>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setMaxPayoutPerCreator(maxPayoutPerCreator === amount ? null : amount)}
+                        className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
+                        style={maxPayoutPerCreator === amount ? {
+                          background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                          boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
+                          border: '1px solid hsl(142 60% 45% / 0.5)',
+                          color: 'hsl(142 60% 30%)',
+                        } : {
+                          background: 'transparent',
+                          border: '1px solid hsl(var(--border))',
+                          color: 'hsl(var(--foreground))',
+                        }}
+                      >
+                        ${amount}
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
