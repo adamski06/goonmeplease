@@ -25,24 +25,18 @@ const CreateCampaign: React.FC = () => {
   // Step 2: Audience
   const [audience, setAudience] = useState('');
 
-  // Step 3: Budget package
-  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
-  const [customBudget, setCustomBudget] = useState('');
+  // Step 3: Pricing
+  const [ratePerThousand, setRatePerThousand] = useState(5); // USD per 1000 views
+  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50>(25);
 
-  const getBudgetAmount = () => {
-    if (selectedPackage === 'base') return 1000;
-    if (selectedPackage === 'pro') return 5000;
-    if (selectedPackage === 'custom' && customBudget) return parseFloat(customBudget);
-    return 0;
-  };
-
-  const getFee = () => getBudgetAmount() * 0.1;
-  const getTotal = () => getBudgetAmount() + getFee();
+  const getBudgetAmount = () => 0; // budget not used directly anymore
+  const getFee = () => 0;
+  const getTotal = () => 0;
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
-    if (step === 2) return selectedPackage !== null && (selectedPackage !== 'custom' || (customBudget && parseFloat(customBudget) > 0));
+    if (step === 2) return ratePerThousand > 0;
     if (step === 3) return true;
     return false;
   };
@@ -220,79 +214,63 @@ const CreateCampaign: React.FC = () => {
             </div>
           )}
 
-          {/* Step 3: Budget */}
+          {/* Step 3: Pricing */}
           {step === 2 && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="flex items-center gap-3 mb-2">
                 <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Choose your plan</h2>
+                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              <div className="flex flex-col gap-4">
-                {/* Base */}
-                <button
-                  onClick={() => { setSelectedPackage('base'); setCustomBudget(''); }}
-                  className={`rounded-xl border px-5 py-6 text-left transition-all flex items-center justify-between ${
-                    selectedPackage === 'base'
-                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
-                      : 'border-border hover:border-foreground/20'
-                  }`}
-                >
-                  <div>
-                    <div className="text-xs text-muted-foreground font-medium mb-1">Base</div>
-                    <div className="text-2xl font-bold text-foreground">$1,000</div>
-                  </div>
-                  <div className="text-2xl font-bold text-foreground">1,000,000 – 3,000,000 <span className="text-sm font-medium text-muted-foreground">views</span></div>
-                </button>
-
-                {/* Pro */}
-                <button
-                  onClick={() => { setSelectedPackage('pro'); setCustomBudget(''); }}
-                  className={`rounded-xl border px-5 py-6 text-left transition-all relative flex items-center justify-between ${
-                    selectedPackage === 'pro'
-                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
-                      : 'border-border hover:border-foreground/20'
-                  }`}
-                >
-                  <div className="absolute -top-2 right-3 text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium">Popular</div>
-                  <div>
-                    <div className="text-xs text-muted-foreground font-medium mb-1">Pro</div>
-                    <div className="text-2xl font-bold text-foreground">$5,000</div>
-                  </div>
-                  <div className="text-2xl font-bold text-foreground">5,000,000 – 15,000,000 <span className="text-sm font-medium text-muted-foreground">views</span></div>
-                </button>
-
-                {/* Custom */}
-                <button
-                  onClick={() => setSelectedPackage('custom')}
-                  className={`rounded-xl border px-5 py-6 text-left transition-all flex items-center justify-between ${
-                    selectedPackage === 'custom'
-                      ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500/30'
-                      : 'border-border hover:border-foreground/20'
-                  }`}
-                >
-                  <div>
-                    <div className="text-xs text-muted-foreground font-medium mb-1">Custom</div>
-                    <div className="text-2xl font-bold text-foreground">Custom</div>
-                  </div>
-                  <div className="text-sm text-muted-foreground">You set the budget, we deliver the views</div>
-                </button>
-              </div>
-
-              {selectedPackage === 'custom' && (
-                <div className="space-y-1.5 pt-2">
-                  <Label className="text-sm font-medium">Your budget (USD)</Label>
-                  <Input
-                    type="number"
-                    value={customBudget}
-                    onChange={(e) => setCustomBudget(e.target.value)}
-                    placeholder="Enter amount"
-                    className="h-10"
-                  />
+              {/* Rate node */}
+              <div
+                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
+                style={{ background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.4) 100%)' }}
+              >
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Rate</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-foreground">${ratePerThousand}</span>
+                  <span className="text-base text-muted-foreground">/ 1,000 views</span>
                 </div>
-              )}
+                <input
+                  type="range"
+                  min={1}
+                  max={50}
+                  step={1}
+                  value={ratePerThousand}
+                  onChange={(e) => setRatePerThousand(Number(e.target.value))}
+                  className="w-full accent-foreground cursor-pointer"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>$1</span>
+                  <span>$50</span>
+                </div>
+              </div>
+
+              {/* Max payout node */}
+              <div
+                className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
+                style={{ background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.4) 100%)' }}
+              >
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Max payout per creator</p>
+                <div className="flex gap-3 flex-1 items-stretch">
+                  {([10, 25, 50] as const).map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => setMaxPayoutPerCreator(amount)}
+                      className={`flex-1 rounded-xl border flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold ${
+                        maxPayoutPerCreator === amount
+                          ? 'border-foreground bg-foreground text-background'
+                          : 'border-border text-foreground hover:border-foreground/40'
+                      }`}
+                    >
+                      ${amount}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
@@ -325,20 +303,24 @@ const CreateCampaign: React.FC = () => {
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Plan</p>
-                  <p className="text-sm font-semibold text-foreground capitalize">{selectedPackage}</p>
+                  <p className="text-xs text-muted-foreground mb-1">Rate</p>
+                  <p className="text-sm font-semibold text-foreground">${ratePerThousand} / 1,000 views</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Max payout per creator</p>
+                  <p className="text-sm font-semibold text-foreground">${maxPayoutPerCreator}</p>
                 </div>
               </div>
 
               {/* Price breakdown */}
               <div className="rounded-xl border border-border bg-card p-6 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Campaign budget</span>
-                  <span className="text-sm font-medium text-foreground">${getBudgetAmount().toLocaleString()}</span>
+                  <span className="text-sm text-muted-foreground">Rate per 1,000 views</span>
+                  <span className="text-sm font-medium text-foreground">${ratePerThousand}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Jarla service fee (10%)</span>
-                  <span className="text-sm font-medium text-foreground">${getFee().toLocaleString()}</span>
+                  <span className="text-sm text-muted-foreground">Max payout per creator</span>
+                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Total</span>
