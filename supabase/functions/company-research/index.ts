@@ -22,7 +22,7 @@ Response format:
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
     "brand_values": "e.g. Sustainability, authenticity, inclusivity",
-    "logo_url": "Direct URL to the company's official logo. Use the format https://www.google.com/s2/favicons?domain=domain.com&sz=128 based on the website domain. If you know the website domain, ALWAYS provide a logo_url."
+    "logo_url": "Use Clearbit Logo API for high-resolution logos: https://logo.clearbit.com/domain.com — replace domain.com with the actual company domain. This returns a full-quality PNG. ALWAYS provide this if you know the website domain."
   }
 }
 
@@ -31,7 +31,7 @@ Rules:
 - Research the company from its name alone. Guess the website if needed.
 - Keep the message field SHORT — 1 sentence, max 15 words.
 - NEVER list or repeat the profile fields in your message.
-- ALWAYS include logo_url using https://www.google.com/s2/favicons?domain=DOMAIN&sz=128 format based on the company website.`;
+- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format (e.g. https://logo.clearbit.com/nike.com).`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {

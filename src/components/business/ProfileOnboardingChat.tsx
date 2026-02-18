@@ -87,10 +87,11 @@ const ProfileCard: React.FC<{
 
   const displayData = doneTyping ? editData : typed;
   const logoUrl = data.logo_url;
-  // Derive a fallback logo from website domain
+  // Use Clearbit for high-res logos, fallback to Google favicons
   const websiteDomain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+  const clearbitLogo = websiteDomain ? `https://logo.clearbit.com/${websiteDomain}` : null;
   const fallbackLogo = websiteDomain ? `https://www.google.com/s2/favicons?domain=${websiteDomain}&sz=128` : null;
-  const effectiveLogo = logoUrl || fallbackLogo;
+  const effectiveLogo = logoUrl || clearbitLogo;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
@@ -108,8 +109,10 @@ const ProfileCard: React.FC<{
               className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
-                // Try fallback if primary fails
-                if (fallbackLogo && img.src !== fallbackLogo) {
+                // Cascade: clearbit -> google favicon -> hide
+                if (clearbitLogo && img.src !== clearbitLogo) {
+                  img.src = clearbitLogo;
+                } else if (fallbackLogo && img.src !== fallbackLogo) {
                   img.src = fallbackLogo;
                 } else {
                   img.style.display = 'none';
@@ -292,7 +295,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     const dataToSave = { ...editedData };
     if (!dataToSave.logo_url && dataToSave.website) {
       const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-      if (domain) dataToSave.logo_url = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+      if (domain) dataToSave.logo_url = `https://logo.clearbit.com/${domain}`;
     }
 
     try {
