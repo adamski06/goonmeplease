@@ -96,8 +96,8 @@ const BusinessProfile: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Profile header — no card node */}
-      <div className="mb-10 flex items-start gap-6">
-        {/* Logo / Avatar — 1.5x bigger */}
+      <div className="mb-10 flex items-center gap-6">
+        {/* Logo / Avatar */}
         <div className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
@@ -121,15 +121,15 @@ const BusinessProfile: React.FC = () => {
         </div>
 
         {/* Info */}
-        <div className="flex-1 min-w-0 pt-1">
+        <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-1">
             {profile?.company_name || 'Your Company'}
           </h1>
           {profile?.description && (
             <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2 mb-3">{profile.description}</p>
           )}
-          {/* Buttons + stats all in one row */}
-          <div className="flex items-center gap-4 flex-wrap">
+          {/* Buttons + stats all in one row with equal spacing */}
+          <div className="flex items-center gap-6 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
               className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
@@ -153,22 +153,20 @@ const BusinessProfile: React.FC = () => {
                 {profile.website.replace(/^https?:\/\//, '')}
               </a>
             )}
-            {/* Stats inline */}
-            <div className="flex items-center gap-4 ml-1">
-              <div className="flex flex-col items-center gap-0.5">
-                <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
-                <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
-              </div>
-              <div className="flex flex-col items-center gap-0.5">
-                <span className="text-xl font-bold text-foreground font-montserrat leading-none">
-                  {totalViews >= 1000000
-                    ? `${(totalViews / 1000000).toFixed(1)}M`
-                    : totalViews >= 1000
-                    ? `${(totalViews / 1000).toFixed(1)}K`
-                    : totalViews}
-                </span>
-                <span className="text-xs text-muted-foreground font-jakarta">Views</span>
-              </div>
+            {/* Stats — same gap as between other items */}
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
+              <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
+            </div>
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-xl font-bold text-foreground font-montserrat leading-none">
+                {totalViews >= 1000000
+                  ? `${(totalViews / 1000000).toFixed(1)}M`
+                  : totalViews >= 1000
+                  ? `${(totalViews / 1000).toFixed(1)}K`
+                  : totalViews}
+              </span>
+              <span className="text-xs text-muted-foreground font-jakarta">Views</span>
             </div>
           </div>
         </div>
@@ -183,7 +181,7 @@ const BusinessProfile: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {/* New Ad card */}
             <button
-              onClick={() => navigate('/business/campaigns/new')}
+              onClick={() => navigate('/business/new')}
               className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
@@ -200,7 +198,7 @@ const BusinessProfile: React.FC = () => {
               >
                 <Plus className="h-5 w-5 text-muted-foreground" />
               </div>
-              <span className="text-sm font-medium text-muted-foreground font-jakarta">New Campaign</span>
+              <span className="text-sm font-medium text-muted-foreground font-jakarta">New Ad</span>
             </button>
 
             {campaigns.map((c) => (
