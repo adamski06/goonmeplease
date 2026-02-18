@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, Megaphone, LogOut, Settings, Sun, Moon } from 'lucide-react';
+import { User, Megaphone, LogOut, Settings } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -55,27 +55,24 @@ const BusinessSidebar: React.FC = () => {
         })}
       </nav>
 
-      {/* Settings + Sign out */}
-      <div className="px-3 py-4 border-t border-border space-y-1">
-        {/* Theme toggle row */}
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
-        >
-          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-        </button>
-
-        {/* Settings */}
+      {/* Settings (above border) */}
+      <div className="px-3 pb-2 space-y-1">
         <button
           onClick={() => navigate('/business/settings')}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+          className={cn(
+            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+            location.pathname === '/business/settings'
+              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+          )}
         >
           <Settings className="h-4 w-4" />
           Settings
         </button>
+      </div>
 
-        {/* Sign out */}
+      {/* Sign out */}
+      <div className="px-3 py-4 border-t border-border space-y-1">
         <button
           onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-destructive transition-colors"

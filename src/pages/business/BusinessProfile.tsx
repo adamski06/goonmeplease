@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { Pencil, Settings, ExternalLink, Plus } from 'lucide-react';
+
+import { Pencil, ExternalLink, Plus } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 
 interface BusinessProfileData {
   company_name: string;
@@ -30,7 +28,7 @@ const BusinessProfile: React.FC = () => {
   const [profile, setProfile] = useState<BusinessProfileData | null>(null);
   const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,9 +80,17 @@ const BusinessProfile: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* Profile header */}
-      <div className="flex items-start gap-8 mb-10">
-        <div className="h-36 w-36 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
+      {/* Profile header node — phone-ad style */}
+      <div
+        className="rounded-[32px] p-6 mb-10 flex items-center gap-6"
+        style={{
+          background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+          border: '1px solid hsl(var(--border))',
+          boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 4px 20px hsl(var(--foreground) / 0.05)',
+        }}
+      >
+        {/* Logo / Avatar */}
+        <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
               src={profile.logo_url}
@@ -103,41 +109,34 @@ const BusinessProfile: React.FC = () => {
               }}
             />
           ) : null}
-          <span className={`text-5xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
+          <span className={`text-3xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
         </div>
 
-        <div className="flex-1 pt-2">
-          <h1 className="text-2xl font-bold text-foreground font-montserrat mb-2">
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-0.5">
             {profile?.company_name || 'Your Company'}
           </h1>
+          {profile?.industry && (
+            <p className="text-xs text-muted-foreground font-jakarta mb-2">{profile.industry}</p>
+          )}
+          {profile?.description && (
+            <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2">{profile.description}</p>
+          )}
 
-          <div className="flex items-center gap-2 mb-3">
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 text-xs h-8"
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            <button
               onClick={() => navigate('/business/edit-profile')}
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
+              style={{
+                background: 'hsl(var(--background))',
+                border: '1px solid hsl(var(--border))',
+                color: 'hsl(var(--foreground))',
+              }}
             >
               <Pencil className="h-3 w-3" />
               Edit Profile
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <Settings className="h-3.5 w-3.5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-1.5 text-xs h-8 border-dashed text-muted-foreground"
-              onClick={async () => {
-                const { data: { user } } = await supabase.auth.getUser();
-                if (user) {
-                  await supabase.from('business_profiles').update({ onboarding_complete: false }).eq('user_id', user.id);
-                  setShowOnboarding(true);
-                }
-              }}
-            >
-              🔧 Dev: Reset Onboarding
-            </Button>
+            </button>
             {profile?.website && (
               <a
                 href={profile.website.startsWith('http') ? profile.website : `https://${profile.website}`}
@@ -150,18 +149,12 @@ const BusinessProfile: React.FC = () => {
               </a>
             )}
           </div>
+        </div>
 
-          <div className="flex items-center gap-6 text-sm mb-1">
-            <span><strong className="text-foreground">{campaigns.length}</strong> <span className="text-muted-foreground">Campaigns</span></span>
-            {profile?.industry && (
-              <span className="text-muted-foreground">{profile.industry}</span>
-            )}
-          </div>
-
-          {profile?.description && (
-            <p className="text-sm text-muted-foreground mt-2 max-w-md">{profile.description}</p>
-          )}
-
+        {/* Campaign count pill */}
+        <div className="flex flex-col items-center shrink-0">
+          <span className="text-2xl font-bold text-foreground font-montserrat">{campaigns.length}</span>
+          <span className="text-xs text-muted-foreground font-jakarta">Campaigns</span>
         </div>
       </div>
 

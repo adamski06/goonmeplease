@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Bell, Shield, HelpCircle, FileText, LogOut, Pencil } from 'lucide-react';
+import { Bell, Shield, HelpCircle, FileText, LogOut, Pencil, Sun, Moon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 const BusinessSettings: React.FC = () => {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -34,6 +36,35 @@ const BusinessSettings: React.FC = () => {
       <h1 className="text-2xl font-bold text-foreground font-montserrat mb-8">Settings</h1>
 
       <div className="space-y-6">
+        {/* Appearance */}
+        <div>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-2 px-1">
+            Appearance
+          </h3>
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{
+              background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+              border: '1px solid hsl(var(--border))',
+              boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+            }}
+          >
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-accent/40 transition-colors"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <Moon className="h-5 w-5 text-muted-foreground" />
+              )}
+              <span className="text-sm text-foreground font-jakarta flex-1">
+                {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              </span>
+            </button>
+          </div>
+        </div>
+
         {sections.map((section) => (
           <div key={section.title}>
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-2 px-1">
