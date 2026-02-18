@@ -293,6 +293,125 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_applications: {
+        Row: {
+          created_at: string
+          creator_id: string
+          current_likes: number | null
+          current_views: number | null
+          deal_id: string
+          id: string
+          message: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          status: string
+          tiktok_video_id: string | null
+          tiktok_video_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id: string
+          current_likes?: number | null
+          current_views?: number | null
+          deal_id: string
+          id?: string
+          message?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          tiktok_video_id?: string | null
+          tiktok_video_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          current_likes?: number | null
+          current_views?: number | null
+          deal_id?: string
+          id?: string
+          message?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          tiktok_video_id?: string | null
+          tiktok_video_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_applications_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals: {
+        Row: {
+          brand_logo_url: string | null
+          brand_name: string
+          business_id: string
+          category: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          guidelines: string[] | null
+          id: string
+          is_active: boolean | null
+          max_earnings: number | null
+          product_visibility: string | null
+          rate_per_view: number | null
+          status: string | null
+          title: string
+          total_budget: number | null
+          updated_at: string
+          video_length: string | null
+        }
+        Insert: {
+          brand_logo_url?: string | null
+          brand_name: string
+          business_id: string
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          guidelines?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          max_earnings?: number | null
+          product_visibility?: string | null
+          rate_per_view?: number | null
+          status?: string | null
+          title: string
+          total_budget?: number | null
+          updated_at?: string
+          video_length?: string | null
+        }
+        Update: {
+          brand_logo_url?: string | null
+          brand_name?: string
+          business_id?: string
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          guidelines?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          max_earnings?: number | null
+          product_visibility?: string | null
+          rate_per_view?: number | null
+          status?: string | null
+          title?: string
+          total_budget?: number | null
+          updated_at?: string
+          video_length?: string | null
+        }
+        Relationships: []
+      }
       earnings: {
         Row: {
           amount: number

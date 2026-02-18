@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Eye, Clock, CheckCircle2, XCircle, Trash2 } from 'lucide-react';
+import { Plus, Clock, CheckCircle2, XCircle, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-interface CampaignItem {
+interface DealItem {
   id: string;
   title: string;
   brand_name: string;
@@ -18,11 +18,10 @@ interface CampaignItem {
   description: string | null;
 }
 
-interface CampaignStats {
-  campaign_id: string;
-  submissions: number;
-  approved: number;
-  total_views: number;
+interface DealStats {
+  deal_id: string;
+  applications: number;
+  accepted: number;
 }
 
 const statusConfig: Record<string, { label: string; icon: React.ElementType; className: string }> = {
@@ -31,9 +30,9 @@ const statusConfig: Record<string, { label: string; icon: React.ElementType; cla
   ended: { label: 'Ended', icon: XCircle, className: 'bg-muted text-muted-foreground border-border' },
 };
 
-const BusinessCampaigns: React.FC = () => {
-  const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
-  const [stats, setStats] = useState<Record<string, CampaignStats>>({});
+const BusinessDeals: React.FC = () => {
+  const [deals, setDeals] = useState<DealItem[]>([]);
+  const [stats, setStats] = useState<Record<string, DealStats>>({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -43,30 +42,28 @@ const BusinessCampaigns: React.FC = () => {
       if (!user) return;
 
       const { data: rows } = await supabase
-        .from('campaigns')
+        .from('deals')
         .select('id, title, brand_name, cover_image_url, is_active, status, total_budget, created_at, description')
         .eq('business_id', user.id)
         .order('created_at', { ascending: false });
 
-      setCampaigns(rows || []);
+      setDeals(rows || []);
 
-      // Fetch submission stats for each campaign
       if (rows && rows.length > 0) {
         const ids = rows.map(r => r.id);
-        const { data: subs } = await supabase
-          .from('content_submissions')
-          .select('campaign_id, status, current_views')
-          .in('campaign_id', ids);
+        const { data: apps } = await supabase
+          .from('deal_applications')
+          .select('deal_id, status')
+          .in('deal_id', ids);
 
-        if (subs) {
-          const grouped: Record<string, CampaignStats> = {};
-          for (const s of subs) {
-            if (!grouped[s.campaign_id]) {
-              grouped[s.campaign_id] = { campaign_id: s.campaign_id, submissions: 0, approved: 0, total_views: 0 };
+        if (apps) {
+          const grouped: Record<string, DealStats> = {};
+          for (const a of apps) {
+            if (!grouped[a.deal_id]) {
+              grouped[a.deal_id] = { deal_id: a.deal_id, applications: 0, accepted: 0 };
             }
-            grouped[s.campaign_id].submissions++;
-            if (s.status === 'approved' || s.status === 'paid') grouped[s.campaign_id].approved++;
-            grouped[s.campaign_id].total_views += s.current_views || 0;
+            grouped[a.deal_id].applications++;
+            if (a.status === 'accepted') grouped[a.deal_id].accepted++;
           }
           setStats(grouped);
         }
@@ -77,21 +74,21 @@ const BusinessCampaigns: React.FC = () => {
     load();
   }, []);
 
-  const handleDelete = async (e: React.MouseEvent, campaignId: string) => {
+  const handleDelete = async (e: React.MouseEvent, dealId: string) => {
     e.stopPropagation();
-    if (!confirm('Are you sure you want to delete this campaign? This cannot be undone.')) return;
-    const { error } = await supabase.from('campaigns').delete().eq('id', campaignId);
+    if (!confirm('Are you sure you want to delete this deal? This cannot be undone.')) return;
+    const { error } = await supabase.from('deals').delete().eq('id', dealId);
     if (error) {
-      toast.error('Failed to delete campaign');
+      toast.error('Failed to delete deal');
       return;
     }
-    setCampaigns(prev => prev.filter(c => c.id !== campaignId));
-    toast.success('Campaign deleted');
+    setDeals(prev => prev.filter(d => d.id !== dealId));
+    toast.success('Deal deleted');
   };
 
-  const getStatus = (c: CampaignItem) => {
-    if (c.status && statusConfig[c.status]) return c.status;
-    return c.is_active ? 'active' : 'ended';
+  const getStatus = (d: DealItem) => {
+    if (d.status && statusConfig[d.status]) return d.status;
+    return d.is_active ? 'active' : 'ended';
   };
 
   if (loading) {
@@ -106,47 +103,47 @@ const BusinessCampaigns: React.FC = () => {
     <div className="max-w-5xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-foreground font-montserrat">Spread</h1>
-          <p className="text-sm text-muted-foreground mt-1">{campaigns.length} spread{campaigns.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-bold text-foreground font-montserrat">Deals</h1>
+          <p className="text-sm text-muted-foreground mt-1">{deals.length} deal{deals.length !== 1 ? 's' : ''}</p>
         </div>
         <Button
-          onClick={() => navigate('/business/campaigns/new')}
+          onClick={() => navigate('/business/deals/new')}
           className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Plus className="h-4 w-4" />
-          New Spread
+          New Deal
         </Button>
       </div>
 
-      {campaigns.length === 0 ? (
+      {deals.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
             <Plus className="h-7 w-7 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold text-foreground mb-1">No spreads yet</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-1">No deals yet</h3>
           <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-            Create your first spread and start getting UGC content from creators.
+            Create a deal and let creators request to collaborate with your brand.
           </p>
           <Button
-            onClick={() => navigate('/business/campaigns/new')}
+            onClick={() => navigate('/business/deals/new')}
             className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
             <Plus className="h-4 w-4" />
-            Create Spread
+            Create Deal
           </Button>
         </div>
       ) : (
         <div className="space-y-3">
-          {campaigns.map((c) => {
-            const status = getStatus(c);
+          {deals.map((d) => {
+            const status = getStatus(d);
             const cfg = statusConfig[status] || statusConfig.active;
             const StatusIcon = cfg.icon;
-            const s = stats[c.id];
+            const s = stats[d.id];
 
             return (
               <button
-                key={c.id}
-                onClick={() => navigate(`/business/campaigns/${c.id}`)}
+                key={d.id}
+                onClick={() => navigate(`/business/deals/${d.id}`)}
                 className="w-full flex items-center gap-4 rounded-[28px] p-4 transition-all text-left active:scale-[0.99]"
                 style={{
                   background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
@@ -154,14 +151,14 @@ const BusinessCampaigns: React.FC = () => {
                   boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
                 }}
               >
-                {/* Thumbnail bubble – matches mobile app card style */}
+                {/* Thumbnail */}
                 <div className="h-[72px] w-[46px] rounded-[14px] bg-muted shrink-0 overflow-hidden shadow-sm border border-border">
-                  {c.cover_image_url ? (
-                    <img src={c.cover_image_url} alt="" className="h-full w-full object-cover" />
+                  {d.cover_image_url ? (
+                    <img src={d.cover_image_url} alt="" className="h-full w-full object-cover" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center bg-gradient-to-b from-muted to-muted/80">
                       <span className="text-xs font-bold text-muted-foreground/40 font-montserrat">
-                        {c.brand_name.charAt(0).toUpperCase()}
+                        {d.brand_name.charAt(0).toUpperCase()}
                       </span>
                     </div>
                   )}
@@ -170,41 +167,35 @@ const BusinessCampaigns: React.FC = () => {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <h3 className="text-sm font-semibold text-foreground truncate">{c.title}</h3>
+                    <h3 className="text-sm font-semibold text-foreground truncate">{d.title}</h3>
                     <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 shrink-0 ${cfg.className}`}>
                       <StatusIcon className="h-3 w-3 mr-1" />
                       {cfg.label}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">{c.description || 'No description'}</p>
+                  <p className="text-xs text-muted-foreground truncate">{d.description || 'No description'}</p>
                 </div>
 
                 {/* Stats */}
                 <div className="flex items-center gap-6 shrink-0">
                   <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">{s?.submissions || 0}</p>
-                    <p className="text-[10px] text-muted-foreground">Submissions</p>
+                    <p className="text-sm font-semibold text-foreground">{s?.applications || 0}</p>
+                    <p className="text-[10px] text-muted-foreground">Requests</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">{s?.approved || 0}</p>
-                    <p className="text-[10px] text-muted-foreground">Approved</p>
+                    <p className="text-sm font-semibold text-foreground">{s?.accepted || 0}</p>
+                    <p className="text-[10px] text-muted-foreground">Accepted</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-semibold text-foreground">
-                      {s?.total_views ? (s.total_views >= 1000 ? `${(s.total_views / 1000).toFixed(1)}k` : s.total_views) : 0}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">Views</p>
-                  </div>
-                  {c.total_budget && (
+                  {d.total_budget && (
                     <div className="text-center">
-                      <p className="text-sm font-semibold text-foreground">${c.total_budget.toLocaleString()}</p>
+                      <p className="text-sm font-semibold text-foreground">${d.total_budget.toLocaleString()}</p>
                       <p className="text-[10px] text-muted-foreground">Budget</p>
                     </div>
                   )}
                   <button
-                    onClick={(e) => handleDelete(e, c.id)}
+                    onClick={(e) => handleDelete(e, d.id)}
                     className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
-                    title="Delete campaign"
+                    title="Delete deal"
                   >
                     <Trash2 className="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
                   </button>
@@ -218,4 +209,4 @@ const BusinessCampaigns: React.FC = () => {
   );
 };
 
-export default BusinessCampaigns;
+export default BusinessDeals;
