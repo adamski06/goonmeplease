@@ -601,3 +601,35 @@
   );
   animation: shimmer 1.8s ease-in-out infinite;
 }
+
+/* Campaign pricing slider - flat bar, no rounded edges */
+.rate-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.rate-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: hsl(217 80% 50%);
+  cursor: pointer;
+  border: 2px solid hsl(0 0% 100%);
+  box-shadow: 0 1px 4px hsl(217 80% 30% / 0.4);
+}
+
+.rate-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: hsl(217 80% 50%);
+  cursor: pointer;
+  border: 2px solid hsl(0 0% 100%);
+  box-shadow: 0 1px 4px hsl(217 80% 30% / 0.4);
+}

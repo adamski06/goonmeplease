@@ -26,8 +26,8 @@ const CreateCampaign: React.FC = () => {
   const [audience, setAudience] = useState('');
 
   // Step 3: Pricing
-  const [ratePerThousand, setRatePerThousand] = useState(5); // USD per 1000 views
-  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50>(25);
+  const [ratePerThousand, setRatePerThousand] = useState(1); // USD per 1000 views
+  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50 | null>(null);
 
   const getBudgetAmount = () => 0; // budget not used directly anymore
   const getFee = () => 0;
@@ -36,7 +36,7 @@ const CreateCampaign: React.FC = () => {
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
-    if (step === 2) return ratePerThousand > 0;
+    if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null;
     if (step === 3) return true;
     return false;
   };
@@ -227,44 +227,54 @@ const CreateCampaign: React.FC = () => {
               {/* Rate node */}
               <div
                 className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{ background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.4) 100%)' }}
+                style={{ background: 'linear-gradient(180deg, hsl(217 100% 97%) 0%, hsl(217 100% 93%) 100%)' }}
               >
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Rate</p>
+                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'hsl(217 60% 55%)' }}>Rate</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold text-foreground">${ratePerThousand}</span>
-                  <span className="text-base text-muted-foreground">/ 1,000 views</span>
+                  <span className="text-5xl font-bold" style={{ color: 'hsl(217 80% 30%)' }}>${ratePerThousand.toFixed(1)}</span>
+                  <span className="text-base" style={{ color: 'hsl(217 60% 55%)' }}>/ 1,000 views</span>
                 </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={50}
-                  step={1}
-                  value={ratePerThousand}
-                  onChange={(e) => setRatePerThousand(Number(e.target.value))}
-                  className="w-full accent-foreground cursor-pointer"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>$1</span>
-                  <span>$50</span>
+                <div className="w-full">
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={3}
+                    step={0.5}
+                    value={ratePerThousand}
+                    onChange={(e) => setRatePerThousand(Number(e.target.value))}
+                    className="rate-slider w-full"
+                    style={{
+                      background: `linear-gradient(to right, hsl(217 80% 50%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(217 60% 80%) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
+                    }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs" style={{ color: 'hsl(217 60% 55%)' }}>
+                  <span>$0.50</span>
+                  <span>$3.00</span>
                 </div>
               </div>
 
               {/* Max payout node */}
               <div
                 className="rounded-2xl border border-border p-6 flex flex-col gap-4 min-h-[200px]"
-                style={{ background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)/0.4) 100%)' }}
+                style={{ background: 'linear-gradient(180deg, hsl(217 100% 97%) 0%, hsl(217 100% 93%) 100%)' }}
               >
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Max payout per creator</p>
+                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'hsl(217 60% 55%)' }}>Max payout per creator</p>
                 <div className="flex gap-3 flex-1 items-stretch">
                   {([10, 25, 50] as const).map((amount) => (
                     <button
                       key={amount}
-                      onClick={() => setMaxPayoutPerCreator(amount)}
-                      className={`flex-1 rounded-xl border flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold ${
-                        maxPayoutPerCreator === amount
-                          ? 'border-foreground bg-foreground text-background'
-                          : 'border-border text-foreground hover:border-foreground/40'
-                      }`}
+                      onClick={() => setMaxPayoutPerCreator(maxPayoutPerCreator === amount ? null : amount)}
+                      className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
+                      style={maxPayoutPerCreator === amount ? {
+                        background: 'hsl(217 80% 50%)',
+                        border: '1.5px solid hsl(217 80% 50%)',
+                        color: 'hsl(0 0% 100%)',
+                      } : {
+                        background: 'transparent',
+                        border: '1.5px solid hsl(217 60% 75%)',
+                        color: 'hsl(217 80% 40%)',
+                      }}
                     >
                       ${amount}
                     </button>
