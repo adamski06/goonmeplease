@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, Megaphone, LogOut, Settings } from 'lucide-react';
+import { User, Megaphone, LogOut, Settings, Handshake } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -8,7 +8,8 @@ import { useTheme } from 'next-themes';
 
 const navItems = [
   { label: 'Profile', icon: User, path: '/business' },
-  { label: 'Campaigns', icon: Megaphone, path: '/business/campaigns' },
+  { label: 'Spread', icon: Megaphone, path: '/business/campaigns' },
+  { label: 'Deals', icon: Handshake, path: '/business/deals' },
 ];
 
 const BusinessSidebar: React.FC = () => {
