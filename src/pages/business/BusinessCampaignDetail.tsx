@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, CheckCircle2, Clock, Users, Upload } from 'lucide-react';
+import { ArrowLeft, Eye, Users, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -130,8 +130,6 @@ const BusinessCampaignDetail: React.FC = () => {
 
   const statusLabel = campaign.is_active ? 'Active' : 'Ended';
   const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
-  const approvedCount = submissions.filter(s => s.status === 'approved' || s.status === 'paid').length;
-  const pendingCount = submissions.filter(s => s.status === 'pending_review').length;
 
   const statusBadge: Record<string, string> = {
     pending_review: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
@@ -192,11 +190,9 @@ const BusinessCampaignDetail: React.FC = () => {
       </div>
 
       {/* Stats cards */}
-      <div className="grid grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 gap-4 mb-10">
         {[
           { label: 'Submissions', value: submissions.length, icon: Users },
-          { label: 'Approved', value: approvedCount, icon: CheckCircle2 },
-          { label: 'Pending', value: pendingCount, icon: Clock },
           { label: 'Total Views', value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews, icon: Eye },
         ].map((stat) => (
           <div key={stat.label} className="rounded-xl border border-border bg-card p-4">
@@ -244,14 +240,13 @@ const BusinessCampaignDetail: React.FC = () => {
             {submissions.map((sub) => (
               <div
                 key={sub.id}
-                className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col"
-                style={{ width: '210px', justifySelf: 'center' }}
+                className="rounded-2xl border border-border overflow-hidden flex flex-col"
+                style={{ width: '210px', justifySelf: 'center', background: 'hsl(var(--card))' }}
               >
-                {/* TikTok Embed — sized to match the embed */}
+                {/* TikTok Embed */}
                 {sub.tiktok_video_id ? (
                   <div
-                    className="overflow-hidden rounded-t-2xl bg-muted/20"
-                    style={{ width: '210px', height: '375px', flexShrink: 0 }}
+                    style={{ width: '210px', height: '375px', flexShrink: 0, overflow: 'hidden', background: '#000', display: 'block', lineHeight: 0 }}
                   >
                     <iframe
                       src={`https://www.tiktok.com/embed/v2/${sub.tiktok_video_id}`}
@@ -268,7 +263,7 @@ const BusinessCampaignDetail: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  <div className="bg-muted/30 p-4 text-center" style={{ height: '375px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ height: '375px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'hsl(var(--muted))' }} className="p-4 text-center">
                     <a href={sub.tiktok_video_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline truncate block">
                       {sub.tiktok_video_url}
                     </a>
