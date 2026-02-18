@@ -24,9 +24,6 @@ const BusinessSidebar: React.FC = () => {
       {/* Logo */}
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-border">
         <img src={jarlaLogo} alt="Jarla" className="h-6" />
-        <span className="text-xs font-semibold text-muted-foreground font-montserrat tracking-widest uppercase">
-          Business
-        </span>
       </div>
 
       {/* Nav */}
