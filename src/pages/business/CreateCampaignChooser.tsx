@@ -1,22 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Megaphone, Handshake, ArrowLeft } from 'lucide-react';
+import { Megaphone, Handshake } from 'lucide-react';
 
 const CreateCampaignChooser: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </button>
-
-      <h1 className="text-2xl font-bold text-foreground font-montserrat mb-2">New Campaign</h1>
-      <p className="text-sm text-muted-foreground mb-10">Choose the type of campaign you want to create.</p>
+      <h1 className="text-2xl font-bold text-foreground font-montserrat mb-10">Launch your ad</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Spread */}
@@ -43,7 +34,7 @@ const CreateCampaignChooser: React.FC = () => {
           </span>
         </button>
 
-        {/* Deal */}
+        {/* Ad (Deal) */}
         <button
           onClick={() => navigate('/business/deals/new')}
           className="group flex flex-col gap-4 rounded-[24px] p-6 text-left transition-all active:scale-[0.98]"
@@ -57,7 +48,7 @@ const CreateCampaignChooser: React.FC = () => {
             <Handshake className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-foreground font-montserrat mb-1">Deal</h2>
+            <h2 className="text-base font-semibold text-foreground font-montserrat mb-1">Ad</h2>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Manual collaboration. Creators request to join — you review and accept. Set your own rate per view.
             </p>

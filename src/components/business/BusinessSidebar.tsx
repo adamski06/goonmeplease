@@ -82,7 +82,7 @@ const BusinessSidebar: React.FC = () => {
           Profile
         </button>
 
-        {/* New Campaign */}
+        {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
@@ -93,7 +93,7 @@ const BusinessSidebar: React.FC = () => {
           )}
         >
           <Plus className="h-4 w-4 shrink-0" />
-          New Campaign
+          New Ad
         </button>
 
         {/* Spread campaigns */}
@@ -124,11 +124,11 @@ const BusinessSidebar: React.FC = () => {
           </div>
         )}
 
-        {/* Deal items */}
+        {/* Ad items */}
         {dealItems.length > 0 && (
           <div className="space-y-0.5">
             <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
-              Deals
+              Ads
             </p>
             {dealItems.map(item => {
               const path = getItemPath(item);
