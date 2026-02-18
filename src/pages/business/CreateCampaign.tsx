@@ -163,7 +163,7 @@ const CreateCampaign: React.FC = () => {
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
               <div 
-                className="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out"
+                className="h-full bg-foreground rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${((step + 1) / steps.length) * 100}%` }}
               />
             </div>
