@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, Megaphone, LogOut } from 'lucide-react';
+import { User, Megaphone, LogOut, Settings, Sun, Moon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 const navItems = [
   { label: 'Profile', icon: User, path: '/business' },
@@ -13,6 +14,7 @@ const navItems = [
 const BusinessSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme, setTheme } = useTheme();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -23,7 +25,12 @@ const BusinessSidebar: React.FC = () => {
     <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0 sticky top-0">
       {/* Logo */}
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-border">
-        <img src={jarlaLogo} alt="Jarla" className="h-6" />
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-6"
+          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+        />
       </div>
 
       {/* Nav */}
@@ -48,8 +55,27 @@ const BusinessSidebar: React.FC = () => {
         })}
       </nav>
 
-      {/* Sign out */}
-      <div className="px-3 py-4 border-t border-border">
+      {/* Settings + Sign out */}
+      <div className="px-3 py-4 border-t border-border space-y-1">
+        {/* Theme toggle row */}
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        </button>
+
+        {/* Settings */}
+        <button
+          onClick={() => navigate('/business/settings')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+        >
+          <Settings className="h-4 w-4" />
+          Settings
+        </button>
+
+        {/* Sign out */}
         <button
           onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-destructive transition-colors"
