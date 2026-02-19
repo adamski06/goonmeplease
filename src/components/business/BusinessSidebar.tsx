@@ -127,7 +127,7 @@ const BusinessSidebar: React.FC = () => {
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
               )}
             </div>
-            <span className="truncate flex-1 text-left text-xs">{profile?.company_name || 'Profile'}</span>
+            <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
             <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
           </button>
 
