@@ -16,12 +16,13 @@ const CreateCampaignChooser: React.FC = () => {
         Select one
       </p>
 
-      <div className="flex gap-4 flex-1">
+      <div className="flex gap-4 justify-center flex-1">
         {/* Spread node */}
         <button
           onClick={() => setSelected('spread')}
-          className="flex flex-col items-center justify-center flex-1 rounded-[28px] p-8 transition-all active:scale-[0.99]"
+          className="flex flex-col items-center justify-center rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
+            width: '220px',
             minHeight: '500px',
             background: selected === 'spread'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'
@@ -43,8 +44,9 @@ const CreateCampaignChooser: React.FC = () => {
         {/* Deals node */}
         <button
           onClick={() => setSelected('deal')}
-          className="flex flex-col items-center justify-center flex-1 rounded-[28px] p-8 transition-all active:scale-[0.99]"
+          className="flex flex-col items-center justify-center rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
+            width: '220px',
             minHeight: '500px',
             background: selected === 'deal'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'

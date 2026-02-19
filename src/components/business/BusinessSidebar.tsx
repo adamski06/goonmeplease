@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, LogOut, Settings, Plus, Megaphone, Handshake } from 'lucide-react';
+import { LogOut, Settings, Plus, Megaphone, Handshake } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -12,18 +12,30 @@ interface SidebarItem {
   type: 'spread' | 'deal';
 }
 
+interface BusinessProfileData {
+  company_name: string;
+  logo_url: string | null;
+  website: string | null;
+}
+
 const BusinessSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useTheme();
   const [items, setItems] = useState<SidebarItem[]>([]);
+  const [profile, setProfile] = useState<BusinessProfileData | null>(null);
 
   useEffect(() => {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [{ data: campaigns }, { data: deals }] = await Promise.all([
+      const [{ data: profileData }, { data: campaigns }, { data: deals }] = await Promise.all([
+        supabase
+          .from('business_profiles')
+          .select('company_name, logo_url, website')
+          .eq('user_id', user.id)
+          .maybeSingle(),
         supabase
           .from('campaigns')
           .select('id, title')
@@ -36,12 +48,14 @@ const BusinessSidebar: React.FC = () => {
           .order('created_at', { ascending: false }),
       ]);
 
+      if (profileData) setProfile(profileData);
+
       const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' }));
       const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' }));
       setItems([...spreadItems, ...dealItems]);
     };
     load();
-  }, [location.pathname]); // re-fetch when route changes (e.g. after creating a campaign)
+  }, [location.pathname]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -51,8 +65,8 @@ const BusinessSidebar: React.FC = () => {
   const getItemPath = (item: SidebarItem) =>
     item.type === 'spread' ? `/business/campaigns/${item.id}` : `/business/deals/${item.id}`;
 
-  const spreadItems = items.filter(i => i.type === 'spread');
-  const dealItems = items.filter(i => i.type === 'deal');
+  const initial = profile?.company_name?.charAt(0)?.toUpperCase() || '?';
+  const domain = (profile?.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
 
   return (
     <aside className="w-60 border-r border-border bg-sidebar-background flex flex-col h-screen shrink-0 sticky top-0">
@@ -68,7 +82,7 @@ const BusinessSidebar: React.FC = () => {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4 min-h-0">
-        {/* Profile */}
+        {/* Company profile button */}
         <button
           onClick={() => navigate('/business')}
           className={cn(
@@ -78,8 +92,28 @@ const BusinessSidebar: React.FC = () => {
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
           )}
         >
-          <User className="h-4 w-4 shrink-0" />
-          Profile
+          {/* Company avatar */}
+          <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+            {profile?.logo_url ? (
+              <img
+                src={profile.logo_url}
+                alt=""
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  const fallback = domain ? `https://logo.clearbit.com/${domain}` : '';
+                  if (fallback && img.src !== fallback) {
+                    img.src = fallback;
+                  } else {
+                    img.style.display = 'none';
+                  }
+                }}
+              />
+            ) : (
+              <span className="text-[10px] font-bold text-muted-foreground font-montserrat">{initial}</span>
+            )}
+          </div>
+          <span className="truncate">{profile?.company_name || 'Profile'}</span>
         </button>
 
         {/* New Ad */}

@@ -185,19 +185,11 @@ const BusinessProfile: React.FC = () => {
               className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                border: '1.5px dashed hsl(var(--border))',
+                border: '1px solid hsl(var(--border))',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
               }}
             >
-              <div
-                className="h-10 w-10 rounded-full flex items-center justify-center"
-                style={{
-                  background: 'hsl(var(--muted))',
-                  border: '1px solid hsl(var(--border))',
-                }}
-              >
-                <Plus className="h-5 w-5 text-muted-foreground" />
-              </div>
+              <Plus className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm font-medium text-muted-foreground font-jakarta">New Ad</span>
             </button>
 
