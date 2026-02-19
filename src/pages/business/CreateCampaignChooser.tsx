@@ -20,9 +20,9 @@ const CreateCampaignChooser: React.FC = () => {
         {/* Spread node */}
         <button
           onClick={() => setSelected('spread')}
-          className="flex flex-col items-center justify-center rounded-[28px] p-8 transition-all active:scale-[0.99]"
+          className="flex flex-col justify-end rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
-            width: '220px',
+            width: '440px',
             minHeight: '500px',
             background: selected === 'spread'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'
@@ -35,8 +35,8 @@ const CreateCampaignChooser: React.FC = () => {
               : 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
           }}
         >
-          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2 text-center">Spread</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed text-center max-w-[160px]">
+          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2">Spread</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-[240px]">
             Performance-based — pay creators per view using a tiered rate.
           </p>
         </button>
@@ -44,9 +44,9 @@ const CreateCampaignChooser: React.FC = () => {
         {/* Deals node */}
         <button
           onClick={() => setSelected('deal')}
-          className="flex flex-col items-center justify-center rounded-[28px] p-8 transition-all active:scale-[0.99]"
+          className="flex flex-col justify-end rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
-            width: '220px',
+            width: '440px',
             minHeight: '500px',
             background: selected === 'deal'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'
@@ -59,8 +59,8 @@ const CreateCampaignChooser: React.FC = () => {
               : 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
           }}
         >
-          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2 text-center">Deals</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed text-center max-w-[160px]">
+          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2">Deals</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-[240px]">
             Manual collaboration — review and approve creator requests.
           </p>
         </button>
