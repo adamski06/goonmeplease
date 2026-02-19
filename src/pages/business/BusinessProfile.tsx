@@ -204,16 +204,45 @@ const BusinessProfile: React.FC = () => {
                     <img src={ad.cover_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
                     <div
-                      className="absolute inset-0 flex items-center justify-center"
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-2"
                       style={{ background: 'hsl(var(--muted))' }}
                     >
-                      <span className="text-4xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.3)' }}>
-                        {ad.brand_name.charAt(0).toUpperCase()}
+                      <div
+                        className="h-8 w-8 rounded-full flex items-center justify-center"
+                        style={{ background: 'hsl(var(--muted-foreground) / 0.15)', border: '1.5px dashed hsl(var(--muted-foreground) / 0.3)' }}
+                      >
+                        <Plus className="h-4 w-4" style={{ color: 'hsl(var(--muted-foreground) / 0.5)' }} />
+                      </div>
+                      <span className="text-[10px] font-medium font-jakarta text-center px-4 leading-snug" style={{ color: 'hsl(var(--muted-foreground) / 0.55)' }}>
+                        Add thumbnail
                       </span>
                     </div>
                   )}
 
-                  {/* Floating white node inside card — like user app */}
+                  {/* Type badge — top right corner */}
+                  <div className="absolute top-3 right-3">
+                    <span
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+                      style={isSpread ? {
+                        background: 'linear-gradient(135deg, rgba(59,130,246,0.35) 0%, rgba(37,99,235,0.28) 100%)',
+                        border: '1px solid rgba(59,130,246,0.45)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
+                        color: 'rgb(29,78,216)',
+                        backdropFilter: 'blur(8px)',
+                      } : {
+                        background: 'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.12) 100%)',
+                        border: '1px solid rgba(255,255,255,0.22)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+                        color: 'rgba(255,255,255,0.88)',
+                        backdropFilter: 'blur(8px)',
+                      }}
+                    >
+                      {isSpread ? <Megaphone className="h-3 w-3" /> : <Handshake className="h-3 w-3" />}
+                      {isSpread ? 'Spread' : 'Deal'}
+                    </span>
+                  </div>
+
+                  {/* Floating white node inside card */}
                   <div
                     className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex flex-col gap-2"
                     style={{
@@ -229,27 +258,12 @@ const BusinessProfile: React.FC = () => {
                     {/* Title */}
                     <p className="text-[11px] text-black/55 font-jakarta line-clamp-2 leading-snug">{ad.title}</p>
 
-                    {/* Glassy type badge */}
-                    <div className="flex">
-                      <span
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-                        style={isSpread ? {
-                          background: 'linear-gradient(135deg, rgba(59,130,246,0.25) 0%, rgba(37,99,235,0.18) 100%)',
-                          border: '1px solid rgba(59,130,246,0.35)',
-                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
-                          color: 'rgb(29,78,216)',
-                          backdropFilter: 'blur(4px)',
-                        } : {
-                          background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.05) 100%)',
-                          border: '1px solid rgba(0,0,0,0.10)',
-                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)',
-                          color: 'rgba(0,0,0,0.60)',
-                          backdropFilter: 'blur(4px)',
-                        }}
-                      >
-                        {isSpread ? <Megaphone className="h-3 w-3" /> : <Handshake className="h-3 w-3" />}
-                        {isSpread ? 'Spread' : 'Deal'}
+                    {/* Stats row */}
+                    <div className="flex items-center justify-between pt-0.5">
+                      <span className="text-[10px] font-semibold text-black/50 font-jakarta">
+                        {isSpread ? 'Creators' : 'Requests'}
                       </span>
+                      <span className="text-[10px] font-semibold text-black/50 font-jakarta">Views</span>
                     </div>
                   </div>
                 </button>
