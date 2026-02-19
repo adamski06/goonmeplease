@@ -110,11 +110,11 @@ const CreateDeal: React.FC = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh)] overflow-hidden">
-      {/* Top bar — matches sidebar logo height */}
+      {/* Top bar — matches sidebar logo height: py-5 (20+20) + h-6 (24) = 64px */}
       <div
         className="w-full flex items-center shrink-0 animate-in slide-in-from-top-2 duration-300"
         style={{
-          height: '68px',
+          height: '64px',
           borderBottom: '1px solid hsl(var(--border))',
           background: 'hsl(var(--background))',
           paddingLeft: '24px',

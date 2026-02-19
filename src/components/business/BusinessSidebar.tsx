@@ -135,9 +135,9 @@ const BusinessSidebar: React.FC = () => {
           {profileOpen && (
             <div
               className="absolute left-0 right-0 mt-1 rounded-lg border border-border overflow-hidden z-50 shadow-md"
-              style={{ background: 'hsl(var(--popover))' }}
+              style={{ background: 'hsl(var(--popover))', backdropFilter: 'none' }}
             >
-              {/* View profile */}
+              {/* Company / profile row */}
               <button
                 onClick={() => { navigate('/business'); setProfileOpen(false); }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
@@ -149,7 +149,16 @@ const BusinessSidebar: React.FC = () => {
               </button>
               {/* Separator */}
               <div className="h-px bg-border" />
-              {/* Credits — Lovable pill style */}
+              {/* Home */}
+              <button
+                onClick={() => { navigate('/business'); setProfileOpen(false); }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+              >
+                <span>Home</span>
+              </button>
+              {/* Separator */}
+              <div className="h-px bg-border" />
+              {/* Credits — pill style */}
               <div className="px-3 py-2.5 flex items-center justify-between gap-2">
                 <span className="text-[11px] text-muted-foreground">Credits</span>
                 <span
