@@ -96,41 +96,13 @@ const BusinessSidebar: React.FC = () => {
           New Ad
         </button>
 
-        {/* Spread campaigns */}
-        {spreadItems.length > 0 && (
-          <div className="space-y-0.5">
-            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
-              Spread
-            </p>
-            {spreadItems.map(item => {
-              const path = getItemPath(item);
-              const isActive = location.pathname === path;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => navigate(path)}
-                  className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left',
-                    isActive
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-                      : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-                  )}
-                >
-                  <Megaphone className="h-3.5 w-3.5 shrink-0" />
-                  <span className="truncate">{item.title}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Ad items */}
-        {dealItems.length > 0 && (
+        {/* All ads (spread + deals) under one "Ads" heading */}
+        {items.length > 0 && (
           <div className="space-y-0.5">
             <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
               Ads
             </p>
-            {dealItems.map(item => {
+            {items.map(item => {
               const path = getItemPath(item);
               const isActive = location.pathname === path;
               return (
@@ -144,7 +116,11 @@ const BusinessSidebar: React.FC = () => {
                       : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
                   )}
                 >
-                  <Handshake className="h-3.5 w-3.5 shrink-0" />
+                  {item.type === 'spread' ? (
+                    <Megaphone className="h-3.5 w-3.5 shrink-0" />
+                  ) : (
+                    <Handshake className="h-3.5 w-3.5 shrink-0" />
+                  )}
                   <span className="truncate">{item.title}</span>
                 </button>
               );
