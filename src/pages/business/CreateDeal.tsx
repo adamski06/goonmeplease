@@ -127,11 +127,12 @@ const CreateDeal: React.FC = () => {
 
       <div className="flex flex-1 overflow-hidden relative">
       {/* Chat panel + toggle */}
-      <div className="shrink-0 border-r border-border h-full flex transition-all duration-300 ease-in-out overflow-hidden"
+      <div
+        className="shrink-0 border-r border-border h-full relative flex transition-all duration-300 ease-in-out overflow-hidden"
         style={{ width: chatCollapsed ? '32px' : '340px' }}
       >
-        {/* Chat content */}
-        <div className="w-[340px] h-full relative shrink-0">
+        {/* Chat content — fixed 340px, clipped by parent overflow-hidden */}
+        <div className="w-[340px] h-full shrink-0">
           <CampaignChat
             formData={formData}
             requirements={guidelinesList.filter(g => g.trim())}
@@ -142,17 +143,11 @@ const CreateDeal: React.FC = () => {
           />
         </div>
 
-        {/* Toggle button */}
+        {/* Toggle button — always pinned to right edge of visible panel */}
         <button
           onClick={() => setChatCollapsed(c => !c)}
-          className="absolute shrink-0 flex items-center justify-center hover:bg-muted transition-colors"
-          style={{
-            width: '32px',
-            top: 0,
-            bottom: 0,
-            left: chatCollapsed ? 0 : '308px',
-            color: 'hsl(var(--muted-foreground))',
-          }}
+          className="absolute top-0 bottom-0 right-0 w-8 flex items-center justify-center hover:bg-muted transition-colors"
+          style={{ color: 'hsl(var(--muted-foreground))' }}
           title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
         >
           {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
@@ -239,7 +234,7 @@ const CreateDeal: React.FC = () => {
               </div>
 
               {/* Rate node */}
-              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
+              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-4 min-h-[200px]">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold text-foreground">${ratePerThousand.toFixed(1)}</span>
@@ -266,7 +261,7 @@ const CreateDeal: React.FC = () => {
               </div>
 
               {/* Max payout node */}
-              <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4 min-h-[200px]">
+              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-4 min-h-[200px]">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</p>
                 <div className="flex gap-3 flex-1 items-stretch">
                   {([10, 25, 50] as const).map((amount) => (
