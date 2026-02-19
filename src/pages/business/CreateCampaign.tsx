@@ -153,28 +153,19 @@ const CreateCampaign: React.FC = () => {
           height: '64px',
           borderBottom: '1px solid hsl(var(--border))',
           background: 'hsl(var(--background))',
-          paddingLeft: '24px',
+          paddingLeft: '20px',
         }}
       >
         <span className="text-sm font-semibold text-foreground font-montserrat">Create a Spread</span>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-      {/* Chat panel */}
-      <div
-        className="shrink-0 border-r border-border h-full relative overflow-hidden transition-all duration-300 ease-in-out"
-        style={{ width: chatCollapsed ? '0px' : '340px' }}
+      <div className="flex flex-1 overflow-hidden relative">
+      {/* Chat panel + toggle */}
+      <div className="shrink-0 border-r border-border h-full flex transition-all duration-300 ease-in-out overflow-hidden"
+        style={{ width: chatCollapsed ? '32px' : '340px' }}
       >
-        {/* Collapse button — top right of chat */}
-        <button
-          onClick={() => setChatCollapsed(true)}
-          className="absolute top-3 right-3 z-10 h-7 w-7 rounded-full flex items-center justify-center transition-colors hover:bg-muted"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-          title="Collapse chat"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </button>
-        <div className="w-[340px] h-full">
+        {/* Chat content */}
+        <div className="w-[340px] h-full relative shrink-0">
           <CampaignChat
             formData={formData}
             requirements={guidelinesList.filter(g => g.trim())}
@@ -184,19 +175,23 @@ const CreateCampaign: React.FC = () => {
             currentStep={step}
           />
         </div>
-      </div>
 
-      {/* Expand button — visible only when chat is collapsed */}
-      {chatCollapsed && (
+        {/* Toggle button — sits at the right edge of this wrapper */}
         <button
-          onClick={() => setChatCollapsed(false)}
-          className="shrink-0 h-full w-8 flex items-center justify-center border-r border-border hover:bg-muted transition-colors"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-          title="Expand chat"
+          onClick={() => setChatCollapsed(c => !c)}
+          className="absolute shrink-0 flex items-center justify-center hover:bg-muted transition-colors"
+          style={{
+            width: '32px',
+            top: 0,
+            bottom: 0,
+            left: chatCollapsed ? 0 : '308px',
+            color: 'hsl(var(--muted-foreground))',
+          }}
+          title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
         >
-          <ArrowRight className="h-4 w-4" />
+          {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
         </button>
-      )}
+      </div>
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
