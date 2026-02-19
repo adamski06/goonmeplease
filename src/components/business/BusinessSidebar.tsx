@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, Settings, Plus, Megaphone, Handshake } from 'lucide-react';
+import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Coins } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -24,6 +24,8 @@ const BusinessSidebar: React.FC = () => {
   const { theme } = useTheme();
   const [items, setItems] = useState<SidebarItem[]>([]);
   const [profile, setProfile] = useState<BusinessProfileData | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -57,6 +59,17 @@ const BusinessSidebar: React.FC = () => {
     load();
   }, [location.pathname]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/business/auth');
@@ -82,39 +95,70 @@ const BusinessSidebar: React.FC = () => {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4 min-h-0">
-        {/* Company profile button */}
-        <button
-          onClick={() => navigate('/business')}
-          className={cn(
-            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-            location.pathname === '/business'
-              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-          )}
-        >
-          {/* Company avatar */}
-          <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
-            {profile?.logo_url ? (
-              <img
-                src={profile.logo_url}
-                alt=""
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  const fallback = domain ? `https://logo.clearbit.com/${domain}` : '';
-                  if (fallback && img.src !== fallback) {
-                    img.src = fallback;
-                  } else {
-                    img.style.display = 'none';
-                  }
-                }}
-              />
-            ) : (
-              <span className="text-[10px] font-bold text-muted-foreground font-montserrat">{initial}</span>
+        {/* Company profile node with dropdown */}
+        <div ref={profileRef} className="relative">
+          <button
+            onClick={() => setProfileOpen(o => !o)}
+            className={cn(
+              'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+              'border',
+              profileOpen
+                ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
+                : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-border'
             )}
-          </div>
-          <span className="truncate">{profile?.company_name || 'Profile'}</span>
-        </button>
+          >
+            {/* Company avatar */}
+            <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+              {profile?.logo_url ? (
+                <img
+                  src={profile.logo_url}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    const fallback = domain ? `https://logo.clearbit.com/${domain}` : '';
+                    if (fallback && img.src !== fallback) {
+                      img.src = fallback;
+                    } else {
+                      img.style.display = 'none';
+                    }
+                  }}
+                />
+              ) : (
+                <span className="text-[10px] font-bold text-muted-foreground font-montserrat">{initial}</span>
+              )}
+            </div>
+            <span className="truncate flex-1 text-left">{profile?.company_name || 'Profile'}</span>
+            <ChevronDown className={cn('h-3.5 w-3.5 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+          </button>
+
+          {/* Dropdown */}
+          {profileOpen && (
+            <div
+              className="absolute left-0 right-0 mt-1 rounded-lg border border-border overflow-hidden z-50"
+              style={{ background: 'hsl(var(--popover))' }}
+            >
+              {/* View profile */}
+              <button
+                onClick={() => { navigate('/business'); setProfileOpen(false); }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
+              >
+                <div className="h-4 w-4 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+                  <span className="text-[8px] font-bold text-muted-foreground font-montserrat">{initial}</span>
+                </div>
+                <span>View profile</span>
+              </button>
+              {/* Separator */}
+              <div className="h-px bg-border mx-2" />
+              {/* Credits */}
+              <div className="flex items-center gap-3 px-3 py-2.5">
+                <Coins className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Credits</span>
+                <span className="ml-auto text-xs font-semibold text-foreground">—</span>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* New Ad */}
         <button
