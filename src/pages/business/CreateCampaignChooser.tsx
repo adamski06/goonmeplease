@@ -11,19 +11,18 @@ const CreateCampaignChooser: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-full px-6 py-16">
-      <p className="text-sm font-medium text-muted-foreground font-jakarta mb-8 tracking-wide">
+    <div className="flex flex-col h-full min-h-screen px-4 py-8">
+      <p className="text-sm font-medium text-muted-foreground font-jakarta mb-6 tracking-wide text-center">
         Select one
       </p>
 
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-4 flex-1">
         {/* Spread node */}
         <button
           onClick={() => setSelected('spread')}
-          className="flex flex-col justify-end rounded-[28px] p-6 text-left transition-all active:scale-[0.98]"
+          className="flex flex-col items-center justify-center flex-1 rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
-            width: '180px',
-            height: '360px',
+            minHeight: '500px',
             background: selected === 'spread'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'
               : 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
@@ -35,21 +34,18 @@ const CreateCampaignChooser: React.FC = () => {
               : 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
           }}
         >
-          <div>
-            <h2 className="text-base font-semibold text-foreground font-montserrat mb-1">Spread</h2>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Performance-based — pay creators per view using a tiered rate.
-            </p>
-          </div>
+          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2 text-center">Spread</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed text-center max-w-[160px]">
+            Performance-based — pay creators per view using a tiered rate.
+          </p>
         </button>
 
-        {/* Deal node */}
+        {/* Deals node */}
         <button
           onClick={() => setSelected('deal')}
-          className="flex flex-col justify-end rounded-[28px] p-6 text-left transition-all active:scale-[0.98]"
+          className="flex flex-col items-center justify-center flex-1 rounded-[28px] p-8 transition-all active:scale-[0.99]"
           style={{
-            width: '180px',
-            height: '360px',
+            minHeight: '500px',
             background: selected === 'deal'
               ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'
               : 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
@@ -61,29 +57,34 @@ const CreateCampaignChooser: React.FC = () => {
               : 'inset 0 1px 0 hsl(var(--background) / 0.6), 0 2px 8px hsl(var(--foreground) / 0.04)',
           }}
         >
-          <div>
-            <h2 className="text-base font-semibold text-foreground font-montserrat mb-1">Ad</h2>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Manual collaboration — review and approve creator requests.
-            </p>
-          </div>
+          <h2 className="text-xl font-semibold text-foreground font-montserrat mb-2 text-center">Deals</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed text-center max-w-[160px]">
+            Manual collaboration — review and approve creator requests.
+          </p>
         </button>
       </div>
 
       {/* Continue button */}
-      <button
-        onClick={handleContinue}
-        disabled={!selected}
-        className="mt-10 px-10 py-3 rounded-full text-sm font-semibold font-jakarta transition-all"
-        style={{
-          background: selected ? 'hsl(var(--primary))' : 'hsl(var(--muted))',
-          color: selected ? 'hsl(var(--primary-foreground))' : 'hsl(var(--muted-foreground))',
-          cursor: selected ? 'pointer' : 'not-allowed',
-          opacity: selected ? 1 : 0.5,
-        }}
-      >
-        Continue
-      </button>
+      <div className="flex justify-center mt-8 pb-4">
+        <button
+          onClick={handleContinue}
+          disabled={!selected}
+          className="px-12 py-3.5 rounded-full text-sm font-semibold font-jakarta transition-all"
+          style={{
+            background: selected
+              ? 'linear-gradient(135deg, hsl(214, 84%, 56%) 0%, hsl(221, 83%, 53%) 100%)'
+              : 'hsl(var(--muted))',
+            color: selected ? '#ffffff' : 'hsl(var(--muted-foreground))',
+            boxShadow: selected
+              ? '0 4px 15px hsl(214, 84%, 56% / 0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
+              : 'none',
+            cursor: selected ? 'pointer' : 'not-allowed',
+            opacity: selected ? 1 : 0.5,
+          }}
+        >
+          Continue
+        </button>
+      </div>
     </div>
   );
 };
