@@ -244,7 +244,7 @@ const BusinessProfile: React.FC = () => {
 
                   {/* Floating white node inside card */}
                   <div
-                    className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex flex-col gap-2"
+                    className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex items-center gap-3"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(242,242,242,0.96) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.9)',
@@ -252,18 +252,15 @@ const BusinessProfile: React.FC = () => {
                       backdropFilter: 'blur(8px)',
                     }}
                   >
-                    {/* Brand name */}
-                    <p className="text-xs font-bold text-black font-montserrat truncate">{ad.brand_name}</p>
+                    {/* Title — takes ~2/3 */}
+                    <p className="flex-1 min-w-0 text-[11px] font-bold text-black font-montserrat line-clamp-2 leading-snug">{ad.title}</p>
 
-                    {/* Title */}
-                    <p className="text-[11px] text-black/55 font-jakarta line-clamp-2 leading-snug">{ad.title}</p>
-
-                    {/* Stats row */}
-                    <div className="flex items-center justify-between pt-0.5">
-                      <span className="text-[10px] font-semibold text-black/50 font-jakarta">
+                    {/* Stats — stacked on right, ~1/3 */}
+                    <div className="shrink-0 flex flex-col items-end gap-1">
+                      <span className="text-[10px] font-semibold text-black/50 font-jakarta leading-none">
                         {isSpread ? 'Creators' : 'Requests'}
                       </span>
-                      <span className="text-[10px] font-semibold text-black/50 font-jakarta">Views</span>
+                      <span className="text-[10px] font-semibold text-black/50 font-jakarta leading-none">Views</span>
                     </div>
                   </div>
                 </button>
