@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Coins } from 'lucide-react';
+import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Coins, Home } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -149,15 +149,6 @@ const BusinessSidebar: React.FC = () => {
               </button>
               {/* Separator */}
               <div className="h-px bg-border" />
-              {/* Home */}
-              <button
-                onClick={() => { navigate('/business'); setProfileOpen(false); }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
-              >
-                <span>Home</span>
-              </button>
-              {/* Separator */}
-              <div className="h-px bg-border" />
               {/* Credits — pill style */}
               <div className="px-3 py-2.5 flex items-center justify-between gap-2">
                 <span className="text-[11px] text-muted-foreground">Credits</span>
@@ -177,15 +168,28 @@ const BusinessSidebar: React.FC = () => {
           )}
         </div>
 
-        {/* New Ad */}
+        {/* Home */}
         <button
-          onClick={() => navigate('/business/new')}
+          onClick={() => navigate('/business')}
           className={cn(
             'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-            location.pathname === '/business/new'
+            location.pathname === '/business'
               ? 'bg-sidebar-accent text-sidebar-accent-foreground'
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
           )}
+        >
+          <Home className="h-4 w-4 shrink-0" />
+          Home
+        </button>
+
+        {/* New Ad — always blue */}
+        <button
+          onClick={() => navigate('/business/new')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors text-white"
+          style={{
+            background: 'linear-gradient(135deg, hsl(214, 84%, 56%) 0%, hsl(221, 83%, 53%) 100%)',
+            boxShadow: '0 2px 8px hsl(214, 84%, 56% / 0.35)',
+          }}
         >
           <Plus className="h-4 w-4 shrink-0" />
           New Ad
