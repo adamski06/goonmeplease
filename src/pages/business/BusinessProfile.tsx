@@ -224,23 +224,17 @@ const BusinessProfile: React.FC = () => {
                       backdropFilter: 'blur(8px)',
                     }}
                   >
-                    {/* Title */}
-                    <p className="text-[11px] font-bold text-black font-montserrat line-clamp-2 leading-snug">{ad.title}</p>
-
-                    {/* Type badge */}
-                    <div>
+                    {/* Title row — title on left, badge top-right */}
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[11px] font-bold text-black font-montserrat line-clamp-2 leading-snug flex-1 min-w-0">{ad.title}</p>
                       <span
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold"
-                        style={isSpread ? {
-                          background: 'linear-gradient(135deg, rgba(59,130,246,0.25) 0%, rgba(37,99,235,0.18) 100%)',
-                          border: '1px solid rgba(59,130,246,0.35)',
+                        className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold"
+                        style={{
+                          background: 'linear-gradient(135deg, rgba(59,130,246,0.32) 0%, rgba(37,99,235,0.22) 100%)',
+                          border: '1px solid rgba(59,130,246,0.45)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
                           color: 'rgb(29,78,216)',
-                          backdropFilter: 'blur(4px)',
-                        } : {
-                          background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.05) 100%)',
-                          border: '1px solid rgba(0,0,0,0.10)',
-                          color: 'rgba(0,0,0,0.55)',
-                          backdropFilter: 'blur(4px)',
+                          backdropFilter: 'blur(6px)',
                         }}
                       >
                         {isSpread ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
