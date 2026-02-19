@@ -204,47 +204,19 @@ const BusinessProfile: React.FC = () => {
                     <img src={ad.cover_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
                     <div
-                      className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
                       style={{ background: 'hsl(var(--muted))' }}
                     >
-                      <div
-                        className="h-8 w-8 rounded-full flex items-center justify-center"
-                        style={{ background: 'hsl(var(--muted-foreground) / 0.15)', border: '1.5px dashed hsl(var(--muted-foreground) / 0.3)' }}
-                      >
-                        <Plus className="h-4 w-4" style={{ color: 'hsl(var(--muted-foreground) / 0.5)' }} />
-                      </div>
-                      <span className="text-[10px] font-medium font-jakarta text-center px-4 leading-snug" style={{ color: 'hsl(var(--muted-foreground) / 0.55)' }}>
+                      <Plus className="h-5 w-5" style={{ color: 'hsl(var(--muted-foreground) / 0.4)' }} />
+                      <span className="text-[10px] font-medium font-jakarta text-center px-4 leading-snug" style={{ color: 'hsl(var(--muted-foreground) / 0.5)' }}>
                         Add thumbnail
                       </span>
                     </div>
                   )}
 
-                  {/* Type badge — top right corner */}
-                  <div className="absolute top-3 right-3">
-                    <span
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-                      style={isSpread ? {
-                        background: 'linear-gradient(135deg, rgba(59,130,246,0.35) 0%, rgba(37,99,235,0.28) 100%)',
-                        border: '1px solid rgba(59,130,246,0.45)',
-                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
-                        color: 'rgb(29,78,216)',
-                        backdropFilter: 'blur(8px)',
-                      } : {
-                        background: 'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.12) 100%)',
-                        border: '1px solid rgba(255,255,255,0.22)',
-                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
-                        color: 'rgba(255,255,255,0.88)',
-                        backdropFilter: 'blur(8px)',
-                      }}
-                    >
-                      {isSpread ? <Megaphone className="h-3 w-3" /> : <Handshake className="h-3 w-3" />}
-                      {isSpread ? 'Spread' : 'Deal'}
-                    </span>
-                  </div>
-
                   {/* Floating white node inside card */}
                   <div
-                    className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex items-center gap-3"
+                    className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex flex-col gap-2"
                     style={{
                       background: 'linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(242,242,242,0.96) 100%)',
                       border: '1.5px solid rgba(255,255,255,0.9)',
@@ -252,15 +224,40 @@ const BusinessProfile: React.FC = () => {
                       backdropFilter: 'blur(8px)',
                     }}
                   >
-                    {/* Title — takes ~2/3 */}
-                    <p className="flex-1 min-w-0 text-[11px] font-bold text-black font-montserrat line-clamp-2 leading-snug">{ad.title}</p>
+                    {/* Title */}
+                    <p className="text-[11px] font-bold text-black font-montserrat line-clamp-2 leading-snug">{ad.title}</p>
 
-                    {/* Stats — stacked on right, ~1/3 */}
-                    <div className="shrink-0 flex flex-col items-end gap-1">
-                      <span className="text-[10px] font-semibold text-black/50 font-jakarta leading-none">
-                        {isSpread ? 'Creators' : 'Requests'}
+                    {/* Type badge */}
+                    <div>
+                      <span
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                        style={isSpread ? {
+                          background: 'linear-gradient(135deg, rgba(59,130,246,0.25) 0%, rgba(37,99,235,0.18) 100%)',
+                          border: '1px solid rgba(59,130,246,0.35)',
+                          color: 'rgb(29,78,216)',
+                          backdropFilter: 'blur(4px)',
+                        } : {
+                          background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.05) 100%)',
+                          border: '1px solid rgba(0,0,0,0.10)',
+                          color: 'rgba(0,0,0,0.55)',
+                          backdropFilter: 'blur(4px)',
+                        }}
+                      >
+                        {isSpread ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
+                        {isSpread ? 'Spread' : 'Deal'}
                       </span>
-                      <span className="text-[10px] font-semibold text-black/50 font-jakarta leading-none">Views</span>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="flex flex-col gap-1 pt-0.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-black/45 font-jakarta">{isSpread ? 'Creators' : 'Requests'}</span>
+                        <span className="text-[10px] font-semibold text-black font-jakarta">0</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-black/45 font-jakarta">Views</span>
+                        <span className="text-[10px] font-semibold text-black font-jakarta">0</span>
+                      </div>
                     </div>
                   </div>
                 </button>
