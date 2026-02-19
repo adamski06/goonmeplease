@@ -182,13 +182,13 @@ const BusinessSidebar: React.FC = () => {
           Home
         </button>
 
-        {/* New Ad — always blue */}
+        {/* New Ad — black, same size as profile node */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors text-white"
+          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent"
           style={{
-            background: 'linear-gradient(135deg, hsl(214, 84%, 56%) 0%, hsl(221, 83%, 53%) 100%)',
-            boxShadow: '0 2px 8px hsl(214, 84%, 56% / 0.35)',
+            background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
+            boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
           }}
         >
           <Plus className="h-4 w-4 shrink-0" />

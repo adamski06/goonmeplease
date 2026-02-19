@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-
-import { Pencil, ExternalLink, Plus } from 'lucide-react';
+import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
+import tiktokIcon from '@/assets/tiktok-icon.png';
 
 interface BusinessProfileData {
   company_name: string;
@@ -16,46 +16,46 @@ interface BusinessProfileData {
   onboarding_complete: boolean | null;
 }
 
-interface CampaignItem {
+interface AdItem {
   id: string;
   title: string;
   brand_name: string;
   cover_image_url: string | null;
   is_active: boolean | null;
+  max_earnings: number | null;
+  type: 'spread' | 'deal';
 }
 
 const BusinessProfile: React.FC = () => {
   const [profile, setProfile] = useState<BusinessProfileData | null>(null);
-  const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
+  const [ads, setAds] = useState<AdItem[]>([]);
   const [loading, setLoading] = useState(true);
-  
+  const [totalViews, setTotalViews] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const [totalViews, setTotalViews] = useState<number>(0);
-
   const fetchData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const [profileRes, campaignsRes] = await Promise.all([
+    const [profileRes, campaignsRes, dealsRes] = await Promise.all([
       supabase.from('business_profiles').select('company_name, description, website, logo_url, industry, target_audience, brand_values, onboarding_complete').eq('user_id', user.id).maybeSingle(),
-      supabase.from('campaigns').select('id, title, brand_name, cover_image_url, is_active').eq('business_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('campaigns').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('deals').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
     ]);
 
-    if (profileRes.data) {
-      setProfile(profileRes.data);
-    }
+    if (profileRes.data) setProfile(profileRes.data);
 
-    const fetchedCampaigns = campaignsRes.data || [];
-    setCampaigns(fetchedCampaigns);
+    const spreadAds: AdItem[] = (campaignsRes.data || []).map(c => ({ ...c, type: 'spread' as const }));
+    const dealAds: AdItem[] = (dealsRes.data || []).map(d => ({ ...d, type: 'deal' as const }));
+    const allAds = [...spreadAds, ...dealAds].sort(() => 0); // preserve creation order interleaved
+    setAds(allAds);
 
-    // Fetch total views across all submissions for this business's campaigns
-    if (fetchedCampaigns.length > 0) {
-      const campaignIds = fetchedCampaigns.map(c => c.id);
+    if (spreadAds.length > 0) {
+      const campaignIds = spreadAds.map(c => c.id);
       const { data: submissions } = await supabase
         .from('content_submissions')
         .select('current_views')
@@ -95,9 +95,8 @@ const BusinessProfile: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* Profile header — no card node */}
+      {/* Profile header */}
       <div className="mb-10 flex items-center gap-6">
-        {/* Logo / Avatar */}
         <div className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
@@ -120,7 +119,6 @@ const BusinessProfile: React.FC = () => {
           <span className={`text-5xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
         </div>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-1">
             {profile?.company_name || 'Your Company'}
@@ -128,7 +126,6 @@ const BusinessProfile: React.FC = () => {
           {profile?.description && (
             <p className="text-sm text-muted-foreground font-jakarta leading-snug line-clamp-2 mb-3">{profile.description}</p>
           )}
-          {/* Buttons + stats all in one row with equal spacing */}
           <div className="flex items-center gap-6 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
@@ -153,9 +150,8 @@ const BusinessProfile: React.FC = () => {
                 {profile.website.replace(/^https?:\/\//, '')}
               </a>
             )}
-            {/* Stats — same gap as between other items */}
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-xl font-bold text-foreground font-montserrat leading-none">{campaigns.length}</span>
+              <span className="text-xl font-bold text-foreground font-montserrat leading-none">{ads.length}</span>
               <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
             </div>
             <div className="flex flex-col items-center gap-0.5">
@@ -171,8 +167,6 @@ const BusinessProfile: React.FC = () => {
           </div>
         </div>
       </div>
-
-
 
       {/* Ads section */}
       <div>
@@ -193,51 +187,89 @@ const BusinessProfile: React.FC = () => {
               <span className="text-sm font-medium text-muted-foreground font-jakarta">New Ad</span>
             </button>
 
-            {campaigns.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => navigate(`/business/campaigns/${c.id}`)}
-                className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col text-left transition-all active:scale-[0.98] relative"
-                style={{
-                  background: 'hsl(var(--card))',
-                  border: '1.5px solid hsl(var(--border))',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                }}
-              >
-                {/* Cover image */}
-                {c.cover_image_url ? (
-                  <img src={c.cover_image_url} alt="" className="flex-1 w-full object-cover" />
-                ) : (
-                  <div
-                    className="flex-1 flex items-center justify-center"
-                    style={{ background: 'hsl(var(--muted))' }}
-                  >
-                    <span className="text-3xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.4)' }}>
-                      {c.brand_name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                )}
-
-                {/* Bottom node — mimics the mobile white node */}
-                <div
-                  className="px-4 pt-3 pb-4 flex-shrink-0"
+            {ads.map((ad) => {
+              const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : `/business/deals/${ad.id}`;
+              return (
+                <button
+                  key={`${ad.type}-${ad.id}`}
+                  onClick={() => navigate(path)}
+                  className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col text-left transition-all active:scale-[0.98] relative"
                   style={{
-                    background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                    borderTop: '1px solid hsl(var(--border))',
+                    border: '1px solid hsl(var(--border))',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                   }}
                 >
-                  <div className="flex items-center gap-1.5 mb-1">
-                    {/* Status dot */}
-                    <span
-                      className="h-1.5 w-1.5 rounded-full flex-shrink-0"
-                      style={{ background: c.is_active ? 'hsl(142 70% 45%)' : 'hsl(var(--muted-foreground))' }}
-                    />
-                    <p className="text-xs font-bold text-foreground font-montserrat truncate">{c.brand_name}</p>
+                  {/* Cover image — takes all space above the node */}
+                  <div className="flex-1 relative overflow-hidden">
+                    {ad.cover_image_url ? (
+                      <img src={ad.cover_image_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: 'hsl(var(--muted))' }}
+                      >
+                        <span className="text-3xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.4)' }}>
+                          {ad.brand_name.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-[11px] text-muted-foreground font-jakarta line-clamp-2 leading-snug">{c.title}</p>
-                </div>
-              </button>
-            ))}
+
+                  {/* White node — mimics user app campaign card node */}
+                  <div
+                    className="px-4 pt-3 pb-4 flex-shrink-0 flex flex-col gap-2"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.97) 100%)',
+                      borderTop: '1.5px solid rgba(255,255,255,0.8)',
+                      boxShadow: 'inset 0 2px 0 rgba(255,255,255,1)',
+                    }}
+                  >
+                    {/* Brand + type badge */}
+                    <div className="flex items-center justify-between gap-1.5">
+                      <p className="text-xs font-bold text-black font-montserrat truncate">{ad.brand_name}</p>
+                      <span
+                        className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold shrink-0"
+                        style={{
+                          background: ad.type === 'spread' ? 'rgba(0,0,0,0.06)' : 'rgba(59,130,246,0.12)',
+                          color: ad.type === 'spread' ? 'rgba(0,0,0,0.55)' : 'rgb(37,99,235)',
+                        }}
+                      >
+                        {ad.type === 'spread' ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
+                        {ad.type === 'spread' ? 'Spread' : 'Deal'}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <p className="text-[11px] text-black/60 font-jakarta line-clamp-2 leading-snug">{ad.title}</p>
+
+                    {/* Max earnings + platform */}
+                    <div className="flex items-center justify-between mt-0.5">
+                      <div
+                        className="flex items-baseline gap-1 px-2.5 py-1 rounded-full"
+                        style={{
+                          background: 'linear-gradient(180deg, rgb(22,101,52) 0%, rgb(20,83,45) 100%)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15)',
+                        }}
+                      >
+                        <span className="text-sm font-bold text-white font-montserrat leading-none">
+                          {(ad.max_earnings || 0).toLocaleString()}
+                        </span>
+                        <span className="text-[9px] font-semibold text-white/70 font-montserrat">sek</span>
+                      </div>
+                      <div
+                        className="h-7 w-7 rounded-full flex items-center justify-center"
+                        style={{
+                          background: 'linear-gradient(180deg, rgb(55,65,81) 0%, rgb(17,24,39) 100%)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1)',
+                        }}
+                      >
+                        <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
