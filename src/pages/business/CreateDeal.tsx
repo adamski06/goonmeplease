@@ -146,7 +146,7 @@ const CreateDeal: React.FC = () => {
         {/* Toggle button — always pinned to right edge of visible panel */}
         <button
           onClick={() => setChatCollapsed(c => !c)}
-          className="absolute top-0 bottom-0 right-0 w-8 flex items-center justify-center hover:bg-muted transition-colors"
+          className="absolute top-0 bottom-0 right-0 w-8 flex items-center justify-center hover:bg-muted transition-colors bg-background"
           style={{ color: 'hsl(var(--muted-foreground))' }}
           title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
         >
