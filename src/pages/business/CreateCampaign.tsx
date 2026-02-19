@@ -143,7 +143,20 @@ const CreateCampaign: React.FC = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh)] overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh)] overflow-hidden">
+      {/* Top bar */}
+      <div
+        className="w-full flex items-center justify-center shrink-0"
+        style={{
+          height: '48px',
+          borderBottom: '1px solid hsl(var(--border))',
+          background: 'hsl(var(--card))',
+        }}
+      >
+        <span className="text-sm font-semibold text-foreground font-montserrat tracking-wide">Create a Spread</span>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
       {/* Chat panel */}
       <div className="w-[340px] shrink-0 border-r border-border h-full">
         <CampaignChat
@@ -480,6 +493,7 @@ const CreateCampaign: React.FC = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

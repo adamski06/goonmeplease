@@ -10,25 +10,8 @@ const CreateCampaignChooser: React.FC = () => {
     else if (selected === 'deal') navigate('/business/deals/new');
   };
 
-  const topBarLabel = selected === 'spread' ? 'Create a Spread' : selected === 'deal' ? 'Create a Deal' : '';
-
   return (
     <div className="flex flex-col h-full min-h-screen relative">
-      {/* Animated top bar */}
-      <div
-        className="w-full flex items-center justify-center transition-all duration-300 overflow-hidden"
-        style={{
-          height: selected ? '48px' : '0px',
-          opacity: selected ? 1 : 0,
-          borderBottom: selected ? '1px solid hsl(var(--border))' : 'none',
-          background: 'hsl(var(--card))',
-        }}
-      >
-        <span className="text-sm font-semibold text-foreground font-montserrat tracking-wide">
-          {topBarLabel}
-        </span>
-      </div>
-
       {/* Content */}
       <div className="flex flex-col flex-1 px-4 py-8">
         <p className="text-sm font-medium text-muted-foreground font-jakarta mb-6 tracking-wide text-center">
