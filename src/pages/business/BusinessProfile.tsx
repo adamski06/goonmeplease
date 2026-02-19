@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 
 interface BusinessProfileData {
   company_name: string;
@@ -189,82 +188,68 @@ const BusinessProfile: React.FC = () => {
 
             {ads.map((ad) => {
               const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : `/business/deals/${ad.id}`;
+              const isSpread = ad.type === 'spread';
               return (
                 <button
                   key={`${ad.type}-${ad.id}`}
                   onClick={() => navigate(path)}
-                  className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col text-left transition-all active:scale-[0.98] relative"
+                  className="aspect-[9/14] rounded-[48px] overflow-hidden text-left transition-all active:scale-[0.98] relative"
                   style={{
                     border: '1px solid hsl(var(--border))',
                     boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                   }}
                 >
-                  {/* Cover image — takes all space above the node */}
-                  <div className="flex-1 relative overflow-hidden">
-                    {ad.cover_image_url ? (
-                      <img src={ad.cover_image_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <div
-                        className="w-full h-full flex items-center justify-center"
-                        style={{ background: 'hsl(var(--muted))' }}
-                      >
-                        <span className="text-3xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.4)' }}>
-                          {ad.brand_name.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* White node — mimics user app campaign card node */}
-                  <div
-                    className="px-4 pt-3 pb-4 flex-shrink-0 flex flex-col gap-2"
-                    style={{
-                      background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.97) 100%)',
-                      borderTop: '1.5px solid rgba(255,255,255,0.8)',
-                      boxShadow: 'inset 0 2px 0 rgba(255,255,255,1)',
-                    }}
-                  >
-                    {/* Brand + type badge */}
-                    <div className="flex items-center justify-between gap-1.5">
-                      <p className="text-xs font-bold text-black font-montserrat truncate">{ad.brand_name}</p>
-                      <span
-                        className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold shrink-0"
-                        style={{
-                          background: ad.type === 'spread' ? 'rgba(0,0,0,0.06)' : 'rgba(59,130,246,0.12)',
-                          color: ad.type === 'spread' ? 'rgba(0,0,0,0.55)' : 'rgb(37,99,235)',
-                        }}
-                      >
-                        {ad.type === 'spread' ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
-                        {ad.type === 'spread' ? 'Spread' : 'Deal'}
+                  {/* Cover image — fills entire card */}
+                  {ad.cover_image_url ? (
+                    <img src={ad.cover_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center"
+                      style={{ background: 'hsl(var(--muted))' }}
+                    >
+                      <span className="text-4xl font-bold font-montserrat" style={{ color: 'hsl(var(--muted-foreground) / 0.3)' }}>
+                        {ad.brand_name.charAt(0).toUpperCase()}
                       </span>
                     </div>
+                  )}
+
+                  {/* Floating white node inside card — like user app */}
+                  <div
+                    className="absolute left-3 right-3 bottom-3 rounded-[28px] px-4 py-3 flex flex-col gap-2"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(242,242,242,0.96) 100%)',
+                      border: '1.5px solid rgba(255,255,255,0.9)',
+                      boxShadow: '0 -4px 20px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,1)',
+                      backdropFilter: 'blur(8px)',
+                    }}
+                  >
+                    {/* Brand name */}
+                    <p className="text-xs font-bold text-black font-montserrat truncate">{ad.brand_name}</p>
 
                     {/* Title */}
-                    <p className="text-[11px] text-black/60 font-jakarta line-clamp-2 leading-snug">{ad.title}</p>
+                    <p className="text-[11px] text-black/55 font-jakarta line-clamp-2 leading-snug">{ad.title}</p>
 
-                    {/* Max earnings + platform */}
-                    <div className="flex items-center justify-between mt-0.5">
-                      <div
-                        className="flex items-baseline gap-1 px-2.5 py-1 rounded-full"
-                        style={{
-                          background: 'linear-gradient(180deg, rgb(22,101,52) 0%, rgb(20,83,45) 100%)',
-                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15)',
+                    {/* Glassy type badge */}
+                    <div className="flex">
+                      <span
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+                        style={isSpread ? {
+                          background: 'linear-gradient(135deg, rgba(59,130,246,0.25) 0%, rgba(37,99,235,0.18) 100%)',
+                          border: '1px solid rgba(59,130,246,0.35)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
+                          color: 'rgb(29,78,216)',
+                          backdropFilter: 'blur(4px)',
+                        } : {
+                          background: 'linear-gradient(135deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.05) 100%)',
+                          border: '1px solid rgba(0,0,0,0.10)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)',
+                          color: 'rgba(0,0,0,0.60)',
+                          backdropFilter: 'blur(4px)',
                         }}
                       >
-                        <span className="text-sm font-bold text-white font-montserrat leading-none">
-                          {(ad.max_earnings || 0).toLocaleString()}
-                        </span>
-                        <span className="text-[9px] font-semibold text-white/70 font-montserrat">sek</span>
-                      </div>
-                      <div
-                        className="h-7 w-7 rounded-full flex items-center justify-center"
-                        style={{
-                          background: 'linear-gradient(180deg, rgb(55,65,81) 0%, rgb(17,24,39) 100%)',
-                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1)',
-                        }}
-                      >
-                        <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain" />
-                      </div>
+                        {isSpread ? <Megaphone className="h-3 w-3" /> : <Handshake className="h-3 w-3" />}
+                        {isSpread ? 'Spread' : 'Deal'}
+                      </span>
                     </div>
                   </div>
                 </button>
