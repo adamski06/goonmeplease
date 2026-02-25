@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, Upload } from 'lucide-react';
+import { ArrowLeft, Eye, Upload, ImagePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
 
 interface CampaignData {
   id: string;
@@ -43,6 +44,7 @@ const BusinessCampaignDetail: React.FC = () => {
   const [tiers, setTiers] = useState<{ min_views: number; max_views: number | null; rate_per_view: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [thumbModalOpen, setThumbModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -110,6 +112,35 @@ const BusinessCampaignDetail: React.FC = () => {
     } else {
       setCampaign(prev => prev ? { ...prev, cover_image_url: urlData.publicUrl } : prev);
       toast({ title: 'Thumbnail updated' });
+    }
+    setUploading(false);
+  };
+
+  const handleThumbnailCropSave = async (blob: Blob) => {
+    if (!id) return;
+    setUploading(true);
+    const path = `thumbnails/${id}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from('campaign-assets')
+      .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+    if (uploadError) {
+      toast({ title: 'Upload failed', description: uploadError.message, variant: 'destructive' });
+      setUploading(false);
+      return;
+    }
+    const { data: urlData } = supabase.storage.from('campaign-assets').getPublicUrl(path);
+    const ts = Date.now();
+    const freshUrl = `${urlData.publicUrl}?t=${ts}`;
+    const { error: updateError } = await supabase
+      .from('campaigns')
+      .update({ cover_image_url: freshUrl })
+      .eq('id', id);
+    if (updateError) {
+      toast({ title: 'Error', description: updateError.message, variant: 'destructive' });
+    } else {
+      setCampaign(prev => prev ? { ...prev, cover_image_url: freshUrl } : prev);
+      toast({ title: 'Thumbnail updated' });
+      setThumbModalOpen(false);
     }
     setUploading(false);
   };
@@ -316,27 +347,39 @@ const BusinessCampaignDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: thumbnail — fixed size, 9/14 aspect ratio like homepage cards */}
+        {/* Right: thumbnail — clickable to open upload/crop modal */}
         <div className="shrink-0 w-[182px]">
-          <div
-            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
+          <button
+            onClick={() => setThumbModalOpen(true)}
+            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden relative group cursor-pointer"
             style={{ border: '1px solid hsl(var(--border))' }}
           >
             {campaign.cover_image_url ? (
               <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
             ) : (
               <div
-                className="h-full w-full flex items-center justify-center"
+                className="h-full w-full flex flex-col items-center justify-center gap-2"
                 style={{ background: 'linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--border)) 100%)' }}
               >
-                <span className="text-2xl font-bold text-muted-foreground/30 font-montserrat">
-                  {campaign.brand_name.charAt(0).toUpperCase()}
-                </span>
+                <ImagePlus className="h-6 w-6 text-muted-foreground/40" />
+                <span className="text-xs text-muted-foreground/50 font-medium">Add thumbnail</span>
               </div>
             )}
-          </div>
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[28px]">
+              <ImagePlus className="h-5 w-5 text-white" />
+            </div>
+          </button>
         </div>
       </div>
+
+      {/* Thumbnail upload/crop modal */}
+      <ThumbnailUploadModal
+        open={thumbModalOpen}
+        onClose={() => setThumbModalOpen(false)}
+        onSave={handleThumbnailCropSave}
+        saving={uploading}
+      />
     </div>
   );
 };

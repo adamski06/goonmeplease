@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Eye } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye, ImagePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
 
 interface DealData {
   id: string;
@@ -46,6 +47,8 @@ const BusinessDealDetail: React.FC = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [thumbModalOpen, setThumbModalOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -99,6 +102,35 @@ const BusinessDealDetail: React.FC = () => {
       toast.success(newStatus === 'accepted' ? 'Creator accepted!' : 'Application rejected');
     }
     setUpdating(null);
+  };
+
+  const handleThumbnailCropSave = async (blob: Blob) => {
+    if (!id) return;
+    setUploading(true);
+    const path = `thumbnails/deal-${id}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from('campaign-assets')
+      .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
+    if (uploadError) {
+      toast.error('Upload failed: ' + uploadError.message);
+      setUploading(false);
+      return;
+    }
+    const { data: urlData } = supabase.storage.from('campaign-assets').getPublicUrl(path);
+    const ts = Date.now();
+    const freshUrl = `${urlData.publicUrl}?t=${ts}`;
+    const { error: updateError } = await supabase
+      .from('deals')
+      .update({ cover_image_url: freshUrl })
+      .eq('id', id);
+    if (updateError) {
+      toast.error(updateError.message);
+    } else {
+      setDeal(prev => prev ? { ...prev, cover_image_url: freshUrl } : prev);
+      toast.success('Thumbnail updated');
+      setThumbModalOpen(false);
+    }
+    setUploading(false);
   };
 
   if (loading) {
@@ -371,27 +403,38 @@ const BusinessDealDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: thumbnail — fixed size, 9/14 aspect ratio like homepage cards */}
+        {/* Right: thumbnail — clickable to open upload/crop modal */}
         <div className="shrink-0 w-[182px]">
-          <div
-            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
+          <button
+            onClick={() => setThumbModalOpen(true)}
+            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden relative group cursor-pointer"
             style={{ border: '1px solid hsl(var(--border))' }}
           >
             {deal.cover_image_url ? (
               <img src={deal.cover_image_url} alt="" className="h-full w-full object-cover" />
             ) : (
               <div
-                className="h-full w-full flex items-center justify-center"
+                className="h-full w-full flex flex-col items-center justify-center gap-2"
                 style={{ background: 'linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--border)) 100%)' }}
               >
-                <span className="text-2xl font-bold text-muted-foreground/30 font-montserrat">
-                  {deal.brand_name.charAt(0).toUpperCase()}
-                </span>
+                <ImagePlus className="h-6 w-6 text-muted-foreground/40" />
+                <span className="text-xs text-muted-foreground/50 font-medium">Add thumbnail</span>
               </div>
             )}
-          </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[28px]">
+              <ImagePlus className="h-5 w-5 text-white" />
+            </div>
+          </button>
         </div>
       </div>
+
+      {/* Thumbnail upload/crop modal */}
+      <ThumbnailUploadModal
+        open={thumbModalOpen}
+        onClose={() => setThumbModalOpen(false)}
+        onSave={handleThumbnailCropSave}
+        saving={uploading}
+      />
     </div>
   );
 };
