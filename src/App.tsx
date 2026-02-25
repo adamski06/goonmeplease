@@ -18,11 +18,13 @@ import BusinessProfile from "./pages/business/BusinessProfile";
 import CreateCampaign from "./pages/business/CreateCampaign";
 import BusinessCampaigns from "./pages/business/BusinessCampaigns";
 import BusinessCampaignDetail from "./pages/business/BusinessCampaignDetail";
+import BusinessSubmissionDetail from "./pages/business/BusinessSubmissionDetail";
 import BusinessEditProfile from "./pages/business/BusinessEditProfile";
 import BusinessSettings from "./pages/business/BusinessSettings";
 import BusinessDeals from "./pages/business/BusinessDeals";
 import CreateDeal from "./pages/business/CreateDeal";
 import BusinessDealDetail from "./pages/business/BusinessDealDetail";
+import BusinessDealSubmissionDetail from "./pages/business/BusinessDealSubmissionDetail";
 import CreateCampaignChooser from "./pages/business/CreateCampaignChooser";
 
 const queryClient = new QueryClient();
@@ -68,9 +70,11 @@ const App = () => (
                   <Route path="campaigns" element={<BusinessCampaigns />} />
                   <Route path="campaigns/new" element={<CreateCampaign />} />
                   <Route path="campaigns/:id" element={<BusinessCampaignDetail />} />
+                  <Route path="campaigns/:id/submissions/:submissionId" element={<BusinessSubmissionDetail />} />
                   <Route path="deals" element={<BusinessDeals />} />
                   <Route path="deals/new" element={<CreateDeal />} />
                   <Route path="deals/:id" element={<BusinessDealDetail />} />
+                  <Route path="deals/:id/applications/:applicationId" element={<BusinessDealSubmissionDetail />} />
                   <Route path="settings" element={<BusinessSettings />} />
                 </Route>
                 <Route path="/" element={<Navigate to="/user" replace />} />

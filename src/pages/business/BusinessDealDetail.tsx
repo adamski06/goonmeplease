@@ -271,7 +271,7 @@ const BusinessDealDetail: React.FC = () => {
                   background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
                   border: '1px solid hsl(var(--border))',
                 }}
-                onClick={() => app.tiktok_video_url && window.open(app.tiktok_video_url, '_blank')}
+                onClick={() => navigate(`/business/deals/${id}/applications/${app.id}`)}
               >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
