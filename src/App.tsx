@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,26 +7,29 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
-import Auth from "./pages/Auth";
-import UserLayout from "./components/UserLayout";
-import CampaignDetail from "./pages/CampaignDetail";
-import EditProfile from "./pages/EditProfile";
-import Settings from "./pages/Settings";
-import NotFound from "./pages/NotFound";
-import BusinessAuth from "./pages/business/BusinessAuth";
-import BusinessLayout from "./components/business/BusinessLayout";
-import BusinessProfile from "./pages/business/BusinessProfile";
-import CreateCampaign from "./pages/business/CreateCampaign";
-import BusinessCampaigns from "./pages/business/BusinessCampaigns";
-import BusinessCampaignDetail from "./pages/business/BusinessCampaignDetail";
-import BusinessSubmissionDetail from "./pages/business/BusinessSubmissionDetail";
-import BusinessEditProfile from "./pages/business/BusinessEditProfile";
-import BusinessSettings from "./pages/business/BusinessSettings";
-import BusinessDeals from "./pages/business/BusinessDeals";
-import CreateDeal from "./pages/business/CreateDeal";
-import BusinessDealDetail from "./pages/business/BusinessDealDetail";
-import BusinessDealSubmissionDetail from "./pages/business/BusinessDealSubmissionDetail";
-import CreateCampaignChooser from "./pages/business/CreateCampaignChooser";
+import JarlaLoader from "@/components/JarlaLoader";
+
+// Lazy-loaded pages
+const Auth = lazy(() => import("./pages/Auth"));
+const UserLayout = lazy(() => import("./components/UserLayout"));
+const CampaignDetail = lazy(() => import("./pages/CampaignDetail"));
+const EditProfile = lazy(() => import("./pages/EditProfile"));
+const Settings = lazy(() => import("./pages/Settings"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const BusinessAuth = lazy(() => import("./pages/business/BusinessAuth"));
+const BusinessLayout = lazy(() => import("./components/business/BusinessLayout"));
+const BusinessProfile = lazy(() => import("./pages/business/BusinessProfile"));
+const CreateCampaign = lazy(() => import("./pages/business/CreateCampaign"));
+const BusinessCampaigns = lazy(() => import("./pages/business/BusinessCampaigns"));
+const BusinessCampaignDetail = lazy(() => import("./pages/business/BusinessCampaignDetail"));
+const BusinessSubmissionDetail = lazy(() => import("./pages/business/BusinessSubmissionDetail"));
+const BusinessEditProfile = lazy(() => import("./pages/business/BusinessEditProfile"));
+const BusinessSettings = lazy(() => import("./pages/business/BusinessSettings"));
+const BusinessDeals = lazy(() => import("./pages/business/BusinessDeals"));
+const CreateDeal = lazy(() => import("./pages/business/CreateDeal"));
+const BusinessDealDetail = lazy(() => import("./pages/business/BusinessDealDetail"));
+const BusinessDealSubmissionDetail = lazy(() => import("./pages/business/BusinessDealSubmissionDetail"));
+const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaignChooser"));
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <ProfileProvider>
+            <Suspense fallback={<JarlaLoader />}>
               <Routes>
                 {/* User tab pages — kept mounted via UserLayout */}
                 <Route path="/user" element={<UserLayout />} />
@@ -80,6 +85,7 @@ const App = () => (
                 <Route path="/" element={<Navigate to="/user" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+            </Suspense>
             </ProfileProvider>
           </AuthProvider>
         </BrowserRouter>
