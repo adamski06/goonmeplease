@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, DollarSign, Upload } from 'lucide-react';
+import { ArrowLeft, Eye, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -162,14 +162,14 @@ const BusinessCampaignDetail: React.FC = () => {
       </button>
 
       {/* Header */}
-      <div className="flex items-start gap-5 mb-8">
+      <div className="flex items-center gap-4 mb-8">
         <div className="relative group">
-          <div className="h-16 w-16 rounded-xl bg-muted shrink-0 overflow-hidden">
+          <div className="h-14 w-14 rounded-full bg-muted shrink-0 overflow-hidden">
             {campaign.cover_image_url ? (
               <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
             ) : (
               <div className="h-full w-full flex items-center justify-center">
-                <span className="text-xl font-bold text-muted-foreground/40 font-montserrat">
+                <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">
                   {campaign.brand_name.charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -178,7 +178,7 @@ const BusinessCampaignDetail: React.FC = () => {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="absolute inset-0 rounded-xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+            className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
           >
             {uploading ? (
               <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -188,21 +188,18 @@ const BusinessCampaignDetail: React.FC = () => {
           </button>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
-            <Badge variant="outline" className={campaign.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
-              {campaign.is_active ? 'Active' : 'Ended'}
-            </Badge>
-          </div>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
+          <Badge variant="outline" className={campaign.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
+            {campaign.is_active ? 'Active' : 'Ended'}
+          </Badge>
         </div>
       </div>
 
       {/* Stats: Views + Pot */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="rounded-[28px] p-5" style={cardStyle}>
-          <div className="flex items-center gap-2 mb-2">
-            <Eye className="h-4 w-4 text-muted-foreground" />
+          <div className="mb-2">
             <span className="text-xs text-muted-foreground">Total Views</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
@@ -210,8 +207,7 @@ const BusinessCampaignDetail: React.FC = () => {
           </p>
         </div>
         <div className="rounded-[28px] p-5" style={cardStyle}>
-          <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <div className="mb-2">
             <span className="text-xs text-muted-foreground">Pot</span>
           </div>
           <p className="text-2xl font-bold text-foreground">

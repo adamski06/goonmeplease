@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Eye, DollarSign } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -140,25 +140,23 @@ const BusinessDealDetail: React.FC = () => {
       </button>
 
       {/* Header */}
-      <div className="flex items-start gap-5 mb-8">
-        <div className="h-16 w-16 rounded-xl bg-muted shrink-0 overflow-hidden">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="h-14 w-14 rounded-full bg-muted shrink-0 overflow-hidden">
           {deal.cover_image_url ? (
             <img src={deal.cover_image_url} alt="" className="h-full w-full object-cover" />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
-              <span className="text-xl font-bold text-muted-foreground/40 font-montserrat">
+              <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">
                 {deal.brand_name.charAt(0).toUpperCase()}
               </span>
             </div>
           )}
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-foreground font-montserrat">{deal.title}</h1>
-            <Badge variant="outline" className={deal.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
-              {deal.is_active ? 'Active' : 'Ended'}
-            </Badge>
-          </div>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl font-bold text-foreground font-montserrat">{deal.title}</h1>
+          <Badge variant="outline" className={deal.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
+            {deal.is_active ? 'Active' : 'Ended'}
+          </Badge>
         </div>
       </div>
 
@@ -172,8 +170,7 @@ const BusinessDealDetail: React.FC = () => {
             boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
           }}
         >
-          <div className="flex items-center gap-2 mb-2">
-            <Eye className="h-4 w-4 text-muted-foreground" />
+          <div className="mb-2">
             <span className="text-xs text-muted-foreground">Total Views</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
@@ -188,8 +185,7 @@ const BusinessDealDetail: React.FC = () => {
             boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
           }}
         >
-          <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <div className="mb-2">
             <span className="text-xs text-muted-foreground">Money Spent</span>
           </div>
           <p className="text-2xl font-bold text-foreground">
