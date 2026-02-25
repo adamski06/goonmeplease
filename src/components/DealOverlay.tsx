@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Bookmark, HandshakeIcon, X, Send } from 'lucide-react';
 import EarningsGraph from '@/components/EarningsGraph';
@@ -23,9 +23,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   onToggleSave,
 }) => {
   const { user } = useAuth();
+  const [backdropVisible, setBackdropVisible] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setBackdropVisible(true));
+  }, []);
 
   const handleSendRequest = async () => {
     if (!user) {
@@ -73,9 +78,9 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
     <div className="fixed inset-0 z-40">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60"
+        className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
         style={{
-          opacity: isClosing ? 0 : 1,
+          opacity: isClosing ? 0 : backdropVisible ? 1 : 0,
           transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
