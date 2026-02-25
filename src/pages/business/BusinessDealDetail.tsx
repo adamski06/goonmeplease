@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -30,6 +30,7 @@ interface Application {
   tiktok_video_id: string | null;
   current_views: number | null;
   created_at: string;
+  creator_username?: string;
 }
 
 const appStatusBadge: Record<string, string> = {
@@ -57,7 +58,30 @@ const BusinessDealDetail: React.FC = () => {
           .order('created_at', { ascending: false }),
       ]);
       if (dealRes.data) setDeal(dealRes.data);
-      setApplications(appRes.data || []);
+
+      const apps = appRes.data || [];
+
+      // Fetch creator usernames
+      if (apps.length > 0) {
+        const creatorIds = [...new Set(apps.map(a => a.creator_id))];
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('user_id, username')
+          .in('user_id', creatorIds);
+
+        const usernameMap: Record<string, string> = {};
+        (profiles || []).forEach(p => {
+          if (p.username) usernameMap[p.user_id] = p.username;
+        });
+
+        setApplications(apps.map(a => ({
+          ...a,
+          creator_username: usernameMap[a.creator_id] || `User ${a.creator_id.slice(0, 6)}`,
+        })));
+      } else {
+        setApplications([]);
+      }
+
       setLoading(false);
     };
     load();
@@ -98,7 +122,7 @@ const BusinessDealDetail: React.FC = () => {
 
   const pending = applications.filter(a => a.status === 'pending');
   const accepted = applications.filter(a => a.status === 'accepted');
-  const rejected = applications.filter(a => a.status === 'rejected');
+  const totalViews = applications.reduce((sum, a) => sum + (a.current_views || 0), 0);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
@@ -111,7 +135,7 @@ const BusinessDealDetail: React.FC = () => {
         Back
       </button>
 
-      {/* Header */}
+      {/* Header — clean, no date or pricing */}
       <div className="flex items-start gap-5 mb-8">
         <div className="h-16 w-16 rounded-xl bg-muted shrink-0 overflow-hidden">
           {deal.cover_image_url ? (
@@ -131,36 +155,39 @@ const BusinessDealDetail: React.FC = () => {
               {deal.is_active ? 'Active' : 'Ended'}
             </Badge>
           </div>
-          <p className="text-xs text-muted-foreground">Created {new Date(deal.created_at).toLocaleDateString()}</p>
-          {deal.rate_per_view && (
-            <p className="text-xs text-muted-foreground mt-1">${deal.rate_per_view}/1k views · Max ${deal.max_earnings}/creator · Budget ${deal.total_budget?.toLocaleString()}</p>
-          )}
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-10">
-        {[
-          { label: 'Pending', value: pending.length, icon: Clock, color: 'text-amber-600' },
-          { label: 'Accepted', value: accepted.length, icon: CheckCircle, color: 'text-emerald-600' },
-          { label: 'Rejected', value: rejected.length, icon: XCircle, color: 'text-red-500' },
-        ].map(stat => (
-          <div
-            key={stat.label}
-            className="rounded-[28px] p-5"
-            style={{
-              background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-              border: '1px solid hsl(var(--border))',
-              boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
-            }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              <span className="text-xs text-muted-foreground">{stat.label}</span>
-            </div>
-            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+      {/* Single Views stat */}
+      <div className="mb-10">
+        <div
+          className="rounded-[28px] p-5"
+          style={{
+            background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+            border: '1px solid hsl(var(--border))',
+            boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+          }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Eye className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Total Views</span>
           </div>
-        ))}
+          <p className="text-2xl font-bold text-foreground">
+            {totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews}
+          </p>
+          {/* Pricing info moved here */}
+          <div className="flex items-center gap-3 mt-3 flex-wrap">
+            {deal.rate_per_view != null && (
+              <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
+            )}
+            {deal.max_earnings != null && (
+              <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
+            )}
+            {deal.total_budget != null && (
+              <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Description */}
@@ -186,21 +213,21 @@ const BusinessDealDetail: React.FC = () => {
         </div>
       )}
 
-      {/* Applications */}
-      <div>
+      {/* Creator Requests (pending) */}
+      <div className="mb-8">
         <h3 className="text-sm font-semibold text-foreground mb-4">
-          Creator Requests ({applications.length})
+          Creator Requests ({pending.length})
         </h3>
 
-        {applications.length === 0 ? (
+        {pending.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border p-10 text-center">
             <Users className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">No creator requests yet</p>
+            <p className="text-sm text-muted-foreground">No pending requests</p>
             <p className="text-xs text-muted-foreground/60 mt-1">Creators will appear here once they apply</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {applications.map(app => (
+            {pending.map(app => (
               <div
                 key={app.id}
                 className="flex items-center gap-4 rounded-[20px] p-4"
@@ -209,27 +236,75 @@ const BusinessDealDetail: React.FC = () => {
                   border: '1px solid hsl(var(--border))',
                 }}
               >
-                {/* Avatar placeholder */}
                 <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <Users className="h-4 w-4 text-muted-foreground/50" />
+                  <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
+                    {(app.creator_username || '?').charAt(0).toUpperCase()}
+                  </span>
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <p className="text-sm font-semibold text-foreground truncate">Creator #{app.creator_id.slice(0, 8)}</p>
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 shrink-0 ${appStatusBadge[app.status] || ''}`}>
-                      {app.status}
-                    </Badge>
-                  </div>
+                  <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
                   {app.message && (
                     <p className="text-xs text-muted-foreground truncate">{app.message}</p>
                   )}
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {new Date(app.created_at).toLocaleDateString()}
-                  </p>
                 </div>
 
-                {/* Video link if submitted */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => updateStatus(app.id, 'rejected')}
+                    disabled={updating === app.id}
+                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors"
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => updateStatus(app.id, 'accepted')}
+                    disabled={updating === app.id}
+                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors"
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* In Action Creators (accepted) */}
+      <div>
+        <h3 className="text-sm font-semibold text-foreground mb-4">
+          In Action Creators ({accepted.length})
+        </h3>
+
+        {accepted.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border p-8 text-center">
+            <p className="text-sm text-muted-foreground">No active creators yet</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {accepted.map(app => (
+              <div
+                key={app.id}
+                className="flex items-center gap-4 rounded-[20px] p-4"
+                style={{
+                  background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+                  border: '1px solid hsl(var(--border))',
+                }}
+              >
+                <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
+                    {(app.creator_username || '?').charAt(0).toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
+                  {app.message && (
+                    <p className="text-xs text-muted-foreground truncate">{app.message}</p>
+                  )}
+                </div>
+
                 {app.tiktok_video_url && (
                   <a
                     href={app.tiktok_video_url}
@@ -241,25 +316,10 @@ const BusinessDealDetail: React.FC = () => {
                   </a>
                 )}
 
-                {/* Accept / Reject buttons (only for pending) */}
-                {app.status === 'pending' && (
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => updateStatus(app.id, 'rejected')}
-                      disabled={updating === app.id}
-                      className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors"
-                    >
-                      <XCircle className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => updateStatus(app.id, 'accepted')}
-                      disabled={updating === app.id}
-                      className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors"
-                    >
-                      <CheckCircle className="h-4 w-4" />
-                    </button>
-                  </div>
-                )}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{(app.current_views || 0).toLocaleString()}</span>
+                </div>
               </div>
             ))}
           </div>
