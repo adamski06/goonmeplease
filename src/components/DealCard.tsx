@@ -169,7 +169,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             {deal.ratePerView ? (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <span className="text-xl font-bold text-white font-montserrat">${deal.ratePerView}</span>
-                <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
+                <span className="text-sm font-semibold text-white/80 font-montserrat">/1000 views</span>
               </div>
             ) : null}
           </div>
