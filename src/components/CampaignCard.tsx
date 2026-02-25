@@ -194,17 +194,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
           </div>
-          <div className="flex items-center justify-between flex-1 pb-5">
+          <div className="flex items-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">sek</span>
+              <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
+              <span className="text-xl font-bold text-white font-montserrat">${campaign.maxEarnings.toLocaleString()}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
-              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
+            {campaign.tiers.length > 0 && (
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span className="text-xl font-bold text-white font-montserrat">${campaign.tiers[0].rate}</span>
+                <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
