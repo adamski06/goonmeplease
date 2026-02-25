@@ -189,7 +189,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               ) : null}
               <span className="text-xs font-bold text-black/40" style={{ display: campaign.logo ? 'none' : 'flex' }}>{campaign.brand.charAt(0)}</span>
             </div>
-            <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+            <span className="text-sm font-bold text-black font-montserrat flex-1">{campaign.brand}</span>
+            <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+              <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
+            </div>
           </div>
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
