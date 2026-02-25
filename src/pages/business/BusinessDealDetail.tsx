@@ -265,11 +265,12 @@ const BusinessDealDetail: React.FC = () => {
             {accepted.map(app => (
               <div
                 key={app.id}
-                className="rounded-[20px] p-4"
+                className="rounded-[20px] p-4 cursor-pointer hover:ring-1 hover:ring-primary/30 transition-all"
                 style={{
                   background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
                   border: '1px solid hsl(var(--border))',
                 }}
+                onClick={() => app.tiktok_video_url && window.open(app.tiktok_video_url, '_blank')}
               >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
@@ -279,22 +280,15 @@ const BusinessDealDetail: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
+                    {app.tiktok_video_url && (
+                      <p className="text-xs text-primary truncate">View submission →</p>
+                    )}
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <Eye className="h-3.5 w-3.5 text-muted-foreground" />
                     <span className="text-sm font-semibold text-foreground">{(app.current_views || 0).toLocaleString()}</span>
                   </div>
                 </div>
-                {app.tiktok_video_url && (
-                  <a
-                    href={app.tiktok_video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 block text-xs text-primary hover:underline"
-                  >
-                    View posted video →
-                  </a>
-                )}
               </div>
             ))}
           </div>
@@ -333,7 +327,7 @@ const BusinessDealDetail: React.FC = () => {
           )}
 
           {/* Pricing pills — glassy green */}
-          <div className="flex items-center gap-2 pt-3 border-t border-border flex-wrap">
+          <div className="flex items-center gap-2 pt-3 flex-wrap">
             {deal.rate_per_view != null && (
               <span
                 className="text-xs font-medium px-3 py-1 rounded-full"
@@ -377,7 +371,7 @@ const BusinessDealDetail: React.FC = () => {
         </div>
 
         {/* Right: thumbnail — fixed size, 9/14 aspect ratio like homepage cards */}
-        <div className="shrink-0 w-[140px]">
+        <div className="shrink-0 w-[182px]">
           <div
             className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
             style={{ border: '1px solid hsl(var(--border))' }}
