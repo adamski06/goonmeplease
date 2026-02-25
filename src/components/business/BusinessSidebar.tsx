@@ -137,22 +137,10 @@ const BusinessSidebar: React.FC = () => {
               className="absolute left-0 right-0 mt-1 rounded-lg border border-border overflow-hidden z-50 shadow-md"
               style={{ background: 'hsl(var(--popover))', backdropFilter: 'none' }}
             >
-              {/* Company / profile row */}
-              <button
-                onClick={() => { navigate('/business'); setProfileOpen(false); }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
-              >
-                <div className="h-4 w-4 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
-                  <span className="text-[8px] font-bold text-muted-foreground font-montserrat">{initial}</span>
-                </div>
-                <span className="truncate">{profile?.company_name || 'Profile'}</span>
-              </button>
-              {/* Separator */}
-              <div className="h-px bg-border" />
-              {/* Credits card */}
+              {/* Balance card */}
               <div className="mx-2 my-2 rounded-lg border border-border p-3 space-y-2.5" style={{ background: 'hsl(var(--muted) / 0.5)' }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-foreground">Credits</span>
+                  <span className="text-xs font-medium text-foreground">Balance</span>
                   <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
                     <span className="font-semibold text-foreground">—</span>
                     <span>left</span>
@@ -163,10 +151,15 @@ const BusinessSidebar: React.FC = () => {
                 <div className="h-1.5 w-full rounded-full bg-border overflow-hidden">
                   <div className="h-full rounded-full bg-primary" style={{ width: '0%' }} />
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  <span className="text-[10px] text-muted-foreground">No active plan</span>
-                </div>
+              </div>
+              {/* Ad Balance button */}
+              <div className="px-2 pb-2">
+                <button
+                  onClick={() => { setProfileOpen(false); }}
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-foreground border border-border hover:bg-sidebar-accent/50 transition-colors"
+                >
+                  Ad Balance
+                </button>
               </div>
             </div>
           )}
