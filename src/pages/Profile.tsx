@@ -141,9 +141,7 @@ const ProfilePage: React.FC = () => {
 
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
-  if (loading) {
-    return <JarlaLoader />;
-  }
+  // Loading handled by UserLayout
 
   return (
     <div className="min-h-screen bg-white pb-24">

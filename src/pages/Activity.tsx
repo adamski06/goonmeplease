@@ -221,9 +221,7 @@ const Activity: React.FC = () => {
     }, 400);
   };
 
-  if (loading) {
-    return <JarlaLoader />;
-  }
+  // Loading handled by UserLayout
 
   return (
     <div className="min-h-screen bg-white pb-24">

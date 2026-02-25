@@ -128,9 +128,7 @@ const Discover: React.FC = () => {
     }
   }, [hasMore, loadMore]);
 
-  if (loading) {
-    return <JarlaLoader />;
-  }
+  // Loading handled by UserLayout
 
   const cardBottomPanel = {
     background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',

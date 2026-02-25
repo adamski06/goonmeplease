@@ -7,14 +7,10 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import Auth from "./pages/Auth";
-import Campaigns from "./pages/Campaigns";
-import Discover from "./pages/Discover";
+import UserLayout from "./components/UserLayout";
 import CampaignDetail from "./pages/CampaignDetail";
-import Activity from "./pages/Activity";
-import Alerts from "./pages/Alerts";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
 import EditProfile from "./pages/EditProfile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import BusinessAuth from "./pages/business/BusinessAuth";
 import BusinessLayout from "./components/business/BusinessLayout";
@@ -52,13 +48,15 @@ const App = () => (
           <AuthProvider>
             <ProfileProvider>
               <Routes>
-                <Route path="/user" element={<Campaigns />} />
-                <Route path="/user/discover" element={<Discover />} />
+                {/* User tab pages — kept mounted via UserLayout */}
+                <Route path="/user" element={<UserLayout />} />
+                <Route path="/user/discover" element={<UserLayout />} />
+                <Route path="/user/activity" element={<UserLayout />} />
+                <Route path="/user/alerts" element={<UserLayout />} />
+                <Route path="/user/profile" element={<UserLayout />} />
+                {/* User sub-pages */}
                 <Route path="/user/auth" element={<Auth />} />
                 <Route path="/user/campaigns/:id" element={<CampaignDetail />} />
-                <Route path="/user/activity" element={<Activity />} />
-                <Route path="/user/alerts" element={<Alerts />} />
-                <Route path="/user/profile" element={<Profile />} />
                 <Route path="/user/edit-profile" element={<EditProfile />} />
                 <Route path="/user/settings" element={<Settings />} />
                 {/* Business routes */}
