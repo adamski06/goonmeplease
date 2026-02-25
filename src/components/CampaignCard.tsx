@@ -145,6 +145,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setExpandReady(false);
   }, [campaign.id]);
 
+  const displayRate = campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5;
+
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
       {/* Card container with image */}
@@ -189,21 +191,22 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               ) : null}
               <span className="text-xs font-bold text-black/40" style={{ display: campaign.logo ? 'none' : 'flex' }}>{campaign.brand.charAt(0)}</span>
             </div>
-            <span className="text-sm font-bold text-black font-montserrat">{campaign.brand}</span>
+            <span className="text-sm font-bold text-black font-montserrat flex-1">{campaign.brand}</span>
+            <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+              <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
+            </div>
           </div>
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
           </div>
-          <div className="flex items-center justify-between flex-1 pb-5">
+          <div className="flex items-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">sek</span>
+              <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
+              <span className="text-xl font-bold text-white font-montserrat">${campaign.maxEarnings.toLocaleString()}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-black/50 font-jakarta">Platform:</span>
-              <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[44px] w-[44px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <img src={tiktokIcon} alt="TikTok" className="w-6 h-6 object-contain" />
-              </div>
+            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <span className="text-xl font-bold text-white font-montserrat">${displayRate}</span>
+              <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
             </div>
           </div>
         </div>

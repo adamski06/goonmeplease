@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from 'lucide-react';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 
 interface BottomNavProps {
@@ -26,7 +27,12 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
 
   const isActive = (path: string) => currentPath === path;
 
+  const tap = () => {
+    Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+  };
+
   const handleProtectedNav = (path: string) => {
+    tap();
     if (!user && onAuthRequired) {
       onAuthRequired();
     } else {
@@ -43,7 +49,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
       <div className="flex items-start justify-between h-full">
         {/* Home */}
         <button
-          onClick={() => navigate('/user')}
+          onClick={() => { tap(); navigate('/user'); }}
           className="flex flex-col items-center gap-1 pt-1 w-12"
         >
           <svg
@@ -60,7 +66,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
 
         {/* Discover */}
         <button
-          onClick={() => navigate('/user/discover')}
+          onClick={() => { tap(); navigate('/user/discover'); }}
           className="flex flex-col items-center gap-1 pt-1 w-12"
         >
           <svg
