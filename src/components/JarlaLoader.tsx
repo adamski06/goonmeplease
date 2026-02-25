@@ -8,9 +8,9 @@ const JarlaLoader: React.FC = () => {
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) return 100;
-        return prev + 2;
+        return prev + 1;
       });
-    }, 30);
+    }, 16);
     return () => clearInterval(interval);
   }, []);
 
