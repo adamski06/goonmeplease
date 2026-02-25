@@ -4,7 +4,7 @@ import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
-import tiktokIcon from '@/assets/tiktok-icon.png';
+
 import { supabase } from '@/integrations/supabase/client';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 import {
@@ -217,16 +217,25 @@ const Discover: React.FC = () => {
                         <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{deal.brand}</span>
                       </div>
                       <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
-                        <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5">
-                          {deal.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="rounded-[16px] px-3 py-1.5 flex items-center gap-1 border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
-                            <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 flex-1">
+                            {deal.description}
+                          </p>
+                          <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0 ml-1.5" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
+                            <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
                           </div>
-                          <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                            <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain pointer-events-none" draggable={false} />
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                            <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
+                            <span className="text-xs font-bold text-white font-montserrat">${deal.maxEarnings}</span>
                           </div>
+                          {deal.ratePerView ? (
+                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                              <span className="text-xs font-bold text-white font-montserrat">${deal.ratePerView}</span>
+                              <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </div>
@@ -281,17 +290,25 @@ const Discover: React.FC = () => {
                           <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
                         </div>
                         <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
-                          <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5">
-                            {campaign.description}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[16px] px-3 py-1.5 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-sm font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-                              <span className="text-[10px] font-semibold text-white/80 font-montserrat">sek</span>
+                          <div className="flex items-center justify-between mb-0.5">
+                            <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 flex-1">
+                              {campaign.description}
+                            </p>
+                            <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0 ml-1.5" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+                              <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
                             </div>
-                            <div className="bg-gradient-to-b from-gray-700 to-gray-900 rounded-full h-[32px] w-[32px] flex items-center justify-center border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <img src={tiktokIcon} alt="TikTok" className="w-4 h-4 object-contain pointer-events-none" draggable={false} />
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                              <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
+                              <span className="text-xs font-bold text-white font-montserrat">${campaign.maxEarnings}</span>
                             </div>
+                            {campaign.tiers.length > 0 && (
+                              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                                <span className="text-xs font-bold text-white font-montserrat">${campaign.tiers[0].rate}</span>
+                                <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
