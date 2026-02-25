@@ -94,7 +94,7 @@ const BusinessSidebar: React.FC = () => {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-4 min-h-0">
+      <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-1.5 min-h-0">
         {/* Company profile node with dropdown */}
         <div ref={profileRef} className="relative">
           <button
