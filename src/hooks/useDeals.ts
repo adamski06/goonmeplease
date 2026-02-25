@@ -26,6 +26,8 @@ function mapDbDeal(row: any): Campaign {
     guidelines: row.guidelines || [],
     tiers: [],
     exampleImages: [],
+    ratePerView: Number(row.rate_per_view) || 0,
+    type: 'deal',
   };
 }
 

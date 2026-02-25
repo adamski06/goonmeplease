@@ -19,4 +19,6 @@ export interface Campaign {
   tiers: CampaignTier[];
   exampleImages?: string[];
   pot?: number;
+  ratePerView?: number;
+  type?: 'spread' | 'deal';
 }
