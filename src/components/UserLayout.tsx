@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 import JarlaLoader from '@/components/JarlaLoader';
 import Campaigns from '@/pages/Campaigns';
 import Discover from '@/pages/Discover';
@@ -12,6 +13,7 @@ const TAB_PATHS = ['/user', '/user/discover', '/user/activity', '/user/alerts', 
 
 const UserLayout: React.FC = () => {
   const { loading } = useAuth();
+  const isMobile = useIsMobile();
   const location = useLocation();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
@@ -42,6 +44,19 @@ const UserLayout: React.FC = () => {
 
   if (!ready) {
     return <JarlaLoader />;
+  }
+
+  if (!isMobile) {
+    return (
+      <div className="h-screen w-screen bg-black flex flex-col items-center justify-center px-8">
+        <svg className="h-16 w-16 mb-4 opacity-60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+          <line x1="12" y1="18" x2="12" y2="18" />
+        </svg>
+        <p className="text-lg font-semibold text-white font-montserrat text-center">This app is mobile only</p>
+        <p className="text-sm text-white/50 mt-2 font-jakarta text-center">Open this link on your phone to use the app</p>
+      </div>
+    );
   }
 
   return (
