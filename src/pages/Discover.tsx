@@ -215,16 +215,14 @@ const Discover: React.FC = () => {
                           {deal.logo && <img src={deal.logo} alt={deal.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />}
                         </div>
                         <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{deal.brand}</span>
+                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
+                          <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
+                        </div>
                       </div>
                       <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
-                        <div className="flex items-center justify-between mb-0.5">
-                          <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 flex-1">
-                            {deal.description}
-                          </p>
-                          <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0 ml-1.5" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
-                            <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
-                          </div>
-                        </div>
+                        <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 mb-0.5">
+                          {deal.description}
+                        </p>
                         <div className="flex items-center gap-1.5">
                           <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                             <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
@@ -287,17 +285,15 @@ const Discover: React.FC = () => {
                           <div className="h-[20px] w-[20px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
                             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />
                           </div>
-                          <span className="text-sm font-medium text-white font-montserrat drop-shadow-md">{campaign.brand}</span>
+                          <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{campaign.brand}</span>
+                          <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+                            <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
+                          </div>
                         </div>
                         <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
-                          <div className="flex items-center justify-between mb-0.5">
-                            <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 flex-1">
-                              {campaign.description}
-                            </p>
-                            <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0 ml-1.5" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
-                              <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
-                            </div>
-                          </div>
+                          <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 mb-0.5">
+                            {campaign.description}
+                          </p>
                           <div className="flex items-center gap-1.5">
                             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                               <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
