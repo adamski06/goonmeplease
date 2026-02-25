@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -139,11 +140,7 @@ const CampaignDetail: React.FC = () => {
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <JarlaLoader />;
   }
 
   if (!campaign) {

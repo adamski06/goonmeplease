@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -183,11 +184,7 @@ const Auth: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <JarlaLoader />;
   }
 
   const currentStep = stepNumber(signUpStep);
