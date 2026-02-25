@@ -299,12 +299,10 @@ const Discover: React.FC = () => {
                               <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
                               <span className="text-xs font-bold text-white font-montserrat">${campaign.maxEarnings}</span>
                             </div>
-                            {campaign.tiers.length > 0 && (
-                              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                                <span className="text-xs font-bold text-white font-montserrat">${campaign.tiers[0].rate}</span>
-                                <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
-                              </div>
-                            )}
+                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                              <span className="text-xs font-bold text-white font-montserrat">${campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5}</span>
+                              <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
+                            </div>
                           </div>
                         </div>
                       </div>

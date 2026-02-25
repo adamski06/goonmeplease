@@ -154,14 +154,14 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
             <span className="text-sm font-bold text-black font-montserrat flex-1">{deal.brand}</span>
             {/* Deal badge */}
-            <div className="px-2.5 py-1 rounded-full" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
-              <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
+            <div className="rounded-[12px] px-2 h-[22px] flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
+              <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
             </div>
           </div>
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{deal.description}</p>
           </div>
-          <div className="flex items-center gap-2 flex-1 pb-5">
+          <div className="flex items-center justify-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
               <span className="text-xl font-bold text-white font-montserrat">${deal.maxEarnings.toLocaleString()}</span>
