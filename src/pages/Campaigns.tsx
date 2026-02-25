@@ -93,9 +93,7 @@ const Campaigns: React.FC = () => {
     }
   }, [hasMore, loadMore]);
 
-  if (loading) {
-    return <JarlaLoader />;
-  }
+  // Loading handled by UserLayout
 
   return (
     <div className="h-screen flex relative overflow-hidden">

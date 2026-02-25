@@ -15,22 +15,16 @@ const JarlaLoader: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black gap-6">
       <img
         src={jarlaLogo}
         alt="Jarla"
-        className="h-8 opacity-40"
-        style={{ filter: 'grayscale(100%)' }}
+        className="h-8 brightness-0 invert opacity-60"
       />
-      <div className="w-24 h-[2px] rounded-full overflow-hidden" style={{ background: 'hsl(var(--muted))' }}>
+      <div className="w-24 h-[2px] rounded-full overflow-hidden bg-white/10">
         <div
-          className="h-full rounded-full transition-all duration-75 ease-linear"
-          style={{
-            width: `${progress}%`,
-            background: 'hsl(var(--muted-foreground) / 0.4)',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
+          className="h-full rounded-full transition-all duration-75 ease-linear bg-white/40"
+          style={{ width: `${progress}%` }}
         />
       </div>
     </div>

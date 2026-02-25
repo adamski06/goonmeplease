@@ -14,9 +14,7 @@ const Alerts: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
-  if (loading) {
-    return <JarlaLoader />;
-  }
+  // Loading handled by UserLayout
 
   return (
     <div className="min-h-screen bg-white pb-24">
