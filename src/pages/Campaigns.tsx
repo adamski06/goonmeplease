@@ -87,11 +87,32 @@ const Campaigns: React.FC = () => {
   const handleScroll = useCallback(() => {
     if (!scrollRef.current || !hasMore) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-    // Load 2 more when within 1 card of the bottom
     if (scrollHeight - scrollTop - clientHeight < clientHeight) {
       loadMore();
     }
   }, [hasMore, loadMore]);
+
+  // Faster snap settling — detect scroll end and snap programmatically
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleSnapSettle = useCallback(() => {
+    if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    scrollTimer.current = setTimeout(() => {
+      if (!scrollRef.current) return;
+      const container = scrollRef.current;
+      const cardHeight = container.clientHeight;
+      if (cardHeight === 0) return;
+      const targetIndex = Math.round(container.scrollTop / cardHeight);
+      const targetScroll = targetIndex * cardHeight;
+      if (Math.abs(container.scrollTop - targetScroll) > 2) {
+        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      }
+    }, 80);
+  }, []);
+
+  const onScroll = useCallback(() => {
+    handleScroll();
+    handleSnapSettle();
+  }, [handleScroll, handleSnapSettle]);
 
   // Loading handled by UserLayout
 
@@ -103,9 +124,9 @@ const Campaigns: React.FC = () => {
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
         <div 
           ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)]"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onScroll={onScroll}
+          className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)] overscroll-none"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
         >
           {feedItems.map((item) =>
             item.type === 'deal' ? (

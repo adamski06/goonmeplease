@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -51,6 +51,20 @@ const Discover: React.FC = () => {
         d.title.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : deals;
+
+  // Shuffle campaigns and deals together, stable per content set
+  const shuffledItems = useMemo(() => {
+    const allItems: (Campaign & { _kind: 'spread' | 'deal' })[] = [
+      ...filteredCampaigns.map(c => ({ ...c, _kind: 'spread' as const })),
+      ...filteredDeals.map(d => ({ ...d, _kind: 'deal' as const })),
+    ];
+    // Fisher-Yates shuffle with a seed based on ids for stability
+    for (let i = allItems.length - 1; i > 0; i--) {
+      const j = Math.floor((i * 7 + 3) % (i + 1));
+      [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+    }
+    return allItems;
+  }, [filteredCampaigns, filteredDeals]);
 
   const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
@@ -190,138 +204,80 @@ const Discover: React.FC = () => {
           className="relative flex-1 overflow-y-auto pt-2 pb-24 scrollbar-hide overscroll-contain"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
         >
-          <div className="px-3 space-y-4">
-
-            {/* Deals section */}
-            {filteredDeals.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-black/40 uppercase tracking-widest font-montserrat">Deals</span>
-                  <div className="flex-1 h-[1px] bg-black/10" />
-                </div>
-                <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-                  {filteredDeals.map((deal) => (
+          <div className="px-3">
+            {campaignsLoading && campaigns.length === 0 ? (
+              <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="relative w-full rounded-[28px] aspect-[9/14] overflow-hidden" style={{ background: 'linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 100%)' }}>
+                    <div className="absolute inset-0 skeleton-shimmer" />
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <div className="h-5 w-5 rounded-full bg-black/[0.07]" />
+                      <div className="h-3 w-16 rounded-full bg-black/[0.07]" />
+                    </div>
+                    <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 bg-white/60">
+                      <div className="h-3 w-full rounded-full bg-black/[0.07] mb-2" />
+                      <div className="h-3 w-3/4 rounded-full bg-black/[0.07] mb-3" />
+                      <div className="flex items-center justify-between">
+                        <div className="h-8 w-20 rounded-[16px] bg-black/[0.07]" />
+                        <div className="h-8 w-8 rounded-full bg-black/[0.07]" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : shuffledItems.length > 0 ? (
+              <div className="grid grid-cols-2 gap-x-2 gap-y-4">
+                {shuffledItems.map((item) => {
+                  const isDeal = item._kind === 'deal';
+                  const rate = isDeal ? item.ratePerView : (item.tiers[0]?.rate ?? item.ratePerView ?? 0.5);
+                  return (
                     <div
-                      key={deal.id}
-                      onClick={() => handleSelectDeal(deal)}
+                      key={item.id}
+                      onClick={() => isDeal ? handleSelectDeal(item) : handleSelectCampaign(item)}
                       className="relative overflow-hidden w-full rounded-[28px] aspect-[9/14] select-none"
                       style={{ WebkitUserDrag: 'none', touchAction: 'pan-y' } as React.CSSProperties}
                     >
-                      <img src={deal.image || placeholderBlue} alt={deal.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
+                      <img src={item.image || placeholderBlue} alt={item.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
                       <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[28px]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} />
                       <div className="absolute inset-x-0 top-0 h-[70px] bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none rounded-t-[28px]" />
                       <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center gap-1.5">
                         <div className="h-[20px] w-[20px] rounded-full overflow-hidden border border-white/30 flex-shrink-0 bg-black/20">
-                          {deal.logo && <img src={deal.logo} alt={deal.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />}
+                          {item.logo && <img src={item.logo} alt={item.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />}
                         </div>
-                        <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{deal.brand}</span>
-                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
-                          <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
+                        <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{item.brand}</span>
+                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+                          <span className="text-[9px] font-bold text-white font-montserrat">{isDeal ? 'DEAL' : 'SPREAD'}</span>
                         </div>
                       </div>
                       <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
                         <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 mb-0.5">
-                          {deal.description}
+                          {item.description}
                         </p>
                         <div className="flex items-center gap-1.5">
                           <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                             <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
-                            <span className="text-xs font-bold text-white font-montserrat">${deal.maxEarnings}</span>
+                            <span className="text-xs font-bold text-white font-montserrat">${item.maxEarnings}</span>
                           </div>
-                          {deal.ratePerView ? (
+                          {rate != null && (
                             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-xs font-bold text-white font-montserrat">${deal.ratePerView}</span>
+                              <span className="text-xs font-bold text-white font-montserrat">${rate}</span>
                               <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
                             </div>
-                          ) : null}
+                          )}
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
-            )}
-
-            {/* Spread campaigns section */}
-            {(filteredCampaigns.length > 0 || campaignsLoading) && (
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-black/40 uppercase tracking-widest font-montserrat">Spread</span>
-                  <div className="flex-1 h-[1px] bg-black/10" />
-                </div>
-                {campaignsLoading && campaigns.length === 0 ? (
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <div key={i} className="relative w-full rounded-[28px] aspect-[9/14] overflow-hidden" style={{ background: 'linear-gradient(180deg, #e8e8e8 0%, #f0f0f0 100%)' }}>
-                        <div className="absolute inset-0 skeleton-shimmer" />
-                        <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                          <div className="h-5 w-5 rounded-full bg-black/[0.07]" />
-                          <div className="h-3 w-16 rounded-full bg-black/[0.07]" />
-                        </div>
-                        <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 bg-white/60">
-                          <div className="h-3 w-full rounded-full bg-black/[0.07] mb-2" />
-                          <div className="h-3 w-3/4 rounded-full bg-black/[0.07] mb-3" />
-                          <div className="flex items-center justify-between">
-                            <div className="h-8 w-20 rounded-[16px] bg-black/[0.07]" />
-                            <div className="h-8 w-8 rounded-full bg-black/[0.07]" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-                    {filteredCampaigns.map((campaign) => (
-                      <div
-                        key={campaign.id}
-                        onClick={() => handleSelectCampaign(campaign)}
-                        className="relative overflow-hidden w-full rounded-[28px] aspect-[9/14] select-none"
-                        style={{ WebkitUserDrag: 'none', touchAction: 'pan-y' } as React.CSSProperties}
-                      >
-                        <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="absolute inset-0 w-full h-full object-cover rounded-[28px] pointer-events-none select-none" draggable={false} />
-                        <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none rounded-[28px]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} />
-                        <div className="absolute inset-x-0 top-0 h-[70px] bg-gradient-to-b from-black/50 via-black/20 to-transparent pointer-events-none rounded-t-[28px]" />
-                        <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center gap-1.5">
-                          <div className="h-[20px] w-[20px] rounded-full overflow-hidden border border-white/30 flex-shrink-0">
-                            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />
-                          </div>
-                          <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{campaign.brand}</span>
-                          <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
-                            <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
-                          </div>
-                        </div>
-                        <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
-                          <p className="text-[11px] font-medium text-black font-jakarta line-clamp-2 leading-relaxed px-0.5 mb-0.5">
-                            {campaign.description}
-                          </p>
-                          <div className="flex items-center gap-1.5">
-                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
-                              <span className="text-xs font-bold text-white font-montserrat">${campaign.maxEarnings}</span>
-                            </div>
-                            {campaign.tiers.length > 0 && (
-                              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                                <span className="text-xs font-bold text-white font-montserrat">${campaign.tiers[0].rate}</span>
-                                <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {campaignsLoading && campaigns.length > 0 && (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="animate-pulse text-black/40 text-sm">Loading...</div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {!campaignsLoading && filteredCampaigns.length === 0 && filteredDeals.length === 0 && (
+            ) : !campaignsLoading ? (
               <div className="flex items-center justify-center py-20">
                 <p className="text-black/40 text-sm">{searchQuery.trim() ? 'No results found' : 'No campaigns available'}</p>
+              </div>
+            ) : null}
+            {campaignsLoading && campaigns.length > 0 && (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-pulse text-black/40 text-sm">Loading...</div>
               </div>
             )}
           </div>

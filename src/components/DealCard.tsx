@@ -154,14 +154,14 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
             <span className="text-sm font-bold text-black font-montserrat flex-1">{deal.brand}</span>
             {/* Deal badge */}
-            <div className="px-2.5 py-1 rounded-full" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
-              <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
+            <div className="rounded-[12px] px-2 h-[22px] flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
+              <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
             </div>
           </div>
           <div className="pb-2">
             <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{deal.description}</p>
           </div>
-          <div className="flex items-center gap-2 flex-1 pb-5">
+          <div className="flex items-center justify-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
               <span className="text-xl font-bold text-white font-montserrat">${deal.maxEarnings.toLocaleString()}</span>
@@ -169,7 +169,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             {deal.ratePerView ? (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <span className="text-xl font-bold text-white font-montserrat">${deal.ratePerView}</span>
-                <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
+                <span className="text-sm font-semibold text-white/80 font-montserrat">/1000 views</span>
               </div>
             ) : null}
           </div>
@@ -216,9 +216,6 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
                 {deal.logo ? <img src={deal.logo} alt={deal.brand} className="w-full h-full object-cover" /> : <span className="text-xs font-bold text-black/40">{deal.brand.charAt(0)}</span>}
               </div>
               <h2 className="text-base font-bold text-black font-montserrat flex-1">{deal.brand}</h2>
-              <div className="px-2.5 py-1 rounded-full" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
-                <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
-              </div>
             </div>
 
             {/* Scrollable content */}
@@ -276,9 +273,9 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
                 style={{
                   background: requested
                     ? 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)'
-                    : 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
-                  border: '1.5px solid rgba(96,165,250,0.4)',
-                  boxShadow: '0 4px 20px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',
+                    : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+                  border: '1.5px solid rgba(60,60,60,0.6)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)',
                   color: 'white',
                 }}
               >
