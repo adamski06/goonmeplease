@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Bookmark, Plus, X } from 'lucide-react';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
@@ -21,11 +21,16 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
   isSaved,
   onToggleSave,
 }) => {
+  const [backdropVisible, setBackdropVisible] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setBackdropVisible(true));
+  }, []);
 
   const handleContinue = () => {
     // Check if guide should be skipped
@@ -80,9 +85,9 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
     <div className="fixed inset-0 z-40">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60"
+        className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
         style={{
-          opacity: isClosing ? 0 : 1,
+          opacity: isClosing ? 0 : backdropVisible ? 1 : 0,
           transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
