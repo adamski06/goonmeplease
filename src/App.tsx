@@ -8,10 +8,12 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import JarlaLoader from "@/components/JarlaLoader";
+import jarlaLogoSrc from "@/assets/jarla-logo.png";
 
 const BusinessLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+  <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-5">
+    <img src={jarlaLogoSrc} alt="Jarla" className="h-5 dark:invert-0 invert" />
+    <div className="h-3.5 w-3.5 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
   </div>
 );
 
