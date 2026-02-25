@@ -60,8 +60,6 @@ const BusinessDealDetail: React.FC = () => {
       if (dealRes.data) setDeal(dealRes.data);
 
       const apps = appRes.data || [];
-
-      // Fetch creator usernames
       if (apps.length > 0) {
         const creatorIds = [...new Set(apps.map(a => a.creator_id))];
         const { data: profiles } = await supabase
@@ -135,7 +133,7 @@ const BusinessDealDetail: React.FC = () => {
         Back
       </button>
 
-      {/* Header — clean, no date or pricing */}
+      {/* Header */}
       <div className="flex items-start gap-5 mb-8">
         <div className="h-16 w-16 rounded-xl bg-muted shrink-0 overflow-hidden">
           {deal.cover_image_url ? (
@@ -149,7 +147,7 @@ const BusinessDealDetail: React.FC = () => {
           )}
         </div>
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-foreground font-montserrat">{deal.title}</h1>
             <Badge variant="outline" className={deal.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
               {deal.is_active ? 'Active' : 'Ended'}
@@ -158,8 +156,8 @@ const BusinessDealDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Single Views stat */}
-      <div className="mb-10">
+      {/* Views stat — small like the old ones */}
+      <div className="grid grid-cols-2 gap-4 mb-8">
         <div
           className="rounded-[28px] p-5"
           style={{
@@ -175,43 +173,8 @@ const BusinessDealDetail: React.FC = () => {
           <p className="text-2xl font-bold text-foreground">
             {totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews}
           </p>
-          {/* Pricing info moved here */}
-          <div className="flex items-center gap-3 mt-3 flex-wrap">
-            {deal.rate_per_view != null && (
-              <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
-            )}
-            {deal.max_earnings != null && (
-              <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
-            )}
-            {deal.total_budget != null && (
-              <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
-            )}
-          </div>
         </div>
       </div>
-
-      {/* Description */}
-      {deal.description && (
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-foreground mb-2">Description</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{deal.description}</p>
-        </div>
-      )}
-
-      {/* Guidelines */}
-      {deal.guidelines && deal.guidelines.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Guidelines</h3>
-          <ul className="space-y-1.5">
-            {deal.guidelines.map((g, i) => (
-              <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                <span className="text-foreground/40 mt-0.5">•</span>
-                {g}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
 
       {/* Creator Requests (pending) */}
       <div className="mb-8">
@@ -241,19 +204,17 @@ const BusinessDealDetail: React.FC = () => {
                     {(app.creator_username || '?').charAt(0).toUpperCase()}
                   </span>
                 </div>
-
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
                   {app.message && (
                     <p className="text-xs text-muted-foreground truncate">{app.message}</p>
                   )}
                 </div>
-
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => updateStatus(app.id, 'rejected')}
                     disabled={updating === app.id}
-                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-red-500/10 hover:text-red-500 transition-colors"
+                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
                   >
                     <XCircle className="h-4 w-4" />
                   </button>
@@ -272,7 +233,7 @@ const BusinessDealDetail: React.FC = () => {
       </div>
 
       {/* In Action Creators (accepted) */}
-      <div>
+      <div className="mb-8">
         <h3 className="text-sm font-semibold text-foreground mb-4">
           In Action Creators ({accepted.length})
         </h3>
@@ -297,25 +258,22 @@ const BusinessDealDetail: React.FC = () => {
                     {(app.creator_username || '?').charAt(0).toUpperCase()}
                   </span>
                 </div>
-
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
                   {app.message && (
                     <p className="text-xs text-muted-foreground truncate">{app.message}</p>
                   )}
                 </div>
-
                 {app.tiktok_video_url && (
                   <a
                     href={app.tiktok_video_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-blue-600 hover:underline shrink-0"
+                    className="text-xs text-primary hover:underline shrink-0"
                   >
                     View video
                   </a>
                 )}
-
                 <div className="flex items-center gap-1.5 shrink-0">
                   <Eye className="h-3.5 w-3.5 text-muted-foreground" />
                   <span className="text-sm font-semibold text-foreground">{(app.current_views || 0).toLocaleString()}</span>
@@ -324,6 +282,49 @@ const BusinessDealDetail: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Ad Details node — title, description, guidelines, pricing at bottom */}
+      <div
+        className="rounded-[28px] p-6"
+        style={{
+          background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+          border: '1px solid hsl(var(--border))',
+          boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+        }}
+      >
+        <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{deal.title}</h3>
+
+        {deal.description && (
+          <p className="text-sm text-muted-foreground leading-relaxed mb-4">{deal.description}</p>
+        )}
+
+        {deal.guidelines && deal.guidelines.length > 0 && (
+          <div className="mb-4">
+            <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
+            <ul className="space-y-1.5">
+              {deal.guidelines.map((g, i) => (
+                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-foreground/40 mt-0.5">•</span>
+                  {g}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Pricing info */}
+        <div className="flex items-center gap-3 pt-3 border-t border-border flex-wrap">
+          {deal.rate_per_view != null && (
+            <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
+          )}
+          {deal.max_earnings != null && (
+            <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
+          )}
+          {deal.total_budget != null && (
+            <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
+          )}
+        </div>
       </div>
     </div>
   );
