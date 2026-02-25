@@ -156,7 +156,7 @@ const BusinessDealDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Views stat — small like the old ones */}
+      {/* Views stat */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div
           className="rounded-[28px] p-5"
@@ -183,10 +183,8 @@ const BusinessDealDetail: React.FC = () => {
         </h3>
 
         {pending.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-10 text-center">
-            <Users className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">No pending requests</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Creators will appear here once they apply</p>
+          <div className="rounded-xl border border-dashed border-border px-6 py-5 text-center">
+            <p className="text-xs text-muted-foreground">No pending requests</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -232,98 +230,121 @@ const BusinessDealDetail: React.FC = () => {
         )}
       </div>
 
-      {/* In Action Creators (accepted) */}
-      <div className="mb-8">
+      {/* In Action Creators (accepted) — half width */}
+      <div className="mb-8 max-w-[50%]">
         <h3 className="text-sm font-semibold text-foreground mb-4">
           In Action Creators ({accepted.length})
         </h3>
 
         {accepted.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-8 text-center">
-            <p className="text-sm text-muted-foreground">No active creators yet</p>
+          <div className="rounded-xl border border-dashed border-border px-5 py-4 text-center">
+            <p className="text-xs text-muted-foreground">No active creators yet</p>
           </div>
         ) : (
           <div className="space-y-3">
             {accepted.map(app => (
               <div
                 key={app.id}
-                className="flex items-center gap-4 rounded-[20px] p-4"
+                className="rounded-[20px] p-4"
                 style={{
                   background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
                   border: '1px solid hsl(var(--border))',
                 }}
               >
-                <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
-                    {(app.creator_username || '?').charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
-                  {app.message && (
-                    <p className="text-xs text-muted-foreground truncate">{app.message}</p>
-                  )}
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    <span className="text-xs font-bold text-muted-foreground/60 font-montserrat">
+                      {(app.creator_username || '?').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-sm font-semibold text-foreground">{(app.current_views || 0).toLocaleString()}</span>
+                  </div>
                 </div>
                 {app.tiktok_video_url && (
                   <a
                     href={app.tiktok_video_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-primary hover:underline shrink-0"
+                    className="mt-2 block text-xs text-primary hover:underline"
                   >
-                    View video
+                    View posted video →
                   </a>
                 )}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <Eye className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="text-sm font-semibold text-foreground">{(app.current_views || 0).toLocaleString()}</span>
-                </div>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Ad Details node — title, description, guidelines, pricing at bottom */}
+      {/* Ad Details node — description + thumbnail side by side */}
       <div
-        className="rounded-[28px] p-6"
+        className="rounded-[28px] p-6 flex gap-5"
         style={{
           background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
           border: '1px solid hsl(var(--border))',
           boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
         }}
       >
-        <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{deal.title}</h3>
+        {/* Left: text content */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{deal.title}</h3>
 
-        {deal.description && (
-          <p className="text-sm text-muted-foreground leading-relaxed mb-4">{deal.description}</p>
-        )}
+          {deal.description && (
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{deal.description}</p>
+          )}
 
-        {deal.guidelines && deal.guidelines.length > 0 && (
-          <div className="mb-4">
-            <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
-            <ul className="space-y-1.5">
-              {deal.guidelines.map((g, i) => (
-                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <span className="text-foreground/40 mt-0.5">•</span>
-                  {g}
-                </li>
-              ))}
-            </ul>
+          {deal.guidelines && deal.guidelines.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
+              <ul className="space-y-1.5">
+                {deal.guidelines.map((g, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <span className="text-foreground/40 mt-0.5">•</span>
+                    {g}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Pricing info */}
+          <div className="flex items-center gap-3 pt-3 border-t border-border flex-wrap">
+            {deal.rate_per_view != null && (
+              <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
+            )}
+            {deal.max_earnings != null && (
+              <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
+            )}
+            {deal.total_budget != null && (
+              <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
+            )}
           </div>
-        )}
+        </div>
 
-        {/* Pricing info */}
-        <div className="flex items-center gap-3 pt-3 border-t border-border flex-wrap">
-          {deal.rate_per_view != null && (
-            <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
-          )}
-          {deal.max_earnings != null && (
-            <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
-          )}
-          {deal.total_budget != null && (
-            <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
-          )}
+        {/* Right: thumbnail (same as homepage card: 9/14 aspect, 48px rounded) */}
+        <div className="w-[120px] shrink-0">
+          <div
+            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
+            style={{ border: '1px solid hsl(var(--border))' }}
+          >
+            {deal.cover_image_url ? (
+              <img src={deal.cover_image_url} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div
+                className="h-full w-full flex items-center justify-center"
+                style={{ background: 'linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--border)) 100%)' }}
+              >
+                <span className="text-2xl font-bold text-muted-foreground/30 font-montserrat">
+                  {deal.brand_name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
