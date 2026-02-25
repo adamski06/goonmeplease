@@ -199,12 +199,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
               <span className="text-xl font-bold text-white font-montserrat">${campaign.maxEarnings.toLocaleString()}</span>
             </div>
-            {campaign.tiers.length > 0 && (
+            {campaign.tiers.length > 0 ? (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <span className="text-xl font-bold text-white font-montserrat">${campaign.tiers[0].rate}</span>
                 <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
               </div>
-            )}
+            ) : campaign.ratePerView ? (
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span className="text-xl font-bold text-white font-montserrat">${campaign.ratePerView}</span>
+                <span className="text-sm font-semibold text-white/80 font-montserrat">/1k</span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
