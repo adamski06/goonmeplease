@@ -16,33 +16,31 @@ const UserLayout: React.FC = () => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
 
-  // Track which tabs have been visited so we only mount them on first visit
-  const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set([location.pathname]));
-
+  // Mount ALL tabs immediately so they preload
   const currentPath = TAB_PATHS.includes(location.pathname as any) ? location.pathname : '/user';
 
-  useEffect(() => {
-    setVisitedTabs(prev => {
-      if (prev.has(currentPath)) return prev;
-      const next = new Set(prev);
-      next.add(currentPath);
-      return next;
-    });
-  }, [currentPath]);
+  // Keep loader visible for a minimum duration to let pages preload
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
   useEffect(() => {
-    if (!loading && !hasLoaded) {
+    const timer = setTimeout(() => setMinTimeElapsed(true), 1800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const ready = !loading && minTimeElapsed;
+
+  useEffect(() => {
+    if (ready && !hasLoaded) {
       setHasLoaded(true);
-      // Small delay for fade-in
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setFadeIn(true);
         });
       });
     }
-  }, [loading, hasLoaded]);
+  }, [ready, hasLoaded]);
 
-  if (loading) {
+  if (!ready) {
     return <JarlaLoader />;
   }
 
@@ -53,23 +51,23 @@ const UserLayout: React.FC = () => {
     >
       {/* Home */}
       <div style={{ display: currentPath === '/user' ? 'block' : 'none' }}>
-        {visitedTabs.has('/user') && <Campaigns />}
+        <Campaigns />
       </div>
       {/* Discover */}
       <div style={{ display: currentPath === '/user/discover' ? 'block' : 'none' }}>
-        {visitedTabs.has('/user/discover') && <Discover />}
+        <Discover />
       </div>
       {/* Activity */}
       <div style={{ display: currentPath === '/user/activity' ? 'block' : 'none' }}>
-        {visitedTabs.has('/user/activity') && <Activity />}
+        <Activity />
       </div>
       {/* Alerts */}
       <div style={{ display: currentPath === '/user/alerts' ? 'block' : 'none' }}>
-        {visitedTabs.has('/user/alerts') && <Alerts />}
+        <Alerts />
       </div>
       {/* Profile */}
       <div style={{ display: currentPath === '/user/profile' ? 'block' : 'none' }}>
-        {visitedTabs.has('/user/profile') && <Profile />}
+        <Profile />
       </div>
     </div>
   );
