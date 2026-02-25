@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Eye } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -121,6 +121,12 @@ const BusinessDealDetail: React.FC = () => {
   const pending = applications.filter(a => a.status === 'pending');
   const accepted = applications.filter(a => a.status === 'accepted');
   const totalViews = applications.reduce((sum, a) => sum + (a.current_views || 0), 0);
+  // Estimate money spent: sum of (views / 1000 * rate_per_view) per creator, capped at max_earnings
+  const moneySpent = accepted.reduce((sum, a) => {
+    const earned = ((a.current_views || 0) / 1000) * (deal?.rate_per_view || 0);
+    const capped = deal?.max_earnings ? Math.min(earned, deal.max_earnings) : earned;
+    return sum + capped;
+  }, 0);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
@@ -156,7 +162,7 @@ const BusinessDealDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Views stat */}
+      {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div
           className="rounded-[28px] p-5"
@@ -172,6 +178,22 @@ const BusinessDealDetail: React.FC = () => {
           </div>
           <p className="text-2xl font-bold text-foreground">
             {totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews}
+          </p>
+        </div>
+        <div
+          className="rounded-[28px] p-5"
+          style={{
+            background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
+            border: '1px solid hsl(var(--border))',
+            boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+          }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Money Spent</span>
+          </div>
+          <p className="text-2xl font-bold text-foreground">
+            ${moneySpent >= 1000 ? `${(moneySpent / 1000).toFixed(1)}k` : moneySpent.toFixed(0)}
           </p>
         </div>
       </div>
@@ -358,8 +380,8 @@ const BusinessDealDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: thumbnail — stretches to full node height */}
-        <div className="w-[120px] shrink-0 self-stretch">
+        {/* Right: thumbnail — full height, 9/14 aspect ratio */}
+        <div className="shrink-0 self-stretch" style={{ aspectRatio: '9/14' }}>
           <div
             className="w-full h-full rounded-[28px] overflow-hidden"
             style={{ border: '1px solid hsl(var(--border))' }}
