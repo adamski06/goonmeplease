@@ -176,14 +176,14 @@ const BusinessDealDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Creator Requests (pending) */}
-      <div className="mb-8">
+      {/* Creator Requests (pending) — half width */}
+      <div className="mb-8 max-w-[50%]">
         <h3 className="text-sm font-semibold text-foreground mb-4">
           Creator Requests ({pending.length})
         </h3>
 
         {pending.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border px-6 py-5 text-center">
+          <div className="rounded-xl border border-dashed border-border px-5 py-4 text-center">
             <p className="text-xs text-muted-foreground">No pending requests</p>
           </div>
         ) : (
@@ -191,38 +191,40 @@ const BusinessDealDetail: React.FC = () => {
             {pending.map(app => (
               <div
                 key={app.id}
-                className="flex items-center gap-4 rounded-[20px] p-4"
+                className="rounded-[20px] p-4"
                 style={{
                   background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
                   border: '1px solid hsl(var(--border))',
                 }}
               >
-                <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
-                    {(app.creator_username || '?').charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
-                  {app.message && (
-                    <p className="text-xs text-muted-foreground truncate">{app.message}</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => updateStatus(app.id, 'rejected')}
-                    disabled={updating === app.id}
-                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
-                  >
-                    <XCircle className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => updateStatus(app.id, 'accepted')}
-                    disabled={updating === app.id}
-                    className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors"
-                  >
-                    <CheckCircle className="h-4 w-4" />
-                  </button>
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    <span className="text-xs font-bold text-muted-foreground/60 font-montserrat">
+                      {(app.creator_username || '?').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">@{app.creator_username}</p>
+                    {app.message && (
+                      <p className="text-xs text-muted-foreground truncate">{app.message}</p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => updateStatus(app.id, 'rejected')}
+                      disabled={updating === app.id}
+                      className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                    >
+                      <XCircle className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => updateStatus(app.id, 'accepted')}
+                      disabled={updating === app.id}
+                      className="h-8 w-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-emerald-500/10 hover:text-emerald-600 transition-colors"
+                    >
+                      <CheckCircle className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -312,24 +314,54 @@ const BusinessDealDetail: React.FC = () => {
             </div>
           )}
 
-          {/* Pricing info */}
-          <div className="flex items-center gap-3 pt-3 border-t border-border flex-wrap">
+          {/* Pricing pills — glassy green */}
+          <div className="flex items-center gap-2 pt-3 border-t border-border flex-wrap">
             {deal.rate_per_view != null && (
-              <span className="text-xs text-muted-foreground">${deal.rate_per_view}/1k views</span>
+              <span
+                className="text-xs font-medium px-3 py-1 rounded-full"
+                style={{
+                  background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.12) 0%, hsla(142, 71%, 45%, 0.06) 100%)',
+                  border: '1px solid hsla(142, 71%, 45%, 0.25)',
+                  color: 'hsl(142, 71%, 35%)',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                ${deal.rate_per_view}/1k views
+              </span>
             )}
             {deal.max_earnings != null && (
-              <span className="text-xs text-muted-foreground">Max ${deal.max_earnings}/creator</span>
+              <span
+                className="text-xs font-medium px-3 py-1 rounded-full"
+                style={{
+                  background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.12) 0%, hsla(142, 71%, 45%, 0.06) 100%)',
+                  border: '1px solid hsla(142, 71%, 45%, 0.25)',
+                  color: 'hsl(142, 71%, 35%)',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                Max ${deal.max_earnings}/creator
+              </span>
             )}
             {deal.total_budget != null && (
-              <span className="text-xs text-muted-foreground">Budget ${deal.total_budget.toLocaleString()}</span>
+              <span
+                className="text-xs font-medium px-3 py-1 rounded-full"
+                style={{
+                  background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.12) 0%, hsla(142, 71%, 45%, 0.06) 100%)',
+                  border: '1px solid hsla(142, 71%, 45%, 0.25)',
+                  color: 'hsl(142, 71%, 35%)',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                Budget ${deal.total_budget.toLocaleString()}
+              </span>
             )}
           </div>
         </div>
 
-        {/* Right: thumbnail (same as homepage card: 9/14 aspect, 48px rounded) */}
-        <div className="w-[120px] shrink-0">
+        {/* Right: thumbnail — stretches to full node height */}
+        <div className="w-[120px] shrink-0 self-stretch">
           <div
-            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
+            className="w-full h-full rounded-[28px] overflow-hidden"
             style={{ border: '1px solid hsl(var(--border))' }}
           >
             {deal.cover_image_url ? (
