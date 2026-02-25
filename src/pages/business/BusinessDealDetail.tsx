@@ -376,10 +376,10 @@ const BusinessDealDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: thumbnail — full height, 9/14 aspect ratio */}
-        <div className="shrink-0 self-stretch" style={{ aspectRatio: '9/14' }}>
+        {/* Right: thumbnail — fixed size, 9/14 aspect ratio like homepage cards */}
+        <div className="shrink-0 w-[140px]">
           <div
-            className="w-full h-full rounded-[28px] overflow-hidden"
+            className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
             style={{ border: '1px solid hsl(var(--border))' }}
           >
             {deal.cover_image_url ? (
