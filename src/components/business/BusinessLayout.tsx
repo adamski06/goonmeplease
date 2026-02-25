@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
 
 const BusinessLayout: React.FC = () => {
@@ -48,8 +49,14 @@ const BusinessLayout: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="h-6 w-6 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-5"
+          style={{ filter: 'invert(1)' }}
+        />
+        <div className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
       </div>
     );
   }
