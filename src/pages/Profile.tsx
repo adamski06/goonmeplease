@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -141,11 +142,7 @@ const ProfilePage: React.FC = () => {
   const firstName = profile?.full_name?.split(' ')[0] || 'User';
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse text-black/40">Loading...</div>
-      </div>
-    );
+    return <JarlaLoader />;
   }
 
   return (

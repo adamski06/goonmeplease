@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
@@ -14,11 +15,7 @@ const Alerts: React.FC = () => {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse text-black/40">Loading...</div>
-      </div>
-    );
+    return <JarlaLoader />;
   }
 
   return (

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import JarlaLoader from '@/components/JarlaLoader';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -221,11 +222,7 @@ const Activity: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse text-black/40">Loading...</div>
-      </div>
-    );
+    return <JarlaLoader />;
   }
 
   return (
