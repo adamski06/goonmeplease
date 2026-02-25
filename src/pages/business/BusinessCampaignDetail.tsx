@@ -206,16 +206,21 @@ const BusinessCampaignDetail: React.FC = () => {
             {totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : totalViews}
           </p>
         </div>
-        <div className="rounded-[28px] p-5" style={cardStyle}>
+        <div className="rounded-[28px] p-5" style={{
+          background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.15) 0%, hsla(142, 71%, 35%, 0.08) 100%)',
+          border: '1px solid hsla(142, 71%, 45%, 0.30)',
+          boxShadow: 'inset 0 1px 0 hsla(142, 71%, 80%, 0.2), 0 2px 8px hsla(142, 71%, 30%, 0.08)',
+          backdropFilter: 'blur(8px)',
+        }}>
           <div className="mb-2">
-            <span className="text-xs text-muted-foreground">Pot</span>
+            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pot</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
+          <p className="text-2xl font-bold" style={{ color: 'hsl(142, 60%, 30%)' }}>
             ${potUsed >= 1000 ? `${(potUsed / 1000).toFixed(1)}k` : potUsed.toFixed(0)}
-            <span className="text-sm font-normal text-muted-foreground ml-1">/ ${potTotal.toLocaleString()}</span>
+            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ ${potTotal.toLocaleString()}</span>
           </p>
           {potTotal > 0 && (
-            <div className="mt-2 h-1.5 rounded-full bg-muted overflow-hidden">
+            <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'hsla(142, 71%, 45%, 0.15)' }}>
               <div
                 className="h-full rounded-full transition-all"
                 style={{ width: `${potPercent}%`, background: 'hsl(142, 71%, 45%)' }}

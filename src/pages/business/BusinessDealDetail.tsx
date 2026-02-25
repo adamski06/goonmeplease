@@ -180,15 +180,16 @@ const BusinessDealDetail: React.FC = () => {
         <div
           className="rounded-[28px] p-5"
           style={{
-            background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-            border: '1px solid hsl(var(--border))',
-            boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
+            background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.15) 0%, hsla(142, 71%, 35%, 0.08) 100%)',
+            border: '1px solid hsla(142, 71%, 45%, 0.30)',
+            boxShadow: 'inset 0 1px 0 hsla(142, 71%, 80%, 0.2), 0 2px 8px hsla(142, 71%, 30%, 0.08)',
+            backdropFilter: 'blur(8px)',
           }}
         >
           <div className="mb-2">
-            <span className="text-xs text-muted-foreground">Money Spent</span>
+            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Money Spent</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">
+          <p className="text-2xl font-bold" style={{ color: 'hsl(142, 60%, 30%)' }}>
             ${moneySpent >= 1000 ? `${(moneySpent / 1000).toFixed(1)}k` : moneySpent.toFixed(0)}
           </p>
         </div>
