@@ -215,7 +215,7 @@ const Discover: React.FC = () => {
                           {deal.logo && <img src={deal.logo} alt={deal.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />}
                         </div>
                         <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{deal.brand}</span>
-                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', borderColor: 'rgba(96,165,250,0.4)' }}>
+                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
                           <span className="text-[9px] font-bold text-white font-montserrat">DEAL</span>
                         </div>
                       </div>
