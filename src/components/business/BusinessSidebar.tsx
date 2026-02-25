@@ -197,7 +197,7 @@ const BusinessSidebar: React.FC = () => {
 
         {/* All ads (spread + deals) under one "Ads" heading */}
         {items.length > 0 && (
-          <div className="space-y-0.5 mt-4">
+          <div className="space-y-0.5 mt-6">
             <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
               Ads
             </p>
