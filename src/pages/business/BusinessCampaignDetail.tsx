@@ -291,27 +291,24 @@ const BusinessCampaignDetail: React.FC = () => {
             </div>
           )}
 
-          {/* Pricing pills — glassy green */}
-          <div className="flex items-center gap-2 pt-3 flex-wrap">
+          {/* Earnings — simple two rows */}
+          <div className="pt-3 space-y-1.5">
+            {campaign.max_earnings != null && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-20">Max payout</span>
+                <span className="text-sm font-semibold text-foreground">${campaign.max_earnings}</span>
+              </div>
+            )}
             {tiers.length > 0 ? (
-              tiers.map((tier, i) => (
-                <span key={i} className="text-xs font-medium px-3 py-1 rounded-full" style={greenPillStyle}>
-                  {tier.min_views.toLocaleString()}–{tier.max_views ? tier.max_views.toLocaleString() : '∞'} views: ${tier.rate_per_view}/1k
-                </span>
-              ))
-            ) : (
-              <>
-                {campaign.max_earnings != null && (
-                  <span className="text-xs font-medium px-3 py-1 rounded-full" style={greenPillStyle}>
-                    Max ${campaign.max_earnings}/creator
-                  </span>
-                )}
-                {campaign.total_budget != null && (
-                  <span className="text-xs font-medium px-3 py-1 rounded-full" style={greenPillStyle}>
-                    Budget ${campaign.total_budget.toLocaleString()}
-                  </span>
-                )}
-              </>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-20">Rate</span>
+                <span className="text-sm font-semibold text-foreground">${tiers[0].rate_per_view}/1k views</span>
+              </div>
+            ) : campaign.total_budget != null && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground w-20">Budget</span>
+                <span className="text-sm font-semibold text-foreground">${campaign.total_budget.toLocaleString()}</span>
+              </div>
             )}
           </div>
         </div>
