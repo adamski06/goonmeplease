@@ -238,7 +238,12 @@ const BusinessCampaignDetail: React.FC = () => {
         ) : (
           <div className="space-y-3">
             {approved.map(sub => (
-              <div key={sub.id} className="rounded-[20px] p-4" style={cardStyle}>
+              <div
+                key={sub.id}
+                className="rounded-[20px] p-4 cursor-pointer hover:ring-1 hover:ring-primary/30 transition-all"
+                style={cardStyle}
+                onClick={() => sub.tiktok_video_url && window.open(sub.tiktok_video_url, '_blank')}
+              >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
                     <span className="text-xs font-bold text-muted-foreground/60 font-montserrat">
@@ -247,22 +252,15 @@ const BusinessCampaignDetail: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">@{sub.creator_username}</p>
+                    {sub.tiktok_video_url && (
+                      <p className="text-xs text-primary truncate">View submission →</p>
+                    )}
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <Eye className="h-3.5 w-3.5 text-muted-foreground" />
                     <span className="text-sm font-semibold text-foreground">{(sub.current_views || 0).toLocaleString()}</span>
                   </div>
                 </div>
-                {sub.tiktok_video_url && (
-                  <a
-                    href={sub.tiktok_video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 block text-xs text-primary hover:underline"
-                  >
-                    View posted video →
-                  </a>
-                )}
               </div>
             ))}
           </div>
@@ -294,7 +292,7 @@ const BusinessCampaignDetail: React.FC = () => {
           )}
 
           {/* Pricing pills — glassy green */}
-          <div className="flex items-center gap-2 pt-3 border-t border-border flex-wrap">
+          <div className="flex items-center gap-2 pt-3 flex-wrap">
             {tiers.length > 0 ? (
               tiers.map((tier, i) => (
                 <span key={i} className="text-xs font-medium px-3 py-1 rounded-full" style={greenPillStyle}>
@@ -319,7 +317,7 @@ const BusinessCampaignDetail: React.FC = () => {
         </div>
 
         {/* Right: thumbnail — fixed size, 9/14 aspect ratio like homepage cards */}
-        <div className="shrink-0 w-[140px]">
+        <div className="shrink-0 w-[182px]">
           <div
             className="w-full aspect-[9/14] rounded-[28px] overflow-hidden"
             style={{ border: '1px solid hsl(var(--border))' }}
