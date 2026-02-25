@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Coins, Home } from 'lucide-react';
+import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Home } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -149,20 +149,24 @@ const BusinessSidebar: React.FC = () => {
               </button>
               {/* Separator */}
               <div className="h-px bg-border" />
-              {/* Credits — pill style */}
-              <div className="px-3 py-2.5 flex items-center justify-between gap-2">
-                <span className="text-[11px] text-muted-foreground">Credits</span>
-                <span
-                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
-                  style={{
-                    background: 'hsl(var(--muted))',
-                    color: 'hsl(var(--foreground))',
-                    border: '1px solid hsl(var(--border))',
-                  }}
-                >
-                  <Coins className="h-3 w-3" />
-                  —
-                </span>
+              {/* Credits card */}
+              <div className="mx-2 my-2 rounded-lg border border-border p-3 space-y-2.5" style={{ background: 'hsl(var(--muted) / 0.5)' }}>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-foreground">Credits</span>
+                  <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    <span className="font-semibold text-foreground">—</span>
+                    <span>left</span>
+                    <ChevronDown className="h-3 w-3 -rotate-90" />
+                  </button>
+                </div>
+                {/* Progress bar */}
+                <div className="h-1.5 w-full rounded-full bg-border overflow-hidden">
+                  <div className="h-full rounded-full bg-primary" style={{ width: '0%' }} />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="text-[10px] text-muted-foreground">No active plan</span>
+                </div>
               </div>
             </div>
           )}
