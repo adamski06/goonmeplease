@@ -135,7 +135,7 @@ const BusinessCampaignDetail: React.FC = () => {
   const potUsed = campaign.total_budget ? Math.min(totalViews * 0.003, campaign.total_budget) : 0; // rough estimate
   const potTotal = campaign.total_budget || 0;
   const potPercent = potTotal > 0 ? Math.min((potUsed / potTotal) * 100, 100) : 0;
-  const approved = submissions.filter(s => s.status === 'approved' || s.status === 'paid');
+  const inAction = submissions; // Show all submissions as "in action"
 
   const greenPillStyle = {
     background: 'linear-gradient(135deg, hsla(142, 71%, 45%, 0.12) 0%, hsla(142, 71%, 45%, 0.06) 100%)',
@@ -230,24 +230,24 @@ const BusinessCampaignDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* In Action Creators (approved submissions) — half width */}
+      {/* In Action Creators — half width */}
       <div className="mb-8 max-w-[50%]">
         <h3 className="text-sm font-semibold text-foreground mb-4">
-          In Action Creators ({approved.length})
+          In Action Creators ({inAction.length})
         </h3>
 
-        {approved.length === 0 ? (
+        {inAction.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border px-5 py-4 text-center">
             <p className="text-xs text-muted-foreground">No active creators yet</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {approved.map(sub => (
+            {inAction.map(sub => (
               <div
                 key={sub.id}
                 className="rounded-[20px] p-4 cursor-pointer hover:ring-1 hover:ring-primary/30 transition-all"
                 style={cardStyle}
-                onClick={() => sub.tiktok_video_url && window.open(sub.tiktok_video_url, '_blank')}
+                onClick={() => navigate(`/business/campaigns/${id}/submissions/${sub.id}`)}
               >
                 <div className="flex items-center gap-3">
                   <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
@@ -257,9 +257,7 @@ const BusinessCampaignDetail: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">@{sub.creator_username}</p>
-                    {sub.tiktok_video_url && (
-                      <p className="text-xs text-primary truncate">View submission →</p>
-                    )}
+                    <p className="text-xs text-primary truncate">View submission →</p>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <Eye className="h-3.5 w-3.5 text-muted-foreground" />
