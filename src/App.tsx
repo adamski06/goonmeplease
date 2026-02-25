@@ -9,6 +9,12 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import JarlaLoader from "@/components/JarlaLoader";
 
+const BusinessLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+  </div>
+);
+
 // Lazy-loaded pages
 const Auth = lazy(() => import("./pages/Auth"));
 const UserLayout = lazy(() => import("./components/UserLayout"));
@@ -66,9 +72,9 @@ const App = () => (
                 <Route path="/user/campaigns/:id" element={<CampaignDetail />} />
                 <Route path="/user/edit-profile" element={<EditProfile />} />
                 <Route path="/user/settings" element={<Settings />} />
-                {/* Business routes */}
-                <Route path="/business/auth" element={<BusinessAuth />} />
-                <Route path="/business" element={<BusinessLayout />}>
+                {/* Business routes — white loader */}
+                <Route path="/business/auth" element={<Suspense fallback={<BusinessLoader />}><BusinessAuth /></Suspense>} />
+                <Route path="/business" element={<Suspense fallback={<BusinessLoader />}><BusinessLayout /></Suspense>}>
                   <Route index element={<BusinessProfile />} />
                   <Route path="new" element={<CreateCampaignChooser />} />
                   <Route path="edit-profile" element={<BusinessEditProfile />} />
