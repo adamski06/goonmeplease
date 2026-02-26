@@ -219,7 +219,7 @@ const Auth: React.FC = () => {
         </div>
 
         {/* Logo */}
-        <div className="flex justify-center py-6">
+        <div className="flex justify-center pt-6 pb-10">
           <div className="relative h-10 w-[140px]">
             <div
               className="absolute inset-0 bg-black"
@@ -238,22 +238,22 @@ const Auth: React.FC = () => {
         </div>
 
         {/* Animated image rows */}
-        <div className="overflow-hidden pb-6 space-y-2">
+        <div className="overflow-hidden pb-6 space-y-3">
           {/* Row 1 — scrolls left */}
-          <div className="relative h-[140px]">
-            <div className="flex gap-2 animate-[scrollLeft_20s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+          <div className="relative h-[160px]">
+            <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {[...gridImages, ...gridImages].map((src, i) => (
-                <div key={`r1-${i}`} className="w-[140px] h-[140px] rounded-xl overflow-hidden shrink-0">
+                <div key={`r1-${i}`} className="w-[120px] h-[160px] rounded-xl overflow-hidden shrink-0">
                   <img src={src} alt="" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
           </div>
           {/* Row 2 — scrolls right */}
-          <div className="relative h-[140px]">
-            <div className="flex gap-2 animate-[scrollRight_22s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+          <div className="relative h-[160px]">
+            <div className="flex gap-3 animate-[scrollRight_38s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {[...gridImages.slice().reverse(), ...gridImages.slice().reverse()].map((src, i) => (
-                <div key={`r2-${i}`} className="w-[140px] h-[140px] rounded-xl overflow-hidden shrink-0">
+                <div key={`r2-${i}`} className="w-[120px] h-[160px] rounded-xl overflow-hidden shrink-0">
                   <img src={src} alt="" className="w-full h-full object-cover" />
                 </div>
               ))}
