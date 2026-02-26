@@ -218,8 +218,27 @@ const Auth: React.FC = () => {
           </button>
         </div>
 
+        {/* Logo */}
+        <div className="flex justify-center py-6">
+          <div className="relative h-10 w-[140px]">
+            <div
+              className="absolute inset-0 bg-black"
+              style={{
+                WebkitMaskImage: `url(${jarlaLogo})`,
+                maskImage: `url(${jarlaLogo})`,
+                WebkitMaskSize: 'contain',
+                maskSize: 'contain',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center',
+              }}
+            />
+          </div>
+        </div>
+
         {/* Animated image rows */}
-        <div className="overflow-hidden pt-2 pb-6 space-y-2">
+        <div className="overflow-hidden pb-6 space-y-2">
           {/* Row 1 — scrolls left */}
           <div className="relative h-[140px]">
             <div className="flex gap-2 animate-[scrollLeft_20s_linear_infinite] absolute" style={{ width: 'max-content' }}>
@@ -262,11 +281,7 @@ const Auth: React.FC = () => {
           <div className="w-full max-w-xs space-y-3">
             <button
               onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
-              className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all backdrop-blur-md border border-white/20"
-              style={{
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 100%)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15)',
-              }}
+              className="w-full py-3.5 rounded-xl text-base font-semibold text-white bg-black hover:bg-black/90 transition-all"
             >
               Register now
             </button>
