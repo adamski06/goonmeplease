@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import JarlaLoader from "@/components/JarlaLoader";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import jarlaLogoSrc from "@/assets/jarla-logo.png";
 
 const BusinessLoader = () => (
@@ -59,6 +60,7 @@ const App = () => (
           </div>
         </div>
         <BrowserRouter>
+          <ScrollToTop />
           <AuthProvider>
             <ProfileProvider>
             <Suspense fallback={<JarlaLoader />}>
