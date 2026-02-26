@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,10 +31,8 @@ const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
 // Signup flow: credentials → tiktok → age → phone → username
 type SignUpStep = 'credentials' | 'tiktok' | 'age' | 'phone' | 'username';
-type ViewState = 'loading' | 'ready';
 type AuthView = 'welcome' | 'signup' | 'login';
 
-const TRANSITION_DELAY = 500;
 const TOTAL_STEPS = 5;
 
 const stepNumber = (step: SignUpStep) => {
@@ -56,31 +55,16 @@ const Auth: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
   const [signUpFullName, setSignUpFullName] = useState<string>('');
-  const [viewState, setViewState] = useState<ViewState>('loading');
+  
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const prevStepRef = useRef(signUpStep);
-  const prevIsSignUpRef = useRef(isSignUp);
+  
 
-  useEffect(() => {
-    if (prevStepRef.current !== signUpStep || prevIsSignUpRef.current !== isSignUp) {
-      prevStepRef.current = signUpStep;
-      prevIsSignUpRef.current = isSignUp;
-      setViewState('loading');
-      const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
-      return () => clearTimeout(timer);
-    }
-  }, [signUpStep, isSignUp]);
-
-  useEffect(() => {
-    setViewState('loading');
-    const timer = setTimeout(() => setViewState('ready'), TRANSITION_DELAY);
-    return () => clearTimeout(timer);
-  }, []);
+  
 
   useEffect(() => {
     // Only auto-redirect if user is logged in AND we're not in the middle of signup
@@ -292,7 +276,7 @@ const Auth: React.FC = () => {
 
           <div className="w-full max-w-xs space-y-1.5">
             <button
-              onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
+              onClick={() => { Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {}); setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
               className="w-full py-2.5 rounded-full text-sm font-semibold text-white transition-all"
               style={{
                 background: 'rgba(0,0,0,0.88)',
@@ -303,7 +287,7 @@ const Auth: React.FC = () => {
               Register now
             </button>
             <button
-              onClick={() => { setAuthView('login'); setIsSignUp(false); }}
+              onClick={() => { Haptics.impact({ style: ImpactStyle.Light }).catch(() => {}); setAuthView('login'); setIsSignUp(false); }}
               className="w-full py-2.5 rounded-full text-sm font-semibold text-black transition-all"
               style={{
                 background: 'rgba(255,255,255,0.85)',
@@ -324,39 +308,8 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
-        {viewState === 'loading' ? (
-          <div className="flex flex-col items-center justify-center">
-            <div className="relative h-10 w-[140px] mb-6">
-              <div
-                className="absolute inset-0 bg-black"
-                style={{
-                  WebkitMaskImage: `url(${jarlaLogo})`,
-                  maskImage: `url(${jarlaLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-            </div>
-            <div className="w-32 h-[3px] rounded-full bg-black/10 overflow-hidden flex items-center justify-center">
-              <div
-                className="h-full rounded-full bg-black/40"
-                style={{ animation: 'expandCenter 0.5s ease-out forwards' }}
-              />
-            </div>
-            <style>{`
-              @keyframes expandCenter {
-                0% { width: 0%; }
-                100% { width: 100%; }
-              }
-            `}</style>
-          </div>
-        ) : (
           <div
-            className="w-full max-w-sm rounded-3xl p-8 border border-white/40 animate-fade-in"
+            className="w-full max-w-sm rounded-3xl p-8 border border-white/40"
             style={{
               background: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(24px) saturate(180%)',
@@ -423,7 +376,6 @@ const Auth: React.FC = () => {
               />
             )}
           </div>
-        )}
       </div>
     </div>
   );
