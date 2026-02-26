@@ -14,6 +14,7 @@ import CredentialsStep from '@/components/auth/CredentialsStep';
 import UsernameStep from '@/components/auth/UsernameStep';
 import LoginForm from '@/components/auth/LoginForm';
 import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
+import TikTokStep from '@/components/auth/TikTokStep';
 
 // Grid images – reuse existing assets
 import img1 from '@/assets/campaigns/fashion-style.jpg';
@@ -27,20 +28,21 @@ import img8 from '@/assets/campaigns/food-delivery.jpg';
 
 const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
-// Signup flow: credentials → age → phone → username
-type SignUpStep = 'credentials' | 'age' | 'phone' | 'username';
+// Signup flow: credentials → tiktok → age → phone → username
+type SignUpStep = 'credentials' | 'tiktok' | 'age' | 'phone' | 'username';
 type ViewState = 'loading' | 'ready';
 type AuthView = 'welcome' | 'signup' | 'login';
 
 const TRANSITION_DELAY = 500;
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const stepNumber = (step: SignUpStep) => {
   switch (step) {
     case 'credentials': return 1;
-    case 'age': return 2;
-    case 'phone': return 3;
-    case 'username': return 4;
+    case 'tiktok': return 2;
+    case 'age': return 3;
+    case 'phone': return 4;
+    case 'username': return 5;
   }
 };
 
@@ -81,7 +83,7 @@ const Auth: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && user && signUpStep !== 'username' && signUpStep !== 'age' && signUpStep !== 'phone') {
+    if (!loading && user && signUpStep !== 'username' && signUpStep !== 'age' && signUpStep !== 'phone' && signUpStep !== 'tiktok') {
       checkCreatorRole();
     }
   }, [user, loading, signUpStep]);
@@ -141,12 +143,21 @@ const Auth: React.FC = () => {
       const currentUserId = session.session.user.id;
       setNewUserId(currentUserId);
 
-      setSignUpStep('age');
+      setSignUpStep('tiktok');
     } catch (error: any) {
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleTikTokNext = (username: string) => {
+    // Store the TikTok username - could save to DB here
+    setSignUpStep('age');
+  };
+
+  const handleTikTokSkip = () => {
+    setSignUpStep('age');
   };
 
   const handleAgeNext = (age: number) => {
@@ -278,16 +289,27 @@ const Auth: React.FC = () => {
             Create content.<br />Get paid.
           </h1>
 
-          <div className="w-full max-w-xs space-y-3">
+          <div className="w-full max-w-xs space-y-1.5">
             <button
               onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
-              className="w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-black hover:bg-black/90 transition-all"
+              className="w-full py-2.5 rounded-full text-sm font-semibold text-white transition-all"
+              style={{
+                background: 'rgba(0,0,0,0.88)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.15)',
+              }}
             >
               Register now
             </button>
             <button
               onClick={() => { setAuthView('login'); setIsSignUp(false); }}
-              className="w-full py-2.5 rounded-xl text-sm font-semibold text-black border border-black/20 bg-white hover:bg-black/5 transition-all"
+              className="w-full py-2.5 rounded-full text-sm font-semibold text-black transition-all"
+              style={{
+                background: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(0,0,0,0.12)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 4px rgba(0,0,0,0.06)',
+              }}
             >
               I already have an account
             </button>
@@ -368,6 +390,9 @@ const Auth: React.FC = () => {
                     onSwitchToLogin={() => { setIsSignUp(false); setAuthView('login'); }}
                     isLoading={isLoading}
                   />
+                )}
+                {signUpStep === 'tiktok' && newUserId && (
+                  <TikTokStep userId={newUserId} onNext={handleTikTokNext} onSkip={handleTikTokSkip} />
                 )}
                 {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
                 {signUpStep === 'phone' && newUserId && (
