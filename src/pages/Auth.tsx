@@ -218,26 +218,40 @@ const Auth: React.FC = () => {
           </button>
         </div>
 
-        {/* Image grid */}
-        <div className="px-4 pt-2 pb-6">
-          <div className="grid grid-cols-4 gap-2 auto-rows-[100px]">
-            {gridImages.map((src, i) => (
-              <div
-                key={i}
-                className={`rounded-xl overflow-hidden ${
-                  i === 0 || i === 7 ? 'row-span-2' : ''
-                }`}
-              >
-                <img
-                  src={src}
-                  alt=""
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+        {/* Animated image rows */}
+        <div className="overflow-hidden pt-2 pb-6 space-y-2">
+          {/* Row 1 — scrolls left */}
+          <div className="relative h-[140px]">
+            <div className="flex gap-2 animate-[scrollLeft_20s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+              {[...gridImages, ...gridImages].map((src, i) => (
+                <div key={`r1-${i}`} className="w-[140px] h-[140px] rounded-xl overflow-hidden shrink-0">
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Row 2 — scrolls right */}
+          <div className="relative h-[140px]">
+            <div className="flex gap-2 animate-[scrollRight_22s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+              {[...gridImages.slice().reverse(), ...gridImages.slice().reverse()].map((src, i) => (
+                <div key={`r2-${i}`} className="w-[140px] h-[140px] rounded-xl overflow-hidden shrink-0">
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
+        <style>{`
+          @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+          }
+        `}</style>
 
         {/* Tagline & buttons */}
         <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10">
@@ -248,10 +262,10 @@ const Auth: React.FC = () => {
           <div className="w-full max-w-xs space-y-3">
             <button
               onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
-              className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all"
+              className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all backdrop-blur-md border border-white/20"
               style={{
-                background: 'linear-gradient(135deg, hsl(0 0% 10%) 0%, hsl(0 0% 20%) 100%)',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+                background: 'linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 100%)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15)',
               }}
             >
               Register now
