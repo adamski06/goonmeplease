@@ -27,16 +27,17 @@ const CreateCampaign: React.FC = () => {
 
   // Step 3: Pricing
   const [ratePerThousand, setRatePerThousand] = useState(1); // USD per 1000 views
-  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50 | null>(null);
+  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<number | null>(null);
+  const [customPayoutInput, setCustomPayoutInput] = useState('');
+  const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
-
-  const [customBudgetSlider, setCustomBudgetSlider] = useState(5000);
+  const [customBudgetInput, setCustomBudgetInput] = useState('25');
 
   const getBudget = () => {
     if (budgetOption === 'preset') return 10000;
-    return customBudgetSlider;
+    return Math.max(25, parseInt(customBudgetInput) || 25);
   };
 
   const getBudgetAmount = () => getBudget();
@@ -46,8 +47,8 @@ const CreateCampaign: React.FC = () => {
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
-    if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null;
-    if (step === 3) return budgetOption !== null;
+    if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
+    if (step === 3) return budgetOption === 'preset' || (budgetOption === 'custom' && (parseInt(customBudgetInput) || 0) >= 25);
     if (step === 4) return true;
     return false;
   };
@@ -316,9 +317,12 @@ const CreateCampaign: React.FC = () => {
                         </div>
                       )}
                       <button
-                        onClick={() => setMaxPayoutPerCreator(maxPayoutPerCreator === amount ? null : amount)}
+                        onClick={() => {
+                          setPayoutMode('preset');
+                          setMaxPayoutPerCreator(maxPayoutPerCreator === amount && payoutMode === 'preset' ? null : amount);
+                        }}
                         className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
-                        style={maxPayoutPerCreator === amount ? {
+                        style={maxPayoutPerCreator === amount && payoutMode === 'preset' ? {
                           background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
                           boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
                           border: '1px solid hsl(142 60% 45% / 0.5)',
@@ -333,7 +337,47 @@ const CreateCampaign: React.FC = () => {
                       </button>
                     </div>
                   ))}
+                  {/* Custom payout option */}
+                  <div className="flex-1 relative flex flex-col">
+                    <button
+                      onClick={() => {
+                        setPayoutMode('custom');
+                        const val = parseInt(customPayoutInput) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
+                      style={payoutMode === 'custom' ? {
+                        background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                        boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
+                        border: '1px solid hsl(142 60% 45% / 0.5)',
+                        color: 'hsl(142 60% 30%)',
+                      } : {
+                        background: 'transparent',
+                        border: '1px solid hsl(var(--border))',
+                        color: 'hsl(var(--foreground))',
+                      }}
+                    >
+                      Custom
+                    </button>
+                  </div>
                 </div>
+                {payoutMode === 'custom' && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={1}
+                      placeholder="Enter amount"
+                      value={customPayoutInput}
+                      onChange={(e) => {
+                        setCustomPayoutInput(e.target.value);
+                        const val = parseInt(e.target.value) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      className="text-lg font-bold h-12"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -387,37 +431,30 @@ const CreateCampaign: React.FC = () => {
                   }}
                 >
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Custom</p>
-                  <p className="text-4xl font-bold text-foreground mt-auto">${customBudgetSlider.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">Min. $5,000 USD</p>
+                  <p className="text-4xl font-bold text-foreground mt-auto">
+                    {customBudgetInput ? `$${parseInt(customBudgetInput).toLocaleString()}` : '$—'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">Min. $25 USD</p>
                 </button>
               </div>
 
-              {/* Custom slider — shown below when custom is selected */}
+              {/* Custom input — shown below when custom is selected */}
               {budgetOption === 'custom' && (
                 <div className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Adjust budget</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-foreground">${customBudgetSlider.toLocaleString()}</span>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Enter budget</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-bold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={25}
+                      placeholder="Enter exact amount"
+                      value={customBudgetInput}
+                      onChange={(e) => setCustomBudgetInput(e.target.value)}
+                      className="text-2xl font-bold h-14"
+                    />
                     <span className="text-base text-muted-foreground">USD</span>
                   </div>
-                  <div className="w-full">
-                    <input
-                      type="range"
-                      min={5000}
-                      max={100000}
-                      step={5000}
-                      value={customBudgetSlider}
-                      onChange={(e) => setCustomBudgetSlider(Number(e.target.value))}
-                      className="rate-slider w-full"
-                      style={{
-                        background: `linear-gradient(to right, hsl(0 0% 10%) ${((customBudgetSlider - 5000) / 95000) * 100}%, hsl(var(--border)) ${((customBudgetSlider - 5000) / 95000) * 100}%)`,
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>$5,000</span>
-                    <span>$100,000</span>
-                  </div>
+                  <p className="text-xs text-muted-foreground">Minimum budget: $25</p>
                 </div>
               )}
             </div>
