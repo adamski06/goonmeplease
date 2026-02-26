@@ -83,10 +83,11 @@ const Auth: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && user && signUpStep !== 'username' && signUpStep !== 'age' && signUpStep !== 'phone' && signUpStep !== 'tiktok') {
+    // Only auto-redirect if user is logged in AND we're not in the middle of signup
+    if (!loading && user && !isSignUp) {
       checkCreatorRole();
     }
-  }, [user, loading, signUpStep]);
+  }, [user, loading, isSignUp]);
 
   const checkCreatorRole = async () => {
     if (!user) return;
