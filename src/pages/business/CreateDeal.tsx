@@ -27,12 +27,14 @@ const CreateDeal: React.FC = () => {
 
   // Step 3: Pricing
   const [ratePerThousand, setRatePerThousand] = useState(1);
-  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<10 | 25 | 50 | null>(null);
+  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<number | null>(null);
+  const [customPayoutInput, setCustomPayoutInput] = useState('');
+  const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
     if (step === 1) return true;
-    if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null;
+    if (step === 2) return ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
     if (step === 3) return true;
     return false;
   };
@@ -282,9 +284,12 @@ const CreateDeal: React.FC = () => {
                         </div>
                       )}
                       <button
-                        onClick={() => setMaxPayoutPerCreator(maxPayoutPerCreator === amount ? null : amount)}
+                        onClick={() => {
+                          setPayoutMode('preset');
+                          setMaxPayoutPerCreator(maxPayoutPerCreator === amount && payoutMode === 'preset' ? null : amount);
+                        }}
                         className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
-                        style={maxPayoutPerCreator === amount ? {
+                        style={maxPayoutPerCreator === amount && payoutMode === 'preset' ? {
                           background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
                           boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
                           border: '1px solid hsl(142 60% 45% / 0.5)',
@@ -299,7 +304,47 @@ const CreateDeal: React.FC = () => {
                       </button>
                     </div>
                   ))}
+                  {/* Custom payout option */}
+                  <div className="flex-1 relative flex flex-col">
+                    <button
+                      onClick={() => {
+                        setPayoutMode('custom');
+                        const val = parseInt(customPayoutInput) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
+                      style={payoutMode === 'custom' ? {
+                        background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
+                        boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
+                        border: '1px solid hsl(142 60% 45% / 0.5)',
+                        color: 'hsl(142 60% 30%)',
+                      } : {
+                        background: 'transparent',
+                        border: '1px solid hsl(var(--border))',
+                        color: 'hsl(var(--foreground))',
+                      }}
+                    >
+                      Custom
+                    </button>
+                  </div>
                 </div>
+                {payoutMode === 'custom' && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={1}
+                      placeholder="Enter amount"
+                      value={customPayoutInput}
+                      onChange={(e) => {
+                        setCustomPayoutInput(e.target.value);
+                        const val = parseInt(e.target.value) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      className="text-lg font-bold h-12"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}
