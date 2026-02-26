@@ -33,66 +33,44 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
   const maxViews = points[1].views || 1;
   const firstViewsFraction = Math.min(points[0].views / maxViews, 1);
 
+  // Rate from first tier for the per-1000-views pill
+  const ratePerThousand = tiers.length > 0 ? tiers[0].rate : 0;
+
   return (
-    <div className="mt-2 mb-10">
+    <div className="mt-2 mb-4">
       <h4 className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider mb-4">
         Earnings
       </h4>
-      <div className="flex items-center justify-center py-4">
-        {/* Views (left) */}
-        <div className="flex flex-col items-end" style={{ gap: 84 }}>
-          <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
-            {formatViews(points[1].views)} views
+      <div className="flex flex-col gap-3">
+        {/* Max Earnings pill */}
+        <div
+          className="rounded-full px-5 py-3 flex items-center justify-center gap-1.5 w-full"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
+          }}
+        >
+          <span className="text-sm font-semibold text-white/70 font-montserrat">Max Earnings:</span>
+          <span className="text-xl font-bold text-white font-montserrat">
+            {formatEarnings(maxEarnings)}
           </span>
-          <span className="text-sm font-semibold text-white/50 font-montserrat" style={{ lineHeight: '52px' }}>
-            {formatViews(points[0].views)} views
-          </span>
+          <span className="text-xs font-semibold text-white/70 font-montserrat">sek</span>
         </div>
 
-        {/* Clean vertical bar (center) */}
-        <div className="relative mx-4" style={{ width: 4, alignSelf: 'stretch', marginTop: -20, marginBottom: -40 }}>
-          {/* Track */}
-          <div className="absolute inset-0 rounded-full bg-white/10" />
-          {/* Fill from bottom */}
-          <div
-            className="absolute bottom-0 left-0 right-0 rounded-full bg-white/35"
-            style={{ height: `${firstViewsFraction * 100}%` }}
-          />
-        </div>
-
-        {/* Pills (right) */}
-        <div className="flex flex-col items-start" style={{ gap: 84 }}>
-          <div
-            className="rounded-full px-5 py-3 flex items-baseline gap-1"
-            style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
-            }}
-          >
-            <span className="text-xl font-bold text-white font-montserrat">
-              {formatEarnings(points[1].earnings)}
-            </span>
-            <span className="text-xs font-semibold text-white/70 font-montserrat">
-              sek
-            </span>
-          </div>
-
-          <div
-            className="rounded-full px-5 py-3 flex items-baseline gap-1"
-            style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
-              border: '1px solid rgba(255,255,255,0.25)',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
-            }}
-          >
-            <span className="text-xl font-bold text-white font-montserrat">
-              {formatEarnings(points[0].earnings)}
-            </span>
-            <span className="text-xs font-semibold text-white/70 font-montserrat">
-              sek
-            </span>
-          </div>
+        {/* Rate per 1000 views pill */}
+        <div
+          className="rounded-full px-5 py-3 flex items-center justify-center gap-1.5 w-full"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 100%)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.1)',
+          }}
+        >
+          <span className="text-xl font-bold text-white font-montserrat">
+            {formatEarnings(ratePerThousand)}
+          </span>
+          <span className="text-sm font-semibold text-white/70 font-montserrat">sek / 1000 views</span>
         </div>
       </div>
     </div>
