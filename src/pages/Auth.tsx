@@ -281,13 +281,13 @@ const Auth: React.FC = () => {
           <div className="w-full max-w-xs space-y-3">
             <button
               onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
-              className="w-full py-3.5 rounded-xl text-base font-semibold text-white bg-black hover:bg-black/90 transition-all"
+              className="w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-black hover:bg-black/90 transition-all"
             >
               Register now
             </button>
             <button
               onClick={() => { setAuthView('login'); setIsSignUp(false); }}
-              className="w-full py-3.5 rounded-xl text-base font-semibold text-black border border-black/20 bg-white hover:bg-black/5 transition-all"
+              className="w-full py-2.5 rounded-xl text-sm font-semibold text-black border border-black/20 bg-white hover:bg-black/5 transition-all"
             >
               I already have an account
             </button>
