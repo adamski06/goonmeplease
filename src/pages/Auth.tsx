@@ -6,6 +6,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import jarlaLogo from '@/assets/jarla-logo.png';
+import { Button } from '@/components/ui/button';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 import AgeStep from '@/components/auth/AgeStep';
 import CredentialsStep from '@/components/auth/CredentialsStep';
@@ -13,9 +15,22 @@ import UsernameStep from '@/components/auth/UsernameStep';
 import LoginForm from '@/components/auth/LoginForm';
 import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
 
+// Grid images – reuse existing assets
+import img1 from '@/assets/campaigns/fashion-style.jpg';
+import img2 from '@/assets/campaigns/tech-unboxing.jpg';
+import img3 from '@/assets/campaigns/coffee-moment.jpg';
+import img4 from '@/assets/campaigns/fitness-workout.jpg';
+import img5 from '@/assets/campaigns/music-lifestyle.jpg';
+import img6 from '@/assets/campaigns/street-style.jpg';
+import img7 from '@/assets/campaigns/creative-design.jpg';
+import img8 from '@/assets/campaigns/food-delivery.jpg';
+
+const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
+
 // Signup flow: credentials → age → phone → username
 type SignUpStep = 'credentials' | 'age' | 'phone' | 'username';
 type ViewState = 'loading' | 'ready';
+type AuthView = 'welcome' | 'signup' | 'login';
 
 const TRANSITION_DELAY = 500;
 const TOTAL_STEPS = 4;
@@ -31,7 +46,9 @@ const stepNumber = (step: SignUpStep) => {
 
 const Auth: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [isSignUp, setIsSignUp] = useState(searchParams.get('mode') !== 'login');
+  const initialView: AuthView = searchParams.get('mode') === 'login' ? 'login' : 'welcome';
+  const [authView, setAuthView] = useState<AuthView>(initialView);
+  const [isSignUp, setIsSignUp] = useState(true);
   const [signUpStep, setSignUpStep] = useState<SignUpStep>('credentials');
   const [selectedAge, setSelectedAge] = useState<number>(18);
   const [isLoading, setIsLoading] = useState(false);
@@ -124,9 +141,6 @@ const Auth: React.FC = () => {
       const currentUserId = session.session.user.id;
       setNewUserId(currentUserId);
 
-      // Role is auto-created by the handle_new_user trigger, no need to insert manually
-
-      // After account creation, go to age step
       setSignUpStep('age');
     } catch (error: any) {
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
@@ -189,6 +203,72 @@ const Auth: React.FC = () => {
 
   const currentStep = stepNumber(signUpStep);
 
+  // Welcome screen — Vinted-inspired
+  if (authView === 'welcome') {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-5 pt-4 pb-2">
+          <LanguageSwitcher />
+          <button
+            onClick={() => { setAuthView('login'); setIsSignUp(false); }}
+            className="text-sm font-medium text-black/60 hover:text-black transition-colors"
+          >
+            Skip
+          </button>
+        </div>
+
+        {/* Image grid */}
+        <div className="px-4 pt-2 pb-6">
+          <div className="grid grid-cols-4 gap-2 auto-rows-[100px]">
+            {gridImages.map((src, i) => (
+              <div
+                key={i}
+                className={`rounded-xl overflow-hidden ${
+                  i === 0 || i === 7 ? 'row-span-2' : ''
+                }`}
+              >
+                <img
+                  src={src}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tagline & buttons */}
+        <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10">
+          <h1 className="text-3xl font-bold text-black text-center leading-tight mb-8">
+            Create content.<br />Get paid.
+          </h1>
+
+          <div className="w-full max-w-xs space-y-3">
+            <button
+              onClick={() => { setAuthView('signup'); setIsSignUp(true); setSignUpStep('credentials'); }}
+              className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all"
+              style={{
+                background: 'linear-gradient(135deg, hsl(0 0% 10%) 0%, hsl(0 0% 20%) 100%)',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
+              }}
+            >
+              Register now
+            </button>
+            <button
+              onClick={() => { setAuthView('login'); setIsSignUp(false); }}
+              className="w-full py-3.5 rounded-xl text-base font-semibold text-black border border-black/20 bg-white hover:bg-black/5 transition-all"
+            >
+              I already have an account
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Signup / Login forms
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="flex-1 flex items-center justify-center px-6 py-8">
@@ -256,7 +336,7 @@ const Auth: React.FC = () => {
                 {signUpStep === 'credentials' && (
                   <CredentialsStep
                     onNext={handleCredentialsNext}
-                    onSwitchToLogin={() => { setIsSignUp(false); setSignUpStep('credentials'); }}
+                    onSwitchToLogin={() => { setIsSignUp(false); setAuthView('login'); }}
                     isLoading={isLoading}
                   />
                 )}
@@ -283,7 +363,7 @@ const Auth: React.FC = () => {
             ) : (
               <LoginForm
                 onSubmit={handleLogin}
-                onSwitchToSignUp={() => { setIsSignUp(true); setSignUpStep('credentials'); }}
+                onSwitchToSignUp={() => { setIsSignUp(true); setAuthView('signup'); setSignUpStep('credentials'); }}
                 isLoading={isLoading}
               />
             )}
