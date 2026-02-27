@@ -53,9 +53,7 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
     <div className="space-y-6">
       <div className="text-center">
         <div className="flex justify-center mb-3">
-          <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center overflow-hidden">
-            <img src={tiktokLogo} alt="TikTok" className="w-7 h-7 object-contain" />
-          </div>
+          <img src={tiktokLogo} alt="TikTok" className="w-12 h-12 object-contain" />
         </div>
         <h2 className="text-xl font-bold text-black mb-1">Add your TikTok</h2>
       </div>

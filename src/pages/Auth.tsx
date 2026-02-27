@@ -12,7 +12,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 import AgeStep from '@/components/auth/AgeStep';
 import CredentialsStep from '@/components/auth/CredentialsStep';
-import UsernameStep from '@/components/auth/UsernameStep';
+
 import LoginForm from '@/components/auth/LoginForm';
 import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
 import TikTokStep from '@/components/auth/TikTokStep';
@@ -29,11 +29,11 @@ import img8 from '@/assets/campaigns/food-delivery.jpg';
 
 const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
-// Signup flow: credentials → tiktok → age → phone → username
-type SignUpStep = 'credentials' | 'tiktok' | 'age' | 'phone' | 'username';
+// Signup flow: credentials → tiktok → age → phone
+type SignUpStep = 'credentials' | 'tiktok' | 'age' | 'phone';
 type AuthView = 'welcome' | 'signup' | 'login';
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 4;
 
 const stepNumber = (step: SignUpStep) => {
   switch (step) {
@@ -41,7 +41,6 @@ const stepNumber = (step: SignUpStep) => {
     case 'tiktok': return 2;
     case 'age': return 3;
     case 'phone': return 4;
-    case 'username': return 5;
   }
 };
 
@@ -151,10 +150,6 @@ const Auth: React.FC = () => {
   };
 
   const handlePhoneNext = () => {
-    setSignUpStep('username');
-  };
-
-  const handleUsernameComplete = () => {
     navigate('/user');
   };
 
@@ -351,9 +346,6 @@ const Auth: React.FC = () => {
                 {signUpStep === 'age' && <AgeStep onNext={handleAgeNext} />}
                 {signUpStep === 'phone' && newUserId && (
                   <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
-                )}
-                {signUpStep === 'username' && newUserId && (
-                  <UsernameStep userId={newUserId} fullName={signUpFullName} onComplete={handleUsernameComplete} />
                 )}
 
                 {/* Step indicator */}
