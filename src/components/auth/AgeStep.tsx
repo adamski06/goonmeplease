@@ -5,11 +5,11 @@ import { ChevronDown } from 'lucide-react';
 const MIN_AGE = 16;
 const MAX_AGE = 100;
 
-const blueGlassStyle = {
-  background: 'linear-gradient(180deg, rgba(60, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%)',
+const blackGlassStyle = {
+  background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.95) 100%)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
-  boxShadow: '0 4px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+  boxShadow: '0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
 };
 
 interface AgeStepProps {
@@ -48,7 +48,7 @@ const AgeStep: React.FC<AgeStepProps> = ({ onNext }) => {
       <Button
         onClick={() => selectedAge !== '' && onNext(selectedAge)}
         className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
-        style={blueGlassStyle}
+        style={blackGlassStyle}
         disabled={selectedAge === ''}
       >
         Continue
