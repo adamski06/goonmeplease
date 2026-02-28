@@ -12,7 +12,7 @@ import CampaignChat from '@/components/CampaignChat';
 
 // Exponential slider for rate: 75% of slider = $0.50–$3.00, remaining 25% = $3.00–$10.00
 const RATE_MIN = 0.5;
-const RATE_MID = 3;
+const RATE_MID = 5;
 const RATE_MAX = 10;
 const RATE_BREAK = 75;
 const rateToSlider = (rate: number): number => {
@@ -130,6 +130,14 @@ const CreateDeal: React.FC = () => {
   };
 
   const [chatCollapsed, setChatCollapsed] = useState(false);
+  const chatRelevant = step <= 1;
+
+  // Auto-collapse chat when it becomes irrelevant
+  React.useEffect(() => {
+    if (!chatRelevant) {
+      setChatCollapsed(true);
+    }
+  }, [chatRelevant]);
 
   return (
     <div className="flex flex-col h-[calc(100vh)] overflow-hidden">
@@ -149,8 +157,8 @@ const CreateDeal: React.FC = () => {
       <div className="flex flex-1 overflow-hidden relative">
       {/* Chat panel + toggle */}
       <div
-        className="shrink-0 border-r border-border h-full relative flex transition-all duration-300 ease-in-out overflow-hidden"
-        style={{ width: chatCollapsed ? '32px' : '340px' }}
+        className="shrink-0 border-r border-border h-full relative flex transition-all duration-500 ease-in-out overflow-hidden"
+        style={{ width: chatCollapsed ? '0px' : '340px', opacity: chatRelevant ? 1 : 0 }}
       >
         {/* Chat content — fixed 340px, clipped by parent overflow-hidden */}
         <div className="w-[340px] h-full shrink-0">
@@ -164,15 +172,17 @@ const CreateDeal: React.FC = () => {
           />
         </div>
 
-        {/* Toggle button — always pinned to right edge of visible panel */}
-        <button
-          onClick={() => setChatCollapsed(c => !c)}
-          className="absolute top-0 bottom-0 right-0 w-8 flex items-center justify-center hover:bg-muted transition-colors bg-background"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-          title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
-        >
-          {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
-        </button>
+        {/* Toggle button — only show when chat is relevant */}
+        {chatRelevant && (
+          <button
+            onClick={() => setChatCollapsed(c => !c)}
+            className="absolute top-0 bottom-0 right-0 w-8 flex items-center justify-center hover:bg-muted transition-colors bg-background"
+            style={{ color: 'hsl(var(--muted-foreground))' }}
+            title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
+          >
+            {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+          </button>
+        )}
       </div>
 
       {/* Form panel */}
