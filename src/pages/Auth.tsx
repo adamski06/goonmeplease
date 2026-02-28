@@ -4,6 +4,7 @@ import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable/index';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import jarlaLogo from '@/assets/jarla-logo.png';
@@ -292,6 +293,37 @@ const Auth: React.FC = () => {
               }}
             >
               I already have an account
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 py-1">
+              <div className="flex-1 h-px bg-black/10" />
+              <span className="text-xs text-black/40">or</span>
+              <div className="flex-1 h-px bg-black/10" />
+            </div>
+
+            {/* Apple Sign In */}
+            <button
+              onClick={async () => {
+                Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+                const { error } = await lovable.auth.signInWithOAuth('apple', {
+                  redirect_uri: window.location.origin,
+                });
+                if (error) {
+                  toast({ title: 'Sign in failed', description: String(error), variant: 'destructive' });
+                }
+              }}
+              className="w-full py-2.5 rounded-full text-sm font-semibold text-white flex items-center justify-center gap-2 transition-all"
+              style={{
+                background: 'rgba(0,0,0,0.88)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.15)',
+              }}
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+              </svg>
+              Continue with Apple
             </button>
           </div>
         </div>
