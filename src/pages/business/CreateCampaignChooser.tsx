@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 const CreateCampaignChooser: React.FC = () => {
   const navigate = useNavigate();
@@ -65,6 +66,17 @@ const CreateCampaignChooser: React.FC = () => {
             <p className="text-sm text-muted-foreground leading-relaxed">
               Manual collaboration — review and approve creator requests.
             </p>
+          </button>
+        </div>
+
+        {/* Rewards link — positioned below the nodes, aligned right */}
+        <div className="flex justify-end mt-3" style={{ maxWidth: '920px', width: '100%', margin: '12px auto 0' }}>
+          <button
+            onClick={() => navigate('/business/rewards')}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+          >
+            Rewards
+            <ArrowRight className="h-3 w-3" />
           </button>
         </div>
 
