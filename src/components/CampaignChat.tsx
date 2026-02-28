@@ -126,7 +126,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
     fetchBusinessProfile();
   }, [user]);
 
-  // Fade out messages when step changes
+  // Fade out messages when step changes, then re-trigger for new step
   useEffect(() => {
     if (currentStep !== prevStepRef.current) {
       setFadeOut(true);
@@ -134,34 +134,31 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
         setMessages([]);
         setFadeOut(false);
         prevStepRef.current = currentStep;
+
+        // Trigger step-specific chat after fade completes
+        if (currentStep === 1 && businessProfile) {
+          const msgId = (Date.now() + 100).toString();
+          const suggestion = `I'd suggest going broad here — wider audiences tend to perform much better with UGC. Want me to fill in a target audience based on what I know about ${businessProfile.company_name}?`;
+          setMessages([{
+            id: msgId,
+            role: 'jarla',
+            content: suggestion,
+            displayedContent: '',
+            quickReplies: ['Yes', 'No, I\'ll write it'],
+          }]);
+          setIsTyping(true);
+          setTimeout(() => typewriterEffect(msgId, suggestion), 300);
+        }
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [currentStep]);
+  }, [currentStep, businessProfile]);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
-
-  // Auto-trigger chat on step changes
-  useEffect(() => {
-    if (currentStep === 1 && !stepTriggeredRef.current.has(1) && businessProfile) {
-      stepTriggeredRef.current.add(1);
-      const msgId = (Date.now() + 100).toString();
-      const suggestion = `I'd suggest going broad here — wider audiences tend to perform much better with UGC. Want me to fill in a target audience based on what I know about ${businessProfile.company_name}?`;
-      setMessages(prev => [...prev, {
-        id: msgId,
-        role: 'jarla',
-        content: suggestion,
-        displayedContent: '',
-        quickReplies: ['Yes', 'No, I\'ll write it'],
-      }]);
-      setIsTyping(true);
-      setTimeout(() => typewriterEffect(msgId, suggestion), 300);
-    }
-  }, [currentStep, businessProfile]);
 
   const typeOutField = (value: string, setter: (val: string) => void, speed = 18): Promise<void> => {
     return new Promise((resolve) => {
