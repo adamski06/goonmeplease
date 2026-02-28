@@ -39,6 +39,8 @@ const CreateDeal = lazy(() => import("./pages/business/CreateDeal"));
 const BusinessDealDetail = lazy(() => import("./pages/business/BusinessDealDetail"));
 const BusinessDealSubmissionDetail = lazy(() => import("./pages/business/BusinessDealSubmissionDetail"));
 const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaignChooser"));
+const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
+const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
 
 const queryClient = new QueryClient();
 
@@ -90,8 +92,10 @@ const App = () => (
                   <Route path="deals/new" element={<CreateDeal />} />
                   <Route path="deals/:id" element={<BusinessDealDetail />} />
                   <Route path="deals/:id/applications/:applicationId" element={<BusinessDealSubmissionDetail />} />
+                  <Route path="rewards" element={<BusinessRewards />} />
                   <Route path="settings" element={<BusinessSettings />} />
                 </Route>
+                <Route path="/rewards-embed" element={<Suspense fallback={<BusinessLoader />}><RewardsEmbed /></Suspense>} />
                 <Route path="/" element={<Navigate to="/user" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
