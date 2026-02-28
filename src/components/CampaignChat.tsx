@@ -60,9 +60,11 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null);
+  const [fadeOut, setFadeOut] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
   const stepTriggeredRef = useRef<Set<number>>(new Set());
+  const prevStepRef = useRef(currentStep);
 
   // Typewriter effect helper
   const typewriterEffect = (messageId: string, content: string) => {
@@ -123,6 +125,19 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
 
     fetchBusinessProfile();
   }, [user]);
+
+  // Fade out messages when step changes
+  useEffect(() => {
+    if (currentStep !== prevStepRef.current) {
+      setFadeOut(true);
+      const timer = setTimeout(() => {
+        setMessages([]);
+        setFadeOut(false);
+        prevStepRef.current = currentStep;
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -297,7 +312,7 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
         ref={scrollRef}
         className="flex-1 overflow-y-auto px-5 flex flex-col justify-center"
       >
-        <div className="space-y-4 py-6 max-w-full">
+        <div className="space-y-4 py-6 max-w-full transition-opacity duration-400 ease-out" style={{ opacity: fadeOut ? 0 : 1 }}>
           {messages.map((msg, index) => {
             if (msg.role === 'jarla' && !msg.displayedContent) return null;
             
