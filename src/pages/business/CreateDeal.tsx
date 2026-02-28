@@ -5,9 +5,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
+
+// Exponential slider for rate: 75% of slider = $0.50–$3.00, remaining 25% = $3.00–$10.00
+const RATE_MIN = 0.5;
+const RATE_MID = 3;
+const RATE_MAX = 10;
+const RATE_BREAK = 75;
+const rateToSlider = (rate: number): number => {
+  if (rate <= RATE_MIN) return 0;
+  if (rate <= RATE_MID) return ((Math.log(rate) - Math.log(RATE_MIN)) / (Math.log(RATE_MID) - Math.log(RATE_MIN))) * RATE_BREAK;
+  return RATE_BREAK + ((Math.log(rate) - Math.log(RATE_MID)) / (Math.log(RATE_MAX) - Math.log(RATE_MID))) * (100 - RATE_BREAK);
+};
+const sliderToRate = (s: number): number => {
+  if (s <= 0) return RATE_MIN;
+  const logVal = s <= RATE_BREAK
+    ? Math.log(RATE_MIN) + (s / RATE_BREAK) * (Math.log(RATE_MID) - Math.log(RATE_MIN))
+    : Math.log(RATE_MID) + ((s - RATE_BREAK) / (100 - RATE_BREAK)) * (Math.log(RATE_MAX) - Math.log(RATE_MID));
+  return Math.round(Math.exp(logVal) * 10) / 10;
+};
 
 const steps = ['Ad Details', 'Target Audience', 'Rate', 'Review'];
 
@@ -242,23 +261,19 @@ const CreateDeal: React.FC = () => {
                   <span className="text-5xl font-bold text-foreground">${ratePerThousand.toFixed(1)}</span>
                   <span className="text-base text-muted-foreground">/ 1,000 views</span>
                 </div>
-                <div className="w-full">
-                  <input
-                    type="range"
-                    min={0.5}
-                    max={3}
-                    step={0.5}
-                    value={ratePerThousand}
-                    onChange={(e) => setRatePerThousand(Number(e.target.value))}
-                    className="rate-slider w-full"
-                    style={{
-                      background: `linear-gradient(to right, hsl(0 0% 10%) ${((ratePerThousand - 0.5) / 2.5) * 100}%, hsl(var(--border)) ${((ratePerThousand - 0.5) / 2.5) * 100}%)`,
-                    }}
-                  />
-                </div>
+                <Slider
+                  value={[rateToSlider(ratePerThousand)]}
+                  onValueChange={(value) => {
+                    setRatePerThousand(sliderToRate(value[0]));
+                  }}
+                  min={0}
+                  max={100}
+                  step={0.1}
+                  className="w-full"
+                />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>$0.50</span>
-                  <span>$3.00</span>
+                  <span>$10.00</span>
                 </div>
               </div>
 
