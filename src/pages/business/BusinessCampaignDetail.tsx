@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, Upload, ImagePlus } from 'lucide-react';
+import { ArrowLeft, Eye, Upload, ImagePlus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
 
 interface CampaignData {
@@ -219,12 +220,28 @@ const BusinessCampaignDetail: React.FC = () => {
           </button>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-1">
           <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
           <Badge variant="outline" className={campaign.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
             {campaign.is_active ? 'Active' : 'Ended'}
           </Badge>
         </div>
+        <button
+          onClick={async () => {
+            if (!confirm('Are you sure you want to delete this spread? This cannot be undone.')) return;
+            const { error } = await supabase.from('campaigns').delete().eq('id', campaign.id);
+            if (error) {
+              sonnerToast.error('Failed to delete spread');
+              return;
+            }
+            sonnerToast.success('Spread deleted');
+            navigate('/business');
+          }}
+          className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
+          title="Delete spread"
+        >
+          <Trash2 className="h-5 w-5 text-muted-foreground group-hover:text-destructive transition-colors" />
+        </button>
       </div>
 
       {/* Stats: Views + Pot */}
