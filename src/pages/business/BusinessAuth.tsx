@@ -49,9 +49,12 @@ const BusinessAuth: React.FC = () => {
         });
         if (error) throw error;
 
-        if (data.user) {
+        if (data.user && data.session) {
           // Assign business role
           await supabase.rpc('register_as_business', { p_company_name: fullName || 'My Company' });
+          toast({ title: 'Account created', description: 'Welcome to Jarla Business!' });
+          navigate('/business');
+        } else if (data.user && !data.session) {
           toast({ title: 'Account created', description: 'Please check your email to verify your account.' });
         }
       }
