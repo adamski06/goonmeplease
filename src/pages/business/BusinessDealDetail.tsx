@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Eye, ImagePlus } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye, ImagePlus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -184,12 +184,28 @@ const BusinessDealDetail: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-1">
           <h1 className="text-xl font-bold text-foreground font-montserrat">{deal.title}</h1>
           <Badge variant="outline" className={deal.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
             {deal.is_active ? 'Active' : 'Ended'}
           </Badge>
         </div>
+        <button
+          onClick={async () => {
+            if (!confirm('Are you sure you want to delete this deal? This cannot be undone.')) return;
+            const { error } = await supabase.from('deals').delete().eq('id', deal.id);
+            if (error) {
+              toast.error('Failed to delete deal');
+              return;
+            }
+            toast.success('Deal deleted');
+            navigate('/business');
+          }}
+          className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
+          title="Delete deal"
+        >
+          <Trash2 className="h-5 w-5 text-muted-foreground group-hover:text-destructive transition-colors" />
+        </button>
       </div>
 
       {/* Stats */}
