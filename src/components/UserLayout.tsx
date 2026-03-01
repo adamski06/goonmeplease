@@ -21,15 +21,7 @@ const UserLayout: React.FC = () => {
   // Mount ALL tabs immediately so they preload
   const currentPath = TAB_PATHS.includes(location.pathname as any) ? location.pathname : '/user';
 
-  // Keep loader visible for a minimum duration to let pages preload
-  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMinTimeElapsed(true), 1800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const ready = !loading && minTimeElapsed;
+  const ready = !loading;
 
   useEffect(() => {
     if (ready && !hasLoaded) {
