@@ -60,6 +60,25 @@ const BusinessSidebar: React.FC = () => {
     load();
   }, [location.pathname]);
 
+  // Re-fetch when profile is updated (e.g. after onboarding)
+  useEffect(() => {
+    const handler = () => {
+      const refetch = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data: profileData } = await supabase
+          .from('business_profiles')
+          .select('company_name, logo_url, website')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        if (profileData) setProfile(profileData);
+      };
+      refetch();
+    };
+    window.addEventListener('business-profile-updated', handler);
+    return () => window.removeEventListener('business-profile-updated', handler);
+  }, []);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
