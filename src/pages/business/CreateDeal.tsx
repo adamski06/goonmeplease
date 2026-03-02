@@ -5,28 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
-
-// Exponential slider for rate: 75% of slider = $0.50–$3.00, remaining 25% = $3.00–$10.00
-const RATE_MIN = 0.5;
-const RATE_MID = 5;
-const RATE_MAX = 10;
-const RATE_BREAK = 75;
-const rateToSlider = (rate: number): number => {
-  if (rate <= RATE_MIN) return 0;
-  if (rate <= RATE_MID) return ((Math.log(rate) - Math.log(RATE_MIN)) / (Math.log(RATE_MID) - Math.log(RATE_MIN))) * RATE_BREAK;
-  return RATE_BREAK + ((Math.log(rate) - Math.log(RATE_MID)) / (Math.log(RATE_MAX) - Math.log(RATE_MID))) * (100 - RATE_BREAK);
-};
-const sliderToRate = (s: number): number => {
-  if (s <= 0) return RATE_MIN;
-  const logVal = s <= RATE_BREAK
-    ? Math.log(RATE_MIN) + (s / RATE_BREAK) * (Math.log(RATE_MID) - Math.log(RATE_MIN))
-    : Math.log(RATE_MID) + ((s - RATE_BREAK) / (100 - RATE_BREAK)) * (Math.log(RATE_MAX) - Math.log(RATE_MID));
-  return Math.round(Math.exp(logVal) * 10) / 10;
-};
 
 const steps = ['Ad Details', 'Target Audience', 'Rate', 'Review'];
 
@@ -264,113 +245,56 @@ const CreateDeal: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Rate node */}
-              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-4 min-h-[200px]">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold text-foreground">${ratePerThousand.toFixed(1)}</span>
-                  <span className="text-base text-muted-foreground">/ 1,000 views</span>
-                </div>
-                <Slider
-                  value={[rateToSlider(ratePerThousand)]}
-                  onValueChange={(value) => {
-                    setRatePerThousand(sliderToRate(value[0]));
-                  }}
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>$0.50</span>
-                  <span>$10.00</span>
+              {/* Rate input */}
+              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-3">
+                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate per 1,000 views</Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-foreground">$</span>
+                  <Input
+                    type="number"
+                    min={0.1}
+                    step={0.1}
+                    value={ratePerThousand || ''}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value) || 0;
+                      setRatePerThousand(Math.round(val * 10) / 10);
+                    }}
+                    placeholder="e.g. 2.0"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
                 </div>
               </div>
 
-              {/* Max payout node */}
-              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-4 min-h-[200px]">
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</p>
-                <div className="flex gap-3 flex-1 items-stretch">
-                  {([10, 25, 50] as const).map((amount) => (
-                    <div key={amount} className="flex-1 relative flex flex-col">
-                      {amount === 25 && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                          <span
-                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
-                            style={{
-                              background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                              border: '1px solid hsl(142 60% 45% / 0.4)',
-                              color: 'hsl(142 60% 35%)',
-                              backdropFilter: 'blur(8px)',
-                            }}
-                          >
-                            Popular
-                          </span>
-                        </div>
-                      )}
-                      <button
-                        onClick={() => {
-                          setPayoutMode('preset');
-                          setMaxPayoutPerCreator(maxPayoutPerCreator === amount && payoutMode === 'preset' ? null : amount);
-                        }}
-                        className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
-                        style={maxPayoutPerCreator === amount && payoutMode === 'preset' ? {
-                          background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                          boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                          border: '1px solid hsl(142 60% 45% / 0.5)',
-                          color: 'hsl(142 60% 30%)',
-                        } : {
-                          background: 'transparent',
-                          border: '1px solid hsl(var(--border))',
-                          color: 'hsl(var(--foreground))',
-                        }}
-                      >
-                        ${amount}
-                      </button>
-                    </div>
-                  ))}
-                  {/* Custom payout option */}
-                  <div className="flex-1 relative flex flex-col">
-                    <button
-                      onClick={() => {
-                        setPayoutMode('custom');
-                        const val = parseInt(customPayoutInput) || 0;
-                        setMaxPayoutPerCreator(val > 0 ? val : null);
-                      }}
-                      className="flex-1 rounded-xl flex flex-col items-center justify-center py-5 transition-all text-2xl font-bold"
-                      style={payoutMode === 'custom' ? {
-                        background: 'linear-gradient(135deg, hsl(142 60% 40% / 0.25) 0%, hsl(142 60% 30% / 0.15) 100%)',
-                        boxShadow: 'inset 0 1px 0 hsl(142 60% 80% / 0.3), 0 0 20px hsl(142 60% 40% / 0.15)',
-                        border: '1px solid hsl(142 60% 45% / 0.5)',
-                        color: 'hsl(142 60% 30%)',
-                      } : {
-                        background: 'transparent',
-                        border: '1px solid hsl(var(--border))',
-                        color: 'hsl(var(--foreground))',
-                      }}
-                    >
-                      Custom
-                    </button>
-                  </div>
+              {/* Max payout input */}
+              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-3">
+                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-foreground">$</span>
+                  <Input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={maxPayoutPerCreator ?? ''}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 0;
+                      setMaxPayoutPerCreator(val > 0 ? val : null);
+                    }}
+                    placeholder="e.g. 50"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
                 </div>
-                {payoutMode === 'custom' && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold text-foreground">$</span>
-                    <Input
-                      type="number"
-                      min={1}
-                      placeholder="Enter amount"
-                      value={customPayoutInput}
-                      onChange={(e) => {
-                        setCustomPayoutInput(e.target.value);
-                        const val = parseInt(e.target.value) || 0;
-                        setMaxPayoutPerCreator(val > 0 ? val : null);
-                      }}
-                      className="text-lg font-bold h-12"
-                    />
-                  </div>
-                )}
               </div>
+
+              {/* Calculated views display */}
+              {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0 && (
+                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col items-center gap-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Views per creator</p>
+                  <p className="text-3xl font-bold text-foreground">
+                    {Math.round((maxPayoutPerCreator / ratePerThousand) * 1000).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-muted-foreground">views to earn max payout</p>
+                </div>
+              )}
             </div>
           )}
 
