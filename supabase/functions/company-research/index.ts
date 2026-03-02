@@ -22,7 +22,7 @@ Response format:
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
     "brand_values": "e.g. Sustainability, authenticity, inclusivity",
-    "logo_url": "Use Clearbit Logo API for high-resolution logos: https://logo.clearbit.com/domain.com — replace domain.com with the actual company domain. This returns a full-quality PNG. ALWAYS provide this if you know the website domain."
+    "logo_url": "Use Clearbit Logo API with max size: https://logo.clearbit.com/domain.com?size=512&format=png — replace domain.com with the actual company domain. ALWAYS add ?size=512&format=png for full quality. ALWAYS provide this if you know the website domain."
   }
 }
 
