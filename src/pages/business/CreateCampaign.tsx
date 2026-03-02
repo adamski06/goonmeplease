@@ -33,12 +33,23 @@ const CreateCampaign: React.FC = () => {
 
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
-  const [customBudgetInput, setCustomBudgetInput] = useState('');
+  const [totalBudget, setTotalBudget] = useState<number>(250); // default 10x of maxPayout
+
+  // Update budget default when maxPayout changes
+  React.useEffect(() => {
+    if (maxPayoutPerCreator && maxPayoutPerCreator > 0) {
+      setTotalBudget(prev => {
+        const min = maxPayoutPerCreator;
+        const def = maxPayoutPerCreator * 10;
+        if (prev < min) return def;
+        return prev;
+      });
+    }
+  }, [maxPayoutPerCreator]);
 
   const getBudget = () => {
-    if (budgetOption === 'preset') return 10000;
-    if (!customBudgetInput) return null;
-    return Math.max(25, parseInt(customBudgetInput) || 25);
+    const min = maxPayoutPerCreator || 1;
+    return Math.max(min, totalBudget || min);
   };
 
   const getBudgetAmount = () => getBudget();
@@ -50,7 +61,7 @@ const CreateCampaign: React.FC = () => {
     if (step === 1) return true;
     if (step === 2) {
       const rateOk = ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
-      const budgetOk = !customBudgetInput || (parseInt(customBudgetInput) || 0) >= 25;
+      const budgetOk = totalBudget >= (maxPayoutPerCreator || 1);
       return rateOk && budgetOk;
     }
     if (step === 3) return true;
@@ -283,30 +294,32 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Rate input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
+              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    value={ratePerThousand || ''}
-                    onChange={(e) => {
-                      const val = parseFloat(e.target.value) || 0;
-                      setRatePerThousand(Math.round(val * 10) / 10);
-                    }}
-                    placeholder="2.0"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">/ 1,000 views</span>
+                  <span className="text-sm font-semibold text-foreground">$</span>
+                  <div className="relative flex-1">
+                    <Input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      value={ratePerThousand || ''}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value) || 0;
+                        setRatePerThousand(Math.round(val * 10) / 10);
+                      }}
+                      placeholder="2.0"
+                      className="text-sm font-semibold h-10 pr-24 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1,000 views</span>
+                  </div>
                 </div>
-                <div className="flex gap-2 mt-1">
+                <div className="flex gap-2">
                   {[1.5, 2.5, 4].map(v => (
                     <button
                       key={v}
                       onClick={() => setRatePerThousand(v)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${ratePerThousand === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      className={`flex-1 py-2 rounded-md text-xs font-medium border transition-colors ${ratePerThousand === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
                     >
                       ${v}
                     </button>
@@ -315,10 +328,10 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Max payout input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
+              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-foreground">$</span>
+                  <span className="text-sm font-semibold text-foreground">$</span>
                   <Input
                     type="number"
                     min={1}
@@ -329,15 +342,15 @@ const CreateCampaign: React.FC = () => {
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
                     placeholder="25"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="flex gap-2 mt-1">
+                <div className="flex gap-2">
                   {[5, 10, 25].map(v => (
                     <button
                       key={v}
                       onClick={() => setMaxPayoutPerCreator(v)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      className={`flex-1 py-2 rounded-md text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
                     >
                       ${v}
                     </button>
@@ -345,25 +358,40 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Total budget (optional) */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total budget <span className="normal-case text-muted-foreground/60">(optional)</span></Label>
+              {/* Total budget */}
+              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total budget</Label>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-foreground">$</span>
+                  <span className="text-sm font-semibold text-foreground">$</span>
                   <Input
                     type="number"
-                    min={25}
+                    min={maxPayoutPerCreator || 1}
                     step={1}
-                    value={customBudgetInput}
+                    value={totalBudget || ''}
                     onChange={(e) => {
-                      setCustomBudgetInput(e.target.value);
-                      setBudgetOption(e.target.value ? 'custom' : null);
+                      const val = parseInt(e.target.value) || 0;
+                      setTotalBudget(val);
                     }}
-                    placeholder="—"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder={String((maxPayoutPerCreator || 25) * 10)}
+                    className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">Min. $25. Leave empty for no cap.</p>
+                <div className="flex gap-2">
+                  {[
+                    { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
+                    { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
+                    { label: `$${(maxPayoutPerCreator || 25) * 100}`, value: (maxPayoutPerCreator || 25) * 100 },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setTotalBudget(opt.value)}
+                      className={`flex-1 py-2 rounded-md text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
               </div>
 
               {/* Calculated views display */}
