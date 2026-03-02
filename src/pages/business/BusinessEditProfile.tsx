@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ChevronLeft, Camera } from 'lucide-react';
+import { getHighResLogoUrl } from '@/lib/logoUrl';
 
 interface EditData {
   company_name: string;
@@ -133,7 +134,7 @@ const BusinessEditProfile: React.FC = () => {
             <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
               {data.logo_url ? (
                 <img
-                  src={data.logo_url}
+                  src={getHighResLogoUrl(data.logo_url) || data.logo_url}
                   alt=""
                   className="h-full w-full object-cover"
                   onError={(e) => {

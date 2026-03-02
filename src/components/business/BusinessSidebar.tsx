@@ -4,6 +4,7 @@ import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Home } from 
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
+import { getHighResLogoUrl } from '@/lib/logoUrl';
 import { useTheme } from 'next-themes';
 
 interface SidebarItem {
@@ -110,7 +111,7 @@ const BusinessSidebar: React.FC = () => {
             <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
               {profile?.logo_url ? (
                 <img
-                  src={profile.logo_url}
+                  src={getHighResLogoUrl(profile.logo_url) || profile.logo_url}
                   alt=""
                   className="h-full w-full object-cover"
                   onError={(e) => {

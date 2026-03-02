@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
+import { getHighResLogoUrl } from '@/lib/logoUrl';
 
 interface BusinessProfileData {
   company_name: string;
@@ -99,7 +100,7 @@ const BusinessProfile: React.FC = () => {
         <div className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
           {profile?.logo_url ? (
             <img
-              src={profile.logo_url}
+              src={getHighResLogoUrl(profile.logo_url) || profile.logo_url}
               alt=""
               className="h-full w-full object-cover"
               onError={(e) => {

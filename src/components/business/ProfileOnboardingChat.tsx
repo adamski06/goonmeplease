@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowUp, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { getHighResLogoUrl } from '@/lib/logoUrl';
 
 interface Message {
   id: string;
@@ -88,10 +89,10 @@ const ProfileCard: React.FC<{
   };
 
   const displayData = doneTyping ? editData : typed;
-  const logoUrl = data.logo_url;
+  const logoUrl = getHighResLogoUrl(data.logo_url) || data.logo_url;
   // Use Clearbit for high-res logos, fallback to Google favicons
   const websiteDomain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-  const clearbitLogo = websiteDomain ? `https://logo.clearbit.com/${websiteDomain}` : null;
+  const clearbitLogo = websiteDomain ? `https://logo.clearbit.com/${websiteDomain}?size=512&format=png` : null;
   const fallbackLogo = websiteDomain ? `https://www.google.com/s2/favicons?domain=${websiteDomain}&sz=128` : null;
   const effectiveLogo = logoUrl || clearbitLogo;
   const activeFields = fields.filter(f => data[f.key]);
@@ -389,7 +390,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     const dataToSave = { ...editedData };
     if (!dataToSave.logo_url && dataToSave.website) {
       const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-      if (domain) dataToSave.logo_url = `https://logo.clearbit.com/${domain}`;
+      if (domain) dataToSave.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
     }
 
     try {
