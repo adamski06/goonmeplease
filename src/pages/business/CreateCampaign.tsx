@@ -216,7 +216,7 @@ const CreateCampaign: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col justify-center w-full ${step === 2 ? 'max-w-3xl' : 'max-w-xl'}`}>
+        <div className="max-w-xl mx-auto px-6 flex-1 flex flex-col justify-center w-full">
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -285,16 +285,16 @@ const CreateCampaign: React.FC = () => {
 
           {/* Step 3: Pricing */}
           {step === 2 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
-              </div>
+            <div className="flex gap-4">
+              {/* Left column: Rate, Max Payout, Pot stacked */}
+              <div className="flex-1 space-y-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
+                    <ArrowLeft className="h-4 w-4" />
+                  </button>
+                  <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
+                </div>
 
-              {/* Rate + Views side by side */}
-              <div className="grid grid-cols-2 gap-4">
                 {/* Rate input */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
@@ -329,83 +329,83 @@ const CreateCampaign: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Views display */}
-                <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0
-                      ? Math.round((getBudget() / ratePerThousand) * 1000).toLocaleString()
-                      : '—'}
-                  </p>
-                  <p className="text-xs text-muted-foreground">across all creators</p>
+                {/* Max payout input */}
+                <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                  <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={1}
+                      step={1}
+                      value={maxPayoutPerCreator ?? ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      placeholder="25"
+                      className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+                  <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
+                    {[5, 10, 25].map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setMaxPayoutPerCreator(v)}
+                        className={`px-3 h-10 rounded-[4px] text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      >
+                        ${v}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Pot */}
+                <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                  <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Pot</Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={maxPayoutPerCreator || 1}
+                      step={1}
+                      value={totalBudget || ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        setTotalBudget(val);
+                      }}
+                      placeholder={String((maxPayoutPerCreator || 25) * 10)}
+                      className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+                  <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
+                    {[
+                      { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
+                      { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
+                      { label: `$${((maxPayoutPerCreator || 25) * 100).toLocaleString()}`, value: (maxPayoutPerCreator || 25) * 100 },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setTotalBudget(opt.value)}
+                        className={`px-3 h-10 rounded-[4px] text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
                 </div>
               </div>
 
-              {/* Max payout input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={maxPayoutPerCreator ?? ''}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
-                      setMaxPayoutPerCreator(val > 0 ? val : null);
-                    }}
-                    placeholder="25"
-                    className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                </div>
-                <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
-                  {[5, 10, 25].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setMaxPayoutPerCreator(v)}
-                      className={`px-3 h-10 rounded-[4px] text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      ${v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Pot */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Pot</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={maxPayoutPerCreator || 1}
-                    step={1}
-                    value={totalBudget || ''}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
-                      setTotalBudget(val);
-                    }}
-                    placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                    className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                </div>
-                <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
-                  {[
-                    { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
-                    { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
-                    { label: `$${((maxPayoutPerCreator || 25) * 100).toLocaleString()}`, value: (maxPayoutPerCreator || 25) * 100 },
-                  ].map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setTotalBudget(opt.value)}
-                      className={`px-3 h-10 rounded-[4px] text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
+              {/* Right column: Total views */}
+              <div className="w-[200px] shrink-0 rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1 self-start sticky top-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0
+                    ? Math.round((getBudget() / ratePerThousand) * 1000).toLocaleString()
+                    : '—'}
+                </p>
+                <p className="text-xs text-muted-foreground">across all creators</p>
               </div>
             </div>
           )}
