@@ -285,7 +285,7 @@ const CreateCampaign: React.FC = () => {
               {/* Rate input */}
               <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
-                <div className="flex items-center gap-2 max-w-[200px]">
+                <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -297,7 +297,7 @@ const CreateCampaign: React.FC = () => {
                       setRatePerThousand(Math.round(val * 10) / 10);
                     }}
                     placeholder="2.0"
-                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <span className="text-sm text-muted-foreground whitespace-nowrap">/ 1,000 views</span>
                 </div>
@@ -317,7 +317,7 @@ const CreateCampaign: React.FC = () => {
               {/* Max payout input */}
               <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
-                <div className="flex items-center gap-2 max-w-[200px]">
+                <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -329,7 +329,7 @@ const CreateCampaign: React.FC = () => {
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
                     placeholder="25"
-                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="flex gap-2 mt-1">
@@ -345,21 +345,10 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Calculated views display */}
-              {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0 && (
-                <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center gap-1">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Views per creator</p>
-                  <p className="text-3xl font-bold text-foreground">
-                    {Math.round((maxPayoutPerCreator / ratePerThousand) * 1000).toLocaleString()}
-                  </p>
-                  <p className="text-sm text-muted-foreground">views to earn max payout</p>
-                </div>
-              )}
-
               {/* Total budget (optional) */}
               <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total budget <span className="normal-case text-muted-foreground/60">(optional)</span></Label>
-                <div className="flex items-center gap-2 max-w-[200px]">
+                <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -371,11 +360,22 @@ const CreateCampaign: React.FC = () => {
                       setBudgetOption(e.target.value ? 'custom' : null);
                     }}
                     placeholder="—"
-                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">Min. $25. Leave empty for no cap.</p>
               </div>
+
+              {/* Calculated views display */}
+              {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0 && (
+                <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center gap-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Views per creator</p>
+                  <p className="text-3xl font-bold text-foreground">
+                    {Math.round((maxPayoutPerCreator / ratePerThousand) * 1000).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-muted-foreground">views to earn max payout</p>
+                </div>
+              )}
             </div>
           )}
 

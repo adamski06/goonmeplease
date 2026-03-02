@@ -248,7 +248,7 @@ const CreateDeal: React.FC = () => {
               {/* Rate input */}
               <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
-                <div className="flex items-center gap-2 max-w-[200px]">
+                <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -260,7 +260,7 @@ const CreateDeal: React.FC = () => {
                       setRatePerThousand(Math.round(val * 10) / 10);
                     }}
                     placeholder="2.0"
-                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <span className="text-sm text-muted-foreground whitespace-nowrap">/ 1,000 views</span>
                 </div>
@@ -280,7 +280,7 @@ const CreateDeal: React.FC = () => {
               {/* Max payout input */}
               <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
-                <div className="flex items-center gap-2 max-w-[200px]">
+                <div className="flex items-center gap-2">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -292,7 +292,7 @@ const CreateDeal: React.FC = () => {
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
                     placeholder="25"
-                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="flex gap-2 mt-1">
