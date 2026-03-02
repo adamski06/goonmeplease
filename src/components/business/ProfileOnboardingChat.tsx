@@ -125,6 +125,12 @@ const ProfileCard: React.FC<{
             <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
           </div>
         )}
+        {/* Editable hint */}
+        {doneTyping && !confirmed && (
+          <p className="text-[11px] text-muted-foreground/60 italic flex items-center gap-1">
+            <span>✏️</span> Tap any field below to edit it
+          </p>
+        )}
         {activeFields.map(({ key, label }) => (
           <div key={key} className="flex gap-2">
             <span className="text-xs text-muted-foreground shrink-0 w-20 pt-0.5">{label}</span>
@@ -134,7 +140,7 @@ const ProfileCard: React.FC<{
                   value={editData[key] || ''}
                   onChange={(e) => updateField(key, e.target.value)}
                   rows={1}
-                  className="text-sm text-foreground bg-transparent border-none outline-none w-full font-geist focus:bg-muted/50 rounded px-1 -ml-1 transition-colors resize-none"
+                  className="text-sm text-foreground bg-muted/40 border border-border/50 outline-none w-full font-geist focus:bg-muted/70 focus:border-foreground/30 rounded-md px-2 py-1 -ml-1 transition-colors resize-none"
                   style={{ height: 'auto' }}
                   onInput={(e) => {
                     const t = e.target as HTMLTextAreaElement;
