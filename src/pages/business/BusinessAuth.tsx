@@ -163,18 +163,6 @@ const BusinessAuth: React.FC = () => {
                 <span className="text-sm text-muted-foreground">{email}</span>
               </div>
 
-              {!isLogin && (
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-foreground">Full name</label>
-                  <Input
-                    type="text"
-                    placeholder="Your name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="h-11 bg-transparent border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring rounded-lg"
-                  />
-                </div>
-              )}
 
               <div className="space-y-1.5">
                 <label className="text-sm font-medium text-foreground">Password</label>
