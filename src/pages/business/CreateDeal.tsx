@@ -246,9 +246,9 @@ const CreateDeal: React.FC = () => {
               </div>
 
               {/* Rate input */}
-              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-3">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate per 1,000 views</Label>
-                <div className="flex items-center gap-2">
+              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
+                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
+                <div className="flex items-center gap-2 max-w-[200px]">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -259,16 +259,28 @@ const CreateDeal: React.FC = () => {
                       const val = parseFloat(e.target.value) || 0;
                       setRatePerThousand(Math.round(val * 10) / 10);
                     }}
-                    placeholder="e.g. 2.0"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="2.0"
+                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">/ 1,000 views</span>
+                </div>
+                <div className="flex gap-2 mt-1">
+                  {[1.5, 2.5, 4].map(v => (
+                    <button
+                      key={v}
+                      onClick={() => setRatePerThousand(v)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${ratePerThousand === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                    >
+                      ${v}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Max payout input */}
-              <div className="rounded-2xl border border-border bg-background p-6 flex flex-col gap-3">
+              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
                 <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 max-w-[200px]">
                   <span className="text-lg font-bold text-foreground">$</span>
                   <Input
                     type="number"
@@ -279,9 +291,20 @@ const CreateDeal: React.FC = () => {
                       const val = parseInt(e.target.value) || 0;
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
-                    placeholder="e.g. 50"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="25"
+                    className="text-xl font-bold h-11 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
+                </div>
+                <div className="flex gap-2 mt-1">
+                  {[5, 10, 25].map(v => (
+                    <button
+                      key={v}
+                      onClick={() => setMaxPayoutPerCreator(v)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                    >
+                      ${v}
+                    </button>
+                  ))}
                 </div>
               </div>
 
