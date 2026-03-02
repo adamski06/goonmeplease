@@ -421,6 +421,8 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
       setIsTyping(true);
       typewriterEffect(doneMsg.id, doneMsg.content);
 
+      // Notify sidebar to re-fetch profile data
+      window.dispatchEvent(new Event('business-profile-updated'));
       setTimeout(() => onComplete(), 2000);
     } catch (error) {
       console.error('Save error:', error);
