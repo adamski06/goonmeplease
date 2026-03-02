@@ -29,13 +29,16 @@ interface ProfileOnboardingChatProps {
 const ProfileCard: React.FC<{
   data: ProfileUpdates;
   onConfirm: (edited: ProfileUpdates) => void;
+  onRetry: (website?: string) => void;
   saving: boolean;
   confirmed: boolean;
-}> = ({ data, onConfirm, saving, confirmed }) => {
+}> = ({ data, onConfirm, onRetry, saving, confirmed }) => {
   const [editData, setEditData] = useState<ProfileUpdates>({});
   const [typed, setTyped] = useState<ProfileUpdates>({});
   const [doneTyping, setDoneTyping] = useState(false);
   const [cardVisible, setCardVisible] = useState(false);
+  const [showCorrection, setShowCorrection] = useState(false);
+  const [correctionUrl, setCorrectionUrl] = useState('');
   const startedRef = useRef(false);
 
   const fields: { key: keyof ProfileUpdates; label: string }[] = [
@@ -47,7 +50,6 @@ const ProfileCard: React.FC<{
     { key: 'brand_values', label: 'Values' },
   ];
 
-  
 
   useEffect(() => {
     if (startedRef.current) return;
@@ -155,18 +157,53 @@ const ProfileCard: React.FC<{
           </div>
         ))}
       </div>
-      {doneTyping && !confirmed && (
-        <button
-          onClick={() => onConfirm(editData)}
-          disabled={saving}
-          className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors disabled:opacity-50 animate-fade-in"
-        >
-          <Check className="h-3.5 w-3.5" />
-          {saving ? 'Saving...' : "That's correct"}
-        </button>
+      {doneTyping && !confirmed && !showCorrection && (
+        <div className="flex gap-2 animate-fade-in">
+          <button
+            onClick={() => onConfirm(editData)}
+            disabled={saving}
+            className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground transition-colors disabled:opacity-50"
+          >
+            <Check className="h-3.5 w-3.5" />
+            {saving ? 'Saving...' : "That's correct"}
+          </button>
+          <button
+            onClick={() => setShowCorrection(true)}
+            className="text-sm font-medium px-4 py-2 rounded-lg border border-border bg-muted/50 text-foreground hover:bg-muted transition-colors"
+          >
+            That's not correct
+          </button>
+        </div>
+      )}
+      {doneTyping && !confirmed && showCorrection && (
+        <div className="space-y-3 animate-fade-in">
+          <p className="text-xs text-muted-foreground">Paste your company website so I can look it up, or fill in the fields above manually.</p>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={correctionUrl}
+              onChange={(e) => setCorrectionUrl(e.target.value)}
+              placeholder="https://yourcompany.com"
+              className="flex-1 h-9 rounded-lg border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/30 transition-colors"
+            />
+            <button
+              onClick={() => { onRetry(correctionUrl.trim() || undefined); setShowCorrection(false); setCorrectionUrl(''); }}
+              disabled={!correctionUrl.trim()}
+              className="h-9 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-40"
+            >
+              Research
+            </button>
+          </div>
+          <button
+            onClick={() => setShowCorrection(false)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ← Back to editing
+          </button>
+        </div>
       )}
       {confirmed && (
-        <div className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600/60 text-white/70 w-fit">
+        <div className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-primary/60 text-primary-foreground/70 w-fit">
           <Check className="h-3.5 w-3.5" />
           Confirmed
         </div>
@@ -287,6 +324,63 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     }
   };
 
+  const handleRetryResearch = async (website?: string) => {
+    const retryMsg = website 
+      ? `Please research this company again using this website: ${website}`
+      : 'The information is not correct. Please let me enter it manually.';
+    
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: retryMsg
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setIsTyping(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('company-research', {
+        body: {
+          message: retryMsg,
+          conversationHistory: messages.slice(-10),
+        }
+      });
+      if (error) throw error;
+
+      const responseContent = data?.response || "Here's what I found:";
+      if (data?.profileUpdates) setPendingUpdates(data.profileUpdates);
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'jarla',
+        content: responseContent,
+        displayedContent: '',
+        profileUpdates: data?.profileUpdates || null
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+      let charIndex = 0;
+      const typeInterval = setInterval(() => {
+        charIndex++;
+        setMessages(prev => prev.map(msg =>
+          msg.id === assistantMessage.id
+            ? { ...msg, displayedContent: responseContent.slice(0, charIndex) }
+            : msg
+        ));
+        if (charIndex >= responseContent.length) {
+          clearInterval(typeInterval);
+          setIsTyping(false);
+        }
+      }, 8);
+    } catch {
+      setIsTyping(false);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'jarla',
+        content: "Sorry, something went wrong. Try again?",
+        displayedContent: "Sorry, something went wrong. Try again?"
+      }]);
+    }
+  };
+
   const handleConfirmProfile = async (editedData: ProfileUpdates) => {
     setSaving(true);
     setConfirmed(true);
@@ -374,6 +468,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
                   <ProfileCard
                     data={msg.profileUpdates}
                     onConfirm={handleConfirmProfile}
+                    onRetry={handleRetryResearch}
                     saving={saving}
                     confirmed={confirmed}
                   />
