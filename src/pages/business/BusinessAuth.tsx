@@ -88,7 +88,7 @@ const BusinessAuth: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#1a1a1a]">
+    <div className="min-h-screen flex bg-background">
       {/* Left panel */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-[420px]">
@@ -96,11 +96,11 @@ const BusinessAuth: React.FC = () => {
           <img
             src={jarlaLogo}
             alt="Jarla"
-            className="h-8 brightness-0 invert mb-10"
+            className="h-8 dark:invert-0 invert mb-10"
           />
 
           <h1
-            className="text-[28px] font-bold text-white mb-8"
+            className="text-[28px] font-bold text-foreground mb-8"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
             {isLogin ? 'Log in' : 'Create account'}
@@ -109,7 +109,7 @@ const BusinessAuth: React.FC = () => {
           {/* Google button */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full h-11 rounded-lg border border-white/20 bg-transparent text-white text-sm font-medium flex items-center justify-center gap-2.5 hover:bg-white/5 transition-colors mb-4"
+            className="w-full h-11 rounded-lg border border-border bg-transparent text-foreground text-sm font-medium flex items-center justify-center gap-2.5 hover:bg-muted transition-colors mb-4"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -122,28 +122,28 @@ const BusinessAuth: React.FC = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-white/40 uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">or</span>
+            <div className="flex-1 h-px bg-border" />
           </div>
 
           {step === 'initial' ? (
             <form onSubmit={handleEmailContinue} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-white/80">Email</label>
+                <label className="text-sm font-medium text-foreground">Email</label>
                 <Input
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-11 bg-transparent border-white/20 text-white placeholder:text-white/30 focus-visible:ring-white/30 rounded-lg"
+                  className="h-11 bg-transparent border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring rounded-lg"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full h-11 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors"
+                className="w-full h-11 rounded-lg bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-colors"
               >
                 Continue
               </button>
@@ -154,44 +154,44 @@ const BusinessAuth: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setStep('initial')}
-                  className="text-white/50 hover:text-white transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 12H5M12 19l-7-7 7-7"/>
                   </svg>
                 </button>
-                <span className="text-sm text-white/60">{email}</span>
+                <span className="text-sm text-muted-foreground">{email}</span>
               </div>
 
               {!isLogin && (
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-white/80">Full name</label>
+                  <label className="text-sm font-medium text-foreground">Full name</label>
                   <Input
                     type="text"
                     placeholder="Your name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="h-11 bg-transparent border-white/20 text-white placeholder:text-white/30 focus-visible:ring-white/30 rounded-lg"
+                    className="h-11 bg-transparent border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring rounded-lg"
                   />
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-white/80">Password</label>
+                <label className="text-sm font-medium text-foreground">Password</label>
                 <Input
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11 bg-transparent border-white/20 text-white placeholder:text-white/30 focus-visible:ring-white/30 rounded-lg"
+                  className="h-11 bg-transparent border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-ring rounded-lg"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-11 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors disabled:opacity-50"
+                className="w-full h-11 rounded-lg bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-colors disabled:opacity-50"
               >
                 {isLoading
                   ? (isLogin ? 'Signing in...' : 'Creating account...')
@@ -200,12 +200,12 @@ const BusinessAuth: React.FC = () => {
             </form>
           )}
 
-          <p className="text-center text-white/40 text-sm mt-8">
+          <p className="text-center text-muted-foreground text-sm mt-8">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
             <button
               type="button"
               onClick={() => { setIsLogin(!isLogin); setStep('initial'); }}
-              className="text-white underline underline-offset-2 hover:text-white/80"
+              className="text-foreground underline underline-offset-2 hover:opacity-70"
             >
               {isLogin ? 'Create your account' : 'Log in'}
             </button>
@@ -217,7 +217,7 @@ const BusinessAuth: React.FC = () => {
       <div
         className="hidden lg:block lg:w-1/2 relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #1a1a1a 0%, #1a3a5c 30%, #2a5a8a 50%, #c44a7a 75%, #e86040 100%)',
+          background: 'linear-gradient(160deg, hsl(var(--background)) 0%, hsl(var(--muted)) 40%, hsl(var(--foreground) / 0.15) 70%, hsl(var(--foreground) / 0.3) 100%)',
         }}
       />
     </div>
