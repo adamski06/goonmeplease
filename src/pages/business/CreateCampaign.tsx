@@ -294,9 +294,9 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Rate + Views side by side */}
-              <div className="flex gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {/* Rate input */}
-                <div className="flex-1 rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-foreground">$</span>
@@ -330,15 +330,15 @@ const CreateCampaign: React.FC = () => {
                 </div>
 
                 {/* Views display */}
-                {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0 && (
-                  <div className="w-[180px] shrink-0 rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
-                    <p className="text-2xl font-bold text-foreground">
-                      {Math.round((getBudget() / ratePerThousand) * 1000).toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground">across all creators</p>
-                  </div>
-                )}
+                <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0
+                      ? Math.round((getBudget() / ratePerThousand) * 1000).toLocaleString()
+                      : '—'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">across all creators</p>
+                </div>
               </div>
 
               {/* Max payout input */}
