@@ -293,19 +293,18 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Steam-style grid table */}
+              {/* Steam-style grid table — inputs only */}
               <div className="rounded-xl border border-border overflow-hidden">
                 {/* Header row */}
                 <div className="grid grid-cols-4">
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Creator pot</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Max payout / creator</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Creators receive</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-b border-border bg-muted/40">You pay</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Creator pot</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Max payout / creator</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Creators receive</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-b border-border bg-muted/40">You pay</div>
                 </div>
 
                 {/* Input row */}
                 <div className="grid grid-cols-4">
-                  {/* Pot */}
                   <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-foreground shrink-0">$</span>
                     <Input
@@ -318,8 +317,6 @@ const CreateCampaign: React.FC = () => {
                       className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
-
-                  {/* Max payout */}
                   <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-foreground shrink-0">$</span>
                     <Input
@@ -335,8 +332,6 @@ const CreateCampaign: React.FC = () => {
                       className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
-
-                  {/* Creators receive */}
                   <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-foreground shrink-0">$</span>
                     <div className="relative flex-1">
@@ -355,8 +350,6 @@ const CreateCampaign: React.FC = () => {
                       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                     </div>
                   </div>
-
-                  {/* You pay (editable, syncs back to creators receive) */}
                   <div className="px-4 py-4 flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-foreground shrink-0">$</span>
                     <div className="relative flex-1">
@@ -376,11 +369,6 @@ const CreateCampaign: React.FC = () => {
                       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                     </div>
                   </div>
-                </div>
-
-                {/* Fee note */}
-                <div className="px-4 py-2 bg-muted/20 border-t border-border">
-                  <p className="text-xs text-muted-foreground">You pay includes a 15% service fee. Edit either field — the other updates automatically.</p>
                 </div>
               </div>
 
