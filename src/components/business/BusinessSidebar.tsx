@@ -116,7 +116,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
   return (
     <aside
       className={cn(
-        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden',
+        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden z-10',
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
@@ -209,7 +209,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-2 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden"
+          className={cn(
+            'flex items-center gap-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden',
+            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]'
+          )}
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
@@ -217,7 +220,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           title="New Ad"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          <span>New Ad</span>
+          {!isCollapsed && <span>New Ad</span>}
         </button>
 
         {/* All ads */}

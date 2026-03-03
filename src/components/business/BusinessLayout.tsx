@@ -87,7 +87,7 @@ const BusinessLayout: React.FC = () => {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar — only on creation routes */}
         {isCreationRoute && (
-          <div className="shrink-0 h-16 border-b border-border animate-in slide-in-from-top-2 duration-300" />
+          <div className="shrink-0 h-16 border-b border-border animate-in slide-in-from-top-2 duration-300 z-20" />
         )}
 
         <main className="flex-1 overflow-auto">
