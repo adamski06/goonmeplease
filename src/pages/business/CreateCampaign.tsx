@@ -312,62 +312,54 @@ const CreateCampaign: React.FC = () => {
               {/* Input row — matching header style */}
               <div className="grid grid-cols-4 gap-3 px-2">
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
-                  <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
-                    type="number"
-                    min={maxPayoutPerCreator || 1}
-                    step={1}
-                    value={totalBudget || ''}
-                    onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
-                    placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={totalBudget ? `$${totalBudget}` : ''}
+                    onChange={(e) => setTotalBudget(parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                    placeholder="$250"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
-                  <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={maxPayoutPerCreator ?? ''}
+                    type="text"
+                    inputMode="numeric"
+                    value={maxPayoutPerCreator ? `$${maxPayoutPerCreator}` : ''}
                     onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
+                      const val = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
-                    placeholder="25"
-                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="$25"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
-                  <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    value={ratePerThousand || ''}
+                    type="text"
+                    inputMode="decimal"
+                    value={ratePerThousand ? `$${ratePerThousand}` : ''}
                     onChange={(e) => {
-                      const val = parseFloat(e.target.value) || 0;
+                      const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       setRatePerThousand(Math.round(val * 100) / 100);
                     }}
-                    placeholder="2.00"
-                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="$2.00"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
-                  <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
+                    type="text"
+                    inputMode="decimal"
+                    value={ratePerThousand ? `$${Math.round(ratePerThousand * 1.15 * 100) / 100}` : ''}
                     onChange={(e) => {
-                      const youPay = parseFloat(e.target.value) || 0;
+                      const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       const base = Math.round((youPay / 1.15) * 100) / 100;
                       setRatePerThousand(base);
                     }}
-                    placeholder="2.30"
-                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="$2.30"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
