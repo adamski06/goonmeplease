@@ -130,7 +130,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       </div>
 
       {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
-      <nav className="flex-1 px-2 py-4 overflow-y-auto space-y-1.5 min-h-0">
+      <nav className="flex-1 px-2 py-4 overflow-y-auto overflow-x-hidden space-y-1.5 min-h-0 min-w-0">
         {/* Company profile node */}
         <div ref={profileRef} className="relative px-1">
           <button

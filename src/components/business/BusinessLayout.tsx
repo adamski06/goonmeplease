@@ -84,7 +84,7 @@ const BusinessLayout: React.FC = () => {
       {isCreationRoute && (
         <div className="flex shrink-0 border-b border-border animate-in slide-in-from-top-2 duration-300">
           {/* Spacer matching logo area */}
-          <div className="w-60 shrink-0 py-5" />
+          <div className="w-60 shrink-0 px-5 py-5" />
           <div className="flex-1" />
         </div>
       )}
