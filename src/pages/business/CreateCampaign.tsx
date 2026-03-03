@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Check, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
 
-const steps = ['Ad Details', 'Target Audience', 'Rate', 'Checkout'];
+const steps = ['Ad Details', 'Rate', 'Checkout'];
 
 const CreateCampaign: React.FC = () => {
   const [step, setStep] = useState(0);
@@ -59,13 +59,12 @@ const CreateCampaign: React.FC = () => {
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
-    if (step === 1) return true;
-    if (step === 2) {
+    if (step === 1) {
       const rateOk = ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
       const budgetOk = totalBudget >= (maxPayoutPerCreator || 1);
       return rateOk && budgetOk;
     }
-    if (step === 3) return true;
+    if (step === 2) return true;
     return false;
   };
 
@@ -160,7 +159,7 @@ const CreateCampaign: React.FC = () => {
   };
 
   const [chatCollapsed, setChatCollapsed] = useState(false);
-  const chatRelevant = step <= 1;
+  const chatRelevant = step === 0;
 
   // Auto-collapse chat when it becomes irrelevant
   React.useEffect(() => {
@@ -224,7 +223,7 @@ const CreateCampaign: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 2 ? 'max-w-4xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
+        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-4xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -267,35 +266,23 @@ const CreateCampaign: React.FC = () => {
                   <Plus className="h-3.5 w-3.5" /> Add guideline
                 </button>
               </div>
-            </div>
-          )}
-
-          {/* Step 2: Audience */}
-          {step === 1 && (
-            <div className="space-y-5">
-              <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(0)} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Target audience</h2>
-              </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Who should see this campaign?</Label>
+                <Label className="text-sm font-medium">Target audience</Label>
                 <Textarea
                   value={audience}
                   onChange={(e) => setAudience(e.target.value)}
-                  placeholder="e.g. 18-35 year olds interested in fitness, lifestyle, health & wellness. Broad reach across Scandinavia."
-                  rows={6}
+                  placeholder="e.g. 18-35 year olds interested in fitness, lifestyle, health & wellness."
+                  rows={3}
                 />
               </div>
             </div>
           )}
 
-          {/* Step 3: Pricing */}
-          {step === 2 && (
+          {/* Step 2: Pricing */}
+          {step === 1 && (
             <div className="space-y-5 mt-6">
               <div className="flex items-center gap-3">
-                <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => setStep(0)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
@@ -346,7 +333,7 @@ const CreateCampaign: React.FC = () => {
                     placeholder="$2.00"
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
-                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
                 </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <input
@@ -361,7 +348,7 @@ const CreateCampaign: React.FC = () => {
                     placeholder="$2.30"
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
-                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
                 </div>
               </div>
 
@@ -401,11 +388,11 @@ const CreateCampaign: React.FC = () => {
             </div>
           )}
 
-          {/* Step 4: Checkout */}
-          {step === 3 && (
+          {/* Step 3: Checkout */}
+          {step === 2 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(2)} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Review & Pay</h2>
@@ -469,7 +456,7 @@ const CreateCampaign: React.FC = () => {
           <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-3">
             {step < steps.length - 1 ? (
               <>
-                {step === 2 && resultsShown && (
+                {step === 1 && resultsShown && (
                   <div
                     className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
                     style={{ animationDelay: '800ms', animationFillMode: 'both' }}
