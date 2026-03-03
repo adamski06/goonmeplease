@@ -178,13 +178,13 @@ const BusinessProfile: React.FC = () => {
               onClick={() => navigate('/business/new')}
               className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
               style={{
-                background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
-                border: '1px solid hsl(var(--border))',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+                background: 'linear-gradient(135deg, hsl(0,0%,18%), hsl(0,0%,10%))',
+                border: '1px solid hsla(0,0%,100%,0.08)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.06)',
               }}
             >
-              <Plus className="h-5 w-5 text-muted-foreground" />
-              <span className="text-sm font-medium text-muted-foreground font-jakarta">New Ad</span>
+              <Plus className="h-5 w-5 text-white/60" />
+              <span className="text-sm font-medium text-white/70 font-jakarta">New Ad</span>
             </button>
 
             {ads.map((ad) => {
