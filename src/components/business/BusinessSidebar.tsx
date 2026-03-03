@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, Settings, Plus, Megaphone, Handshake, ChevronDown, Home } from 'lucide-react';
+import { Plus, Megaphone, Handshake, ChevronDown, Home, User, Sun, Moon, Settings, Inbox } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
@@ -22,11 +22,13 @@ interface BusinessProfileData {
 const BusinessSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [items, setItems] = useState<SidebarItem[]>([]);
   const [profile, setProfile] = useState<BusinessProfileData | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -79,11 +81,14 @@ const BusinessSidebar: React.FC = () => {
     return () => window.removeEventListener('business-profile-updated', handler);
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setProfileOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -127,7 +132,7 @@ const BusinessSidebar: React.FC = () => {
             )}
           >
             {/* Company avatar */}
-            <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+            <div className="h-6 w-6 rounded-md bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
               {profile?.logo_url ? (
                 <img
                   src={getHighResLogoUrl(profile.logo_url) || profile.logo_url}
@@ -245,30 +250,45 @@ const BusinessSidebar: React.FC = () => {
         )}
       </nav>
 
-      {/* Settings */}
-      <div className="px-3 pb-2 space-y-1">
-        <button
-          onClick={() => navigate('/business/settings')}
-          className={cn(
-            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-            location.pathname === '/business/settings'
-              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
-          )}
-        >
-          <Settings className="h-4 w-4" />
-          Settings
-        </button>
-      </div>
+      {/* Bottom bar — profile icon (left) + inbox (right) */}
+      <div className="px-3 py-3 border-t border-border flex items-center justify-between">
+        {/* Profile / user menu */}
+        <div ref={userMenuRef} className="relative">
+          <button
+            onClick={() => setUserMenuOpen(o => !o)}
+            className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+          >
+            <User className="h-4 w-4" />
+          </button>
 
-      {/* Sign out */}
-      <div className="px-3 py-4 border-t border-border space-y-1">
+          {userMenuOpen && (
+            <div
+              className="absolute left-0 bottom-full mb-1 w-48 rounded-lg border border-border overflow-hidden z-50 shadow-md"
+              style={{ background: 'hsl(var(--popover))' }}
+            >
+              <button
+                onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setUserMenuOpen(false); }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+              >
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              </button>
+              <button
+                onClick={() => { navigate('/business/settings'); setUserMenuOpen(false); }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+              >
+                <Settings className="h-4 w-4" />
+                Settings
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Inbox */}
         <button
-          onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-sidebar-accent/50 hover:text-destructive transition-colors"
+          className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
         >
-          <LogOut className="h-4 w-4" />
-          Sign out
+          <Inbox className="h-4 w-4" />
         </button>
       </div>
     </aside>
