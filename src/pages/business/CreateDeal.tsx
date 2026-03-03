@@ -14,6 +14,7 @@ const steps = ['Ad Details', 'Target Audience', 'Rate', 'Review'];
 const CreateDeal: React.FC = () => {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -237,87 +238,91 @@ const CreateDeal: React.FC = () => {
 
           {/* Step 3: Pricing */}
           {step === 2 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
+            <div className="space-y-5 mt-6">
+              <div className="flex items-center gap-3">
                 <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Rate input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    value={ratePerThousand || ''}
-                    onChange={(e) => {
-                      const val = parseFloat(e.target.value) || 0;
-                      setRatePerThousand(Math.round(val * 10) / 10);
-                    }}
-                    placeholder="2.0"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">/ 1,000 views</span>
-                </div>
-                <div className="flex gap-2 mt-1">
-                  {[1.5, 2.5, 4].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setRatePerThousand(v)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${ratePerThousand === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      ${v}
-                    </button>
-                  ))}
-                </div>
+              {/* Header labels */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">MAX PAYOUT / CREATOR</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATORS RECEIVE</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">YOU PAY</div>
               </div>
 
-              {/* Max payout input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-3">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout per creator</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={1}
-                    step={1}
-                    value={maxPayoutPerCreator ?? ''}
+              {/* Input row */}
+              <div className="grid grid-cols-3 gap-3 px-2">
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={maxPayoutPerCreator ? `$${maxPayoutPerCreator}` : ''}
                     onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
+                      const val = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
-                    placeholder="25"
-                    className="text-2xl font-bold h-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    placeholder="$25"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
-                <div className="flex gap-2 mt-1">
-                  {[5, 10, 25].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setMaxPayoutPerCreator(v)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      ${v}
-                    </button>
-                  ))}
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={ratePerThousand ? `$${ratePerThousand}` : ''}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
+                      setRatePerThousand(Math.round(val * 100) / 100);
+                    }}
+                    placeholder="$2.00"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                  />
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
+                </div>
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={ratePerThousand ? `$${Math.round(ratePerThousand * 1.15 * 100) / 100}` : ''}
+                    onChange={(e) => {
+                      const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
+                      const base = Math.round((youPay / 1.15) * 100) / 100;
+                      setRatePerThousand(base);
+                    }}
+                    placeholder="$2.30"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                  />
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
               </div>
 
-              {/* Calculated views display */}
-              {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0 && (
-                <div className="rounded-2xl border border-border bg-muted/30 p-6 flex flex-col items-center gap-1">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Views per creator</p>
-                  <p className="text-3xl font-bold text-foreground">
-                    {Math.round((maxPayoutPerCreator / ratePerThousand) * 1000).toLocaleString()}
-                  </p>
-                  <p className="text-sm text-muted-foreground">views to earn max payout</p>
-                </div>
-              )}
+              {/* Results node — glassy black, stays visible once shown */}
+              {(() => {
+                const allFilled = maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
+                const viewsPerCreator = allFilled ? Math.round((maxPayoutPerCreator / ratePerThousand) * 1000) : 0;
+                const viewsEstimated = Math.round(viewsPerCreator * 1.4);
+                if (allFilled && !resultsShown) setResultsShown(true);
+                if (!allFilled && !resultsShown) return null;
+                return (
+                  <div
+                    className="rounded-xl px-6 py-8 border animate-in fade-in slide-in-from-bottom-2 duration-500"
+                    style={{
+                      background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
+                      borderColor: 'hsla(0,0%,100%,0.08)',
+                      backdropFilter: 'blur(16px)',
+                      boxShadow: '0 0 40px hsla(0,0%,100%,0.03), inset 0 1px 0 hsla(0,0%,100%,0.06)',
+                    }}
+                  >
+                    <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Views per creator to earn max payout</p>
+                    <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                      {allFilled ? `${viewsPerCreator.toLocaleString()} – ${viewsEstimated.toLocaleString()}` : '—'}
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -380,17 +385,27 @@ const CreateDeal: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border">
+          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-3">
             {step < steps.length - 1 ? (
-              <Button
-                size="sm"
-                onClick={() => setStep(step + 1)}
-                disabled={!canProceed()}
-                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Continue
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
+              <>
+                {step === 2 && resultsShown && (
+                  <div
+                    className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
+                    style={{ animationDelay: '800ms', animationFillMode: 'both' }}
+                  >
+                    Total: ${maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.15).toLocaleString()}` : '0'} / creator
+                  </div>
+                )}
+                <Button
+                  size="sm"
+                  onClick={() => setStep(step + 1)}
+                  disabled={!canProceed()}
+                  className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Continue
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </>
             ) : (
               <Button
                 size="sm"
