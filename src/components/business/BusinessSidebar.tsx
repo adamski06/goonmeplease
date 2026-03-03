@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
 import { useTheme } from 'next-themes';
+import jarlaLogo from '@/assets/jarla-logo.png';
 
 interface SidebarItem {
   id: string;
@@ -114,10 +115,23 @@ const BusinessSidebar: React.FC = () => {
   return (
     <aside
       className={cn(
-        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden',
+        'border-r border-border bg-sidebar-background flex flex-col shrink-0 h-full transition-[width] duration-300 ease-in-out overflow-hidden',
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
+      {/* Logo header — always visible, never collapses in height */}
+      <div className={cn(
+        'border-b border-border shrink-0 flex items-center',
+        isCollapsed ? 'px-4 py-5 justify-center' : 'px-5 py-5'
+      )}>
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-6 shrink-0"
+          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+        />
+      </div>
+
       {/* Nav */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto space-y-1.5 min-h-0">
         {/* Company profile node */}
@@ -125,8 +139,8 @@ const BusinessSidebar: React.FC = () => {
           <button
             onClick={() => !isCollapsed && setProfileOpen(o => !o)}
             className={cn(
-              'w-full flex items-center gap-2 rounded-lg text-sm font-medium transition-colors border whitespace-nowrap',
-              'px-2.5 py-2',
+              'w-full flex items-center rounded-lg text-sm font-medium transition-colors border',
+              isCollapsed ? 'justify-center px-0 py-2' : 'gap-2 px-2.5 py-2',
               profileOpen
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
                 : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-transparent'
@@ -153,8 +167,12 @@ const BusinessSidebar: React.FC = () => {
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
               )}
             </div>
-            <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
-            <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+            {!isCollapsed && (
+              <>
+                <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
+                <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+              </>
+            )}
           </button>
 
           {profileOpen && !isCollapsed && (
@@ -191,7 +209,8 @@ const BusinessSidebar: React.FC = () => {
         <button
           onClick={() => navigate('/business')}
           className={cn(
-            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+            'w-full flex items-center rounded-lg text-sm font-medium transition-colors',
+            isCollapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2.5',
             location.pathname === '/business'
               ? 'bg-sidebar-accent text-sidebar-accent-foreground'
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -199,13 +218,16 @@ const BusinessSidebar: React.FC = () => {
           title="Home"
         >
           <Home className="h-4 w-4 shrink-0" />
-          <span>Home</span>
+          {!isCollapsed && <span>Home</span>}
         </button>
 
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap"
+          className={cn(
+            'w-full flex items-center rounded-lg text-sm font-medium transition-colors text-white border border-transparent',
+            isCollapsed ? 'justify-center px-0 py-2' : 'gap-2 px-2.5 py-2'
+          )}
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
@@ -213,13 +235,13 @@ const BusinessSidebar: React.FC = () => {
           title="New Ad"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          <span>New Ad</span>
+          {!isCollapsed && <span>New Ad</span>}
         </button>
 
         {/* All ads */}
-        {items.length > 0 && (
+        {!isCollapsed && items.length > 0 && (
           <div className="space-y-0.5 mt-6">
-            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 whitespace-nowrap">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
               Ads
             </p>
             {items.map(item => {
@@ -230,7 +252,7 @@ const BusinessSidebar: React.FC = () => {
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left whitespace-nowrap',
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left',
                     isActive
                       ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
                       : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -250,8 +272,18 @@ const BusinessSidebar: React.FC = () => {
         )}
       </nav>
 
-      {/* Bottom bar — profile avatar + inbox */}
-      <div className="px-3 py-3 border-t border-border flex items-center justify-between shrink-0">
+      {/* Bottom — profile avatar + inbox stacked vertically */}
+      <div className={cn(
+        'px-3 py-3 flex flex-col items-center gap-3 shrink-0',
+      )}>
+        {/* Inbox */}
+        <button
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          title="Inbox"
+        >
+          <Inbox className="h-4 w-4" />
+        </button>
+
         {/* Profile / user menu */}
         <div ref={userMenuRef} className="relative">
           <button
@@ -295,14 +327,6 @@ const BusinessSidebar: React.FC = () => {
             </div>
           )}
         </div>
-
-        {/* Inbox */}
-        <button
-          className="text-muted-foreground hover:text-foreground transition-colors"
-          title="Inbox"
-        >
-          <Inbox className="h-4 w-4" />
-        </button>
       </div>
     </aside>
   );
