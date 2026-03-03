@@ -216,7 +216,7 @@ const CreateCampaign: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col justify-center w-full ${step === 2 ? 'max-w-4xl' : 'max-w-xl'}`}>
+        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 2 ? 'max-w-4xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -285,136 +285,108 @@ const CreateCampaign: React.FC = () => {
 
           {/* Step 3: Pricing */}
           {step === 2 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 mb-2">
+            <div className="space-y-5">
+              <div className="flex items-center gap-3">
                 <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                 </button>
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Edge-to-edge grid table */}
+              {/* Steam-style grid table */}
               <div className="rounded-xl border border-border overflow-hidden">
                 {/* Header row */}
-                <div className="grid grid-cols-4 border-b border-border bg-muted/40">
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-border">Creator pot</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-border">Max payout / creator</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-border">Creators receive</div>
-                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">You pay</div>
+                <div className="grid grid-cols-4">
+                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Creator pot</div>
+                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Max payout / creator</div>
+                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-r border-b border-border bg-muted/40">Creators receive</div>
+                  <div className="px-4 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground border-b border-border bg-muted/40">You pay</div>
                 </div>
 
                 {/* Input row */}
-                <div className="grid grid-cols-4 border-b border-border">
-                  {/* Pot input */}
-                  <div className="px-4 py-4 border-r border-border space-y-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-semibold text-foreground">$</span>
+                <div className="grid grid-cols-4">
+                  {/* Pot */}
+                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                    <Input
+                      type="number"
+                      min={maxPayoutPerCreator || 1}
+                      step={1}
+                      value={totalBudget || ''}
+                      onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
+                      placeholder={String((maxPayoutPerCreator || 25) * 10)}
+                      className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+
+                  {/* Max payout */}
+                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                    <Input
+                      type="number"
+                      min={1}
+                      step={1}
+                      value={maxPayoutPerCreator ?? ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        setMaxPayoutPerCreator(val > 0 ? val : null);
+                      }}
+                      placeholder="25"
+                      className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+
+                  {/* Creators receive */}
+                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                    <div className="relative flex-1">
                       <Input
                         type="number"
-                        min={maxPayoutPerCreator || 1}
-                        step={1}
-                        value={totalBudget || ''}
+                        min={0.1}
+                        step={0.1}
+                        value={ratePerThousand || ''}
                         onChange={(e) => {
-                          const val = parseInt(e.target.value) || 0;
-                          setTotalBudget(val);
+                          const val = parseFloat(e.target.value) || 0;
+                          setRatePerThousand(Math.round(val * 100) / 100);
                         }}
-                        placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                        className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="2.00"
+                        className="text-sm font-semibold h-9 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       />
-                    </div>
-                    <div className="flex gap-1.5">
-                      {[
-                        { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
-                        { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
-                        { label: `$${((maxPayoutPerCreator || 25) * 100).toLocaleString()}`, value: (maxPayoutPerCreator || 25) * 100 },
-                      ].map(opt => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setTotalBudget(opt.value)}
-                          className={`px-2.5 py-1.5 rounded-[4px] text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                     </div>
                   </div>
 
-                  {/* Max payout input */}
-                  <div className="px-4 py-4 border-r border-border space-y-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-semibold text-foreground">$</span>
+                  {/* You pay (editable, syncs back to creators receive) */}
+                  <div className="px-4 py-4 flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                    <div className="relative flex-1">
                       <Input
                         type="number"
-                        min={1}
-                        step={1}
-                        value={maxPayoutPerCreator ?? ''}
+                        min={0.1}
+                        step={0.1}
+                        value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
                         onChange={(e) => {
-                          const val = parseInt(e.target.value) || 0;
-                          setMaxPayoutPerCreator(val > 0 ? val : null);
+                          const youPay = parseFloat(e.target.value) || 0;
+                          const base = Math.round((youPay / 1.15) * 100) / 100;
+                          setRatePerThousand(base);
                         }}
-                        placeholder="25"
-                        className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="2.30"
+                        className="text-sm font-semibold h-9 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                     </div>
-                    <div className="flex gap-1.5">
-                      {[5, 10, 25].map(v => (
-                        <button
-                          key={v}
-                          onClick={() => setMaxPayoutPerCreator(v)}
-                          className={`px-2.5 py-1.5 rounded-[4px] text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                        >
-                          ${v}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Creators receive (rate) */}
-                  <div className="px-4 py-4 border-r border-border space-y-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-semibold text-foreground">$</span>
-                      <div className="relative flex-1">
-                        <Input
-                          type="number"
-                          min={0.1}
-                          step={0.1}
-                          value={ratePerThousand || ''}
-                          onChange={(e) => {
-                            const val = parseFloat(e.target.value) || 0;
-                            setRatePerThousand(Math.round(val * 10) / 10);
-                          }}
-                          placeholder="2.0"
-                          className="text-sm font-semibold h-9 pr-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1.5">
-                      {[1.5, 2.5, 4].map(v => (
-                        <button
-                          key={v}
-                          onClick={() => setRatePerThousand(v)}
-                          className={`px-2.5 py-1.5 rounded-[4px] text-xs font-medium border transition-colors ${ratePerThousand === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                        >
-                          ${v}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* You pay (read-only, with 15% fee) */}
-                  <div className="px-4 py-4 flex flex-col justify-center">
-                    <div className="rounded-[4px] bg-muted/50 border border-border px-3 py-2">
-                      <span className="text-sm font-semibold text-foreground">${(Math.round(ratePerThousand * 1.15 * 100) / 100).toFixed(2)}</span>
-                      <span className="text-xs text-muted-foreground ml-1">/ 1k views</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1.5">incl. 15% service fee</p>
                   </div>
                 </div>
 
-                {/* Results row */}
-                <div className="grid grid-cols-2 bg-muted/10">
-                  {/* Total views */}
+                {/* Fee note */}
+                <div className="px-4 py-2 bg-muted/20 border-t border-border">
+                  <p className="text-xs text-muted-foreground">You pay includes a 15% service fee. Edit either field — the other updates automatically.</p>
+                </div>
+              </div>
+
+              {/* Detached results node */}
+              <div className="rounded-xl border border-border overflow-hidden">
+                <div className="grid grid-cols-2">
                   <div className="px-5 py-4 border-r border-border">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
                     {(() => {
@@ -433,8 +405,6 @@ const CreateCampaign: React.FC = () => {
                     })()}
                     <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
                   </div>
-
-                  {/* Total creators */}
                   <div className="px-5 py-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
                     {(() => {
