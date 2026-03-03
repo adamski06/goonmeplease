@@ -293,9 +293,9 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Rate + Total Views — same row */}
-              <div className="grid grid-cols-[1fr_auto] gap-6">
-                {/* Rate input */}
+              {/* 2x3 grid: left = Rate, Max Payout, Pot; right = Total Views + 2 invisible spacers */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Row 1 Left: Rate */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
                   <div className="flex items-center gap-2">
@@ -329,7 +329,7 @@ const CreateCampaign: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Total views display — matches Rate node height */}
+                {/* Row 1 Right: Total views */}
                 <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
                   <p className="text-2xl font-bold text-foreground">
@@ -339,76 +339,82 @@ const CreateCampaign: React.FC = () => {
                   </p>
                   <p className="text-xs text-muted-foreground">across all creators</p>
                 </div>
-              </div>
 
-              {/* Max payout input */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">$</span>
-                  <div className="relative flex-1">
-                    <Input
-                      type="number"
-                      min={1}
-                      step={1}
-                      value={maxPayoutPerCreator ?? ''}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value) || 0;
-                        setMaxPayoutPerCreator(val > 0 ? val : null);
-                      }}
-                      placeholder="25"
-                      className="text-sm font-semibold h-10 pr-24 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">per creator</span>
+                {/* Row 2 Left: Max payout */}
+                <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                  <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Max payout</Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground">$</span>
+                    <div className="relative flex-1">
+                      <Input
+                        type="number"
+                        min={1}
+                        step={1}
+                        value={maxPayoutPerCreator ?? ''}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value) || 0;
+                          setMaxPayoutPerCreator(val > 0 ? val : null);
+                        }}
+                        placeholder="25"
+                        className="text-sm font-semibold h-10 pr-24 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">per creator</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
+                    {[5, 10, 25].map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setMaxPayoutPerCreator(v)}
+                        className={`px-3 py-2.5 rounded-[4px] text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      >
+                        ${v}
+                      </button>
+                    ))}
                   </div>
                 </div>
-                <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
-                  {[5, 10, 25].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setMaxPayoutPerCreator(v)}
-                      className={`px-3 py-2.5 rounded-[4px] text-xs font-medium border transition-colors ${maxPayoutPerCreator === v ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      ${v}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              {/* Pot */}
-              <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
-                <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Pot</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">$</span>
-                  <Input
-                    type="number"
-                    min={maxPayoutPerCreator || 1}
-                    step={1}
-                    value={totalBudget || ''}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 0;
-                      setTotalBudget(val);
-                    }}
-                    placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                    className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
+                {/* Row 2 Right: invisible spacer */}
+                <div className="invisible" aria-hidden="true" />
+
+                {/* Row 3 Left: Pot */}
+                <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
+                  <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Pot</Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={maxPayoutPerCreator || 1}
+                      step={1}
+                      value={totalBudget || ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value) || 0;
+                        setTotalBudget(val);
+                      }}
+                      placeholder={String((maxPayoutPerCreator || 25) * 10)}
+                      className="text-sm font-semibold h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+                  <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
+                    {[
+                      { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
+                      { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
+                      { label: `$${((maxPayoutPerCreator || 25) * 100).toLocaleString()}`, value: (maxPayoutPerCreator || 25) * 100 },
+                    ].map(opt => (
+                      <button
+                        key={opt.value}
+                        onClick={() => setTotalBudget(opt.value)}
+                        className={`px-3 py-2.5 rounded-[4px] text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
                 </div>
-                <div className="flex gap-1.5 ml-[calc(0.5rem+1ch+0.5rem)]">
-                  {[
-                    { label: `$${maxPayoutPerCreator || 25}`, value: maxPayoutPerCreator || 25 },
-                    { label: `$${(maxPayoutPerCreator || 25) * 10}`, value: (maxPayoutPerCreator || 25) * 10 },
-                    { label: `$${((maxPayoutPerCreator || 25) * 100).toLocaleString()}`, value: (maxPayoutPerCreator || 25) * 100 },
-                  ].map(opt => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setTotalBudget(opt.value)}
-                      className={`px-3 py-2.5 rounded-[4px] text-xs font-medium border transition-colors ${totalBudget === opt.value ? 'bg-foreground text-background border-foreground' : 'bg-muted/50 text-muted-foreground border-border hover:border-foreground/30'}`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
+
+                {/* Row 3 Right: invisible spacer */}
+                <div className="invisible" aria-hidden="true" />
               </div>
             </div>
           )}
