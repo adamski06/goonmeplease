@@ -295,15 +295,15 @@ const CreateCampaign: React.FC = () => {
 
               {/* Header labels — separate cards */}
               <div className="grid grid-cols-4 gap-3">
-                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Creator pot</div>
-                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Max payout / creator</div>
-                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Creators receive</div>
-                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">You pay</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATOR POT</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">MAX PAYOUT / CREATOR</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATORS RECEIVE</div>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">YOU PAY</div>
               </div>
 
               {/* Input row — matching header style */}
               <div className="grid grid-cols-4 gap-3">
-                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -315,7 +315,7 @@ const CreateCampaign: React.FC = () => {
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -330,7 +330,7 @@ const CreateCampaign: React.FC = () => {
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -346,7 +346,7 @@ const CreateCampaign: React.FC = () => {
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
-                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -365,45 +365,43 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Detached results node */}
-              <div className="rounded-xl border border-border overflow-hidden">
-                <div className="grid grid-cols-2">
-                  <div className="px-5 py-4 border-r border-border">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
-                    {(() => {
-                      const hasData = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                      const guaranteed = hasData ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
-                      const estimated = Math.round(guaranteed * 1.8);
-                      return hasData ? (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
-                          <span className="text-sm text-muted-foreground">–</span>
-                          <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
-                        </div>
-                      ) : (
-                        <p className="text-xl font-bold text-foreground">—</p>
-                      );
-                    })()}
-                    <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
-                  </div>
-                  <div className="px-5 py-4">
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
-                    {(() => {
-                      const hasData = maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                      const guaranteed = hasData ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
-                      const estimated = Math.round(guaranteed * 1.8);
-                      return hasData ? (
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
-                          <span className="text-sm text-muted-foreground">–</span>
-                          <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
-                        </div>
-                      ) : (
-                        <p className="text-xl font-bold text-foreground">—</p>
-                      );
-                    })()}
-                    <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
-                  </div>
+              {/* Stacked results */}
+              <div className="space-y-3">
+                <div className="rounded-xl border border-border px-5 py-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
+                  {(() => {
+                    const hasData = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                    const guaranteed = hasData ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
+                    const estimated = Math.round(guaranteed * 1.8);
+                    return hasData ? (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
+                        <span className="text-sm text-muted-foreground">–</span>
+                        <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+                      </div>
+                    ) : (
+                      <p className="text-xl font-bold text-foreground">—</p>
+                    );
+                  })()}
+                  <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
+                </div>
+                <div className="rounded-xl border border-border px-5 py-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
+                  {(() => {
+                    const hasData = maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                    const guaranteed = hasData ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
+                    const estimated = Math.round(guaranteed * 1.8);
+                    return hasData ? (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
+                        <span className="text-sm text-muted-foreground">–</span>
+                        <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+                      </div>
+                    ) : (
+                      <p className="text-xl font-bold text-foreground">—</p>
+                    );
+                  })()}
+                  <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
                 </div>
               </div>
             </div>
