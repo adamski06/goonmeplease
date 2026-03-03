@@ -216,7 +216,7 @@ const CreateCampaign: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col justify-center w-full ${step === 2 ? 'max-w-2xl' : 'max-w-xl'}`}>
+        <div className={`mx-auto px-6 flex-1 flex flex-col justify-center w-full ${step === 2 ? 'max-w-4xl' : 'max-w-xl'}`}>
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -294,7 +294,7 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* 2-col grid: left = Rate, Max Payout, Pot; right = Summary spanning all rows */}
-              <div className="grid grid-cols-[1.2fr_1fr] gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {/* Row 1 Left: Rate */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
@@ -327,50 +327,58 @@ const CreateCampaign: React.FC = () => {
                       </button>
                     ))}
                   </div>
+                  {/* You pay bar */}
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">You pay</span>
+                    <div className="flex-1 rounded-[4px] bg-muted/50 border border-border px-3 py-2 flex items-center justify-between">
+                      <span className="text-sm font-semibold text-foreground">${(Math.round(ratePerThousand * 1.15 * 100) / 100).toFixed(2)}</span>
+                      <span className="text-xs text-muted-foreground">incl. 15% fee</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right: Summary card spanning all 3 rows */}
                 <div className="row-span-3 rounded-2xl border border-border bg-muted/30 p-6 flex flex-col items-center justify-center gap-6">
                   {/* Total Views */}
-                  <div className="text-center space-y-1">
+                  <div className="text-center space-y-2">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
                     {(() => {
                       const hasData = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
                       const guaranteed = hasData ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
                       const estimated = Math.round(guaranteed * 1.8);
                       return hasData ? (
-                        <>
-                          <p className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">guaranteed</p>
-                          <p className="text-sm font-semibold text-foreground/60 mt-1">~{estimated.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">estimated with organic reach</p>
-                        </>
+                        <div className="flex items-baseline justify-center gap-2">
+                          <span className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
+                          <span className="text-sm text-muted-foreground">–</span>
+                          <span className="text-2xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+                        </div>
                       ) : (
                         <p className="text-2xl font-bold text-foreground">—</p>
                       );
                     })()}
+                    <p className="text-xs text-muted-foreground">guaranteed – estimated</p>
                   </div>
 
                   <div className="w-full border-t border-border" />
 
                   {/* Total Creators */}
-                  <div className="text-center space-y-1">
+                  <div className="text-center space-y-2">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total creators</p>
                     {(() => {
                       const hasData = maxPayoutPerCreator && maxPayoutPerCreator > 0;
                       const guaranteed = hasData ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
                       const estimated = Math.round(guaranteed * 1.8);
                       return hasData ? (
-                        <>
-                          <p className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">guaranteed spots</p>
-                          <p className="text-sm font-semibold text-foreground/60 mt-1">~{estimated.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">estimated participants</p>
-                        </>
+                        <div className="flex items-baseline justify-center gap-2">
+                          <span className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
+                          <span className="text-sm text-muted-foreground">–</span>
+                          <span className="text-2xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+                        </div>
                       ) : (
                         <p className="text-2xl font-bold text-foreground">—</p>
                       );
                     })()}
+                    <p className="text-xs text-muted-foreground">guaranteed – estimated</p>
                   </div>
                 </div>
 
