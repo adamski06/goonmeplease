@@ -120,16 +120,14 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo spacer — always same height so nav icons stay vertically fixed */}
+      {/* Logo spacer — fixed 64px height so nav icons never shift vertically */}
       <div className={cn(
-        'shrink-0 px-5 py-5',
+        'shrink-0 h-16',
         isCollapsed ? 'border-b-0' : 'border-b border-border'
-      )}>
-        <div className="h-6" />
-      </div>
+      )} />
 
       {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
-      <nav className="flex-1 px-2 py-4 overflow-hidden space-y-1.5 min-h-0 min-w-0">
+      <nav className="flex-1 px-2 py-4 overflow-y-auto overflow-x-hidden space-y-1.5 min-h-0 min-w-0">
         {/* Company profile node */}
         <div ref={profileRef} className="relative px-1">
           <button
@@ -214,7 +212,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-2 px-2.5 min-h-[36px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden"
+          className="w-full flex items-center gap-2 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
