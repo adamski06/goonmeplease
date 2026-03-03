@@ -5,12 +5,16 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
 import { useTheme } from 'next-themes';
 
+const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new'];
+
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useTheme();
+
+  const isCreationRoute = CREATION_ROUTES.includes(location.pathname);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -65,11 +69,29 @@ const BusinessLayout: React.FC = () => {
   if (!authorized) return null;
 
   return (
-    <div className="h-screen flex overflow-hidden bg-background">
-      <BusinessSidebar />
-      <main className="flex-1 overflow-auto">
-        <Outlet />
-      </main>
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
+      {/* Top bar — only on creation routes. Logo section matches sidebar width (w-60). */}
+      {isCreationRoute && (
+        <div className="flex shrink-0 border-b border-border animate-in slide-in-from-top-2 duration-300">
+          <div className="w-60 shrink-0 px-5 py-5 border-r border-border flex items-center">
+            <img
+              src={jarlaLogo}
+              alt="Jarla"
+              className="h-6"
+              style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+            />
+          </div>
+          <div className="flex-1" />
+        </div>
+      )}
+
+      {/* Sidebar + content */}
+      <div className="flex flex-1 overflow-hidden">
+        <BusinessSidebar isCreationRoute={isCreationRoute} />
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
