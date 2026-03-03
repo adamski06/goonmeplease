@@ -129,12 +129,7 @@ const BusinessProfile: React.FC = () => {
           <div className="flex items-center gap-6 flex-wrap">
             <button
               onClick={() => navigate('/business/edit-profile')}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
-              style={{
-                background: 'hsl(var(--muted))',
-                border: '1px solid hsl(var(--border))',
-                color: 'hsl(var(--foreground))',
-              }}
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors bg-card border border-border text-foreground hover:bg-muted"
             >
               <Pencil className="h-3 w-3" />
               Edit Profile
@@ -150,12 +145,12 @@ const BusinessProfile: React.FC = () => {
                 {profile.website.replace(/^https?:\/\//, '')}
               </a>
             )}
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-xl font-bold text-foreground font-montserrat leading-none">{ads.length}</span>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-semibold text-foreground font-jakarta">{ads.length}</span>
               <span className="text-xs text-muted-foreground font-jakarta">Ads</span>
             </div>
-            <div className="flex flex-col items-center gap-0.5">
-              <span className="text-xl font-bold text-foreground font-montserrat leading-none">
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-semibold text-foreground font-jakarta">
                 {totalViews >= 1000000
                   ? `${(totalViews / 1000000).toFixed(1)}M`
                   : totalViews >= 1000
@@ -176,10 +171,18 @@ const BusinessProfile: React.FC = () => {
             {/* New Ad card */}
             <button
               onClick={() => navigate('/business/new')}
-              className="group aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 active:scale-[0.98] border border-border hover:border-white/[0.08] bg-card hover:bg-[linear-gradient(135deg,hsl(0,0%,18%),hsl(0,0%,10%))] hover:shadow-[0_4px_20px_rgba(0,0,0,0.2),inset_0_1px_0_hsla(0,0%,100%,0.06)] transition-all duration-500 ease-in-out"
+              className="group relative aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 active:scale-[0.98] border border-border hover:border-white/[0.08] bg-card transition-all duration-500 ease-in-out"
             >
-              <Plus className="h-5 w-5 text-muted-foreground group-hover:text-white/60 transition-colors duration-500" />
-              <span className="text-sm font-medium text-muted-foreground group-hover:text-white/70 font-jakarta transition-colors duration-500">New Ad</span>
+              {/* Dark overlay that fades in on hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out pointer-events-none"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(0,0%,18%) 0%, hsl(0,0%,10%) 100%)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.06)',
+                }}
+              />
+              <Plus className="h-5 w-5 text-muted-foreground group-hover:text-white/60 transition-colors duration-500 relative z-10" />
+              <span className="text-sm font-medium text-muted-foreground group-hover:text-white/70 font-jakarta transition-colors duration-500 relative z-10">New Ad</span>
             </button>
 
             {ads.map((ad) => {
