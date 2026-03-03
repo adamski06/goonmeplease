@@ -301,23 +301,23 @@ const CreateCampaign: React.FC = () => {
                 <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">You pay</div>
               </div>
 
-              {/* Input row — no outer border */}
+              {/* Input row — matching header style */}
               <div className="grid grid-cols-4 gap-3">
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                  <Input
+                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                  <span className="text-sm text-muted-foreground mr-1">$</span>
+                  <input
                     type="number"
                     min={maxPayoutPerCreator || 1}
                     step={1}
                     value={totalBudget || ''}
                     onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
                     placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                    className="text-sm font-semibold h-9 pl-7 border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                  <Input
+                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                  <span className="text-sm text-muted-foreground mr-1">$</span>
+                  <input
                     type="number"
                     min={1}
                     step={1}
@@ -327,12 +327,12 @@ const CreateCampaign: React.FC = () => {
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
                     placeholder="25"
-                    className="text-sm font-semibold h-9 pl-7 border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                  <Input
+                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                  <span className="text-sm text-muted-foreground mr-1">$</span>
+                  <input
                     type="number"
                     min={0.1}
                     step={0.1}
@@ -342,13 +342,13 @@ const CreateCampaign: React.FC = () => {
                       setRatePerThousand(Math.round(val * 100) / 100);
                     }}
                     placeholder="2.00"
-                    className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                  <Input
+                <div className="rounded-lg bg-muted/50 flex items-center px-4 h-10">
+                  <span className="text-sm text-muted-foreground mr-1">$</span>
+                  <input
                     type="number"
                     min={0.1}
                     step={0.1}
@@ -359,9 +359,9 @@ const CreateCampaign: React.FC = () => {
                       setRatePerThousand(base);
                     }}
                     placeholder="2.30"
-                    className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
               </div>
 
