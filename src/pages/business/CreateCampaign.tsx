@@ -293,7 +293,7 @@ const CreateCampaign: React.FC = () => {
 
           {/* Step 3: Pricing */}
           {step === 2 && (
-            <div className="space-y-5">
+            <div className="space-y-5 mt-6">
               <div className="flex items-center gap-3">
                 <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="h-4 w-4" />
@@ -466,17 +466,24 @@ const CreateCampaign: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border">
+          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-4">
             {step < steps.length - 1 ? (
-              <Button
-                size="sm"
-                onClick={() => setStep(step + 1)}
-                disabled={!canProceed()}
-                className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Continue
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => setStep(step + 1)}
+                  disabled={!canProceed()}
+                  className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Continue
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+                {step === 2 && totalBudget > 0 && (
+                  <div className="rounded-md border border-border bg-muted/50 px-4 py-1.5 text-sm font-semibold text-foreground">
+                    Total: ${getTotal().toLocaleString()}
+                  </div>
+                )}
+              </>
             ) : (
               <Button
                 size="sm"
