@@ -83,8 +83,10 @@ const BusinessLayout: React.FC = () => {
       {/* Top bar — only on creation routes, slides down behind the fixed logo */}
       {isCreationRoute && (
         <div className="flex shrink-0 border-b border-border animate-in slide-in-from-top-2 duration-300">
-          {/* Spacer matching logo area */}
-          <div className="w-60 shrink-0 px-5 py-5" />
+          {/* Spacer matching sidebar logo area height: py-5 (40px) + h-6 (24px) = 64px */}
+          <div className="w-60 shrink-0 px-5 py-5">
+            <div className="h-6" />
+          </div>
           <div className="flex-1" />
         </div>
       )}

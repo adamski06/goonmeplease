@@ -120,23 +120,22 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo spacer — reserves height for the fixed logo overlay; invisible on collapsed (topbar handles it) */}
+      {/* Logo spacer — always same height so nav icons stay vertically fixed */}
       <div className={cn(
-        'border-b border-border shrink-0',
-        isCollapsed ? 'h-0 border-b-0' : 'px-5 py-5'
+        'shrink-0 px-5 py-5',
+        isCollapsed ? 'border-b-0' : 'border-b border-border'
       )}>
-        {/* Logo is rendered as fixed overlay in BusinessLayout, this is just height spacer */}
-        {!isCollapsed && <div className="h-6" />}
+        <div className="h-6" />
       </div>
 
       {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
-      <nav className="flex-1 px-2 py-4 overflow-y-auto overflow-x-hidden space-y-1.5 min-h-0 min-w-0">
+      <nav className="flex-1 px-2 py-4 overflow-hidden space-y-1.5 min-h-0 min-w-0">
         {/* Company profile node */}
         <div ref={profileRef} className="relative px-1">
           <button
             onClick={() => !isCollapsed && setProfileOpen(o => !o)}
             className={cn(
-              'w-full flex items-center gap-2 px-2.5 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap',
+              'w-full flex items-center gap-2 px-2.5 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap overflow-hidden',
               profileOpen
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
                 : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-transparent'
@@ -201,7 +200,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business')}
           className={cn(
-            'w-full flex items-center gap-3 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+            'w-full flex items-center gap-3 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap overflow-hidden',
             location.pathname === '/business'
               ? 'bg-sidebar-accent text-sidebar-accent-foreground'
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -215,7 +214,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-2 px-2.5 min-h-[36px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap"
+          className="w-full flex items-center gap-2 px-2.5 min-h-[36px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
