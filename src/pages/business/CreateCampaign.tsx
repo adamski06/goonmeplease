@@ -365,37 +365,46 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Combined results node */}
-              <div className="rounded-xl border border-border px-5 py-4 grid grid-cols-2 gap-6">
-                {(() => {
-                  const hasRate = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                  const hasPayout = maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                  const viewsGuaranteed = hasRate ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
-                  const viewsEstimated = Math.round(viewsGuaranteed * 1.8);
-                  const creatorsGuaranteed = hasPayout ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
-                  const creatorsEstimated = Math.round(creatorsGuaranteed * 1.8);
-                  return (
-                    <>
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
-                        {hasRate ? (
-                          <p className="text-xl font-bold text-foreground">{viewsGuaranteed.toLocaleString()} – {viewsEstimated.toLocaleString()}</p>
-                        ) : (
-                          <p className="text-xl font-bold text-foreground">—</p>
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
-                        {hasPayout ? (
-                          <p className="text-xl font-bold text-foreground">{creatorsGuaranteed.toLocaleString()} – {creatorsEstimated.toLocaleString()}</p>
-                        ) : (
-                          <p className="text-xl font-bold text-foreground">—</p>
-                        )}
-                      </div>
-                    </>
-                  );
-                })()}
-              </div>
+              {/* Combined results node — glassy black, fades in when all fields filled */}
+              {(() => {
+                const allFilled = totalBudget > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
+                const hasRate = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                const hasPayout = maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                const viewsGuaranteed = hasRate ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
+                const viewsEstimated = Math.round(viewsGuaranteed * 1.8);
+                const creatorsGuaranteed = hasPayout ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
+                const creatorsEstimated = Math.round(creatorsGuaranteed * 1.8);
+                return (
+                  <div
+                    className="rounded-xl px-5 py-4 grid grid-cols-2 gap-6 border transition-all duration-500"
+                    style={{
+                      background: allFilled
+                        ? 'linear-gradient(135deg, hsla(0,0%,8%,0.95), hsla(0,0%,14%,0.9))'
+                        : 'linear-gradient(135deg, hsla(0,0%,8%,0.3), hsla(0,0%,14%,0.25))',
+                      borderColor: allFilled ? 'hsla(0,0%,30%,0.5)' : 'hsla(0,0%,20%,0.25)',
+                      backdropFilter: 'blur(12px)',
+                      opacity: allFilled ? 1 : 0.4,
+                    }}
+                  >
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide mb-1.5" style={{ color: 'hsla(0,0%,100%,0.5)' }}>Total views</p>
+                      {hasRate ? (
+                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>{viewsGuaranteed.toLocaleString()} – {viewsEstimated.toLocaleString()}</p>
+                      ) : (
+                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>—</p>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wide mb-1.5" style={{ color: 'hsla(0,0%,100%,0.5)' }}>Total creators</p>
+                      {hasPayout ? (
+                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>{creatorsGuaranteed.toLocaleString()} – {creatorsEstimated.toLocaleString()}</p>
+                      ) : (
+                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>—</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           )}
 
