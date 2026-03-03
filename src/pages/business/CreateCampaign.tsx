@@ -26,14 +26,14 @@ const CreateCampaign: React.FC = () => {
   const [audience, setAudience] = useState('');
 
   // Step 3: Pricing
-  const [ratePerThousand, setRatePerThousand] = useState(1); // USD per 1000 views
-  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<number | null>(25);
+  const [ratePerThousand, setRatePerThousand] = useState(0);
+  const [maxPayoutPerCreator, setMaxPayoutPerCreator] = useState<number | null>(null);
   const [customPayoutInput, setCustomPayoutInput] = useState('');
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
-  const [totalBudget, setTotalBudget] = useState<number>(250); // default 10x of maxPayout
+  const [totalBudget, setTotalBudget] = useState<number>(0);
 
   // Update budget default when maxPayout changes
   React.useEffect(() => {
@@ -365,42 +365,35 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Combined results node — glassy black, fades in when all fields filled */}
+              {/* Combined results node — glassy black, hidden until all filled */}
               {(() => {
                 const allFilled = totalBudget > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
-                const hasRate = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                const hasPayout = maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                const viewsGuaranteed = hasRate ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
+                if (!allFilled) return null;
+                const viewsGuaranteed = Math.round((getBudget() / ratePerThousand) * 1000);
                 const viewsEstimated = Math.round(viewsGuaranteed * 1.8);
-                const creatorsGuaranteed = hasPayout ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
+                const creatorsGuaranteed = Math.floor(getBudget() / maxPayoutPerCreator!);
                 const creatorsEstimated = Math.round(creatorsGuaranteed * 1.8);
                 return (
                   <div
-                    className="rounded-xl px-5 py-4 grid grid-cols-2 gap-6 border transition-all duration-500"
+                    className="rounded-xl px-6 py-5 grid grid-cols-2 gap-6 border animate-in fade-in slide-in-from-bottom-2 duration-500"
                     style={{
-                      background: allFilled
-                        ? 'linear-gradient(135deg, hsla(0,0%,8%,0.95), hsla(0,0%,14%,0.9))'
-                        : 'linear-gradient(135deg, hsla(0,0%,8%,0.3), hsla(0,0%,14%,0.25))',
-                      borderColor: allFilled ? 'hsla(0,0%,30%,0.5)' : 'hsla(0,0%,20%,0.25)',
-                      backdropFilter: 'blur(12px)',
-                      opacity: allFilled ? 1 : 0.4,
+                      background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
+                      borderColor: 'hsla(0,0%,100%,0.08)',
+                      backdropFilter: 'blur(16px)',
+                      boxShadow: '0 0 40px hsla(0,0%,100%,0.03), inset 0 1px 0 hsla(0,0%,100%,0.06)',
                     }}
                   >
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide mb-1.5" style={{ color: 'hsla(0,0%,100%,0.5)' }}>Total views</p>
-                      {hasRate ? (
-                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>{viewsGuaranteed.toLocaleString()} – {viewsEstimated.toLocaleString()}</p>
-                      ) : (
-                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>—</p>
-                      )}
+                      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total views</p>
+                      <p className="text-2xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                        {viewsGuaranteed.toLocaleString()} – {viewsEstimated.toLocaleString()}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide mb-1.5" style={{ color: 'hsla(0,0%,100%,0.5)' }}>Total creators</p>
-                      {hasPayout ? (
-                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>{creatorsGuaranteed.toLocaleString()} – {creatorsEstimated.toLocaleString()}</p>
-                      ) : (
-                        <p className="text-xl font-bold" style={{ color: 'hsla(0,0%,100%,0.9)' }}>—</p>
-                      )}
+                      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total creators</p>
+                      <p className="text-2xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                        {creatorsGuaranteed.toLocaleString()} – {creatorsEstimated.toLocaleString()}
+                      </p>
                     </div>
                   </div>
                 );
