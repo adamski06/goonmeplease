@@ -296,17 +296,17 @@ const CreateCampaign: React.FC = () => {
               {/* Steam-style grid table — inputs only */}
               <div className="rounded-xl border border-border overflow-hidden">
                 {/* Header row */}
-                <div className="grid grid-cols-4">
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Creator pot</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Max payout / creator</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-r border-b border-border bg-muted/40">Creators receive</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground border-b border-border bg-muted/40">You pay</div>
+                <div className="grid grid-cols-4 border-b border-border bg-muted/40">
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Creator pot</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Max payout / creator</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Creators receive</div>
+                  <div className="px-4 py-3 text-sm font-semibold text-foreground">You pay</div>
                 </div>
 
                 {/* Input row */}
-                <div className="grid grid-cols-4">
-                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                <div className="grid grid-cols-4 gap-4 px-4 py-4">
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
                     <Input
                       type="number"
                       min={maxPayoutPerCreator || 1}
@@ -314,11 +314,11 @@ const CreateCampaign: React.FC = () => {
                       value={totalBudget || ''}
                       onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
                       placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                      className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="text-sm font-semibold h-9 pl-7 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
-                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
                     <Input
                       type="number"
                       min={1}
@@ -329,45 +329,41 @@ const CreateCampaign: React.FC = () => {
                         setMaxPayoutPerCreator(val > 0 ? val : null);
                       }}
                       placeholder="25"
-                      className="text-sm font-semibold h-9 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="text-sm font-semibold h-9 pl-7 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
-                  <div className="px-4 py-4 border-r border-border flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
-                    <div className="relative flex-1">
-                      <Input
-                        type="number"
-                        min={0.1}
-                        step={0.1}
-                        value={ratePerThousand || ''}
-                        onChange={(e) => {
-                          const val = parseFloat(e.target.value) || 0;
-                          setRatePerThousand(Math.round(val * 100) / 100);
-                        }}
-                        placeholder="2.00"
-                        className="text-sm font-semibold h-9 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
-                    </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                    <Input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      value={ratePerThousand || ''}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value) || 0;
+                        setRatePerThousand(Math.round(val * 100) / 100);
+                      }}
+                      placeholder="2.00"
+                      className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                   </div>
-                  <div className="px-4 py-4 flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-foreground shrink-0">$</span>
-                    <div className="relative flex-1">
-                      <Input
-                        type="number"
-                        min={0.1}
-                        step={0.1}
-                        value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
-                        onChange={(e) => {
-                          const youPay = parseFloat(e.target.value) || 0;
-                          const base = Math.round((youPay / 1.15) * 100) / 100;
-                          setRatePerThousand(base);
-                        }}
-                        placeholder="2.30"
-                        className="text-sm font-semibold h-9 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      />
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
-                    </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                    <Input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
+                      onChange={(e) => {
+                        const youPay = parseFloat(e.target.value) || 0;
+                        const base = Math.round((youPay / 1.15) * 100) / 100;
+                        setRatePerThousand(base);
+                      }}
+                      placeholder="2.30"
+                      className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                   </div>
                 </div>
               </div>
