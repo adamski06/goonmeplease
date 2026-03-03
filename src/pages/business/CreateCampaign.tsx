@@ -466,9 +466,17 @@ const CreateCampaign: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-4">
+          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-3">
             {step < steps.length - 1 ? (
               <>
+                {step === 2 && resultsShown && (
+                  <div
+                    className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
+                    style={{ animationDelay: '800ms', animationFillMode: 'both' }}
+                  >
+                    Total: ${Math.round(getTotal() * 1.15).toLocaleString()}
+                  </div>
+                )}
                 <Button
                   size="sm"
                   onClick={() => setStep(step + 1)}
@@ -478,11 +486,6 @@ const CreateCampaign: React.FC = () => {
                   Continue
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
-                {step === 2 && totalBudget > 0 && (
-                  <div className="rounded-md border border-border bg-muted/50 px-4 py-1.5 text-sm font-semibold text-foreground">
-                    Total: ${getTotal().toLocaleString()}
-                  </div>
-                )}
               </>
             ) : (
               <Button
