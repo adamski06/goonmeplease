@@ -5,7 +5,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
 import { useTheme } from 'next-themes';
-import jarlaLogo from '@/assets/jarla-logo.png';
 
 interface SidebarItem {
   id: string;
@@ -121,27 +120,23 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo header — always rendered to prevent blink; hidden when topbar shows it */}
+      {/* Logo spacer — reserves height for the fixed logo overlay; invisible on collapsed (topbar handles it) */}
       <div className={cn(
-        'px-5 py-5 border-b border-border shrink-0 flex items-center',
-        isCollapsed && 'invisible h-0 py-0 border-b-0'
+        'border-b border-border shrink-0',
+        isCollapsed ? 'h-0 border-b-0' : 'px-5 py-5'
       )}>
-        <img
-          src={jarlaLogo}
-          alt="Jarla"
-          className="h-6 shrink-0"
-          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
-        />
+        {/* Logo is rendered as fixed overlay in BusinessLayout, this is just height spacer */}
+        {!isCollapsed && <div className="h-6" />}
       </div>
 
-      {/* Nav — icons stay at same px-3 offset, text clips via overflow-hidden on aside */}
+      {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto space-y-1.5 min-h-0">
         {/* Company profile node */}
         <div ref={profileRef} className="relative px-1">
           <button
             onClick={() => !isCollapsed && setProfileOpen(o => !o)}
             className={cn(
-              'w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors border whitespace-nowrap',
+              'w-full flex items-center gap-2 px-2.5 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap',
               profileOpen
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
                 : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-transparent'
@@ -168,12 +163,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
               )}
             </div>
-            {!isCollapsed && (
-              <>
-                <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
-                <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
-              </>
-            )}
+            <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
+            <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
           </button>
 
           {profileOpen && !isCollapsed && (
@@ -210,7 +201,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business')}
           className={cn(
-            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+            'w-full flex items-center gap-3 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
             location.pathname === '/business'
               ? 'bg-sidebar-accent text-sidebar-accent-foreground'
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -218,13 +209,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           title="Home"
         >
           <Home className="h-4 w-4 shrink-0" />
-          {!isCollapsed && <span>Home</span>}
+          <span>Home</span>
         </button>
 
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap"
+          className="w-full flex items-center gap-2 px-2.5 min-h-[36px] rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap"
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
@@ -232,7 +223,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           title="New Ad"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          {!isCollapsed && <span>New Ad</span>}
+          <span>New Ad</span>
         </button>
 
         {/* All ads */}
@@ -249,7 +240,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left whitespace-nowrap',
+                    'w-full flex items-center gap-3 px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
                       ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
                       : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -269,13 +260,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         )}
       </nav>
 
-      {/* Bottom — horizontal when expanded, stacked when collapsed */}
+      {/* Bottom — horizontal when expanded, stacked when collapsed. Profile always left-aligned. */}
       <div className={cn(
         'px-3 py-3 shrink-0 flex items-center',
         isCollapsed ? 'flex-col gap-3' : 'flex-row justify-between'
       )}>
-        {/* Profile / user menu */}
-        <div ref={userMenuRef} className="relative">
+        {/* Profile / user menu — always at left edge */}
+        <div ref={userMenuRef} className="relative self-start">
           <button
             onClick={() => setUserMenuOpen(o => !o)}
             className="h-7 w-7 rounded-full overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity"
