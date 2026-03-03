@@ -12,7 +12,7 @@ const BusinessLayout: React.FC = () => {
   const [authorized, setAuthorized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const isCreationRoute = CREATION_ROUTES.includes(location.pathname);
 
@@ -76,7 +76,7 @@ const BusinessLayout: React.FC = () => {
           src={jarlaLogo}
           alt="Jarla"
           className="h-6"
-          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+          style={{ filter: resolvedTheme === 'dark' ? 'none' : 'invert(1)' }}
         />
       </div>
 
