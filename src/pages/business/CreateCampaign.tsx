@@ -293,78 +293,75 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Steam-style grid table — inputs only */}
-              <div className="rounded-xl border border-border overflow-hidden">
-                {/* Header row */}
-                <div className="grid grid-cols-4 border-b border-border bg-muted/40">
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Creator pot</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Max payout / creator</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground">Creators receive</div>
-                  <div className="px-4 py-3 text-sm font-semibold text-foreground">You pay</div>
-                </div>
+              {/* Header labels — separate cards */}
+              <div className="grid grid-cols-4 gap-3">
+                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Creator pot</div>
+                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Max payout / creator</div>
+                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">Creators receive</div>
+                <div className="rounded-lg bg-muted/50 px-4 py-2.5 text-sm font-semibold text-foreground">You pay</div>
+              </div>
 
-                {/* Input row */}
-                <div className="grid grid-cols-4 gap-4 px-4 py-4">
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                    <Input
-                      type="number"
-                      min={maxPayoutPerCreator || 1}
-                      step={1}
-                      value={totalBudget || ''}
-                      onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
-                      placeholder={String((maxPayoutPerCreator || 25) * 10)}
-                      className="text-sm font-semibold h-9 pl-7 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                  </div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                    <Input
-                      type="number"
-                      min={1}
-                      step={1}
-                      value={maxPayoutPerCreator ?? ''}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value) || 0;
-                        setMaxPayoutPerCreator(val > 0 ? val : null);
-                      }}
-                      placeholder="25"
-                      className="text-sm font-semibold h-9 pl-7 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                  </div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                    <Input
-                      type="number"
-                      min={0.1}
-                      step={0.1}
-                      value={ratePerThousand || ''}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value) || 0;
-                        setRatePerThousand(Math.round(val * 100) / 100);
-                      }}
-                      placeholder="2.00"
-                      className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
-                  </div>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
-                    <Input
-                      type="number"
-                      min={0.1}
-                      step={0.1}
-                      value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
-                      onChange={(e) => {
-                        const youPay = parseFloat(e.target.value) || 0;
-                        const base = Math.round((youPay / 1.15) * 100) / 100;
-                        setRatePerThousand(base);
-                      }}
-                      placeholder="2.30"
-                      className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
-                  </div>
+              {/* Input row — no outer border */}
+              <div className="grid grid-cols-4 gap-3">
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                  <Input
+                    type="number"
+                    min={maxPayoutPerCreator || 1}
+                    step={1}
+                    value={totalBudget || ''}
+                    onChange={(e) => setTotalBudget(parseInt(e.target.value) || 0)}
+                    placeholder={String((maxPayoutPerCreator || 25) * 10)}
+                    className="text-sm font-semibold h-9 pl-7 border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                  <Input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={maxPayoutPerCreator ?? ''}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 0;
+                      setMaxPayoutPerCreator(val > 0 ? val : null);
+                    }}
+                    placeholder="25"
+                    className="text-sm font-semibold h-9 pl-7 border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                  <Input
+                    type="number"
+                    min={0.1}
+                    step={0.1}
+                    value={ratePerThousand || ''}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value) || 0;
+                      setRatePerThousand(Math.round(val * 100) / 100);
+                    }}
+                    placeholder="2.00"
+                    className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
+                </div>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">$</span>
+                  <Input
+                    type="number"
+                    min={0.1}
+                    step={0.1}
+                    value={Math.round(ratePerThousand * 1.15 * 100) / 100 || ''}
+                    onChange={(e) => {
+                      const youPay = parseFloat(e.target.value) || 0;
+                      const base = Math.round((youPay / 1.15) * 100) / 100;
+                      setRatePerThousand(base);
+                    }}
+                    placeholder="2.30"
+                    className="text-sm font-semibold h-9 pl-7 pr-[4.5rem] border-0 bg-muted/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground whitespace-nowrap pointer-events-none">/ 1k views</span>
                 </div>
               </div>
 
