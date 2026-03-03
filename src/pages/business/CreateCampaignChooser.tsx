@@ -13,11 +13,6 @@ const CreateCampaignChooser: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full min-h-screen relative">
-      {/* Top bar — matches sidebar logo height */}
-      <div className="w-full flex items-center shrink-0 px-5 py-5 border-b border-border bg-background">
-        <span className="text-sm font-semibold text-foreground font-montserrat leading-6">New Ad</span>
-      </div>
-
       {/* Content */}
       <div className="flex flex-col flex-1 px-4 py-8">
         <p className="text-sm font-medium text-muted-foreground font-jakarta mb-6 tracking-wide text-center">
