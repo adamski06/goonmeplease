@@ -73,7 +73,7 @@ const BusinessLayout: React.FC = () => {
       {/* Top bar — only on creation routes. Logo section matches sidebar width (w-60). */}
       {isCreationRoute && (
         <div className="flex shrink-0 border-b border-border animate-in slide-in-from-top-2 duration-300">
-          <div className="w-60 shrink-0 px-5 py-5 border-r border-border flex items-center">
+          <div className="w-60 shrink-0 px-5 py-5 flex items-center">
             <img
               src={jarlaLogo}
               alt="Jarla"
