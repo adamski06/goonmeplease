@@ -293,8 +293,8 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* Rate + Total Views — same row, same size */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Rate + Total Views — same row */}
+              <div className="grid grid-cols-[1fr_auto] gap-6">
                 {/* Rate input */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
