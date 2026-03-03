@@ -176,15 +176,23 @@ const BusinessProfile: React.FC = () => {
             {/* New Ad card */}
             <button
               onClick={() => navigate('/business/new')}
-              className="aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all active:scale-[0.98]"
+              className="group aspect-[9/14] rounded-[48px] overflow-hidden flex flex-col items-center justify-center gap-2 transition-all duration-500 active:scale-[0.98] border border-border hover:border-transparent"
               style={{
-                background: 'linear-gradient(135deg, hsl(0,0%,18%), hsl(0,0%,10%))',
-                border: '1px solid hsla(0,0%,100%,0.08)',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.06)',
+                background: 'hsl(var(--card))',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, hsl(0,0%,18%), hsl(0,0%,10%))';
+                e.currentTarget.style.border = '1px solid hsla(0,0%,100%,0.08)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.06)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'hsl(var(--card))';
+                e.currentTarget.style.border = '1px solid hsl(var(--border))';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              <Plus className="h-5 w-5 text-white/60" />
-              <span className="text-sm font-medium text-white/70 font-jakarta">New Ad</span>
+              <Plus className="h-5 w-5 text-muted-foreground group-hover:text-white/60 transition-colors duration-500" />
+              <span className="text-sm font-medium text-muted-foreground group-hover:text-white/70 font-jakarta transition-colors duration-500">New Ad</span>
             </button>
 
             {ads.map((ad) => {
