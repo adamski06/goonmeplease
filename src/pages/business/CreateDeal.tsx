@@ -123,16 +123,8 @@ const CreateDeal: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh)] overflow-hidden">
       {/* Top bar — matches sidebar logo height: py-5 (20+20) + h-6 (24) = 64px */}
-      <div
-        className="w-full flex items-center shrink-0 animate-in slide-in-from-top-2 duration-300"
-        style={{
-          height: '64px',
-          borderBottom: '1px solid hsl(var(--border))',
-          background: 'hsl(var(--background))',
-          paddingLeft: '20px',
-        }}
-      >
-        <span className="text-sm font-semibold text-foreground font-montserrat">Create a Deal</span>
+      <div className="w-full flex items-center shrink-0 animate-in slide-in-from-top-2 duration-300 px-5 py-5 border-b border-border bg-background">
+        <span className="text-sm font-semibold text-foreground font-montserrat leading-6">Create a Deal</span>
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">
