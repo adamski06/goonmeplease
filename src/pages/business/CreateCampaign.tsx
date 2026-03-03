@@ -293,8 +293,8 @@ const CreateCampaign: React.FC = () => {
                 <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
               </div>
 
-              {/* 2x3 grid: left = Rate, Max Payout, Pot; right = Total Views + 2 invisible spacers */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* 2-col grid: left = Rate, Max Payout, Pot; right = Summary spanning all rows */}
+              <div className="grid grid-cols-[1.2fr_1fr] gap-4">
                 {/* Row 1 Left: Rate */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Rate</Label>
@@ -329,15 +329,49 @@ const CreateCampaign: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Row 1 Right: Total views */}
-                <div className="rounded-2xl border border-border bg-muted/30 p-5 flex flex-col items-center justify-center gap-1">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    {ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0
-                      ? Math.round((getBudget() / ratePerThousand) * 1000).toLocaleString()
-                      : '—'}
-                  </p>
-                  <p className="text-xs text-muted-foreground">across all creators</p>
+                {/* Right: Summary card spanning all 3 rows */}
+                <div className="row-span-3 rounded-2xl border border-border bg-muted/30 p-6 flex flex-col items-center justify-center gap-6">
+                  {/* Total Views */}
+                  <div className="text-center space-y-1">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total views</p>
+                    {(() => {
+                      const hasData = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                      const guaranteed = hasData ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
+                      const estimated = Math.round(guaranteed * 1.8);
+                      return hasData ? (
+                        <>
+                          <p className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">guaranteed</p>
+                          <p className="text-sm font-semibold text-foreground/60 mt-1">~{estimated.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">estimated with organic reach</p>
+                        </>
+                      ) : (
+                        <p className="text-2xl font-bold text-foreground">—</p>
+                      );
+                    })()}
+                  </div>
+
+                  <div className="w-full border-t border-border" />
+
+                  {/* Total Creators */}
+                  <div className="text-center space-y-1">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total creators</p>
+                    {(() => {
+                      const hasData = maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                      const guaranteed = hasData ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
+                      const estimated = Math.round(guaranteed * 1.8);
+                      return hasData ? (
+                        <>
+                          <p className="text-2xl font-bold text-foreground">{guaranteed.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">guaranteed spots</p>
+                          <p className="text-sm font-semibold text-foreground/60 mt-1">~{estimated.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">estimated participants</p>
+                        </>
+                      ) : (
+                        <p className="text-2xl font-bold text-foreground">—</p>
+                      );
+                    })()}
+                  </div>
                 </div>
 
                 {/* Row 2 Left: Max payout */}
@@ -374,9 +408,6 @@ const CreateCampaign: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Row 2 Right: invisible spacer */}
-                <div className="invisible" aria-hidden="true" />
-
                 {/* Row 3 Left: Pot */}
                 <div className="rounded-2xl border border-border bg-background p-5 flex flex-col gap-2">
                   <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Pot</Label>
@@ -412,9 +443,6 @@ const CreateCampaign: React.FC = () => {
                   </div>
                   <p className="text-xs text-muted-foreground">Min. ${maxPayoutPerCreator || 1} (max payout per creator).</p>
                 </div>
-
-                {/* Row 3 Right: invisible spacer */}
-                <div className="invisible" aria-hidden="true" />
               </div>
             </div>
           )}
