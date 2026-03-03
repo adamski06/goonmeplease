@@ -7,12 +7,6 @@ import { useTheme } from 'next-themes';
 
 const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new'];
 
-const CREATION_TITLES: Record<string, string> = {
-  '/business/new': 'New Ad',
-  '/business/campaigns/new': 'Create a Spread',
-  '/business/deals/new': 'Create a Deal',
-};
-
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
@@ -21,7 +15,6 @@ const BusinessLayout: React.FC = () => {
   const { theme } = useTheme();
 
   const isCreationRoute = CREATION_ROUTES.includes(location.pathname);
-  const creationTitle = CREATION_TITLES[location.pathname] || 'New Ad';
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -75,41 +68,25 @@ const BusinessLayout: React.FC = () => {
 
   if (!authorized) return null;
 
-  if (isCreationRoute) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        {/* Shared top bar: logo section (w-60) + page title */}
-        <div className="flex border-b border-border shrink-0 animate-in slide-in-from-top-2 duration-300">
-          <div className="w-60 px-5 py-5 border-r border-border shrink-0 flex items-center gap-2.5">
-            <img
-              src={jarlaLogo}
-              alt="Jarla"
-              className="h-6"
-              style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
-            />
-          </div>
-          <div className="flex-1 px-5 py-5 flex items-center">
-            <span className="text-sm font-semibold text-foreground font-montserrat leading-6">{creationTitle}</span>
-          </div>
-        </div>
-
-        {/* Sidebar (no header) + content */}
-        <div className="flex flex-1 overflow-hidden">
-          <BusinessSidebar noHeader />
-          <main className="flex-1 overflow-auto">
-            <Outlet />
-          </main>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen flex bg-background">
-      <BusinessSidebar />
-      <main className="flex-1 overflow-auto h-screen">
-        <Outlet />
-      </main>
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Top bar — always present, logo is its own entity */}
+      <div className="flex items-center shrink-0 border-b border-border px-5 py-5">
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-6"
+          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+        />
+      </div>
+
+      {/* Sidebar + content below the top bar */}
+      <div className="flex flex-1 overflow-hidden">
+        <BusinessSidebar />
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

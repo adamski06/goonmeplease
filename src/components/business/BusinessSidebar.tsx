@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Plus, Megaphone, Handshake, ChevronDown, Home, Sun, Moon, Settings, Inbox } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import jarlaLogo from '@/assets/jarla-logo.png';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
 import { useTheme } from 'next-themes';
@@ -21,11 +20,7 @@ interface BusinessProfileData {
 
 const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new'];
 
-interface BusinessSidebarProps {
-  noHeader?: boolean;
-}
-
-const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) => {
+const BusinessSidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
@@ -36,7 +31,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
   const profileRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const isCollapsed = noHeader || CREATION_ROUTES.includes(location.pathname);
+  const isCollapsed = CREATION_ROUTES.includes(location.pathname);
 
   useEffect(() => {
     const load = async () => {
@@ -119,22 +114,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
   return (
     <aside
       className={cn(
-        'border-r border-border bg-sidebar-background flex flex-col shrink-0 sticky top-0',
-        isCollapsed ? 'w-[56px] h-full' : 'w-60 h-screen'
+        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden',
+        isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo — only when not in noHeader mode */}
-      {!noHeader && (
-        <div className="px-5 py-5 flex items-center gap-2.5 border-b border-border shrink-0">
-          <img
-            src={jarlaLogo}
-            alt="Jarla"
-            className="h-6"
-            style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
-          />
-        </div>
-      )}
-
       {/* Nav */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto space-y-1.5 min-h-0">
         {/* Company profile node */}
@@ -142,8 +125,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
           <button
             onClick={() => !isCollapsed && setProfileOpen(o => !o)}
             className={cn(
-              'w-full flex items-center gap-2 rounded-lg text-sm font-medium transition-colors border',
-              isCollapsed ? 'px-1.5 py-2 justify-center border-transparent' : 'px-2.5 py-2',
+              'w-full flex items-center gap-2 rounded-lg text-sm font-medium transition-colors border whitespace-nowrap',
+              'px-2.5 py-2',
               profileOpen
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
                 : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-transparent'
@@ -170,12 +153,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
               )}
             </div>
-            {!isCollapsed && (
-              <>
-                <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
-                <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
-              </>
-            )}
+            <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
+            <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
           </button>
 
           {profileOpen && !isCollapsed && (
@@ -212,8 +191,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
         <button
           onClick={() => navigate('/business')}
           className={cn(
-            'w-full flex items-center gap-3 rounded-lg text-sm font-medium transition-colors',
-            isCollapsed ? 'px-1.5 py-2.5 justify-center' : 'px-3 py-2.5',
+            'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
             location.pathname === '/business'
               ? 'bg-sidebar-accent text-sidebar-accent-foreground'
               : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -221,16 +199,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
           title="Home"
         >
           <Home className="h-4 w-4 shrink-0" />
-          {!isCollapsed && 'Home'}
+          <span>Home</span>
         </button>
 
         {/* New Ad */}
         <button
           onClick={() => navigate('/business/new')}
-          className={cn(
-            'w-full flex items-center gap-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent',
-            isCollapsed ? 'px-1.5 py-2.5 justify-center' : 'px-2.5 py-2'
-          )}
+          className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap"
           style={{
             background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
@@ -238,17 +213,15 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
           title="New Ad"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          {!isCollapsed && 'New Ad'}
+          <span>New Ad</span>
         </button>
 
         {/* All ads */}
         {items.length > 0 && (
           <div className="space-y-0.5 mt-6">
-            {!isCollapsed && (
-              <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
-                Ads
-              </p>
-            )}
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 whitespace-nowrap">
+              Ads
+            </p>
             {items.map(item => {
               const path = getItemPath(item);
               const isActive = location.pathname === path;
@@ -257,8 +230,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center gap-3 rounded-lg text-sm transition-colors text-left',
-                    isCollapsed ? 'px-1.5 py-2 justify-center' : 'px-3 py-2',
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
                       ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
                       : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -270,7 +242,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
                   ) : (
                     <Handshake className="h-3.5 w-3.5 shrink-0" />
                   )}
-                  {!isCollapsed && <span className="truncate">{item.title}</span>}
+                  <span className="truncate">{item.title}</span>
                 </button>
               );
             })}
@@ -278,11 +250,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
         )}
       </nav>
 
-      {/* Bottom bar — profile avatar (left) + inbox icon (right) */}
-      <div className={cn(
-        'px-3 py-3 border-t border-border flex items-center',
-        isCollapsed ? 'justify-center gap-3 flex-col' : 'justify-between'
-      )}>
+      {/* Bottom bar — profile avatar + inbox */}
+      <div className="px-3 py-3 border-t border-border flex items-center justify-between shrink-0">
         {/* Profile / user menu */}
         <div ref={userMenuRef} className="relative">
           <button
@@ -327,7 +296,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ noHeader = false }) =
           )}
         </div>
 
-        {/* Inbox — plain icon */}
+        {/* Inbox */}
         <button
           className="text-muted-foreground hover:text-foreground transition-colors"
           title="Inbox"
