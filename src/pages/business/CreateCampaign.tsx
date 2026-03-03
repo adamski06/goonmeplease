@@ -302,8 +302,8 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Input row — matching header style */}
-              <div className="grid grid-cols-4 gap-3">
-                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
+              <div className="grid grid-cols-4 gap-3 px-2">
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -315,7 +315,7 @@ const CreateCampaign: React.FC = () => {
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -330,7 +330,7 @@ const CreateCampaign: React.FC = () => {
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
-                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
@@ -346,7 +346,7 @@ const CreateCampaign: React.FC = () => {
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1k views</span>
                 </div>
-                <div className="rounded-md border border-border bg-muted/50 flex items-center px-4 h-10">
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <span className="text-sm text-muted-foreground mr-1">$</span>
                   <input
                     type="number"
