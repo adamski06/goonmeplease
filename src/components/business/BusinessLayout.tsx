@@ -69,18 +69,22 @@ const BusinessLayout: React.FC = () => {
   if (!authorized) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden">
-      {/* Top bar — only on creation routes. Logo section matches sidebar width (w-60). */}
+    <div className="h-screen flex flex-col bg-background overflow-hidden relative">
+      {/* Fixed logo overlay — always in same spot, never animates */}
+      <div className="absolute top-0 left-0 z-50 px-5 py-5 pointer-events-none">
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-6"
+          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+        />
+      </div>
+
+      {/* Top bar — only on creation routes, slides down behind the fixed logo */}
       {isCreationRoute && (
         <div className="flex shrink-0 border-b border-border animate-in slide-in-from-top-2 duration-300">
-          <div className="w-60 shrink-0 px-5 py-5 flex items-center">
-            <img
-              src={jarlaLogo}
-              alt="Jarla"
-              className="h-6"
-              style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
-            />
-          </div>
+          {/* Spacer matching logo area */}
+          <div className="w-60 shrink-0 py-5" />
           <div className="flex-1" />
         </div>
       )}
