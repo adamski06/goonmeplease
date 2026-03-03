@@ -121,17 +121,18 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo header — only when NOT on creation route (topbar handles it otherwise) */}
-      {!isCollapsed && (
-        <div className="px-5 py-5 border-b border-border shrink-0 flex items-center">
-          <img
-            src={jarlaLogo}
-            alt="Jarla"
-            className="h-6 shrink-0"
-            style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
-          />
-        </div>
-      )}
+      {/* Logo header — always rendered to prevent blink; hidden when topbar shows it */}
+      <div className={cn(
+        'px-5 py-5 border-b border-border shrink-0 flex items-center',
+        isCollapsed && 'invisible h-0 py-0 border-b-0'
+      )}>
+        <img
+          src={jarlaLogo}
+          alt="Jarla"
+          className="h-6 shrink-0"
+          style={{ filter: theme === 'dark' ? 'none' : 'invert(1)' }}
+        />
+      </div>
 
       {/* Nav — icons stay at same px-3 offset, text clips via overflow-hidden on aside */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto space-y-1.5 min-h-0">
@@ -167,8 +168,12 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
               )}
             </div>
-            <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
-            <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+            {!isCollapsed && (
+              <>
+                <span className="truncate flex-1 text-left text-sm">{profile?.company_name || 'Profile'}</span>
+                <ChevronDown className={cn('h-3 w-3 shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+              </>
+            )}
           </button>
 
           {profileOpen && !isCollapsed && (
@@ -213,7 +218,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           title="Home"
         >
           <Home className="h-4 w-4 shrink-0" />
-          <span>Home</span>
+          {!isCollapsed && <span>Home</span>}
         </button>
 
         {/* New Ad */}
@@ -227,7 +232,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           title="New Ad"
         >
           <Plus className="h-4 w-4 shrink-0" />
-          <span>New Ad</span>
+          {!isCollapsed && <span>New Ad</span>}
         </button>
 
         {/* All ads */}
