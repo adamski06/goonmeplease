@@ -365,44 +365,36 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Stacked results */}
-              <div className="space-y-3">
-                <div className="rounded-xl border border-border px-5 py-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
-                  {(() => {
-                    const hasData = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                    const guaranteed = hasData ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
-                    const estimated = Math.round(guaranteed * 1.8);
-                    return hasData ? (
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
-                        <span className="text-sm text-muted-foreground">–</span>
-                        <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+              {/* Combined results node */}
+              <div className="rounded-xl border border-border px-5 py-4 grid grid-cols-2 gap-6">
+                {(() => {
+                  const hasRate = ratePerThousand > 0 && maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                  const hasPayout = maxPayoutPerCreator && maxPayoutPerCreator > 0;
+                  const viewsGuaranteed = hasRate ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
+                  const viewsEstimated = Math.round(viewsGuaranteed * 1.8);
+                  const creatorsGuaranteed = hasPayout ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
+                  const creatorsEstimated = Math.round(creatorsGuaranteed * 1.8);
+                  return (
+                    <>
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total views</p>
+                        {hasRate ? (
+                          <p className="text-xl font-bold text-foreground">{viewsGuaranteed.toLocaleString()} – {viewsEstimated.toLocaleString()}</p>
+                        ) : (
+                          <p className="text-xl font-bold text-foreground">—</p>
+                        )}
                       </div>
-                    ) : (
-                      <p className="text-xl font-bold text-foreground">—</p>
-                    );
-                  })()}
-                  <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
-                </div>
-                <div className="rounded-xl border border-border px-5 py-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
-                  {(() => {
-                    const hasData = maxPayoutPerCreator && maxPayoutPerCreator > 0;
-                    const guaranteed = hasData ? Math.floor(getBudget() / maxPayoutPerCreator) : 0;
-                    const estimated = Math.round(guaranteed * 1.8);
-                    return hasData ? (
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-bold text-foreground">{guaranteed.toLocaleString()}</span>
-                        <span className="text-sm text-muted-foreground">–</span>
-                        <span className="text-xl font-bold text-foreground/60">~{estimated.toLocaleString()}</span>
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">Total creators</p>
+                        {hasPayout ? (
+                          <p className="text-xl font-bold text-foreground">{creatorsGuaranteed.toLocaleString()} – {creatorsEstimated.toLocaleString()}</p>
+                        ) : (
+                          <p className="text-xl font-bold text-foreground">—</p>
+                        )}
                       </div>
-                    ) : (
-                      <p className="text-xl font-bold text-foreground">—</p>
-                    );
-                  })()}
-                  <p className="text-xs text-muted-foreground mt-0.5">guaranteed – estimated</p>
-                </div>
+                    </>
+                  );
+                })()}
               </div>
             </div>
           )}
