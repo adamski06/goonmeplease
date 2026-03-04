@@ -18,7 +18,7 @@ const CreateDeal: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { symbol, label, currency } = useCurrency();
+  const { symbol, label, currency, setCurrency } = useCurrency();
 
   const fmtInline = (val: number | null) => {
     if (val === null || val === 0) return '';
@@ -235,14 +235,25 @@ const CreateDeal: React.FC = () => {
               </div>
 
               {/* Header labels */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid gap-3" style={{ gridTemplateColumns: '80px 1fr 1fr 1fr' }}>
+                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CURRENCY</div>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">MAX PAYOUT / CREATOR</div>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATORS RECEIVE</div>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">YOU PAY</div>
               </div>
 
               {/* Input row */}
-              <div className="grid grid-cols-3 gap-3 px-2">
+              <div className="grid gap-3 px-2" style={{ gridTemplateColumns: '80px 1fr 1fr 1fr' }}>
+                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                  <select
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value as 'USD' | 'SEK')}
+                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground cursor-pointer"
+                  >
+                    <option value="USD">$ USD</option>
+                    <option value="SEK">kr SEK</option>
+                  </select>
+                </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <input
                     type="text"
