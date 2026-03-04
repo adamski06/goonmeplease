@@ -90,7 +90,7 @@ const BusinessSubmissionDetail: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 overflow-y-auto h-full">
+    <div className="max-w-5xl mx-auto px-6 py-10 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40" style={{ scrollbarGutter: 'stable' }}>
       {/* Back */}
       <button
         onClick={() => navigate(-1)}
@@ -137,12 +137,14 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* TikTok embeds: video + profile side by side */}
       <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <iframe
-            src={tiktokEmbedUrl}
-            style={{ width: 325, height: 740, border: 'none', display: 'block' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
+          <div className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 228, height: 518 }}>
+            <iframe
+              src={tiktokEmbedUrl}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
         ) : (
           <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
             <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
