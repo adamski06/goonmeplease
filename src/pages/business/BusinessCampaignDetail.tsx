@@ -83,9 +83,34 @@ const BusinessCampaignDetail: React.FC = () => {
           creator_username: usernameMap[s.creator_id] || `User ${s.creator_id.slice(0, 6)}`,
         })));
       } else {
-        setSubmissions([]);
+      setSubmissions([]);
       }
       setLoading(false);
+
+      // Auto-fetch fresh TikTok stats for all submissions
+      const allSubs = subs.length > 0 ? subs : [];
+      if (allSubs.length > 0) {
+        try {
+          const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { submission_ids: allSubs.map(s => s.id) },
+          });
+          if (statsData?.results) {
+            setSubmissions(prev => prev.map(s => {
+              const r = statsData.results[s.id];
+              if (r) {
+                return {
+                  ...s,
+                  current_views: r.views > 0 ? r.views : s.current_views,
+                  current_likes: r.likes > 0 ? r.likes : s.current_likes,
+                };
+              }
+              return s;
+            }));
+          }
+        } catch (e) {
+          console.error('Auto-fetch TikTok stats failed:', e);
+        }
+      }
     };
     load();
   }, [id]);

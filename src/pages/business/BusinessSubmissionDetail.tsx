@@ -81,6 +81,31 @@ const BusinessSubmissionDetail: React.FC = () => {
         }
       }
       setLoading(false);
+
+      // Auto-fetch fresh TikTok stats
+      if (data) {
+        try {
+          const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { submission_ids: [data.id] },
+          });
+          if (statsData?.results?.[data.id]) {
+            const r = statsData.results[data.id];
+            if (r.views > 0 || r.likes > 0 || r.shares > 0) {
+              setSubmission(prev => prev ? {
+                ...prev,
+                current_views: r.views > 0 ? r.views : prev.current_views,
+                current_likes: r.likes > 0 ? r.likes : prev.current_likes,
+                current_shares: r.shares > 0 ? r.shares : prev.current_shares,
+              } : prev);
+            }
+            if (r.earnings > 0) {
+              setCreatorEarnings(r.earnings);
+            }
+          }
+        } catch (e) {
+          console.error('Auto-fetch TikTok stats failed:', e);
+        }
+      }
     };
     load();
   }, [submissionId]);
