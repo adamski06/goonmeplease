@@ -11,8 +11,10 @@ interface SubmissionData {
   status: string;
   current_views: number | null;
   current_likes: number | null;
+  current_shares: number | null;
   created_at: string;
   creator_id: string;
+  campaign_id: string;
 }
 
 const statusStyles: Record<string, string> = {
@@ -34,6 +36,9 @@ const BusinessSubmissionDetail: React.FC = () => {
   const navigate = useNavigate();
   const [submission, setSubmission] = useState<SubmissionData | null>(null);
   const [creatorUsername, setCreatorUsername] = useState<string>('');
+  const [creatorEarnings, setCreatorEarnings] = useState<number>(0);
+  const [potTotal, setPotTotal] = useState<number>(0);
+  const [potSpent, setPotSpent] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,17 +46,38 @@ const BusinessSubmissionDetail: React.FC = () => {
     const load = async () => {
       const { data } = await supabase
         .from('content_submissions')
-        .select('id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at, creator_id')
+        .select('id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, current_shares, created_at, creator_id, campaign_id')
         .eq('id', submissionId)
         .maybeSingle();
       if (data) {
-        setSubmission(data);
+        setSubmission(data as SubmissionData);
+        
+        // Fetch creator username
         const { data: profile } = await supabase
           .from('profiles')
           .select('username')
           .eq('user_id', data.creator_id)
           .maybeSingle();
         setCreatorUsername(profile?.username || `User ${data.creator_id.slice(0, 6)}`);
+
+        // Fetch earnings for this submission
+        const { data: earningsData } = await supabase
+          .from('earnings')
+          .select('amount')
+          .eq('submission_id', data.id)
+          .maybeSingle();
+        if (earningsData) setCreatorEarnings(earningsData.amount);
+
+        // Fetch campaign pot info
+        const { data: campaign } = await supabase
+          .from('campaigns')
+          .select('total_budget, budget_spent')
+          .eq('id', data.campaign_id)
+          .maybeSingle();
+        if (campaign) {
+          setPotTotal(campaign.total_budget || 0);
+          setPotSpent((campaign as any).budget_spent || 0);
+        }
       }
       setLoading(false);
     };
@@ -120,7 +146,7 @@ const BusinessSubmissionDetail: React.FC = () => {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-4">
         <div className="rounded-[20px] p-4" style={cardStyle}>
           <span className="text-xs text-muted-foreground">Views</span>
           <p className="text-xl font-bold text-foreground mt-1">
@@ -132,6 +158,33 @@ const BusinessSubmissionDetail: React.FC = () => {
           <p className="text-xl font-bold text-foreground mt-1">
             {(submission.current_likes || 0).toLocaleString()}
           </p>
+        </div>
+        <div className="rounded-[20px] p-4" style={cardStyle}>
+          <span className="text-xs text-muted-foreground">Shares</span>
+          <p className="text-xl font-bold text-foreground mt-1">
+            {(submission.current_shares || 0).toLocaleString()}
+          </p>
+        </div>
+      </div>
+
+      {/* Earnings & Pot */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="rounded-[20px] p-4" style={cardStyle}>
+          <span className="text-xs text-muted-foreground">Creator Earnings</span>
+          <p className="text-xl font-bold text-foreground mt-1">
+            {creatorEarnings.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">sek</span>
+          </p>
+        </div>
+        <div className="rounded-[20px] p-4" style={cardStyle}>
+          <span className="text-xs text-muted-foreground">Pot</span>
+          <p className="text-xl font-bold text-foreground mt-1">
+            {potSpent.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {potTotal.toLocaleString()} sek</span>
+          </p>
+          {potTotal > 0 && (
+            <div className="w-full h-1.5 rounded-full bg-muted mt-2">
+              <div className="h-full rounded-full bg-foreground/60" style={{ width: `${Math.min((potSpent / potTotal) * 100, 100)}%` }} />
+            </div>
+          )}
         </div>
       </div>
 
