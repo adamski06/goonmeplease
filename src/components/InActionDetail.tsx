@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, Eye, Heart, Clock, CheckCircle } from 'lucide-react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2 } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
 import EarningsGraph from '@/components/EarningsGraph';
@@ -42,6 +42,7 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const StatusIcon = status.icon;
   const [views, setViews] = useState(submission.current_views || 0);
   const [likes, setLikes] = useState(submission.current_likes || 0);
+  const [shares, setShares] = useState((submission as any).current_shares || 0);
   const [refreshing, setRefreshing] = useState(false);
   const [campaignTiers, setCampaignTiers] = useState<CampaignTier[]>([]);
   const [maxEarnings, setMaxEarnings] = useState(0);
@@ -57,6 +58,7 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
           const r = data.results[submission.id];
           if (r.views > 0) setViews(r.views);
           if (r.likes > 0) setLikes(r.likes);
+          if (r.shares > 0) setShares(r.shares);
         }
       } catch (e) {
         console.error('Failed to fetch TikTok stats:', e);
@@ -163,7 +165,7 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               <div className="h-3 w-3 border border-black/20 border-t-black/60 rounded-full animate-spin" />
             )}
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 gap-2">
             <div className="rounded-xl p-3 text-center"
               style={{
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
@@ -183,6 +185,16 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               <Heart className="h-4 w-4 text-black/40 mx-auto mb-1" />
               <p className="text-lg font-bold text-black font-montserrat">{likes.toLocaleString()}</p>
               <p className="text-[11px] text-black/50 font-jakarta">Likes</p>
+            </div>
+            <div className="rounded-xl p-3 text-center"
+              style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <Share2 className="h-4 w-4 text-black/40 mx-auto mb-1" />
+              <p className="text-lg font-bold text-black font-montserrat">{shares.toLocaleString()}</p>
+              <p className="text-[11px] text-black/50 font-jakarta">Shares</p>
             </div>
             <div className="rounded-xl p-3 text-center"
               style={{

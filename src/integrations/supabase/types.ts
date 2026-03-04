@@ -120,6 +120,7 @@ export type Database = {
           assets_urls: string[] | null
           brand_logo_url: string | null
           brand_name: string
+          budget_spent: number | null
           business_id: string
           category: string | null
           cover_image_url: string | null
@@ -142,6 +143,7 @@ export type Database = {
           assets_urls?: string[] | null
           brand_logo_url?: string | null
           brand_name: string
+          budget_spent?: number | null
           business_id: string
           category?: string | null
           cover_image_url?: string | null
@@ -164,6 +166,7 @@ export type Database = {
           assets_urls?: string[] | null
           brand_logo_url?: string | null
           brand_name?: string
+          budget_spent?: number | null
           business_id?: string
           category?: string | null
           cover_image_url?: string | null
@@ -190,6 +193,7 @@ export type Database = {
           created_at: string
           creator_id: string
           current_likes: number | null
+          current_shares: number | null
           current_views: number | null
           id: string
           review_notes: string | null
@@ -206,6 +210,7 @@ export type Database = {
           created_at?: string
           creator_id: string
           current_likes?: number | null
+          current_shares?: number | null
           current_views?: number | null
           id?: string
           review_notes?: string | null
@@ -222,6 +227,7 @@ export type Database = {
           created_at?: string
           creator_id?: string
           current_likes?: number | null
+          current_shares?: number | null
           current_views?: number | null
           id?: string
           review_notes?: string | null
@@ -450,7 +456,7 @@ export type Database = {
           {
             foreignKeyName: "earnings_submission_id_fkey"
             columns: ["submission_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "content_submissions"
             referencedColumns: ["id"]
           },
@@ -619,6 +625,10 @@ export type Database = {
       }
     }
     Functions: {
+      calculate_submission_earnings: {
+        Args: { p_submission_id: string }
+        Returns: number
+      }
       get_or_create_tiktok_account: {
         Args: { p_tiktok_username: string }
         Returns: string
