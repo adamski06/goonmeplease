@@ -96,14 +96,14 @@ const BusinessLayout: React.FC = () => {
         >
           <button
             onClick={() => setSidebarExpanded(e => !e)}
-            className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+            className="h-6 w-6 rounded-md flex items-center justify-center text-foreground hover:bg-sidebar-accent/50 transition-colors"
             title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
             <PanelLeft className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('toggle-ai-chat'))}
-            className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+            className="h-6 w-6 rounded-md flex items-center justify-center text-foreground hover:bg-sidebar-accent/50 transition-colors"
             title="Jarla AI"
           >
             <Sparkles className="h-3.5 w-3.5" />

@@ -303,13 +303,13 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="h-full flex flex-col bg-background" style={{ opacity: fadeOut ? 0 : 1, transition: 'opacity 400ms ease-out' }}>
       {/* Messages - centered vertically when few messages */}
       <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto px-5 flex flex-col justify-center"
       >
-        <div className="space-y-4 py-6 max-w-full transition-opacity duration-400 ease-out" style={{ opacity: fadeOut ? 0 : 1 }}>
+        <div className="space-y-4 py-6 max-w-full">
           {messages.map((msg, index) => {
             if (msg.role === 'jarla' && !msg.displayedContent) return null;
             
