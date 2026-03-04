@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { PanelLeft, Sparkles } from 'lucide-react';
+import { PanelLeft, Sparkle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
@@ -106,7 +106,7 @@ const BusinessLayout: React.FC = () => {
             className="h-6 w-6 rounded-md flex items-center justify-center text-foreground hover:bg-sidebar-accent/50 transition-colors"
             title="Jarla AI"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Sparkle className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
