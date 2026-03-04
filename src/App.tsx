@@ -39,6 +39,7 @@ const CreateDeal = lazy(() => import("./pages/business/CreateDeal"));
 const BusinessDealDetail = lazy(() => import("./pages/business/BusinessDealDetail"));
 const BusinessDealSubmissionDetail = lazy(() => import("./pages/business/BusinessDealSubmissionDetail"));
 const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaignChooser"));
+const AdTypesLibrary = lazy(() => import("./pages/business/AdTypesLibrary"));
 const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
 const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
 
@@ -83,6 +84,7 @@ const App = () => (
                 <Route path="/business" element={<Suspense fallback={<BusinessLoader />}><BusinessLayout /></Suspense>}>
                   <Route index element={<BusinessProfile />} />
                   <Route path="new" element={<CreateCampaignChooser />} />
+                  <Route path="ad-types" element={<AdTypesLibrary />} />
                   <Route path="edit-profile" element={<BusinessEditProfile />} />
                   <Route path="campaigns" element={<BusinessCampaigns />} />
                   <Route path="campaigns/new" element={<CreateCampaign />} />
