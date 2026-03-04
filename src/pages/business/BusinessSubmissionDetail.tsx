@@ -160,7 +160,7 @@ const BusinessSubmissionDetail: React.FC = () => {
         {tiktokUsername && (
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-            style={{ width: 340, height: 640, border: 'none', display: 'block' }}
+            style={{ width: 480, height: 640, border: 'none', display: 'block' }}
             allow="encrypted-media"
             allowFullScreen
           />
