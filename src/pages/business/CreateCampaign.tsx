@@ -262,7 +262,7 @@ const CreateCampaign: React.FC = () => {
           className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}
           key={step}
           style={{
-            animation: 'stepFadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            animation: 'stepFadeIn 0.4s ease-out forwards',
           }}
         >
 
