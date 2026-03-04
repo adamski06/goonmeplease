@@ -90,7 +90,8 @@ const BusinessSubmissionDetail: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40" style={{ scrollbarGutter: 'stable' }}>
+    <div className="h-full overflow-y-auto scrollbar-thin pr-0">
+      <div className="max-w-5xl mx-auto px-6 py-10">
       {/* Back */}
       <button
         onClick={() => navigate(-1)}
@@ -137,10 +138,10 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* TikTok embeds: video + profile side by side */}
       <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <div className="flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 228, height: 518 }}>
+          <div className="flex-shrink-0" style={{ width: 228, height: 518 }}>
             <iframe
-              src={tiktokEmbedUrl}
-              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left' }}
+              src={`${tiktokEmbedUrl}?transparent=1`}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', colorScheme: 'normal' }}
               allow="encrypted-media"
               allowFullScreen
             />
@@ -160,13 +161,16 @@ const BusinessSubmissionDetail: React.FC = () => {
         )}
 
         {tiktokUsername && (
-          <iframe
-            src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-            style={{ width: 540, height: 740, border: 'none', display: 'block' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
+          <div className="flex-shrink-0" style={{ width: 378, height: 518 }}>
+            <iframe
+              src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+              style={{ width: 540, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', colorScheme: 'normal' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
         )}
+      </div>
       </div>
     </div>
   );
