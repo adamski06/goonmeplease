@@ -80,17 +80,24 @@ const BusinessLayout: React.FC = () => {
         />
       </div>
 
+      {/* Top bar — spans full width OVER sidebar, only on creation routes */}
+      {isCreationRoute && (
+        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex items-center justify-center">
+          {location.pathname === '/business/new' && (
+            <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">Select one</p>
+          )}
+        </div>
+      )}
+
       {/* Sidebar — always full height, never affected by topbar */}
       <BusinessSidebar isCreationRoute={isCreationRoute} />
 
-      {/* Content column — topbar + main stacked vertically */}
+      {/* Content column */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top bar — only on creation routes */}
-        {isCreationRoute && (
-          <div className="shrink-0 h-16 border-b border-border animate-in slide-in-from-top-2 duration-300 z-20" />
-        )}
+        {/* Spacer to push content below topbar when it's visible */}
+        {isCreationRoute && <div className="shrink-0 h-16" />}
 
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-hidden">
           <Outlet />
         </main>
       </div>

@@ -12,12 +12,9 @@ const CreateCampaignChooser: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-screen relative">
+    <div className="flex flex-col h-full overflow-hidden relative">
       {/* Content */}
-      <div className="flex flex-col flex-1 px-4 py-8">
-        <p className="text-sm font-medium text-muted-foreground font-jakarta mb-6 tracking-wide text-center">
-          Select one
-        </p>
+      <div className="flex flex-col flex-1 px-4 py-8 overflow-hidden">
 
         <div className="flex gap-4 justify-center flex-1">
           {/* Spread node */}
