@@ -236,10 +236,19 @@ const CreateCampaign: React.FC = () => {
       <div className="flex flex-1 overflow-hidden relative">
       {/* Chat panel (collapsible, no border) */}
       <div
-        className="shrink-0 h-full relative flex transition-all duration-500 ease-in-out overflow-hidden"
-        style={{ width: chatCollapsed || shouldHideChat ? '0px' : '340px' }}
+        className="shrink-0 h-full relative flex overflow-hidden"
+        style={{
+          width: chatCollapsed || shouldHideChat ? '0px' : '340px',
+          transition: 'width 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
       >
-        <div className="w-[340px] h-full shrink-0 transition-opacity duration-400 ease-out" style={{ opacity: chatCollapsed || shouldHideChat ? 0 : 1 }}>
+        <div
+          className="w-[340px] h-full shrink-0"
+          style={{
+            opacity: chatCollapsed || shouldHideChat ? 0 : 1,
+            transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
           <CampaignChat
             formData={formData}
             requirements={guidelinesList.filter(g => g.trim())}
