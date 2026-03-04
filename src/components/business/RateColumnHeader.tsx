@@ -45,7 +45,7 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip, avg
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
-                <span className="text-[11px] text-muted-foreground font-medium">AVG: {avg}</span>
+                <span className="text-[11px] text-muted-foreground">avg on jarla right now: <span className="font-bold text-foreground">{avg}</span></span>
               </div>
             )}
           </div>
