@@ -9,11 +9,13 @@ import ProfileEditContent from '@/components/ProfileEditContent';
 import WithdrawContent from '@/components/WithdrawContent';
 import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const { formatPrice, label, convert } = useCurrency();
 
   // Creator stats
   const [totalVideos, setTotalVideos] = useState(0);
@@ -238,8 +240,8 @@ const ProfilePage: React.FC = () => {
           <div className="p-6">
             <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
-              <span className="text-xl text-white/70 font-montserrat">sek</span>
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+              <span className="text-xl text-white/70 font-montserrat">{label}</span>
             </div>
           </div>
         </div>
@@ -269,8 +271,8 @@ const ProfilePage: React.FC = () => {
           >
             <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
-              <span className="text-xl text-white/70 font-montserrat">sek</span>
+              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+              <span className="text-xl text-white/70 font-montserrat">{label}</span>
             </div>
           </div>
 
@@ -321,25 +323,25 @@ const ProfilePage: React.FC = () => {
                 <div className="flex flex-col items-center mt-4">
                   <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">{balance.toLocaleString()}</span>
-                    <span className="text-2xl text-white/60 font-montserrat">sek</span>
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                    <span className="text-2xl text-white/60 font-montserrat">{label}</span>
                   </div>
                 </div>
 
                 <div className="w-full space-y-3 mt-8">
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Total earned</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">{totalEarnings.toLocaleString()} sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(totalEarnings).toLocaleString()} {label}</span>
                   </div>
                   <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Pending</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">{pendingBalance.toLocaleString()} sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(pendingBalance).toLocaleString()} {label}</span>
                   </div>
                   <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
                     <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
-                    <span className="text-sm font-semibold text-white font-montserrat">{Math.max(0, totalEarnings - balance - pendingBalance).toLocaleString()} sek</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
                   </div>
                 </div>
 

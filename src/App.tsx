@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import JarlaLoader from "@/components/JarlaLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import jarlaLogoSrc from "@/assets/jarla-logo.png";
@@ -65,6 +66,7 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <AuthProvider>
+            <CurrencyProvider>
             <ProfileProvider>
             <Suspense fallback={<JarlaLoader />}>
               <Routes>
@@ -103,6 +105,7 @@ const App = () => (
               </Routes>
             </Suspense>
             </ProfileProvider>
+            </CurrencyProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

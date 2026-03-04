@@ -5,6 +5,7 @@ import EarningsGraph from '@/components/EarningsGraph';
 import { Campaign } from '@/types/campaign';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from 'sonner';
 
 interface DealOverlayProps {
@@ -23,6 +24,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   onToggleSave,
 }) => {
   const { user } = useAuth();
+  const { formatPrice, label, convert } = useCurrency();
   const [backdropVisible, setBackdropVisible] = useState(false);
   const [showPicture, setShowPicture] = useState(false);
   const [requesting, setRequesting] = useState(false);
@@ -230,8 +232,8 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                 <div className="flex items-baseline justify-between mb-1">
                   <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Max Earnings</span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-white font-montserrat">{deal.maxEarnings.toLocaleString()}</span>
-                    <span className="text-xs text-white/60 font-jakarta">sek</span>
+                    <span className="text-xl font-bold text-white font-montserrat">{convert(deal.maxEarnings).toLocaleString()}</span>
+                    <span className="text-xs text-white/60 font-jakarta">{label}</span>
                   </div>
                 </div>
                 <p className="text-xs text-white/50 font-jakarta">
