@@ -12,11 +12,18 @@ const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/bus
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { resolvedTheme } = useTheme();
 
   const isCreationRoute = CREATION_ROUTES.includes(location.pathname);
+  const isCollapsed = isCreationRoute && !sidebarExpanded;
+
+  // Reset expanded state when leaving creation routes
+  useEffect(() => {
+    if (!isCreationRoute) setSidebarExpanded(false);
+  }, [isCreationRoute]);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -88,9 +95,9 @@ const BusinessLayout: React.FC = () => {
           )}
         >
           <button
-            onClick={() => navigate('/business')}
+            onClick={() => setSidebarExpanded(e => !e)}
             className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
-            title="Expand sidebar"
+            title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
             <PanelLeft className="h-3.5 w-3.5" />
           </button>
@@ -108,7 +115,7 @@ const BusinessLayout: React.FC = () => {
         <div className="absolute top-0 left-0 right-0 h-10 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex flex-col">
           <div className="flex-1 flex items-center">
             {/* Center the text in the content area (offset by sidebar width) */}
-            <div className="w-[56px] shrink-0" />
+            <div className={cn('shrink-0 transition-[width] duration-300', isCollapsed ? 'w-[56px]' : 'w-60')} />
             <div className="flex-1 flex items-center justify-center" id="topbar-center">
               {(location.pathname === '/business/new' || location.pathname === '/business/ad-types') && (
                 <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
@@ -123,7 +130,7 @@ const BusinessLayout: React.FC = () => {
       )}
 
       {/* Sidebar — always full height, never affected by topbar */}
-      <BusinessSidebar isCreationRoute={isCreationRoute} />
+      <BusinessSidebar isCreationRoute={isCollapsed} />
 
       {/* Content column */}
       <div className="flex-1 flex flex-col overflow-hidden">
