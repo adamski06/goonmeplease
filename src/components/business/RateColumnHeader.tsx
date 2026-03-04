@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Info } from 'lucide-react';
 
 interface RateColumnHeaderProps {
   label: string;
@@ -14,23 +15,33 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) =
       onMouseEnter={() => tooltip && setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className={`rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide ${tooltip ? 'cursor-default' : ''}`}>
-        {label}
+      {/* Default state */}
+      <div className={`rounded-md bg-muted/50 px-4 py-2.5 flex items-center justify-between gap-1.5 ${tooltip ? 'cursor-default' : ''}`}>
+        <span className="text-xs font-semibold text-foreground uppercase tracking-wide">{label}</span>
+        {tooltip && <Info className="h-3 w-3 text-muted-foreground shrink-0" />}
       </div>
 
-      {/* Tooltip expanding upward */}
+      {/* Expanded node — grows upward from the header */}
       {tooltip && (
         <div
-          className="absolute bottom-full left-0 right-0 mb-1.5 z-50 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 z-50"
           style={{
             opacity: hovered ? 1 : 0,
-            transform: hovered ? 'translateY(0) scaleY(1)' : 'translateY(4px) scaleY(0.96)',
-            transformOrigin: 'bottom center',
-            transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
+            pointerEvents: hovered ? 'auto' : 'none',
+            transition: 'opacity 200ms cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
-          <div className="rounded-lg border border-border bg-card px-3.5 py-3 shadow-lg">
-            <p className="text-xs font-semibold text-foreground uppercase tracking-wide mb-1.5">{label}</p>
+          <div
+            className="rounded-md border border-border bg-card shadow-lg px-4 pt-3 pb-3"
+            style={{
+              transform: hovered ? 'translateY(0)' : 'translateY(4px)',
+              transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          >
+            <div className="flex items-center justify-between gap-1.5 mb-2">
+              <span className="text-xs font-semibold text-foreground uppercase tracking-wide">{label}</span>
+              <Info className="h-3 w-3 text-muted-foreground shrink-0" />
+            </div>
             <p className="text-[11px] leading-relaxed text-muted-foreground">{tooltip}</p>
           </div>
         </div>
