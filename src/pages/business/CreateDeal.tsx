@@ -349,9 +349,17 @@ const CreateDeal: React.FC = () => {
                   <span className="text-sm text-muted-foreground">Rate per 1,000 views</span>
                   <span className="text-sm font-medium text-foreground">${ratePerThousand}</span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Max payout per creator</span>
+                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
+                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator ? (Math.round(maxPayoutPerCreator * 0.15 * 100) / 100).toLocaleString() : '0'}</span>
+                </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-foreground">Max payout per creator</span>
-                  <span className="text-lg font-bold text-foreground">${maxPayoutPerCreator}</span>
+                  <span className="text-sm font-semibold text-foreground">Total per creator</span>
+                  <span className="text-lg font-bold text-foreground">${maxPayoutPerCreator ? Math.round(maxPayoutPerCreator * 1.15 * 100) / 100 : '0'}</span>
                 </div>
               </div>
             </div>
