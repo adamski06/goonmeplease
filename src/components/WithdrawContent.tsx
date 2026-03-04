@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft } from 'lucide-react';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface WithdrawContentProps {
   balance: number;
@@ -12,8 +13,10 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
   const [amount, setAmount] = useState('');
   const [sliding, setSliding] = useState(false);
   const [slidingBack, setSlidingBack] = useState(false);
+  const { label, convert } = useCurrency();
 
-  const formattedBalance = balance.toLocaleString('sv-SE');
+  const convertedBalance = convert(balance);
+  const formattedBalance = convertedBalance.toLocaleString('sv-SE');
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/[^0-9]/g, '');
@@ -42,7 +45,7 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
 
   const handleWithdraw = (method: 'swish' | 'paypal') => {
     // Placeholder - would trigger actual withdrawal
-    console.log(`Withdrawing ${amount} sek via ${method}`);
+    console.log(`Withdrawing ${amount} ${label} via ${method}`);
   };
 
   return (
@@ -81,10 +84,10 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
               className="text-5xl font-bold text-white font-montserrat tracking-tight bg-transparent border-none text-center w-48 placeholder:text-white/20 focus-visible:ring-0 focus-visible:border-none h-auto py-0"
               style={{ caretColor: 'white' }}
             />
-            <span className="text-2xl text-white/40 font-montserrat">sek</span>
+            <span className="text-2xl text-white/40 font-montserrat">{label}</span>
           </div>
           <p className="text-xs text-white/40 font-jakarta mt-4">
-            Available: {formattedBalance} sek
+            Available: {formattedBalance} {label}
           </p>
           {amount && !isValidAmount && numericAmount > balance && (
             <p className="text-xs text-red-300 font-jakarta mt-2">
@@ -143,7 +146,7 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
             <span className="text-4xl font-bold text-white font-montserrat tracking-tight">
               {parseInt(amount || '0', 10).toLocaleString('sv-SE')}
             </span>
-            <span className="text-xl text-white/40 font-montserrat">sek</span>
+            <span className="text-xl text-white/40 font-montserrat">{label}</span>
           </div>
         </div>
 

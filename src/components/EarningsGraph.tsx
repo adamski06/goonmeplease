@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useCurrency } from '@/contexts/CurrencyContext';
 interface Tier {
   minViews: number;
   maxViews: number | null;
@@ -23,6 +23,7 @@ const formatEarnings = (amount: number): string => {
 };
 
 const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => {
+  const { formatPrice, convert, label } = useCurrency();
   const data = calculateEarningsData(tiers, maxEarnings);
   const points = [
     { earnings: data.first.earnings, views: data.first.views },
@@ -53,9 +54,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
         >
           <span className="text-sm font-semibold text-white/70 font-montserrat">Max Earnings:</span>
           <span className="text-xl font-bold text-white font-montserrat">
-            {formatEarnings(maxEarnings)}
+            {formatPrice(maxEarnings, { showSymbol: false })}
           </span>
-          <span className="text-xs font-semibold text-white/70 font-montserrat">sek</span>
+          <span className="text-xs font-semibold text-white/70 font-montserrat">{label}</span>
         </div>
 
         {/* Rate per 1000 views pill */}
@@ -68,9 +69,9 @@ const EarningsGraph: React.FC<EarningsGraphProps> = ({ tiers, maxEarnings }) => 
           }}
         >
           <span className="text-xl font-bold text-white font-montserrat">
-            {formatEarnings(ratePerThousand)}
+            {formatPrice(ratePerThousand, { showSymbol: false })}
           </span>
-          <span className="text-sm font-semibold text-white/70 font-montserrat">sek / 1000 views</span>
+          <span className="text-sm font-semibold text-white/70 font-montserrat">{label} / 1000 views</span>
         </div>
       </div>
     </div>

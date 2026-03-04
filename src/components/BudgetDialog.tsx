@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { ArrowLeft } from 'lucide-react';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface BudgetDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
   budget,
   onBudgetChange,
 }) => {
+  const { label: currencyLabel } = useCurrency();
   const [localBudget, setLocalBudget] = useState(budget);
   const [displayBudget, setDisplayBudget] = useState(budget);
   const [animatedBudget, setAnimatedBudget] = useState(budget);
@@ -172,7 +174,7 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                       className="text-4xl font-bold text-center w-full h-14 border-none shadow-none bg-transparent focus-visible:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
-                  <p className="text-center text-muted-foreground text-lg mb-4">SEK</p>
+                  <p className="text-center text-muted-foreground text-lg mb-4">{currencyLabel.toUpperCase()}</p>
 
                   {/* Slider */}
                   <Slider
@@ -197,8 +199,8 @@ const BudgetDialog: React.FC<BudgetDialogProps> = ({
                     className="w-full"
                   />
                   <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-                    <span>20,000 SEK</span>
-                    <span>500,000 SEK</span>
+                    <span>20,000 {currencyLabel.toUpperCase()}</span>
+                    <span>500,000 {currencyLabel.toUpperCase()}</span>
                   </div>
                 </div>
               </div>

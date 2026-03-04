@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X } from 'lucide-react';
 import CampaignChat from '@/components/CampaignChat';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const steps = ['Ad Details', 'Rate', 'Review'];
 
@@ -17,6 +18,7 @@ const CreateDeal: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { symbol, label } = useCurrency();
 
   // Step 1: Ad details
   const [title, setTitle] = useState('');
@@ -232,12 +234,12 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="numeric"
-                    value={maxPayoutPerCreator ? `$${maxPayoutPerCreator}` : ''}
+                    value={maxPayoutPerCreator ? `${symbol}${maxPayoutPerCreator}` : ''}
                     onChange={(e) => {
                       const val = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
-                    placeholder="$25"
+                    placeholder={`${symbol}25`}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
@@ -245,12 +247,12 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? `$${ratePerThousand}` : ''}
+                    value={ratePerThousand ? `${symbol}${ratePerThousand}` : ''}
                     onChange={(e) => {
                       const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       setRatePerThousand(Math.round(val * 100) / 100);
                     }}
-                    placeholder="$2.00"
+                    placeholder={`${symbol}2.00`}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
@@ -259,13 +261,13 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? `$${Math.round(ratePerThousand * 1.15 * 100) / 100}` : ''}
+                    value={ratePerThousand ? `${symbol}${Math.round(ratePerThousand * 1.15 * 100) / 100}` : ''}
                     onChange={(e) => {
                       const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       const base = Math.round((youPay / 1.15) * 100) / 100;
                       setRatePerThousand(base);
                     }}
-                    placeholder="$2.30"
+                    placeholder={`${symbol}2.30`}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
@@ -329,11 +331,11 @@ const CreateDeal: React.FC = () => {
                 )}
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Rate</p>
-                  <p className="text-sm font-semibold text-foreground">${ratePerThousand} / 1,000 views</p>
+                  <p className="text-sm font-semibold text-foreground">{symbol}{ratePerThousand} / 1,000 views</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Max payout per creator</p>
-                  <p className="text-sm font-semibold text-foreground">${maxPayoutPerCreator}</p>
+                  <p className="text-sm font-semibold text-foreground">{symbol}{maxPayoutPerCreator}</p>
                 </div>
               </div>
 
@@ -347,19 +349,19 @@ const CreateDeal: React.FC = () => {
               <div className="rounded-xl border border-border bg-card p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Rate per 1,000 views</span>
-                  <span className="text-sm font-medium text-foreground">${ratePerThousand}</span>
+                  <span className="text-sm font-medium text-foreground">{symbol}{ratePerThousand}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Max payout per creator</span>
-                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator}</span>
+                  <span className="text-sm font-medium text-foreground">{symbol}{maxPayoutPerCreator}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
-                  <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator ? (Math.round(maxPayoutPerCreator * 0.15 * 100) / 100).toLocaleString() : '0'}</span>
+                  <span className="text-sm font-medium text-foreground">{symbol}{maxPayoutPerCreator ? (Math.round(maxPayoutPerCreator * 0.15 * 100) / 100).toLocaleString() : '0'}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Total per creator</span>
-                  <span className="text-lg font-bold text-foreground">${maxPayoutPerCreator ? Math.round(maxPayoutPerCreator * 1.15 * 100) / 100 : '0'}</span>
+                  <span className="text-lg font-bold text-foreground">{symbol}{maxPayoutPerCreator ? Math.round(maxPayoutPerCreator * 1.15 * 100) / 100 : '0'}</span>
                 </div>
               </div>
             </div>
@@ -374,7 +376,7 @@ const CreateDeal: React.FC = () => {
                     className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
                     style={{ animationDelay: '800ms', animationFillMode: 'both' }}
                   >
-                    Total: ${maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.15).toLocaleString()}` : '0'} / creator
+                    Total: {symbol}{maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.15).toLocaleString()}` : '0'} / creator
                   </div>
                 )}
                 <Button

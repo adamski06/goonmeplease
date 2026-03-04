@@ -7,6 +7,7 @@ import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarning
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -20,6 +21,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   isSaved,
   onToggleFavorite,
 }) => {
+  const { formatPrice, label, convert } = useCurrency();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [expandReady, setExpandReady] = useState(false);
@@ -316,15 +318,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                         <div className="flex items-baseline justify-between mt-3 mb-1">
                           <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pot</span>
                           <div className="flex items-baseline gap-1">
-                            <span className="text-lg font-bold text-white font-montserrat">{potAmount.toLocaleString()}</span>
-                            <span className="text-xs text-white/60 font-jakarta">sek</span>
+                            <span className="text-lg font-bold text-white font-montserrat">{convert(potAmount).toLocaleString()}</span>
+                            <span className="text-xs text-white/60 font-jakarta">{label}</span>
                           </div>
                         </div>
                         <div className="w-full h-[3px] rounded-full bg-white/10 mb-2">
                           <div className="h-full rounded-full bg-white/40" style={{ width: `${Math.min((campaign.maxEarnings / potAmount) * 100, 100)}%` }} />
                         </div>
                         <p className="text-xs text-white/50 font-jakarta leading-relaxed">
-                          You earn {formatEarningsForNote(data.first.earnings)} sek when you first reach {formatViewsForNote(data.first.views)} views and {formatEarningsForNote(data.max.earnings)} sek when you reach {formatViewsForNote(data.max.views)} views. When the pot is fully claimed, earnings stop — your views will convert to score instead. <span className="underline">Learn more</span>
+                          You earn {formatPrice(data.first.earnings, { showSymbol: false })} {label} when you first reach {formatViewsForNote(data.first.views)} views and {formatPrice(data.max.earnings, { showSymbol: false })} {label} when you reach {formatViewsForNote(data.max.views)} views. When the pot is fully claimed, earnings stop — your views will convert to score instead. <span className="underline">Learn more</span>
                         </p>
                       </>
                     );

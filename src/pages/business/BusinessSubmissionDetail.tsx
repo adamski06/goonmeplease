@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface SubmissionData {
   id: string;
@@ -101,6 +102,7 @@ const BusinessSubmissionDetail: React.FC = () => {
     );
   }
 
+  const { formatPrice, label, convert } = useCurrency();
   const tiktokEmbedUrl = submission.tiktok_video_id
     ? `https://www.tiktok.com/embed/v2/${submission.tiktok_video_id}`
     : null;
@@ -172,13 +174,13 @@ const BusinessSubmissionDetail: React.FC = () => {
         <div className="rounded-[20px] p-4" style={cardStyle}>
           <span className="text-xs text-muted-foreground">Creator Earnings</span>
           <p className="text-xl font-bold text-foreground mt-1">
-            {creatorEarnings.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">sek</span>
+            {convert(creatorEarnings).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">{label}</span>
           </p>
         </div>
         <div className="rounded-[20px] p-4" style={cardStyle}>
           <span className="text-xs text-muted-foreground">Pot</span>
           <p className="text-xl font-bold text-foreground mt-1">
-            {potSpent.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {potTotal.toLocaleString()} sek</span>
+            {convert(potSpent).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {convert(potTotal).toLocaleString()} {label}</span>
           </p>
           {potTotal > 0 && (
             <div className="w-full h-1.5 rounded-full bg-muted mt-2">
