@@ -39,11 +39,24 @@ serve(async (req) => {
     for (const sub of submissions || []) {
       try {
         const url = sub.tiktok_video_url;
+        if (!url) {
+          console.log(`Submission ${sub.id} has no video URL`);
+          results[sub.id] = { views: 0, likes: 0, shares: 0, earnings: 0 };
+          continue;
+        }
+        console.log(`Fetching oEmbed for ${sub.id}: ${url}`);
         const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
         const res = await fetch(oembedUrl);
 
         if (res.ok) {
           const data = await res.json();
+          console.log(`oEmbed response for ${sub.id}:`, JSON.stringify({ 
+            title: data.title, 
+            view_count: data.view_count, 
+            like_count: data.like_count,
+            share_count: data.share_count,
+            has_statistics: !!data.statistics 
+          }));
           const views = data.view_count || data.statistics?.playCount || 0;
           const likes = data.like_count || data.statistics?.diggCount || 0;
           const shares = data.share_count || data.statistics?.shareCount || 0;
@@ -59,7 +72,11 @@ serve(async (req) => {
                 current_shares: shares,
               })
               .eq("id", sub.id);
+            console.log(`Updated stats for ${sub.id}: views=${views}, likes=${likes}, shares=${shares}`);
           }
+        } else {
+          console.log(`oEmbed failed for ${sub.id}: status ${res.status}`);
+          results[sub.id] = { views: 0, likes: 0, shares: 0, earnings: 0 };
         }
       } catch (e) {
         console.error(`Failed to fetch stats for ${sub.id}:`, e);

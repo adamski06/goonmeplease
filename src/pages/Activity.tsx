@@ -148,6 +148,30 @@ const Activity: React.FC = () => {
 
     setActiveSubmissions(submissions);
     setSubmissionsLoading(false);
+
+    // Auto-fetch fresh TikTok stats for all submissions
+    if (submissions.length > 0) {
+      try {
+        const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+          body: { submission_ids: submissions.map(s => s.id) },
+        });
+        if (statsData?.results) {
+          setActiveSubmissions(prev => prev.map(s => {
+            const r = statsData.results[s.id];
+            if (r) {
+              return {
+                ...s,
+                current_views: r.views > 0 ? r.views : s.current_views,
+                current_likes: r.likes > 0 ? r.likes : s.current_likes,
+              };
+            }
+            return s;
+          }));
+        }
+      } catch (e) {
+        console.error('Auto-fetch TikTok stats failed:', e);
+      }
+    }
   }, [user]);
 
   useEffect(() => {
