@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, Heart } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface SubmissionData {
@@ -121,19 +121,13 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="rounded-[20px] p-4" style={cardStyle}>
-          <div className="flex items-center gap-2">
-            <Eye className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Views</span>
-          </div>
+          <span className="text-xs text-muted-foreground">Views</span>
           <p className="text-xl font-bold text-foreground mt-1">
             {(submission.current_views || 0).toLocaleString()}
           </p>
         </div>
         <div className="rounded-[20px] p-4" style={cardStyle}>
-          <div className="flex items-center gap-2">
-            <Heart className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Likes</span>
-          </div>
+          <span className="text-xs text-muted-foreground">Likes</span>
           <p className="text-xl font-bold text-foreground mt-1">
             {(submission.current_likes || 0).toLocaleString()}
           </p>
@@ -141,17 +135,14 @@ const BusinessSubmissionDetail: React.FC = () => {
       </div>
 
       {/* TikTok embeds: video + profile side by side */}
-      <div className="flex gap-3 items-start">
-        {/* Video embed - scaled down, no white frame */}
+      <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <div style={{ width: 228, height: 518, overflow: 'hidden', borderRadius: 12 }}>
-            <iframe
-              src={tiktokEmbedUrl}
-              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
-              allow="encrypted-media"
-              allowFullScreen
-            />
-          </div>
+          <iframe
+            src={tiktokEmbedUrl}
+            style={{ width: 280, height: 640, border: 'none', display: 'block' }}
+            allow="encrypted-media"
+            allowFullScreen
+          />
         ) : (
           <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
             <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
@@ -166,16 +157,13 @@ const BusinessSubmissionDetail: React.FC = () => {
           </div>
         )}
 
-        {/* Profile embed - wider native size, scaled down */}
         {tiktokUsername && (
-          <div style={{ width: 280, height: 518, overflow: 'hidden', borderRadius: 12 }}>
-            <iframe
-              src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-              style={{ width: 400, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
-              allow="encrypted-media"
-              allowFullScreen
-            />
-          </div>
+          <iframe
+            src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+            style={{ width: 340, height: 640, border: 'none', display: 'block' }}
+            allow="encrypted-media"
+            allowFullScreen
+          />
         )}
       </div>
     </div>
