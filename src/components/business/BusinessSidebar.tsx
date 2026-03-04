@@ -260,10 +260,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       {/* Bottom — horizontal when expanded, stacked when collapsed */}
       <div className={cn(
         'shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3 py-3 w-full items-center justify-center' : 'flex-row justify-between px-3 py-3'
+        isCollapsed ? 'flex-col gap-3 px-2 py-3' : 'flex-row justify-between px-3 py-3'
       )}>
         {/* Profile / user menu */}
-        <div ref={userMenuRef} className={cn('relative', isCollapsed ? 'flex justify-center' : '')}>
+        <div ref={userMenuRef} className="relative flex justify-center">
           <button
             onClick={() => setUserMenuOpen(o => !o)}
             className="h-6 w-6 rounded-md overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
@@ -308,10 +308,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
         {/* Inbox */}
         <button
-          className={cn(
-            'text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center',
-            isCollapsed ? '' : ''
-          )}
+          className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
           title="Inbox"
         >
           <Inbox className="h-4 w-4" />
