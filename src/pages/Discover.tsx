@@ -23,7 +23,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Discover: React.FC = () => {
   const { user, loading } = useAuth();
-  const { symbol, convert } = useCurrency();
+  const { symbol, convert, currency } = useCurrency();
   const { profile } = useProfile();
   const navigate = useNavigate();
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -258,11 +258,11 @@ const Discover: React.FC = () => {
                         <div className="flex items-center gap-1.5">
                           <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                             <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
-                            <span className="text-xs font-bold text-white font-montserrat">{symbol}{convert(item.maxEarnings)}</span>
+                            <span className="text-xs font-bold text-white font-montserrat">{currency === 'SEK' ? `${convert(item.maxEarnings)} kr` : `$${convert(item.maxEarnings)}`}</span>
                           </div>
                           {rate != null && (
                             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-xs font-bold text-white font-montserrat">{symbol}{convert(rate)}</span>
+                              <span className="text-xs font-bold text-white font-montserrat">{currency === 'SEK' ? `${convert(rate)} kr` : `$${convert(rate)}`}</span>
                               <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
                             </div>
                           )}
