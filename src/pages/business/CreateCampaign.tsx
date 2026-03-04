@@ -259,7 +259,7 @@ const CreateCampaign: React.FC = () => {
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
         <div
-          className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}
+          className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-center' : 'max-w-xl justify-center'}`}
         >
 
           {/* Step 1: Ad Details */}
@@ -378,17 +378,16 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* Combined results node — glassy black, stays visible once shown */}
+              {/* Combined results node — always visible */}
               {(() => {
                 const allFilled = totalBudget > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
                 const viewsGuaranteed = allFilled ? Math.round((getBudget() / ratePerThousand) * 1000) : 0;
                 const viewsEstimated = Math.round(viewsGuaranteed * 1.4);
                 const creatorsGuaranteed = allFilled ? Math.floor(getBudget() / maxPayoutPerCreator!) : 0;
                 const creatorsEstimated = Math.round(creatorsGuaranteed * 2.7);
-                if (!allFilled && !resultsShown) return null;
                 return (
                   <div
-                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border animate-in fade-in slide-in-from-bottom-2 duration-500"
+                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border"
                     style={{
                       background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
                       borderColor: 'hsla(0,0%,100%,0.08)',
@@ -398,13 +397,13 @@ const CreateCampaign: React.FC = () => {
                   >
                     <div>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total views</p>
-                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                      <p className="text-4xl font-bold tracking-tight transition-opacity duration-300" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)', opacity: allFilled ? 1 : 0.2 }}>
                         {allFilled ? `${viewsGuaranteed.toLocaleString()} – ${viewsEstimated.toLocaleString()}` : '—'}
                       </p>
                     </div>
                     <div>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total creators</p>
-                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                      <p className="text-4xl font-bold tracking-tight transition-opacity duration-300" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)', opacity: allFilled ? 1 : 0.2 }}>
                         {allFilled ? `${creatorsGuaranteed.toLocaleString()} – ${creatorsEstimated.toLocaleString()}` : '—'}
                       </p>
                     </div>
