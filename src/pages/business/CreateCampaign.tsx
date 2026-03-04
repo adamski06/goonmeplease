@@ -136,11 +136,11 @@ const CreateCampaign: React.FC = () => {
     }
 
     // Also create the campaign in the database before redirecting
-    const { error: insertError } = await supabase.from('campaigns').insert({
+    const { data: insertData, error: insertError } = await supabase.from('campaigns').insert({
       title: campaignData.title,
       brand_name: campaignData.brand_name,
       description: campaignData.description,
-      max_earnings: null,
+      max_earnings: maxPayoutPerCreator,
       total_budget: campaignData.total_budget,
       guidelines: campaignData.guidelines,
       category: campaignData.category,
@@ -148,12 +148,22 @@ const CreateCampaign: React.FC = () => {
       brand_logo_url: bp?.logo_url || null,
       is_active: true,
       status: 'active',
-    });
+    }).select('id').single();
 
-    if (insertError) {
-      toast({ title: 'Error', description: insertError.message, variant: 'destructive' });
+    if (insertError || !insertData) {
+      toast({ title: 'Error', description: insertError?.message || 'Failed to create campaign', variant: 'destructive' });
       setIsSubmitting(false);
       return;
+    }
+
+    // Create a campaign tier with the CPM rate
+    if (ratePerThousand > 0) {
+      await supabase.from('campaign_tiers').insert({
+        campaign_id: insertData.id,
+        min_views: 0,
+        max_views: null,
+        rate_per_view: ratePerThousand,
+      });
     }
 
     // Redirect to Stripe checkout
