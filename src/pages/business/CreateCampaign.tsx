@@ -324,7 +324,7 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Input row — matching header style */}
-              <div className="grid gap-3 px-2" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
+              <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-2 h-8 overflow-visible">
                   <CurrencySelector />
                 </div>
@@ -489,7 +489,7 @@ const CreateCampaign: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <div className="flex items-center justify-center mt-8 pt-6 border-t border-border gap-3">
+          <div className="flex items-center justify-center mt-8 pt-6 gap-3">
             {step < steps.length - 1 ? (
               <>
                 {step === 1 && resultsShown && (
