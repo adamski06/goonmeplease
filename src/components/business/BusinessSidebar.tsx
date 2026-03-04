@@ -257,13 +257,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         )}
       </nav>
 
-      {/* Bottom — horizontal when expanded, stacked when collapsed. Profile always left-aligned. */}
+      {/* Bottom — horizontal when expanded, stacked when collapsed */}
       <div className={cn(
-        'px-3 py-3 shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3' : 'flex-row justify-between'
+        'shrink-0 flex items-center',
+        isCollapsed ? 'flex-col gap-3 px-0 py-3 items-center' : 'flex-row justify-between px-3 py-3'
       )}>
-        {/* Profile / user menu — always at left edge */}
-        <div ref={userMenuRef} className="relative self-start">
+        {/* Profile / user menu — centered when collapsed */}
+        <div ref={userMenuRef} className={cn('relative', isCollapsed ? 'flex justify-center w-full' : '')}>
           <button
             onClick={() => setUserMenuOpen(o => !o)}
             className="h-7 w-7 rounded-full overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity"
@@ -306,9 +306,12 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           )}
         </div>
 
-        {/* Inbox */}
+        {/* Inbox — centered when collapsed */}
         <button
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className={cn(
+            'text-muted-foreground hover:text-foreground transition-colors',
+            isCollapsed ? 'flex justify-center w-full' : ''
+          )}
           title="Inbox"
         >
           <Inbox className="h-4 w-4" />
