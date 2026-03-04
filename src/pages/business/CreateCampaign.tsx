@@ -320,7 +320,7 @@ const CreateCampaign: React.FC = () => {
                 <RateColumnHeader label="CURRENCY" />
                 <RateColumnHeader label="CREATOR POT" tooltip="Creator pots can vary from $25 to $10,000 — all dependent on how many people you want to participate." />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." />
-                <RateColumnHeader label="CREATORS RECEIVE" />
+                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." />
                 <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
