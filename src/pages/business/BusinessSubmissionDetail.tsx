@@ -141,13 +141,13 @@ const BusinessSubmissionDetail: React.FC = () => {
       </div>
 
       {/* TikTok embeds: video + profile side by side */}
-      <div className="flex gap-4 items-start">
+      <div className="flex gap-4 items-start" style={{ height: Math.ceil(740 * 0.7) }}>
         {/* Video embed */}
         {tiktokEmbedUrl ? (
-          <div className="flex-shrink-0" style={{ transform: 'scale(0.7)', transformOrigin: 'top left' }}>
+          <div className="flex-shrink-0" style={{ width: Math.ceil(325 * 0.7), height: Math.ceil(740 * 0.7), overflow: 'hidden' }}>
             <iframe
               src={tiktokEmbedUrl}
-              style={{ width: 325, height: 740, border: 'none', display: 'block' }}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
               allow="encrypted-media"
               allowFullScreen
             />
@@ -168,10 +168,10 @@ const BusinessSubmissionDetail: React.FC = () => {
 
         {/* Profile embed */}
         {tiktokUsername && (
-          <div className="flex-shrink-0" style={{ transform: 'scale(0.7)', transformOrigin: 'top left' }}>
+          <div className="flex-shrink-0" style={{ width: Math.ceil(325 * 0.7), height: Math.ceil(740 * 0.7), overflow: 'hidden' }}>
             <iframe
               src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-              style={{ width: 325, height: 740, border: 'none', display: 'block' }}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
               allow="encrypted-media"
               allowFullScreen
             />
