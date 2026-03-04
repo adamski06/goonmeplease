@@ -31,7 +31,7 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) =
         {tooltip && (
           <div
             style={{
-              maxHeight: expanded ? '120px' : '0px',
+              maxHeight: expanded ? '200px' : '0px',
               opacity: expanded ? 1 : 0,
               transition: 'max-height 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 250ms ease',
               overflow: 'hidden',
