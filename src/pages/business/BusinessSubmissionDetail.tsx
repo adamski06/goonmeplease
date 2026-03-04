@@ -138,14 +138,13 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* TikTok embeds: video + profile side by side */}
       <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <div className="flex-shrink-0" style={{ width: 228, height: 518 }}>
-            <iframe
-              src={`${tiktokEmbedUrl}?transparent=1`}
-              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', colorScheme: 'normal' }}
-              allow="encrypted-media"
-              allowFullScreen
-            />
-          </div>
+          <iframe
+            src={tiktokEmbedUrl}
+            className="flex-shrink-0 rounded-2xl"
+            style={{ width: 325, height: 740, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            allow="encrypted-media"
+            allowFullScreen
+          />
         ) : (
           <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
             <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
@@ -161,14 +160,13 @@ const BusinessSubmissionDetail: React.FC = () => {
         )}
 
         {tiktokUsername && (
-          <div className="flex-shrink-0" style={{ width: 378, height: 518 }}>
-            <iframe
-              src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-              style={{ width: 540, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', colorScheme: 'normal' }}
-              allow="encrypted-media"
-              allowFullScreen
-            />
-          </div>
+          <iframe
+            src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+            className="flex-shrink-0 rounded-2xl"
+            style={{ width: 540, height: 740, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            allow="encrypted-media"
+            allowFullScreen
+          />
         )}
       </div>
       </div>
