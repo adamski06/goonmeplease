@@ -318,9 +318,9 @@ const CreateCampaign: React.FC = () => {
               {/* Header labels — separate cards */}
               <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
                 <RateColumnHeader label="CURRENCY" />
-                <RateColumnHeader label="CREATOR POT" tooltip="Creator pots can vary from $25 to $10,000 — all dependent on how many people you want to participate." />
-                <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." />
-                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." />
+                <RateColumnHeader label="CREATOR POT" tooltip="Creator pots can vary from $25 to $10,000 — all dependent on how many people you want to participate." avg={totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : undefined} />
+                <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
+                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
                 <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
@@ -383,32 +383,7 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
-              {/* AVG row */}
-              <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
-                <div />
-                <div className="flex items-center gap-1.5 px-3 h-6">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : '—'}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-3 h-6">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : '—'}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-3 h-6">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : '—'}</span>
-                </div>
-                <div />
-              </div>
+
 
               {/* Combined results node — always visible */}
               {(() => {

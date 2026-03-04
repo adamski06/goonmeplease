@@ -4,9 +4,10 @@ import { Info } from 'lucide-react';
 interface RateColumnHeaderProps {
   label: string;
   tooltip?: string;
+  avg?: string;
 }
 
-const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) => {
+const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip, avg }) => {
   const [hovered, setHovered] = useState(false);
   const expanded = tooltip && hovered;
 
@@ -27,7 +28,7 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) =
             : {}),
         }}
       >
-        {/* Description text — sits above the label, revealed on expand */}
+        {/* Description + AVG — sits above the label, revealed on expand */}
         {tooltip && (
           <div
             style={{
@@ -38,6 +39,15 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) =
             }}
           >
             <p className="text-xs leading-relaxed text-foreground pt-3 pb-2">{tooltip}</p>
+            {avg && (
+              <div className="flex items-center gap-1.5 pb-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="text-[11px] text-muted-foreground font-medium">AVG: {avg}</span>
+              </div>
+            )}
           </div>
         )}
 
