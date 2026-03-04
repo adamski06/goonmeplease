@@ -186,7 +186,12 @@ const CreateCampaign: React.FC = () => {
 
   const stepTitles = ['Ad Details', 'Set your rate', 'Review & Pay'];
   const [portalReady, setPortalReady] = useState(false);
+  const [progressMounted, setProgressMounted] = useState(false);
   React.useEffect(() => { setPortalReady(true); }, []);
+  React.useEffect(() => {
+    const t = setTimeout(() => setProgressMounted(true), 100);
+    return () => clearTimeout(t);
+  }, []);
   const topbarCenter = portalReady ? document.getElementById('topbar-center') : null;
   const topbarProgress = portalReady ? document.getElementById('topbar-progress') : null;
 
@@ -213,8 +218,8 @@ const CreateCampaign: React.FC = () => {
           <div 
             className="h-full bg-foreground"
             style={{ 
-              width: `${((step + 1) / steps.length) * 100}%`,
-              transition: 'width 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
+              width: progressMounted ? `${((step + 1) / steps.length) * 100}%` : '0%',
+              transition: 'width 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           />
         </div>,
