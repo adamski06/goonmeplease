@@ -21,12 +21,17 @@ function mapDbCampaign(
     .sort((a, b) => a.min_views - b.min_views)
     .map(t => ({ minViews: t.min_views, maxViews: t.max_views, rate: t.rate_per_view }));
 
+  // Derive a single ratePerView from the first tier (simplest CPM rate)
+  const firstTierRate = campaignTiers.length > 0 ? campaignTiers[0].rate : 0;
+
   return {
     id: row.id,
     brand: row.brand_name,
     title: row.title,
     description: row.description || '',
     maxEarnings: Number(row.max_earnings) || 0,
+    pot: Number(row.total_budget) || 0,
+    ratePerView: firstTierRate,
     logo: row.brand_logo_url || '',
     image: row.cover_image_url || '',
     contentType: row.category || '',

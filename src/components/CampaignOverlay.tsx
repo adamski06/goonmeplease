@@ -221,7 +221,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                 <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
                 {(() => {
                   const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
-                  const potAmount = campaign.pot || 100000;
+                  const potAmount = campaign.pot || campaign.maxEarnings * 10 || 100000;
                   return (
                     <>
                       <div className="flex items-baseline justify-between mt-3 mb-1">
