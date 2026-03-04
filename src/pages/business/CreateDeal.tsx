@@ -120,14 +120,13 @@ const CreateDeal: React.FC = () => {
   };
 
   const [chatCollapsed, setChatCollapsed] = useState(false);
-  const chatRelevant = step === 0;
 
-  // Auto-collapse chat when it becomes irrelevant
+  // Listen for topbar AI button toggle
   React.useEffect(() => {
-    if (!chatRelevant) {
-      setChatCollapsed(true);
-    }
-  }, [chatRelevant]);
+    const handler = () => setChatCollapsed(c => !c);
+    window.addEventListener('toggle-ai-chat', handler);
+    return () => window.removeEventListener('toggle-ai-chat', handler);
+  }, []);
 
   const stepTitles = ['Ad Details', 'Set your rate', 'Review & Launch'];
   const [portalReady, setPortalReady] = useState(false);
@@ -167,7 +166,7 @@ const CreateDeal: React.FC = () => {
       {/* Chat panel (collapsible) */}
       <div
         className="shrink-0 border-r border-border h-full relative flex transition-all duration-500 ease-in-out overflow-hidden"
-        style={{ width: chatCollapsed ? '0px' : '340px', opacity: chatRelevant ? 1 : 0 }}
+        style={{ width: chatCollapsed ? '0px' : '340px' }}
       >
         <div className="w-[340px] h-full shrink-0">
           <CampaignChat
@@ -182,16 +181,14 @@ const CreateDeal: React.FC = () => {
       </div>
 
       {/* Toggle button — outside the collapsible div so it's always accessible */}
-      {chatRelevant && (
-        <button
-          onClick={() => setChatCollapsed(c => !c)}
-          className="shrink-0 w-8 flex items-center justify-center hover:bg-muted transition-colors border-r border-border bg-background"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-          title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
-        >
-          {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
-        </button>
-      )}
+      <button
+        onClick={() => setChatCollapsed(c => !c)}
+        className="shrink-0 w-8 flex items-center justify-center hover:bg-muted transition-colors border-r border-border bg-background"
+        style={{ color: 'hsl(var(--muted-foreground))' }}
+        title={chatCollapsed ? 'Expand chat' : 'Collapse chat'}
+      >
+        {chatCollapsed ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+      </button>
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
