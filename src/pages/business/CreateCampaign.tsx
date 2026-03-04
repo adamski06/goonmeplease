@@ -387,8 +387,9 @@ const CreateCampaign: React.FC = () => {
                 const creatorsEstimated = Math.round(creatorsGuaranteed * 2.7);
                 return (
                   <div
-                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border relative"
+                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border relative transition-opacity duration-500"
                     style={{
+                      opacity: allFilled ? 1 : 0.45,
                       background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
                       borderColor: 'hsla(0,0%,100%,0.08)',
                       backdropFilter: 'blur(16px)',
