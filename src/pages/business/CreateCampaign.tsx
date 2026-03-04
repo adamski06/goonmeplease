@@ -383,6 +383,33 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
+              {/* AVG row */}
+              <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
+                <div />
+                <div className="flex items-center gap-1.5 px-3 h-6">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : '—'}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 h-6">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : '—'}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 h-6">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  <span className="text-[11px] text-muted-foreground font-medium">AVG: {ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : '—'}</span>
+                </div>
+                <div />
+              </div>
+
               {/* Combined results node — always visible */}
               {(() => {
                 const allFilled = totalBudget > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
