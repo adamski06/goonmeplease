@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -128,8 +129,40 @@ const CreateDeal: React.FC = () => {
     }
   }, [chatRelevant]);
 
+  const stepTitles = ['Ad Details', 'Set your rate', 'Review & Launch'];
+  const [portalReady, setPortalReady] = useState(false);
+  React.useEffect(() => { setPortalReady(true); }, []);
+  const topbarCenter = portalReady ? document.getElementById('topbar-center') : null;
+  const topbarProgress = portalReady ? document.getElementById('topbar-progress') : null;
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
+      {/* Portal: step title into topbar center */}
+      {topbarCenter && ReactDOM.createPortal(
+        <div className="flex items-center gap-3">
+          {step > 0 && (
+            <button onClick={() => setStep(step - 1)} className="text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+          )}
+          <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
+            {stepTitles[step]}
+          </p>
+        </div>,
+        topbarCenter
+      )}
+
+      {/* Portal: progress bar into topbar bottom */}
+      {topbarProgress && ReactDOM.createPortal(
+        <div className="h-[3px] w-full bg-muted">
+          <div 
+            className="h-full bg-foreground transition-all duration-500 ease-out"
+            style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+          />
+        </div>,
+        topbarProgress
+      )}
+
       <div className="flex flex-1 overflow-hidden relative">
       {/* Chat panel (collapsible) */}
       <div
@@ -163,15 +196,6 @@ const CreateDeal: React.FC = () => {
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
         <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
-          {/* Progress bar */}
-          <div className="mb-8 px-[15%]">
-            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-foreground rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${((step + 1) / steps.length) * 100}%` }}
-              />
-            </div>
-          </div>
 
           {/* Step 1: Ad Details */}
           {step === 0 && (
@@ -219,13 +243,7 @@ const CreateDeal: React.FC = () => {
 
           {/* Step 2: Pricing */}
           {step === 1 && (
-            <div className="space-y-5">
-              <div className="flex items-center gap-3">
-                <button onClick={() => setStep(0)} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Set your rate</h2>
-              </div>
+            <div className="space-y-5 mt-2">
 
               {/* Header labels */}
               <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr' }}>
@@ -311,15 +329,8 @@ const CreateDeal: React.FC = () => {
             </div>
           )}
 
-          {/* Step 3: Review */}
           {step === 2 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <h2 className="text-xl font-bold text-foreground font-montserrat">Review & Launch</h2>
-              </div>
 
               {/* Summary card */}
               <div className="rounded-xl border border-border bg-card p-6 space-y-4">
