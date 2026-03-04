@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { PanelLeft, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
 import { useTheme } from 'next-themes';
@@ -71,13 +73,34 @@ const BusinessLayout: React.FC = () => {
   return (
     <div className="h-screen flex bg-background overflow-hidden relative">
       {/* Fixed logo overlay — always in same spot, never animates */}
-      <div className="absolute top-0 left-0 z-50 px-5 h-10 flex items-center pointer-events-none">
+      <div className="absolute top-0 left-0 z-50 px-5 h-10 flex items-center gap-3 pointer-events-none">
         <img
           src={jarlaLogo}
           alt="Jarla"
           className="h-[18px]"
           style={{ filter: resolvedTheme === 'dark' ? 'none' : 'invert(1)' }}
         />
+        {/* Expand sidebar + AI buttons — fade in when topbar is visible */}
+        <div
+          className={cn(
+            'flex items-center gap-1.5 pointer-events-auto transition-opacity duration-300',
+            isCreationRoute ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          )}
+        >
+          <button
+            onClick={() => navigate('/business')}
+            className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+            title="Expand sidebar"
+          >
+            <PanelLeft className="h-3.5 w-3.5" />
+          </button>
+          <button
+            className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+            title="Jarla AI"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Top bar — spans full width OVER sidebar, only on creation routes */}
