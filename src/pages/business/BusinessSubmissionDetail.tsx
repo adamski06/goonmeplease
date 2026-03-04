@@ -90,7 +90,7 @@ const BusinessSubmissionDetail: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <div className="max-w-5xl mx-auto px-6 py-10 overflow-y-auto h-full">
       {/* Back */}
       <button
         onClick={() => navigate(-1)}
@@ -139,7 +139,7 @@ const BusinessSubmissionDetail: React.FC = () => {
         {tiktokEmbedUrl ? (
           <iframe
             src={tiktokEmbedUrl}
-            style={{ width: 280, height: 640, border: 'none', display: 'block' }}
+            style={{ width: 325, height: 740, border: 'none', display: 'block' }}
             allow="encrypted-media"
             allowFullScreen
           />
@@ -160,7 +160,7 @@ const BusinessSubmissionDetail: React.FC = () => {
         {tiktokUsername && (
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-            style={{ width: 480, height: 640, border: 'none', display: 'block' }}
+            style={{ width: 540, height: 740, border: 'none', display: 'block' }}
             allow="encrypted-media"
             allowFullScreen
           />
