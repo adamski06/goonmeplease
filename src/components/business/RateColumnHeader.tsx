@@ -37,7 +37,7 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip }) =
               overflow: 'hidden',
             }}
           >
-            <p className="text-[11px] leading-relaxed text-muted-foreground pt-3 pb-2">{tooltip}</p>
+            <p className="text-xs leading-relaxed text-foreground pt-3 pb-2">{tooltip}</p>
           </div>
         )}
 
