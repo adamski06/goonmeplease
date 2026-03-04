@@ -79,6 +79,10 @@ const BusinessSubmissionDetail: React.FC = () => {
     ? `https://www.tiktok.com/embed/v2/${submission.tiktok_video_id}`
     : null;
 
+  // Extract TikTok username from URL for profile embed
+  const tiktokUsernameMatch = submission.tiktok_video_url?.match(/tiktok\.com\/@([^/]+)/);
+  const tiktokUsername = tiktokUsernameMatch ? tiktokUsernameMatch[1] : null;
+
   const cardStyle = {
     background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
     border: '1px solid hsl(var(--border))',
@@ -86,7 +90,7 @@ const BusinessSubmissionDetail: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10">
+    <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Back */}
       <button
         onClick={() => navigate(-1)}
@@ -136,30 +140,44 @@ const BusinessSubmissionDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* TikTok embed */}
-      {tiktokEmbedUrl ? (
-        <div className="rounded-[28px] overflow-hidden" style={{ border: '1px solid hsl(var(--border))' }}>
-          <iframe
-            src={tiktokEmbedUrl}
-            className="w-full"
-            style={{ height: 740, border: 'none' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
-        </div>
-      ) : (
-        <div className="rounded-[28px] p-8 text-center" style={cardStyle}>
-          <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
-          <a
-            href={submission.tiktok_video_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-primary hover:underline"
-          >
-            Open on TikTok →
-          </a>
-        </div>
-      )}
+      {/* TikTok embeds: video + profile side by side */}
+      <div className="flex gap-4 items-start">
+        {/* Video embed */}
+        {tiktokEmbedUrl ? (
+          <div className="rounded-2xl overflow-hidden flex-shrink-0" style={{ width: 325 }}>
+            <iframe
+              src={tiktokEmbedUrl}
+              style={{ width: 325, height: 740, border: 'none', display: 'block' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
+            <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
+            <a
+              href={submission.tiktok_video_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline"
+            >
+              Open on TikTok →
+            </a>
+          </div>
+        )}
+
+        {/* Profile embed */}
+        {tiktokUsername && (
+          <div className="rounded-2xl overflow-hidden flex-shrink-0" style={{ width: 325 }}>
+            <iframe
+              src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+              style={{ width: 325, height: 740, border: 'none', display: 'block' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
