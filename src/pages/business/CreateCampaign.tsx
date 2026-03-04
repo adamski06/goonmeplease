@@ -209,10 +209,13 @@ const CreateCampaign: React.FC = () => {
 
       {/* Portal: progress bar into topbar bottom */}
       {topbarProgress && ReactDOM.createPortal(
-        <div className="h-[3px] w-full bg-muted">
+        <div className="h-[3px] w-full bg-muted overflow-hidden">
           <div 
-            className="h-full bg-foreground transition-all duration-500 ease-out"
-            style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+            className="h-full bg-foreground"
+            style={{ 
+              width: `${((step + 1) / steps.length) * 100}%`,
+              transition: 'width 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
           />
         </div>,
         topbarProgress
@@ -251,10 +254,10 @@ const CreateCampaign: React.FC = () => {
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
         <div
-          className={`mx-auto px-6 flex-1 flex flex-col w-full transition-all duration-500 ease-out ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}
+          className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}
           key={step}
           style={{
-            animation: 'stepFadeIn 0.4s ease-out forwards',
+            animation: 'stepFadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards',
           }}
         >
 
