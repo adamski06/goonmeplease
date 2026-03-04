@@ -217,14 +217,14 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           style={{
             background: resolvedTheme === 'dark'
               ? 'linear-gradient(135deg, hsla(0,0%,100%,0.12) 0%, hsla(0,0%,100%,0.06) 100%)'
-              : 'linear-gradient(135deg, hsla(0,0%,100%,0.7) 0%, hsla(0,0%,96%,0.6) 100%)',
+              : 'hsl(var(--background))',
             border: resolvedTheme === 'dark'
               ? '1px solid hsla(0,0%,100%,0.15)'
-              : '1px solid hsla(0,0%,100%,0.8)',
+              : '1px solid hsl(var(--border))',
             boxShadow: resolvedTheme === 'dark'
               ? '0 2px 8px hsla(0,0%,0%,0.3), inset 0 1px 0 hsla(0,0%,100%,0.08)'
-              : '0 2px 8px hsla(0,0%,0%,0.08), inset 0 1px 0 hsla(0,0%,100%,0.9)',
-            backdropFilter: 'blur(12px)',
+              : '0 1px 3px hsla(0,0%,0%,0.06)',
+            backdropFilter: resolvedTheme === 'dark' ? 'blur(12px)' : undefined,
           }}
           title="New Ad"
         >
