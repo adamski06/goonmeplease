@@ -82,16 +82,20 @@ const BusinessLayout: React.FC = () => {
 
       {/* Top bar — spans full width OVER sidebar, only on creation routes */}
       {isCreationRoute && (
-        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex items-center">
-          {/* Center the text in the content area (offset by sidebar width) */}
-          <div className="w-[56px] shrink-0" />
-          <div className="flex-1 flex items-center justify-center">
-            {(location.pathname === '/business/new' || location.pathname === '/business/ad-types') && (
-              <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
-                {location.pathname === '/business/new' ? 'Select one' : 'Ad types'}
-              </p>
-            )}
+        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex flex-col">
+          <div className="flex-1 flex items-center">
+            {/* Center the text in the content area (offset by sidebar width) */}
+            <div className="w-[56px] shrink-0" />
+            <div className="flex-1 flex items-center justify-center" id="topbar-center">
+              {(location.pathname === '/business/new' || location.pathname === '/business/ad-types') && (
+                <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
+                  {location.pathname === '/business/new' ? 'Select one' : 'Ad types'}
+                </p>
+              )}
+            </div>
           </div>
+          {/* Progress bar slot — rendered by child pages via portal */}
+          <div id="topbar-progress" className="w-full" />
         </div>
       )}
 
