@@ -54,8 +54,8 @@ const CreateCampaign: React.FC = () => {
   };
 
   const getBudgetAmount = () => getBudget();
-  const getFee = () => 0;
-  const getTotal = () => getBudget();
+  const getFee = () => Math.round(getBudget() * 0.15 * 100) / 100;
+  const getTotal = () => Math.round((getBudget() + getFee()) * 100) / 100;
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
@@ -427,8 +427,12 @@ const CreateCampaign: React.FC = () => {
                   <span className="text-sm font-medium text-foreground">${maxPayoutPerCreator}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Pot</span>
+                  <span className="text-sm text-muted-foreground">Creator pot</span>
                   <span className="text-sm font-medium text-foreground">${getBudget().toLocaleString()}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
+                  <span className="text-sm font-medium text-foreground">${getFee().toLocaleString()}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Total</span>
@@ -447,7 +451,7 @@ const CreateCampaign: React.FC = () => {
                     className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
                     style={{ animationDelay: '800ms', animationFillMode: 'both' }}
                   >
-                    Total: ${Math.round(getTotal() * 1.15).toLocaleString()}
+                    Total: ${getTotal().toLocaleString()}
                   </div>
                 )}
                 <Button
