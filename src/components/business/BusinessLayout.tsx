@@ -71,11 +71,11 @@ const BusinessLayout: React.FC = () => {
   return (
     <div className="h-screen flex bg-background overflow-hidden relative">
       {/* Fixed logo overlay — always in same spot, never animates */}
-      <div className="absolute top-0 left-0 z-50 px-5 py-3 pointer-events-none">
+      <div className="absolute top-0 left-0 z-50 px-5 h-10 flex items-center pointer-events-none">
         <img
           src={jarlaLogo}
           alt="Jarla"
-          className="h-6"
+          className="h-[18px]"
           style={{ filter: resolvedTheme === 'dark' ? 'none' : 'invert(1)' }}
         />
       </div>
