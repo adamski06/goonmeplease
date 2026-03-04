@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Plus, Megaphone, Handshake, ChevronDown, Home, Sun, Moon, Settings, Inbox } from 'lucide-react';
+import { Plus, ChevronDown, Home, Sun, Moon, Settings, Inbox } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
@@ -25,7 +25,7 @@ interface BusinessSidebarProps {
 const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [items, setItems] = useState<SidebarItem[]>([]);
   const [profile, setProfile] = useState<BusinessProfileData | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -132,8 +132,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
             className={cn(
               'w-full flex items-center gap-2 px-2.5 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap overflow-hidden',
               profileOpen
-                ? 'bg-sidebar-accent text-sidebar-accent-foreground border-border'
-                : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground border-transparent'
+                ? 'bg-sidebar-accent text-foreground border-border'
+                : 'text-foreground hover:bg-sidebar-accent/50 border-transparent'
             )}
             title={profile?.company_name || 'Profile'}
           >
@@ -197,8 +197,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           className={cn(
             'w-full flex items-center gap-3 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap overflow-hidden',
             location.pathname === '/business'
-              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-              : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+              ? 'bg-sidebar-accent text-foreground'
+              : 'text-foreground hover:bg-sidebar-accent/50'
           )}
           title="Home"
         >
@@ -210,12 +210,21 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
-            'flex items-center gap-2 rounded-lg text-sm font-medium transition-colors border border-transparent whitespace-nowrap overflow-hidden',
-            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]',
-            'bg-foreground text-background'
+            'flex items-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden text-foreground',
+            'transition-all duration-300 ease-in-out',
+            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]'
           )}
           style={{
-            boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
+            background: resolvedTheme === 'dark'
+              ? 'linear-gradient(135deg, hsla(0,0%,100%,0.12) 0%, hsla(0,0%,100%,0.06) 100%)'
+              : 'linear-gradient(135deg, hsla(0,0%,100%,0.7) 0%, hsla(0,0%,96%,0.6) 100%)',
+            border: resolvedTheme === 'dark'
+              ? '1px solid hsla(0,0%,100%,0.15)'
+              : '1px solid hsla(0,0%,100%,0.8)',
+            boxShadow: resolvedTheme === 'dark'
+              ? '0 2px 8px hsla(0,0%,0%,0.3), inset 0 1px 0 hsla(0,0%,100%,0.08)'
+              : '0 2px 8px hsla(0,0%,0%,0.08), inset 0 1px 0 hsla(0,0%,100%,0.9)',
+            backdropFilter: 'blur(12px)',
           }}
           title="New Ad"
         >
@@ -237,18 +246,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
+                    'w-full flex items-center px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
-                      : 'text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
+                      ? 'bg-sidebar-accent text-foreground font-medium'
+                      : 'text-foreground/70 hover:bg-sidebar-accent/50 hover:text-foreground'
                   )}
                   title={item.title}
                 >
-                  {item.type === 'spread' ? (
-                    <Megaphone className="h-3.5 w-3.5 shrink-0" />
-                  ) : (
-                    <Handshake className="h-3.5 w-3.5 shrink-0" />
-                  )}
                   <span className="truncate">{item.title}</span>
                 </button>
               );
