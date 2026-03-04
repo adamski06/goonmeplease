@@ -86,6 +86,7 @@ const BusinessEditProfile: React.FC = () => {
         })
         .eq('user_id', user.id);
       if (error) throw error;
+      window.dispatchEvent(new Event('business-profile-updated'));
       toast({ title: 'Profile updated' });
       navigate('/business');
     } catch (err: any) {
