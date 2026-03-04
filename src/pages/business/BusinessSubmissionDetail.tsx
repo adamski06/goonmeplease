@@ -141,7 +141,7 @@ const BusinessSubmissionDetail: React.FC = () => {
           <iframe
             src={tiktokEmbedUrl}
             className="flex-shrink-0 rounded-2xl"
-            style={{ width: 325, height: 740, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            style={{ width: 280, height: 640, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
             allow="encrypted-media"
             allowFullScreen
           />
@@ -163,7 +163,7 @@ const BusinessSubmissionDetail: React.FC = () => {
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
             className="flex-shrink-0 rounded-2xl"
-            style={{ width: 540, height: 520, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            style={{ width: 540, height: 460, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
             allow="encrypted-media"
             allowFullScreen
           />
