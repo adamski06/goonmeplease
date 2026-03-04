@@ -11,6 +11,7 @@ interface DealData {
   id: string;
   title: string;
   brand_name: string;
+  brand_logo_url: string | null;
   description: string | null;
   cover_image_url: string | null;
   is_active: boolean | null;
@@ -162,20 +163,11 @@ const BusinessDealDetail: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* Back */}
-      <button
-        onClick={() => navigate('/business')}
-        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </button>
-
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
         <div className="h-14 w-14 rounded-full bg-muted shrink-0 overflow-hidden">
-          {deal.cover_image_url ? (
-            <img src={deal.cover_image_url} alt="" className="h-full w-full object-cover" />
+          {deal.brand_logo_url ? (
+            <img src={deal.brand_logo_url} alt="" className="h-full w-full object-cover" />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
               <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">

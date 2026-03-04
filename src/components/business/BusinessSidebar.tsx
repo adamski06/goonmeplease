@@ -261,10 +261,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         )}
       </nav>
 
-      {/* Bottom — horizontal when expanded, stacked when collapsed */}
+      {/* Bottom */}
       <div className={cn(
-        'shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3 px-2 py-3' : 'flex-row justify-between px-3 py-3'
+        'shrink-0 flex items-center justify-center',
+        isCollapsed ? 'flex-col gap-3 py-3' : 'flex-row justify-between px-3 py-3'
       )}>
         {/* Profile / user menu */}
         <div ref={userMenuRef} className="relative flex justify-center">
