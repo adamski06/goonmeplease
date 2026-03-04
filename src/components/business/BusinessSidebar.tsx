@@ -210,11 +210,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
-            'flex items-center gap-2 rounded-lg text-sm font-medium transition-colors text-white border border-transparent whitespace-nowrap overflow-hidden',
-            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]'
+            'flex items-center gap-2 rounded-lg text-sm font-medium transition-colors border border-transparent whitespace-nowrap overflow-hidden',
+            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]',
+            'bg-foreground text-background'
           )}
           style={{
-            background: 'linear-gradient(135deg, hsl(0, 0%, 18%) 0%, hsl(0, 0%, 10%) 100%)',
             boxShadow: '0 2px 8px hsl(0 0% 0% / 0.35)',
           }}
           title="New Ad"
