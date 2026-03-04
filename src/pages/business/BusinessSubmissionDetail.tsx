@@ -138,13 +138,14 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* TikTok embeds: video + profile side by side */}
       <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <iframe
-            src={tiktokEmbedUrl}
-            className="flex-shrink-0 rounded-2xl"
-            style={{ width: 280, height: 640, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
+          <div className="flex-shrink-0 rounded-2xl overflow-hidden" style={{ width: Math.ceil(325 * 0.85), height: Math.ceil(740 * 0.85), background: 'hsl(var(--background))' }}>
+            <iframe
+              src={tiktokEmbedUrl}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.85)', transformOrigin: 'top left', colorScheme: 'normal' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
         ) : (
           <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
             <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
@@ -163,7 +164,7 @@ const BusinessSubmissionDetail: React.FC = () => {
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
             className="flex-shrink-0 rounded-2xl"
-            style={{ width: 540, height: 460, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            style={{ width: 540, height: 480, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
             allow="encrypted-media"
             allowFullScreen
           />
