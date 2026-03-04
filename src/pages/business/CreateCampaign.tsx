@@ -217,7 +217,7 @@ const CreateCampaign: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-4xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
+        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
           {/* Progress bar */}
           <div className="mb-8 px-[15%]">
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
