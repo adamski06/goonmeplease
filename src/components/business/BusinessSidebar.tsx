@@ -217,13 +217,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           )}
           style={{
             background: resolvedTheme === 'dark'
-              ? 'linear-gradient(135deg, hsla(0,0%,100%,0.12) 0%, hsla(0,0%,100%,0.06) 100%)'
+              ? 'linear-gradient(135deg, hsla(0,0%,100%,0.15) 0%, hsla(0,0%,100%,0.08) 100%)'
               : 'linear-gradient(135deg, hsl(0,0%,18%) 0%, hsl(0,0%,10%) 100%)',
             border: resolvedTheme === 'dark'
-              ? '1px solid hsla(0,0%,100%,0.15)'
+              ? '1px solid hsla(0,0%,100%,0.2)'
               : '1px solid hsla(0,0%,0%,0.1)',
             boxShadow: resolvedTheme === 'dark'
-              ? '0 2px 8px hsla(0,0%,0%,0.3), inset 0 1px 0 hsla(0,0%,100%,0.08)'
+              ? '0 2px 8px hsla(0,0%,0%,0.3), inset 0 1px 0 hsla(0,0%,100%,0.12)'
               : '0 2px 8px hsla(0,0%,0%,0.35)',
             backdropFilter: resolvedTheme === 'dark' ? 'blur(12px)' : undefined,
           }}
@@ -235,8 +235,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
         {/* All ads */}
         {items.length > 0 && (
-          <div className="space-y-0.5 mt-6">
-            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 whitespace-nowrap">
+          <div className="space-y-0.5 mt-10">
+            <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-foreground/40 whitespace-nowrap">
               Ads
             </p>
             {items.map(item => {
@@ -250,7 +250,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                     'w-full flex items-center px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
                       ? 'bg-sidebar-accent text-foreground font-medium'
-                      : 'text-foreground/70 hover:bg-sidebar-accent/50 hover:text-foreground'
+                      : 'text-foreground hover:bg-sidebar-accent/50'
                   )}
                   title={item.title}
                 >
