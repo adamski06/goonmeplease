@@ -34,6 +34,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
   const [submitting, setSubmitting] = useState(false);
   const [resolving, setResolving] = useState(false);
   const [urlValid, setUrlValid] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const resolveVideoId = useCallback(async (url: string) => {
     // First try direct extraction
@@ -128,7 +129,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
       if (insertError) throw insertError;
 
       toast.success('Submission sent! The brand will review your video.');
-      onBack();
+      setSubmitted(true);
     } catch (err: any) {
       console.error('Submission error:', err);
       toast.error('Failed to submit. Please try again.');
@@ -138,6 +139,78 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
   };
 
   const canSubmit = urlValid && confirmed && guidelinesConfirmed && !submitting && !resolving;
+
+  if (submitted) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center px-5 pt-5 pb-3 border-b border-black/10 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-1 justify-center">
+            <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+            </div>
+            <h2 className="text-sm font-bold text-black font-montserrat">{campaign.brand}</h2>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
+            style={{
+              background: 'linear-gradient(180deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.25) 100%)',
+              border: '2px solid rgba(16,185,129,0.4)',
+            }}
+          >
+            <CheckCircle className="h-10 w-10 text-emerald-600" />
+          </div>
+          <h3 className="text-xl font-bold text-black font-montserrat mb-2">Video Submitted</h3>
+          <p className="text-sm text-black/60 font-jakarta leading-relaxed mb-2">
+            Your TikTok has been sent to {campaign.brand} for review. You'll be notified once it's approved.
+          </p>
+
+          {/* TikTok embed preview */}
+          {videoId && (
+            <div className="mt-4">
+              <div style={{
+                transform: 'scale(0.6)',
+                transformOrigin: 'top center',
+                height: '432px',
+                marginBottom: '-150px',
+                overflow: 'hidden',
+                borderRadius: '12px',
+              }}>
+                <iframe
+                  src={`https://www.tiktok.com/embed/v2/${videoId}`}
+                  style={{
+                    width: '325px',
+                    height: '720px',
+                    border: 'none',
+                  }}
+                  allowFullScreen
+                  allow="encrypted-media"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="px-5 py-5 flex-shrink-0">
+          <button
+            onClick={onBack}
+            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+            style={{
+              background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+              border: '1.5px solid rgba(60,60,60,0.6)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1)',
+              color: 'white',
+            }}
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
