@@ -164,7 +164,7 @@ const BusinessSubmissionDetail: React.FC = () => {
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
             className="flex-shrink-0 rounded-2xl"
-            style={{ width: 580, height: 455, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            style={{ width: 610, height: 475, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
             allow="encrypted-media"
             allowFullScreen
           />
