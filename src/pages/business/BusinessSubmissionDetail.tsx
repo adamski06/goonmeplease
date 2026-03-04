@@ -138,7 +138,7 @@ const BusinessSubmissionDetail: React.FC = () => {
       {/* TikTok embeds: video + profile side by side */}
       <div className="flex gap-4 items-start">
         {tiktokEmbedUrl ? (
-          <div className="flex-shrink-0 rounded-2xl overflow-hidden" style={{ width: Math.ceil(325 * 0.63), height: 445 }}>
+          <div className="flex-shrink-0 rounded-2xl" style={{ width: Math.ceil(325 * 0.63), height: 455 }}>
             <iframe
               src={tiktokEmbedUrl}
               style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.63)', transformOrigin: 'top left', colorScheme: 'normal', willChange: 'transform' }}
@@ -164,7 +164,7 @@ const BusinessSubmissionDetail: React.FC = () => {
           <iframe
             src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
             className="flex-shrink-0 rounded-2xl"
-            style={{ width: 580, height: 445, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+            style={{ width: 580, height: 455, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
             allow="encrypted-media"
             allowFullScreen
           />
