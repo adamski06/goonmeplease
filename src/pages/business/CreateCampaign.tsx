@@ -110,7 +110,7 @@ const CreateCampaign: React.FC = () => {
       description: description.trim() || null,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
       category: audience.trim() || null,
-      total_budget: getTotal(),
+      total_budget: getBudget(),
     };
 
     const { data, error } = await supabase.functions.invoke('create-campaign-checkout', {
