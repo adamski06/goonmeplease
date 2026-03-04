@@ -12,6 +12,7 @@ import { useCurrency } from '@/contexts/CurrencyContext';
 import CampaignChat from '@/components/CampaignChat';
 import CurrencySelector from '@/components/CurrencySelector';
 import { formatCurrencyValue, getPlaceholderValue } from '@/data/currencies';
+import RateColumnHeader from '@/components/business/RateColumnHeader';
 
 const steps = ['Ad Details', 'Rate', 'Checkout'];
 
@@ -316,11 +317,11 @@ const CreateCampaign: React.FC = () => {
 
               {/* Header labels — separate cards */}
               <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
-                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CURRENCY</div>
-                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATOR POT</div>
-                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">MAX PAYOUT / CREATOR</div>
-                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATORS RECEIVE</div>
-                <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">YOU PAY</div>
+                <RateColumnHeader label="CURRENCY" />
+                <RateColumnHeader label="CREATOR POT" tooltip="Creator pots can vary from $25 to $10,000 — all dependent on how many people you want to participate." />
+                <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." />
+                <RateColumnHeader label="CREATORS RECEIVE" />
+                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
               {/* Input row — matching header style */}
