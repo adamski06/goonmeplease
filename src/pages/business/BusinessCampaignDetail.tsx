@@ -12,6 +12,7 @@ interface CampaignData {
   id: string;
   title: string;
   brand_name: string;
+  brand_logo_url: string | null;
   description: string | null;
   cover_image_url: string | null;
   is_active: boolean | null;
@@ -184,41 +185,18 @@ const BusinessCampaignDetail: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* Back */}
-      <button
-        onClick={() => navigate('/business')}
-        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </button>
-
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <div className="relative group">
-          <div className="h-14 w-14 rounded-full bg-muted shrink-0 overflow-hidden">
-            {campaign.cover_image_url ? (
-              <img src={campaign.cover_image_url} alt="" className="h-full w-full object-cover" />
-            ) : (
-              <div className="h-full w-full flex items-center justify-center">
-                <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">
-                  {campaign.brand_name.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            )}
-          </div>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
-          >
-            {uploading ? (
-              <div className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-            ) : (
-              <Upload className="h-4 w-4 text-white" />
-            )}
-          </button>
-          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
+        <div className="h-14 w-14 rounded-full bg-muted shrink-0 overflow-hidden">
+          {campaign.brand_logo_url ? (
+            <img src={campaign.brand_logo_url} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <span className="text-lg font-bold text-muted-foreground/40 font-montserrat">
+                {campaign.brand_name.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2 flex-1">
           <h1 className="text-xl font-bold text-foreground font-montserrat">{campaign.title}</h1>
