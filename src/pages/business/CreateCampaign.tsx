@@ -387,7 +387,7 @@ const CreateCampaign: React.FC = () => {
                 const creatorsEstimated = Math.round(creatorsGuaranteed * 2.7);
                 return (
                   <div
-                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border"
+                    className="rounded-xl px-6 py-8 grid grid-cols-2 gap-6 border relative"
                     style={{
                       background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
                       borderColor: 'hsla(0,0%,100%,0.08)',
@@ -395,15 +395,24 @@ const CreateCampaign: React.FC = () => {
                       boxShadow: '0 0 40px hsla(0,0%,100%,0.03), inset 0 1px 0 hsla(0,0%,100%,0.06)',
                     }}
                   >
-                    <div>
+                    {/* Overlay prompt when not filled */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 pointer-events-none z-10"
+                      style={{ opacity: allFilled ? 0 : 1 }}
+                    >
+                      <p className="text-sm font-medium tracking-wide" style={{ color: 'hsla(0,0%,100%,0.5)' }}>
+                        Fill out details above to see results
+                      </p>
+                    </div>
+                    <div className="text-center transition-opacity duration-300" style={{ opacity: allFilled ? 1 : 0.15 }}>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total views</p>
-                      <p className="text-4xl font-bold tracking-tight transition-opacity duration-300" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)', opacity: allFilled ? 1 : 0.2 }}>
+                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
                         {allFilled ? `${viewsGuaranteed.toLocaleString()} – ${viewsEstimated.toLocaleString()}` : '—'}
                       </p>
                     </div>
-                    <div>
+                    <div className="text-center transition-opacity duration-300" style={{ opacity: allFilled ? 1 : 0.15 }}>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total creators</p>
-                      <p className="text-4xl font-bold tracking-tight transition-opacity duration-300" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)', opacity: allFilled ? 1 : 0.2 }}>
+                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
                         {allFilled ? `${creatorsGuaranteed.toLocaleString()} – ${creatorsEstimated.toLocaleString()}` : '—'}
                       </p>
                     </div>
