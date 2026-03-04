@@ -210,20 +210,21 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
-            'flex items-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden text-foreground',
+            'flex items-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden',
             'transition-all duration-300 ease-in-out',
-            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]'
+            isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]',
+            resolvedTheme === 'dark' ? 'text-foreground' : 'text-white'
           )}
           style={{
             background: resolvedTheme === 'dark'
               ? 'linear-gradient(135deg, hsla(0,0%,100%,0.12) 0%, hsla(0,0%,100%,0.06) 100%)'
-              : 'hsl(var(--background))',
+              : 'linear-gradient(135deg, hsl(0,0%,18%) 0%, hsl(0,0%,10%) 100%)',
             border: resolvedTheme === 'dark'
               ? '1px solid hsla(0,0%,100%,0.15)'
-              : '1px solid hsl(var(--border))',
+              : '1px solid hsla(0,0%,0%,0.1)',
             boxShadow: resolvedTheme === 'dark'
               ? '0 2px 8px hsla(0,0%,0%,0.3), inset 0 1px 0 hsla(0,0%,100%,0.08)'
-              : '0 1px 3px hsla(0,0%,0%,0.06)',
+              : '0 2px 8px hsla(0,0%,0%,0.35)',
             backdropFilter: resolvedTheme === 'dark' ? 'blur(12px)' : undefined,
           }}
           title="New Ad"
