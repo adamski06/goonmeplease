@@ -141,15 +141,17 @@ const BusinessSubmissionDetail: React.FC = () => {
       </div>
 
       {/* TikTok embeds: video + profile side by side */}
-      <div className="flex gap-4 items-start">
-        {/* Video embed */}
+      <div className="flex gap-3 items-start">
+        {/* Video embed - scaled down, no white frame */}
         {tiktokEmbedUrl ? (
-          <iframe
-            src={tiktokEmbedUrl}
-            style={{ width: 325, height: 740, border: 'none', display: 'block', background: 'none', colorScheme: 'normal' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
+          <div style={{ width: 228, height: 518, overflow: 'hidden', borderRadius: 12 }}>
+            <iframe
+              src={tiktokEmbedUrl}
+              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
         ) : (
           <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
             <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
@@ -164,14 +166,16 @@ const BusinessSubmissionDetail: React.FC = () => {
           </div>
         )}
 
-        {/* Profile embed */}
+        {/* Profile embed - wider native size, scaled down */}
         {tiktokUsername && (
-          <iframe
-            src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-            style={{ width: 325, height: 900, border: 'none', display: 'block', background: 'none', colorScheme: 'normal' }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
+          <div style={{ width: 280, height: 518, overflow: 'hidden', borderRadius: 12 }}>
+            <iframe
+              src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+              style={{ width: 400, height: 740, border: 'none', display: 'block', transform: 'scale(0.7)', transformOrigin: 'top left', background: 'transparent' }}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          </div>
         )}
       </div>
     </div>
