@@ -414,15 +414,39 @@ const CreateCampaign: React.FC = () => {
                     </div>
                     <div className="text-center transition-opacity duration-300" style={{ opacity: allFilled ? 1 : 0.15 }}>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total views</p>
-                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
-                        {allFilled ? `${viewsGuaranteed.toLocaleString()} – ${viewsEstimated.toLocaleString()}` : '—'}
-                      </p>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? viewsGuaranteed.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>minimum</p>
+                        </div>
+                        <span className="text-2xl font-light" style={{ color: 'hsla(0,0%,100%,0.3)' }}>–</span>
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? viewsEstimated.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>likely</p>
+                        </div>
+                      </div>
                     </div>
                     <div className="text-center transition-opacity duration-300" style={{ opacity: allFilled ? 1 : 0.15 }}>
                       <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Total creators</p>
-                      <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
-                        {allFilled ? `${creatorsGuaranteed.toLocaleString()} – ${creatorsEstimated.toLocaleString()}` : '—'}
-                      </p>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? creatorsGuaranteed.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>minimum</p>
+                        </div>
+                        <span className="text-2xl font-light" style={{ color: 'hsla(0,0%,100%,0.3)' }}>–</span>
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? creatorsEstimated.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>likely</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
