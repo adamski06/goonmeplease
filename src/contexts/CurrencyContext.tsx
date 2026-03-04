@@ -5,6 +5,7 @@ type CurrencyCode = 'SEK' | 'USD';
 
 interface CurrencyContextType {
   currency: CurrencyCode;
+  setCurrency: (c: CurrencyCode) => void;
   symbol: string;
   rate: number;
   formatPrice: (amountUsd: number, opts?: { decimals?: number; showSymbol?: boolean }) => string;
@@ -34,7 +35,7 @@ function detectCurrency(): CurrencyCode {
 }
 
 export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currency] = useState<CurrencyCode>(detectCurrency);
+  const [currency, setCurrency] = useState<CurrencyCode>(detectCurrency);
   const [usdToSek, setUsdToSek] = useState(10.5); // sensible fallback
   const [loading, setLoading] = useState(true);
 
@@ -85,7 +86,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 
   return (
-    <CurrencyContext.Provider value={{ currency, symbol, rate, formatPrice, convert, fmtVal, label, loading }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, symbol, rate, formatPrice, convert, fmtVal, label, loading }}>
       {children}
     </CurrencyContext.Provider>
   );
