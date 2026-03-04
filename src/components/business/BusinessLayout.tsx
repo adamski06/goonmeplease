@@ -5,7 +5,7 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
 import { useTheme } from 'next-themes';
 
-const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new'];
+const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new', '/business/ad-types'];
 
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -82,10 +82,16 @@ const BusinessLayout: React.FC = () => {
 
       {/* Top bar — spans full width OVER sidebar, only on creation routes */}
       {isCreationRoute && (
-        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex items-center justify-center">
-          {location.pathname === '/business/new' && (
-            <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">Select one</p>
-          )}
+        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex items-center">
+          {/* Center the text in the content area (offset by sidebar width) */}
+          <div className="w-[56px] shrink-0" />
+          <div className="flex-1 flex items-center justify-center">
+            {(location.pathname === '/business/new' || location.pathname === '/business/ad-types') && (
+              <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
+                {location.pathname === '/business/new' ? 'Select one' : 'Ad types'}
+              </p>
+            )}
+          </div>
         </div>
       )}
 

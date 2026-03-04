@@ -260,13 +260,13 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       {/* Bottom — horizontal when expanded, stacked when collapsed */}
       <div className={cn(
         'shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3 px-0 py-3 items-center' : 'flex-row justify-between px-3 py-3'
+        isCollapsed ? 'flex-col gap-3 py-3' : 'flex-row justify-between px-3 py-3'
       )}>
-        {/* Profile / user menu — centered when collapsed */}
-        <div ref={userMenuRef} className={cn('relative', isCollapsed ? 'flex justify-center w-full' : '')}>
+        {/* Profile / user menu */}
+        <div ref={userMenuRef} className={cn('relative', isCollapsed ? 'flex justify-center' : '')}>
           <button
             onClick={() => setUserMenuOpen(o => !o)}
-            className="h-7 w-7 rounded-full overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity"
+            className="h-6 w-6 rounded-md overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
             title="Profile"
           >
             {logoUrl ? (
@@ -306,11 +306,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           )}
         </div>
 
-        {/* Inbox — centered when collapsed */}
+        {/* Inbox */}
         <button
           className={cn(
-            'text-muted-foreground hover:text-foreground transition-colors',
-            isCollapsed ? 'flex justify-center w-full' : ''
+            'text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center',
+            isCollapsed ? '' : ''
           )}
           title="Inbox"
         >

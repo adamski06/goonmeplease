@@ -66,13 +66,13 @@ const CreateCampaignChooser: React.FC = () => {
           </button>
         </div>
 
-        {/* Rewards link */}
+        {/* See all ad types link */}
         <div className="flex justify-end mt-3" style={{ maxWidth: '920px', width: '100%', margin: '12px auto 0' }}>
           <button
-            onClick={() => navigate('/business/rewards')}
+            onClick={() => navigate('/business/ad-types')}
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
           >
-            Rewards
+            See all ad types
             <ArrowRight className="h-3 w-3" />
           </button>
         </div>
