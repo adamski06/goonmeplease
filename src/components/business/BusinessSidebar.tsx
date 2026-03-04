@@ -120,8 +120,8 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
-      {/* Logo spacer — fixed 64px, border always rendered to prevent layout shift */}
-      <div className="shrink-0 h-16 border-b border-border" style={{ borderColor: isCollapsed ? 'transparent' : undefined }} />
+      {/* Logo spacer — fixed height, border always rendered to prevent layout shift */}
+      <div className="shrink-0 h-10 border-b border-border" style={{ borderColor: isCollapsed ? 'transparent' : undefined }} />
 
       {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto overflow-x-hidden space-y-1.5 min-h-0 min-w-0">

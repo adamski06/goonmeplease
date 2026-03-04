@@ -71,7 +71,7 @@ const BusinessLayout: React.FC = () => {
   return (
     <div className="h-screen flex bg-background overflow-hidden relative">
       {/* Fixed logo overlay — always in same spot, never animates */}
-      <div className="absolute top-0 left-0 z-50 px-5 py-5 pointer-events-none">
+      <div className="absolute top-0 left-0 z-50 px-5 py-3 pointer-events-none">
         <img
           src={jarlaLogo}
           alt="Jarla"
@@ -82,7 +82,7 @@ const BusinessLayout: React.FC = () => {
 
       {/* Top bar — spans full width OVER sidebar, only on creation routes */}
       {isCreationRoute && (
-        <div className="absolute top-0 left-0 right-0 h-16 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex flex-col">
+        <div className="absolute top-0 left-0 right-0 h-10 border-b border-border bg-background animate-in slide-in-from-top-2 duration-300 z-30 flex flex-col">
           <div className="flex-1 flex items-center">
             {/* Center the text in the content area (offset by sidebar width) */}
             <div className="w-[56px] shrink-0" />
@@ -105,7 +105,7 @@ const BusinessLayout: React.FC = () => {
       {/* Content column */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Spacer to push content below topbar when it's visible */}
-        {isCreationRoute && <div className="shrink-0 h-16" />}
+        {isCreationRoute && <div className="shrink-0 h-10" />}
 
         <main className="flex-1 overflow-hidden">
           <Outlet />
