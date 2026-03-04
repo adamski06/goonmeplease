@@ -9,6 +9,8 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Check, Plus, X } from 'lucide-react';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import CampaignChat from '@/components/CampaignChat';
+import CurrencySelector from '@/components/CurrencySelector';
+import { formatCurrencyValue, getPlaceholderValue } from '@/data/currencies';
 
 const steps = ['Ad Details', 'Rate', 'Checkout'];
 
@@ -18,21 +20,11 @@ const CreateCampaign: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { symbol, label, formatPrice, currency, setCurrency } = useCurrency();
+  const { symbol, label, formatPrice, currency } = useCurrency();
 
-  // Currency-aware formatting for inline values
-  const fmtInline = (val: number | null) => {
-    if (val === null || val === 0) return '';
-    return currency === 'SEK' ? `${val} kr` : `$${val}`;
-  };
-  const fmtPlaceholder = (usdVal: number) => {
-    const v = currency === 'SEK' ? Math.round(usdVal * 10) : usdVal;
-    return currency === 'SEK' ? `${v} kr` : `$${v}`;
-  };
-  const fmtPlaceholderDecimal = (usdVal: number) => {
-    const v = currency === 'SEK' ? Math.round(usdVal * 10 * 100) / 100 : usdVal;
-    return currency === 'SEK' ? `${v} kr` : `$${v}`;
-  };
+  const fmtInline = (val: number | null) => formatCurrencyValue(val, currency);
+  const fmtPlaceholder = (usdVal: number) => getPlaceholderValue(usdVal, currency);
+  const fmtPlaceholderDecimal = (usdVal: number) => getPlaceholderValue(usdVal, currency, false);
 
   // Step 1: Ad details
   const [title, setTitle] = useState('');
@@ -291,7 +283,7 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Header labels — separate cards */}
-              <div className="grid gap-3" style={{ gridTemplateColumns: '80px 1fr 1fr 1fr 1fr' }}>
+              <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CURRENCY</div>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">CREATOR POT</div>
                 <div className="rounded-md bg-muted/50 px-4 py-2.5 text-xs font-semibold text-foreground uppercase tracking-wide">MAX PAYOUT / CREATOR</div>
@@ -300,16 +292,9 @@ const CreateCampaign: React.FC = () => {
               </div>
 
               {/* Input row — matching header style */}
-              <div className="grid gap-3 px-2" style={{ gridTemplateColumns: '80px 1fr 1fr 1fr 1fr' }}>
-                <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
-                  <select
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value as 'USD' | 'SEK')}
-                    className="bg-transparent outline-none w-full text-sm font-semibold text-foreground cursor-pointer"
-                  >
-                    <option value="USD">$ USD</option>
-                    <option value="SEK">kr SEK</option>
-                  </select>
+              <div className="grid gap-3 px-2" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr 1fr' }}>
+                <div className="rounded border border-border bg-muted/50 flex items-center px-2 h-8 overflow-visible">
+                  <CurrencySelector />
                 </div>
                 <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
                   <input
