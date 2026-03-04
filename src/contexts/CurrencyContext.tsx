@@ -6,12 +6,11 @@ type CurrencyCode = 'SEK' | 'USD';
 interface CurrencyContextType {
   currency: CurrencyCode;
   symbol: string;
-  rate: number; // multiplier from USD to user currency
-  /** Format a number that is stored in USD into the user's currency */
+  rate: number;
   formatPrice: (amountUsd: number, opts?: { decimals?: number; showSymbol?: boolean }) => string;
-  /** Just the converted number (no formatting) */
   convert: (amountUsd: number) => number;
-  /** Currency label like "sek" or "usd" for inline display */
+  /** Format a raw number with correct currency placement (e.g. "$5" or "50 kr") */
+  fmtVal: (val: number | null) => string;
   label: string;
   loading: boolean;
 }
@@ -77,8 +76,16 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [convert, currency]
   );
 
+  const fmtVal = useCallback(
+    (val: number | null) => {
+      if (val === null || val === 0) return '';
+      return currency === 'SEK' ? `${val} kr` : `$${val}`;
+    },
+    [currency]
+  );
+
   return (
-    <CurrencyContext.Provider value={{ currency, symbol, rate, formatPrice, convert, label, loading }}>
+    <CurrencyContext.Provider value={{ currency, symbol, rate, formatPrice, convert, fmtVal, label, loading }}>
       {children}
     </CurrencyContext.Provider>
   );

@@ -18,7 +18,20 @@ const CreateDeal: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { symbol, label } = useCurrency();
+  const { symbol, label, currency } = useCurrency();
+
+  const fmtInline = (val: number | null) => {
+    if (val === null || val === 0) return '';
+    return currency === 'SEK' ? `${val} kr` : `$${val}`;
+  };
+  const fmtPlaceholder = (usdVal: number) => {
+    const v = currency === 'SEK' ? Math.round(usdVal * 10) : usdVal;
+    return currency === 'SEK' ? `${v} kr` : `$${v}`;
+  };
+  const fmtPlaceholderDecimal = (usdVal: number) => {
+    const v = currency === 'SEK' ? Math.round(usdVal * 10 * 100) / 100 : usdVal;
+    return currency === 'SEK' ? `${v} kr` : `$${v}`;
+  };
 
   // Step 1: Ad details
   const [title, setTitle] = useState('');
@@ -234,12 +247,12 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="numeric"
-                    value={maxPayoutPerCreator ? `${symbol}${maxPayoutPerCreator}` : ''}
+                    value={maxPayoutPerCreator ? fmtInline(maxPayoutPerCreator) : ''}
                     onChange={(e) => {
                       const val = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0;
                       setMaxPayoutPerCreator(val > 0 ? val : null);
                     }}
-                    placeholder={`${symbol}25`}
+                    placeholder={fmtPlaceholder(25)}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
@@ -247,12 +260,12 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? `${symbol}${ratePerThousand}` : ''}
+                    value={ratePerThousand ? fmtInline(ratePerThousand) : ''}
                     onChange={(e) => {
                       const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       setRatePerThousand(Math.round(val * 100) / 100);
                     }}
-                    placeholder={`${symbol}2.00`}
+                    placeholder={fmtPlaceholderDecimal(2)}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
@@ -261,13 +274,13 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? `${symbol}${Math.round(ratePerThousand * 1.15 * 100) / 100}` : ''}
+                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.15 * 100) / 100) : ''}
                     onChange={(e) => {
                       const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
                       const base = Math.round((youPay / 1.15) * 100) / 100;
                       setRatePerThousand(base);
                     }}
-                    placeholder={`${symbol}2.30`}
+                    placeholder={fmtPlaceholderDecimal(2.3)}
                     className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
                   />
                   <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">/ 1000 views</span>
@@ -331,11 +344,11 @@ const CreateDeal: React.FC = () => {
                 )}
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Rate</p>
-                  <p className="text-sm font-semibold text-foreground">{symbol}{ratePerThousand} / 1,000 views</p>
+                  <p className="text-sm font-semibold text-foreground">{fmtInline(ratePerThousand)} / 1,000 views</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Max payout per creator</p>
-                  <p className="text-sm font-semibold text-foreground">{symbol}{maxPayoutPerCreator}</p>
+                  <p className="text-sm font-semibold text-foreground">{fmtInline(maxPayoutPerCreator)}</p>
                 </div>
               </div>
 
@@ -349,19 +362,19 @@ const CreateDeal: React.FC = () => {
               <div className="rounded-xl border border-border bg-card p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Rate per 1,000 views</span>
-                  <span className="text-sm font-medium text-foreground">{symbol}{ratePerThousand}</span>
+                  <span className="text-sm font-medium text-foreground">{fmtInline(ratePerThousand)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Max payout per creator</span>
-                  <span className="text-sm font-medium text-foreground">{symbol}{maxPayoutPerCreator}</span>
+                  <span className="text-sm font-medium text-foreground">{fmtInline(maxPayoutPerCreator)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
-                  <span className="text-sm font-medium text-foreground">{symbol}{maxPayoutPerCreator ? (Math.round(maxPayoutPerCreator * 0.15 * 100) / 100).toLocaleString() : '0'}</span>
+                  <span className="text-sm font-medium text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.15 * 100) / 100) : '0'}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Total per creator</span>
-                  <span className="text-lg font-bold text-foreground">{symbol}{maxPayoutPerCreator ? Math.round(maxPayoutPerCreator * 1.15 * 100) / 100 : '0'}</span>
+                  <span className="text-lg font-bold text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 1.15 * 100) / 100) : '0'}</span>
                 </div>
               </div>
             </div>
