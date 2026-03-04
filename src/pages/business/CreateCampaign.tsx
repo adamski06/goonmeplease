@@ -22,7 +22,7 @@ const CreateCampaign: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { symbol, label, formatPrice, currency } = useCurrency();
+  const { symbol, label, formatPrice, currency, rate } = useCurrency();
 
   const fmtInline = (val: number | null) => formatCurrencyValue(val, currency);
   const fmtPlaceholder = (usdVal: number) => getPlaceholderValue(usdVal, currency);
@@ -135,13 +135,16 @@ const CreateCampaign: React.FC = () => {
       return;
     }
 
+    // Convert local currency values to USD for storage
+    const toUsd = (localVal: number) => Math.round((localVal / rate) * 100) / 100;
+
     // Also create the campaign in the database before redirecting
     const { data: insertData, error: insertError } = await supabase.from('campaigns').insert({
       title: campaignData.title,
       brand_name: campaignData.brand_name,
       description: campaignData.description,
-      max_earnings: maxPayoutPerCreator,
-      total_budget: campaignData.total_budget,
+      max_earnings: maxPayoutPerCreator ? toUsd(maxPayoutPerCreator) : null,
+      total_budget: toUsd(campaignData.total_budget),
       guidelines: campaignData.guidelines,
       category: campaignData.category,
       business_id: user.id,
@@ -156,13 +159,13 @@ const CreateCampaign: React.FC = () => {
       return;
     }
 
-    // Create a campaign tier with the CPM rate
+    // Create a campaign tier with the CPM rate (stored in USD)
     if (ratePerThousand > 0) {
       await supabase.from('campaign_tiers').insert({
         campaign_id: insertData.id,
         min_views: 0,
         max_views: null,
-        rate_per_view: ratePerThousand,
+        rate_per_view: toUsd(ratePerThousand),
       });
     }
 

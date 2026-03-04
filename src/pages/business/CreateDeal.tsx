@@ -22,7 +22,7 @@ const CreateDeal: React.FC = () => {
   const [resultsShown, setResultsShown] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { symbol, label, currency } = useCurrency();
+  const { symbol, label, currency, rate } = useCurrency();
 
   const fmtInline = (val: number | null) => formatCurrencyValue(val, currency);
   const fmtPlaceholder = (usdVal: number) => getPlaceholderValue(usdVal, currency);
@@ -87,6 +87,9 @@ const CreateDeal: React.FC = () => {
       .eq('user_id', user.id)
       .maybeSingle();
 
+    // Convert local currency values to USD for storage
+    const toUsd = (localVal: number) => Math.round((localVal / rate) * 100) / 100;
+
     const { error } = await supabase.from('deals').insert({
       business_id: user.id,
       brand_name: bp?.company_name || 'My Brand',
@@ -95,8 +98,8 @@ const CreateDeal: React.FC = () => {
       description: description.trim() || null,
       guidelines: guidelinesArray.length > 0 ? guidelinesArray : null,
       category: audience.trim() || null,
-      rate_per_view: ratePerThousand,
-      max_earnings: maxPayoutPerCreator,
+      rate_per_view: toUsd(ratePerThousand),
+      max_earnings: maxPayoutPerCreator ? toUsd(maxPayoutPerCreator) : null,
       total_budget: null,
       is_active: true,
       status: 'active',

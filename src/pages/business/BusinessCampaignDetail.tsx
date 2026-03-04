@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CampaignData {
   id: string;
@@ -41,6 +42,7 @@ const BusinessCampaignDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { formatPrice, label, convert } = useCurrency();
   const [campaign, setCampaign] = useState<CampaignData | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [tiers, setTiers] = useState<{ min_views: number; max_views: number | null; rate_per_view: number }[]>([]);
@@ -267,8 +269,8 @@ const BusinessCampaignDetail: React.FC = () => {
             <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pot</span>
           </div>
           <p className="text-2xl font-bold" style={{ color: 'hsl(142, 60%, 30%)' }}>
-            ${potUsed >= 1000 ? `${(potUsed / 1000).toFixed(1)}k` : potUsed.toFixed(0)}
-            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ ${potTotal.toLocaleString()}</span>
+            {convert(potUsed).toLocaleString()}
+            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ {convert(potTotal).toLocaleString()} {label}</span>
           </p>
           {potTotal > 0 && (
             <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'hsla(142, 71%, 45%, 0.15)' }}>
@@ -350,18 +352,18 @@ const BusinessCampaignDetail: React.FC = () => {
             {campaign.max_earnings != null && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-20">Max payout</span>
-                <span className="text-sm font-semibold text-foreground">${campaign.max_earnings}</span>
+                <span className="text-sm font-semibold text-foreground">{formatPrice(campaign.max_earnings)}</span>
               </div>
             )}
             {tiers.length > 0 ? (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-20">Rate</span>
-                <span className="text-sm font-semibold text-foreground">${tiers[0].rate_per_view}/1k views</span>
+                <span className="text-sm font-semibold text-foreground">{formatPrice(tiers[0].rate_per_view)}/1k views</span>
               </div>
             ) : campaign.total_budget != null && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground w-20">Budget</span>
-                <span className="text-sm font-semibold text-foreground">${campaign.total_budget.toLocaleString()}</span>
+                <span className="text-sm font-semibold text-foreground">{formatPrice(campaign.total_budget)}</span>
               </div>
             )}
           </div>
