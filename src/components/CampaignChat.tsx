@@ -303,7 +303,15 @@ const CampaignChat: React.FC<CampaignChatProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="h-full flex flex-col bg-background relative">
+      {/* Collapse arrow - top right */}
+      <button
+        onClick={() => window.dispatchEvent(new Event('toggle-ai-chat'))}
+        className="absolute top-3 right-3 z-10 p-1.5 text-muted-foreground/50 hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+      </button>
+
       {/* Messages - centered vertically when few messages */}
       <div 
         ref={scrollRef}
