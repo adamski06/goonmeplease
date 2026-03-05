@@ -81,8 +81,17 @@ const CreateReward: React.FC = () => {
     }
   };
 
+  const looksLikeCode = (s: string) => {
+    if (s.length < 3 || s.length > 50) return false;
+    if (/\s{2,}/.test(s)) return false; // multiple spaces = likely a name/sentence
+    if (/^[a-z]+\s[a-z]+$/i.test(s)) return false; // "First Last" pattern
+    if (/^[a-z\s]+$/i.test(s) && s.includes(' ')) return false; // words with spaces
+    return /[A-Z0-9]/.test(s); // must contain at least one uppercase or digit
+  };
+
   const handleBulkPaste = (text: string) => {
-    const codes = text.split(/[\n,;]+/).map(c => c.trim()).filter(Boolean);
+    const raw = text.split(/[\n,;]+/).map(c => c.trim()).filter(Boolean);
+    const codes = raw.filter(looksLikeCode);
     const unique = codes.filter(c => !couponCodes.includes(c));
     if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
   };
