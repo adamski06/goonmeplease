@@ -108,7 +108,7 @@ const CreateReward: React.FC = () => {
       const wb = read(buffer);
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows: string[][] = utils.sheet_to_json(ws, { header: 1 });
-      const codes = rows.flat().map(c => String(c).trim()).filter(Boolean);
+      const codes = rows.flat().map(c => String(c).trim()).filter(Boolean).filter(looksLikeCode);
       const unique = codes.filter(c => !couponCodes.includes(c));
       if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
     } else {
