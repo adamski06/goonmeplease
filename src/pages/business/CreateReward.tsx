@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
 
@@ -78,6 +78,24 @@ const CreateReward: React.FC = () => {
       setCouponCodes([...couponCodes, code]);
       setNewCouponCode('');
     }
+  };
+
+  const handleBulkPaste = (text: string) => {
+    const codes = text.split(/[\n,;]+/).map(c => c.trim()).filter(Boolean);
+    const unique = codes.filter(c => !couponCodes.includes(c));
+    if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      handleBulkPaste(text);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   const removeCouponCode = (i: number) => setCouponCodes(couponCodes.filter((_, idx) => idx !== i));
@@ -337,11 +355,38 @@ const CreateReward: React.FC = () => {
                   <DialogTitle className="text-base font-semibold">Coupon Codes</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
+                  {/* Bulk paste area */}
+                  <div className="space-y-2">
+                    <Textarea
+                      placeholder="Paste codes here (one per line, or comma/semicolon separated)..."
+                      className="text-sm font-mono min-h-[80px]"
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        const text = e.clipboardData.getData('text');
+                        handleBulkPaste(text);
+                      }}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val.includes('\n') || val.includes(',') || val.includes(';')) {
+                          handleBulkPaste(val);
+                          e.target.value = '';
+                        }
+                      }}
+                    />
+                    <div className="flex items-center gap-2">
+                      <label className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                        <Upload className="h-3.5 w-3.5" /> Import from file (.txt, .csv)
+                        <input type="file" accept=".txt,.csv,.tsv" onChange={handleFileUpload} className="hidden" />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Single add */}
                   <div className="flex gap-2">
                     <Input
                       value={newCouponCode}
                       onChange={(e) => setNewCouponCode(e.target.value)}
-                      placeholder="Enter code..."
+                      placeholder="Or add one code..."
                       className="h-9 text-sm"
                       onKeyDown={(e) => e.key === 'Enter' && addCouponCode()}
                     />
@@ -352,6 +397,7 @@ const CreateReward: React.FC = () => {
 
                   {couponCodes.length > 0 && (
                     <>
+                      <p className="text-xs text-muted-foreground">{couponCodes.length} code{couponCodes.length !== 1 ? 's' : ''} added</p>
                       <div className="max-h-[240px] overflow-y-auto rounded-lg border border-border divide-y divide-border">
                         {couponCodes.map((code, i) => (
                           <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
@@ -372,7 +418,7 @@ const CreateReward: React.FC = () => {
                   )}
 
                   {couponCodes.length === 0 && (
-                    <p className="text-xs text-muted-foreground text-center py-4">No codes added yet. Add codes above.</p>
+                    <p className="text-xs text-muted-foreground text-center py-4">Paste codes above or import a file to get started.</p>
                   )}
                 </div>
               </DialogContent>
