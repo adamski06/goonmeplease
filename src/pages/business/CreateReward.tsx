@@ -7,10 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download, Upload, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
-import RewardAdPreview from '@/components/business/RewardAdPreview';
+
 
 const steps = ['Ad Details', 'Reward', 'Review'];
 const VIEW_PRESETS = [
@@ -155,7 +155,7 @@ const CreateReward: React.FC = () => {
 
   const formData = { brand_name: '', title, description, deadline: '', total_budget: 0 };
 
-  const [previewOpen, setPreviewOpen] = useState(true);
+  
 
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const shouldHideChat = step === 1;
@@ -190,18 +190,6 @@ const CreateReward: React.FC = () => {
           <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
             {stepTitles[step]}
           </p>
-          {step !== 2 && (
-            <>
-              <span className="text-border">|</span>
-              <button
-                onClick={() => setPreviewOpen(p => !p)}
-                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {previewOpen ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                Preview
-              </button>
-            </>
-          )}
         </div>,
         topbarCenter
       )}
@@ -511,32 +499,6 @@ const CreateReward: React.FC = () => {
           </div>
         </div>
 
-        {/* Live preview panel */}
-        <div
-          className="shrink-0 h-full overflow-hidden"
-          style={{
-            width: previewOpen && step !== 2 ? '380px' : '0px',
-            transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
-        >
-          <div
-            className="w-[380px] h-full shrink-0"
-            style={{
-              opacity: previewOpen && step !== 2 ? 1 : 0,
-              transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)',
-            }}
-          >
-            <RewardAdPreview
-              title={title}
-              description={description}
-              guidelines={guidelinesList}
-              rewardDescription={rewardDescription}
-              viewsRequired={effectiveViews}
-              couponCount={couponCodes.length}
-              audience={audience}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
