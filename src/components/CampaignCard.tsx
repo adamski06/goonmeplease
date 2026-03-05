@@ -203,12 +203,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           </div>
           <div className="flex items-center justify-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
-              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(campaign.maxEarnings)}</span>
+              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(campaign.maxEarnings, { decimals: 0 })}</span>
             </div>
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(displayRate)}</span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">/1000 views</span>
+              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(displayRate, { decimals: 0 })}</span>
+              <span className="text-sm font-semibold text-white/80 font-montserrat">/1k views</span>
             </div>
           </div>
         </div>

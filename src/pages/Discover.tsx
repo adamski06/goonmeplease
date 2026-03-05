@@ -257,12 +257,11 @@ const Discover: React.FC = () => {
                         </p>
                         <div className="flex items-center gap-1.5">
                           <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                            <span className="text-[10px] font-bold text-white font-montserrat">Max</span>
-                            <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${convert(item.maxEarnings)}` : `${convert(item.maxEarnings)} ${symbol}`}</span>
+                            <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(item.maxEarnings))}` : `${Math.floor(convert(item.maxEarnings))} ${symbol}`}</span>
                           </div>
                           {rate != null && (
                             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${convert(rate)}` : `${convert(rate)} ${symbol}`}</span>
+                              <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(rate))}` : `${Math.floor(convert(rate))} ${symbol}`}</span>
                               <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
                             </div>
                           )}
