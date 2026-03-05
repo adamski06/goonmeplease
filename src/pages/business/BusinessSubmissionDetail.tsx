@@ -53,7 +53,6 @@ const BusinessSubmissionDetail: React.FC = () => {
       if (data) {
         setSubmission(data as SubmissionData);
         
-        // Fetch creator username
         const { data: profile } = await supabase
           .from('profiles')
           .select('username')
@@ -61,7 +60,6 @@ const BusinessSubmissionDetail: React.FC = () => {
           .maybeSingle();
         setCreatorUsername(profile?.username || `User ${data.creator_id.slice(0, 6)}`);
 
-        // Fetch earnings for this submission
         const { data: earningsData } = await supabase
           .from('earnings')
           .select('amount')
@@ -69,7 +67,6 @@ const BusinessSubmissionDetail: React.FC = () => {
           .maybeSingle();
         if (earningsData) setCreatorEarnings(earningsData.amount);
 
-        // Fetch campaign pot info
         const { data: campaign } = await supabase
           .from('campaigns')
           .select('total_budget, budget_spent')
@@ -82,7 +79,6 @@ const BusinessSubmissionDetail: React.FC = () => {
       }
       setLoading(false);
 
-      // Auto-fetch fresh TikTok stats
       if (data) {
         try {
           const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
@@ -132,7 +128,6 @@ const BusinessSubmissionDetail: React.FC = () => {
     ? `https://www.tiktok.com/embed/v2/${submission.tiktok_video_id}`
     : null;
 
-  // Extract TikTok username from URL for profile embed
   const tiktokUsernameMatch = submission.tiktok_video_url?.match(/tiktok\.com\/@([^/]+)/);
   const tiktokUsername = tiktokUsernameMatch ? tiktokUsernameMatch[1] : null;
 
@@ -142,114 +137,150 @@ const BusinessSubmissionDetail: React.FC = () => {
     boxShadow: 'inset 0 1px 0 hsl(var(--background) / 0.6)',
   };
 
+  // Embed sizing — bigger video
+  const embedScale = 0.78;
+  const embedNativeW = 325;
+  const embedNativeH = 740;
+  const embedW = Math.ceil(embedNativeW * embedScale);
+  const embedH = Math.ceil(embedNativeH * embedScale);
+
   return (
-    <div className="h-full overflow-y-auto scrollbar-thin pr-0">
-      <div className="max-w-5xl mx-auto px-6 py-10">
-      {/* Back */}
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back
-      </button>
+    <div className="h-full overflow-y-auto scrollbar-thin">
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        {/* Back */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </button>
 
-      {/* Creator header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0">
-          <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
-            {creatorUsername.charAt(0).toUpperCase()}
-          </span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-base font-semibold text-foreground font-montserrat">@{creatorUsername}</p>
-          <p className="text-xs text-muted-foreground">
-            Submitted {new Date(submission.created_at).toLocaleDateString()}
-          </p>
-        </div>
-        <Badge variant="outline" className={statusStyles[submission.status] || 'bg-muted text-muted-foreground'}>
-          {statusLabels[submission.status] || submission.status}
-        </Badge>
-      </div>
+        {/* Side-by-side: TikTok embed LEFT, info RIGHT */}
+        <div className="flex gap-8 items-start">
+          {/* TikTok video embed — left column */}
+          <div className="flex-shrink-0">
+            {tiktokEmbedUrl ? (
+              <div
+                style={{
+                  width: embedW,
+                  height: embedH,
+                  background: 'hsl(var(--card))',
+                  borderRadius: 16,
+                  overflow: 'hidden',
+                  border: '1px solid hsl(var(--border))',
+                }}
+              >
+                <iframe
+                  src={tiktokEmbedUrl}
+                  style={{
+                    width: embedNativeW,
+                    height: embedNativeH,
+                    border: 'none',
+                    display: 'block',
+                    transform: `scale(${embedScale})`,
+                    transformOrigin: 'top left',
+                    colorScheme: 'normal',
+                    willChange: 'transform',
+                  }}
+                  allow="encrypted-media"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="rounded-2xl p-8 text-center" style={{ ...cardStyle, width: embedW }}>
+                <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
+                <a
+                  href={submission.tiktok_video_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline"
+                >
+                  Open on TikTok →
+                </a>
+              </div>
+            )}
+          </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <div className="rounded-[20px] p-4" style={cardStyle}>
-          <span className="text-xs text-muted-foreground">Views</span>
-          <p className="text-xl font-bold text-foreground mt-1">
-            {(submission.current_views || 0).toLocaleString()}
-          </p>
-        </div>
-        <div className="rounded-[20px] p-4" style={cardStyle}>
-          <span className="text-xs text-muted-foreground">Likes</span>
-          <p className="text-xl font-bold text-foreground mt-1">
-            {(submission.current_likes || 0).toLocaleString()}
-          </p>
-        </div>
-        <div className="rounded-[20px] p-4" style={cardStyle}>
-          <span className="text-xs text-muted-foreground">Shares</span>
-          <p className="text-xl font-bold text-foreground mt-1">
-            {(submission.current_shares || 0).toLocaleString()}
-          </p>
-        </div>
-      </div>
-
-      {/* Earnings & Pot */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="rounded-[20px] p-4" style={cardStyle}>
-          <span className="text-xs text-muted-foreground">Creator Earnings</span>
-          <p className="text-xl font-bold text-foreground mt-1">
-            {convert(creatorEarnings).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">{label}</span>
-          </p>
-        </div>
-        <div className="rounded-[20px] p-4" style={cardStyle}>
-          <span className="text-xs text-muted-foreground">Pot</span>
-          <p className="text-xl font-bold text-foreground mt-1">
-            {convert(potSpent).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {convert(potTotal).toLocaleString()} {label}</span>
-          </p>
-          {potTotal > 0 && (
-            <div className="w-full h-1.5 rounded-full bg-muted mt-2">
-              <div className="h-full rounded-full bg-foreground/60" style={{ width: `${Math.min((potSpent / potTotal) * 100, 100)}%` }} />
+          {/* Right column — all info nodes */}
+          <div className="flex-1 min-w-0 flex flex-col gap-4">
+            {/* Creator header */}
+            <div className="flex items-center gap-3">
+              <div className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0">
+                <span className="text-sm font-bold text-muted-foreground/60 font-montserrat">
+                  {creatorUsername.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-semibold text-foreground font-montserrat">@{creatorUsername}</p>
+                <p className="text-xs text-muted-foreground">
+                  Submitted {new Date(submission.created_at).toLocaleDateString()}
+                </p>
+              </div>
+              <Badge variant="outline" className={statusStyles[submission.status] || 'bg-muted text-muted-foreground'}>
+                {statusLabels[submission.status] || submission.status}
+              </Badge>
             </div>
-          )}
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="rounded-[20px] p-4" style={cardStyle}>
+                <span className="text-xs text-muted-foreground">Views</span>
+                <p className="text-xl font-bold text-foreground mt-1">
+                  {(submission.current_views || 0).toLocaleString()}
+                </p>
+              </div>
+              <div className="rounded-[20px] p-4" style={cardStyle}>
+                <span className="text-xs text-muted-foreground">Likes</span>
+                <p className="text-xl font-bold text-foreground mt-1">
+                  {(submission.current_likes || 0).toLocaleString()}
+                </p>
+              </div>
+              <div className="rounded-[20px] p-4" style={cardStyle}>
+                <span className="text-xs text-muted-foreground">Shares</span>
+                <p className="text-xl font-bold text-foreground mt-1">
+                  {(submission.current_shares || 0).toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            {/* Earnings & Pot */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-[20px] p-4" style={cardStyle}>
+                <span className="text-xs text-muted-foreground">Creator Earnings</span>
+                <p className="text-xl font-bold text-foreground mt-1">
+                  {convert(creatorEarnings).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">{label}</span>
+                </p>
+              </div>
+              <div className="rounded-[20px] p-4" style={cardStyle}>
+                <span className="text-xs text-muted-foreground">Pot</span>
+                <p className="text-xl font-bold text-foreground mt-1">
+                  {convert(potSpent).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {convert(potTotal).toLocaleString()} {label}</span>
+                </p>
+                {potTotal > 0 && (
+                  <div className="w-full h-1.5 rounded-full bg-muted mt-2">
+                    <div className="h-full rounded-full bg-foreground/60" style={{ width: `${Math.min((potSpent / potTotal) * 100, 100)}%` }} />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* TikTok profile embed */}
+            {tiktokUsername && (
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ border: '1px solid hsl(var(--border))' }}
+              >
+                <iframe
+                  src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
+                  style={{ width: '100%', height: 300, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal' }}
+                  allow="encrypted-media"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-      {/* TikTok embeds: video + profile side by side */}
-      <div className="flex gap-4 items-start">
-        {tiktokEmbedUrl ? (
-          <div className="flex-shrink-0" style={{ width: Math.ceil(325 * 0.63), height: 475, background: 'white', borderRadius: 8 }}>
-            <iframe
-              src={tiktokEmbedUrl}
-              style={{ width: 325, height: 740, border: 'none', display: 'block', transform: 'scale(0.63)', transformOrigin: 'top left', colorScheme: 'normal', willChange: 'transform' }}
-              allow="encrypted-media"
-              allowFullScreen
-            />
-          </div>
-        ) : (
-          <div className="rounded-2xl p-8 text-center flex-1" style={cardStyle}>
-            <p className="text-sm text-muted-foreground mb-3">TikTok embed unavailable</p>
-            <a
-              href={submission.tiktok_video_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-primary hover:underline"
-            >
-              Open on TikTok →
-            </a>
-          </div>
-        )}
-
-        {tiktokUsername && (
-          <iframe
-            src={`https://www.tiktok.com/embed/@${tiktokUsername}`}
-            className="flex-shrink-0"
-            style={{ width: 610, height: 475, border: 'none', display: 'block', background: 'hsl(var(--background))', colorScheme: 'normal', borderRadius: 8 }}
-            allow="encrypted-media"
-            allowFullScreen
-          />
-        )}
-      </div>
       </div>
     </div>
   );

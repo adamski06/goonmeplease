@@ -138,7 +138,7 @@ const BusinessLayout: React.FC = () => {
         {/* Spacer to push content below topbar when it's visible */}
         {isCreationRoute && <div className="shrink-0 h-10" />}
 
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
