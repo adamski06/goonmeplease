@@ -257,8 +257,8 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
                   <div className="flex items-baseline justify-between mb-1">
                     <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Max Earnings</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-xl font-bold text-white font-montserrat">{deal.maxEarnings.toLocaleString()}</span>
-                      <span className="text-xs text-white/60 font-jakarta">sek</span>
+                      <span className="text-xl font-bold text-white font-montserrat">{convert(deal.maxEarnings).toLocaleString()}</span>
+                      <span className="text-xs text-white/60 font-jakarta">{label}</span>
                     </div>
                   </div>
                   <p className="text-xs text-white/50 font-jakarta">Based on your video's views after acceptance.</p>
