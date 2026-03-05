@@ -57,11 +57,38 @@ const Auth: React.FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
+  // Detect returning OAuth users who need onboarding
   useEffect(() => {
-    if (!loading && user && !isSignUp) {
-      checkCreatorRole();
+    if (!loading && user) {
+      // If we're mid-signup flow (email), don't interfere
+      if (isSignUp && signUpStep !== 'credentials') return;
+
+      // Check if this user needs onboarding (new OAuth user with no username)
+      const checkOnboarding = async () => {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (!profile?.username) {
+          // New user (OAuth or otherwise) — show TikTok onboarding
+          setNewUserId(user.id);
+          setIsSignUp(true);
+          setSignUpStep('tiktok');
+          setAuthView('signup');
+          return;
+        }
+
+        // Existing user with profile — check roles and redirect
+        if (!isSignUp) {
+          checkCreatorRole();
+        }
+      };
+
+      checkOnboarding();
     }
-  }, [user, loading, isSignUp]);
+  }, [user, loading]);
 
   const checkCreatorRole = async () => {
     if (!user) return;
