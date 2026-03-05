@@ -43,6 +43,9 @@ const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaign
 const AdTypesLibrary = lazy(() => import("./pages/business/AdTypesLibrary"));
 const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
 const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
+const PublicAd = lazy(() => import("./pages/PublicAd"));
+const PublicBrand = lazy(() => import("./pages/PublicBrand"));
+const EmbedAd = lazy(() => import("./pages/EmbedAd"));
 
 const queryClient = new QueryClient();
 
