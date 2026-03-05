@@ -151,7 +151,8 @@ const CreateReward: React.FC = () => {
       .eq('user_id', user.id)
       .maybeSingle();
 
-    const { error } = await supabase.from('reward_ads').insert({
+    // Insert the reward ad first
+    const { data: rewardAd, error } = await supabase.from('reward_ads').insert({
       business_id: user.id,
       brand_name: bp?.company_name || 'My Brand',
       brand_logo_url: bp?.logo_url || null,
@@ -164,16 +165,32 @@ const CreateReward: React.FC = () => {
       coupon_codes: couponCodes.length > 0 ? couponCodes : null,
       is_active: true,
       status: 'active',
-    } as any);
+    } as any).select('id').single();
 
-    if (error) {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    if (error || !rewardAd) {
+      toast({ title: 'Error', description: error?.message || 'Failed to create reward', variant: 'destructive' });
       setIsSubmitting(false);
       return;
     }
 
-    toast({ title: 'Reward ad launched!' });
-    navigate('/business/deals');
+    // Redirect to Stripe setup to save payment method
+    try {
+      const { data: setupData, error: setupError } = await supabase.functions.invoke('create-reward-setup', {
+        body: { rewardAdId: rewardAd.id },
+      });
+
+      if (setupError || !setupData?.url) {
+        throw new Error(setupError?.message || 'Failed to create payment setup');
+      }
+
+      // Redirect to Stripe Checkout (setup mode)
+      window.location.href = setupData.url;
+    } catch (err: any) {
+      // If setup fails, still navigate — the reward is created, card can be added later
+      console.error('Stripe setup error:', err);
+      toast({ title: 'Reward ad launched!', description: 'Note: Payment method setup skipped. You can add it later.' });
+      navigate('/business/rewards');
+    }
   };
 
   const formData = { brand_name: '', title, description, deadline: '', total_budget: 0 };

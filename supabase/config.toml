@@ -2,3 +2,9 @@ project_id = "ktnqolddfsqkbqhmmiiz"
 
 [functions.create-campaign-checkout]
 verify_jwt = false
+
+[functions.create-reward-setup]
+verify_jwt = false
+
+[functions.charge-reward-video]
+verify_jwt = false
