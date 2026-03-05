@@ -522,6 +522,60 @@ export type Database = {
         }
         Relationships: []
       }
+      reward_ads: {
+        Row: {
+          brand_logo_url: string | null
+          brand_name: string
+          business_id: string
+          category: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          guidelines: string[] | null
+          id: string
+          is_active: boolean | null
+          reward_description: string
+          status: string | null
+          title: string
+          updated_at: string
+          views_required: number
+        }
+        Insert: {
+          brand_logo_url?: string | null
+          brand_name: string
+          business_id: string
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          guidelines?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          reward_description: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          views_required?: number
+        }
+        Update: {
+          brand_logo_url?: string | null
+          brand_name?: string
+          business_id?: string
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          guidelines?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          reward_description?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          views_required?: number
+        }
+        Relationships: []
+      }
       tiktok_accounts: {
         Row: {
           access_token: string | null
