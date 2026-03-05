@@ -513,17 +513,16 @@ const CreateReward: React.FC = () => {
 
         {/* Live preview panel */}
         <div
-          className="shrink-0 h-full overflow-hidden border-l border-border"
+          className="shrink-0 h-full overflow-hidden"
           style={{
-            width: showPreview ? '380px' : '0px',
-            borderLeftWidth: showPreview ? '1px' : '0px',
+            width: previewOpen && step !== 2 ? '380px' : '0px',
             transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
           <div
             className="w-[380px] h-full shrink-0"
             style={{
-              opacity: showPreview ? 1 : 0,
+              opacity: previewOpen && step !== 2 ? 1 : 0,
               transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)',
             }}
           >
