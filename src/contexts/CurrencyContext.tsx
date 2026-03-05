@@ -70,7 +70,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const label = currency.toLowerCase();
 
   const convert = useCallback(
-    (amountUsd: number) => Math.round(amountUsd * rate * 100) / 100,
+    (amountUsd: number) => Math.floor(amountUsd * rate * 100) / 100,
     [rate]
   );
 
@@ -78,7 +78,8 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     (amountUsd: number, opts?: { decimals?: number; showSymbol?: boolean }) => {
       const converted = convert(amountUsd);
       const decimals = opts?.decimals ?? (converted % 1 === 0 ? 0 : 2);
-      const formatted = converted.toLocaleString(undefined, {
+      const displayVal = decimals === 0 ? Math.floor(converted) : converted;
+      const formatted = displayVal.toLocaleString(undefined, {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
       });
