@@ -27,7 +27,7 @@ import img8 from '@/assets/campaigns/food-delivery.jpg';
 
 const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
-// Signup flow: credentials → tiktok → phone
+// Signup flow: credentials → tiktok → phone (email) or just tiktok (Apple)
 type SignUpStep = 'credentials' | 'tiktok' | 'phone';
 type AuthView = 'welcome' | 'signup' | 'login';
 
@@ -51,17 +51,49 @@ const Auth: React.FC = () => {
   const [newUserId, setNewUserId] = useState<string | null>(null);
   const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [showMethodSheet, setShowMethodSheet] = useState(false);
+  const [isOAuthUser, setIsOAuthUser] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useTranslation();
 
+  // Detect returning OAuth users who need onboarding
   useEffect(() => {
-    if (!loading && user && !isSignUp) {
-      checkCreatorRole();
+    if (!loading && user) {
+      // If we're mid-signup flow (email), don't interfere
+      if (isSignUp && signUpStep !== 'credentials') return;
+
+      // Check if this user needs onboarding (new OAuth user with no username)
+      const checkOnboarding = async () => {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (!profile?.username) {
+          // New user (OAuth or otherwise) — show TikTok onboarding
+          // Check if this is an OAuth user (provider !== email)
+          const provider = user.app_metadata?.provider;
+          const oauthUser = provider && provider !== 'email';
+          setIsOAuthUser(!!oauthUser);
+          setNewUserId(user.id);
+          setIsSignUp(true);
+          setSignUpStep('tiktok');
+          setAuthView('signup');
+          return;
+        }
+
+        // Existing user with profile — check roles and redirect
+        if (!isSignUp) {
+          checkCreatorRole();
+        }
+      };
+
+      checkOnboarding();
     }
-  }, [user, loading, isSignUp]);
+  }, [user, loading]);
 
   const checkCreatorRole = async () => {
     if (!user) return;
@@ -118,11 +150,19 @@ const Auth: React.FC = () => {
   };
 
   const handleTikTokNext = (username: string) => {
-    // Username is set from TikTok handle in the TikTokStep component
+    // OAuth users (Apple) skip phone step — go straight to app
+    if (isOAuthUser) {
+      navigate('/user');
+      return;
+    }
     setSignUpStep('phone');
   };
 
   const handleTikTokSkip = () => {
+    if (isOAuthUser) {
+      navigate('/user');
+      return;
+    }
     setSignUpStep('phone');
   };
 
@@ -406,17 +446,19 @@ const Auth: React.FC = () => {
                 <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
               )}
 
-              {/* Step indicator */}
-              <div className="flex justify-center gap-2 mt-6">
-                {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
-                  <div
-                    key={s}
-                    className={`h-1.5 rounded-full transition-all ${
-                      s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
-                    }`}
-                  />
-                ))}
-              </div>
+              {/* Step indicator — hide for OAuth users (single step) */}
+              {!isOAuthUser && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
+                    <div
+                      key={s}
+                      className={`h-1.5 rounded-full transition-all ${
+                        s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           ) : (
             <LoginForm

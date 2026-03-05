@@ -108,7 +108,7 @@ const App = () => (
                 <Route path="/ad/:id" element={<Suspense fallback={<BusinessLoader />}><PublicAd /></Suspense>} />
                 <Route path="/brand/:businessId" element={<Suspense fallback={<BusinessLoader />}><PublicBrand /></Suspense>} />
                 <Route path="/embed/ad/:id" element={<Suspense fallback={<BusinessLoader />}><EmbedAd /></Suspense>} />
-                <Route path="/" element={<Navigate to="/user" replace />} />
+                <Route path="/" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
