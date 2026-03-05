@@ -30,6 +30,7 @@ export type Database = {
           organization_number: string | null
           phone_number: string | null
           postal_code: string | null
+          stripe_customer_id: string | null
           target_audience: string | null
           updated_at: string
           user_id: string
@@ -51,6 +52,7 @@ export type Database = {
           organization_number?: string | null
           phone_number?: string | null
           postal_code?: string | null
+          stripe_customer_id?: string | null
           target_audience?: string | null
           updated_at?: string
           user_id: string
@@ -72,6 +74,7 @@ export type Database = {
           organization_number?: string | null
           phone_number?: string | null
           postal_code?: string | null
+          stripe_customer_id?: string | null
           target_audience?: string | null
           updated_at?: string
           user_id?: string
