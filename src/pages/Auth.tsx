@@ -51,6 +51,7 @@ const Auth: React.FC = () => {
   const [newUserId, setNewUserId] = useState<string | null>(null);
   const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [showMethodSheet, setShowMethodSheet] = useState(false);
+  const [isOAuthUser, setIsOAuthUser] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
