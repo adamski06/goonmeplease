@@ -151,7 +151,8 @@ const CreateReward: React.FC = () => {
       .eq('user_id', user.id)
       .maybeSingle();
 
-    const { error } = await supabase.from('reward_ads').insert({
+    // Insert the reward ad first
+    const { data: rewardAd, error } = await supabase.from('reward_ads').insert({
       business_id: user.id,
       brand_name: bp?.company_name || 'My Brand',
       brand_logo_url: bp?.logo_url || null,
@@ -164,16 +165,32 @@ const CreateReward: React.FC = () => {
       coupon_codes: couponCodes.length > 0 ? couponCodes : null,
       is_active: true,
       status: 'active',
-    } as any);
+    } as any).select('id').single();
 
-    if (error) {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    if (error || !rewardAd) {
+      toast({ title: 'Error', description: error?.message || 'Failed to create reward', variant: 'destructive' });
       setIsSubmitting(false);
       return;
     }
 
-    toast({ title: 'Reward ad launched!' });
-    navigate('/business/deals');
+    // Redirect to Stripe setup to save payment method
+    try {
+      const { data: setupData, error: setupError } = await supabase.functions.invoke('create-reward-setup', {
+        body: { rewardAdId: rewardAd.id },
+      });
+
+      if (setupError || !setupData?.url) {
+        throw new Error(setupError?.message || 'Failed to create payment setup');
+      }
+
+      // Redirect to Stripe Checkout (setup mode)
+      window.location.href = setupData.url;
+    } catch (err: any) {
+      // If setup fails, still navigate — the reward is created, card can be added later
+      console.error('Stripe setup error:', err);
+      toast({ title: 'Reward ad launched!', description: 'Note: Payment method setup skipped. You can add it later.' });
+      navigate('/business/rewards');
+    }
   };
 
   const formData = { brand_name: '', title, description, deadline: '', total_budget: 0 };
@@ -508,6 +525,11 @@ const CreateReward: React.FC = () => {
                   <p className="font-semibold text-foreground mb-1">How Rewards work</p>
                   <p>Creators post a video about your brand. Once they hit the required views, they receive your reward. No monetary payout — you provide the reward directly.</p>
                 </div>
+
+                <div className="rounded-xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">
+                  <p className="font-semibold text-foreground mb-1">Billing</p>
+                  <p>You'll be charged <span className="font-semibold text-foreground">$1.20 per video</span> created on this reward ad. A payment method will be saved during checkout.</p>
+                </div>
               </div>
             )}
 
@@ -530,7 +552,7 @@ const CreateReward: React.FC = () => {
                   disabled={isSubmitting}
                   className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {isSubmitting ? 'Launching...' : 'Launch Reward Ad'}
+                  {isSubmitting ? 'Setting up...' : 'Save card & Launch'}
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               )}
