@@ -78,7 +78,8 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     (amountUsd: number, opts?: { decimals?: number; showSymbol?: boolean }) => {
       const converted = convert(amountUsd);
       const decimals = opts?.decimals ?? (converted % 1 === 0 ? 0 : 2);
-      const formatted = converted.toLocaleString(undefined, {
+      const displayVal = decimals === 0 ? Math.floor(converted) : converted;
+      const formatted = displayVal.toLocaleString(undefined, {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
       });
