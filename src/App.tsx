@@ -43,6 +43,9 @@ const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaign
 const AdTypesLibrary = lazy(() => import("./pages/business/AdTypesLibrary"));
 const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
 const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
+const PublicAd = lazy(() => import("./pages/PublicAd"));
+const PublicBrand = lazy(() => import("./pages/PublicBrand"));
+const EmbedAd = lazy(() => import("./pages/EmbedAd"));
 
 const queryClient = new QueryClient();
 
@@ -100,6 +103,9 @@ const App = () => (
                   <Route path="settings" element={<BusinessSettings />} />
                 </Route>
                 <Route path="/rewards-embed" element={<Suspense fallback={<BusinessLoader />}><RewardsEmbed /></Suspense>} />
+                <Route path="/ad/:id" element={<Suspense fallback={<BusinessLoader />}><PublicAd /></Suspense>} />
+                <Route path="/brand/:businessId" element={<Suspense fallback={<BusinessLoader />}><PublicBrand /></Suspense>} />
+                <Route path="/embed/ad/:id" element={<Suspense fallback={<BusinessLoader />}><EmbedAd /></Suspense>} />
                 <Route path="/" element={<Navigate to="/user" replace />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
