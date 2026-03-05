@@ -150,11 +150,19 @@ const Auth: React.FC = () => {
   };
 
   const handleTikTokNext = (username: string) => {
-    // Username is set from TikTok handle in the TikTokStep component
+    // OAuth users (Apple) skip phone step — go straight to app
+    if (isOAuthUser) {
+      navigate('/user');
+      return;
+    }
     setSignUpStep('phone');
   };
 
   const handleTikTokSkip = () => {
+    if (isOAuthUser) {
+      navigate('/user');
+      return;
+    }
     setSignUpStep('phone');
   };
 
