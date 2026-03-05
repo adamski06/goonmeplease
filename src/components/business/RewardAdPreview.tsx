@@ -1,5 +1,6 @@
 import React from 'react';
-import { ChevronLeft, Bookmark, Gift, Eye } from 'lucide-react';
+import { Bookmark, Gift, Eye } from 'lucide-react';
+import jarlaLogo from '@/assets/jarla-logo.png';
 
 interface RewardAdPreviewProps {
   title: string;
@@ -27,111 +28,94 @@ const RewardAdPreview: React.FC<RewardAdPreviewProps> = ({
     <div className="h-full flex items-center justify-center bg-muted/30">
       <div className="w-[300px] rounded-[36px] border-[3px] border-border/80 bg-white shadow-2xl overflow-hidden relative" style={{ height: '560px' }}>
         {/* Status bar */}
-        <div className="h-7 bg-white" />
+        <div className="h-6 bg-white" />
 
-        {/* Top bar */}
+        {/* Top bar - Jarla icon + brand name + badge */}
         <div className="flex items-center gap-3 px-4 pb-3 bg-white border-b border-black/5">
-          <div className="p-1 -ml-1">
-            <ChevronLeft className="h-5 w-5 text-black/20" />
+          <div className="w-7 h-7 rounded-md bg-neutral-100 flex items-center justify-center flex-shrink-0 border border-black/10 overflow-hidden p-0.5">
+            <img src={jarlaLogo} alt="J" className="w-full h-full object-contain" />
           </div>
-          <div className="w-7 h-7 rounded-md bg-neutral-100 flex items-center justify-center flex-shrink-0 border border-black/10">
-            <span className="text-xs font-bold text-black">
-              {title ? title.charAt(0).toUpperCase() : 'R'}
-            </span>
-          </div>
-          <h1 className="text-sm font-bold text-black font-montserrat flex-1 truncate">
+          <h1 className="text-[15px] font-bold text-black font-montserrat flex-1 truncate">
             {title || 'Your Brand'}
           </h1>
-          <div className="p-1">
-            <Bookmark className="h-4 w-4 text-black/20" strokeWidth={1.5} />
+          <div className="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+            Reward
           </div>
         </div>
 
         {/* Scrollable content */}
-        <div className="overflow-y-auto px-4 pt-4" style={{ height: 'calc(100% - 40px - 28px - 56px)' }}>
+        <div className="overflow-y-auto px-4 pt-5" style={{ height: 'calc(100% - 34px - 40px - 56px)' }}>
+          {/* Show picture placeholder */}
+          <div className="w-full h-10 rounded-full bg-neutral-100 border border-black/5 flex items-center justify-center mb-5">
+            <span className="text-[13px] text-black/40 font-jakarta">Show picture</span>
+          </div>
+
           {/* Description */}
-          <p className="text-[13px] text-black font-jakarta leading-relaxed mb-5">
-            {description || <span className="text-black/30">Ad description will appear here...</span>}
+          <p className="text-[15px] text-black font-jakarta leading-relaxed mb-6">
+            {description || <span className="text-black/25">Ad description will appear here...</span>}
           </p>
 
-          {/* Reward Display */}
-          <div className="mb-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Gift className="h-4 w-4 text-emerald-600" />
-              <span className="text-xs font-bold text-black font-montserrat uppercase tracking-wide">Reward</span>
-            </div>
-
-            <div className="bg-black px-3 py-1.5 rounded-full rounded-br-none inline-flex items-baseline gap-1 max-w-full">
-              <span className="text-[13px] font-bold text-white font-montserrat truncate">
-                {rewardDescription || 'Your reward'}
+          {/* Reward card - light emerald tint like the blue "How Deals work" but for rewards */}
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-5 mb-6">
+            <h3 className="text-[15px] font-bold text-emerald-700 font-montserrat mb-3">Reward</h3>
+            <div className="flex items-start gap-2 mb-2">
+              <Gift className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+              <span className="text-[14px] text-black font-jakarta">
+                {rewardDescription || <span className="text-black/25">Reward description...</span>}
               </span>
             </div>
-
-            <div className="relative py-3">
-              <div className="h-[2px] bg-black w-full" />
-              <div className="absolute z-20" style={{ left: '0%', top: '50%', transform: 'translateY(-50%)' }}>
-                <div className="w-[2px] h-[10px] bg-black" />
-              </div>
+            <div className="flex items-center gap-1.5 mt-3">
+              <Eye className="h-3.5 w-3.5 text-emerald-600/70" />
+              <span className="text-[13px] text-black/60 font-jakarta">{viewsLabel}</span>
             </div>
-
-            <div className="bg-white border border-black/10 px-3 py-1.5 rounded-full rounded-tr-none inline-flex items-center gap-1">
-              <Eye className="h-3 w-3 text-black/50" />
-              <span className="text-xs font-normal text-black font-jakarta">{viewsLabel}</span>
-            </div>
-
             {couponCount > 0 && (
-              <p className="text-xs text-emerald-600 mt-2 font-jakarta">
+              <p className="text-[12px] text-emerald-600 mt-2 font-jakarta">
                 {couponCount} coupon code{couponCount > 1 ? 's' : ''} included
               </p>
             )}
           </div>
 
-          {/* Requirements */}
-          <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 rounded-xl p-4 mb-4 -mx-1">
-            <h3 className="text-xs font-semibold text-black mb-3 font-montserrat">Requirements</h3>
-            <ul className="space-y-2">
+          {/* Requirements - gray card matching screenshot */}
+          <div className="rounded-2xl bg-neutral-100/80 p-5 mb-5">
+            <h3 className="text-[15px] font-bold text-black font-montserrat mb-3">Requirements</h3>
+            <ul className="space-y-2.5">
               {filteredGuidelines.length > 0 ? (
                 filteredGuidelines.map((guideline, idx) => (
-                  <li key={idx} className="text-xs text-black font-jakarta flex items-start gap-2">
-                    <span className="text-black">•</span>
+                  <li key={idx} className="text-[14px] text-black/80 font-jakarta flex items-start gap-2.5">
+                    <span className="text-black/40 mt-0.5">•</span>
                     {guideline}
                   </li>
                 ))
               ) : (
-                <li className="text-xs text-black/30 font-jakarta flex items-start gap-2">
-                  <span className="text-black/30">•</span>
+                <li className="text-[14px] text-black/25 font-jakarta flex items-start gap-2.5">
+                  <span className="text-black/20 mt-0.5">•</span>
                   Guidelines will appear here...
                 </li>
               )}
             </ul>
           </div>
 
-          {/* Target Audience */}
-          <div className="backdrop-blur-md bg-gradient-to-b from-white/95 to-white/40 rounded-xl p-4 mb-4 -mx-1">
-            <h3 className="text-xs font-semibold text-black mb-3 font-montserrat">Target Audience</h3>
-            <p className="text-xs text-black font-jakarta">
-              {audience || <span className="text-black/30">Target audience will appear here...</span>}
-            </p>
-          </div>
-
           {/* Bottom spacing for CTA */}
-          <div className="h-14" />
+          <div className="h-16" />
         </div>
 
-        {/* CTA - positioned within phone frame */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 bg-gradient-to-t from-white via-white to-transparent" style={{ borderRadius: '0 0 33px 33px' }}>
-          <button
-            className="h-10 w-full text-xs font-bold rounded-full flex items-center justify-center gap-2"
-            style={{
-              background: 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.92) 100%)',
-              border: '1.5px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-              backdropFilter: 'blur(12px)',
-              color: 'white',
-            }}
-          >
-            Continue
-          </button>
+        {/* CTA - black glass pill matching app style */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-8 bg-gradient-to-t from-white via-white/95 to-transparent" style={{ borderRadius: '0 0 33px 33px' }}>
+          <div className="flex items-center gap-3">
+            <button
+              className="h-12 flex-1 text-sm font-bold rounded-full flex items-center justify-center gap-2"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.92) 100%)',
+                backdropFilter: 'blur(12px)',
+                color: 'white',
+              }}
+            >
+              Continue
+            </button>
+            <div className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center bg-white">
+              <Bookmark className="h-5 w-5 text-black/30" strokeWidth={1.5} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
