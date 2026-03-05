@@ -103,7 +103,7 @@ const BusinessLayout: React.FC = () => {
           </button>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('toggle-ai-chat'))}
-            className="h-6 w-6 rounded-md flex items-center justify-center text-foreground hover:bg-sidebar-accent/50 transition-colors"
+            className="h-6 w-6 rounded-md flex items-center justify-center text-foreground/60 hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
             title="Jarla AI"
           >
             <Sparkle className="h-3.5 w-3.5" />
