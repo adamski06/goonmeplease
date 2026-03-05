@@ -27,7 +27,7 @@ import img8 from '@/assets/campaigns/food-delivery.jpg';
 
 const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
-// Signup flow: credentials → tiktok → phone
+// Signup flow: credentials → tiktok → phone (email) or just tiktok (Apple)
 type SignUpStep = 'credentials' | 'tiktok' | 'phone';
 type AuthView = 'welcome' | 'signup' | 'login';
 
