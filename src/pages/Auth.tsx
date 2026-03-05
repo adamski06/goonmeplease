@@ -446,17 +446,19 @@ const Auth: React.FC = () => {
                 <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
               )}
 
-              {/* Step indicator */}
-              <div className="flex justify-center gap-2 mt-6">
-                {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
-                  <div
-                    key={s}
-                    className={`h-1.5 rounded-full transition-all ${
-                      s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
-                    }`}
-                  />
-                ))}
-              </div>
+              {/* Step indicator — hide for OAuth users (single step) */}
+              {!isOAuthUser && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
+                    <div
+                      key={s}
+                      className={`h-1.5 rounded-full transition-all ${
+                        s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           ) : (
             <LoginForm
