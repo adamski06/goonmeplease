@@ -233,22 +233,91 @@ const BusinessCampaignDetail: React.FC = () => {
             {campaign.is_active ? 'Active' : 'Ended'}
           </Badge>
         </div>
-        <button
-          onClick={async () => {
-            if (!confirm('Are you sure you want to delete this spread? This cannot be undone.')) return;
-            const { error } = await supabase.from('campaigns').delete().eq('id', campaign.id);
-            if (error) {
-              sonnerToast.error('Failed to delete spread');
-              return;
-            }
-            sonnerToast.success('Spread deleted');
-            navigate('/business');
-          }}
-          className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
-          title="Delete spread"
-        >
-          <Trash2 className="h-5 w-5 text-muted-foreground group-hover:text-destructive transition-colors" />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Share button */}
+          <div className="relative">
+            <button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="p-2 rounded-lg hover:bg-muted transition-colors"
+              title="Share ad"
+            >
+              <Share2 className="h-5 w-5 text-muted-foreground" />
+            </button>
+            {showShareMenu && (
+              <div
+                className="absolute right-0 top-full mt-2 w-80 rounded-2xl p-4 z-50"
+                style={{
+                  background: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  boxShadow: '0 16px 48px rgba(0,0,0,0.15)',
+                }}
+              >
+                <p className="text-xs font-semibold text-foreground font-montserrat mb-3">Share this ad</p>
+                {/* Public link */}
+                <div className="mb-3">
+                  <label className="text-[11px] text-muted-foreground font-jakarta mb-1 block">Public link</label>
+                  <div className="flex gap-2">
+                    <input
+                      readOnly
+                      value={`${window.location.origin}/ad/${campaign.id}`}
+                      className="flex-1 bg-muted rounded-lg px-3 py-2 text-xs text-foreground border border-border font-mono"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/ad/${campaign.id}`);
+                        setCopied('link');
+                        setTimeout(() => setCopied(null), 2000);
+                      }}
+                      className="px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors flex items-center gap-1"
+                    >
+                      {copied === 'link' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                      {copied === 'link' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+                {/* Embed code */}
+                <div>
+                  <label className="text-[11px] text-muted-foreground font-jakarta mb-1 block">Embed code</label>
+                  <div className="flex gap-2">
+                    <input
+                      readOnly
+                      value={`<iframe src="${window.location.origin}/embed/ad/${campaign.id}" width="420" height="160" frameborder="0" style="border:none;border-radius:20px;"></iframe>`}
+                      className="flex-1 bg-muted rounded-lg px-3 py-2 text-xs text-foreground border border-border font-mono truncate"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`<iframe src="${window.location.origin}/embed/ad/${campaign.id}" width="420" height="160" frameborder="0" style="border:none;border-radius:20px;"></iframe>`);
+                        setCopied('embed');
+                        setTimeout(() => setCopied(null), 2000);
+                      }}
+                      className="px-3 py-2 rounded-lg bg-muted text-foreground text-xs font-medium hover:bg-muted/80 transition-colors border border-border flex items-center gap-1"
+                    >
+                      {copied === 'embed' ? <Check className="h-3 w-3" /> : <Code className="h-3 w-3" />}
+                      {copied === 'embed' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={async () => {
+              if (!confirm('Are you sure you want to delete this spread? This cannot be undone.')) return;
+              const { error } = await supabase.from('campaigns').delete().eq('id', campaign.id);
+              if (error) {
+                sonnerToast.error('Failed to delete spread');
+                return;
+              }
+              sonnerToast.success('Spread deleted');
+              navigate('/business');
+            }}
+            className="p-2 rounded-lg hover:bg-destructive/10 transition-colors group"
+            title="Delete spread"
+          >
+            <Trash2 className="h-5 w-5 text-muted-foreground group-hover:text-destructive transition-colors" />
+          </button>
+        </div>
       </div>
 
       {/* Stats: Views + Pot */}
