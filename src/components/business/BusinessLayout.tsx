@@ -7,7 +7,7 @@ import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
 import { useTheme } from 'next-themes';
 
-const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/new', '/business/ad-types'];
+const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/rewards/new', '/business/new', '/business/ad-types'];
 
 const BusinessLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);

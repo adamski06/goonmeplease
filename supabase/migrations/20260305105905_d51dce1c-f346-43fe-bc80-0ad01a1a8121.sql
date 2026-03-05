@@ -1,0 +1,1 @@
+ALTER TABLE public.reward_ads ADD COLUMN coupon_codes text[] DEFAULT NULL;

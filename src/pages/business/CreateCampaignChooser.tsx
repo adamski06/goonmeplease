@@ -28,7 +28,7 @@ const CreateCampaignChooser: React.FC = () => {
               onClick={() => setSelected(ad.key)}
               className="flex flex-col justify-end rounded-[28px] p-8 transition-all active:scale-[0.99]"
               style={{
-                width: '300px',
+                width: '360px',
                 minHeight: '500px',
                 background: selected === ad.key
                   ? 'linear-gradient(180deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.18) 100%)'

@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ArrowRight, Plus, X, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
 
 const steps = ['Ad Details', 'Reward', 'Review'];
@@ -37,6 +38,9 @@ const CreateReward: React.FC = () => {
   const [viewsPreset, setViewsPreset] = useState<number | null>(null);
   const [customViews, setCustomViews] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [couponCodes, setCouponCodes] = useState<string[]>([]);
+  const [couponDialogOpen, setCouponDialogOpen] = useState(false);
+  const [newCouponCode, setNewCouponCode] = useState('');
 
   const effectiveViews = viewsPreset === -1 ? (parseInt(customViews) || 0) : (viewsPreset ?? 0);
   const selectedPresetLabel = VIEW_PRESETS.find(p => p.value === viewsPreset)?.label;
@@ -68,6 +72,27 @@ const CreateReward: React.FC = () => {
     setAudience(value);
   };
 
+  const addCouponCode = () => {
+    const code = newCouponCode.trim();
+    if (code && !couponCodes.includes(code)) {
+      setCouponCodes([...couponCodes, code]);
+      setNewCouponCode('');
+    }
+  };
+
+  const removeCouponCode = (i: number) => setCouponCodes(couponCodes.filter((_, idx) => idx !== i));
+
+  const exportCouponCodes = () => {
+    const csv = couponCodes.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'coupon-codes.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const { data: { user } } = await supabase.auth.getUser();
@@ -94,6 +119,7 @@ const CreateReward: React.FC = () => {
       category: audience.trim() || null,
       reward_description: rewardDescription.trim(),
       views_required: effectiveViews,
+      coupon_codes: couponCodes.length > 0 ? couponCodes : null,
       is_active: true,
       status: 'active',
     } as any);
@@ -186,7 +212,7 @@ const CreateReward: React.FC = () => {
 
         {/* Form panel */}
         <div className="flex-1 overflow-y-auto flex flex-col">
-          <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
+          <div className="mx-auto px-6 flex-1 flex flex-col w-full max-w-xl justify-center">
 
             {/* Step 1: Ad Details */}
             {step === 0 && (
@@ -206,7 +232,7 @@ const CreateReward: React.FC = () => {
                       <Input
                         value={g}
                         onChange={(e) => updateGuideline(i, e.target.value)}
-                        placeholder={`Guideline ${i + 1}`}
+                        placeholder={`User must include...`}
                         className="h-9 text-sm"
                       />
                       {guidelinesList.length > 1 && (
@@ -237,11 +263,11 @@ const CreateReward: React.FC = () => {
               <div className="space-y-6">
                 <div className="space-y-1.5">
                   <Label className="text-sm font-medium">What reward will creators receive? *</Label>
-                  <Textarea
+                  <Input
                     value={rewardDescription}
                     onChange={(e) => setRewardDescription(e.target.value)}
-                    placeholder="e.g. 20% discount code, free product sample, 1 month premium subscription..."
-                    rows={3}
+                    placeholder="e.g. 20% discount code, free product sample..."
+                    className="h-10"
                   />
                   <p className="text-xs text-muted-foreground">Describe the reward your company will give creators who complete this ad.</p>
                 </div>
@@ -288,8 +314,69 @@ const CreateReward: React.FC = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Coupon codes */}
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-medium">Coupon codes</Label>
+                  <button
+                    onClick={() => setCouponDialogOpen(true)}
+                    className="w-full flex items-center gap-2 h-10 rounded-[4px] border border-input bg-background px-3 text-sm text-muted-foreground hover:border-foreground/50 transition-colors"
+                  >
+                    <Ticket className="h-4 w-4" />
+                    {couponCodes.length > 0 ? `${couponCodes.length} code${couponCodes.length > 1 ? 's' : ''} added` : 'Add coupon codes...'}
+                  </button>
+                  <p className="text-xs text-muted-foreground">Add codes that will be distributed to creators as rewards.</p>
+                </div>
               </div>
             )}
+
+            {/* Coupon codes dialog */}
+            <Dialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-base font-semibold">Coupon Codes</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCouponCode}
+                      onChange={(e) => setNewCouponCode(e.target.value)}
+                      placeholder="Enter code..."
+                      className="h-9 text-sm"
+                      onKeyDown={(e) => e.key === 'Enter' && addCouponCode()}
+                    />
+                    <Button size="sm" onClick={addCouponCode} disabled={!newCouponCode.trim()} className="shrink-0 h-9">
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add
+                    </Button>
+                  </div>
+
+                  {couponCodes.length > 0 && (
+                    <>
+                      <div className="max-h-[240px] overflow-y-auto rounded-lg border border-border divide-y divide-border">
+                        {couponCodes.map((code, i) => (
+                          <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
+                            <span className="font-mono text-foreground">{code}</span>
+                            <button onClick={() => removeCouponCode(i)} className="text-muted-foreground hover:text-destructive transition-colors">
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={exportCouponCodes}
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <Download className="h-3.5 w-3.5" /> Export as CSV
+                      </button>
+                    </>
+                  )}
+
+                  {couponCodes.length === 0 && (
+                    <p className="text-xs text-muted-foreground text-center py-4">No codes added yet. Add codes above.</p>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {/* Step 3: Review */}
             {step === 2 && (
@@ -321,6 +408,12 @@ const CreateReward: React.FC = () => {
                       {effectiveViews === 0 ? 'Just by posting' : `${effectiveViews.toLocaleString()} views`}
                     </p>
                   </div>
+                  {couponCodes.length > 0 && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Coupon codes</p>
+                      <p className="text-sm font-semibold text-foreground">{couponCodes.length} code{couponCodes.length > 1 ? 's' : ''} attached</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">

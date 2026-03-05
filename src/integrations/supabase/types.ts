@@ -528,6 +528,7 @@ export type Database = {
           brand_name: string
           business_id: string
           category: string | null
+          coupon_codes: string[] | null
           cover_image_url: string | null
           created_at: string
           description: string | null
@@ -545,6 +546,7 @@ export type Database = {
           brand_name: string
           business_id: string
           category?: string | null
+          coupon_codes?: string[] | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
@@ -562,6 +564,7 @@ export type Database = {
           brand_name?: string
           business_id?: string
           category?: string | null
+          coupon_codes?: string[] | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
