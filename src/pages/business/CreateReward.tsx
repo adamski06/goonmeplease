@@ -72,6 +72,27 @@ const CreateReward: React.FC = () => {
     setAudience(value);
   };
 
+  const addCouponCode = () => {
+    const code = newCouponCode.trim();
+    if (code && !couponCodes.includes(code)) {
+      setCouponCodes([...couponCodes, code]);
+      setNewCouponCode('');
+    }
+  };
+
+  const removeCouponCode = (i: number) => setCouponCodes(couponCodes.filter((_, idx) => idx !== i));
+
+  const exportCouponCodes = () => {
+    const csv = couponCodes.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'coupon-codes.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const { data: { user } } = await supabase.auth.getUser();
