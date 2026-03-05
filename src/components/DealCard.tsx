@@ -5,6 +5,7 @@ import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from 'sonner';
 
 interface DealCardProps {
@@ -15,6 +16,7 @@ interface DealCardProps {
 
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
+  const { formatPrice, label, convert } = useCurrency();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [expandReady, setExpandReady] = useState(false);
@@ -164,11 +166,11 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
           <div className="flex items-center justify-center gap-2 flex-1 pb-5">
             <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
               <span className="text-[10px] font-bold text-white/80 font-montserrat">Max</span>
-              <span className="text-xl font-bold text-white font-montserrat">${deal.maxEarnings.toLocaleString()}</span>
+              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(deal.maxEarnings)}</span>
             </div>
             {deal.ratePerView ? (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                <span className="text-xl font-bold text-white font-montserrat">${deal.ratePerView}</span>
+                <span className="text-xl font-bold text-white font-montserrat">{formatPrice(deal.ratePerView)}</span>
                 <span className="text-sm font-semibold text-white/80 font-montserrat">/1000 views</span>
               </div>
             ) : null}
@@ -255,8 +257,8 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
                   <div className="flex items-baseline justify-between mb-1">
                     <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Max Earnings</span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-xl font-bold text-white font-montserrat">{deal.maxEarnings.toLocaleString()}</span>
-                      <span className="text-xs text-white/60 font-jakarta">sek</span>
+                      <span className="text-xl font-bold text-white font-montserrat">{convert(deal.maxEarnings).toLocaleString()}</span>
+                      <span className="text-xs text-white/60 font-jakarta">{label}</span>
                     </div>
                   </div>
                   <p className="text-xs text-white/50 font-jakarta">Based on your video's views after acceptance.</p>
