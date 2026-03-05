@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, ArrowRight, Plus, X, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
 
 const steps = ['Ad Details', 'Reward', 'Review'];
