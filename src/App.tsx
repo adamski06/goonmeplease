@@ -42,6 +42,7 @@ const BusinessDealSubmissionDetail = lazy(() => import("./pages/business/Busines
 const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaignChooser"));
 const AdTypesLibrary = lazy(() => import("./pages/business/AdTypesLibrary"));
 const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
+const CreateReward = lazy(() => import("./pages/business/CreateReward"));
 const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
 const PublicAd = lazy(() => import("./pages/PublicAd"));
 const PublicBrand = lazy(() => import("./pages/PublicBrand"));
