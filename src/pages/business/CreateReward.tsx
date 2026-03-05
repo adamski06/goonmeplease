@@ -525,6 +525,11 @@ const CreateReward: React.FC = () => {
                   <p className="font-semibold text-foreground mb-1">How Rewards work</p>
                   <p>Creators post a video about your brand. Once they hit the required views, they receive your reward. No monetary payout — you provide the reward directly.</p>
                 </div>
+
+                <div className="rounded-xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">
+                  <p className="font-semibold text-foreground mb-1">Billing</p>
+                  <p>You'll be charged <span className="font-semibold text-foreground">$1.20 per video</span> created on this reward ad. A payment method will be saved during checkout.</p>
+                </div>
               </div>
             )}
 
