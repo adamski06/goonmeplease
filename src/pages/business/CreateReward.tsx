@@ -408,6 +408,12 @@ const CreateReward: React.FC = () => {
                       {effectiveViews === 0 ? 'Just by posting' : `${effectiveViews.toLocaleString()} views`}
                     </p>
                   </div>
+                  {couponCodes.length > 0 && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Coupon codes</p>
+                      <p className="text-sm font-semibold text-foreground">{couponCodes.length} code{couponCodes.length > 1 ? 's' : ''} attached</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-xl border border-border bg-muted/50 p-4 text-sm text-muted-foreground">
