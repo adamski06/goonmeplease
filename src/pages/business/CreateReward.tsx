@@ -552,7 +552,7 @@ const CreateReward: React.FC = () => {
                   disabled={isSubmitting}
                   className="gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {isSubmitting ? 'Launching...' : 'Launch Reward Ad'}
+                  {isSubmitting ? 'Setting up...' : 'Save card & Launch'}
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               )}
