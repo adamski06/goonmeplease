@@ -38,6 +38,9 @@ const CreateReward: React.FC = () => {
   const [viewsPreset, setViewsPreset] = useState<number | null>(null);
   const [customViews, setCustomViews] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [couponCodes, setCouponCodes] = useState<string[]>([]);
+  const [couponDialogOpen, setCouponDialogOpen] = useState(false);
+  const [newCouponCode, setNewCouponCode] = useState('');
 
   const effectiveViews = viewsPreset === -1 ? (parseInt(customViews) || 0) : (viewsPreset ?? 0);
   const selectedPresetLabel = VIEW_PRESETS.find(p => p.value === viewsPreset)?.label;
