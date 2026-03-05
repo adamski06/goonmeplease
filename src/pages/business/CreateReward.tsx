@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
-import RewardAdPreview from '@/components/business/RewardAdPreview';
+
 
 const steps = ['Ad Details', 'Reward', 'Review'];
 const VIEW_PRESETS = [
