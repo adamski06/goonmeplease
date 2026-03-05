@@ -206,7 +206,7 @@ const CreateReward: React.FC = () => {
                       <Input
                         value={g}
                         onChange={(e) => updateGuideline(i, e.target.value)}
-                        placeholder={`Guideline ${i + 1}`}
+                        placeholder={`User must include...`}
                         className="h-9 text-sm"
                       />
                       {guidelinesList.length > 1 && (
