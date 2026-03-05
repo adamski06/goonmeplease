@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, ArrowRight, Plus, X, ChevronDown, Ticket, Download, Upload } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CampaignChat from '@/components/CampaignChat';
+import RewardAdPreview from '@/components/business/RewardAdPreview';
 
 const steps = ['Ad Details', 'Reward', 'Review'];
 const VIEW_PRESETS = [
@@ -153,6 +154,9 @@ const CreateReward: React.FC = () => {
   };
 
   const formData = { brand_name: '', title, description, deadline: '', total_budget: 0 };
+
+  const hasPreviewContent = title.trim().length > 0 || description.trim().length > 0 || guidelinesList.some(g => g.trim()) || rewardDescription.trim().length > 0;
+  const showPreview = hasPreviewContent && step !== 2;
 
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const shouldHideChat = step === 1;
@@ -493,6 +497,34 @@ const CreateReward: React.FC = () => {
                 </Button>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Live preview panel */}
+        <div
+          className="shrink-0 h-full overflow-hidden border-l border-border"
+          style={{
+            width: showPreview ? '380px' : '0px',
+            borderLeftWidth: showPreview ? '1px' : '0px',
+            transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          <div
+            className="w-[380px] h-full shrink-0"
+            style={{
+              opacity: showPreview ? 1 : 0,
+              transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          >
+            <RewardAdPreview
+              title={title}
+              description={description}
+              guidelines={guidelinesList}
+              rewardDescription={rewardDescription}
+              viewsRequired={effectiveViews}
+              couponCount={couponCodes.length}
+              audience={audience}
+            />
           </div>
         </div>
       </div>
