@@ -39,10 +39,7 @@ const UserLayout: React.FC = () => {
   }
 
   return (
-    <div
-      className="transition-opacity duration-500 ease-out"
-      style={{ opacity: fadeIn ? 1 : 0 }}
-    >
+    <div>
       {/* Home */}
       <div style={{ display: currentPath === '/user' ? 'block' : 'none' }}>
         <Campaigns />
