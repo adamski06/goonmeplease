@@ -119,6 +119,7 @@ const CreateReward: React.FC = () => {
       category: audience.trim() || null,
       reward_description: rewardDescription.trim(),
       views_required: effectiveViews,
+      coupon_codes: couponCodes.length > 0 ? couponCodes : null,
       is_active: true,
       status: 'active',
     } as any);
