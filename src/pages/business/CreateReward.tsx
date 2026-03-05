@@ -155,6 +155,9 @@ const CreateReward: React.FC = () => {
 
   const formData = { brand_name: '', title, description, deadline: '', total_budget: 0 };
 
+  const hasPreviewContent = title.trim().length > 0 || description.trim().length > 0 || guidelinesList.some(g => g.trim()) || rewardDescription.trim().length > 0;
+  const showPreview = hasPreviewContent && step !== 2;
+
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const shouldHideChat = step === 1;
 
