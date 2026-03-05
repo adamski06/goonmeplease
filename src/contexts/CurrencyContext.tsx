@@ -70,7 +70,7 @@ export const CurrencyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const label = currency.toLowerCase();
 
   const convert = useCallback(
-    (amountUsd: number) => Math.round(amountUsd * rate * 100) / 100,
+    (amountUsd: number) => Math.floor(amountUsd * rate * 100) / 100,
     [rate]
   );
 
