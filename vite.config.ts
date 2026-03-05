@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules')) {
             if (id.includes('react-dom') || id.includes('@radix-ui') || id.includes('i18next') || id.includes('react-i18next') || id.includes('@supabase') || id.includes('@lovable.dev')) return 'vendor-ui';
             if (id.includes('react-router')) return 'vendor-router';
-            if (id.includes('@supabase')) return 'vendor-supabase';
+            // @supabase merged into vendor-ui to avoid circular deps
             if (id.includes('recharts') || id.includes('d3-')) return 'vendor-charts';
             if (id.includes('@tanstack')) return 'vendor-query';
             if (id.includes('lucide-react')) return 'vendor-icons';
