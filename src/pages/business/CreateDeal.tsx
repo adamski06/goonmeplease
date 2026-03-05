@@ -201,7 +201,7 @@ const CreateDeal: React.FC = () => {
 
       {/* Form panel */}
       <div className="flex-1 overflow-y-auto flex flex-col">
-        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-start pt-10' : 'max-w-xl justify-center'}`}>
+        <div className={`mx-auto px-6 flex-1 flex flex-col w-full ${step === 1 ? 'max-w-5xl justify-center' : 'max-w-xl justify-center'}`}>
 
           {/* Step 1: Ad Details */}
           {step === 0 && (
@@ -310,37 +310,47 @@ const CreateDeal: React.FC = () => {
 
 
 
-              {/* Results node — glassy black, stays visible once shown */}
+              {/* Results node — always visible, blurred when not filled */}
               {(() => {
                 const allFilled = maxPayoutPerCreator !== null && maxPayoutPerCreator > 0 && ratePerThousand > 0;
                 const viewsPerCreator = allFilled ? Math.round((maxPayoutPerCreator / ratePerThousand) * 1000) : 0;
                 const viewsEstimated = Math.round(viewsPerCreator * 1.4);
-                if (allFilled && !resultsShown) setResultsShown(true);
-                if (!allFilled && !resultsShown) return null;
                 return (
                   <div
-                    className="rounded-xl px-6 py-8 border animate-in fade-in slide-in-from-bottom-2 duration-500"
+                    className="rounded-xl px-6 py-8 border relative transition-opacity duration-500"
                     style={{
+                      opacity: allFilled ? 1 : 0.45,
                       background: 'linear-gradient(135deg, hsla(0,0%,6%,0.97), hsla(0,0%,12%,0.93), hsla(0,0%,8%,0.95))',
                       borderColor: 'hsla(0,0%,100%,0.08)',
                       backdropFilter: 'blur(16px)',
                       boxShadow: '0 0 40px hsla(0,0%,100%,0.03), inset 0 1px 0 hsla(0,0%,100%,0.06)',
                     }}
                   >
-                    <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Views per creator to earn max payout</p>
-                    <div className="flex items-baseline justify-center gap-2">
-                      <div className="text-center">
-                        <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
-                          {allFilled ? viewsPerCreator.toLocaleString() : '—'}
-                        </p>
-                        <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>minimum</p>
-                      </div>
-                      <span className="text-2xl font-light" style={{ color: 'hsla(0,0%,100%,0.3)' }}>–</span>
-                      <div className="text-center">
-                        <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
-                          {allFilled ? viewsEstimated.toLocaleString() : '—'}
-                        </p>
-                        <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>likely</p>
+                    {/* Overlay prompt when not filled */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 pointer-events-none z-10"
+                      style={{ opacity: allFilled ? 0 : 1 }}
+                    >
+                      <p className="text-sm font-medium tracking-wide" style={{ color: 'hsla(0,0%,100%,0.5)' }}>
+                        Fill out details above to see results
+                      </p>
+                    </div>
+                    <div className="text-center transition-opacity duration-300" style={{ opacity: allFilled ? 1 : 0.15 }}>
+                      <p className="text-sm font-medium uppercase tracking-wide mb-3" style={{ color: 'hsla(0,0%,100%,0.4)' }}>Views per creator to earn max payout</p>
+                      <div className="flex items-baseline justify-center gap-2">
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? viewsPerCreator.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>minimum</p>
+                        </div>
+                        <span className="text-2xl font-light" style={{ color: 'hsla(0,0%,100%,0.3)' }}>–</span>
+                        <div className="text-center">
+                          <p className="text-4xl font-bold tracking-tight" style={{ color: 'hsla(0,0%,100%,0.95)', textShadow: '0 0 20px hsla(0,0%,100%,0.15)' }}>
+                            {allFilled ? viewsEstimated.toLocaleString() : '—'}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'hsla(0,0%,100%,0.35)' }}>likely</p>
+                        </div>
                       </div>
                     </div>
                   </div>
