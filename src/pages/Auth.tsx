@@ -74,6 +74,10 @@ const Auth: React.FC = () => {
 
         if (!profile?.username) {
           // New user (OAuth or otherwise) — show TikTok onboarding
+          // Check if this is an OAuth user (provider !== email)
+          const provider = user.app_metadata?.provider;
+          const oauthUser = provider && provider !== 'email';
+          setIsOAuthUser(!!oauthUser);
           setNewUserId(user.id);
           setIsSignUp(true);
           setSignUpStep('tiktok');
