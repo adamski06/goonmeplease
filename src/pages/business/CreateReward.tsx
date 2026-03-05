@@ -87,15 +87,29 @@ const CreateReward: React.FC = () => {
     if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const text = ev.target?.result as string;
-      handleBulkPaste(text);
-    };
-    reader.readAsText(file);
+
+    const ext = file.name.split('.').pop()?.toLowerCase();
+
+    if (ext === 'xlsx' || ext === 'xls') {
+      const { read, utils } = await import('xlsx');
+      const buffer = await file.arrayBuffer();
+      const wb = read(buffer);
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows: string[][] = utils.sheet_to_json(ws, { header: 1 });
+      const codes = rows.flat().map(c => String(c).trim()).filter(Boolean);
+      const unique = codes.filter(c => !couponCodes.includes(c));
+      if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = ev.target?.result as string;
+        handleBulkPaste(text);
+      };
+      reader.readAsText(file);
+    }
     e.target.value = '';
   };
 
@@ -378,8 +392,8 @@ const CreateReward: React.FC = () => {
                     />
                     <div className="flex items-center gap-2">
                       <label className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                        <Upload className="h-3.5 w-3.5" /> Import from file (.txt, .csv)
-                        <input type="file" accept=".txt,.csv,.tsv" onChange={handleFileUpload} className="hidden" />
+                        <Upload className="h-3.5 w-3.5" /> Import from file (.txt, .csv, .xlsx)
+                        <input type="file" accept=".txt,.csv,.tsv,.xlsx,.xls" onChange={handleFileUpload} className="hidden" />
                       </label>
                     </div>
                   </div>
