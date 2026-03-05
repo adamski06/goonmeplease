@@ -499,32 +499,6 @@ const CreateReward: React.FC = () => {
           </div>
         </div>
 
-        {/* Live preview panel */}
-        <div
-          className="shrink-0 h-full overflow-hidden"
-          style={{
-            width: previewOpen && step !== 2 ? '380px' : '0px',
-            transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
-        >
-          <div
-            className="w-[380px] h-full shrink-0"
-            style={{
-              opacity: previewOpen && step !== 2 ? 1 : 0,
-              transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)',
-            }}
-          >
-            <RewardAdPreview
-              title={title}
-              description={description}
-              guidelines={guidelinesList}
-              rewardDescription={rewardDescription}
-              viewsRequired={effectiveViews}
-              couponCount={couponCodes.length}
-              audience={audience}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
