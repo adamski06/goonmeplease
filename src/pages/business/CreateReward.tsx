@@ -80,6 +80,24 @@ const CreateReward: React.FC = () => {
     }
   };
 
+  const handleBulkPaste = (text: string) => {
+    const codes = text.split(/[\n,;]+/).map(c => c.trim()).filter(Boolean);
+    const unique = codes.filter(c => !couponCodes.includes(c));
+    if (unique.length > 0) setCouponCodes([...couponCodes, ...unique]);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      handleBulkPaste(text);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
   const removeCouponCode = (i: number) => setCouponCodes(couponCodes.filter((_, idx) => idx !== i));
 
   const exportCouponCodes = () => {
