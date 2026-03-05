@@ -314,8 +314,69 @@ const CreateReward: React.FC = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Coupon codes */}
+                <div className="space-y-1.5">
+                  <Label className="text-sm font-medium">Coupon codes</Label>
+                  <button
+                    onClick={() => setCouponDialogOpen(true)}
+                    className="w-full flex items-center gap-2 h-10 rounded-[4px] border border-input bg-background px-3 text-sm text-muted-foreground hover:border-foreground/50 transition-colors"
+                  >
+                    <Ticket className="h-4 w-4" />
+                    {couponCodes.length > 0 ? `${couponCodes.length} code${couponCodes.length > 1 ? 's' : ''} added` : 'Add coupon codes...'}
+                  </button>
+                  <p className="text-xs text-muted-foreground">Add codes that will be distributed to creators as rewards.</p>
+                </div>
               </div>
             )}
+
+            {/* Coupon codes dialog */}
+            <Dialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen}>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-base font-semibold">Coupon Codes</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCouponCode}
+                      onChange={(e) => setNewCouponCode(e.target.value)}
+                      placeholder="Enter code..."
+                      className="h-9 text-sm"
+                      onKeyDown={(e) => e.key === 'Enter' && addCouponCode()}
+                    />
+                    <Button size="sm" onClick={addCouponCode} disabled={!newCouponCode.trim()} className="shrink-0 h-9">
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add
+                    </Button>
+                  </div>
+
+                  {couponCodes.length > 0 && (
+                    <>
+                      <div className="max-h-[240px] overflow-y-auto rounded-lg border border-border divide-y divide-border">
+                        {couponCodes.map((code, i) => (
+                          <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
+                            <span className="font-mono text-foreground">{code}</span>
+                            <button onClick={() => removeCouponCode(i)} className="text-muted-foreground hover:text-destructive transition-colors">
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={exportCouponCodes}
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <Download className="h-3.5 w-3.5" /> Export as CSV
+                      </button>
+                    </>
+                  )}
+
+                  {couponCodes.length === 0 && (
+                    <p className="text-xs text-muted-foreground text-center py-4">No codes added yet. Add codes above.</p>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {/* Step 3: Review */}
             {step === 2 && (
