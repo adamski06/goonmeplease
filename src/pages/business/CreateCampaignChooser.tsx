@@ -4,11 +4,12 @@ import { ArrowRight } from 'lucide-react';
 
 const CreateCampaignChooser: React.FC = () => {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState<'spread' | 'deal' | null>(null);
+  const [selected, setSelected] = useState<'spread' | 'deal' | 'reward' | null>(null);
 
   const handleContinue = () => {
     if (selected === 'spread') navigate('/business/campaigns/new');
     else if (selected === 'deal') navigate('/business/deals/new');
+    else if (selected === 'reward') navigate('/business/rewards/new');
   };
 
   return (
