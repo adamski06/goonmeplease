@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Check, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import tiktokLogo from '@/assets/tiktok-logo.png';
 
 interface TikTokStepProps {
@@ -21,6 +22,7 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
   const [linkInput, setLinkInput] = useState('');
   const [username, setUsername] = useState<string | null>(null);
   const [resolving, setResolving] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   const extractUsername = (input: string): string | null => {
@@ -45,8 +47,21 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
     setResolving(false);
   };
 
-  const handleContinue = () => {
-    if (username) onNext(username);
+  const handleContinue = async () => {
+    if (!username) return;
+    setSaving(true);
+    try {
+      // Set username on profile to match TikTok handle
+      await supabase
+        .from('profiles')
+        .update({ username: username })
+        .eq('user_id', userId);
+    } catch (e) {
+      // Non-blocking — continue even if update fails
+      console.error('Failed to set username from TikTok handle:', e);
+    }
+    setSaving(false);
+    onNext(username);
   };
 
   return (
@@ -104,11 +119,11 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
       <div className="space-y-2 pt-2">
         <Button
           onClick={handleContinue}
-          disabled={!username}
+          disabled={!username || saving}
           className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
           style={blackGlassStyle}
         >
-          Continue
+          {saving ? 'Saving...' : 'Continue'}
         </Button>
         <button
           onClick={onSkip}
