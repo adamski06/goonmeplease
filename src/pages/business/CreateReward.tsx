@@ -423,23 +423,39 @@ const CreateReward: React.FC = () => {
 
                   {couponCodes.length > 0 && (
                     <>
-                      <p className="text-xs text-muted-foreground">{couponCodes.length} code{couponCodes.length !== 1 ? 's' : ''} added</p>
-                      <div className="max-h-[240px] overflow-y-auto rounded-lg border border-border divide-y divide-border">
-                        {couponCodes.map((code, i) => (
-                          <div key={i} className="flex items-center justify-between px-3 py-2 text-sm">
-                            <span className="font-mono text-foreground">{code}</span>
-                            <button onClick={() => removeCouponCode(i)} className="text-muted-foreground hover:text-destructive transition-colors">
-                              <X className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        ))}
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs text-muted-foreground">{couponCodes.length} code{couponCodes.length !== 1 ? 's' : ''}</p>
+                        <button
+                          onClick={exportCouponCodes}
+                          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <Download className="h-3 w-3" /> Export
+                        </button>
                       </div>
-                      <button
-                        onClick={exportCouponCodes}
-                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        <Download className="h-3.5 w-3.5" /> Export as CSV
-                      </button>
+                      <div className="max-h-[280px] overflow-y-auto rounded-md border border-border bg-muted/30">
+                        <table className="w-full text-xs font-mono">
+                          <thead>
+                            <tr className="border-b border-border bg-muted/50">
+                              <th className="text-left px-3 py-1.5 text-muted-foreground font-medium w-8">#</th>
+                              <th className="text-left px-3 py-1.5 text-muted-foreground font-medium">Code</th>
+                              <th className="w-8" />
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {couponCodes.map((code, i) => (
+                              <tr key={i} className="border-b border-border/50 last:border-0 hover:bg-muted/50 transition-colors">
+                                <td className="px-3 py-1.5 text-muted-foreground">{i + 1}</td>
+                                <td className="px-3 py-1.5 text-foreground">{code}</td>
+                                <td className="px-2 py-1.5">
+                                  <button onClick={() => removeCouponCode(i)} className="text-muted-foreground/50 hover:text-destructive transition-colors">
+                                    <X className="h-3 w-3" />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </>
                   )}
 
