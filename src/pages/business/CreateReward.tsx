@@ -237,11 +237,11 @@ const CreateReward: React.FC = () => {
               <div className="space-y-6">
                 <div className="space-y-1.5">
                   <Label className="text-sm font-medium">What reward will creators receive? *</Label>
-                  <Textarea
+                  <Input
                     value={rewardDescription}
                     onChange={(e) => setRewardDescription(e.target.value)}
-                    placeholder="e.g. 20% discount code, free product sample, 1 month premium subscription..."
-                    rows={3}
+                    placeholder="e.g. 20% discount code, free product sample..."
+                    className="h-10"
                   />
                   <p className="text-xs text-muted-foreground">Describe the reward your company will give creators who complete this ad.</p>
                 </div>
