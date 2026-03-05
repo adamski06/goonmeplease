@@ -190,6 +190,18 @@ const CreateReward: React.FC = () => {
           <p className="text-sm font-medium text-muted-foreground font-jakarta tracking-wide">
             {stepTitles[step]}
           </p>
+          {step !== 2 && (
+            <>
+              <span className="text-border">|</span>
+              <button
+                onClick={() => setPreviewOpen(p => !p)}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {previewOpen ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                Preview
+              </button>
+            </>
+          )}
         </div>,
         topbarCenter
       )}
