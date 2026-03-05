@@ -15,24 +15,11 @@ const UserLayout: React.FC = () => {
   const { loading } = useAuth();
   const isMobile = useIsMobile();
   const location = useLocation();
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [fadeIn, setFadeIn] = useState(false);
 
   // Mount ALL tabs immediately so they preload
   const currentPath = TAB_PATHS.includes(location.pathname as any) ? location.pathname : '/user';
 
   const ready = !loading;
-
-  useEffect(() => {
-    if (ready && !hasLoaded) {
-      setHasLoaded(true);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setFadeIn(true);
-        });
-      });
-    }
-  }, [ready, hasLoaded]);
 
   if (!ready) {
     return <JarlaLoader />;
@@ -52,10 +39,7 @@ const UserLayout: React.FC = () => {
   }
 
   return (
-    <div
-      className="transition-opacity duration-500 ease-out"
-      style={{ opacity: fadeIn ? 1 : 0 }}
-    >
+    <div>
       {/* Home */}
       <div style={{ display: currentPath === '/user' ? 'block' : 'none' }}>
         <Campaigns />
