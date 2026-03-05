@@ -392,8 +392,8 @@ const CreateReward: React.FC = () => {
                     />
                     <div className="flex items-center gap-2">
                       <label className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                        <Upload className="h-3.5 w-3.5" /> Import from file (.txt, .csv)
-                        <input type="file" accept=".txt,.csv,.tsv" onChange={handleFileUpload} className="hidden" />
+                        <Upload className="h-3.5 w-3.5" /> Import from file (.txt, .csv, .xlsx)
+                        <input type="file" accept=".txt,.csv,.tsv,.xlsx,.xls" onChange={handleFileUpload} className="hidden" />
                       </label>
                     </div>
                   </div>
