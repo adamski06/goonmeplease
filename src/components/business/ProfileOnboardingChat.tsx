@@ -395,7 +395,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     // Ensure logo_url has a value — use Google favicon fallback if AI didn't provide one
     const dataToSave = { ...editedData };
     if (!dataToSave.logo_url && dataToSave.website) {
-      const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '').toLowerCase();
       if (domain) dataToSave.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
     }
 

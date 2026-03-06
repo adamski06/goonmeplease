@@ -250,12 +250,12 @@ serve(async (req) => {
 
     // If we scraped a URL, ensure the website field uses the actual URL
     if (detectedUrl && parsedResponse.profileUpdates) {
-      const domain = detectedUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      const domain = detectedUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '').toLowerCase();
       if (!parsedResponse.profileUpdates.website || parsedResponse.profileUpdates.website.includes('example')) {
         parsedResponse.profileUpdates.website = detectedUrl;
       }
-      // Ensure logo uses actual domain
-      if (!parsedResponse.profileUpdates.logo_url || !parsedResponse.profileUpdates.logo_url.includes(domain)) {
+      // Ensure logo uses actual domain (lowercase for Clearbit)
+      if (!parsedResponse.profileUpdates.logo_url || !parsedResponse.profileUpdates.logo_url.toLowerCase().includes(domain)) {
         parsedResponse.profileUpdates.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
       }
     }
