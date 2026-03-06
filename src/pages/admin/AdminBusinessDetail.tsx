@@ -468,6 +468,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{r.views_required?.toLocaleString()}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{r.reward_description}</TableCell>
                     <TableCell>{fmt(r.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={r.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === r.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
+                      >
+                        {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -149,8 +149,8 @@ const CreateCampaign: React.FC = () => {
       category: campaignData.category,
       business_id: user.id,
       brand_logo_url: bp?.logo_url || null,
-      is_active: true,
-      status: 'active',
+      is_active: false,
+      status: 'pending',
     }).select('id').single();
 
     if (insertError || !insertData) {
