@@ -37,32 +37,32 @@ const lazyRetry = (importFn: () => Promise<any>) =>
 
 // Lazy-loaded pages
 const Auth = lazyRetry(() => import("./pages/Auth"));
-const UserLayout = lazy(() => import("./components/UserLayout"));
-const CampaignDetail = lazy(() => import("./pages/CampaignDetail"));
-const EditProfile = lazy(() => import("./pages/EditProfile"));
-const Settings = lazy(() => import("./pages/Settings"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const BusinessAuth = lazy(() => import("./pages/business/BusinessAuth"));
-const BusinessLayout = lazy(() => import("./components/business/BusinessLayout"));
-const BusinessProfile = lazy(() => import("./pages/business/BusinessProfile"));
-const CreateCampaign = lazy(() => import("./pages/business/CreateCampaign"));
-const BusinessCampaigns = lazy(() => import("./pages/business/BusinessCampaigns"));
-const BusinessCampaignDetail = lazy(() => import("./pages/business/BusinessCampaignDetail"));
-const BusinessSubmissionDetail = lazy(() => import("./pages/business/BusinessSubmissionDetail"));
-const BusinessEditProfile = lazy(() => import("./pages/business/BusinessEditProfile"));
-const BusinessSettings = lazy(() => import("./pages/business/BusinessSettings"));
-const BusinessDeals = lazy(() => import("./pages/business/BusinessDeals"));
-const CreateDeal = lazy(() => import("./pages/business/CreateDeal"));
-const BusinessDealDetail = lazy(() => import("./pages/business/BusinessDealDetail"));
-const BusinessDealSubmissionDetail = lazy(() => import("./pages/business/BusinessDealSubmissionDetail"));
-const CreateCampaignChooser = lazy(() => import("./pages/business/CreateCampaignChooser"));
-const AdTypesLibrary = lazy(() => import("./pages/business/AdTypesLibrary"));
-const BusinessRewards = lazy(() => import("./pages/business/BusinessRewards"));
-const CreateReward = lazy(() => import("./pages/business/CreateReward"));
-const RewardsEmbed = lazy(() => import("./pages/RewardsEmbed"));
-const PublicAd = lazy(() => import("./pages/PublicAd"));
-const PublicBrand = lazy(() => import("./pages/PublicBrand"));
-const EmbedAd = lazy(() => import("./pages/EmbedAd"));
+const UserLayout = lazyRetry(() => import("./components/UserLayout"));
+const CampaignDetail = lazyRetry(() => import("./pages/CampaignDetail"));
+const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
+const Settings = lazyRetry(() => import("./pages/Settings"));
+const NotFound = lazyRetry(() => import("./pages/NotFound"));
+const BusinessAuth = lazyRetry(() => import("./pages/business/BusinessAuth"));
+const BusinessLayout = lazyRetry(() => import("./components/business/BusinessLayout"));
+const BusinessProfile = lazyRetry(() => import("./pages/business/BusinessProfile"));
+const CreateCampaign = lazyRetry(() => import("./pages/business/CreateCampaign"));
+const BusinessCampaigns = lazyRetry(() => import("./pages/business/BusinessCampaigns"));
+const BusinessCampaignDetail = lazyRetry(() => import("./pages/business/BusinessCampaignDetail"));
+const BusinessSubmissionDetail = lazyRetry(() => import("./pages/business/BusinessSubmissionDetail"));
+const BusinessEditProfile = lazyRetry(() => import("./pages/business/BusinessEditProfile"));
+const BusinessSettings = lazyRetry(() => import("./pages/business/BusinessSettings"));
+const BusinessDeals = lazyRetry(() => import("./pages/business/BusinessDeals"));
+const CreateDeal = lazyRetry(() => import("./pages/business/CreateDeal"));
+const BusinessDealDetail = lazyRetry(() => import("./pages/business/BusinessDealDetail"));
+const BusinessDealSubmissionDetail = lazyRetry(() => import("./pages/business/BusinessDealSubmissionDetail"));
+const CreateCampaignChooser = lazyRetry(() => import("./pages/business/CreateCampaignChooser"));
+const AdTypesLibrary = lazyRetry(() => import("./pages/business/AdTypesLibrary"));
+const BusinessRewards = lazyRetry(() => import("./pages/business/BusinessRewards"));
+const CreateReward = lazyRetry(() => import("./pages/business/CreateReward"));
+const RewardsEmbed = lazyRetry(() => import("./pages/RewardsEmbed"));
+const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
+const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
+const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 
 const queryClient = new QueryClient();
 
