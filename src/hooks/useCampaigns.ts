@@ -30,7 +30,7 @@ function mapDbCampaign(
     title: row.title,
     description: row.description || '',
     maxEarnings: Number(row.max_earnings) || 0,
-    pot: Number(row.total_budget) || 0,
+    pool: Number(row.total_budget) || 0,
     ratePerView: firstTierRate,
     logo: row.brand_logo_url || '',
     image: row.cover_image_url || '',

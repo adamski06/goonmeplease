@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, Pencil, X } from 'lucide-react';
+import { Settings, Pencil, X, Clock } from 'lucide-react';
 import ProfileEditContent from '@/components/ProfileEditContent';
 import WithdrawContent from '@/components/WithdrawContent';
 import BottomNav from '@/components/BottomNav';
@@ -23,6 +23,7 @@ const ProfilePage: React.FC = () => {
   const [balance, setBalance] = useState(0);
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
+  const [nextPayoutDate, setNextPayoutDate] = useState<string | null>(null);
 
   // Earnings expansion state
   const earningsRef = useRef<HTMLDivElement>(null);
@@ -125,6 +126,19 @@ const ProfilePage: React.FC = () => {
       if (data) {
         setTotalVideos(data.length);
         setTotalViews(data.reduce((sum, s) => sum + (s.current_views || 0), 0));
+      }
+
+      // Fetch next payout date from approved submissions
+      const { data: pendingSubs } = await supabase
+        .from('content_submissions')
+        .select('payout_available_at')
+        .eq('creator_id', user.id)
+        .eq('status', 'approved')
+        .not('payout_available_at', 'is', null)
+        .order('payout_available_at', { ascending: true })
+        .limit(1);
+      if (pendingSubs && pendingSubs.length > 0 && (pendingSubs[0] as any).payout_available_at) {
+        setNextPayoutDate((pendingSubs[0] as any).payout_available_at);
       }
 
       const { data: stats } = await supabase
@@ -343,6 +357,23 @@ const ProfilePage: React.FC = () => {
                     <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
                     <span className="text-sm font-semibold text-white font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
                   </div>
+                  {nextPayoutDate && (
+                    <>
+                      <div className="h-px bg-white/10" />
+                      <div className="flex items-center gap-2 px-2">
+                        <Clock className="h-3.5 w-3.5 text-white/40" />
+                        <span className="text-sm text-white/60 font-jakarta">Next claim</span>
+                        <span className="text-sm font-semibold text-white font-montserrat ml-auto">
+                          {(() => {
+                            const diff = new Date(nextPayoutDate).getTime() - Date.now();
+                            if (diff <= 0) return 'Available now';
+                            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                            return `${days} day${days !== 1 ? 's' : ''}`;
+                          })()}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="flex-1" />

@@ -38,8 +38,8 @@ const BusinessSubmissionDetail: React.FC = () => {
   const [submission, setSubmission] = useState<SubmissionData | null>(null);
   const [creatorUsername, setCreatorUsername] = useState<string>('');
   const [creatorEarnings, setCreatorEarnings] = useState<number>(0);
-  const [potTotal, setPotTotal] = useState<number>(0);
-  const [potSpent, setPotSpent] = useState<number>(0);
+  const [poolTotal, setPoolTotal] = useState<number>(0);
+  const [poolSpent, setPoolSpent] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,8 +73,8 @@ const BusinessSubmissionDetail: React.FC = () => {
           .eq('id', data.campaign_id)
           .maybeSingle();
         if (campaign) {
-          setPotTotal(campaign.total_budget || 0);
-          setPotSpent((campaign as any).budget_spent || 0);
+          setPoolTotal(campaign.total_budget || 0);
+          setPoolSpent((campaign as any).budget_spent || 0);
         }
       }
       setLoading(false);
@@ -244,7 +244,7 @@ const BusinessSubmissionDetail: React.FC = () => {
               </div>
             </div>
 
-            {/* Earnings & Pot */}
+            {/* Earnings & Pool */}
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-[20px] p-4" style={cardStyle}>
                 <span className="text-xs text-muted-foreground">Creator Earnings</span>
@@ -253,13 +253,13 @@ const BusinessSubmissionDetail: React.FC = () => {
                 </p>
               </div>
               <div className="rounded-[20px] p-4" style={cardStyle}>
-                <span className="text-xs text-muted-foreground">Pot</span>
+                <span className="text-xs text-muted-foreground">Pool</span>
                 <p className="text-xl font-bold text-foreground mt-1">
-                  {convert(potSpent).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {convert(potTotal).toLocaleString()} {label}</span>
+                  {convert(poolSpent).toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {convert(poolTotal).toLocaleString()} {label}</span>
                 </p>
-                {potTotal > 0 && (
+                {poolTotal > 0 && (
                   <div className="w-full h-1.5 rounded-full bg-muted mt-2">
-                    <div className="h-full rounded-full bg-foreground/60" style={{ width: `${Math.min((potSpent / potTotal) * 100, 100)}%` }} />
+                    <div className="h-full rounded-full bg-foreground/60" style={{ width: `${Math.min((poolSpent / poolTotal) * 100, 100)}%` }} />
                   </div>
                 )}
               </div>

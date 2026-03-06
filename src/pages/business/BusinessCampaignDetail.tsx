@@ -194,9 +194,9 @@ const BusinessCampaignDetail: React.FC = () => {
   }
 
   const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
-  const potUsed = campaign.total_budget ? Math.min(totalViews * 0.003, campaign.total_budget) : 0; // rough estimate
-  const potTotal = campaign.total_budget || 0;
-  const potPercent = potTotal > 0 ? Math.min((potUsed / potTotal) * 100, 100) : 0;
+  const poolUsed = campaign.total_budget ? Math.min(totalViews * 0.003, campaign.total_budget) : 0; // rough estimate
+  const poolTotal = campaign.total_budget || 0;
+  const poolPercent = poolTotal > 0 ? Math.min((poolUsed / poolTotal) * 100, 100) : 0;
   const inAction = submissions; // Show all submissions as "in action"
 
   const greenPillStyle = {
@@ -320,7 +320,7 @@ const BusinessCampaignDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats: Views + Pot */}
+      {/* Stats: Views + Pool */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="rounded-[28px] p-5" style={cardStyle}>
           <div className="mb-2">
@@ -337,17 +337,17 @@ const BusinessCampaignDetail: React.FC = () => {
           backdropFilter: 'blur(8px)',
         }}>
           <div className="mb-2">
-            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pot</span>
+            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pool</span>
           </div>
           <p className="text-2xl font-bold" style={{ color: 'hsl(142, 60%, 30%)' }}>
-            {convert(potUsed).toLocaleString()}
-            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ {convert(potTotal).toLocaleString()} {label}</span>
+            {convert(poolUsed).toLocaleString()}
+            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ {convert(poolTotal).toLocaleString()} {label}</span>
           </p>
-          {potTotal > 0 && (
+          {poolTotal > 0 && (
             <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'hsla(142, 71%, 45%, 0.15)' }}>
               <div
                 className="h-full rounded-full transition-all"
-                style={{ width: `${potPercent}%`, background: 'hsl(142, 71%, 45%)' }}
+                style={{ width: `${poolPercent}%`, background: 'hsl(142, 71%, 45%)' }}
               />
             </div>
           )}
