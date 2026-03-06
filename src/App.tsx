@@ -65,6 +65,7 @@ const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
 const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
+const AdminBusinessDetail = lazyRetry(() => import("./pages/admin/AdminBusinessDetail"));
 
 const queryClient = new QueryClient();
 
@@ -128,6 +129,7 @@ const App = () => (
                 <Route path="/embed/ad/:id" element={<Suspense fallback={<BusinessLoader />}><EmbedAd /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={<BusinessLoader />}><AdminLayout /></Suspense>}>
                   <Route index element={<AdminDashboard />} />
+                  <Route path="business/:userId" element={<AdminBusinessDetail />} />
                 </Route>
                 <Route path="/" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />
