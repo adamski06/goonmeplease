@@ -19,8 +19,24 @@ const BusinessLoader = () => (
   </div>
 );
 
+// Retry wrapper for dynamic imports — handles stale chunk errors after deploys
+const lazyRetry = (importFn: () => Promise<any>) =>
+  lazy(() =>
+    importFn().catch(() => {
+      // If chunk fails to load, force a full page reload (once)
+      const hasReloaded = sessionStorage.getItem('chunk_reload');
+      if (!hasReloaded) {
+        sessionStorage.setItem('chunk_reload', '1');
+        window.location.reload();
+        return new Promise(() => {}); // never resolves, page reloads
+      }
+      sessionStorage.removeItem('chunk_reload');
+      return importFn(); // retry once more after reload
+    })
+  );
+
 // Lazy-loaded pages
-const Auth = lazy(() => import("./pages/Auth"));
+const Auth = lazyRetry(() => import("./pages/Auth"));
 const UserLayout = lazy(() => import("./components/UserLayout"));
 const CampaignDetail = lazy(() => import("./pages/CampaignDetail"));
 const EditProfile = lazy(() => import("./pages/EditProfile"));
