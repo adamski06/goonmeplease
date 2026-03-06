@@ -10,6 +10,7 @@ interface SidebarItem {
   id: string;
   title: string;
   type: 'spread' | 'deal';
+  status: string | null;
 }
 
 interface BusinessProfileData {
