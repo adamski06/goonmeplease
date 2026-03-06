@@ -14,6 +14,7 @@ const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
   if (s === 'active' || s === 'approved' || s === 'paid') return 'default' as const;
   if (s === 'denied') return 'destructive' as const;
+  if (s === 'pending') return 'outline' as const;
   return 'secondary' as const;
 };
 
