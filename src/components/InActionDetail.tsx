@@ -51,7 +51,6 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const [poolSpent, setPoolSpent] = useState(0);
   const [myEarnings, setMyEarnings] = useState(0);
   const [payoutAvailableAt, setPayoutAvailableAt] = useState<string | null>(null);
-  const [ratePerThousand, setRatePerThousand] = useState(0);
 
   useEffect(() => {
     const fetchStats = async () => {
