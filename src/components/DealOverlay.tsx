@@ -26,7 +26,6 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
   const [backdropVisible, setBackdropVisible] = useState(false);
-  const [showPicture, setShowPicture] = useState(false);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
 
