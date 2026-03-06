@@ -149,26 +149,6 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 py-4">
-            {/* Show Picture toggle */}
-            {!showPicture ? (
-              <button
-                onClick={() => setShowPicture(true)}
-                className="w-full mb-4 h-10 rounded-full text-xs font-semibold text-black/60 font-montserrat flex items-center justify-center gap-1.5"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                Show picture
-              </button>
-            ) : (
-              <div className="mb-4 overflow-hidden rounded-xl animate-fade-in">
-                <div className="mx-auto w-full max-w-[220px] aspect-[9/16] overflow-hidden rounded-xl">
-                  <img src={deal.image || placeholderBlue} alt={deal.brand} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-
             <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
               {deal.description}
             </p>
