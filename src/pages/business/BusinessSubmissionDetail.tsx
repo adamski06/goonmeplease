@@ -73,8 +73,8 @@ const BusinessSubmissionDetail: React.FC = () => {
           .eq('id', data.campaign_id)
           .maybeSingle();
         if (campaign) {
-          setPotTotal(campaign.total_budget || 0);
-          setPotSpent((campaign as any).budget_spent || 0);
+          setPoolTotal(campaign.total_budget || 0);
+          setPoolSpent((campaign as any).budget_spent || 0);
         }
       }
       setLoading(false);
