@@ -311,11 +311,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                   <EarningsGraph tiers={campaign.tiers} maxEarnings={campaign.maxEarnings} />
                   {(() => {
                   const data = calculateEarningsData(campaign.tiers, campaign.maxEarnings);
-                    const potAmount = campaign.pot || 100000;
+                    const poolAmount = campaign.pool || 100000;
                     return (
                       <>
                         <div className="flex items-baseline justify-between mt-3 mb-1">
-                          <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pot</span>
+                          <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pool</span>
                           <div className="flex items-baseline gap-1">
                             <span className="text-lg font-bold text-white font-montserrat">{convert(potAmount).toLocaleString()}</span>
                             <span className="text-xs text-white/60 font-jakarta">{label}</span>
