@@ -128,6 +128,19 @@ const ProfilePage: React.FC = () => {
         setTotalViews(data.reduce((sum, s) => sum + (s.current_views || 0), 0));
       }
 
+      // Fetch next payout date from approved submissions
+      const { data: pendingSubs } = await supabase
+        .from('content_submissions')
+        .select('payout_available_at')
+        .eq('creator_id', user.id)
+        .eq('status', 'approved')
+        .not('payout_available_at', 'is', null)
+        .order('payout_available_at', { ascending: true })
+        .limit(1);
+      if (pendingSubs && pendingSubs.length > 0 && (pendingSubs[0] as any).payout_available_at) {
+        setNextPayoutDate((pendingSubs[0] as any).payout_available_at);
+      }
+
       const { data: stats } = await supabase
         .from('creator_stats')
         .select('total_balance, total_earnings, pending_balance')
