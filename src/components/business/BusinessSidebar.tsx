@@ -279,7 +279,12 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                 alt=""
                 className="h-full w-full object-cover"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
+                  const img = e.target as HTMLImageElement;
+                  if (domain && !img.src.includes('google.com/s2/favicons')) {
+                    img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+                  } else {
+                    img.style.display = 'none';
+                  }
                 }}
               />
             ) : (
