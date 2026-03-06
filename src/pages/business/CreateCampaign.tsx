@@ -513,7 +513,7 @@ const CreateCampaign: React.FC = () => {
                   <span className="text-sm font-medium text-foreground">{fmtInline(maxPayoutPerCreator)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Creator pot</span>
+                  <span className="text-sm text-muted-foreground">Creator pool</span>
                   <span className="text-sm font-medium text-foreground">{fmtInline(getBudget())}</span>
                 </div>
                 <div className="flex items-center justify-between">
