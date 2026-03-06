@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import JarlaLoader from '@/components/JarlaLoader';
+import { DollarSign } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
