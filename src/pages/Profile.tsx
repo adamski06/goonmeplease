@@ -23,6 +23,7 @@ const ProfilePage: React.FC = () => {
   const [balance, setBalance] = useState(0);
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
+  const [nextPayoutDate, setNextPayoutDate] = useState<string | null>(null);
 
   // Earnings expansion state
   const earningsRef = useRef<HTMLDivElement>(null);
