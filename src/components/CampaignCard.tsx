@@ -317,7 +317,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                         <div className="flex items-baseline justify-between mt-3 mb-1">
                           <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pool</span>
                           <div className="flex items-baseline gap-1">
-                            <span className="text-lg font-bold text-white font-montserrat">{convert(potAmount).toLocaleString()}</span>
+                            <span className="text-lg font-bold text-white font-montserrat">{convert(poolAmount).toLocaleString()}</span>
                             <span className="text-xs text-white/60 font-jakarta">{label}</span>
                           </div>
                         </div>
