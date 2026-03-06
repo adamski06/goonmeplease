@@ -458,7 +458,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Created</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {rewards.map((r) => (
