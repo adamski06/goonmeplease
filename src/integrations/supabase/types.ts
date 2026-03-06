@@ -199,6 +199,7 @@ export type Database = {
           current_shares: number | null
           current_views: number | null
           id: string
+          payout_available_at: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -216,6 +217,7 @@ export type Database = {
           current_shares?: number | null
           current_views?: number | null
           id?: string
+          payout_available_at?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -233,6 +235,7 @@ export type Database = {
           current_shares?: number | null
           current_views?: number | null
           id?: string
+          payout_available_at?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -311,6 +314,7 @@ export type Database = {
           deal_id: string
           id: string
           message: string | null
+          payout_available_at: string | null
           review_notes: string | null
           reviewed_at: string | null
           status: string
@@ -326,6 +330,7 @@ export type Database = {
           deal_id: string
           id?: string
           message?: string | null
+          payout_available_at?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           status?: string
@@ -341,6 +346,7 @@ export type Database = {
           deal_id?: string
           id?: string
           message?: string | null
+          payout_available_at?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           status?: string

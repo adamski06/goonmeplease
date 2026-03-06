@@ -6,8 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Building2, Megaphone, Handshake, Gift } from 'lucide-react';
+import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X } from 'lucide-react';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 
 const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
@@ -22,16 +23,23 @@ const money = (n: number | null) => (n != null ? `$${Number(n).toLocaleString()}
 const AdminBusinessDetail = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [deals, setDeals] = useState<any[]>([]);
   const [rewards, setRewards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Drill-down state for viewing submissions
-  const [selectedAd, setSelectedAd] = useState<{ type: 'spread' | 'deal'; id: string; title: string } | null>(null);
+  // Drill-down: ad submissions list
+  const [selectedAd, setSelectedAd] = useState<{ type: 'spread' | 'deal'; id: string; title: string; ad: any } | null>(null);
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [subsLoading, setSubsLoading] = useState(false);
+
+  // Drill-down: single submission review
+  const [reviewItem, setReviewItem] = useState<any | null>(null);
+  const [reviewType, setReviewType] = useState<'spread' | 'deal'>('spread');
+  const [reviewAd, setReviewAd] = useState<any>(null);
+  const [acting, setActing] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -51,8 +59,8 @@ const AdminBusinessDetail = () => {
     load();
   }, [userId]);
 
-  const openSubmissions = async (type: 'spread' | 'deal', id: string, title: string) => {
-    setSelectedAd({ type, id, title });
+  const openSubmissions = async (type: 'spread' | 'deal', id: string, title: string, ad: any) => {
+    setSelectedAd({ type, id, title, ad });
     setSubsLoading(true);
     if (type === 'spread') {
       const { data } = await supabase.from('content_submissions').select('*').eq('campaign_id', id).order('created_at', { ascending: false });
@@ -64,6 +72,50 @@ const AdminBusinessDetail = () => {
     setSubsLoading(false);
   };
 
+  const openReview = (item: any, type: 'spread' | 'deal', ad: any) => {
+    setReviewItem(item);
+    setReviewType(type);
+    setReviewAd(ad);
+  };
+
+  const handleAction = async (action: 'approve' | 'deny') => {
+    if (!reviewItem) return;
+    setActing(true);
+
+    const now = new Date();
+    const payoutDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+    if (reviewType === 'spread') {
+      const updateData: any = {
+        status: action === 'approve' ? 'approved' : 'denied',
+        reviewed_at: now.toISOString(),
+      };
+      if (action === 'approve') {
+        updateData.payout_available_at = payoutDate.toISOString();
+      }
+      await supabase.from('content_submissions').update(updateData).eq('id', reviewItem.id);
+    } else {
+      const newStatus = action === 'approve' ? 'accepted' : 'denied';
+      const updateData: any = {
+        status: newStatus,
+        reviewed_at: now.toISOString(),
+      };
+      if (action === 'approve') {
+        updateData.payout_available_at = payoutDate.toISOString();
+      }
+      await supabase.from('deal_applications').update(updateData).eq('id', reviewItem.id);
+    }
+
+    toast({ title: action === 'approve' ? 'Submission approved' : 'Submission denied' });
+
+    // Refresh submissions list
+    setReviewItem(null);
+    if (selectedAd) {
+      await openSubmissions(selectedAd.type, selectedAd.id, selectedAd.title, selectedAd.ad);
+    }
+    setActing(false);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -72,7 +124,148 @@ const AdminBusinessDetail = () => {
     );
   }
 
-  // Submissions sub-view
+  // ============ REVIEW VIEW (side-by-side) ============
+  if (reviewItem && reviewAd) {
+    const guidelines = reviewAd.guidelines || [];
+    return (
+      <div className="space-y-4">
+        <Button variant="ghost" size="sm" onClick={() => setReviewItem(null)}>
+          <ArrowLeft className="h-4 w-4 mr-1" /> Back to submissions
+        </Button>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left: Ad requirements */}
+          <div className="space-y-4">
+            <h2 className="font-montserrat font-semibold text-lg">Ad Requirements</h2>
+            <Card className="border-border">
+              <CardContent className="p-5 space-y-4">
+                {reviewAd.cover_image_url && (
+                  <img src={reviewAd.cover_image_url} alt="" className="w-full h-40 object-cover rounded-[4px]" />
+                )}
+                <div>
+                  <p className="font-semibold">{reviewAd.title}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{reviewAd.brand_name}</p>
+                </div>
+                {reviewAd.description && (
+                  <p className="text-sm">{reviewAd.description}</p>
+                )}
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  {reviewAd.category && (
+                    <div><span className="text-muted-foreground">Category:</span> {reviewAd.category}</div>
+                  )}
+                  {reviewAd.video_length && (
+                    <div><span className="text-muted-foreground">Video Length:</span> {reviewAd.video_length}</div>
+                  )}
+                  {reviewAd.product_visibility && (
+                    <div><span className="text-muted-foreground">Product Visibility:</span> {reviewAd.product_visibility}</div>
+                  )}
+                  {reviewAd.total_budget && (
+                    <div><span className="text-muted-foreground">Budget:</span> {money(reviewAd.total_budget)}</div>
+                  )}
+                </div>
+                {guidelines.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium mb-2">Guidelines</p>
+                    <ul className="space-y-1">
+                      {guidelines.map((g: string, i: number) => (
+                        <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                          <span className="text-primary shrink-0">•</span> {g}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right: Submission / TikTok embed */}
+          <div className="space-y-4">
+            <h2 className="font-montserrat font-semibold text-lg">Submission</h2>
+            <Card className="border-border">
+              <CardContent className="p-5 space-y-4">
+                <Badge variant={statusVariant(reviewItem.status)}>{reviewItem.status}</Badge>
+
+                {reviewItem.tiktok_video_url ? (
+                  <div className="rounded-[4px] overflow-hidden bg-black aspect-[9/16] max-h-[500px]">
+                    <iframe
+                      src={`https://www.tiktok.com/embed/v2/${reviewItem.tiktok_video_id || ''}`}
+                      className="w-full h-full"
+                      allowFullScreen
+                      allow="encrypted-media"
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-muted rounded-[4px] aspect-[9/16] max-h-[500px] flex items-center justify-center text-muted-foreground text-sm">
+                    No video submitted
+                  </div>
+                )}
+
+                {reviewItem.tiktok_video_url && (
+                  <a href={reviewItem.tiktok_video_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline block">
+                    Open on TikTok ↗
+                  </a>
+                )}
+
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div>
+                    <p className="text-lg font-semibold">{(reviewItem.current_views || 0).toLocaleString()}</p>
+                    <p className="text-[11px] text-muted-foreground">Views</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold">{(reviewItem.current_likes || 0).toLocaleString()}</p>
+                    <p className="text-[11px] text-muted-foreground">Likes</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold">{(reviewItem.current_shares || 0).toLocaleString()}</p>
+                    <p className="text-[11px] text-muted-foreground">Shares</p>
+                  </div>
+                </div>
+
+                {reviewItem.message && (
+                  <div>
+                    <p className="text-sm font-medium">Creator message</p>
+                    <p className="text-sm text-muted-foreground">{reviewItem.message}</p>
+                  </div>
+                )}
+
+                <p className="text-xs text-muted-foreground">Submitted {fmt(reviewItem.created_at)}</p>
+
+                {/* Action buttons — only for pending items */}
+                {(reviewItem.status === 'pending_review' || reviewItem.status === 'pending') && (
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      className="flex-1"
+                      onClick={() => handleAction('approve')}
+                      disabled={acting}
+                    >
+                      <Check className="h-4 w-4 mr-1" /> Approve
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      className="flex-1"
+                      onClick={() => handleAction('deny')}
+                      disabled={acting}
+                    >
+                      <X className="h-4 w-4 mr-1" /> Deny
+                    </Button>
+                  </div>
+                )}
+
+                {reviewItem.payout_available_at && (
+                  <p className="text-xs text-muted-foreground">
+                    Payout available: {fmt(reviewItem.payout_available_at)}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ============ SUBMISSIONS LIST ============
   if (selectedAd) {
     return (
       <div className="space-y-4">
@@ -102,13 +295,17 @@ const AdminBusinessDetail = () => {
             </TableHeader>
             <TableBody>
               {submissions.map((s) => (
-                <TableRow key={s.id}>
+                <TableRow
+                  key={s.id}
+                  className="cursor-pointer hover:bg-accent/50"
+                  onClick={() => openReview(s, selectedAd.type, selectedAd.ad)}
+                >
                   <TableCell><Badge variant={statusVariant(s.status)}>{s.status}</Badge></TableCell>
                   <TableCell>{(s.current_views || 0).toLocaleString()}</TableCell>
                   <TableCell>{(s.current_likes || 0).toLocaleString()}</TableCell>
                   <TableCell>
                     {s.tiktok_video_url ? (
-                      <a href={s.tiktok_video_url} target="_blank" rel="noreferrer" className="text-primary underline text-xs">View</a>
+                      <span className="text-primary text-xs">Has video</span>
                     ) : '–'}
                   </TableCell>
                   <TableCell>{fmt(s.created_at)}</TableCell>
@@ -121,13 +318,13 @@ const AdminBusinessDetail = () => {
     );
   }
 
+  // ============ BUSINESS DETAIL (ads tabs) ============
   return (
     <div className="space-y-6">
       <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
         <ArrowLeft className="h-4 w-4 mr-1" /> All Businesses
       </Button>
 
-      {/* Business header */}
       <div className="flex items-center gap-3">
         {profile?.logo_url ? (
           <img src={profile.logo_url} alt="" className="h-12 w-12 rounded-full object-cover bg-muted" />
@@ -144,7 +341,6 @@ const AdminBusinessDetail = () => {
         </div>
       </div>
 
-      {/* Stats row */}
       <div className="grid grid-cols-3 gap-3">
         {[
           { label: 'Spread Ads', value: campaigns.length, icon: Megaphone },
@@ -180,7 +376,7 @@ const AdminBusinessDetail = () => {
               </TableRow></TableHeader>
               <TableBody>
                 {campaigns.map((c) => (
-                  <TableRow key={c.id} className="cursor-pointer hover:bg-accent/50" onClick={() => openSubmissions('spread', c.id, c.title)}>
+                  <TableRow key={c.id} className="cursor-pointer hover:bg-accent/50" onClick={() => openSubmissions('spread', c.id, c.title, c)}>
                     <TableCell className="font-medium max-w-[200px] truncate">{c.title}</TableCell>
                     <TableCell><Badge variant={statusVariant(c.status)}>{c.status || 'active'}</Badge></TableCell>
                     <TableCell>{money(c.total_budget)}</TableCell>
@@ -203,7 +399,7 @@ const AdminBusinessDetail = () => {
               </TableRow></TableHeader>
               <TableBody>
                 {deals.map((d) => (
-                  <TableRow key={d.id} className="cursor-pointer hover:bg-accent/50" onClick={() => openSubmissions('deal', d.id, d.title)}>
+                  <TableRow key={d.id} className="cursor-pointer hover:bg-accent/50" onClick={() => openSubmissions('deal', d.id, d.title, d)}>
                     <TableCell className="font-medium max-w-[200px] truncate">{d.title}</TableCell>
                     <TableCell><Badge variant={statusVariant(d.status)}>{d.status || 'active'}</Badge></TableCell>
                     <TableCell>{money(d.total_budget)}</TableCell>
