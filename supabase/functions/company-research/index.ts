@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const SYSTEM_PROMPT = `You are Jarla, the onboarding assistant for the Jarla platform — a performance-based UGC marketplace.
 
-Your job: when the user gives you a company name, IMMEDIATELY research it and return a full profile. Do NOT ask follow-up questions. Do NOT ask for a website. Just research based on the name and fill everything in.
+Your job: when the user gives you a company name or website content, return a full profile based ONLY on the provided information. Do NOT make up facts. If website content is provided, extract details from it. Do NOT ask follow-up questions.
 
 ALWAYS respond with valid JSON only. No markdown, no extra text.
 
@@ -22,16 +22,80 @@ Response format:
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
     "brand_values": "e.g. Sustainability, authenticity, inclusivity",
-    "logo_url": "Use Clearbit Logo API with max size: https://logo.clearbit.com/domain.com?size=512&format=png — replace domain.com with the actual company domain. ALWAYS add ?size=512&format=png for full quality. ALWAYS provide this if you know the website domain."
+    "logo_url": "Use Clearbit Logo API: https://logo.clearbit.com/domain.com?size=512&format=png"
   }
 }
 
 Rules:
 - ALWAYS include profileUpdates on the FIRST response. Never ask follow-up questions first.
-- Research the company from its name alone. Guess the website if needed.
+- If WEBSITE CONTENT is provided, base ALL your answers on that content. Do not hallucinate.
+- If only a company name is given, do your best but prefer facts over guesses.
 - Keep the message field SHORT — 1 sentence, max 15 words.
 - NEVER list or repeat the profile fields in your message.
-- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format (e.g. https://logo.clearbit.com/nike.com).`;
+- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format.`;
+
+// Extract a URL from a user message
+function extractUrl(text: string): string | null {
+  const urlMatch = text.match(/https?:\/\/[^\s,)]+/i);
+  if (urlMatch) return urlMatch[0];
+  // Also match bare domains like "company.com"
+  const domainMatch = text.match(/(?:^|\s)([\w-]+\.[\w]{2,}(?:\.[\w]{2,})?)\b/i);
+  if (domainMatch) return `https://${domainMatch[1]}`;
+  return null;
+}
+
+// Scrape website content using Firecrawl
+async function scrapeWebsite(url: string): Promise<string | null> {
+  const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
+  if (!apiKey) {
+    console.log('FIRECRAWL_API_KEY not available, skipping scrape');
+    return null;
+  }
+
+  try {
+    let formattedUrl = url.trim();
+    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
+
+    console.log('Scraping website:', formattedUrl);
+
+    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: formattedUrl,
+        formats: ['markdown'],
+        onlyMainContent: true,
+        waitFor: 5000,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Firecrawl error:', response.status, await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+    const markdown = data?.data?.markdown || data?.markdown || '';
+
+    if (!markdown) {
+      console.log('No content returned from Firecrawl');
+      return null;
+    }
+
+    // Truncate to avoid blowing up the token limit
+    const truncated = markdown.slice(0, 4000);
+    console.log(`Scraped ${markdown.length} chars, using ${truncated.length}`);
+    return truncated;
+  } catch (error) {
+    console.error('Firecrawl scrape error:', error);
+    return null;
+  }
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -89,7 +153,15 @@ serve(async (req) => {
       });
     }
 
-    // Chat flow
+    // Chat flow — try to extract URL from user message and scrape it
+    let websiteContent: string | null = null;
+    const detectedUrl = extractUrl(message);
+    
+    if (detectedUrl) {
+      websiteContent = await scrapeWebsite(detectedUrl);
+    }
+
+    // Build messages for the AI
     const messages: Array<{role: string; content: string}> = [
       { role: 'system', content: SYSTEM_PROMPT }
     ];
@@ -103,7 +175,13 @@ serve(async (req) => {
       }
     }
 
-    messages.push({ role: 'user', content: message });
+    // Enrich user message with scraped content
+    let enrichedMessage = message;
+    if (websiteContent) {
+      enrichedMessage = `${message}\n\n---\nWEBSITE CONTENT SCRAPED FROM ${detectedUrl}:\n${websiteContent}\n---\n\nIMPORTANT: Base your profile ONLY on the website content above. Do not make up information.`;
+    }
+
+    messages.push({ role: 'user', content: enrichedMessage });
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -114,13 +192,18 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'google/gemini-3-flash-preview',
         messages,
-        max_tokens: 800,
+        max_tokens: 1000,
       }),
     });
 
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(JSON.stringify({ response: "Give me a moment, I'm a bit busy right now..." }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ response: "Let me help you set up your profile — please try again in a moment." }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
@@ -134,17 +217,46 @@ serve(async (req) => {
 
     console.log('Company research raw response:', aiResponse);
 
-    // Parse JSON response
+    // Parse JSON response with truncation detection
     let parsedResponse;
     try {
       const cleaned = aiResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      parsedResponse = JSON.parse(cleaned);
+      
+      // Detect truncation: mismatched braces/brackets
+      const openBraces = (cleaned.match(/{/g) || []).length;
+      const closeBraces = (cleaned.match(/}/g) || []).length;
+      const openBrackets = (cleaned.match(/\[/g) || []).length;
+      const closeBrackets = (cleaned.match(/]/g) || []).length;
+      
+      let fixedJson = cleaned;
+      if (openBrackets > closeBrackets) {
+        fixedJson += ']'.repeat(openBrackets - closeBrackets);
+      }
+      if (openBraces > closeBraces) {
+        fixedJson += '}'.repeat(openBraces - closeBraces);
+      }
+      // Fix trailing commas
+      fixedJson = fixedJson.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+      
+      parsedResponse = JSON.parse(fixedJson);
     } catch {
       const jsonMatch = aiResponse.match(/\{[\s\S]*"message"[\s\S]*\}/);
       if (jsonMatch) {
         try { parsedResponse = JSON.parse(jsonMatch[0]); } catch { parsedResponse = { message: aiResponse }; }
       } else {
         parsedResponse = { message: aiResponse };
+      }
+    }
+
+    // If we scraped a URL, ensure the website field uses the actual URL
+    if (detectedUrl && parsedResponse.profileUpdates) {
+      const domain = detectedUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      if (!parsedResponse.profileUpdates.website || parsedResponse.profileUpdates.website.includes('example')) {
+        parsedResponse.profileUpdates.website = detectedUrl;
+      }
+      // Ensure logo uses actual domain
+      if (!parsedResponse.profileUpdates.logo_url || !parsedResponse.profileUpdates.logo_url.includes(domain)) {
+        parsedResponse.profileUpdates.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
       }
     }
 
