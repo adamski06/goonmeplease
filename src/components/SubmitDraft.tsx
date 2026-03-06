@@ -91,7 +91,28 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
     try {
       // Extract TikTok username from URL
       const usernameMatch = tiktokUrl.match(/tiktok\.com\/@([^/]+)/);
-      const tiktokUsername = usernameMatch ? usernameMatch[1] : 'unknown';
+      const tiktokUsername = usernameMatch ? usernameMatch[1] : null;
+
+      if (!tiktokUsername) {
+        toast.error('Could not detect TikTok username from the link.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Verify the submitted video is from the creator's registered TikTok account
+      const { data: registeredAccounts } = await supabase
+        .rpc('get_user_tiktok_accounts', { p_user_id: user.id });
+
+      if (registeredAccounts && registeredAccounts.length > 0) {
+        const registeredUsernames = registeredAccounts.map(
+          (a: any) => a.tiktok_username?.toLowerCase()
+        );
+        if (!registeredUsernames.includes(tiktokUsername.toLowerCase())) {
+          toast.error(`This video is from @${tiktokUsername}, but your registered TikTok is @${registeredAccounts[0].tiktok_username}. Please submit a video from your own account.`);
+          setSubmitting(false);
+          return;
+        }
+      }
 
       // Get or create tiktok account via security definer function
       const { data: accountId, error: accountError } = await supabase

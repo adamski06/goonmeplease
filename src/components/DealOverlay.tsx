@@ -26,7 +26,6 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
   const [backdropVisible, setBackdropVisible] = useState(false);
-  const [showPicture, setShowPicture] = useState(false);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
 
@@ -142,34 +141,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             <h2 className="text-base font-bold text-black font-montserrat flex-1">
               {deal.brand}
             </h2>
-            {/* Deal badge */}
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
+            {/* Deal badge - positioned before the X button area */}
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
               <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
             </div>
           </div>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 py-4">
-            {/* Show Picture toggle */}
-            {!showPicture ? (
-              <button
-                onClick={() => setShowPicture(true)}
-                className="w-full mb-4 h-10 rounded-full text-xs font-semibold text-black/60 font-montserrat flex items-center justify-center gap-1.5"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                Show picture
-              </button>
-            ) : (
-              <div className="mb-4 overflow-hidden rounded-xl animate-fade-in">
-                <div className="mx-auto w-full max-w-[220px] aspect-[9/16] overflow-hidden rounded-xl">
-                  <img src={deal.image || placeholderBlue} alt={deal.brand} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-
             <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
               {deal.description}
             </p>
