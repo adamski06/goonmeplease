@@ -89,21 +89,34 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
         .eq('campaign_id', submission.campaign_id)
         .order('min_views', { ascending: true });
       if (tiers && tiers.length > 0) {
-        setCampaignTiers(tiers.map(t => ({
+        const parsedTiers = tiers.map(t => ({
           minViews: t.min_views,
           maxViews: t.max_views,
           rate: t.rate_per_view,
-        })));
-        setRatePerThousand(tiers[0].rate_per_view * 1000);
-      }
+        }));
+        setCampaignTiers(parsedTiers);
 
-      // Fetch my earnings for this submission
-      const { data: earningsData } = await supabase
-        .from('earnings')
-        .select('amount')
-        .eq('submission_id', submission.id)
-        .maybeSingle();
-      if (earningsData) setMyEarnings(earningsData.amount || 0);
+        // Calculate earnings client-side from views and tiers
+        const currentViews = submission.current_views || 0;
+        let calculated = 0;
+        for (const tier of parsedTiers) {
+          if (currentViews > tier.minViews) {
+            const upper = tier.maxViews != null ? Math.min(currentViews, tier.maxViews) : currentViews;
+            const tierViews = upper - tier.minViews;
+            if (tierViews > 0) calculated += tierViews * tier.rate;
+          }
+        }
+        // Cap at max earnings
+        if (campaign?.max_earnings && calculated > campaign.max_earnings) {
+          calculated = campaign.max_earnings;
+        }
+        // Cap at pool remaining
+        const remaining = (campaign?.total_budget || 0) - (campaign?.budget_spent || 0);
+        if (remaining >= 0 && calculated > remaining) {
+          calculated = remaining;
+        }
+        setMyEarnings(calculated);
+      }
 
       // Fetch payout_available_at
       const { data: subData } = await supabase
