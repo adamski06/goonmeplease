@@ -220,7 +220,7 @@ const PublicAd: React.FC = () => {
           </div>
         </div>
 
-        {/* Pot / Budget info */}
+        {/* Pool / Budget info */}
         {ad.total_budget != null && ad.total_budget > 0 && (
           <div
             className="rounded-[20px] p-5 mb-8"
@@ -229,7 +229,7 @@ const PublicAd: React.FC = () => {
               border: '1px solid rgba(5,150,105,0.15)',
             }}
           >
-            <span className="text-xs font-jakarta" style={{ color: 'rgba(5,120,87,0.6)' }}>Total Pot</span>
+            <span className="text-xs font-jakarta" style={{ color: 'rgba(5,120,87,0.6)' }}>Total Pool</span>
             <p className="text-xl font-bold font-montserrat mt-1" style={{ color: 'hsl(160, 70%, 25%)' }}>
               ${ad.total_budget.toLocaleString()}
             </p>

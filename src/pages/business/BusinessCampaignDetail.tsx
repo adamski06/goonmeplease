@@ -337,17 +337,17 @@ const BusinessCampaignDetail: React.FC = () => {
           backdropFilter: 'blur(8px)',
         }}>
           <div className="mb-2">
-            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pot</span>
+            <span className="text-xs" style={{ color: 'hsl(142, 50%, 40%)' }}>Pool</span>
           </div>
           <p className="text-2xl font-bold" style={{ color: 'hsl(142, 60%, 30%)' }}>
-            {convert(potUsed).toLocaleString()}
-            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ {convert(potTotal).toLocaleString()} {label}</span>
+            {convert(poolUsed).toLocaleString()}
+            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(142, 40%, 45%)' }}>/ {convert(poolTotal).toLocaleString()} {label}</span>
           </p>
-          {potTotal > 0 && (
+          {poolTotal > 0 && (
             <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'hsla(142, 71%, 45%, 0.15)' }}>
               <div
                 className="h-full rounded-full transition-all"
-                style={{ width: `${potPercent}%`, background: 'hsl(142, 71%, 45%)' }}
+                style={{ width: `${poolPercent}%`, background: 'hsl(142, 71%, 45%)' }}
               />
             </div>
           )}

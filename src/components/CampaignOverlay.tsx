@@ -235,7 +235,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                         <div className="h-full rounded-full bg-white/40" style={{ width: `${Math.min((campaign.maxEarnings / poolAmount) * 100, 100)}%` }} />
                       </div>
                       <p className="text-xs text-white/50 font-jakarta leading-relaxed">
-                        You earn {formatPrice(data.first.earnings, { showSymbol: false })} {label} when you first reach {formatViewsForNote(data.first.views)} views and {formatPrice(data.max.earnings, { showSymbol: false })} {label} when you reach {formatViewsForNote(data.max.views)} views. When the pot is fully claimed, earnings stop — your views will convert to score instead. <span className="underline">Learn more</span>
+                        You earn {formatPrice(data.first.earnings, { showSymbol: false })} {label} when you first reach {formatViewsForNote(data.first.views)} views and {formatPrice(data.max.earnings, { showSymbol: false })} {label} when you reach {formatViewsForNote(data.max.views)} views. When the pool is fully claimed, earnings stop — your views will convert to score instead. <span className="underline">Learn more</span>
                       </p>
                     </>
                   );
