@@ -392,7 +392,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Spent</TableHead><TableHead>Created</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Spent</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {campaigns.map((c) => (
