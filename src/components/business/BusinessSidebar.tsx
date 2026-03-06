@@ -49,20 +49,20 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           .maybeSingle(),
         supabase
           .from('campaigns')
-          .select('id, title')
+          .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
         supabase
           .from('deals')
-          .select('id, title')
+          .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
       ]);
 
       if (profileData) setProfile(profileData);
 
-      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' }));
-      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' }));
+      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread', status: c.status }));
+      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal', status: d.status }));
       setItems([...spreadItems, ...dealItems]);
     };
     load();
