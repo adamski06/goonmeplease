@@ -320,7 +320,7 @@ const BusinessCampaignDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats: Views + Pot */}
+      {/* Stats: Views + Pool */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="rounded-[28px] p-5" style={cardStyle}>
           <div className="mb-2">
