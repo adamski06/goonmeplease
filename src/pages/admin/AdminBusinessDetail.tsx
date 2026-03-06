@@ -435,6 +435,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{money(d.total_budget)}</TableCell>
                     <TableCell>{d.rate_per_view ? `$${d.rate_per_view}` : '–'}</TableCell>
                     <TableCell>{fmt(d.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={d.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === d.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('deal', d.id, d.status || 'pending'); }}
+                      >
+                        {d.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
