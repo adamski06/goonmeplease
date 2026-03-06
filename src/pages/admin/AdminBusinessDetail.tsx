@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X } from 'lucide-react';
+import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
@@ -14,6 +14,7 @@ const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
   if (s === 'active' || s === 'approved' || s === 'paid') return 'default' as const;
   if (s === 'denied') return 'destructive' as const;
+  if (s === 'pending') return 'outline' as const;
   return 'secondary' as const;
 };
 
@@ -40,6 +41,25 @@ const AdminBusinessDetail = () => {
   const [reviewType, setReviewType] = useState<'spread' | 'deal'>('spread');
   const [reviewAd, setReviewAd] = useState<any>(null);
   const [acting, setActing] = useState(false);
+  const [togglingAd, setTogglingAd] = useState<string | null>(null);
+
+  const toggleAdStatus = async (type: 'campaign' | 'deal' | 'reward', id: string, currentStatus: string) => {
+    setTogglingAd(id);
+    const isActivating = currentStatus !== 'active';
+    const newStatus = isActivating ? 'active' : 'pending';
+    const newIsActive = isActivating;
+
+    const table = type === 'campaign' ? 'campaigns' : type === 'deal' ? 'deals' : 'reward_ads';
+    await supabase.from(table).update({ status: newStatus, is_active: newIsActive }).eq('id', id);
+
+    // Refresh local state
+    if (type === 'campaign') setCampaigns(prev => prev.map(c => c.id === id ? { ...c, status: newStatus, is_active: newIsActive } : c));
+    if (type === 'deal') setDeals(prev => prev.map(d => d.id === id ? { ...d, status: newStatus, is_active: newIsActive } : d));
+    if (type === 'reward') setRewards(prev => prev.map(r => r.id === id ? { ...r, status: newStatus, is_active: newIsActive } : r));
+
+    toast({ title: isActivating ? 'Ad set live' : 'Ad paused' });
+    setTogglingAd(null);
+  };
 
   useEffect(() => {
     if (!userId) return;
@@ -372,7 +392,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Spent</TableHead><TableHead>Created</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Spent</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {campaigns.map((c) => (
@@ -382,6 +402,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{money(c.total_budget)}</TableCell>
                     <TableCell>{money(c.budget_spent)}</TableCell>
                     <TableCell>{fmt(c.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={c.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === c.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
+                      >
+                        {c.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -395,7 +425,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Rate/View</TableHead><TableHead>Created</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Budget</TableHead><TableHead>Rate/View</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {deals.map((d) => (
@@ -405,6 +435,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{money(d.total_budget)}</TableCell>
                     <TableCell>{d.rate_per_view ? `$${d.rate_per_view}` : '–'}</TableCell>
                     <TableCell>{fmt(d.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={d.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === d.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('deal', d.id, d.status || 'pending'); }}
+                      >
+                        {d.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -418,7 +458,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Created</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {rewards.map((r) => (
@@ -428,6 +468,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{r.views_required?.toLocaleString()}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{r.reward_description}</TableCell>
                     <TableCell>{fmt(r.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={r.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === r.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
+                      >
+                        {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

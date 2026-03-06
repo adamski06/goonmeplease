@@ -101,8 +101,8 @@ const CreateDeal: React.FC = () => {
       rate_per_view: toUsd(ratePerThousand),
       max_earnings: maxPayoutPerCreator ? toUsd(maxPayoutPerCreator) : null,
       total_budget: null,
-      is_active: true,
-      status: 'active',
+      is_active: false,
+      status: 'pending',
     });
 
     if (error) {

@@ -163,8 +163,8 @@ const CreateReward: React.FC = () => {
       reward_description: rewardDescription.trim(),
       views_required: effectiveViews,
       coupon_codes: couponCodes.length > 0 ? couponCodes : null,
-      is_active: true,
-      status: 'active',
+      is_active: false,
+      status: 'pending',
     } as any).select('id').single();
 
     if (error || !rewardAd) {
