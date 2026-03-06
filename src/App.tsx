@@ -63,6 +63,8 @@ const RewardsEmbed = lazyRetry(() => import("./pages/RewardsEmbed"));
 const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
 const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
 const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
+const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
 
 const queryClient = new QueryClient();
 
