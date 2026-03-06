@@ -41,6 +41,25 @@ const AdminBusinessDetail = () => {
   const [reviewType, setReviewType] = useState<'spread' | 'deal'>('spread');
   const [reviewAd, setReviewAd] = useState<any>(null);
   const [acting, setActing] = useState(false);
+  const [togglingAd, setTogglingAd] = useState<string | null>(null);
+
+  const toggleAdStatus = async (type: 'campaign' | 'deal' | 'reward', id: string, currentStatus: string) => {
+    setTogglingAd(id);
+    const isActivating = currentStatus !== 'active';
+    const newStatus = isActivating ? 'active' : 'pending';
+    const newIsActive = isActivating;
+
+    const table = type === 'campaign' ? 'campaigns' : type === 'deal' ? 'deals' : 'reward_ads';
+    await supabase.from(table).update({ status: newStatus, is_active: newIsActive }).eq('id', id);
+
+    // Refresh local state
+    if (type === 'campaign') setCampaigns(prev => prev.map(c => c.id === id ? { ...c, status: newStatus, is_active: newIsActive } : c));
+    if (type === 'deal') setDeals(prev => prev.map(d => d.id === id ? { ...d, status: newStatus, is_active: newIsActive } : d));
+    if (type === 'reward') setRewards(prev => prev.map(r => r.id === id ? { ...r, status: newStatus, is_active: newIsActive } : r));
+
+    toast({ title: isActivating ? 'Ad set live' : 'Ad paused' });
+    setTogglingAd(null);
+  };
 
   useEffect(() => {
     if (!userId) return;
