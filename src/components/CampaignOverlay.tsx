@@ -24,7 +24,6 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 }) => {
   const [backdropVisible, setBackdropVisible] = useState(false);
   const { formatPrice, label, convert } = useCurrency();
-  const [showPicture, setShowPicture] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
