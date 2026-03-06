@@ -221,129 +221,94 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
           </div>
         </div>
 
-        {/* Your Earnings Progress + Pool */}
-        <div className="mt-4 space-y-3">
-          {/* Your earnings progress */}
-          <div
-            className="rounded-2xl p-4"
-            style={{
-              background: 'linear-gradient(135deg, rgba(5,150,105,0.12) 0%, rgba(5,150,105,0.04) 100%)',
-              border: '1px solid rgba(5,150,105,0.2)',
-            }}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-black/60 font-montserrat uppercase tracking-wider">Your Earnings</span>
-              <span className="text-lg font-bold font-montserrat" style={{ color: 'hsl(160, 70%, 25%)' }}>
-                {convert(myEarnings).toLocaleString()} <span className="text-xs font-normal text-black/40">{label}</span>
+        {/* Earnings — all inside green node */}
+        {(campaignTiers.length > 0 || maxEarnings > 0) && (
+          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mt-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+            
+            {/* Your earnings progress */}
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[11px] font-semibold text-white/60 font-montserrat uppercase tracking-wider">Your Earnings</span>
+              <span className="text-lg font-bold text-white font-montserrat">
+                {convert(myEarnings).toLocaleString()} <span className="text-xs font-normal text-white/50">{label}</span>
               </span>
             </div>
-            <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(5,150,105,0.1)' }}>
-              <div
-                className="h-full rounded-full transition-all"
-                style={{ width: `${myProgress}%`, background: 'hsl(160, 70%, 40%)' }}
-              />
+            <div className="w-full h-2 rounded-full overflow-hidden bg-white/10 mb-1">
+              <div className="h-full rounded-full bg-white/50 transition-all" style={{ width: `${myProgress}%` }} />
             </div>
-            <div className="flex justify-between mt-1.5">
-              <span className="text-[10px] text-black/40 font-jakarta">0 {label}</span>
-              <span className="text-[10px] text-black/40 font-jakarta">Max {convert(maxEarnings).toLocaleString()} {label}</span>
+            <div className="flex justify-between mb-4">
+              <span className="text-[10px] text-white/40 font-jakarta">0</span>
+              <span className="text-[10px] text-white/40 font-jakarta">Max {convert(maxEarnings).toLocaleString()} {label}</span>
             </div>
-          </div>
 
-          {/* Smaller pills row: Max Earnings + Rate */}
-          <div className="flex gap-2">
-            <div
-              className="flex-1 rounded-[14px] px-3 py-2.5 text-center"
-              style={{
-                background: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
-                border: '1px solid rgba(52,211,153,0.4)',
-                boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
-              }}
-            >
-              <p className="text-xs font-bold text-white font-montserrat">{convert(maxEarnings).toLocaleString()} {label}</p>
-              <p className="text-[9px] text-white/60 font-jakarta">Max Earnings</p>
-            </div>
-            {ratePerThousand > 0 && (
-              <div
-                className="flex-1 rounded-[14px] px-3 py-2.5 text-center"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
-                  border: '1px solid rgba(52,211,153,0.4)',
-                  boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
-                }}
-              >
-                <p className="text-xs font-bold text-white font-montserrat">{convert(ratePerThousand).toLocaleString()} {label}</p>
-                <p className="text-[9px] text-white/60 font-jakarta">/ 1000 views</p>
+            {/* Compact pills: Max Earnings + Rate */}
+            <div className="flex gap-2 mb-4">
+              <div className="flex-1 rounded-[10px] px-2.5 py-1.5 text-center bg-white/10 border border-white/15">
+                <p className="text-[11px] font-bold text-white font-montserrat">{convert(maxEarnings).toLocaleString()} {label}</p>
+                <p className="text-[9px] text-white/50 font-jakarta">Max Earnings</p>
               </div>
-            )}
-          </div>
-
-          {/* Pool remaining */}
-          {poolTotal > 0 && (
-            <div
-              className="rounded-2xl p-4"
-              style={{
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                border: '1px solid rgba(0,0,0,0.06)',
-              }}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-black/60 font-montserrat uppercase tracking-wider">Pool</span>
-                <span className="text-sm font-bold text-black font-montserrat">
-                  {convert(poolRemaining).toLocaleString()} <span className="text-xs font-normal text-black/40">/ {convert(poolTotal).toLocaleString()} {label}</span>
-                </span>
-              </div>
-              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.06)' }}>
-                <div
-                  className="h-full rounded-full transition-all"
-                  style={{ width: `${poolPercent}%`, background: 'rgba(0,0,0,0.25)' }}
-                />
-              </div>
-              <p className="text-[10px] text-black/40 font-jakarta mt-1.5">
-                {convert(poolRemaining).toLocaleString()} {label} remaining in pool
-              </p>
+              {ratePerThousand > 0 && (
+                <div className="flex-1 rounded-[10px] px-2.5 py-1.5 text-center bg-white/10 border border-white/15">
+                  <p className="text-[11px] font-bold text-white font-montserrat">{convert(ratePerThousand).toLocaleString()} {label}</p>
+                  <p className="text-[9px] text-white/50 font-jakarta">/ 1000 views</p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        {/* Earnings graph */}
-        {campaignTiers.length > 0 && maxEarnings > 0 && (
-          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mt-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-            <EarningsGraph tiers={campaignTiers} maxEarnings={maxEarnings} />
-          </div>
-        )}
-
-        {/* Claim button */}
-        {submission.status === 'approved' && myEarnings > 0 && (
-          <div className="mt-4 mb-2">
-            {canClaim ? (
-              <button
-                className="w-full py-3.5 rounded-full font-semibold text-sm font-montserrat text-white transition-all active:scale-[0.97]"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(4,120,87,1) 100%)',
-                  border: '1px solid rgba(52,211,153,0.5)',
-                  boxShadow: '0 4px 16px rgba(5,150,105,0.3), inset 0 1px 1px rgba(255,255,255,0.2)',
-                }}
-              >
-                <DollarSign className="h-4 w-4 inline mr-1" />
-                Claim {convert(myEarnings).toLocaleString()} {label}
-              </button>
-            ) : (
-              <div
-                className="w-full py-3.5 rounded-full text-center relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                }}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <Lock className="h-3.5 w-3.5 text-black/30" />
-                  <span className="text-sm font-semibold text-black/40 font-montserrat">
-                    {daysUntilClaim !== null && daysUntilClaim > 0
-                      ? `Claimable in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
-                      : 'Awaiting approval'
-                    }
+            {/* Pool */}
+            {poolTotal > 0 && (
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] font-semibold text-white/60 font-montserrat uppercase tracking-wider">Pool</span>
+                  <span className="text-sm font-bold text-white font-montserrat">
+                    {convert(poolRemaining).toLocaleString()} <span className="text-[10px] font-normal text-white/40">/ {convert(poolTotal).toLocaleString()} {label}</span>
                   </span>
                 </div>
+                <div className="w-full h-1.5 rounded-full overflow-hidden bg-white/10">
+                  <div className="h-full rounded-full bg-white/30 transition-all" style={{ width: `${poolPercent}%` }} />
+                </div>
+              </div>
+            )}
+
+            {/* Graph */}
+            {campaignTiers.length > 0 && maxEarnings > 0 && (
+              <EarningsGraph tiers={campaignTiers} maxEarnings={maxEarnings} />
+            )}
+
+            {/* Claim button inside green node */}
+            {submission.status === 'approved' && myEarnings > 0 && (
+              <div className="mt-4">
+                {canClaim ? (
+                  <button
+                    className="w-full py-3 rounded-full font-semibold text-sm font-montserrat transition-all active:scale-[0.97]"
+                    style={{
+                      background: 'rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(255,255,255,0.3)',
+                      color: 'white',
+                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15)',
+                    }}
+                  >
+                    <DollarSign className="h-4 w-4 inline mr-1" />
+                    Claim {convert(myEarnings).toLocaleString()} {label}
+                  </button>
+                ) : (
+                  <div
+                    className="w-full py-3 rounded-full text-center"
+                    style={{
+                      background: 'rgba(0,0,0,0.15)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                    }}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <Lock className="h-3.5 w-3.5 text-white/30" />
+                      <span className="text-sm font-semibold text-white/50 font-montserrat">
+                        {daysUntilClaim !== null && daysUntilClaim > 0
+                          ? `Claimable in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
+                          : 'Awaiting approval'
+                        }
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
