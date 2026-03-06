@@ -141,15 +141,22 @@ const ProfilePage: React.FC = () => {
         setNextPayoutDate((pendingSubs[0] as any).payout_available_at);
       }
 
-      const { data: stats } = await supabase
-        .from('creator_stats')
-        .select('total_balance, total_earnings, pending_balance')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (stats) {
-        setBalance(Number(stats.total_balance) || 0);
-        setTotalEarnings(Number(stats.total_earnings) || 0);
-        setPendingBalance(Number(stats.pending_balance) || 0);
+      // Fetch earnings - only count claimed (paid) earnings as balance
+      // Unclaimed earnings stay as pending until user claims them
+      const { data: allEarnings } = await supabase
+        .from('earnings')
+        .select('amount, is_paid')
+        .eq('creator_id', user.id);
+      
+      if (allEarnings) {
+        const total = allEarnings.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+        const paidOut = allEarnings.filter(e => e.is_paid).reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+        const unclaimed = total - paidOut;
+        setTotalEarnings(total);
+        // Balance = 0 until claimed (claimed earnings that haven't been withdrawn)
+        // For now, pending = all unclaimed earnings
+        setBalance(0); // Nothing shows as claimable balance on profile until explicitly claimed in InAction
+        setPendingBalance(unclaimed);
       }
     };
     fetchStats();
