@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, DollarSign, Lock } from 'lucide-react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
 import EarningsGraph from '@/components/EarningsGraph';
