@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, DollarSign, Lock } from 'lucide-react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
 import EarningsGraph from '@/components/EarningsGraph';
@@ -51,7 +51,6 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const [poolSpent, setPoolSpent] = useState(0);
   const [myEarnings, setMyEarnings] = useState(0);
   const [payoutAvailableAt, setPayoutAvailableAt] = useState<string | null>(null);
-  const [ratePerThousand, setRatePerThousand] = useState(0);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -90,21 +89,34 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
         .eq('campaign_id', submission.campaign_id)
         .order('min_views', { ascending: true });
       if (tiers && tiers.length > 0) {
-        setCampaignTiers(tiers.map(t => ({
+        const parsedTiers = tiers.map(t => ({
           minViews: t.min_views,
           maxViews: t.max_views,
           rate: t.rate_per_view,
-        })));
-        setRatePerThousand(tiers[0].rate_per_view * 1000);
-      }
+        }));
+        setCampaignTiers(parsedTiers);
 
-      // Fetch my earnings for this submission
-      const { data: earningsData } = await supabase
-        .from('earnings')
-        .select('amount')
-        .eq('submission_id', submission.id)
-        .maybeSingle();
-      if (earningsData) setMyEarnings(earningsData.amount || 0);
+        // Calculate earnings client-side from views and tiers
+        const currentViews = submission.current_views || 0;
+        let calculated = 0;
+        for (const tier of parsedTiers) {
+          if (currentViews > tier.minViews) {
+            const upper = tier.maxViews != null ? Math.min(currentViews, tier.maxViews) : currentViews;
+            const tierViews = upper - tier.minViews;
+            if (tierViews > 0) calculated += tierViews * tier.rate;
+          }
+        }
+        // Cap at max earnings
+        if (campaign?.max_earnings && calculated > campaign.max_earnings) {
+          calculated = campaign.max_earnings;
+        }
+        // Cap at pool remaining
+        const remaining = (campaign?.total_budget || 0) - (campaign?.budget_spent || 0);
+        if (remaining >= 0 && calculated > remaining) {
+          calculated = remaining;
+        }
+        setMyEarnings(calculated);
+      }
 
       // Fetch payout_available_at
       const { data: subData } = await supabase
@@ -240,20 +252,6 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               <span className="text-[10px] text-white/40 font-jakarta">Max {convert(maxEarnings).toLocaleString()} {label}</span>
             </div>
 
-            {/* Compact pills: Max Earnings + Rate */}
-            <div className="flex gap-2 mb-4">
-              <div className="flex-1 rounded-[10px] px-2.5 py-1.5 text-center bg-white/10 border border-white/15">
-                <p className="text-[11px] font-bold text-white font-montserrat">{convert(maxEarnings).toLocaleString()} {label}</p>
-                <p className="text-[9px] text-white/50 font-jakarta">Max Earnings</p>
-              </div>
-              {ratePerThousand > 0 && (
-                <div className="flex-1 rounded-[10px] px-2.5 py-1.5 text-center bg-white/10 border border-white/15">
-                  <p className="text-[11px] font-bold text-white font-montserrat">{convert(ratePerThousand).toLocaleString()} {label}</p>
-                  <p className="text-[9px] text-white/50 font-jakarta">/ 1000 views</p>
-                </div>
-              )}
-            </div>
-
             {/* Pool */}
             {poolTotal > 0 && (
               <div className="mb-4">
@@ -274,36 +272,34 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               <EarningsGraph tiers={campaignTiers} maxEarnings={maxEarnings} />
             )}
 
-            {/* Claim button inside green node */}
-            {submission.status === 'approved' && myEarnings > 0 && (
+            {/* Claim button / countdown */}
+            {myEarnings > 0 && (
               <div className="mt-4">
                 {canClaim ? (
                   <button
-                    className="w-full py-3 rounded-full font-semibold text-sm font-montserrat transition-all active:scale-[0.97]"
+                    className="w-full py-3.5 rounded-full font-bold text-sm font-montserrat transition-all active:scale-[0.97]"
                     style={{
-                      background: 'rgba(255,255,255,0.2)',
-                      border: '1px solid rgba(255,255,255,0.3)',
-                      color: 'white',
-                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15)',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                      color: '#065f46',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
                     }}
                   >
-                    <DollarSign className="h-4 w-4 inline mr-1" />
                     Claim {convert(myEarnings).toLocaleString()} {label}
                   </button>
                 ) : (
                   <div
-                    className="w-full py-3 rounded-full text-center"
+                    className="w-full py-3.5 rounded-full text-center"
                     style={{
                       background: 'rgba(0,0,0,0.15)',
                       border: '1px solid rgba(255,255,255,0.1)',
                     }}
                   >
                     <div className="flex items-center justify-center gap-2">
-                      <Lock className="h-3.5 w-3.5 text-white/30" />
-                      <span className="text-sm font-semibold text-white/50 font-montserrat">
+                      <Lock className="h-3.5 w-3.5 text-white/40" />
+                      <span className="text-sm font-semibold text-white/60 font-montserrat">
                         {daysUntilClaim !== null && daysUntilClaim > 0
-                          ? `Claimable in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
-                          : 'Awaiting approval'
+                          ? `Claim in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
+                          : 'Processing...'
                         }
                       </span>
                     </div>
