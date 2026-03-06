@@ -402,6 +402,16 @@ const AdminBusinessDetail = () => {
                     <TableCell>{money(c.total_budget)}</TableCell>
                     <TableCell>{money(c.budget_spent)}</TableCell>
                     <TableCell>{fmt(c.created_at)}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={c.status === 'active' ? 'outline' : 'default'}
+                        disabled={togglingAd === c.id}
+                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
+                      >
+                        {c.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
