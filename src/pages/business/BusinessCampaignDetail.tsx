@@ -194,9 +194,9 @@ const BusinessCampaignDetail: React.FC = () => {
   }
 
   const totalViews = submissions.reduce((sum, s) => sum + (s.current_views || 0), 0);
-  const potUsed = campaign.total_budget ? Math.min(totalViews * 0.003, campaign.total_budget) : 0; // rough estimate
-  const potTotal = campaign.total_budget || 0;
-  const potPercent = potTotal > 0 ? Math.min((potUsed / potTotal) * 100, 100) : 0;
+  const poolUsed = campaign.total_budget ? Math.min(totalViews * 0.003, campaign.total_budget) : 0; // rough estimate
+  const poolTotal = campaign.total_budget || 0;
+  const poolPercent = poolTotal > 0 ? Math.min((poolUsed / poolTotal) * 100, 100) : 0;
   const inAction = submissions; // Show all submissions as "in action"
 
   const greenPillStyle = {
