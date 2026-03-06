@@ -129,6 +129,7 @@ const App = () => (
                 <Route path="/embed/ad/:id" element={<Suspense fallback={<BusinessLoader />}><EmbedAd /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={<BusinessLoader />}><AdminLayout /></Suspense>}>
                   <Route index element={<AdminDashboard />} />
+                  <Route path="business/:userId" element={<AdminBusinessDetail />} />
                 </Route>
                 <Route path="/" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />
