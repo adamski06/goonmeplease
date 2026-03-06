@@ -97,13 +97,14 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
         setCampaignTiers(parsedTiers);
 
         // Calculate earnings client-side from views and tiers
-        const currentViews = submission.current_views || 0;
+        // Note: rate_per_view is actually stored as rate per 1000 views (CPM)
+        const currentViews = views || submission.current_views || 0;
         let calculated = 0;
         for (const tier of parsedTiers) {
           if (currentViews > tier.minViews) {
             const upper = tier.maxViews != null ? Math.min(currentViews, tier.maxViews) : currentViews;
             const tierViews = upper - tier.minViews;
-            if (tierViews > 0) calculated += tierViews * tier.rate;
+            if (tierViews > 0) calculated += (tierViews / 1000) * tier.rate;
           }
         }
         // Cap at max earnings
@@ -115,7 +116,7 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
         if (remaining >= 0 && calculated > remaining) {
           calculated = remaining;
         }
-        setMyEarnings(calculated);
+        setMyEarnings(Math.round(calculated * 100) / 100);
       }
 
       // Fetch payout_available_at
