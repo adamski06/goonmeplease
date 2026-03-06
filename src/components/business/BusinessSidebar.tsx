@@ -247,13 +247,21 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
+                    'w-full flex items-center gap-2 px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
                       ? 'bg-sidebar-accent text-foreground font-medium'
                       : 'text-foreground hover:bg-sidebar-accent/50'
                   )}
                   title={item.title}
                 >
+                  <span
+                    className={cn(
+                      'h-2 w-2 rounded-full shrink-0',
+                      item.status === 'active' && 'bg-emerald-500',
+                      item.status === 'pending' && 'bg-amber-400',
+                      (!item.status || item.status === 'ended') && 'bg-foreground/20'
+                    )}
+                  />
                   <span className="truncate">{item.title}</span>
                 </button>
               );
