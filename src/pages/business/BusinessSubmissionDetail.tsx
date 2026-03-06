@@ -38,8 +38,8 @@ const BusinessSubmissionDetail: React.FC = () => {
   const [submission, setSubmission] = useState<SubmissionData | null>(null);
   const [creatorUsername, setCreatorUsername] = useState<string>('');
   const [creatorEarnings, setCreatorEarnings] = useState<number>(0);
-  const [potTotal, setPotTotal] = useState<number>(0);
-  const [potSpent, setPotSpent] = useState<number>(0);
+  const [poolTotal, setPoolTotal] = useState<number>(0);
+  const [poolSpent, setPoolSpent] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
