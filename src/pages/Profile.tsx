@@ -357,6 +357,23 @@ const ProfilePage: React.FC = () => {
                     <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
                     <span className="text-sm font-semibold text-white font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
                   </div>
+                  {nextPayoutDate && (
+                    <>
+                      <div className="h-px bg-white/10" />
+                      <div className="flex items-center gap-2 px-2">
+                        <Clock className="h-3.5 w-3.5 text-white/40" />
+                        <span className="text-sm text-white/60 font-jakarta">Next claim</span>
+                        <span className="text-sm font-semibold text-white font-montserrat ml-auto">
+                          {(() => {
+                            const diff = new Date(nextPayoutDate).getTime() - Date.now();
+                            if (diff <= 0) return 'Available now';
+                            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                            return `${days} day${days !== 1 ? 's' : ''}`;
+                          })()}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="flex-1" />
