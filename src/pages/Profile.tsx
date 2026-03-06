@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, Pencil, X } from 'lucide-react';
+import { Settings, Pencil, X, Clock } from 'lucide-react';
 import ProfileEditContent from '@/components/ProfileEditContent';
 import WithdrawContent from '@/components/WithdrawContent';
 import BottomNav from '@/components/BottomNav';
