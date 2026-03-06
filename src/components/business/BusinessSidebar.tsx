@@ -10,6 +10,7 @@ interface SidebarItem {
   id: string;
   title: string;
   type: 'spread' | 'deal';
+  status: string | null;
 }
 
 interface BusinessProfileData {
@@ -48,20 +49,20 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           .maybeSingle(),
         supabase
           .from('campaigns')
-          .select('id, title')
+          .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
         supabase
           .from('deals')
-          .select('id, title')
+          .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
       ]);
 
       if (profileData) setProfile(profileData);
 
-      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' }));
-      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' }));
+      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread', status: c.status }));
+      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal', status: d.status }));
       setItems([...spreadItems, ...dealItems]);
     };
     load();
@@ -246,13 +247,21 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   key={item.id}
                   onClick={() => navigate(path)}
                   className={cn(
-                    'w-full flex items-center px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
+                    'w-full flex items-center gap-2 px-3 min-h-[36px] rounded-lg text-sm transition-colors text-left whitespace-nowrap',
                     isActive
                       ? 'bg-sidebar-accent text-foreground font-medium'
                       : 'text-foreground hover:bg-sidebar-accent/50'
                   )}
                   title={item.title}
                 >
+                  <span
+                    className={cn(
+                      'h-2 w-2 rounded-full shrink-0',
+                      item.status === 'active' && 'bg-emerald-500',
+                      item.status === 'pending' && 'bg-amber-400',
+                      (!item.status || item.status === 'ended') && 'bg-foreground/20'
+                    )}
+                  />
                   <span className="truncate">{item.title}</span>
                 </button>
               );
