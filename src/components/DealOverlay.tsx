@@ -33,6 +33,20 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
     requestAnimationFrame(() => setBackdropVisible(true));
   }, []);
 
+  // Check if already applied on mount
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('deal_applications')
+      .select('id')
+      .eq('deal_id', deal.id)
+      .eq('creator_id', user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setRequested(true);
+      });
+  }, [deal.id, user]);
+
   const handleSendRequest = async () => {
     if (!user) {
       toast.error('You need to be logged in to apply for deals.');
