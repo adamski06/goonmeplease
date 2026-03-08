@@ -90,11 +90,7 @@ const ProfileCard: React.FC<{
 
   const displayData = doneTyping ? editData : typed;
   const logoUrl = getHighResLogoUrl(data.logo_url) || data.logo_url;
-  // Use Clearbit for high-res logos, fallback to Google favicons
-  const websiteDomain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-  const clearbitLogo = websiteDomain ? `https://logo.clearbit.com/${websiteDomain}?size=512&format=png` : null;
-  const fallbackLogo = websiteDomain ? `https://www.google.com/s2/favicons?domain=${websiteDomain}&sz=128` : null;
-  const effectiveLogo = logoUrl || clearbitLogo;
+  const effectiveLogo = logoUrl || defaultBusinessAvatar;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
