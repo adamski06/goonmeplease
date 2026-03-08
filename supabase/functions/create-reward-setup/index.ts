@@ -25,13 +25,13 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    const { data, error: claimsError } = await supabaseClient.auth.getClaims(token);
-    if (claimsError || !data?.claims) {
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    if (userError || !userData?.user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
 
-    const userId = data.claims.sub as string;
-    const email = data.claims.email as string;
+    const userId = userData.user.id;
+    const email = userData.user.email;
     if (!email) throw new Error("User email not available");
 
     const { rewardAdId } = await req.json();
