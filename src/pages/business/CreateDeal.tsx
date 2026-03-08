@@ -42,6 +42,11 @@ const CreateDeal: React.FC = () => {
   const [customPayoutInput, setCustomPayoutInput] = useState('');
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
+  // Bonus tier (optional)
+  const [showBonusTier, setShowBonusTier] = useState(false);
+  const [bonusViewsThreshold, setBonusViewsThreshold] = useState<number>(0);
+  const [bonusRate, setBonusRate] = useState<number>(0);
+
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) return ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
