@@ -153,27 +153,27 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             <div
               className="rounded-xl p-4 mb-4"
               style={{
-                background: 'linear-gradient(180deg, rgba(37,99,235,0.06) 0%, rgba(29,78,216,0.1) 100%)',
-                border: '1px solid rgba(37,99,235,0.15)',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)',
+                border: '1px solid rgba(0,0,0,0.08)',
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
               }}
             >
-              <h3 className="text-sm font-semibold text-blue-700 mb-2 font-montserrat">How Deals work</h3>
+              <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Deals work</h3>
               <ul className="space-y-1.5">
                 <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-blue-500 mt-0.5">1.</span>
+                  <span className="text-black/40 mt-0.5">1.</span>
                   Send a request to the brand
                 </li>
                 <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-blue-500 mt-0.5">2.</span>
+                  <span className="text-black/40 mt-0.5">2.</span>
                   Brand reviews your profile and accepts or declines
                 </li>
                 <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-blue-500 mt-0.5">3.</span>
+                  <span className="text-black/40 mt-0.5">3.</span>
                   If accepted, you create the content and submit your video
                 </li>
                 <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-blue-500 mt-0.5">4.</span>
+                  <span className="text-black/40 mt-0.5">4.</span>
                   Earn based on your video's performance
                 </li>
               </ul>
