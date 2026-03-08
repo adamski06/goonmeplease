@@ -66,6 +66,9 @@ const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
 const AdminBusinessDetail = lazyRetry(() => import("./pages/admin/AdminBusinessDetail"));
+const AdminCreators = lazyRetry(() => import("./pages/admin/AdminCreators"));
+const AdminCreatorDetail = lazyRetry(() => import("./pages/admin/AdminCreatorDetail"));
+const AdminSettings = lazyRetry(() => import("./pages/admin/AdminSettings"));
 
 const queryClient = new QueryClient();
 
