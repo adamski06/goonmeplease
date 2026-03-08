@@ -52,6 +52,7 @@ const Auth: React.FC = () => {
   const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [showMethodSheet, setShowMethodSheet] = useState(false);
   const [isOAuthUser, setIsOAuthUser] = useState(false);
+  const emailSignupInProgress = React.useRef(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
