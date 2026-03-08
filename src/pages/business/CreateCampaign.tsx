@@ -334,7 +334,7 @@ const CreateCampaign: React.FC = () => {
                 <RateColumnHeader label="CREATOR POOL" tooltip="Creator pools can vary from $25 to $10,000 — all dependent on how many people you want to participate." avg={totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : undefined} />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
                 <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
-                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
+                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 10%. About 5% are banking fees and the other 5% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
               {/* Input row — matching header style */}
