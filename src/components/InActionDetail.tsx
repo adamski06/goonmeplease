@@ -213,22 +213,24 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
               <div className="h-3 w-3 border border-black/20 border-t-black/60 rounded-full animate-spin" />
             )}
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="flex flex-col gap-2">
             {[
               { icon: Eye, value: views, label: 'Views' },
               { icon: Heart, value: likes, label: 'Likes' },
               { icon: Share2, value: shares, label: 'Shares' },
               { icon: Clock, value: new Date(submission.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }), label: 'Submitted' },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl p-3 text-center"
+              <div key={stat.label} className="rounded-xl px-4 py-3 flex items-center justify-between"
                 style={{
                   background: 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
                   border: '1px solid rgba(0,0,0,0.06)',
                 }}
               >
-                <stat.icon className="h-4 w-4 text-black/40 mx-auto mb-1" />
-                <p className="text-lg font-bold text-black font-montserrat">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</p>
-                <p className="text-[11px] text-black/50 font-jakarta">{stat.label}</p>
+                <div className="flex items-center gap-3">
+                  <stat.icon className="h-4 w-4 text-black/40" />
+                  <span className="text-[12px] text-black/50 font-jakarta">{stat.label}</span>
+                </div>
+                <p className="text-base font-bold text-black font-montserrat">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</p>
               </div>
             ))}
           </div>
