@@ -95,6 +95,7 @@ const Activity: React.FC = () => {
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [dealApplications, setDealApplications] = useState<{ id: string; deal_id: string; status: string; created_at: string; deal_brand: string; deal_title: string; deal_logo: string }[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
@@ -102,71 +103,104 @@ const Activity: React.FC = () => {
   const fetchActiveSubmissions = useCallback(async () => {
     if (!user) { setSubmissionsLoading(false); return; }
     setSubmissionsLoading(true);
-    const { data, error } = await supabase
-      .from('content_submissions')
-      .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
-      .eq('creator_id', user.id)
-      .order('created_at', { ascending: false });
 
-    if (error || !data) { setSubmissionsLoading(false); return; }
+    // Fetch campaign submissions and deal applications in parallel
+    const [submissionsRes, dealsRes] = await Promise.all([
+      supabase
+        .from('content_submissions')
+        .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+      supabase
+        .from('deal_applications')
+        .select('id, deal_id, status, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+    ]);
 
-    const campaignIds = [...new Set(data.map(s => s.campaign_id))];
-    if (campaignIds.length === 0) {
-      setActiveSubmissions([]);
-      setSubmissionsLoading(false);
-      return;
-    }
+    // Process campaign submissions
+    const data = submissionsRes.data;
+    if (data && data.length > 0) {
+      const campaignIds = [...new Set(data.map(s => s.campaign_id))];
+      const { data: campaigns } = await supabase
+        .from('campaigns')
+        .select('id, title, brand_name, brand_logo_url')
+        .in('id', campaignIds);
 
-    const { data: campaigns } = await supabase
-      .from('campaigns')
-      .select('id, title, brand_name, brand_logo_url')
-      .in('id', campaignIds);
+      const campaignMap = new Map((campaigns || []).map(c => [c.id, c]));
 
-    const campaignMap = new Map((campaigns || []).map(c => [c.id, c]));
+      const submissions: ActiveSubmission[] = data.map(s => {
+        const campaign = campaignMap.get(s.campaign_id);
+        return {
+          id: s.id,
+          campaign_id: s.campaign_id,
+          tiktok_video_url: s.tiktok_video_url,
+          tiktok_video_id: s.tiktok_video_id,
+          status: s.status,
+          current_views: s.current_views || 0,
+          current_likes: s.current_likes || 0,
+          created_at: s.created_at,
+          campaign_title: campaign?.title || '',
+          campaign_brand: campaign?.brand_name || '',
+          campaign_logo: campaign?.brand_logo_url || '',
+        };
+      });
+      setActiveSubmissions(submissions);
 
-    const submissions: ActiveSubmission[] = data.map(s => {
-      const campaign = campaignMap.get(s.campaign_id);
-      return {
-        id: s.id,
-        campaign_id: s.campaign_id,
-        tiktok_video_url: s.tiktok_video_url,
-        tiktok_video_id: s.tiktok_video_id,
-        status: s.status,
-        current_views: s.current_views || 0,
-        current_likes: s.current_likes || 0,
-        created_at: s.created_at,
-        campaign_title: campaign?.title || '',
-        campaign_brand: campaign?.brand_name || '',
-        campaign_logo: campaign?.brand_logo_url || '',
-      };
-    });
-
-    setActiveSubmissions(submissions);
-    setSubmissionsLoading(false);
-
-    // Auto-fetch fresh TikTok stats for all submissions
-    if (submissions.length > 0) {
-      try {
-        const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
-          body: { submission_ids: submissions.map(s => s.id) },
-        });
-        if (statsData?.results) {
-          setActiveSubmissions(prev => prev.map(s => {
-            const r = statsData.results[s.id];
-            if (r) {
-              return {
-                ...s,
-                current_views: r.views > 0 ? r.views : s.current_views,
-                current_likes: r.likes > 0 ? r.likes : s.current_likes,
-              };
-            }
-            return s;
-          }));
+      // Auto-fetch fresh TikTok stats
+      if (submissions.length > 0) {
+        try {
+          const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { submission_ids: submissions.map(s => s.id) },
+          });
+          if (statsData?.results) {
+            setActiveSubmissions(prev => prev.map(s => {
+              const r = statsData.results[s.id];
+              if (r) {
+                return {
+                  ...s,
+                  current_views: r.views > 0 ? r.views : s.current_views,
+                  current_likes: r.likes > 0 ? r.likes : s.current_likes,
+                };
+              }
+              return s;
+            }));
+          }
+        } catch (e) {
+          console.error('Auto-fetch TikTok stats failed:', e);
         }
-      } catch (e) {
-        console.error('Auto-fetch TikTok stats failed:', e);
       }
+    } else {
+      setActiveSubmissions([]);
     }
+
+    // Process deal applications
+    const dealData = dealsRes.data;
+    if (dealData && dealData.length > 0) {
+      const dealIds = [...new Set(dealData.map(d => d.deal_id))];
+      const { data: deals } = await supabase
+        .from('deals')
+        .select('id, title, brand_name, brand_logo_url')
+        .in('id', dealIds);
+
+      const dealMap = new Map((deals || []).map(d => [d.id, d]));
+      setDealApplications(dealData.map(da => {
+        const deal = dealMap.get(da.deal_id);
+        return {
+          id: da.id,
+          deal_id: da.deal_id,
+          status: da.status,
+          created_at: da.created_at,
+          deal_brand: deal?.brand_name || '',
+          deal_title: deal?.title || '',
+          deal_logo: deal?.brand_logo_url || '',
+        };
+      }));
+    } else {
+      setDealApplications([]);
+    }
+
+    setSubmissionsLoading(false);
   }, [user]);
 
   useEffect(() => {
