@@ -15,6 +15,7 @@ type ReviewItem = {
   creator_id: string;
   creator_name: string;
   creator_avatar: string | null;
+  creator_tiktok: string | null;
   ad_title: string;
   brand_name: string;
   tiktok_video_url: string | null;
@@ -59,12 +60,14 @@ const AdminReviewQueue = () => {
     const uniqueIds = [...new Set(allCreatorIds)];
 
     let profilesMap: Record<string, any> = {};
+    let tiktokMap: Record<string, string> = {};
     if (uniqueIds.length > 0) {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, full_name, avatar_url, username')
-        .in('user_id', uniqueIds);
-      (profiles || []).forEach(p => { profilesMap[p.user_id] = p; });
+      const [profRes, tikRes] = await Promise.all([
+        supabase.from('profiles').select('user_id, full_name, avatar_url, username').in('user_id', uniqueIds),
+        supabase.from('tiktok_accounts_safe').select('user_id, tiktok_username').in('user_id', uniqueIds),
+      ]);
+      (profRes.data || []).forEach(p => { profilesMap[p.user_id] = p; });
+      (tikRes.data || []).forEach(t => { if (t.user_id) tiktokMap[t.user_id] = t.tiktok_username || ''; });
     }
 
     const spreadItems: ReviewItem[] = (subsRes.data || []).map(s => ({
@@ -74,6 +77,7 @@ const AdminReviewQueue = () => {
       creator_id: s.creator_id,
       creator_name: profilesMap[s.creator_id]?.full_name || profilesMap[s.creator_id]?.username || 'Unknown',
       creator_avatar: profilesMap[s.creator_id]?.avatar_url || null,
+      creator_tiktok: tiktokMap[s.creator_id] || null,
       ad_title: (s.campaigns as any)?.title || '–',
       brand_name: (s.campaigns as any)?.brand_name || '–',
       tiktok_video_url: s.tiktok_video_url,
@@ -94,6 +98,7 @@ const AdminReviewQueue = () => {
       creator_id: a.creator_id,
       creator_name: profilesMap[a.creator_id]?.full_name || profilesMap[a.creator_id]?.username || 'Unknown',
       creator_avatar: profilesMap[a.creator_id]?.avatar_url || null,
+      creator_tiktok: tiktokMap[a.creator_id] || null,
       ad_title: (a.deals as any)?.title || '–',
       brand_name: (a.deals as any)?.brand_name || '–',
       tiktok_video_url: a.tiktok_video_url,
@@ -210,7 +215,14 @@ const AdminReviewQueue = () => {
                       <User className="h-4 w-4 text-muted-foreground" />
                     </div>
                   )}
-                  <span className="text-sm font-medium">{reviewItem.creator_name}</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium">{reviewItem.creator_name}</span>
+                    {reviewItem.creator_tiktok && (
+                      <a href={`https://www.tiktok.com/@${reviewItem.creator_tiktok}`} target="_blank" rel="noreferrer" className="block text-xs text-primary hover:underline">
+                        @{reviewItem.creator_tiktok}
+                      </a>
+                    )}
+                  </div>
                   <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
                 </div>
 
@@ -311,7 +323,10 @@ const AdminReviewQueue = () => {
                         <User className="h-3.5 w-3.5 text-muted-foreground" />
                       </div>
                     )}
-                    <span className="text-sm font-medium truncate max-w-[120px]">{item.creator_name}</span>
+                    <div className="min-w-0">
+                      <span className="text-sm font-medium truncate block max-w-[120px]">{item.creator_name}</span>
+                      {item.creator_tiktok && <span className="text-[11px] text-muted-foreground">@{item.creator_tiktok}</span>}
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
