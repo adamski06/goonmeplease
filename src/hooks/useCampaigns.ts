@@ -9,6 +9,7 @@ interface UseCampaignsReturn {
   loading: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  refresh: () => Promise<void>;
   getCampaignById: (id: string) => Campaign | undefined;
 }
 
@@ -107,11 +108,21 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
     setLoading(false);
   }, [hasMore, loading, fetchBatch]);
 
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    setHasMore(true);
+    allTiersRef.current = [];
+    const batch = await fetchBatch(0);
+    setCampaigns(batch);
+    offsetRef.current = batch.length;
+    setLoading(false);
+  }, [fetchBatch]);
+
   const getCampaignById = useCallback((id: string) => {
     return campaigns.find(c => c.id === id);
   }, [campaigns]);
 
-  return { campaigns, loading, hasMore, loadMore, getCampaignById };
+  return { campaigns, loading, hasMore, loadMore, refresh, getCampaignById };
 }
 
 // Fetch a single campaign by ID (for deep links, recent, favorites)
