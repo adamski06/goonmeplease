@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 
 interface BusinessProfileData {
   company_name: string;
@@ -105,14 +106,7 @@ const BusinessProfile: React.FC = () => {
               className="h-full w-full object-cover"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
-                const domain = (profile.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-                const fallback = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : '';
-                if (fallback && img.src !== fallback) {
-                  img.src = fallback;
-                } else {
-                  img.style.display = 'none';
-                  img.parentElement?.querySelector('span')?.classList.remove('hidden');
-                }
+                img.src = defaultBusinessAvatar;
               }}
             />
           ) : null}

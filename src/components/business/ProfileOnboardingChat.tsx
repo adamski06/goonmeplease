@@ -3,6 +3,7 @@ import { ArrowUp, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 
 interface Message {
   id: string;
@@ -90,11 +91,7 @@ const ProfileCard: React.FC<{
 
   const displayData = doneTyping ? editData : typed;
   const logoUrl = getHighResLogoUrl(data.logo_url) || data.logo_url;
-  // Use Clearbit for high-res logos, fallback to Google favicons
-  const websiteDomain = (data.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-  const clearbitLogo = websiteDomain ? `https://logo.clearbit.com/${websiteDomain}?size=512&format=png` : null;
-  const fallbackLogo = websiteDomain ? `https://www.google.com/s2/favicons?domain=${websiteDomain}&sz=128` : null;
-  const effectiveLogo = logoUrl || clearbitLogo;
+  const effectiveLogo = logoUrl || defaultBusinessAvatar;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
@@ -112,14 +109,7 @@ const ProfileCard: React.FC<{
               className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
-                // Cascade: clearbit -> google favicon -> hide
-                if (clearbitLogo && img.src !== clearbitLogo) {
-                  img.src = clearbitLogo;
-                } else if (fallbackLogo && img.src !== fallbackLogo) {
-                  img.src = fallbackLogo;
-                } else {
-                  img.style.display = 'none';
-                }
+                img.src = defaultBusinessAvatar;
               }}
             />
             <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
@@ -392,12 +382,7 @@ const ProfileOnboardingChat: React.FC<ProfileOnboardingChatProps> = ({ onComplet
     setSaving(true);
     setConfirmed(true);
 
-    // Ensure logo_url has a value — use Google favicon fallback if AI didn't provide one
     const dataToSave = { ...editedData };
-    if (!dataToSave.logo_url && dataToSave.website) {
-      const domain = dataToSave.website.replace(/^https?:\/\//, '').replace(/\/.*$/, '').toLowerCase();
-      if (domain) dataToSave.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
-    }
 
     try {
       const { error } = await supabase.functions.invoke('company-research', {

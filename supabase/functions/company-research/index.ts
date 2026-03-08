@@ -22,7 +22,7 @@ Response format:
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
     "brand_values": "e.g. Sustainability, authenticity, inclusivity",
-    "logo_url": "Use Clearbit Logo API: https://logo.clearbit.com/domain.com?size=512&format=png"
+    "logo_url": null
   }
 }
 
@@ -32,7 +32,7 @@ Rules:
 - If only a company name is given, do your best but prefer facts over guesses.
 - Keep the message field SHORT — 1 sentence, max 15 words.
 - NEVER list or repeat the profile fields in your message.
-- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format.`;
+- Set logo_url to null. The user will upload their own logo.`;
 
 // Extract a URL from a user message
 function extractUrl(text: string): string | null {
@@ -254,10 +254,7 @@ serve(async (req) => {
       if (!parsedResponse.profileUpdates.website || parsedResponse.profileUpdates.website.includes('example')) {
         parsedResponse.profileUpdates.website = detectedUrl;
       }
-      // Ensure logo uses actual domain (lowercase for Clearbit)
-      if (!parsedResponse.profileUpdates.logo_url || !parsedResponse.profileUpdates.logo_url.toLowerCase().includes(domain)) {
-        parsedResponse.profileUpdates.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
-      }
+      // Don't auto-set logo — user will upload their own
     }
 
     return new Response(JSON.stringify({ 

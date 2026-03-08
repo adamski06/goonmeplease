@@ -4,6 +4,7 @@ import { Plus, ChevronDown, ChevronUp, Home, Sun, Moon, Settings, Inbox, Wallet 
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 import { useTheme } from 'next-themes';
 
 interface SidebarItem {
@@ -123,7 +124,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
   const logoUrl = profile?.logo_url
     ? (getHighResLogoUrl(profile.logo_url) || profile.logo_url)
-    : (domain ? `https://logo.clearbit.com/${domain}` : null);
+    : defaultBusinessAvatar;
 
   return (
     <aside
@@ -157,11 +158,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   className="h-full w-full object-cover"
                   onError={(e) => {
                     const img = e.target as HTMLImageElement;
-                    if (domain && !img.src.includes('google.com/s2/favicons')) {
-                      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-                    } else {
-                      img.style.display = 'none';
-                    }
+                    img.src = defaultBusinessAvatar;
                   }}
                 />
               ) : (
@@ -343,11 +340,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   className="h-full w-full object-cover"
                   onError={(e) => {
                     const img = e.target as HTMLImageElement;
-                    if (domain && !img.src.includes('google.com/s2/favicons')) {
-                      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-                    } else {
-                      img.style.display = 'none';
-                    }
+                    img.src = defaultBusinessAvatar;
                   }}
                 />
               ) : (
