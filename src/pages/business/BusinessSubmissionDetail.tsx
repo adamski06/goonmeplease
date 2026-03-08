@@ -223,7 +223,7 @@ const BusinessSubmissionDetail: React.FC = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-col gap-3">
               <div className="rounded-[20px] p-4" style={cardStyle}>
                 <span className="text-xs text-muted-foreground">Views</span>
                 <p className="text-xl font-bold text-foreground mt-1">
