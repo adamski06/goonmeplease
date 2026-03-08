@@ -117,7 +117,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
   return (
     <aside
       className={cn(
-        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden z-10',
+        'border-r border-border bg-sidebar-background flex flex-col shrink-0 transition-[width] duration-300 ease-in-out z-10',
         isCollapsed ? 'w-[56px]' : 'w-60'
       )}
     >
