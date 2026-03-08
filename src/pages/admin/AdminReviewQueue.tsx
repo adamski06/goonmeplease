@@ -60,12 +60,14 @@ const AdminReviewQueue = () => {
     const uniqueIds = [...new Set(allCreatorIds)];
 
     let profilesMap: Record<string, any> = {};
+    let tiktokMap: Record<string, string> = {};
     if (uniqueIds.length > 0) {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, full_name, avatar_url, username')
-        .in('user_id', uniqueIds);
-      (profiles || []).forEach(p => { profilesMap[p.user_id] = p; });
+      const [profRes, tikRes] = await Promise.all([
+        supabase.from('profiles').select('user_id, full_name, avatar_url, username').in('user_id', uniqueIds),
+        supabase.from('tiktok_accounts_safe').select('user_id, tiktok_username').in('user_id', uniqueIds),
+      ]);
+      (profRes.data || []).forEach(p => { profilesMap[p.user_id] = p; });
+      (tikRes.data || []).forEach(t => { if (t.user_id) tiktokMap[t.user_id] = t.tiktok_username || ''; });
     }
 
     const spreadItems: ReviewItem[] = (subsRes.data || []).map(s => ({
