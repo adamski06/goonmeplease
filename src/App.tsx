@@ -64,6 +64,8 @@ const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
 const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
 const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
+const AdminReviewQueue = lazyRetry(() => import("./pages/admin/AdminReviewQueue"));
+const AdminAllAds = lazyRetry(() => import("./pages/admin/AdminAllAds"));
 const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
 const AdminBusinessDetail = lazyRetry(() => import("./pages/admin/AdminBusinessDetail"));
 const AdminCreators = lazyRetry(() => import("./pages/admin/AdminCreators"));
