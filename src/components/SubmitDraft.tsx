@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 interface SubmitDraftProps {
   campaign: Campaign;
   onBack: () => void;
+  onClose?: () => void;
 }
 
 const extractTikTokVideoId = (url: string): string | null => {
