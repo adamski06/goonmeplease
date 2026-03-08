@@ -221,8 +221,6 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
 
             {/* Scrollable content */}
             <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
-              <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">{deal.description}</p>
-
               {/* How Deals work */}
               <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(37,99,235,0.06) 0%, rgba(29,78,216,0.1) 100%)', border: '1px solid rgba(37,99,235,0.15)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
                 <h3 className="text-sm font-semibold text-blue-700 mb-2 font-montserrat">How Deals work</h3>
@@ -235,6 +233,8 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
                   ))}
                 </ul>
               </div>
+
+              <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">{deal.description}</p>
 
               {/* Requirements */}
               {deal.guidelines.length > 0 && (
