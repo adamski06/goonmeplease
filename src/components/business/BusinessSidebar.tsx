@@ -42,7 +42,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [{ data: profileData }, { data: campaigns }, { data: deals }] = await Promise.all([
+      const [{ data: profileData }, { data: campaigns }, { data: deals }, { data: rewardAds }] = await Promise.all([
         supabase
           .from('business_profiles')
           .select('company_name, logo_url, website')
@@ -50,11 +50,16 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           .maybeSingle(),
         supabase
           .from('campaigns')
-          .select('id, title, status')
+          .select('id, title, status, total_budget')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
         supabase
           .from('deals')
+          .select('id, title, status, total_budget')
+          .eq('business_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('reward_ads')
           .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
@@ -62,9 +67,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
       if (profileData) setProfile(profileData);
 
-      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread', status: c.status }));
-      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal', status: d.status }));
-      setItems([...spreadItems, ...dealItems]);
+      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' as const, status: c.status, budget: Number(c.total_budget) || 0 }));
+      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' as const, status: d.status, budget: Number(d.total_budget) || 0 }));
+      const rewardItems: SidebarItem[] = (rewardAds || []).map(r => ({ id: r.id, title: r.title, type: 'reward' as const, status: r.status }));
+      setItems([...spreadItems, ...dealItems, ...rewardItems]);
     };
     load();
   }, [location.pathname]);
