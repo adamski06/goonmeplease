@@ -333,10 +333,6 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   src={logoUrl}
                   alt=""
                   className="h-full w-full object-cover"
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = defaultBusinessAvatar;
-                  }}
                 />
               ) : (
                 <span className="text-[9px] font-bold font-montserrat">{initial}</span>

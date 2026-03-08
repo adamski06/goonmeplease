@@ -90,7 +90,6 @@ const ProfileCard: React.FC<{
 
   const displayData = doneTyping ? editData : typed;
   const logoUrl = getHighResLogoUrl(data.logo_url) || data.logo_url;
-  const effectiveLogo = logoUrl || defaultBusinessAvatar;
   const activeFields = fields.filter(f => data[f.key]);
 
   return (
