@@ -62,6 +62,8 @@ const Auth: React.FC = () => {
   // Detect returning OAuth users who need onboarding
   useEffect(() => {
     if (!loading && user) {
+      // If email signup is in progress, let handleCredentialsNext manage the flow
+      if (emailSignupInProgress.current) return;
       // If we're mid-signup flow (email), don't interfere
       if (isSignUp && signUpStep !== 'credentials') return;
 
