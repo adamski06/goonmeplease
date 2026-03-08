@@ -109,9 +109,6 @@ const ProfileCard: React.FC<{
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
                 img.src = defaultBusinessAvatar;
-                } else {
-                  img.style.display = 'none';
-                }
               }}
             />
             <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
