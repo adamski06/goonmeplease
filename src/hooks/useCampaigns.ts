@@ -9,6 +9,7 @@ interface UseCampaignsReturn {
   loading: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  refresh: () => Promise<void>;
   getCampaignById: (id: string) => Campaign | undefined;
 }
 
