@@ -305,14 +305,14 @@ const ProfilePage: React.FC = () => {
             }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
-              <span className="text-xs font-semibold text-white/70 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>Manage</span>
+              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-xs font-semibold text-black/55 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.1)' }}>Manage</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-white/50 font-jakarta mb-0.5">Balance</span>
+              <span className="text-xs font-medium text-black/45 font-jakarta mb-0.5">Balance</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                <span className="text-lg text-white/50 font-montserrat">{label}</span>
+                <span className="text-4xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-black/40 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
