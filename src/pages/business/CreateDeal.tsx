@@ -112,7 +112,7 @@ const CreateDeal: React.FC = () => {
     }
 
     toast({ title: 'Deal launched!' });
-    navigate('/business/deals');
+    navigate('/business');
   };
 
   const formData = {
