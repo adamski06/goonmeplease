@@ -84,19 +84,19 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
       {/* Header */}
       <div className="flex items-center px-6 pt-6 pb-4">
         <button onClick={onBack} className="p-1 -ml-1">
-          <ChevronLeft className="h-5 w-5 text-white/60" />
+          <ChevronLeft className="h-5 w-5 text-black/50" />
         </button>
-        <h2 className="text-base font-bold text-white font-montserrat flex-1 text-center pr-6">Withdraw</h2>
+        <h2 className="text-base font-bold text-black/85 font-montserrat flex-1 text-center pr-6">Withdraw</h2>
       </div>
 
       {/* Balance */}
       <div className="flex flex-col items-center px-6 pt-4 pb-6">
-        <p className="text-sm text-white/50 font-jakarta mb-1">Available balance</p>
+        <p className="text-sm text-black/40 font-jakarta mb-1">Available balance</p>
         <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-bold text-white font-montserrat tracking-tight">
+          <span className="text-4xl font-bold text-black/90 font-montserrat tracking-tight">
             {formattedBalance}
           </span>
-          <span className="text-xl text-white/40 font-montserrat">{label}</span>
+          <span className="text-xl text-black/35 font-montserrat">{label}</span>
         </div>
       </div>
 
