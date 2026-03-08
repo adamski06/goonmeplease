@@ -149,10 +149,6 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 py-4">
-            <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
-              {deal.description}
-            </p>
-
             {/* How Deals work info */}
             <div
               className="rounded-xl p-4 mb-4"
@@ -182,6 +178,10 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                 </li>
               </ul>
             </div>
+
+            <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">
+              {deal.description}
+            </p>
 
             {/* Requirements */}
             {deal.guidelines.length > 0 && (
