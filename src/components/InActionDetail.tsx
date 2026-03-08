@@ -227,7 +227,6 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
                 }}
               >
                 <div className="flex items-center gap-3">
-                  <stat.icon className="h-4 w-4 text-black/40" />
                   <span className="text-[12px] text-black/50 font-jakarta">{stat.label}</span>
                 </div>
                 <p className="text-base font-bold text-black font-montserrat">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</p>
