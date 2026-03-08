@@ -291,9 +291,9 @@ const ProfilePage: React.FC = () => {
             top: earningsReady ? '80px' : `${earningsStartTop}px`,
             bottom: earningsReady ? '88px' : `${earningsStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            background: 'linear-gradient(160deg, hsl(68, 70%, 85%) 0%, hsl(72, 65%, 78%) 100%)',
-            border: '1.5px solid hsl(68, 50%, 75%)',
-            boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1.5px solid rgba(52,211,153,0.4)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
           }}
         >
           {/* Collapsed content - fades out as node expands */}
@@ -305,15 +305,14 @@ const ProfilePage: React.FC = () => {
             }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
-              <span className="text-xs font-semibold text-black/60 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.8)' }}>Manage</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
+              <span className="text-xs font-semibold text-white/70 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>Manage</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/50 font-jakarta mb-0.5">Balance</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}</span>
-                <span className="text-lg text-black/50 font-montserrat">.{convert(balance).toFixed(2).split('.')[1]}</span>
-                <span className="text-sm text-black/40 font-montserrat ml-1">{label}</span>
+              <span className="text-xs font-medium text-white/50 font-jakarta mb-0.5">Balance</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
