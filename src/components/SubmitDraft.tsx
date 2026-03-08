@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 interface SubmitDraftProps {
   campaign: Campaign;
   onBack: () => void;
+  onClose?: () => void;
 }
 
 const extractTikTokVideoId = (url: string): string | null => {
@@ -25,7 +26,7 @@ const isValidTikTokUrl = (url: string): boolean => {
   }
 };
 
-const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
+const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) => {
   const { user } = useAuth();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
@@ -217,7 +218,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
 
         <div className="px-5 py-5 flex-shrink-0">
           <button
-            onClick={onBack}
+            onClick={onClose || onBack}
             className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
             style={{
               background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
@@ -328,40 +329,33 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
             </div>
 
             {/* Confirmation */}
-            <div className="flex items-center justify-between px-4 py-3 rounded-2xl -mt-2"
+            <button
+              onClick={() => setConfirmed(!confirmed)}
+              className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl -mt-2 transition-all active:scale-[0.98]"
               style={{
-                background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                border: '1.5px solid rgba(0,0,0,0.08)',
+                background: confirmed
+                  ? 'linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.15) 100%)'
+                  : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+                border: confirmed
+                  ? '1.5px solid rgba(16,185,129,0.4)'
+                  : '1.5px solid rgba(0,0,0,0.08)',
               }}
             >
-              <p className="text-sm font-semibold text-black font-montserrat">Is this your video?</p>
-              <button
-                onClick={() => setConfirmed(!confirmed)}
-                className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
+              <div
+                className="h-5 w-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
                 style={{
                   background: confirmed
-                    ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
-                    : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-                  border: confirmed
-                    ? '1.5px solid rgba(16,185,129,0.4)'
-                    : '1.5px solid rgba(0,0,0,0.1)',
+                    ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                    : 'rgba(0,0,0,0.08)',
+                  border: confirmed ? 'none' : '1.5px solid rgba(0,0,0,0.12)',
                 }}
               >
-                <div
-                  className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-                  style={{
-                    background: confirmed
-                      ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
-                      : 'rgba(0,0,0,0.1)',
-                  }}
-                >
-                  {confirmed && <CheckCircle className="h-3 w-3 text-white" />}
-                </div>
-                <span className={`text-xs font-medium font-jakarta ${confirmed ? 'text-emerald-700' : 'text-black/60'}`}>
-                  Yes, confirm
-                </span>
-              </button>
-            </div>
+                {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
+              </div>
+              <span className={`text-sm font-semibold font-montserrat ${confirmed ? 'text-emerald-700' : 'text-black/70'}`}>
+                This is my video
+              </span>
+            </button>
           </div>
         )}
 
@@ -411,40 +405,33 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
         </div>
 
         {/* Guidelines confirmation */}
-        <div className="flex items-center justify-between px-4 py-3 rounded-2xl mt-3"
+        <button
+          onClick={() => setGuidelinesConfirmed(!guidelinesConfirmed)}
+          className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl mt-3 transition-all active:scale-[0.98]"
           style={{
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-            border: guidelinesConfirmed ? '1.5px solid rgba(16,185,129,0.4)' : '1.5px solid rgba(0,0,0,0.08)',
+            background: guidelinesConfirmed
+              ? 'linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.15) 100%)'
+              : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+            border: guidelinesConfirmed
+              ? '1.5px solid rgba(16,185,129,0.4)'
+              : '1.5px solid rgba(0,0,0,0.08)',
           }}
         >
-          <p className="text-sm font-semibold text-black font-montserrat">I followed all requirements</p>
-          <button
-            onClick={() => setGuidelinesConfirmed(!guidelinesConfirmed)}
-            className="flex items-center gap-2 px-3 py-2 rounded-full transition-all active:scale-[0.97]"
+          <div
+            className="h-5 w-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
             style={{
               background: guidelinesConfirmed
-                ? 'linear-gradient(180deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.2) 100%)'
-                : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
-              border: guidelinesConfirmed
-                ? '1.5px solid rgba(16,185,129,0.4)'
-                : '1.5px solid rgba(0,0,0,0.1)',
+                ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
+                : 'rgba(0,0,0,0.08)',
+              border: guidelinesConfirmed ? 'none' : '1.5px solid rgba(0,0,0,0.12)',
             }}
           >
-            <div
-              className="h-4 w-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-              style={{
-                background: guidelinesConfirmed
-                  ? 'linear-gradient(180deg, rgba(16,185,129,1) 0%, rgba(5,150,105,1) 100%)'
-                  : 'rgba(0,0,0,0.1)',
-              }}
-            >
-              {guidelinesConfirmed && <CheckCircle className="h-3 w-3 text-white" />}
-            </div>
-            <span className={`text-xs font-medium font-jakarta ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/60'}`}>
-              Confirm
-            </span>
-          </button>
-        </div>
+            {guidelinesConfirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
+          </div>
+          <span className={`text-sm font-semibold font-montserrat ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/70'}`}>
+            I followed all requirements
+          </span>
+        </button>
       </div>
 
       {/* Submit button */}
