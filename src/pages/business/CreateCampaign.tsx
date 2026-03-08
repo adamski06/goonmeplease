@@ -401,6 +401,53 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
+              {/* Bonus tier row */}
+              {showBonusTier && (
+                <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-foreground">Bonus tier</p>
+                    <button
+                      onClick={() => { setShowBonusTier(false); setBonusViewsThreshold(0); setBonusRate(0); }}
+                      className="text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">After a creator reaches a view threshold, the rate changes.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">After creator reaches</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={bonusViewsThreshold || ''}
+                          onChange={(e) => setBonusViewsThreshold(parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                          placeholder="e.g. 10,000"
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                        <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">views</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">New rate / 1000 views</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={bonusRate ? fmtInline(bonusRate) : ''}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
+                            setBonusRate(Math.round(val * 100) / 100);
+                          }}
+                          placeholder={fmtPlaceholderDecimal(1)}
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
 
               {/* Combined results node — always visible */}
