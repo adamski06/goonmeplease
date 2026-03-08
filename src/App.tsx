@@ -66,6 +66,9 @@ const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
 const AdminBusinessDetail = lazyRetry(() => import("./pages/admin/AdminBusinessDetail"));
+const AdminCreators = lazyRetry(() => import("./pages/admin/AdminCreators"));
+const AdminCreatorDetail = lazyRetry(() => import("./pages/admin/AdminCreatorDetail"));
+const AdminSettings = lazyRetry(() => import("./pages/admin/AdminSettings"));
 
 const queryClient = new QueryClient();
 
@@ -130,6 +133,9 @@ const App = () => (
                 <Route path="/admin" element={<Suspense fallback={<BusinessLoader />}><AdminLayout /></Suspense>}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="business/:userId" element={<AdminBusinessDetail />} />
+                  <Route path="creators" element={<AdminCreators />} />
+                  <Route path="creators/:userId" element={<AdminCreatorDetail />} />
+                  <Route path="settings" element={<AdminSettings />} />
                 </Route>
                 <Route path="/" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />

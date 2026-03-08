@@ -8,3 +8,12 @@ verify_jwt = false
 
 [functions.charge-reward-video]
 verify_jwt = false
+
+[functions.create-connect-account]
+verify_jwt = false
+
+[functions.request-payout]
+verify_jwt = false
+
+[functions.process-payout]
+verify_jwt = false

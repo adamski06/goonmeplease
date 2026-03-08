@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { ChevronLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ExternalLink, Loader2, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface WithdrawContentProps {
   balance: number;
@@ -9,189 +10,194 @@ interface WithdrawContentProps {
 }
 
 const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) => {
-  const [step, setStep] = useState<'amount' | 'method'>('amount');
-  const [amount, setAmount] = useState('');
-  const [sliding, setSliding] = useState(false);
-  const [slidingBack, setSlidingBack] = useState(false);
   const { label, convert } = useCurrency();
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [stripeConnected, setStripeConnected] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState<any>(null);
+  const [minPayout, setMinPayout] = useState(9.5);
+  const [error, setError] = useState('');
 
   const convertedBalance = convert(balance);
+  const convertedMin = convert(minPayout);
   const formattedBalance = convertedBalance.toLocaleString('sv-SE');
+  const isEligible = balance >= minPayout && stripeConnected && !pendingRequest;
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.replace(/[^0-9]/g, '');
-    setAmount(val);
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return;
+      const [profileRes, settingRes, payoutRes] = await Promise.all([
+        supabase.from('profiles').select('stripe_connect_id').eq('user_id', user.id).maybeSingle(),
+        supabase.from('platform_settings').select('value').eq('key', 'min_payout_amount').maybeSingle(),
+        supabase.from('payout_requests').select('*').eq('creator_id', user.id).in('status', ['pending', 'processing']).limit(1),
+      ]);
+      setStripeConnected(!!profileRes.data?.stripe_connect_id);
+      if (settingRes.data) setMinPayout(parseFloat(settingRes.data.value));
+      if (payoutRes.data && payoutRes.data.length > 0) setPendingRequest(payoutRes.data[0]);
+      setLoading(false);
+    };
+    load();
+  }, [user]);
+
+  const handleConnectBank = async () => {
+    setActionLoading(true);
+    setError('');
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('create-connect-account', {
+        body: { return_url: window.location.href },
+      });
+      if (fnError) throw fnError;
+      if (data?.url) window.location.href = data.url;
+    } catch (e: any) {
+      setError(e.message || 'Failed to connect bank account');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const numericAmount = parseInt(amount || '0', 10);
-  const isValidAmount = numericAmount > 0 && numericAmount <= balance;
-
-  const goToMethod = () => {
-    if (!isValidAmount) return;
-    setSliding(true);
-    setTimeout(() => {
-      setStep('method');
-      setSliding(false);
-    }, 300);
+  const handleRequestPayout = async () => {
+    setActionLoading(true);
+    setError('');
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('request-payout');
+      if (fnError) throw fnError;
+      if (data?.error) throw new Error(data.error);
+      setPendingRequest(data.request);
+    } catch (e: any) {
+      setError(e.message || 'Failed to request payout');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const goBackToAmount = () => {
-    setSlidingBack(true);
-    setTimeout(() => {
-      setStep('amount');
-      setSlidingBack(false);
-    }, 300);
-  };
-
-  const handleWithdraw = (method: 'swish' | 'paypal') => {
-    // Placeholder - would trigger actual withdrawal
-    console.log(`Withdrawing ${amount} ${label} via ${method}`);
-  };
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-white/40" />
+      </div>
+    );
+  }
 
   return (
-    <div className="h-full flex flex-col overflow-hidden relative">
-      {/* Amount step */}
-      <div
-        className="absolute inset-0 flex flex-col"
-        style={{
-          transform: step === 'amount'
-            ? (sliding ? 'translateX(-100%)' : 'translateX(0)')
-            : (slidingBack ? 'translateX(0)' : 'translateX(-100%)'),
-          opacity: step === 'amount'
-            ? (sliding ? 0 : 1)
-            : (slidingBack ? 1 : 0),
-          transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
-          pointerEvents: step === 'amount' && !sliding ? 'auto' : 'none',
-        }}
-      >
-        {/* Header */}
-        <div className="flex items-center px-6 pt-6 pb-4">
-          <button onClick={onBack} className="p-1 -ml-1">
-            <ChevronLeft className="h-5 w-5 text-white/60" />
-          </button>
-          <h2 className="text-base font-bold text-white font-montserrat flex-1 text-center pr-6">Withdraw</h2>
-        </div>
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="flex items-center px-6 pt-6 pb-4">
+        <button onClick={onBack} className="p-1 -ml-1">
+          <ChevronLeft className="h-5 w-5 text-white/60" />
+        </button>
+        <h2 className="text-base font-bold text-white font-montserrat flex-1 text-center pr-6">Withdraw</h2>
+      </div>
 
-        {/* Amount input area */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6">
-          <p className="text-sm text-white/50 font-jakarta mb-3">Enter amount</p>
-          <div className="flex items-baseline gap-2">
-            <Input
-              value={amount}
-              onChange={handleAmountChange}
-              placeholder="0"
-              inputMode="numeric"
-              className="text-5xl font-bold text-white font-montserrat tracking-tight bg-transparent border-none text-center w-48 placeholder:text-white/20 focus-visible:ring-0 focus-visible:border-none h-auto py-0"
-              style={{ caretColor: 'white' }}
-            />
-            <span className="text-2xl text-white/40 font-montserrat">{label}</span>
+      {/* Balance */}
+      <div className="flex flex-col items-center px-6 pt-4 pb-6">
+        <p className="text-sm text-white/50 font-jakarta mb-1">Available balance</p>
+        <div className="flex items-baseline gap-2">
+          <span className="text-4xl font-bold text-white font-montserrat tracking-tight">
+            {formattedBalance}
+          </span>
+          <span className="text-xl text-white/40 font-montserrat">{label}</span>
+        </div>
+      </div>
+
+      {/* Status / Actions */}
+      <div className="flex-1 px-6 space-y-4">
+        {/* Pending payout request */}
+        {pendingRequest && (
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+            <Clock className="h-5 w-5 text-amber-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-white font-montserrat">
+                Payout {pendingRequest.status === 'processing' ? 'processing' : 'pending approval'}
+              </p>
+              <p className="text-xs text-white/50 font-jakarta">
+                {convert(pendingRequest.amount).toLocaleString('sv-SE')} {label} · Requested {new Date(pendingRequest.created_at).toLocaleDateString()}
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-white/40 font-jakarta mt-4">
-            Available: {formattedBalance} {label}
-          </p>
-          {amount && !isValidAmount && numericAmount > balance && (
-            <p className="text-xs text-red-300 font-jakarta mt-2">
-              Amount exceeds your balance
-            </p>
-          )}
-        </div>
+        )}
 
-        {/* Withdraw button */}
-        <div className="px-6 py-5 flex-shrink-0">
+        {/* Not connected */}
+        {!stripeConnected && !pendingRequest && (
+          <div className="text-center space-y-4">
+            <div className="h-14 w-14 rounded-full mx-auto flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
+              <ExternalLink className="h-6 w-6 text-white/60" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white font-montserrat">Connect your bank account</p>
+              <p className="text-xs text-white/50 font-jakarta mt-1">
+                Securely link your bank account to receive payouts directly
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Connected but below minimum */}
+        {stripeConnected && !pendingRequest && balance < minPayout && (
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
+            <AlertCircle className="h-5 w-5 text-white/40 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-white font-montserrat">Minimum not reached</p>
+              <p className="text-xs text-white/50 font-jakarta">
+                You need at least {Math.floor(convertedMin)} {label} to withdraw
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Connected and eligible */}
+        {stripeConnected && !pendingRequest && balance >= minPayout && (
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)' }}>
+            <CheckCircle2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-white font-montserrat">Ready to withdraw</p>
+              <p className="text-xs text-white/50 font-jakarta">
+                Your payout will be reviewed before transfer
+              </p>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <p className="text-xs text-red-300 font-jakarta text-center">{error}</p>
+        )}
+      </div>
+
+      {/* Action button */}
+      <div className="px-6 py-5 flex-shrink-0">
+        {!stripeConnected && !pendingRequest ? (
           <button
-            onClick={goToMethod}
-            disabled={!isValidAmount}
-            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
+            onClick={handleConnectBank}
+            disabled={actionLoading}
+            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] flex items-center justify-center gap-2"
             style={{
-              background: isValidAmount
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+              color: '#065f46',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+            }}
+          >
+            {actionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}
+            Connect Bank Account
+          </button>
+        ) : !pendingRequest ? (
+          <button
+            onClick={handleRequestPayout}
+            disabled={!isEligible || actionLoading}
+            className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] flex items-center justify-center gap-2"
+            style={{
+              background: isEligible
                 ? 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)'
                 : 'rgba(255,255,255,0.1)',
-              color: isValidAmount ? '#065f46' : 'rgba(255,255,255,0.3)',
-              boxShadow: isValidAmount
+              color: isEligible ? '#065f46' : 'rgba(255,255,255,0.3)',
+              boxShadow: isEligible
                 ? '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)'
                 : 'none',
             }}
           >
-            Withdraw
+            {actionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            Request Payout
           </button>
-        </div>
-      </div>
-
-      {/* Method step */}
-      <div
-        className="absolute inset-0 flex flex-col"
-        style={{
-          transform: step === 'method'
-            ? (slidingBack ? 'translateX(100%)' : 'translateX(0)')
-            : (sliding ? 'translateX(0)' : 'translateX(100%)'),
-          opacity: step === 'method'
-            ? (slidingBack ? 0 : 1)
-            : (sliding ? 1 : 0),
-          transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease',
-          pointerEvents: step === 'method' && !slidingBack ? 'auto' : 'none',
-        }}
-      >
-        {/* Header */}
-        <div className="flex items-center px-6 pt-6 pb-4">
-          <button onClick={goBackToAmount} className="p-1 -ml-1">
-            <ChevronLeft className="h-5 w-5 text-white/60" />
-          </button>
-          <h2 className="text-base font-bold text-white font-montserrat flex-1 text-center pr-6">Choose method</h2>
-        </div>
-
-        {/* Amount summary */}
-        <div className="flex flex-col items-center px-6 pt-4 pb-6">
-          <p className="text-sm text-white/50 font-jakarta mb-1">Withdrawing</p>
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-white font-montserrat tracking-tight">
-              {parseInt(amount || '0', 10).toLocaleString('sv-SE')}
-            </span>
-            <span className="text-xl text-white/40 font-montserrat">{label}</span>
-          </div>
-        </div>
-
-        {/* Method options */}
-        <div className="flex-1 px-6 space-y-3">
-          <button
-            onClick={() => handleWithdraw('swish')}
-            className="w-full flex items-center gap-4 p-4 rounded-2xl transition-all active:scale-[0.98]"
-            style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.15)',
-            }}
-          >
-            <div
-              className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #5BBF2C 0%, #3A9B1A 100%)' }}
-            >
-              <span className="text-white font-bold text-lg font-montserrat">S</span>
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-base font-bold text-white font-montserrat">Swish</span>
-              <span className="text-xs text-white/50 font-jakarta">Instant transfer</span>
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleWithdraw('paypal')}
-            className="w-full flex items-center gap-4 p-4 rounded-2xl transition-all active:scale-[0.98]"
-            style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.15)',
-            }}
-          >
-            <div
-              className="h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #003087 0%, #001F5C 100%)' }}
-            >
-              <span className="text-white font-bold text-lg font-montserrat">P</span>
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-base font-bold text-white font-montserrat">PayPal</span>
-              <span className="text-xs text-white/50 font-jakarta">1-2 business days</span>
-            </div>
-          </button>
-        </div>
+        ) : null}
       </div>
     </div>
   );

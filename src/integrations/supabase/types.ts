@@ -492,6 +492,69 @@ export type Database = {
         }
         Relationships: []
       }
+      payout_requests: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          created_at: string
+          creator_id: string
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          stripe_account_id: string | null
+          stripe_transfer_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount?: number
+          created_at?: string
+          creator_id: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          stripe_account_id?: string | null
+          stripe_transfer_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          created_at?: string
+          creator_id?: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          stripe_account_id?: string | null
+          stripe_transfer_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -500,6 +563,7 @@ export type Database = {
           full_name: string | null
           id: string
           phone_number: string | null
+          stripe_connect_id: string | null
           updated_at: string
           user_id: string
           username: string | null
@@ -512,6 +576,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone_number?: string | null
+          stripe_connect_id?: string | null
           updated_at?: string
           user_id: string
           username?: string | null
@@ -524,6 +589,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone_number?: string | null
+          stripe_connect_id?: string | null
           updated_at?: string
           user_id?: string
           username?: string | null
