@@ -288,7 +288,7 @@ const CreateCampaign: React.FC = () => {
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Description</Label>
+                <Label className="text-sm font-medium">Description *</Label>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
               </div>
               <div className="space-y-2">
