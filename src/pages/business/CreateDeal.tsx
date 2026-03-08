@@ -295,10 +295,10 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.15 * 100) / 100) : ''}
+                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.10 * 100) / 100) : ''}
                     onChange={(e) => {
                       const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
-                      const base = Math.round((youPay / 1.15) * 100) / 100;
+                      const base = Math.round((youPay / 1.10) * 100) / 100;
                       setRatePerThousand(base);
                     }}
                     placeholder={fmtPlaceholderDecimal(2.3)}
