@@ -104,13 +104,13 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
       <div className="flex-1 px-6 space-y-4">
         {/* Pending payout request */}
         {pendingRequest && (
-          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
-            <Clock className="h-5 w-5 text-amber-400 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)' }}>
+            <Clock className="h-5 w-5 text-amber-700 flex-shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-white font-montserrat">
+              <p className="text-sm font-semibold text-black/80 font-montserrat">
                 Payout {pendingRequest.status === 'processing' ? 'processing' : 'pending approval'}
               </p>
-              <p className="text-xs text-white/50 font-jakarta">
+              <p className="text-xs text-black/45 font-jakarta">
                 {convert(pendingRequest.amount).toLocaleString('sv-SE')} {label} · Requested {new Date(pendingRequest.created_at).toLocaleDateString()}
               </p>
             </div>
@@ -120,12 +120,12 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
         {/* Not connected */}
         {!stripeConnected && !pendingRequest && (
           <div className="text-center space-y-4">
-            <div className="h-14 w-14 rounded-full mx-auto flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
-              <ExternalLink className="h-6 w-6 text-white/60" />
+            <div className="h-14 w-14 rounded-full mx-auto flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.06)' }}>
+              <ExternalLink className="h-6 w-6 text-black/45" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-white font-montserrat">Connect your bank account</p>
-              <p className="text-xs text-white/50 font-jakarta mt-1">
+              <p className="text-sm font-semibold text-black/80 font-montserrat">Connect your bank account</p>
+              <p className="text-xs text-black/45 font-jakarta mt-1">
                 Securely link your bank account to receive payouts directly
               </p>
             </div>
@@ -134,11 +134,11 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
 
         {/* Connected but below minimum */}
         {stripeConnected && !pendingRequest && balance < minPayout && (
-          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
-            <AlertCircle className="h-5 w-5 text-white/40 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)' }}>
+            <AlertCircle className="h-5 w-5 text-black/35 flex-shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-white font-montserrat">Minimum not reached</p>
-              <p className="text-xs text-white/50 font-jakarta">
+              <p className="text-sm font-semibold text-black/80 font-montserrat">Minimum not reached</p>
+              <p className="text-xs text-black/45 font-jakarta">
                 You need at least {Math.floor(convertedMin)} {label} to withdraw
               </p>
             </div>
@@ -147,11 +147,11 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
 
         {/* Connected and eligible */}
         {stripeConnected && !pendingRequest && balance >= minPayout && (
-          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)' }}>
-            <CheckCircle2 className="h-5 w-5 text-emerald-400 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)' }}>
+            <CheckCircle2 className="h-5 w-5 text-emerald-700 flex-shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-white font-montserrat">Ready to withdraw</p>
-              <p className="text-xs text-white/50 font-jakarta">
+              <p className="text-sm font-semibold text-black/80 font-montserrat">Ready to withdraw</p>
+              <p className="text-xs text-black/45 font-jakarta">
                 Your payout will be reviewed before transfer
               </p>
             </div>
@@ -159,7 +159,7 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
         )}
 
         {error && (
-          <p className="text-xs text-red-300 font-jakarta text-center">{error}</p>
+          <p className="text-xs text-red-700 font-jakarta text-center">{error}</p>
         )}
       </div>
 
@@ -171,9 +171,9 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
             disabled={actionLoading}
             className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] flex items-center justify-center gap-2"
             style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-              color: '#065f46',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
+              background: 'rgba(0,0,0,0.85)',
+              color: 'white',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
             }}
           >
             {actionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}
@@ -185,13 +185,9 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
             disabled={!isEligible || actionLoading}
             className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97] flex items-center justify-center gap-2"
             style={{
-              background: isEligible
-                ? 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)'
-                : 'rgba(255,255,255,0.1)',
-              color: isEligible ? '#065f46' : 'rgba(255,255,255,0.3)',
-              boxShadow: isEligible
-                ? '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)'
-                : 'none',
+              background: isEligible ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.1)',
+              color: isEligible ? 'white' : 'rgba(0,0,0,0.25)',
+              boxShadow: isEligible ? '0 4px 20px rgba(0,0,0,0.15)' : 'none',
             }}
           >
             {actionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
