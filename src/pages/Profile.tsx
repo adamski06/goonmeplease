@@ -253,30 +253,29 @@ const ProfilePage: React.FC = () => {
           style={{
             height: '140px',
             visibility: earningsExpanded ? 'hidden' : 'visible',
-            background: 'linear-gradient(160deg, hsl(68, 70%, 85%) 0%, hsl(72, 65%, 78%) 100%)',
-            border: '1px solid hsl(68, 50%, 75%)',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1px solid rgba(52,211,153,0.4)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
           }}
         >
           <div className="p-6 h-full flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
               <span
-                className="text-xs font-semibold text-black/60 font-montserrat px-3 py-1.5 rounded-full"
+                className="text-xs font-semibold text-white/70 font-montserrat px-3 py-1.5 rounded-full"
                 style={{
-                  background: 'rgba(255,255,255,0.8)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.2)',
                 }}
               >
                 Manage
               </span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/50 font-jakarta mb-0.5">Balance</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}</span>
-                <span className="text-lg text-black/50 font-montserrat">.{convert(balance).toFixed(2).split('.')[1]}</span>
-                <span className="text-sm text-black/40 font-montserrat ml-1">{label}</span>
+              <span className="text-xs font-medium text-white/50 font-jakarta mb-0.5">Balance</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
@@ -292,9 +291,9 @@ const ProfilePage: React.FC = () => {
             top: earningsReady ? '80px' : `${earningsStartTop}px`,
             bottom: earningsReady ? '88px' : `${earningsStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            background: 'linear-gradient(160deg, hsl(68, 70%, 85%) 0%, hsl(72, 65%, 78%) 100%)',
-            border: '1.5px solid hsl(68, 50%, 75%)',
-            boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1.5px solid rgba(52,211,153,0.4)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
           }}
         >
           {/* Collapsed content - fades out as node expands */}
@@ -306,15 +305,14 @@ const ProfilePage: React.FC = () => {
             }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
-              <span className="text-xs font-semibold text-black/60 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.8)' }}>Manage</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
+              <span className="text-xs font-semibold text-white/70 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}>Manage</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/50 font-jakarta mb-0.5">Balance</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}</span>
-                <span className="text-lg text-black/50 font-montserrat">.{convert(balance).toFixed(2).split('.')[1]}</span>
-                <span className="text-sm text-black/40 font-montserrat ml-1">{label}</span>
+              <span className="text-xs font-medium text-white/50 font-jakarta mb-0.5">Balance</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
@@ -344,11 +342,11 @@ const ProfilePage: React.FC = () => {
               }}
               className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
-                background: 'rgba(0,0,0,0.08)',
-                border: '1px solid rgba(0,0,0,0.1)',
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.2)',
               }}
             >
-              <X className="h-4 w-4 text-black/60" />
+              <X className="h-4 w-4 text-white" />
             </button>
 
             {/* Balance view */}
@@ -364,35 +362,35 @@ const ProfilePage: React.FC = () => {
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
                 <div className="flex flex-col items-center mt-4">
-                  <p className="text-sm font-bold text-black/50 font-jakarta mb-2">Your Balance</p>
+                  <p className="text-sm font-bold text-white/70 font-jakarta mb-2">Your Balance</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-6xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                    <span className="text-2xl text-black/40 font-montserrat">{label}</span>
+                    <span className="text-6xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                    <span className="text-2xl text-white/60 font-montserrat">{label}</span>
                   </div>
                 </div>
 
                 <div className="w-full space-y-3 mt-8">
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Total earned</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(totalEarnings).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/60 font-jakarta">Total earned</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(totalEarnings).toLocaleString()} {label}</span>
                   </div>
-                  <div className="h-px bg-black/8" />
+                  <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Pending</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(pendingBalance).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/60 font-jakarta">Pending</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(pendingBalance).toLocaleString()} {label}</span>
                   </div>
-                  <div className="h-px bg-black/8" />
+                  <div className="h-px bg-white/10" />
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Withdrawn</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/60 font-jakarta">Withdrawn</span>
+                    <span className="text-sm font-semibold text-white font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
                   </div>
                   {nextPayoutDate && (
                     <>
-                      <div className="h-px bg-black/8" />
+                      <div className="h-px bg-white/10" />
                       <div className="flex items-center gap-2 px-2">
-                        <Clock className="h-3.5 w-3.5 text-black/30" />
-                        <span className="text-sm text-black/50 font-jakarta">Next claim</span>
-                        <span className="text-sm font-semibold text-black/80 font-montserrat ml-auto">
+                        <Clock className="h-3.5 w-3.5 text-white/40" />
+                        <span className="text-sm text-white/60 font-jakarta">Next claim</span>
+                        <span className="text-sm font-semibold text-white font-montserrat ml-auto">
                           {(() => {
                             const diff = new Date(nextPayoutDate).getTime() - Date.now();
                             if (diff <= 0) return 'Available now';
@@ -421,9 +419,9 @@ const ProfilePage: React.FC = () => {
                   }}
                   className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
                   style={{
-                    background: 'rgba(0,0,0,0.85)',
-                    color: 'hsl(68, 70%, 85%)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                    color: '#065f46',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,1)',
                   }}
                 >
                   Withdraw
