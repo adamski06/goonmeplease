@@ -42,6 +42,11 @@ const CreateCampaign: React.FC = () => {
   const [customPayoutInput, setCustomPayoutInput] = useState('');
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
+  // Bonus tier (optional)
+  const [showBonusTier, setShowBonusTier] = useState(false);
+  const [bonusViewsThreshold, setBonusViewsThreshold] = useState<number>(0);
+  const [bonusRate, setBonusRate] = useState<number>(0);
+
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
   const [totalBudget, setTotalBudget] = useState<number>(0);
