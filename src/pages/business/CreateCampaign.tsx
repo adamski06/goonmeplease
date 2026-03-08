@@ -68,7 +68,7 @@ const CreateCampaign: React.FC = () => {
   const getTotal = () => Math.round((getBudget() + getFee()) * 100) / 100;
 
   const canProceed = () => {
-    if (step === 0) return title.trim().length > 0;
+    if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) {
       const rateOk = ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
       const budgetOk = totalBudget >= (maxPayoutPerCreator || 1);
