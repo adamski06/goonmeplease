@@ -127,11 +127,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       {/* Nav — all buttons keep same height via min-h, text hidden by overflow-hidden on aside */}
       <nav className="flex-1 px-2 py-4 overflow-y-auto overflow-x-hidden space-y-1.5 min-h-0 min-w-0">
         {/* Company profile node */}
-        <div ref={profileRef} className="relative px-1">
+        <div ref={profileRef} className="relative">
           <button
             onClick={() => !isCollapsed && setProfileOpen(o => !o)}
             className={cn(
-              'w-full flex items-center gap-2 px-2.5 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap overflow-hidden',
+              'w-full flex items-center gap-3 px-3 min-h-[40px] rounded-lg text-sm font-medium transition-colors border whitespace-nowrap overflow-hidden',
               profileOpen
                 ? 'bg-sidebar-accent text-foreground border-border'
                 : 'text-foreground hover:bg-sidebar-accent/50 border-transparent'
