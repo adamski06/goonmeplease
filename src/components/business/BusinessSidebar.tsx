@@ -112,7 +112,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
   };
 
   const getItemPath = (item: SidebarItem) =>
-    item.type === 'spread' ? `/business/campaigns/${item.id}` : `/business/deals/${item.id}`;
+    item.type === 'spread' ? `/business/campaigns/${item.id}` : item.type === 'deal' ? `/business/deals/${item.id}` : `/business/rewards/${item.id}`;
+
+  const totalCommitted = items
+    .filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending'))
+    .reduce((sum, i) => sum + (i.budget || 0), 0);
 
   const initial = profile?.company_name?.charAt(0)?.toUpperCase() || '?';
   const domain = (profile?.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
