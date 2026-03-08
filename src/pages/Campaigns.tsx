@@ -165,11 +165,32 @@ const Campaigns: React.FC = () => {
       <BottomNav variant="dark" onAuthRequired={() => setShowAuthPrompt(true)} />
 
       <main className="flex-1 relative z-10 flex flex-col overflow-hidden">
+        {/* Pull-to-refresh indicator */}
+        {(pullDistance > 0 || refreshing) && (
+          <div
+            className="absolute top-0 left-0 right-0 z-20 flex items-center justify-center pointer-events-none"
+            style={{ height: `${pullDistance}px`, transition: refreshing ? 'none' : 'height 0.15s ease-out' }}
+          >
+            <div className={`w-6 h-6 border-2 border-white/40 border-t-white/80 rounded-full ${refreshing ? 'animate-spin' : ''}`}
+              style={{ opacity: Math.min(pullDistance / 50, 1) }}
+            />
+          </div>
+        )}
+
         <div 
           ref={scrollRef}
           onScroll={onScroll}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)] overscroll-none"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+            transform: pullDistance > 0 ? `translateY(${pullDistance}px)` : undefined,
+            transition: pullDistance > 0 ? 'none' : 'transform 0.3s ease-out',
+          } as React.CSSProperties}
         >
           {feedItems.map((item) =>
             item.type === 'deal' ? (
@@ -188,6 +209,12 @@ const Campaigns: React.FC = () => {
                 onToggleFavorite={toggleFavorite}
               />
             )
+          )}
+          {/* Spacer so the last card can snap fully into view */}
+          {feedItems.length > 0 && !campaignsLoading && (
+            <div className="h-[calc(100dvh-80px)] snap-start flex items-center justify-center">
+              <p className="text-white/20 text-sm font-jakarta">You're all caught up</p>
+            </div>
           )}
           {campaignsLoading && campaigns.length === 0 && (
             <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start bg-black">
