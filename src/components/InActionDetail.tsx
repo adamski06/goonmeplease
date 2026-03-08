@@ -316,6 +316,70 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
             )}
           </div>
         )}
+
+        {/* Need Help button */}
+        <div className="mt-6 mb-2">
+          {!showHelpForm ? (
+            <button
+              onClick={() => setShowHelpForm(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-colors"
+              style={{
+                background: 'rgba(0,0,0,0.04)',
+                border: '1px solid rgba(0,0,0,0.08)',
+              }}
+            >
+              <HelpCircle className="h-4 w-4 text-black/40" />
+              <span className="text-black/50 font-jakarta">Need help?</span>
+            </button>
+          ) : (
+            <div
+              className="rounded-xl p-4"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <h4 className="text-sm font-semibold text-black font-montserrat mb-3">Report a problem</h4>
+              <textarea
+                value={helpMessage}
+                onChange={(e) => setHelpMessage(e.target.value)}
+                placeholder="Describe the issue you're experiencing..."
+                className="w-full rounded-lg p-3 text-sm font-jakarta resize-none h-24 focus:outline-none focus:ring-1 focus:ring-black/20"
+                style={{
+                  background: 'rgba(255,255,255,0.8)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  color: '#000',
+                }}
+              />
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => { setShowHelpForm(false); setHelpMessage(''); }}
+                  className="flex-1 py-2.5 rounded-lg text-xs font-medium text-black/50 transition-colors hover:bg-black/5"
+                  style={{ border: '1px solid rgba(0,0,0,0.08)' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={submitHelpRequest}
+                  disabled={!helpMessage.trim() || submittingHelp}
+                  className="flex-1 py-2.5 rounded-lg text-xs font-semibold text-white flex items-center justify-center gap-1.5 transition-all active:scale-[0.97] disabled:opacity-50"
+                  style={{
+                    background: 'linear-gradient(180deg, hsl(0,0%,18%) 0%, hsl(0,0%,10%) 100%)',
+                  }}
+                >
+                  {submittingHelp ? (
+                    <div className="h-3 w-3 border border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="h-3 w-3" />
+                      Submit
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
