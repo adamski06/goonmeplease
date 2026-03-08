@@ -4,7 +4,6 @@ import { Plus, ChevronDown, ChevronUp, Home, Sun, Moon, Settings, Inbox, Wallet 
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
-import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 import { useTheme } from 'next-themes';
 
 interface SidebarItem {
