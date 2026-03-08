@@ -292,9 +292,9 @@ const ProfilePage: React.FC = () => {
             top: earningsReady ? '80px' : `${earningsStartTop}px`,
             bottom: earningsReady ? '88px' : `${earningsStartBottom}px`,
             transition: 'top 0.5s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
-            border: '1.5px solid rgba(52,211,153,0.4)',
-            boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1)',
+            background: 'linear-gradient(160deg, hsl(68, 70%, 85%) 0%, hsl(72, 65%, 78%) 100%)',
+            border: '1.5px solid hsl(68, 50%, 75%)',
+            boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.1)',
           }}
         >
           {/* Collapsed content - fades out as node expands */}
