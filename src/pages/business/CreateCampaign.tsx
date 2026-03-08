@@ -164,14 +164,35 @@ const CreateCampaign: React.FC = () => {
       return;
     }
 
-    // Create a campaign tier with the CPM rate (stored in USD)
+    // Create campaign tiers with the CPM rate (stored in USD)
     if (ratePerThousand > 0) {
-      await supabase.from('campaign_tiers').insert({
-        campaign_id: insertData.id,
-        min_views: 0,
-        max_views: null,
-        rate_per_view: toUsd(ratePerThousand),
-      });
+      const tiers: { campaign_id: string; min_views: number; max_views: number | null; rate_per_view: number }[] = [];
+
+      if (showBonusTier && bonusViewsThreshold > 0 && bonusRate > 0) {
+        // Base tier: 0 to threshold
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: 0,
+          max_views: bonusViewsThreshold,
+          rate_per_view: toUsd(ratePerThousand),
+        });
+        // Bonus tier: threshold onwards
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: bonusViewsThreshold,
+          max_views: null,
+          rate_per_view: toUsd(bonusRate),
+        });
+      } else {
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: 0,
+          max_views: null,
+          rate_per_view: toUsd(ratePerThousand),
+        });
+      }
+
+      await supabase.from('campaign_tiers').insert(tiers);
     }
 
     // Redirect to Stripe checkout
