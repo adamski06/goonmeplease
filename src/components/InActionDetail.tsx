@@ -227,7 +227,6 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
                 }}
               >
                 <div className="flex items-center gap-3">
-                  <stat.icon className="h-4 w-4 text-black/40" />
                   <span className="text-[12px] text-black/50 font-jakarta">{stat.label}</span>
                 </div>
                 <p className="text-base font-bold text-black font-montserrat">{typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}</p>
@@ -300,9 +299,11 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
                     <div className="flex items-center justify-center gap-2">
                       <Lock className="h-3.5 w-3.5 text-white/40" />
                       <span className="text-sm font-semibold text-white/60 font-montserrat">
-                        {daysUntilClaim !== null && daysUntilClaim > 0
-                          ? `Claim in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
-                          : 'Processing...'
+                        {submission.status === 'pending_review'
+                          ? 'Under Review'
+                          : daysUntilClaim !== null && daysUntilClaim > 0
+                            ? `Claim in ${daysUntilClaim} day${daysUntilClaim !== 1 ? 's' : ''}`
+                            : 'Processing...'
                         }
                       </span>
                     </div>
