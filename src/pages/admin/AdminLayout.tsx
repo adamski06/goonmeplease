@@ -59,7 +59,7 @@ const AdminLayout = () => {
         <nav className="flex gap-4 mt-3">
           {navItems.map((item) => {
             const isActive = item.path === '/admin'
-              ? location.pathname === '/admin' || location.pathname.startsWith('/admin/business')
+              ? location.pathname === '/admin'
               : location.pathname.startsWith(item.path);
             return (
               <Link
