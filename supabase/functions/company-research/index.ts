@@ -22,7 +22,7 @@ Response format:
     "industry": "e.g. Fashion, Tech, Food & Beverage, Fitness",
     "target_audience": "e.g. Gen Z fashion-conscious women aged 18-25",
     "brand_values": "e.g. Sustainability, authenticity, inclusivity",
-    "logo_url": "Use Clearbit Logo API: https://logo.clearbit.com/domain.com?size=512&format=png"
+    "logo_url": null
   }
 }
 
