@@ -99,16 +99,12 @@ const ProfileCard: React.FC<{
       }`}
     >
       <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2.5">
-        {effectiveLogo && (
+        {logoUrl && (
           <div className="flex items-center gap-3 pb-2 mb-2 border-b border-border/50">
             <img
-              src={effectiveLogo}
+              src={logoUrl}
               alt="Company logo"
               className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.src = defaultBusinessAvatar;
-              }}
             />
             <span className="text-sm font-medium text-foreground">{displayData.company_name || data.company_name}</span>
           </div>
