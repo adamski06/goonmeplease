@@ -279,7 +279,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
               pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
             }}
           >
-            <SubmitDraft campaign={campaign} onBack={handleBackFromSubmit} />
+            <SubmitDraft campaign={campaign} onBack={handleBackFromSubmit} onClose={onClose} />
           </div>
         </div>
       </div>
