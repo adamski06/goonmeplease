@@ -251,7 +251,7 @@ const ProfilePage: React.FC = () => {
           onClick={() => !earningsExpanded && openEarnings()}
           className="rounded-[48px] overflow-hidden cursor-pointer"
           style={{
-            height: '140px',
+            height: '180px',
             visibility: earningsExpanded ? 'hidden' : 'visible',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
             border: '1px solid rgba(52,211,153,0.4)',
@@ -260,22 +260,22 @@ const ProfilePage: React.FC = () => {
         >
           <div className="p-6 h-full flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
               <span
-                className="text-xs font-semibold text-black/55 font-montserrat px-3 py-1.5 rounded-full"
+                className="text-xs font-semibold text-white/65 font-montserrat px-3 py-1.5 rounded-full"
                 style={{
-                  background: 'rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(0,0,0,0.1)',
+                  background: 'rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Manage
               </span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/45 font-jakarta mb-0.5">Balance</span>
+              <span className="text-xs font-medium text-white/55 font-jakarta mb-0.5">Balance</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                <span className="text-lg text-black/40 font-montserrat">{label}</span>
+                <span className="text-4xl font-bold text-white/95 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
