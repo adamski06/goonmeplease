@@ -218,7 +218,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
 
         <div className="px-5 py-5 flex-shrink-0">
           <button
-            onClick={onBack}
+            onClick={onClose || onBack}
             className="w-full py-4 rounded-full text-base font-bold font-montserrat transition-all active:scale-[0.97]"
             style={{
               background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
