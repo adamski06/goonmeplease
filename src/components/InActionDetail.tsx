@@ -52,6 +52,33 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const [poolSpent, setPoolSpent] = useState(0);
   const [myEarnings, setMyEarnings] = useState(0);
   const [payoutAvailableAt, setPayoutAvailableAt] = useState<string | null>(null);
+  const [showHelpForm, setShowHelpForm] = useState(false);
+  const [helpMessage, setHelpMessage] = useState('');
+  const [submittingHelp, setSubmittingHelp] = useState(false);
+
+  const submitHelpRequest = async () => {
+    if (!helpMessage.trim()) return;
+    setSubmittingHelp(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not logged in');
+      const { error } = await supabase.from('support_requests' as any).insert({
+        user_id: user.id,
+        submission_id: submission.id,
+        submission_type: 'spread',
+        subject: `Issue with submission for ${submission.campaign_brand}`,
+        message: helpMessage.trim(),
+      });
+      if (error) throw error;
+      toast.success('Your request has been submitted. We\'ll get back to you soon.');
+      setShowHelpForm(false);
+      setHelpMessage('');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to submit. Please try again.');
+    }
+    setSubmittingHelp(false);
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
