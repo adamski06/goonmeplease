@@ -32,7 +32,7 @@ Rules:
 - If only a company name is given, do your best but prefer facts over guesses.
 - Keep the message field SHORT — 1 sentence, max 15 words.
 - NEVER list or repeat the profile fields in your message.
-- ALWAYS include logo_url using https://logo.clearbit.com/DOMAIN format.`;
+- Set logo_url to null. The user will upload their own logo.`;
 
 // Extract a URL from a user message
 function extractUrl(text: string): string | null {
