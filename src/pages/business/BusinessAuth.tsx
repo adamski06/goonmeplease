@@ -146,6 +146,16 @@ const BusinessAuth: React.FC = () => {
                 />
               </div>
 
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={() => toast({ title: 'Reset password', description: 'Please contact support to reset your password.' })}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+                >
+                  Forgot your password?
+                </button>
+              )}
+
               <button
                 type="submit"
                 disabled={isLoading}
@@ -171,13 +181,16 @@ const BusinessAuth: React.FC = () => {
         </div>
       </div>
 
-      {/* Right gradient panel — desktop only */}
-      <div
-        className="hidden lg:block lg:w-1/2 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(160deg, hsl(var(--background)) 0%, hsl(var(--muted)) 40%, hsl(var(--foreground) / 0.15) 70%, hsl(var(--foreground) / 0.3) 100%)',
-        }}
-      />
+      {/* Right decorative panel — desktop only */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-10">
+        <div
+          className="w-full h-full rounded-3xl"
+          style={{
+            background: 'linear-gradient(160deg, hsl(var(--muted)) 0%, hsl(var(--foreground) / 0.12) 50%, hsl(var(--foreground) / 0.25) 100%)',
+            border: '1px solid hsl(var(--border))',
+          }}
+        />
+      </div>
     </div>
   );
 };
