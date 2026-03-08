@@ -108,6 +108,8 @@ const CreateDeal: React.FC = () => {
       total_budget: null,
       is_active: false,
       status: 'pending',
+      bonus_views_threshold: showBonusTier && bonusViewsThreshold > 0 ? bonusViewsThreshold : null,
+      bonus_rate_per_view: showBonusTier && bonusRate > 0 ? toUsd(bonusRate) : null,
     });
 
     if (error) {
