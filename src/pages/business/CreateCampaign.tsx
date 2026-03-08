@@ -64,7 +64,7 @@ const CreateCampaign: React.FC = () => {
   };
 
   const getBudgetAmount = () => getBudget();
-  const getFee = () => Math.round(getBudget() * 0.15 * 100) / 100;
+  const getFee = () => Math.round(getBudget() * 0.10 * 100) / 100;
   const getTotal = () => Math.round((getBudget() + getFee()) * 100) / 100;
 
   const canProceed = () => {
