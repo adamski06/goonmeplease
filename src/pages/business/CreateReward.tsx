@@ -48,7 +48,7 @@ const CreateReward: React.FC = () => {
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
-    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0);
+    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0) && couponCodes.length >= 100;
     return true;
   };
 
@@ -386,7 +386,7 @@ const CreateReward: React.FC = () => {
                     <Ticket className="h-4 w-4" />
                     {couponCodes.length > 0 ? `${couponCodes.length} code${couponCodes.length > 1 ? 's' : ''} added` : 'Add coupon codes...'}
                   </button>
-                  <p className="text-xs text-muted-foreground">Add codes that will be distributed to creators as rewards.</p>
+                  <p className="text-xs text-muted-foreground">Add at least 100 codes that will be distributed to creators as rewards.{couponCodes.length > 0 && couponCodes.length < 100 && <span className="text-amber-500 font-medium"> ({100 - couponCodes.length} more needed)</span>}</p>
                 </div>
               </div>
             )}
