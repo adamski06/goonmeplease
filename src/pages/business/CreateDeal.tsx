@@ -427,7 +427,7 @@ const CreateDeal: React.FC = () => {
                     className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
                     style={{ animationDelay: '800ms', animationFillMode: 'both' }}
                   >
-                    Total: {symbol}{maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.15).toLocaleString()}` : '0'} / creator
+                    Total: {symbol}{maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.10).toLocaleString()}` : '0'} / creator
                   </div>
                 )}
                 <Button

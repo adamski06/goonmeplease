@@ -517,7 +517,7 @@ const CreateCampaign: React.FC = () => {
                   <span className="text-sm font-medium text-foreground">{fmtInline(getBudget())}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
+                  <span className="text-sm text-muted-foreground">Jarla service fee (10%)</span>
                   <span className="text-sm font-medium text-foreground">{fmtInline(getFee())}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
