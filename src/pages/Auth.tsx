@@ -52,6 +52,7 @@ const Auth: React.FC = () => {
   const [signUpFullName, setSignUpFullName] = useState<string>('');
   const [showMethodSheet, setShowMethodSheet] = useState(false);
   const [isOAuthUser, setIsOAuthUser] = useState(false);
+  const emailSignupInProgress = React.useRef(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -61,6 +62,8 @@ const Auth: React.FC = () => {
   // Detect returning OAuth users who need onboarding
   useEffect(() => {
     if (!loading && user) {
+      // If email signup is in progress, let handleCredentialsNext manage the flow
+      if (emailSignupInProgress.current) return;
       // If we're mid-signup flow (email), don't interfere
       if (isSignUp && signUpStep !== 'credentials') return;
 
@@ -117,6 +120,7 @@ const Auth: React.FC = () => {
     fullName: string;
   }) => {
     setIsLoading(true);
+    emailSignupInProgress.current = true;
     try {
       setSignUpFullName(data.fullName || '');
       const { error } = await signUp(data.email, data.password, data.fullName);
@@ -139,7 +143,9 @@ const Auth: React.FC = () => {
       const currentUserId = session.session.user.id;
       setNewUserId(currentUserId);
       setSignUpStep('tiktok');
+      emailSignupInProgress.current = false;
     } catch (error: any) {
+      emailSignupInProgress.current = false;
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
     } finally {
       setIsLoading(false);
