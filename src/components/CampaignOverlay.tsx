@@ -34,22 +34,10 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
   }, []);
 
   const handleContinue = () => {
-    // Check if guide should be skipped
-    try {
-      const skipped = JSON.parse(localStorage.getItem('skippedGuides') || '[]');
-      if (skipped.includes(campaign.id)) {
-        setSubmitSliding(true);
-        setTimeout(() => {
-          setShowSubmit(true);
-          setSubmitSliding(false);
-        }, 300);
-        return;
-      }
-    } catch {}
-    setGuideSliding(true);
+    setSubmitSliding(true);
     setTimeout(() => {
-      setShowGuide(true);
-      setGuideSliding(false);
+      setShowSubmit(true);
+      setSubmitSliding(false);
     }, 300);
   };
 
