@@ -26,7 +26,7 @@ const isValidTikTokUrl = (url: string): boolean => {
   }
 };
 
-const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack }) => {
+const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) => {
   const { user } = useAuth();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
