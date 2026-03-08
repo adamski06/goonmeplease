@@ -124,7 +124,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
   const logoUrl = profile?.logo_url
     ? (getHighResLogoUrl(profile.logo_url) || profile.logo_url)
-    : (domain ? `https://logo.clearbit.com/${domain}` : null);
+    : defaultBusinessAvatar;
 
   return (
     <aside
