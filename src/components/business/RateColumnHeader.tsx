@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Info } from 'lucide-react';
+import { Info, Plus } from 'lucide-react';
 
 interface RateColumnHeaderProps {
   label: string;
   tooltip?: string;
   avg?: string;
+  onAddTier?: () => void;
 }
 
-const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip, avg }) => {
+const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip, avg, onAddTier }) => {
   const [hovered, setHovered] = useState(false);
   const expanded = tooltip && hovered;
 
@@ -54,7 +55,18 @@ const RateColumnHeader: React.FC<RateColumnHeaderProps> = ({ label, tooltip, avg
         {/* Label row — always visible */}
         <div className="flex items-center justify-between gap-1.5 py-2.5">
           <span className="text-xs font-semibold text-foreground uppercase tracking-wide">{label}</span>
-          {tooltip && <Info className="h-3 w-3 text-muted-foreground shrink-0" />}
+          <div className="flex items-center gap-1">
+            {onAddTier && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onAddTier(); }}
+                className="h-4 w-4 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                title="Add rate tier"
+              >
+                <Plus className="h-3 w-3" />
+              </button>
+            )}
+            {tooltip && <Info className="h-3 w-3 text-muted-foreground shrink-0" />}
+          </div>
         </div>
       </div>
     </div>

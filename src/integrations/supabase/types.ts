@@ -366,6 +366,8 @@ export type Database = {
       }
       deals: {
         Row: {
+          bonus_rate_per_view: number | null
+          bonus_views_threshold: number | null
           brand_logo_url: string | null
           brand_name: string
           business_id: string
@@ -386,6 +388,8 @@ export type Database = {
           video_length: string | null
         }
         Insert: {
+          bonus_rate_per_view?: number | null
+          bonus_views_threshold?: number | null
           brand_logo_url?: string | null
           brand_name: string
           business_id: string
@@ -406,6 +410,8 @@ export type Database = {
           video_length?: string | null
         }
         Update: {
+          bonus_rate_per_view?: number | null
+          bonus_views_threshold?: number | null
           brand_logo_url?: string | null
           brand_name?: string
           business_id?: string

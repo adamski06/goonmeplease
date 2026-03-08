@@ -42,6 +42,11 @@ const CreateDeal: React.FC = () => {
   const [customPayoutInput, setCustomPayoutInput] = useState('');
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
+  // Bonus tier (optional)
+  const [showBonusTier, setShowBonusTier] = useState(false);
+  const [bonusViewsThreshold, setBonusViewsThreshold] = useState<number>(0);
+  const [bonusRate, setBonusRate] = useState<number>(0);
+
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) return ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
@@ -103,6 +108,8 @@ const CreateDeal: React.FC = () => {
       total_budget: null,
       is_active: false,
       status: 'pending',
+      bonus_views_threshold: showBonusTier && bonusViewsThreshold > 0 ? bonusViewsThreshold : null,
+      bonus_rate_per_view: showBonusTier && bonusRate > 0 ? toUsd(bonusRate) : null,
     });
 
     if (error) {
@@ -255,7 +262,7 @@ const CreateDeal: React.FC = () => {
               <div className="grid gap-3" style={{ gridTemplateColumns: '110px 1fr 1fr 1fr' }}>
                 <RateColumnHeader label="CURRENCY" />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
-                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
+                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} onAddTier={!showBonusTier ? () => setShowBonusTier(true) : undefined} />
                 <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 10%. About 5% are banking fees and the other 5% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
@@ -308,6 +315,53 @@ const CreateDeal: React.FC = () => {
                 </div>
               </div>
 
+              {/* Bonus tier row */}
+              {showBonusTier && (
+                <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-foreground">Bonus tier</p>
+                    <button
+                      onClick={() => { setShowBonusTier(false); setBonusViewsThreshold(0); setBonusRate(0); }}
+                      className="text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">After a creator reaches a view threshold, the rate changes.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">After creator reaches</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={bonusViewsThreshold || ''}
+                          onChange={(e) => setBonusViewsThreshold(parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                          placeholder="e.g. 10,000"
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                        <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">views</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">New rate / 1000 views</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={bonusRate ? fmtInline(bonusRate) : ''}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
+                            setBonusRate(Math.round(val * 100) / 100);
+                          }}
+                          placeholder={fmtPlaceholderDecimal(1)}
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
 
               {/* Results node — always visible, blurred when not filled */}

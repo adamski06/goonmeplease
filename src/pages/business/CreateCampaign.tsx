@@ -42,6 +42,11 @@ const CreateCampaign: React.FC = () => {
   const [customPayoutInput, setCustomPayoutInput] = useState('');
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
+  // Bonus tier (optional)
+  const [showBonusTier, setShowBonusTier] = useState(false);
+  const [bonusViewsThreshold, setBonusViewsThreshold] = useState<number>(0);
+  const [bonusRate, setBonusRate] = useState<number>(0);
+
   // Step 4: Budget
   const [budgetOption, setBudgetOption] = useState<'preset' | 'custom' | null>(null);
   const [totalBudget, setTotalBudget] = useState<number>(0);
@@ -159,14 +164,35 @@ const CreateCampaign: React.FC = () => {
       return;
     }
 
-    // Create a campaign tier with the CPM rate (stored in USD)
+    // Create campaign tiers with the CPM rate (stored in USD)
     if (ratePerThousand > 0) {
-      await supabase.from('campaign_tiers').insert({
-        campaign_id: insertData.id,
-        min_views: 0,
-        max_views: null,
-        rate_per_view: toUsd(ratePerThousand),
-      });
+      const tiers: { campaign_id: string; min_views: number; max_views: number | null; rate_per_view: number }[] = [];
+
+      if (showBonusTier && bonusViewsThreshold > 0 && bonusRate > 0) {
+        // Base tier: 0 to threshold
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: 0,
+          max_views: bonusViewsThreshold,
+          rate_per_view: toUsd(ratePerThousand),
+        });
+        // Bonus tier: threshold onwards
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: bonusViewsThreshold,
+          max_views: null,
+          rate_per_view: toUsd(bonusRate),
+        });
+      } else {
+        tiers.push({
+          campaign_id: insertData.id,
+          min_views: 0,
+          max_views: null,
+          rate_per_view: toUsd(ratePerThousand),
+        });
+      }
+
+      await supabase.from('campaign_tiers').insert(tiers);
     }
 
     // Redirect to Stripe checkout
@@ -333,7 +359,7 @@ const CreateCampaign: React.FC = () => {
                 <RateColumnHeader label="CURRENCY" />
                 <RateColumnHeader label="CREATOR POOL" tooltip="Creator pools can vary from $25 to $10,000 — all dependent on how many people you want to participate." avg={totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : undefined} />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
-                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
+                <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} onAddTier={!showBonusTier ? () => setShowBonusTier(true) : undefined} />
                 <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 10%. About 5% are banking fees and the other 5% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
@@ -396,6 +422,53 @@ const CreateCampaign: React.FC = () => {
                 </div>
               </div>
 
+              {/* Bonus tier row */}
+              {showBonusTier && (
+                <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-foreground">Bonus tier</p>
+                    <button
+                      onClick={() => { setShowBonusTier(false); setBonusViewsThreshold(0); setBonusRate(0); }}
+                      className="text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">After a creator reaches a view threshold, the rate changes.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">After creator reaches</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={bonusViewsThreshold || ''}
+                          onChange={(e) => setBonusViewsThreshold(parseInt(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                          placeholder="e.g. 10,000"
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                        <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">views</span>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] text-muted-foreground">New rate / 1000 views</label>
+                      <div className="rounded border border-border bg-muted/50 flex items-center px-3 h-8">
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={bonusRate ? fmtInline(bonusRate) : ''}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
+                            setBonusRate(Math.round(val * 100) / 100);
+                          }}
+                          placeholder={fmtPlaceholderDecimal(1)}
+                          className="bg-transparent outline-none w-full text-sm font-semibold text-foreground placeholder:text-muted-foreground"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
 
               {/* Combined results node — always visible */}
