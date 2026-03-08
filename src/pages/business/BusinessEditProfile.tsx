@@ -126,7 +126,7 @@ const BusinessEditProfile: React.FC = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="text-sm font-semibold font-montserrat text-blue-600 disabled:text-muted-foreground"
+          className="text-sm font-semibold font-montserrat text-primary disabled:text-muted-foreground"
         >
           {saving ? 'Saving...' : 'Save'}
         </button>
