@@ -323,7 +323,10 @@ const AdminReviewQueue = () => {
                         <User className="h-3.5 w-3.5 text-muted-foreground" />
                       </div>
                     )}
-                    <span className="text-sm font-medium truncate max-w-[120px]">{item.creator_name}</span>
+                    <div className="min-w-0">
+                      <span className="text-sm font-medium truncate block max-w-[120px]">{item.creator_name}</span>
+                      {item.creator_tiktok && <span className="text-[11px] text-muted-foreground">@{item.creator_tiktok}</span>}
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
