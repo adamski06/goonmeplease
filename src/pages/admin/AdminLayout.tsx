@@ -37,7 +37,9 @@ const AdminLayout = () => {
   if (authLoading || authorized === null) return <JarlaLoader />;
 
   const navItems = [
-    { label: 'Businesses', path: '/admin' },
+    { label: 'Review Queue', path: '/admin' },
+    { label: 'All Ads', path: '/admin/all-ads' },
+    { label: 'Businesses', path: '/admin/businesses' },
     { label: 'Creators', path: '/admin/creators' },
     { label: 'Settings', path: '/admin/settings' },
   ];
@@ -57,7 +59,7 @@ const AdminLayout = () => {
         <nav className="flex gap-4 mt-3">
           {navItems.map((item) => {
             const isActive = item.path === '/admin'
-              ? location.pathname === '/admin' || location.pathname.startsWith('/admin/business')
+              ? location.pathname === '/admin'
               : location.pathname.startsWith(item.path);
             return (
               <Link

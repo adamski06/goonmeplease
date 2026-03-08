@@ -64,6 +64,8 @@ const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
 const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
 const EmbedAd = lazyRetry(() => import("./pages/EmbedAd"));
 const AdminLayout = lazyRetry(() => import("./pages/admin/AdminLayout"));
+const AdminReviewQueue = lazyRetry(() => import("./pages/admin/AdminReviewQueue"));
+const AdminAllAds = lazyRetry(() => import("./pages/admin/AdminAllAds"));
 const AdminDashboard = lazyRetry(() => import("./pages/admin/AdminDashboard"));
 const AdminBusinessDetail = lazyRetry(() => import("./pages/admin/AdminBusinessDetail"));
 const AdminCreators = lazyRetry(() => import("./pages/admin/AdminCreators"));
@@ -131,7 +133,9 @@ const App = () => (
                 <Route path="/brand/:businessId" element={<Suspense fallback={<BusinessLoader />}><PublicBrand /></Suspense>} />
                 <Route path="/embed/ad/:id" element={<Suspense fallback={<BusinessLoader />}><EmbedAd /></Suspense>} />
                 <Route path="/admin" element={<Suspense fallback={<BusinessLoader />}><AdminLayout /></Suspense>}>
-                  <Route index element={<AdminDashboard />} />
+                  <Route index element={<AdminReviewQueue />} />
+                  <Route path="all-ads" element={<AdminAllAds />} />
+                  <Route path="businesses" element={<AdminDashboard />} />
                   <Route path="business/:userId" element={<AdminBusinessDetail />} />
                   <Route path="creators" element={<AdminCreators />} />
                   <Route path="creators/:userId" element={<AdminCreatorDetail />} />
