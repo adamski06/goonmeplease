@@ -283,65 +283,87 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
       {/* Bottom */}
       <div className={cn(
-        'shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3 py-3 justify-center' : 'flex-row justify-between px-2 py-3'
+        'shrink-0',
+        isCollapsed ? 'flex flex-col items-center gap-3 py-3' : 'px-2 py-3'
       )}>
-      {/* Profile / user menu */}
-        <div ref={userMenuRef} className="relative flex justify-center">
-          <button
-            onClick={() => setUserMenuOpen(o => !o)}
-            className="h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
-            title="Profile"
-          >
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt=""
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  if (domain && !img.src.includes('google.com/s2/favicons')) {
-                    img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-                  } else {
-                    img.style.display = 'none';
-                  }
-                }}
-              />
-            ) : (
-              <span className="text-[9px] font-bold font-montserrat">{initial}</span>
-            )}
-          </button>
-
-          {userMenuOpen && (
+        {/* Profile / user menu with balance expansion */}
+        <div ref={userMenuRef} className="relative">
+          {/* Expandable balance panel — appears above the profile button */}
+          {userMenuOpen && !isCollapsed && (
             <div
-              className="absolute left-0 bottom-full mb-1 w-48 rounded-lg border border-border overflow-hidden z-50 shadow-md"
+              className="mb-2 rounded-lg border border-border overflow-hidden shadow-md"
               style={{ background: 'hsl(var(--popover))' }}
             >
-              <button
-                onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setUserMenuOpen(false); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
-              >
-                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              </button>
-              <button
-                onClick={() => { navigate('/business/settings'); setUserMenuOpen(false); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
-              >
-                <Settings className="h-4 w-4" />
-                Settings
-              </button>
+              {/* Balance summary */}
+              <div className="px-3 py-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Ad Balance</span>
+                  <Wallet className="h-3 w-3 text-muted-foreground" />
+                </div>
+                <p className="text-lg font-semibold text-foreground">
+                  ${totalCommitted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Committed across {items.filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending')).length} active ad{items.filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending')).length !== 1 ? 's' : ''}
+                </p>
+              </div>
+
+              <div className="border-t border-border">
+                <button
+                  onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setUserMenuOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+                >
+                  {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+                </button>
+                <button
+                  onClick={() => { navigate('/business/settings'); setUserMenuOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </button>
+              </div>
             </div>
           )}
-        </div>
 
-        {/* Inbox */}
-        <button
-          className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
-          title="Inbox"
-        >
-          <Inbox className="h-4 w-4" />
-        </button>
+          <div className={cn('flex items-center', isCollapsed ? 'flex-col gap-3' : 'flex-row justify-between')}>
+            <button
+              onClick={() => setUserMenuOpen(o => !o)}
+              className={cn(
+                'h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border',
+                userMenuOpen && 'ring-1 ring-primary/30'
+              )}
+              title="Profile"
+            >
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    if (domain && !img.src.includes('google.com/s2/favicons')) {
+                      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+                    } else {
+                      img.style.display = 'none';
+                    }
+                  }}
+                />
+              ) : (
+                <span className="text-[9px] font-bold font-montserrat">{initial}</span>
+              )}
+            </button>
+
+            {/* Inbox */}
+            <button
+              className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
+              title="Inbox"
+            >
+              <Inbox className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </aside>
   );
