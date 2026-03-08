@@ -275,11 +275,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         'shrink-0 flex items-center justify-center',
         isCollapsed ? 'flex-col gap-3 py-3' : 'flex-row justify-between px-3 py-3'
       )}>
-        {/* Profile / user menu */}
+      {/* Profile / user menu */}
         <div ref={userMenuRef} className="relative flex justify-center">
           <button
             onClick={() => setUserMenuOpen(o => !o)}
-            className="h-6 w-6 rounded-md overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
+            className="h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
             title="Profile"
           >
             {logoUrl ? (

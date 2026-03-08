@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock } from 'lucide-react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock, HelpCircle, Send } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
 import EarningsGraph from '@/components/EarningsGraph';
 import { CampaignTier } from '@/types/campaign';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { toast } from 'sonner';
 
 interface InActionDetailProps {
   submission: ActiveSubmission;
@@ -51,6 +52,33 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
   const [poolSpent, setPoolSpent] = useState(0);
   const [myEarnings, setMyEarnings] = useState(0);
   const [payoutAvailableAt, setPayoutAvailableAt] = useState<string | null>(null);
+  const [showHelpForm, setShowHelpForm] = useState(false);
+  const [helpMessage, setHelpMessage] = useState('');
+  const [submittingHelp, setSubmittingHelp] = useState(false);
+
+  const submitHelpRequest = async () => {
+    if (!helpMessage.trim()) return;
+    setSubmittingHelp(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not logged in');
+      const { error } = await supabase.from('support_requests' as any).insert({
+        user_id: user.id,
+        submission_id: submission.id,
+        submission_type: 'spread',
+        subject: `Issue with submission for ${submission.campaign_brand}`,
+        message: helpMessage.trim(),
+      });
+      if (error) throw error;
+      toast.success('Your request has been submitted. We\'ll get back to you soon.');
+      setShowHelpForm(false);
+      setHelpMessage('');
+    } catch (e) {
+      console.error(e);
+      toast.error('Failed to submit. Please try again.');
+    }
+    setSubmittingHelp(false);
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -315,6 +343,70 @@ const InActionDetail: React.FC<InActionDetailProps> = ({ submission, onBack }) =
             )}
           </div>
         )}
+
+        {/* Need Help button */}
+        <div className="mt-6 mb-2">
+          {!showHelpForm ? (
+            <button
+              onClick={() => setShowHelpForm(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-colors"
+              style={{
+                background: 'rgba(0,0,0,0.04)',
+                border: '1px solid rgba(0,0,0,0.08)',
+              }}
+            >
+              <HelpCircle className="h-4 w-4 text-black/40" />
+              <span className="text-black/50 font-jakarta">Need help?</span>
+            </button>
+          ) : (
+            <div
+              className="rounded-xl p-4"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
+                border: '1px solid rgba(0,0,0,0.06)',
+              }}
+            >
+              <h4 className="text-sm font-semibold text-black font-montserrat mb-3">Report a problem</h4>
+              <textarea
+                value={helpMessage}
+                onChange={(e) => setHelpMessage(e.target.value)}
+                placeholder="Describe the issue you're experiencing..."
+                className="w-full rounded-lg p-3 text-sm font-jakarta resize-none h-24 focus:outline-none focus:ring-1 focus:ring-black/20"
+                style={{
+                  background: 'rgba(255,255,255,0.8)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  color: '#000',
+                }}
+              />
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => { setShowHelpForm(false); setHelpMessage(''); }}
+                  className="flex-1 py-2.5 rounded-lg text-xs font-medium text-black/50 transition-colors hover:bg-black/5"
+                  style={{ border: '1px solid rgba(0,0,0,0.08)' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={submitHelpRequest}
+                  disabled={!helpMessage.trim() || submittingHelp}
+                  className="flex-1 py-2.5 rounded-lg text-xs font-semibold text-white flex items-center justify-center gap-1.5 transition-all active:scale-[0.97] disabled:opacity-50"
+                  style={{
+                    background: 'linear-gradient(180deg, hsl(0,0%,18%) 0%, hsl(0,0%,10%) 100%)',
+                  }}
+                >
+                  {submittingHelp ? (
+                    <div className="h-3 w-3 border border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="h-3 w-3" />
+                      Submit
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
