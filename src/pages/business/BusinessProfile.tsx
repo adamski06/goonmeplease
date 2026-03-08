@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
-import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
+
 
 interface BusinessProfileData {
   company_name: string;
@@ -94,24 +94,31 @@ const BusinessProfile: React.FC = () => {
     );
   }
 
+  const handleLogoClick = () => {
+    navigate('/business/edit-profile');
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Profile header */}
       <div className="mb-10 flex items-center gap-6">
-        <div className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+        <button
+          onClick={handleLogoClick}
+          className="h-40 w-40 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border hover:bg-muted/80 transition-colors cursor-pointer"
+        >
           {profile?.logo_url ? (
             <img
               src={getHighResLogoUrl(profile.logo_url) || profile.logo_url}
               alt=""
               className="h-full w-full object-cover"
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.src = defaultBusinessAvatar;
-              }}
             />
-          ) : null}
-          <span className={`text-5xl font-bold text-muted-foreground/60 font-montserrat ${profile?.logo_url ? 'hidden' : ''}`}>{initial}</span>
-        </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-sm font-semibold text-muted-foreground">ad profile</p>
+              <p className="text-sm font-semibold text-muted-foreground">picture +</p>
+            </div>
+          )}
+        </button>
 
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-foreground font-montserrat truncate mb-1">

@@ -4,7 +4,6 @@ import { Plus, ChevronDown, ChevronUp, Home, Sun, Moon, Settings, Inbox, Wallet 
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
-import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 import { useTheme } from 'next-themes';
 
 interface SidebarItem {
@@ -124,7 +123,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
   const logoUrl = profile?.logo_url
     ? (getHighResLogoUrl(profile.logo_url) || profile.logo_url)
-    : defaultBusinessAvatar;
+    : null;
 
   return (
     <aside
@@ -156,10 +155,6 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   src={logoUrl}
                   alt=""
                   className="h-full w-full object-cover"
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = defaultBusinessAvatar;
-                  }}
                 />
               ) : (
                 <span className="text-[9px] font-bold text-muted-foreground font-montserrat">{initial}</span>
@@ -338,10 +333,6 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
                   src={logoUrl}
                   alt=""
                   className="h-full w-full object-cover"
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = defaultBusinessAvatar;
-                  }}
                 />
               ) : (
                 <span className="text-[9px] font-bold font-montserrat">{initial}</span>

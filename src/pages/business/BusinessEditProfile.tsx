@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ChevronLeft, Camera } from 'lucide-react';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
-import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
+
 
 interface EditData {
   company_name: string;
@@ -126,7 +126,7 @@ const BusinessEditProfile: React.FC = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="text-sm font-semibold font-montserrat text-blue-600 disabled:text-muted-foreground"
+          className="text-sm font-semibold font-montserrat text-primary disabled:text-muted-foreground"
         >
           {saving ? 'Saving...' : 'Save'}
         </button>
@@ -141,19 +141,19 @@ const BusinessEditProfile: React.FC = () => {
             className="relative"
             disabled={uploading}
           >
-            <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
-              {data.logo_url ? (
-                <img
-                  src={getHighResLogoUrl(data.logo_url) || data.logo_url}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = defaultBusinessAvatar;
-                  }}
-                />
-              ) : null}
-              <span className={`text-3xl font-bold text-muted-foreground/60 font-montserrat ${data.logo_url ? 'hidden' : ''}`}>{initial}</span>
+              <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border hover:bg-muted/80 transition-colors">
+                {data.logo_url ? (
+                  <img
+                    src={getHighResLogoUrl(data.logo_url) || data.logo_url}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <p className="text-xs font-semibold text-muted-foreground">ad profile</p>
+                    <p className="text-xs font-semibold text-muted-foreground">picture +</p>
+                  </div>
+                )}
             </div>
             <div className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-card border border-border shadow-sm flex items-center justify-center">
               <Camera className="h-3.5 w-3.5 text-muted-foreground" />
