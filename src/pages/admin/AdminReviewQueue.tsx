@@ -15,6 +15,7 @@ type ReviewItem = {
   creator_id: string;
   creator_name: string;
   creator_avatar: string | null;
+  creator_tiktok: string | null;
   ad_title: string;
   brand_name: string;
   tiktok_video_url: string | null;

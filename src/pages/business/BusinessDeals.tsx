@@ -26,6 +26,7 @@ interface DealStats {
 
 const statusConfig: Record<string, { label: string; icon: React.ElementType; className: string }> = {
   active: { label: 'Active', icon: CheckCircle2, className: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' },
+  pending: { label: 'Under Review', icon: Clock, className: 'bg-blue-500/10 text-blue-600 border-blue-500/20' },
   paused: { label: 'Paused', icon: Clock, className: 'bg-amber-500/10 text-amber-600 border-amber-500/20' },
   ended: { label: 'Ended', icon: XCircle, className: 'bg-muted text-muted-foreground border-border' },
 };
