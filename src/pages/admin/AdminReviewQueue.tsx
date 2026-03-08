@@ -215,7 +215,14 @@ const AdminReviewQueue = () => {
                       <User className="h-4 w-4 text-muted-foreground" />
                     </div>
                   )}
-                  <span className="text-sm font-medium">{reviewItem.creator_name}</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium">{reviewItem.creator_name}</span>
+                    {reviewItem.creator_tiktok && (
+                      <a href={`https://www.tiktok.com/@${reviewItem.creator_tiktok}`} target="_blank" rel="noreferrer" className="block text-xs text-primary hover:underline">
+                        @{reviewItem.creator_tiktok}
+                      </a>
+                    )}
+                  </div>
                   <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
                 </div>
 
