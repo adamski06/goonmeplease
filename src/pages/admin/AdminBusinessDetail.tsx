@@ -341,7 +341,7 @@ const AdminBusinessDetail = () => {
   // ============ BUSINESS DETAIL (ads tabs) ============
   return (
     <div className="space-y-6">
-      <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
+      <Button variant="ghost" size="sm" onClick={() => navigate('/admin/businesses')}>
         <ArrowLeft className="h-4 w-4 mr-1" /> All Businesses
       </Button>
 
