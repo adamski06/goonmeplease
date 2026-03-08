@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock } from 'lucide-react';
+import { ChevronLeft, Eye, Heart, Clock, CheckCircle, Share2, Lock, HelpCircle, Send } from 'lucide-react';
 import { ActiveSubmission } from './InActionCard';
 import { supabase } from '@/integrations/supabase/client';
 import EarningsGraph from '@/components/EarningsGraph';
 import { CampaignTier } from '@/types/campaign';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { toast } from 'sonner';
 
 interface InActionDetailProps {
   submission: ActiveSubmission;
