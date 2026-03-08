@@ -215,8 +215,9 @@ export function getPlaceholderValue(usdAmount: number, code: string, round = tru
   if (round) {
     converted = snapToFriendly(converted);
   } else {
-    // For decimal placeholders (CPM rates), snap to nearest 0.5 if >= 1
-    if (converted >= 10) converted = snapToFriendly(converted);
+    // For decimal placeholders (CPM rates), use proportional rounding to preserve ratios
+    if (converted >= 100) converted = Math.round(converted / 5) * 5;
+    else if (converted >= 10) converted = Math.round(converted);
     else if (converted >= 1) converted = Math.round(converted * 2) / 2;
     else converted = Math.round(converted * 100) / 100;
   }
