@@ -86,6 +86,14 @@ const BusinessEditProfile: React.FC = () => {
         })
         .eq('user_id', user.id);
       if (error) throw error;
+
+      // Sync brand name & logo to all existing ads
+      await Promise.all([
+        supabase.from('campaigns').update({ brand_name: data.company_name, brand_logo_url: data.logo_url }).eq('business_id', user.id),
+        supabase.from('deals').update({ brand_name: data.company_name, brand_logo_url: data.logo_url }).eq('business_id', user.id),
+        supabase.from('reward_ads').update({ brand_name: data.company_name, brand_logo_url: data.logo_url }).eq('business_id', user.id),
+      ]);
+
       window.dispatchEvent(new Event('business-profile-updated'));
       toast({ title: 'Profile updated' });
       navigate('/business');

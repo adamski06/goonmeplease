@@ -111,7 +111,7 @@ const CreateDeal: React.FC = () => {
       return;
     }
 
-    toast({ title: 'Deal launched!' });
+    toast({ title: 'Ad submitted for review!' });
     navigate('/business');
   };
 
