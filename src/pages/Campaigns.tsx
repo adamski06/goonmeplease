@@ -88,6 +88,15 @@ const Campaigns: React.FC = () => {
     }
   };
 
+  // Scroll to top when feed items first populate (e.g. after login)
+  const prevFeedLength = useRef(0);
+  useEffect(() => {
+    if (feedItems.length > 0 && prevFeedLength.current === 0 && scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+    prevFeedLength.current = feedItems.length;
+  }, [feedItems.length]);
+
   // Load more when scrolling near the end
   const handleScroll = useCallback(() => {
     if (!scrollRef.current || !hasMore) return;
@@ -118,6 +127,35 @@ const Campaigns: React.FC = () => {
     handleScroll();
     handleSnapSettle();
   }, [handleScroll, handleSnapSettle]);
+
+  // Pull-to-refresh handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (scrollRef.current && scrollRef.current.scrollTop <= 0) {
+      touchStartY.current = e.touches[0].clientY;
+    } else {
+      touchStartY.current = 0;
+    }
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStartY.current === 0 || refreshing) return;
+    if (scrollRef.current && scrollRef.current.scrollTop > 0) return;
+    const diff = e.touches[0].clientY - touchStartY.current;
+    if (diff > 0) {
+      setPullDistance(Math.min(diff * 0.4, 80));
+    }
+  }, [refreshing]);
+
+  const handleTouchEnd = useCallback(async () => {
+    if (pullDistance > 50 && !refreshing) {
+      setRefreshing(true);
+      setPullDistance(60);
+      await refresh();
+      setRefreshing(false);
+    }
+    setPullDistance(0);
+    touchStartY.current = 0;
+  }, [pullDistance, refreshing, refresh]);
 
   // Loading handled by UserLayout
 
