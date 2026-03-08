@@ -251,7 +251,7 @@ const ProfilePage: React.FC = () => {
           onClick={() => !earningsExpanded && openEarnings()}
           className="rounded-[48px] overflow-hidden cursor-pointer"
           style={{
-            height: '140px',
+            height: '180px',
             visibility: earningsExpanded ? 'hidden' : 'visible',
             background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
             border: '1px solid rgba(52,211,153,0.4)',
@@ -260,22 +260,22 @@ const ProfilePage: React.FC = () => {
         >
           <div className="p-6 h-full flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
               <span
-                className="text-xs font-semibold text-black/55 font-montserrat px-3 py-1.5 rounded-full"
+                className="text-xs font-semibold text-white/65 font-montserrat px-3 py-1.5 rounded-full"
                 style={{
-                  background: 'rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(0,0,0,0.1)',
+                  background: 'rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Manage
               </span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/45 font-jakarta mb-0.5">Balance</span>
+              <span className="text-xs font-medium text-white/55 font-jakarta mb-0.5">Balance</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                <span className="text-lg text-black/40 font-montserrat">{label}</span>
+                <span className="text-4xl font-bold text-white/95 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
@@ -298,21 +298,21 @@ const ProfilePage: React.FC = () => {
         >
           {/* Collapsed content - fades out as node expands */}
           <div
-            className="absolute inset-x-0 top-0 p-6 pointer-events-none h-[140px] flex flex-col justify-between"
+            className="absolute inset-x-0 top-0 p-6 pointer-events-none h-[180px] flex flex-col justify-between"
             style={{
               opacity: earningsReady && !earningsClosing ? 0 : 1,
               transition: 'opacity 0.25s ease-out',
             }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
-              <span className="text-xs font-semibold text-black/55 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.1)' }}>Manage</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
+              <span className="text-xs font-semibold text-white/65 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>Manage</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/45 font-jakarta mb-0.5">Balance</span>
+              <span className="text-xs font-medium text-white/55 font-jakarta mb-0.5">Balance</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                <span className="text-lg text-black/40 font-montserrat">{label}</span>
+                <span className="text-4xl font-bold text-white/95 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
@@ -342,11 +342,11 @@ const ProfilePage: React.FC = () => {
               }}
               className="absolute top-4 right-4 z-10 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
-                background: 'rgba(0,0,0,0.08)',
-                border: '1px solid rgba(0,0,0,0.1)',
+                background: 'rgba(255,255,255,0.12)',
+                border: '1px solid rgba(255,255,255,0.15)',
               }}
             >
-              <X className="h-4 w-4 text-black/60" />
+              <X className="h-4 w-4 text-white/70" />
             </button>
 
             {/* Balance view */}
@@ -362,35 +362,35 @@ const ProfilePage: React.FC = () => {
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col" onClick={(e) => e.stopPropagation()}>
                 <div className="flex flex-col items-center mt-4">
-                  <p className="text-sm font-bold text-black/50 font-jakarta mb-2">Your Balance</p>
+                  <p className="text-sm font-bold text-white/55 font-jakarta mb-2">Your Balance</p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-6xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-                    <span className="text-2xl text-black/40 font-montserrat">{label}</span>
+                    <span className="text-6xl font-bold text-white/95 font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                    <span className="text-2xl text-white/45 font-montserrat">{label}</span>
                   </div>
                 </div>
 
                 <div className="w-full space-y-3 mt-8">
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Total earned</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(totalEarnings).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/50 font-jakarta">Total earned</span>
+                    <span className="text-sm font-semibold text-white/85 font-montserrat">{convert(totalEarnings).toLocaleString()} {label}</span>
                   </div>
-                  <div className="h-px bg-black/10" />
+                  <div className="h-px bg-white/15" />
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Pending</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(pendingBalance).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/50 font-jakarta">Pending</span>
+                    <span className="text-sm font-semibold text-white/85 font-montserrat">{convert(pendingBalance).toLocaleString()} {label}</span>
                   </div>
-                  <div className="h-px bg-black/10" />
+                  <div className="h-px bg-white/15" />
                   <div className="flex justify-between items-center px-2">
-                    <span className="text-sm text-black/50 font-jakarta">Withdrawn</span>
-                    <span className="text-sm font-semibold text-black/80 font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
+                    <span className="text-sm text-white/50 font-jakarta">Withdrawn</span>
+                    <span className="text-sm font-semibold text-white/85 font-montserrat">{convert(Math.max(0, totalEarnings - balance - pendingBalance)).toLocaleString()} {label}</span>
                   </div>
                   {nextPayoutDate && (
                     <>
-                      <div className="h-px bg-black/10" />
+                      <div className="h-px bg-white/15" />
                       <div className="flex items-center gap-2 px-2">
-                        <Clock className="h-3.5 w-3.5 text-black/30" />
-                        <span className="text-sm text-black/50 font-jakarta">Next claim</span>
-                        <span className="text-sm font-semibold text-black/80 font-montserrat ml-auto">
+                        <Clock className="h-3.5 w-3.5 text-white/35" />
+                        <span className="text-sm text-white/50 font-jakarta">Next claim</span>
+                        <span className="text-sm font-semibold text-white/85 font-montserrat ml-auto">
                           {(() => {
                             const diff = new Date(nextPayoutDate).getTime() - Date.now();
                             if (diff <= 0) return 'Available now';
