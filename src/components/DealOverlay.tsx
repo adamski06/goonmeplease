@@ -231,9 +231,9 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
               style={{
                 background: requested
                   ? 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)'
-                  : 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
-                border: '1.5px solid rgba(96,165,250,0.4)',
-                boxShadow: '0 4px 20px rgba(37,99,235,0.35), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.15)',
+                  : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+                border: requested ? '1.5px solid rgba(52,211,153,0.5)' : '1.5px solid rgba(60,60,60,0.6)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)',
                 color: 'white',
               }}
             >
