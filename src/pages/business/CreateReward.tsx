@@ -48,7 +48,7 @@ const CreateReward: React.FC = () => {
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0;
-    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0);
+    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0) && couponCodes.length >= 100;
     return true;
   };
 
