@@ -98,6 +98,7 @@ const AdminReviewQueue = () => {
       creator_id: a.creator_id,
       creator_name: profilesMap[a.creator_id]?.full_name || profilesMap[a.creator_id]?.username || 'Unknown',
       creator_avatar: profilesMap[a.creator_id]?.avatar_url || null,
+      creator_tiktok: tiktokMap[a.creator_id] || null,
       ad_title: (a.deals as any)?.title || '–',
       brand_name: (a.deals as any)?.brand_name || '–',
       tiktok_video_url: a.tiktok_video_url,
