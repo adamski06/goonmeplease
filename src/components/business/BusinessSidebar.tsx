@@ -138,7 +138,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
             )}
             title={profile?.company_name || 'Profile'}
           >
-            <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+            <div className="h-4 w-4 rounded-[4px] bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
               {logoUrl ? (
                 <img
                   src={logoUrl}
