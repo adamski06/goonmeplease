@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 
 interface BusinessProfileData {
   company_name: string;

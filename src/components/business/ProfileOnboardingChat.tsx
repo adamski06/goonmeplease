@@ -3,6 +3,7 @@ import { ArrowUp, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
 
 interface Message {
   id: string;
