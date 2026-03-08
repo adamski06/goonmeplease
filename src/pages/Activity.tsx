@@ -296,11 +296,56 @@ const Activity: React.FC = () => {
           <CampaignListSkeleton count={2} />
         </div>
       )}
-      {!submissionsLoading && activeSubmissions.length > 0 && !activeCampaign && (
+      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0) && !activeCampaign && (
         <div className="px-3 pt-2 space-y-2.5">
           {activeSubmissions.map(sub => (
             <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
           ))}
+          {dealApplications.map(da => {
+            const dealStatusConfig: Record<string, { label: string; gradient: string; border: string }> = {
+              pending: { label: 'Requested', gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)', border: 'rgba(252,211,77,0.5)' },
+              accepted: { label: 'Accepted', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
+              declined: { label: 'Declined', gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)', border: 'rgba(252,165,165,0.5)' },
+            };
+            const ds = dealStatusConfig[da.status] || dealStatusConfig.pending;
+            return (
+              <div
+                key={da.id}
+                className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                }}
+              >
+                <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+                  {da.deal_logo ? (
+                    <img src={da.deal_logo} alt={da.deal_brand} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-lg font-bold text-black/30">{da.deal_brand[0]}</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-bold text-black font-montserrat truncate block">{da.deal_brand}</span>
+                  <p className="text-xs text-black/50 font-jakarta line-clamp-1">{da.deal_title}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Send className="h-3 w-3 text-black/30" />
+                    <span className="text-[11px] font-medium text-black/40 font-jakarta">Deal</span>
+                  </div>
+                </div>
+                <div
+                  className="flex items-center gap-1.5 rounded-[14px] px-2.5 py-1 flex-shrink-0"
+                  style={{
+                    background: ds.gradient,
+                    border: `1px solid ${ds.border}`,
+                    boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <span className="text-[10px] font-bold text-white font-montserrat">{ds.label}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
