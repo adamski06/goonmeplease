@@ -292,7 +292,7 @@ const CreateCampaign: React.FC = () => {
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Guidelines</Label>
+                <Label className="text-sm font-medium">Guidelines *</Label>
                 {guidelinesList.map((g, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Input
