@@ -9,8 +9,9 @@ import { useTheme } from 'next-themes';
 interface SidebarItem {
   id: string;
   title: string;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   status: string | null;
+  budget?: number;
 }
 
 interface BusinessProfileData {
