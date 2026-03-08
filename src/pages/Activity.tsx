@@ -11,7 +11,7 @@ import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
 import InActionDetail from '@/components/InActionDetail';
 import { Campaign } from '@/types/campaign';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
-import { ChevronRight, X } from 'lucide-react';
+import { ChevronRight, X, Clock, CheckCircle, Send } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useFavorites } from '@/hooks/useFavorites';
 import { supabase } from '@/integrations/supabase/client';
