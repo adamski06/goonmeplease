@@ -178,8 +178,14 @@ const BusinessDealDetail: React.FC = () => {
         </div>
         <div className="flex items-center gap-2 flex-1">
           <h1 className="text-xl font-bold text-foreground font-montserrat">{deal.title}</h1>
-          <Badge variant="outline" className={deal.is_active ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-muted text-muted-foreground'}>
-            {deal.is_active ? 'Active' : 'Ended'}
+          <Badge variant="outline" className={
+            deal.is_active
+              ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+              : deal.status === 'pending'
+                ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                : 'bg-muted text-muted-foreground'
+          }>
+            {deal.is_active ? 'Active' : deal.status === 'pending' ? 'Under Review' : 'Ended'}
           </Badge>
         </div>
         <button
