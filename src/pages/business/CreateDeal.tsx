@@ -43,7 +43,7 @@ const CreateDeal: React.FC = () => {
   const [payoutMode, setPayoutMode] = useState<'preset' | 'custom' | null>(null);
 
   const canProceed = () => {
-    if (step === 0) return title.trim().length > 0;
+    if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) return ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
     if (step === 2) return true;
     return false;
@@ -211,11 +211,11 @@ const CreateDeal: React.FC = () => {
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Collab 2026" className="h-10" />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Description</Label>
+                <Label className="text-sm font-medium">Description *</Label>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Guidelines</Label>
+                <Label className="text-sm font-medium">Guidelines *</Label>
                 {guidelinesList.map((g, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Input

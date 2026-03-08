@@ -68,7 +68,7 @@ const CreateCampaign: React.FC = () => {
   const getTotal = () => Math.round((getBudget() + getFee()) * 100) / 100;
 
   const canProceed = () => {
-    if (step === 0) return title.trim().length > 0;
+    if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) {
       const rateOk = ratePerThousand > 0 && maxPayoutPerCreator !== null && maxPayoutPerCreator > 0;
       const budgetOk = totalBudget >= (maxPayoutPerCreator || 1);
@@ -288,11 +288,11 @@ const CreateCampaign: React.FC = () => {
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Summer Vibes 2026" className="h-10" />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Description</Label>
+                <Label className="text-sm font-medium">Description *</Label>
                 <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you're looking for..." rows={3} />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm font-medium">Guidelines</Label>
+                <Label className="text-sm font-medium">Guidelines *</Label>
                 {guidelinesList.map((g, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Input
