@@ -210,7 +210,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
-            'flex items-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden',
+            'flex items-center gap-3 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden',
             'transition-all duration-300 ease-in-out',
             isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]',
             resolvedTheme === 'dark' ? 'text-foreground' : 'text-white'
