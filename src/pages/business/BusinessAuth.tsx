@@ -182,9 +182,9 @@ const BusinessAuth: React.FC = () => {
       </div>
 
       {/* Right decorative panel — desktop only */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-10">
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-4">
         <div
-          className="w-full h-full rounded-3xl"
+          className="w-full h-full rounded-2xl"
           style={{
             background: 'linear-gradient(160deg, hsl(var(--muted)) 0%, hsl(var(--foreground) / 0.12) 50%, hsl(var(--foreground) / 0.25) 100%)',
             border: '1px solid hsl(var(--border))',
