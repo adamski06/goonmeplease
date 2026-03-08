@@ -143,7 +143,9 @@ const Auth: React.FC = () => {
       const currentUserId = session.session.user.id;
       setNewUserId(currentUserId);
       setSignUpStep('tiktok');
+      emailSignupInProgress.current = false;
     } catch (error: any) {
+      emailSignupInProgress.current = false;
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
     } finally {
       setIsLoading(false);
