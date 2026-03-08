@@ -299,16 +299,23 @@ const ProfilePage: React.FC = () => {
         >
           {/* Collapsed content - fades out as node expands */}
           <div
-            className="absolute inset-x-0 top-0 p-6 pointer-events-none"
+            className="absolute inset-x-0 top-0 p-6 pointer-events-none h-[140px] flex flex-col justify-between"
             style={{
               opacity: earningsReady && !earningsClosing ? 0 : 1,
               transition: 'opacity 0.25s ease-out',
             }}
           >
-            <p className="text-sm font-bold text-white font-jakarta mb-1">Balance</p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
-              <span className="text-xl text-white/70 font-montserrat">{label}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-xs font-semibold text-black/60 font-montserrat px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.8)' }}>Manage</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-xs font-medium text-black/50 font-jakarta mb-0.5">Balance</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}</span>
+                <span className="text-lg text-black/50 font-montserrat">.{convert(balance).toFixed(2).split('.')[1]}</span>
+                <span className="text-sm text-black/40 font-montserrat ml-1">{label}</span>
+              </div>
             </div>
           </div>
 
