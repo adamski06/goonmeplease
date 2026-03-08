@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ChevronLeft, Camera } from 'lucide-react';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
-import defaultBusinessAvatar from '@/assets/default-business-avatar.png';
+
 
 interface EditData {
   company_name: string;
