@@ -133,6 +133,9 @@ const App = () => (
                 <Route path="/admin" element={<Suspense fallback={<BusinessLoader />}><AdminLayout /></Suspense>}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="business/:userId" element={<AdminBusinessDetail />} />
+                  <Route path="creators" element={<AdminCreators />} />
+                  <Route path="creators/:userId" element={<AdminCreatorDetail />} />
+                  <Route path="settings" element={<AdminSettings />} />
                 </Route>
                 <Route path="/" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />
