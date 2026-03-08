@@ -141,22 +141,35 @@ const ProfilePage: React.FC = () => {
         setNextPayoutDate((pendingSubs[0] as any).payout_available_at);
       }
 
-      // Fetch earnings - only count claimed (paid) earnings as balance
-      // Unclaimed earnings stay as pending until user claims them
-      const { data: allEarnings } = await supabase
-        .from('earnings')
-        .select('amount, is_paid')
-        .eq('creator_id', user.id);
-      
-      if (allEarnings) {
-        const total = allEarnings.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-        const paidOut = allEarnings.filter(e => e.is_paid).reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-        const unclaimed = total - paidOut;
-        setTotalEarnings(total);
-        // Balance = 0 until claimed (claimed earnings that haven't been withdrawn)
-        // For now, pending = all unclaimed earnings
-        setBalance(0); // Nothing shows as claimable balance on profile until explicitly claimed in InAction
-        setPendingBalance(unclaimed);
+      // Fetch earnings - only count earnings from approved/paid submissions
+      // Submissions under review should NOT count toward balance or earnings
+      const { data: approvedSubs } = await supabase
+        .from('content_submissions')
+        .select('id')
+        .eq('creator_id', user.id)
+        .in('status', ['approved', 'paid']);
+
+      const approvedSubIds = (approvedSubs || []).map(s => s.id);
+
+      if (approvedSubIds.length > 0) {
+        const { data: allEarnings } = await supabase
+          .from('earnings')
+          .select('amount, is_paid')
+          .eq('creator_id', user.id)
+          .in('submission_id', approvedSubIds);
+        
+        if (allEarnings) {
+          const total = allEarnings.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+          const paidOut = allEarnings.filter(e => e.is_paid).reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+          const unclaimed = total - paidOut;
+          setTotalEarnings(total);
+          setBalance(0);
+          setPendingBalance(unclaimed);
+        }
+      } else {
+        setTotalEarnings(0);
+        setBalance(0);
+        setPendingBalance(0);
       }
     };
     fetchStats();
