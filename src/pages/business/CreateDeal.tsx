@@ -236,7 +236,7 @@ const CreateDeal: React.FC = () => {
                 </button>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Target audience</Label>
+                <Label className="text-sm font-medium">Target audience <span className="text-muted-foreground font-normal">(optional)</span></Label>
                 <Textarea
                   value={audience}
                   onChange={(e) => setAudience(e.target.value)}
