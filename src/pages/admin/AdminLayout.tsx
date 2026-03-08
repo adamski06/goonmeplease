@@ -37,7 +37,9 @@ const AdminLayout = () => {
   if (authLoading || authorized === null) return <JarlaLoader />;
 
   const navItems = [
-    { label: 'Businesses', path: '/admin' },
+    { label: 'Review Queue', path: '/admin' },
+    { label: 'All Ads', path: '/admin/all-ads' },
+    { label: 'Businesses', path: '/admin/businesses' },
     { label: 'Creators', path: '/admin/creators' },
     { label: 'Settings', path: '/admin/settings' },
   ];
