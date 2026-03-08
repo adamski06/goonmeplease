@@ -47,7 +47,7 @@ const CreateReward: React.FC = () => {
   const selectedPresetLabel = VIEW_PRESETS.find(p => p.value === viewsPreset)?.label;
 
   const canProceed = () => {
-    if (step === 0) return title.trim().length > 0;
+    if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
     if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0) && couponCodes.length >= 100;
     return true;
   };
