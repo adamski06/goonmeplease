@@ -138,7 +138,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
             )}
             title={profile?.company_name || 'Profile'}
           >
-            <div className="h-6 w-6 rounded-md bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
+            <div className="h-4 w-4 rounded-sm bg-muted flex items-center justify-center shrink-0 overflow-hidden border border-border">
               {profile?.logo_url ? (
                 <img
                   src={getHighResLogoUrl(profile.logo_url) || profile.logo_url}
@@ -210,7 +210,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
         <button
           onClick={() => navigate('/business/new')}
           className={cn(
-            'flex items-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden',
+            'flex items-center gap-3 rounded-lg text-sm font-medium whitespace-nowrap overflow-hidden',
             'transition-all duration-300 ease-in-out',
             isCollapsed ? 'w-[40px] h-[40px] justify-center px-0' : 'w-full px-3 min-h-[40px]',
             resolvedTheme === 'dark' ? 'text-foreground' : 'text-white'
