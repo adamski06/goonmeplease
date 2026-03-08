@@ -108,11 +108,7 @@ const ProfileCard: React.FC<{
               className="h-10 w-10 rounded-lg object-contain bg-background border border-border"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
-                // Cascade: clearbit -> google favicon -> hide
-                if (clearbitLogo && img.src !== clearbitLogo) {
-                  img.src = clearbitLogo;
-                } else if (fallbackLogo && img.src !== fallbackLogo) {
-                  img.src = fallbackLogo;
+                img.src = defaultBusinessAvatar;
                 } else {
                   img.style.display = 'none';
                 }
