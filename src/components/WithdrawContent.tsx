@@ -74,7 +74,7 @@ const WithdrawContent: React.FC<WithdrawContentProps> = ({ balance, onBack }) =>
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-white/40" />
+        <Loader2 className="h-6 w-6 animate-spin text-black/30" />
       </div>
     );
   }
