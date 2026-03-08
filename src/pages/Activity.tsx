@@ -417,7 +417,7 @@ const Activity: React.FC = () => {
         </div>
       )}
 
-      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && (
+      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && dealApplications.length === 0 && (
         <div className="flex items-center justify-center px-6 py-10">
           <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
