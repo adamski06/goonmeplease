@@ -37,12 +37,7 @@ const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) =>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
-              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-            </div>
-            <span className="text-sm font-bold text-black font-montserrat truncate">{campaign.brand}</span>
-          </div>
+          <span className="text-sm font-bold text-black font-montserrat truncate block mb-0.5">{campaign.brand}</span>
           <p className="text-xs text-black/50 font-jakarta line-clamp-1">{campaign.description}</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
