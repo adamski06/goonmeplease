@@ -186,15 +186,38 @@ export function formatCurrencyValue(val: number | null, code: string): string {
   return info.symbolBefore ? `${info.symbol}${val}` : `${val} ${info.symbol}`;
 }
 
+/** Snap to nearest "friendly" number (10, 15, 20, 25, 50, 75, 100, 150, 200, 250, 500, etc.) */
+function snapToFriendly(val: number): number {
+  if (val <= 0) return 0;
+  // For decimals < 1, keep 2 decimal precision
+  if (val < 1) return Math.round(val * 100) / 100;
+  // For values < 10, snap to nearest 0.5
+  if (val < 10) return Math.round(val * 2) / 2;
+
+  // Friendly anchors per magnitude
+  const anchors = [10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250, 300, 400, 500, 750,
+    1000, 1500, 2000, 2500, 3000, 4000, 5000, 7500, 10000, 15000, 20000, 25000, 50000, 75000, 100000];
+
+  let best = anchors[0];
+  let bestDist = Math.abs(val - best);
+  for (const a of anchors) {
+    const dist = Math.abs(val - a);
+    if (dist < bestDist) { best = a; bestDist = dist; }
+    if (a > val * 2) break;
+  }
+  return best;
+}
+
 /** Get a placeholder value equivalent to ~X USD in the given currency */
 export function getPlaceholderValue(usdAmount: number, code: string, round = true): string {
   const info = getCurrencyInfo(code);
   let converted = usdAmount * info.approxRate;
   if (round) {
-    // Round to nice numbers
-    if (converted >= 1000) converted = Math.round(converted / 100) * 100;
-    else if (converted >= 100) converted = Math.round(converted / 10) * 10;
-    else if (converted >= 10) converted = Math.round(converted);
+    converted = snapToFriendly(converted);
+  } else {
+    // For decimal placeholders (CPM rates), snap to nearest 0.5 if >= 1
+    if (converted >= 10) converted = snapToFriendly(converted);
+    else if (converted >= 1) converted = Math.round(converted * 2) / 2;
     else converted = Math.round(converted * 100) / 100;
   }
   return info.symbolBefore ? `${info.symbol}${converted}` : `${converted} ${info.symbol}`;
