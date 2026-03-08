@@ -253,30 +253,29 @@ const ProfilePage: React.FC = () => {
           style={{
             height: '140px',
             visibility: earningsExpanded ? 'hidden' : 'visible',
-            background: 'linear-gradient(160deg, hsl(68, 70%, 85%) 0%, hsl(72, 65%, 78%) 100%)',
-            border: '1px solid hsl(68, 50%, 75%)',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(6,95,70,1) 100%)',
+            border: '1px solid rgba(52,211,153,0.4)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2)',
           }}
         >
           <div className="p-6 h-full flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-black/85 font-montserrat">Jarla</span>
+              <span className="text-lg font-bold text-white/90 font-montserrat">Jarla</span>
               <span
-                className="text-xs font-semibold text-black/60 font-montserrat px-3 py-1.5 rounded-full"
+                className="text-xs font-semibold text-white/70 font-montserrat px-3 py-1.5 rounded-full"
                 style={{
-                  background: 'rgba(255,255,255,0.8)',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.2)',
                 }}
               >
                 Manage
               </span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs font-medium text-black/50 font-jakarta mb-0.5">Balance</span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-black/90 font-montserrat tracking-tight">{convert(balance).toLocaleString('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split(',')[0]}</span>
-                <span className="text-lg text-black/50 font-montserrat">.{convert(balance).toFixed(2).split('.')[1]}</span>
-                <span className="text-sm text-black/40 font-montserrat ml-1">{label}</span>
+              <span className="text-xs font-medium text-white/50 font-jakarta mb-0.5">Balance</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-white font-montserrat tracking-tight">{convert(balance).toLocaleString()}</span>
+                <span className="text-lg text-white/50 font-montserrat">{label}</span>
               </div>
             </div>
           </div>
