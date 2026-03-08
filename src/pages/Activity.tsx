@@ -11,7 +11,7 @@ import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
 import InActionDetail from '@/components/InActionDetail';
 import { Campaign } from '@/types/campaign';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
-import { ChevronRight, X } from 'lucide-react';
+import { ChevronRight, X, Clock, CheckCircle, Send } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useFavorites } from '@/hooks/useFavorites';
 import { supabase } from '@/integrations/supabase/client';
@@ -95,6 +95,7 @@ const Activity: React.FC = () => {
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [dealApplications, setDealApplications] = useState<{ id: string; deal_id: string; status: string; created_at: string; deal_brand: string; deal_title: string; deal_logo: string }[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
@@ -102,71 +103,104 @@ const Activity: React.FC = () => {
   const fetchActiveSubmissions = useCallback(async () => {
     if (!user) { setSubmissionsLoading(false); return; }
     setSubmissionsLoading(true);
-    const { data, error } = await supabase
-      .from('content_submissions')
-      .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
-      .eq('creator_id', user.id)
-      .order('created_at', { ascending: false });
 
-    if (error || !data) { setSubmissionsLoading(false); return; }
+    // Fetch campaign submissions and deal applications in parallel
+    const [submissionsRes, dealsRes] = await Promise.all([
+      supabase
+        .from('content_submissions')
+        .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+      supabase
+        .from('deal_applications')
+        .select('id, deal_id, status, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+    ]);
 
-    const campaignIds = [...new Set(data.map(s => s.campaign_id))];
-    if (campaignIds.length === 0) {
-      setActiveSubmissions([]);
-      setSubmissionsLoading(false);
-      return;
-    }
+    // Process campaign submissions
+    const data = submissionsRes.data;
+    if (data && data.length > 0) {
+      const campaignIds = [...new Set(data.map(s => s.campaign_id))];
+      const { data: campaigns } = await supabase
+        .from('campaigns')
+        .select('id, title, brand_name, brand_logo_url')
+        .in('id', campaignIds);
 
-    const { data: campaigns } = await supabase
-      .from('campaigns')
-      .select('id, title, brand_name, brand_logo_url')
-      .in('id', campaignIds);
+      const campaignMap = new Map((campaigns || []).map(c => [c.id, c]));
 
-    const campaignMap = new Map((campaigns || []).map(c => [c.id, c]));
+      const submissions: ActiveSubmission[] = data.map(s => {
+        const campaign = campaignMap.get(s.campaign_id);
+        return {
+          id: s.id,
+          campaign_id: s.campaign_id,
+          tiktok_video_url: s.tiktok_video_url,
+          tiktok_video_id: s.tiktok_video_id,
+          status: s.status,
+          current_views: s.current_views || 0,
+          current_likes: s.current_likes || 0,
+          created_at: s.created_at,
+          campaign_title: campaign?.title || '',
+          campaign_brand: campaign?.brand_name || '',
+          campaign_logo: campaign?.brand_logo_url || '',
+        };
+      });
+      setActiveSubmissions(submissions);
 
-    const submissions: ActiveSubmission[] = data.map(s => {
-      const campaign = campaignMap.get(s.campaign_id);
-      return {
-        id: s.id,
-        campaign_id: s.campaign_id,
-        tiktok_video_url: s.tiktok_video_url,
-        tiktok_video_id: s.tiktok_video_id,
-        status: s.status,
-        current_views: s.current_views || 0,
-        current_likes: s.current_likes || 0,
-        created_at: s.created_at,
-        campaign_title: campaign?.title || '',
-        campaign_brand: campaign?.brand_name || '',
-        campaign_logo: campaign?.brand_logo_url || '',
-      };
-    });
-
-    setActiveSubmissions(submissions);
-    setSubmissionsLoading(false);
-
-    // Auto-fetch fresh TikTok stats for all submissions
-    if (submissions.length > 0) {
-      try {
-        const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
-          body: { submission_ids: submissions.map(s => s.id) },
-        });
-        if (statsData?.results) {
-          setActiveSubmissions(prev => prev.map(s => {
-            const r = statsData.results[s.id];
-            if (r) {
-              return {
-                ...s,
-                current_views: r.views > 0 ? r.views : s.current_views,
-                current_likes: r.likes > 0 ? r.likes : s.current_likes,
-              };
-            }
-            return s;
-          }));
+      // Auto-fetch fresh TikTok stats
+      if (submissions.length > 0) {
+        try {
+          const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { submission_ids: submissions.map(s => s.id) },
+          });
+          if (statsData?.results) {
+            setActiveSubmissions(prev => prev.map(s => {
+              const r = statsData.results[s.id];
+              if (r) {
+                return {
+                  ...s,
+                  current_views: r.views > 0 ? r.views : s.current_views,
+                  current_likes: r.likes > 0 ? r.likes : s.current_likes,
+                };
+              }
+              return s;
+            }));
+          }
+        } catch (e) {
+          console.error('Auto-fetch TikTok stats failed:', e);
         }
-      } catch (e) {
-        console.error('Auto-fetch TikTok stats failed:', e);
       }
+    } else {
+      setActiveSubmissions([]);
     }
+
+    // Process deal applications
+    const dealData = dealsRes.data;
+    if (dealData && dealData.length > 0) {
+      const dealIds = [...new Set(dealData.map(d => d.deal_id))];
+      const { data: deals } = await supabase
+        .from('deals')
+        .select('id, title, brand_name, brand_logo_url')
+        .in('id', dealIds);
+
+      const dealMap = new Map((deals || []).map(d => [d.id, d]));
+      setDealApplications(dealData.map(da => {
+        const deal = dealMap.get(da.deal_id);
+        return {
+          id: da.id,
+          deal_id: da.deal_id,
+          status: da.status,
+          created_at: da.created_at,
+          deal_brand: deal?.brand_name || '',
+          deal_title: deal?.title || '',
+          deal_logo: deal?.brand_logo_url || '',
+        };
+      }));
+    } else {
+      setDealApplications([]);
+    }
+
+    setSubmissionsLoading(false);
   }, [user]);
 
   useEffect(() => {
@@ -262,11 +296,56 @@ const Activity: React.FC = () => {
           <CampaignListSkeleton count={2} />
         </div>
       )}
-      {!submissionsLoading && activeSubmissions.length > 0 && !activeCampaign && (
+      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0) && !activeCampaign && (
         <div className="px-3 pt-2 space-y-2.5">
           {activeSubmissions.map(sub => (
             <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
           ))}
+          {dealApplications.map(da => {
+            const dealStatusConfig: Record<string, { label: string; gradient: string; border: string }> = {
+              pending: { label: 'Requested', gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)', border: 'rgba(252,211,77,0.5)' },
+              accepted: { label: 'Accepted', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
+              declined: { label: 'Declined', gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)', border: 'rgba(252,165,165,0.5)' },
+            };
+            const ds = dealStatusConfig[da.status] || dealStatusConfig.pending;
+            return (
+              <div
+                key={da.id}
+                className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                }}
+              >
+                <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+                  {da.deal_logo ? (
+                    <img src={da.deal_logo} alt={da.deal_brand} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-lg font-bold text-black/30">{da.deal_brand[0]}</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-bold text-black font-montserrat truncate block">{da.deal_brand}</span>
+                  <p className="text-xs text-black/50 font-jakarta line-clamp-1">{da.deal_title}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Send className="h-3 w-3 text-black/30" />
+                    <span className="text-[11px] font-medium text-black/40 font-jakarta">Deal</span>
+                  </div>
+                </div>
+                <div
+                  className="flex items-center gap-1.5 rounded-[14px] px-2.5 py-1 flex-shrink-0"
+                  style={{
+                    background: ds.gradient,
+                    border: `1px solid ${ds.border}`,
+                    boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <span className="text-[10px] font-bold text-white font-montserrat">{ds.label}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -338,7 +417,7 @@ const Activity: React.FC = () => {
         </div>
       )}
 
-      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && (
+      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && dealApplications.length === 0 && (
         <div className="flex items-center justify-center px-6 py-10">
           <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
