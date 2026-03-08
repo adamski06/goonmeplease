@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Plus, ChevronDown, Home, Sun, Moon, Settings, Inbox } from 'lucide-react';
+import { Plus, ChevronDown, ChevronUp, Home, Sun, Moon, Settings, Inbox, Wallet } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
