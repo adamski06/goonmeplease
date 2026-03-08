@@ -7,7 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const CHARGE_AMOUNT_CENTS = 100; // $1.00 max per video
+const CHARGE_AMOUNT_CENTS = 100; // $1.00 per 1k views, max $1.00 per video
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {

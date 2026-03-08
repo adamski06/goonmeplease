@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Plus, ChevronDown, Home, Sun, Moon, Settings, Inbox } from 'lucide-react';
+import { Plus, ChevronDown, ChevronUp, Home, Sun, Moon, Settings, Inbox, Wallet } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
@@ -9,8 +9,9 @@ import { useTheme } from 'next-themes';
 interface SidebarItem {
   id: string;
   title: string;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   status: string | null;
+  budget?: number;
 }
 
 interface BusinessProfileData {
@@ -41,7 +42,7 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [{ data: profileData }, { data: campaigns }, { data: deals }] = await Promise.all([
+      const [{ data: profileData }, { data: campaigns }, { data: deals }, { data: rewardAds }] = await Promise.all([
         supabase
           .from('business_profiles')
           .select('company_name, logo_url, website')
@@ -49,11 +50,16 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
           .maybeSingle(),
         supabase
           .from('campaigns')
-          .select('id, title, status')
+          .select('id, title, status, total_budget')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
         supabase
           .from('deals')
+          .select('id, title, status, total_budget')
+          .eq('business_id', user.id)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('reward_ads')
           .select('id, title, status')
           .eq('business_id', user.id)
           .order('created_at', { ascending: false }),
@@ -61,9 +67,10 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
       if (profileData) setProfile(profileData);
 
-      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread', status: c.status }));
-      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal', status: d.status }));
-      setItems([...spreadItems, ...dealItems]);
+      const spreadItems: SidebarItem[] = (campaigns || []).map(c => ({ id: c.id, title: c.title, type: 'spread' as const, status: c.status, budget: Number(c.total_budget) || 0 }));
+      const dealItems: SidebarItem[] = (deals || []).map(d => ({ id: d.id, title: d.title, type: 'deal' as const, status: d.status, budget: Number(d.total_budget) || 0 }));
+      const rewardItems: SidebarItem[] = (rewardAds || []).map(r => ({ id: r.id, title: r.title, type: 'reward' as const, status: r.status }));
+      setItems([...spreadItems, ...dealItems, ...rewardItems]);
     };
     load();
   }, [location.pathname]);
@@ -105,7 +112,11 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
   };
 
   const getItemPath = (item: SidebarItem) =>
-    item.type === 'spread' ? `/business/campaigns/${item.id}` : `/business/deals/${item.id}`;
+    item.type === 'spread' ? `/business/campaigns/${item.id}` : item.type === 'deal' ? `/business/deals/${item.id}` : `/business/rewards/${item.id}`;
+
+  const totalCommitted = items
+    .filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending'))
+    .reduce((sum, i) => sum + (i.budget || 0), 0);
 
   const initial = profile?.company_name?.charAt(0)?.toUpperCase() || '?';
   const domain = (profile?.website || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '');
@@ -272,65 +283,87 @@ const BusinessSidebar: React.FC<BusinessSidebarProps> = ({ isCreationRoute }) =>
 
       {/* Bottom */}
       <div className={cn(
-        'shrink-0 flex items-center',
-        isCollapsed ? 'flex-col gap-3 py-3 justify-center' : 'flex-row justify-between px-2 py-3'
+        'shrink-0',
+        isCollapsed ? 'flex flex-col items-center gap-3 py-3' : 'px-2 py-3'
       )}>
-      {/* Profile / user menu */}
-        <div ref={userMenuRef} className="relative flex justify-center">
-          <button
-            onClick={() => setUserMenuOpen(o => !o)}
-            className="h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border"
-            title="Profile"
-          >
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt=""
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  const img = e.target as HTMLImageElement;
-                  if (domain && !img.src.includes('google.com/s2/favicons')) {
-                    img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-                  } else {
-                    img.style.display = 'none';
-                  }
-                }}
-              />
-            ) : (
-              <span className="text-[9px] font-bold font-montserrat">{initial}</span>
-            )}
-          </button>
-
-          {userMenuOpen && (
+        {/* Profile / user menu with balance expansion */}
+        <div ref={userMenuRef} className="relative">
+          {/* Expandable balance panel — appears above the profile button */}
+          {userMenuOpen && !isCollapsed && (
             <div
-              className="absolute left-0 bottom-full mb-1 w-48 rounded-lg border border-border overflow-hidden z-50 shadow-md"
+              className="mb-2 rounded-lg border border-border overflow-hidden shadow-md"
               style={{ background: 'hsl(var(--popover))' }}
             >
-              <button
-                onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setUserMenuOpen(false); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
-              >
-                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-              </button>
-              <button
-                onClick={() => { navigate('/business/settings'); setUserMenuOpen(false); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
-              >
-                <Settings className="h-4 w-4" />
-                Settings
-              </button>
+              {/* Balance summary */}
+              <div className="px-3 py-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Ad Balance</span>
+                  <Wallet className="h-3 w-3 text-muted-foreground" />
+                </div>
+                <p className="text-lg font-semibold text-foreground">
+                  ${totalCommitted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Committed across {items.filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending')).length} active ad{items.filter(i => (i.type === 'spread' || i.type === 'deal') && (i.status === 'active' || i.status === 'pending')).length !== 1 ? 's' : ''}
+                </p>
+              </div>
+
+              <div className="border-t border-border">
+                <button
+                  onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setUserMenuOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+                >
+                  {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+                </button>
+                <button
+                  onClick={() => { navigate('/business/settings'); setUserMenuOpen(false); }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </button>
+              </div>
             </div>
           )}
-        </div>
 
-        {/* Inbox */}
-        <button
-          className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
-          title="Inbox"
-        >
-          <Inbox className="h-4 w-4" />
-        </button>
+          <div className={cn('flex items-center', isCollapsed ? 'flex-col gap-3' : 'flex-row justify-between')}>
+            <button
+              onClick={() => setUserMenuOpen(o => !o)}
+              className={cn(
+                'h-8 w-8 rounded-lg overflow-hidden flex items-center justify-center bg-muted text-muted-foreground hover:opacity-80 transition-opacity border border-border',
+                userMenuOpen && 'ring-1 ring-primary/30'
+              )}
+              title="Profile"
+            >
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    if (domain && !img.src.includes('google.com/s2/favicons')) {
+                      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+                    } else {
+                      img.style.display = 'none';
+                    }
+                  }}
+                />
+              ) : (
+                <span className="text-[9px] font-bold font-montserrat">{initial}</span>
+              )}
+            </button>
+
+            {/* Inbox */}
+            <button
+              className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
+              title="Inbox"
+            >
+              <Inbox className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </aside>
   );
