@@ -64,7 +64,7 @@ const CreateCampaign: React.FC = () => {
   };
 
   const getBudgetAmount = () => getBudget();
-  const getFee = () => Math.round(getBudget() * 0.15 * 100) / 100;
+  const getFee = () => Math.round(getBudget() * 0.10 * 100) / 100;
   const getTotal = () => Math.round((getBudget() + getFee()) * 100) / 100;
 
   const canProceed = () => {
@@ -334,7 +334,7 @@ const CreateCampaign: React.FC = () => {
                 <RateColumnHeader label="CREATOR POOL" tooltip="Creator pools can vary from $25 to $10,000 — all dependent on how many people you want to participate." avg={totalBudget > 0 ? fmtInline(Math.round(totalBudget * 0.78)) : undefined} />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
                 <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
-                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
+                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 10%. About 5% are banking fees and the other 5% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
               {/* Input row — matching header style */}
@@ -383,10 +383,10 @@ const CreateCampaign: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.15 * 100) / 100) : ''}
+                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.10 * 100) / 100) : ''}
                     onChange={(e) => {
                       const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
-                      const base = Math.round((youPay / 1.15) * 100) / 100;
+                      const base = Math.round((youPay / 1.10) * 100) / 100;
                       setRatePerThousand(base);
                     }}
                     placeholder={fmtPlaceholderDecimal(2.3)}
@@ -517,7 +517,7 @@ const CreateCampaign: React.FC = () => {
                   <span className="text-sm font-medium text-foreground">{fmtInline(getBudget())}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
+                  <span className="text-sm text-muted-foreground">Jarla service fee (10%)</span>
                   <span className="text-sm font-medium text-foreground">{fmtInline(getFee())}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">

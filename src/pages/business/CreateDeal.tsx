@@ -256,7 +256,7 @@ const CreateDeal: React.FC = () => {
                 <RateColumnHeader label="CURRENCY" />
                 <RateColumnHeader label="MAX PAYOUT / CREATOR" tooltip="Max payout can vary from $5 to $1,000 — all dependent on how much effort you want from your creators. Low amount = simpler videos. High amount = more advanced." avg={maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.82)) : undefined} />
                 <RateColumnHeader label="CREATORS RECEIVE" tooltip="This is the rate you're paying creators per 1,000 views they generate. A low CPM works better if your product only needs to be shown for a few seconds. Higher CPM if the video is explanatory." avg={ratePerThousand > 0 ? fmtInline(Math.round(ratePerThousand * 0.85 * 100) / 100) : undefined} />
-                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 15%. About 5% are banking fees and the other 10% goes to confirming creators follow your brief and helping Jarla run our platform." />
+                <RateColumnHeader label="YOU PAY" tooltip="Jarla takes a fee of 10%. About 5% are banking fees and the other 5% goes to confirming creators follow your brief and helping Jarla run our platform." />
               </div>
 
               {/* Input row */}
@@ -295,10 +295,10 @@ const CreateDeal: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.15 * 100) / 100) : ''}
+                    value={ratePerThousand ? fmtInline(Math.round(ratePerThousand * 1.10 * 100) / 100) : ''}
                     onChange={(e) => {
                       const youPay = parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0;
-                      const base = Math.round((youPay / 1.15) * 100) / 100;
+                      const base = Math.round((youPay / 1.10) * 100) / 100;
                       setRatePerThousand(base);
                     }}
                     placeholder={fmtPlaceholderDecimal(2.3)}
@@ -407,12 +407,12 @@ const CreateDeal: React.FC = () => {
                   <span className="text-sm font-medium text-foreground">{fmtInline(maxPayoutPerCreator)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Jarla service fee (15%)</span>
-                  <span className="text-sm font-medium text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.15 * 100) / 100) : '0'}</span>
+                   <span className="text-sm text-muted-foreground">Jarla service fee (10%)</span>
+                  <span className="text-sm font-medium text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 0.10 * 100) / 100) : '0'}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">Total per creator</span>
-                  <span className="text-lg font-bold text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 1.15 * 100) / 100) : '0'}</span>
+                  <span className="text-lg font-bold text-foreground">{maxPayoutPerCreator ? fmtInline(Math.round(maxPayoutPerCreator * 1.10 * 100) / 100) : '0'}</span>
                 </div>
               </div>
             </div>
@@ -427,7 +427,7 @@ const CreateDeal: React.FC = () => {
                     className="rounded border border-border bg-muted/50 px-3 h-8 flex items-center text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-2"
                     style={{ animationDelay: '800ms', animationFillMode: 'both' }}
                   >
-                    Total: {symbol}{maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.15).toLocaleString()}` : '0'} / creator
+                    Total: {symbol}{maxPayoutPerCreator ? `${Math.round(maxPayoutPerCreator * 1.10).toLocaleString()}` : '0'} / creator
                   </div>
                 )}
                 <Button
