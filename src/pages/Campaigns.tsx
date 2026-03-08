@@ -23,9 +23,14 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
-  const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns(2);
+  const { campaigns, loading: campaignsLoading, hasMore, loadMore, refresh } = useCampaigns(2);
   const { deals } = useDeals();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Pull-to-refresh state
+  const touchStartY = useRef(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
 
   // Interleave deals into campaign feed (1 deal every 3 campaigns)
   const feedItems = React.useMemo(() => {
