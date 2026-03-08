@@ -94,6 +94,10 @@ const BusinessProfile: React.FC = () => {
     );
   }
 
+  const handleLogoClick = () => {
+    navigate('/business/edit-profile');
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Profile header */}
