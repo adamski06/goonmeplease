@@ -120,6 +120,7 @@ const Auth: React.FC = () => {
     fullName: string;
   }) => {
     setIsLoading(true);
+    emailSignupInProgress.current = true;
     try {
       setSignUpFullName(data.fullName || '');
       const { error } = await signUp(data.email, data.password, data.fullName);
