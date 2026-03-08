@@ -146,6 +146,16 @@ const BusinessAuth: React.FC = () => {
                 />
               </div>
 
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={() => toast({ title: 'Reset password', description: 'Please contact support to reset your password.' })}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+                >
+                  Forgot your password?
+                </button>
+              )}
+
               <button
                 type="submit"
                 disabled={isLoading}
