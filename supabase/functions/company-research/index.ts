@@ -254,10 +254,7 @@ serve(async (req) => {
       if (!parsedResponse.profileUpdates.website || parsedResponse.profileUpdates.website.includes('example')) {
         parsedResponse.profileUpdates.website = detectedUrl;
       }
-      // Ensure logo uses actual domain (lowercase for Clearbit)
-      if (!parsedResponse.profileUpdates.logo_url || !parsedResponse.profileUpdates.logo_url.toLowerCase().includes(domain)) {
-        parsedResponse.profileUpdates.logo_url = `https://logo.clearbit.com/${domain}?size=512&format=png`;
-      }
+      // Don't auto-set logo — user will upload their own
     }
 
     return new Response(JSON.stringify({ 
