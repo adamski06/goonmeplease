@@ -138,6 +138,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
     }
   }, [swipeX]);
 
+  const submitHelpRequest = async () => {
     if (!helpMessage.trim()) return;
     setSubmittingHelp(true);
     try {
