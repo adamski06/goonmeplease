@@ -65,6 +65,27 @@ const BusinessRewardSubmissionDetail: React.FC = () => {
         }
       }
       setLoading(false);
+
+      // Fetch live stats via edge function
+      if (data) {
+        try {
+          const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+            body: { reward_submission_ids: [data.id] },
+          });
+          if (statsData?.results?.[data.id]) {
+            const r = statsData.results[data.id];
+            if (r.views > 0 || r.likes > 0) {
+              setSubmission(prev => prev ? {
+                ...prev,
+                current_views: r.views > 0 ? r.views : prev.current_views,
+                current_likes: r.likes > 0 ? r.likes : prev.current_likes,
+              } : prev);
+            }
+          }
+        } catch (e) {
+          console.error('Auto-fetch TikTok stats failed:', e);
+        }
+      }
     };
     load();
   }, [submissionId]);
