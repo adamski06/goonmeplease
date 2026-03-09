@@ -107,8 +107,8 @@ const Activity: React.FC = () => {
     if (!user) { setSubmissionsLoading(false); return; }
     setSubmissionsLoading(true);
 
-    // Fetch campaign submissions and deal applications in parallel
-    const [submissionsRes, dealsRes] = await Promise.all([
+    // Fetch campaign submissions, deal applications, and reward submissions in parallel
+    const [submissionsRes, dealsRes, rewardsRes] = await Promise.all([
       supabase
         .from('content_submissions')
         .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
@@ -117,6 +117,11 @@ const Activity: React.FC = () => {
       supabase
         .from('deal_applications')
         .select('id, deal_id, status, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+      supabase
+        .from('reward_submissions')
+        .select('id, reward_ad_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, coupon_code, created_at')
         .eq('creator_id', user.id)
         .order('created_at', { ascending: false }),
     ]);
