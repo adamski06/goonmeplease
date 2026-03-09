@@ -111,7 +111,33 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
     setClaiming(false);
   };
 
-  const submitHelpRequest = async () => {
+  const maxSwipe = 220; // px to complete swipe
+
+  const handleSwipeStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    if (claiming) return;
+    setIsDragging(true);
+    setRevealStarted(true);
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    swipeStartRef.current = clientX - swipeX;
+  }, [claiming, swipeX]);
+
+  const handleSwipeMove = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    if (!isDragging) return;
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const newX = Math.max(0, Math.min(clientX - swipeStartRef.current, maxSwipe));
+    setSwipeX(newX);
+  }, [isDragging]);
+
+  const handleSwipeEnd = useCallback(() => {
+    setIsDragging(false);
+    if (swipeX > maxSwipe * 0.7) {
+      setSwipeX(maxSwipe);
+      claimReward();
+    } else {
+      setSwipeX(0);
+    }
+  }, [swipeX]);
+
     if (!helpMessage.trim()) return;
     setSubmittingHelp(true);
     try {
