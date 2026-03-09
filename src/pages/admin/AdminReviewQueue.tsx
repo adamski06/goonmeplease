@@ -404,9 +404,12 @@ const AdminReviewQueue = () => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{item.type === 'spread' ? 'Spread' : item.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
+                  <div className="flex flex-col gap-0.5">
+                    <Badge variant="outline">{item.type === 'spread' ? 'Spread' : item.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
+                    {item.category === 'ad' && <span className="text-[10px] text-amber-600 font-medium">New Ad</span>}
+                  </div>
                 </TableCell>
-                <TableCell className="text-sm">{item.current_views.toLocaleString()}</TableCell>
+                <TableCell className="text-sm">{item.category === 'ad' ? '–' : item.current_views.toLocaleString()}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{fmt(item.created_at)}</TableCell>
                 <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-1.5">
