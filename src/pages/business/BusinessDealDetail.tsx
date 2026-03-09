@@ -50,6 +50,8 @@ const BusinessDealDetail: React.FC = () => {
   const [updating, setUpdating] = useState<string | null>(null);
   const [thumbModalOpen, setThumbModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
