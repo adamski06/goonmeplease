@@ -59,6 +59,14 @@ const Discover: React.FC = () => {
       )
     : deals;
 
+  const filteredRewards = searchQuery.trim()
+    ? rewards.filter(r =>
+        r.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : rewards;
+
   // Shuffle campaigns and deals together, stable per content set
   const shuffledItems = useMemo(() => {
     const allItems: (Campaign & { _kind: 'spread' | 'deal' })[] = [
