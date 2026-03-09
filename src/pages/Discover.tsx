@@ -30,8 +30,10 @@ const Discover: React.FC = () => {
   const navigate = useNavigate();
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Campaign | null>(null);
+  const [selectedReward, setSelectedReward] = useState<Campaign | null>(null);
   const [isClosingDetail, setIsClosingDetail] = useState(false);
   const [isClosingDeal, setIsClosingDeal] = useState(false);
+  const [isClosingReward, setIsClosingReward] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
