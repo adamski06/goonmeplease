@@ -57,10 +57,11 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
   const [helpMessage, setHelpMessage] = useState('');
   const [submittingHelp, setSubmittingHelp] = useState(false);
 
-  const viewsProgress = submission.views_required > 0
+  const isApproved = submission.status === 'approved' || submission.status === 'completed';
+  const viewsProgress = submission.views_required > 0 && isApproved
     ? Math.min((views / submission.views_required) * 100, 100)
     : 0;
-  const goalReached = views >= submission.views_required && submission.status === 'approved';
+  const goalReached = views >= submission.views_required && isApproved;
 
   useEffect(() => {
     const fetchStats = async () => {

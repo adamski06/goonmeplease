@@ -127,8 +127,9 @@ const BusinessRewardSubmissionDetail: React.FC = () => {
   const embedH = Math.ceil(embedNativeH * embedScale);
 
   const views = submission.current_views || 0;
-  const viewProgress = viewsRequired > 0 ? Math.min((views / viewsRequired) * 100, 100) : 100;
-  const goalReached = (viewsRequired === 0 || views >= viewsRequired) && submission.status === 'approved';
+  const isApproved = submission.status === 'approved';
+  const viewProgress = viewsRequired > 0 && isApproved ? Math.min((views / viewsRequired) * 100, 100) : (isApproved ? 100 : 0);
+  const goalReached = (viewsRequired === 0 || views >= viewsRequired) && isApproved;
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin">
