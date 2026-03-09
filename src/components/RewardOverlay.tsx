@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark, Gift, Plus, X } from 'lucide-react';
-import SubmitReward from '@/components/SubmitReward';
+import SubmitReward from '@/components/SubmitReward
 import { Campaign } from '@/types/campaign';
 
 interface RewardOverlayProps {
@@ -228,7 +228,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
               pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
             }}
           >
-            <SubmReward rewardgn={reward} onBack={handleBackFromSubmit} onClose={onClose} />
+            <SubmReitReward rewardreward} onBack={handleBackFromSubmit} onClose={onClose} />
           </div>
         </div>
       </div>
