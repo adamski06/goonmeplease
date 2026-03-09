@@ -266,7 +266,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
           </div>
 
           {/* Coupon code or status */}
-          {submission.coupon_code ? (
+          {couponCode ? (
             <div
               className="rounded-xl p-3 text-center"
               style={{
@@ -275,18 +275,28 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
               }}
             >
               <span className="text-[10px] font-semibold text-purple-600/60 font-montserrat uppercase tracking-wider block mb-1">Your Coupon Code</span>
-              <p className="text-lg font-bold text-purple-700 font-montserrat tracking-wider">{submission.coupon_code}</p>
+              <p className="text-lg font-bold text-purple-700 font-montserrat tracking-wider">{couponCode}</p>
             </div>
-          ) : goalReached && submission.status === 'approved' ? (
-            <div
-              className="w-full py-3 rounded-full text-center"
+          ) : goalReached ? (
+            <button
+              onClick={claimReward}
+              disabled={claiming}
+              className="w-full py-3.5 rounded-full text-center font-semibold text-sm transition-all active:scale-[0.97] disabled:opacity-60"
               style={{
-                background: 'rgba(255,255,255,0.15)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                color: 'hsl(270, 60%, 40%)',
               }}
             >
-              <span className="text-sm font-semibold text-white/70 font-montserrat">🎉 Goal reached! Coupon incoming...</span>
-            </div>
+              {claiming ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="h-3.5 w-3.5 border-2 border-purple-400/30 border-t-purple-600 rounded-full animate-spin" />
+                  Claiming...
+                </div>
+              ) : (
+                '🎁 Claim Your Reward'
+              )}
+            </button>
           ) : (
             <div
               className="w-full py-3 rounded-full text-center"
