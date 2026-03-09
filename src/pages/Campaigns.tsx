@@ -37,21 +37,30 @@ const Campaigns: React.FC = () => {
 
   // Interleave deals into campaign feed (1 deal every 3 campaigns)
   const feedItems = React.useMemo(() => {
-    const items: Array<{ type: 'campaign' | 'deal'; data: typeof campaigns[0] }> = [];
+    const items: Array<{ type: 'campaign' | 'deal' | 'reward'; data: typeof campaigns[0] }> = [];
     let dealIdx = 0;
+    let rewardIdx = 0;
     campaigns.forEach((campaign, i) => {
       items.push({ type: 'campaign', data: campaign });
       // Insert a deal after every 3rd campaign
       if ((i + 1) % 3 === 0 && dealIdx < deals.length) {
         items.push({ type: 'deal', data: deals[dealIdx++] });
       }
+      // Insert a reward after every 5th campaign
+      if ((i + 1) % 5 === 0 && rewardIdx < rewards.length) {
+        items.push({ type: 'reward', data: rewards[rewardIdx++] });
+      }
     });
     // Append remaining deals
     while (dealIdx < deals.length) {
       items.push({ type: 'deal', data: deals[dealIdx++] });
     }
+    // Append remaining rewards
+    while (rewardIdx < rewards.length) {
+      items.push({ type: 'reward', data: rewards[rewardIdx++] });
+    }
     return items;
-  }, [campaigns, deals]);
+  }, [campaigns, deals, rewards]);
 
   // Fetch user favorites
   useEffect(() => {
