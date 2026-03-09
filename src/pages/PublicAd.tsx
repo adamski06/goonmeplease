@@ -18,8 +18,10 @@ interface PublicAdData {
   max_earnings: number | null;
   total_budget: number | null;
   business_id: string;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   rate_display: string;
+  reward_description?: string;
+  views_required?: number;
 }
 
 interface BusinessInfo {
