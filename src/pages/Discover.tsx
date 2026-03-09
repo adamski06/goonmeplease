@@ -69,9 +69,10 @@ const Discover: React.FC = () => {
 
   // Shuffle campaigns and deals together, stable per content set
   const shuffledItems = useMemo(() => {
-    const allItems: (Campaign & { _kind: 'spread' | 'deal' })[] = [
+    const allItems: (Campaign & { _kind: 'spread' | 'deal' | 'reward' })[] = [
       ...filteredCampaigns.map(c => ({ ...c, _kind: 'spread' as const })),
       ...filteredDeals.map(d => ({ ...d, _kind: 'deal' as const })),
+      ...filteredRewards.map(r => ({ ...r, _kind: 'reward' as const })),
     ];
     // Fisher-Yates shuffle with a seed based on ids for stability
     for (let i = allItems.length - 1; i > 0; i--) {
@@ -79,7 +80,7 @@ const Discover: React.FC = () => {
       [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
     }
     return allItems;
-  }, [filteredCampaigns, filteredDeals]);
+  }, [filteredCampaigns, filteredDeals, filteredRewards]);
 
   const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
