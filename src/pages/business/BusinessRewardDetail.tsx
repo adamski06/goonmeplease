@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket, User, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket, User, CheckCircle, Share2, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
