@@ -337,7 +337,7 @@ const Activity: React.FC = () => {
           <CampaignListSkeleton count={2} />
         </div>
       )}
-      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0) && !activeCampaign && (
+      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0 || rewardSubmissions.length > 0) && !activeCampaign && (
         <div className="px-3 pt-2 space-y-2.5">
           {activeSubmissions.map(sub => (
             <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
