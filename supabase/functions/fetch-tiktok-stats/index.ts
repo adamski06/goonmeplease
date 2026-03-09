@@ -3,8 +3,48 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+async function fetchTiktokStats(videoUrl: string, videoId: string | null) {
+  let views = 0, likes = 0, shares = 0;
+
+  // Try oEmbed first
+  try {
+    const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(videoUrl)}`;
+    const res = await fetch(oembedUrl);
+    if (res.ok) {
+      const data = await res.json();
+      views = data.view_count || data.statistics?.playCount || 0;
+      likes = data.like_count || data.statistics?.diggCount || 0;
+      shares = data.share_count || data.statistics?.shareCount || 0;
+    }
+  } catch (e) {
+    console.error("oEmbed failed:", e);
+  }
+
+  // Fallback: scrape page
+  if (views === 0 && videoId) {
+    try {
+      const pageRes = await fetch(videoUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
+      const html = await pageRes.text();
+      const viewMatch = html.match(/"playCount"\s*:\s*(\d+)/);
+      const likeMatch = html.match(/"diggCount"\s*:\s*(\d+)/);
+      const shareMatch = html.match(/"shareCount"\s*:\s*(\d+)/);
+      if (viewMatch) views = parseInt(viewMatch[1]);
+      if (likeMatch) likes = parseInt(likeMatch[1]);
+      if (shareMatch) shares = parseInt(shareMatch[1]);
+    } catch (e) {
+      console.error("Page scrape failed:", e);
+    }
+  }
+
+  return { views, likes, shares };
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -12,10 +52,14 @@ serve(async (req) => {
   }
 
   try {
-    const { submission_ids } = await req.json();
+    const body = await req.json();
+    const { submission_ids, reward_submission_ids } = body;
 
-    if (!submission_ids || !Array.isArray(submission_ids) || submission_ids.length === 0) {
-      return new Response(JSON.stringify({ error: "submission_ids required" }), {
+    const hasSpread = submission_ids && Array.isArray(submission_ids) && submission_ids.length > 0;
+    const hasReward = reward_submission_ids && Array.isArray(reward_submission_ids) && reward_submission_ids.length > 0;
+
+    if (!hasSpread && !hasReward) {
+      return new Response(JSON.stringify({ error: "submission_ids or reward_submission_ids required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -25,113 +69,71 @@ serve(async (req) => {
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-    // Fetch submissions
-    const { data: submissions, error: fetchError } = await supabase
-      .from("content_submissions")
-      .select("id, tiktok_video_url, tiktok_video_id, campaign_id")
-      .in("id", submission_ids);
-
-    if (fetchError) throw fetchError;
-
     const results: Record<string, { views: number; likes: number; shares: number; earnings: number }> = {};
 
-    // Fetch stats from TikTok oEmbed for each submission
-    for (const sub of submissions || []) {
-      try {
-        const url = sub.tiktok_video_url;
-        if (!url) {
-          console.log(`Submission ${sub.id} has no video URL`);
-          results[sub.id] = { views: 0, likes: 0, shares: 0, earnings: 0 };
-          continue;
+    // --- Handle spread/content submissions ---
+    if (hasSpread) {
+      const { data: submissions, error: fetchError } = await supabase
+        .from("content_submissions")
+        .select("id, tiktok_video_url, tiktok_video_id, campaign_id")
+        .in("id", submission_ids);
+
+      if (fetchError) throw fetchError;
+
+      for (const sub of submissions || []) {
+        const stats = await fetchTiktokStats(sub.tiktok_video_url, sub.tiktok_video_id);
+        results[sub.id] = { ...stats, earnings: 0 };
+
+        if (stats.views > 0 || stats.likes > 0 || stats.shares > 0) {
+          await supabase
+            .from("content_submissions")
+            .update({
+              current_views: stats.views,
+              current_likes: stats.likes,
+              current_shares: stats.shares,
+            })
+            .eq("id", sub.id);
         }
-        console.log(`Fetching oEmbed for ${sub.id}: ${url}`);
-        const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
-        const res = await fetch(oembedUrl);
-
-        if (res.ok) {
-          const data = await res.json();
-          console.log(`oEmbed response for ${sub.id}:`, JSON.stringify({ 
-            title: data.title, 
-            view_count: data.view_count, 
-            like_count: data.like_count,
-            share_count: data.share_count,
-            has_statistics: !!data.statistics 
-          }));
-          const views = data.view_count || data.statistics?.playCount || 0;
-          const likes = data.like_count || data.statistics?.diggCount || 0;
-          const shares = data.share_count || data.statistics?.shareCount || 0;
-
-          results[sub.id] = { views, likes, shares, earnings: 0 };
-
-          if (views > 0 || likes > 0 || shares > 0) {
-            await supabase
-              .from("content_submissions")
-              .update({
-                current_views: views,
-                current_likes: likes,
-                current_shares: shares,
-              })
-              .eq("id", sub.id);
-            console.log(`Updated stats for ${sub.id}: views=${views}, likes=${likes}, shares=${shares}`);
-          }
-        } else {
-          console.log(`oEmbed failed for ${sub.id}: status ${res.status}`);
-          results[sub.id] = { views: 0, likes: 0, shares: 0, earnings: 0 };
-        }
-      } catch (e) {
-        console.error(`Failed to fetch stats for ${sub.id}:`, e);
-        results[sub.id] = { views: 0, likes: 0, shares: 0, earnings: 0 };
       }
-    }
 
-    // Fallback: scrape page for submissions with 0 views
-    for (const sub of submissions || []) {
-      if (results[sub.id]?.views === 0 && sub.tiktok_video_id) {
-        try {
-          const pageRes = await fetch(sub.tiktok_video_url, {
-            headers: {
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            },
-          });
-          const html = await pageRes.text();
-
-          const viewMatch = html.match(/"playCount"\s*:\s*(\d+)/);
-          const likeMatch = html.match(/"diggCount"\s*:\s*(\d+)/);
-          const shareMatch = html.match(/"shareCount"\s*:\s*(\d+)/);
-
-          const views = viewMatch ? parseInt(viewMatch[1]) : 0;
-          const likes = likeMatch ? parseInt(likeMatch[1]) : 0;
-          const shares = shareMatch ? parseInt(shareMatch[1]) : 0;
-
-          if (views > 0 || likes > 0 || shares > 0) {
-            results[sub.id] = { ...results[sub.id], views, likes, shares };
-            await supabase
-              .from("content_submissions")
-              .update({
-                current_views: views,
-                current_likes: likes,
-                current_shares: shares,
-              })
-              .eq("id", sub.id);
+      // Calculate earnings
+      for (const sub of submissions || []) {
+        if (results[sub.id]?.views > 0) {
+          try {
+            const { data: earnings, error: earningsError } = await supabase
+              .rpc("calculate_submission_earnings", { p_submission_id: sub.id });
+            if (!earningsError && earnings !== null) {
+              results[sub.id].earnings = earnings;
+            }
+          } catch (e) {
+            console.error(`Earnings calc failed for ${sub.id}:`, e);
           }
-        } catch (e) {
-          console.error(`Page scrape failed for ${sub.id}:`, e);
         }
       }
     }
 
-    // Calculate earnings for each submission based on views and campaign tiers
-    for (const sub of submissions || []) {
-      if (results[sub.id]?.views > 0) {
-        try {
-          const { data: earnings, error: earningsError } = await supabase
-            .rpc("calculate_submission_earnings", { p_submission_id: sub.id });
-          
-          if (!earningsError && earnings !== null) {
-            results[sub.id].earnings = earnings;
-          }
-        } catch (e) {
-          console.error(`Earnings calc failed for ${sub.id}:`, e);
+    // --- Handle reward submissions ---
+    if (hasReward) {
+      const { data: rewardSubs, error: rewardError } = await supabase
+        .from("reward_submissions")
+        .select("id, tiktok_video_url, tiktok_video_id, reward_ad_id")
+        .in("id", reward_submission_ids);
+
+      if (rewardError) throw rewardError;
+
+      for (const sub of rewardSubs || []) {
+        const stats = await fetchTiktokStats(sub.tiktok_video_url, sub.tiktok_video_id);
+        results[sub.id] = { ...stats, earnings: 0 };
+
+        if (stats.views > 0 || stats.likes > 0) {
+          await supabase
+            .from("reward_submissions")
+            .update({
+              current_views: stats.views,
+              current_likes: stats.likes,
+            })
+            .eq("id", sub.id);
+          console.log(`Updated reward stats for ${sub.id}: views=${stats.views}, likes=${stats.likes}`);
         }
       }
     }
