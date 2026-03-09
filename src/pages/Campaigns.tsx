@@ -205,7 +205,14 @@ const Campaigns: React.FC = () => {
           } as React.CSSProperties}
         >
           {feedItems.map((item) =>
-            item.type === 'deal' ? (
+            item.type === 'reward' ? (
+              <RewardCard
+                key={`reward-${item.data.id}`}
+                reward={item.data}
+                isSaved={false}
+                onToggleFavorite={() => {}}
+              />
+            ) : item.type === 'deal' ? (
               <DealCard
                 key={`deal-${item.data.id}`}
                 deal={item.data}
