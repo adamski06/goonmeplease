@@ -42,17 +42,19 @@ const BusinessProfile: React.FC = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const [profileRes, campaignsRes, dealsRes] = await Promise.all([
+    const [profileRes, campaignsRes, dealsRes, rewardsRes] = await Promise.all([
       supabase.from('business_profiles').select('company_name, description, website, logo_url, industry, target_audience, brand_values, onboarding_complete').eq('user_id', user.id).maybeSingle(),
       supabase.from('campaigns').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
       supabase.from('deals').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('reward_ads').select('id, title, brand_name, cover_image_url, is_active').eq('business_id', user.id).order('created_at', { ascending: false }),
     ]);
 
     if (profileRes.data) setProfile(profileRes.data);
 
     const spreadAds: AdItem[] = (campaignsRes.data || []).map(c => ({ ...c, type: 'spread' as const }));
     const dealAds: AdItem[] = (dealsRes.data || []).map(d => ({ ...d, type: 'deal' as const }));
-    const allAds = [...spreadAds, ...dealAds].sort(() => 0); // preserve creation order interleaved
+    const rewardAds: AdItem[] = (rewardsRes.data || []).map(r => ({ ...r, max_earnings: null, type: 'reward' as const }));
+    const allAds = [...spreadAds, ...dealAds, ...rewardAds].sort(() => 0);
     setAds(allAds);
 
     if (spreadAds.length > 0) {
