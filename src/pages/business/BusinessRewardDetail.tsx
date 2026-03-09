@@ -52,7 +52,8 @@ const BusinessRewardDetail: React.FC = () => {
   const [couponDialogOpen, setCouponDialogOpen] = useState(false); // kept for potential future use
   const [newCouponCode, setNewCouponCode] = useState('');
   const [savingCodes, setSavingCodes] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | false>(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [submissions, setSubmissions] = useState<RewardSubmission[]>([]);
 
   useEffect(() => {
