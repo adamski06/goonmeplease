@@ -96,9 +96,11 @@ const Activity: React.FC = () => {
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [rewardSubmissions, setRewardSubmissions] = useState<RewardSubmission[]>([]);
   const [dealApplications, setDealApplications] = useState<{ id: string; deal_id: string; status: string; created_at: string; deal_brand: string; deal_title: string; deal_logo: string }[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
+  const [selectedRewardSubmission, setSelectedRewardSubmission] = useState<RewardSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
 
   const fetchActiveSubmissions = useCallback(async () => {
