@@ -369,7 +369,7 @@ const AdminReviewQueue = () => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{item.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
+                  <Badge variant="outline">{item.type === 'spread' ? 'Spread' : item.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
                 </TableCell>
                 <TableCell className="text-sm">{item.current_views.toLocaleString()}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{fmt(item.created_at)}</TableCell>
