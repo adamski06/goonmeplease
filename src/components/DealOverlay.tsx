@@ -31,6 +31,8 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, []);
 
   // Check if already applied on mount

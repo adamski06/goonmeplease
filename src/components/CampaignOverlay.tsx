@@ -31,6 +31,8 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, []);
 
   const handleContinue = () => {
