@@ -439,6 +439,44 @@ const BusinessRewardDetail: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* In Action — Submissions */}
+      {submissions.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-base font-bold text-foreground font-montserrat mb-4">In Action</h3>
+          <div className="space-y-3">
+            {submissions.map(sub => {
+              const statusColor = sub.status === 'approved' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                : sub.status === 'denied' ? 'bg-red-500/10 text-red-600 border-red-500/20'
+                : 'bg-amber-500/10 text-amber-600 border-amber-500/20';
+              const statusLabel = sub.status === 'approved' ? 'Approved'
+                : sub.status === 'denied' ? 'Denied'
+                : 'Under Review';
+              return (
+                <div key={sub.id} className="rounded-[20px] p-4 flex items-center gap-4" style={cardStyle}>
+                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    {sub.creator_avatar ? (
+                      <img src={sub.creator_avatar} alt="" className="h-full w-full rounded-full object-cover" />
+                    ) : (
+                      <User className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">@{sub.creator_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {sub.current_views.toLocaleString()} views · {new Date(sub.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {sub.coupon_code && (
+                    <span className="text-xs font-mono bg-muted px-2 py-1 rounded-lg text-foreground">{sub.coupon_code}</span>
+                  )}
+                  <Badge variant="outline" className={statusColor}>{statusLabel}</Badge>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
