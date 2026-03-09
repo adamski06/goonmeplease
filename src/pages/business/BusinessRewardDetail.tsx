@@ -27,6 +27,20 @@ interface RewardData {
   coupon_codes: string[] | null;
 }
 
+interface RewardSubmission {
+  id: string;
+  creator_id: string;
+  tiktok_video_url: string;
+  tiktok_video_id: string | null;
+  status: string;
+  current_views: number;
+  current_likes: number;
+  coupon_code: string | null;
+  created_at: string;
+  creator_name?: string;
+  creator_avatar?: string | null;
+}
+
 const BusinessRewardDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
