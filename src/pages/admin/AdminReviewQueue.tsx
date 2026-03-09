@@ -256,7 +256,7 @@ const AdminReviewQueue = () => {
                       </a>
                     )}
                   </div>
-                  <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
+                  <Badge variant="outline" className="ml-auto">{item.type === 'spread' ? 'Spread' : item.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
                 </div>
 
                 {reviewItem.tiktok_video_url ? (
