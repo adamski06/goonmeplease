@@ -128,7 +128,7 @@ const BusinessRewardSubmissionDetail: React.FC = () => {
 
   const views = submission.current_views || 0;
   const viewProgress = viewsRequired > 0 ? Math.min((views / viewsRequired) * 100, 100) : 100;
-  const goalReached = viewsRequired === 0 || views >= viewsRequired;
+  const goalReached = (viewsRequired === 0 || views >= viewsRequired) && submission.status === 'approved';
 
   return (
     <div className="h-full overflow-y-auto scrollbar-thin">

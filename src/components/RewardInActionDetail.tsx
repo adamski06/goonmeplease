@@ -60,7 +60,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
   const viewsProgress = submission.views_required > 0
     ? Math.min((views / submission.views_required) * 100, 100)
     : 0;
-  const goalReached = views >= submission.views_required;
+  const goalReached = views >= submission.views_required && submission.status === 'approved';
 
   useEffect(() => {
     const fetchStats = async () => {
