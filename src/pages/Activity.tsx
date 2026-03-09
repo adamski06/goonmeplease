@@ -208,6 +208,39 @@ const Activity: React.FC = () => {
       setDealApplications([]);
     }
 
+    // Process reward submissions
+    const rewardData = rewardsRes.data;
+    if (rewardData && rewardData.length > 0) {
+      const rewardAdIds = [...new Set(rewardData.map(r => r.reward_ad_id))];
+      const { data: rewardAds } = await supabase
+        .from('reward_ads')
+        .select('id, title, brand_name, brand_logo_url, reward_description, views_required')
+        .in('id', rewardAdIds);
+
+      const rewardMap = new Map((rewardAds || []).map(r => [r.id, r]));
+      setRewardSubmissions(rewardData.map(rs => {
+        const ad = rewardMap.get(rs.reward_ad_id);
+        return {
+          id: rs.id,
+          reward_ad_id: rs.reward_ad_id,
+          tiktok_video_url: rs.tiktok_video_url,
+          tiktok_video_id: rs.tiktok_video_id,
+          status: rs.status,
+          current_views: rs.current_views || 0,
+          current_likes: rs.current_likes || 0,
+          created_at: rs.created_at,
+          coupon_code: rs.coupon_code,
+          reward_brand: ad?.brand_name || '',
+          reward_title: ad?.title || '',
+          reward_logo: ad?.brand_logo_url || '',
+          reward_description: ad?.reward_description || '',
+          views_required: ad?.views_required || 0,
+        };
+      }));
+    } else {
+      setRewardSubmissions([]);
+    }
+
     setSubmissionsLoading(false);
   }, [user]);
 
