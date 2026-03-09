@@ -228,7 +228,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
               pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
             }}
           >
-            <SuitReward reward={rdreward} onBack={handleBackFromSubmit} onClose={onClose} />
+            <SubmitReward reward={reward} onBack={handleBackFromSubmit} onClose={onClose} />
           </div>
         </div>
       </div>
