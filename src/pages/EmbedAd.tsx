@@ -66,6 +66,7 @@ const EmbedAd: React.FC = () => {
             });
           }
         }
+      }
       setLoading(false);
     };
     load();

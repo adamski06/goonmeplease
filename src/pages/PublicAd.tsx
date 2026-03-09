@@ -119,6 +119,7 @@ const PublicAd: React.FC = () => {
             if (biz) setBusiness(biz);
           }
         }
+      }
 
       setLoading(false);
     };
