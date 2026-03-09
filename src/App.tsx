@@ -58,6 +58,7 @@ const BusinessDealSubmissionDetail = lazyRetry(() => import("./pages/business/Bu
 const CreateCampaignChooser = lazyRetry(() => import("./pages/business/CreateCampaignChooser"));
 const AdTypesLibrary = lazyRetry(() => import("./pages/business/AdTypesLibrary"));
 const BusinessRewards = lazyRetry(() => import("./pages/business/BusinessRewards"));
+const BusinessRewardDetail = lazyRetry(() => import("./pages/business/BusinessRewardDetail"));
 const CreateReward = lazyRetry(() => import("./pages/business/CreateReward"));
 const RewardsEmbed = lazyRetry(() => import("./pages/RewardsEmbed"));
 const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
