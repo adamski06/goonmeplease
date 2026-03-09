@@ -9,6 +9,7 @@ import SubmitDraft from '@/components/SubmitDraft';
 import CampaignOverlay from '@/components/CampaignOverlay';
 import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
 import InActionDetail from '@/components/InActionDetail';
+import RewardInActionDetail, { RewardSubmission } from '@/components/RewardInActionDetail';
 import { Campaign } from '@/types/campaign';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
 import { ChevronRight, X, Clock, CheckCircle, Send } from 'lucide-react';
