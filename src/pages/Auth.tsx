@@ -4,7 +4,7 @@ import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { lovable } from '@/integrations/lovable/index';
+import { signInWithApple } from '@/lib/appleAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import jarlaLogo from '@/assets/jarla-logo.png';
@@ -339,9 +339,7 @@ const Auth: React.FC = () => {
                 <button
                   onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
-                    const { error } = await lovable.auth.signInWithOAuth('apple', {
-                      redirect_uri: window.location.origin,
-                    });
+                    const { error } = await signInWithApple();
                     if (error) {
                       toast({ title: 'Sign in failed', description: String(error), variant: 'destructive' });
                     }
