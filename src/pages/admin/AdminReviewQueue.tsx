@@ -387,12 +387,13 @@ const AdminReviewQueue = () => {
                       <img src={item.creator_avatar} alt="" className="h-7 w-7 rounded-full object-cover bg-muted" />
                     ) : (
                       <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center">
-                        <User className="h-3.5 w-3.5 text-muted-foreground" />
+                        {item.category === 'ad' ? <Building2 className="h-3.5 w-3.5 text-muted-foreground" /> : <User className="h-3.5 w-3.5 text-muted-foreground" />}
                       </div>
                     )}
                     <div className="min-w-0">
                       <span className="text-sm font-medium truncate block max-w-[120px]">{item.creator_name}</span>
                       {item.creator_tiktok && <span className="text-[11px] text-muted-foreground">@{item.creator_tiktok}</span>}
+                      {item.category === 'ad' && <span className="text-[11px] text-muted-foreground">Business</span>}
                     </div>
                   </div>
                 </TableCell>
