@@ -420,7 +420,7 @@ const AdminReviewQueue = () => {
               </Card>
             </div>
           </div>
-        )
+        )}
       </div>
     );
   }
