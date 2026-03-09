@@ -453,7 +453,7 @@ const BusinessRewardDetail: React.FC = () => {
                 : sub.status === 'denied' ? 'Denied'
                 : 'Under Review';
               return (
-                <div key={sub.id} className="rounded-[20px] p-4 flex items-center gap-4" style={cardStyle}>
+                <div key={sub.id} className="rounded-[20px] p-4 flex items-center gap-4 cursor-pointer hover:ring-1 hover:ring-foreground/10 transition-all" style={cardStyle} onClick={() => navigate(`/business/rewards/${id}/submissions/${sub.id}`)}>
                   <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
                     {sub.creator_avatar ? (
                       <img src={sub.creator_avatar} alt="" className="h-full w-full rounded-full object-cover" />

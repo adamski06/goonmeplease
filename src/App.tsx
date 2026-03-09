@@ -60,6 +60,7 @@ const AdTypesLibrary = lazyRetry(() => import("./pages/business/AdTypesLibrary")
 const BusinessRewards = lazyRetry(() => import("./pages/business/BusinessRewards"));
 const BusinessRewardDetail = lazyRetry(() => import("./pages/business/BusinessRewardDetail"));
 const CreateReward = lazyRetry(() => import("./pages/business/CreateReward"));
+const BusinessRewardSubmissionDetail = lazyRetry(() => import("./pages/business/BusinessRewardSubmissionDetail"));
 const RewardsEmbed = lazyRetry(() => import("./pages/RewardsEmbed"));
 const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
 const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
@@ -128,6 +129,7 @@ const App = () => (
                   <Route path="rewards" element={<BusinessRewards />} />
                   <Route path="rewards/new" element={<CreateReward />} />
                   <Route path="rewards/:id" element={<BusinessRewardDetail />} />
+                  <Route path="rewards/:id/submissions/:submissionId" element={<BusinessRewardSubmissionDetail />} />
                   <Route path="settings" element={<BusinessSettings />} />
                 </Route>
                 <Route path="/rewards-embed" element={<Suspense fallback={<BusinessLoader />}><RewardsEmbed /></Suspense>} />
