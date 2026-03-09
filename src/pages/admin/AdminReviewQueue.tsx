@@ -176,26 +176,37 @@ const AdminReviewQueue = () => {
     const now = new Date();
     const payoutDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    if (item.type === 'spread') {
+    if (item.category === 'ad') {
+      // Approving/denying a pending ad from a business
+      const table = item.type === 'spread' ? 'campaigns' : item.type === 'deal' ? 'deals' : 'reward_ads';
       const updateData: any = {
-        status: action === 'approve' ? 'approved' : 'denied',
-        reviewed_at: now.toISOString(),
+        status: action === 'approve' ? 'active' : 'denied',
+        is_active: action === 'approve',
       };
-      if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
-      await supabase.from('content_submissions').update(updateData).eq('id', item.id);
-    } else if (item.type === 'deal') {
-      const updateData: any = {
-        status: action === 'approve' ? 'accepted' : 'denied',
-        reviewed_at: now.toISOString(),
-      };
-      if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
-      await supabase.from('deal_applications').update(updateData).eq('id', item.id);
-    } else if (item.type === 'reward') {
-      const updateData: any = {
-        status: action === 'approve' ? 'approved' : 'denied',
-        reviewed_at: now.toISOString(),
-      };
-      await supabase.from('reward_submissions').update(updateData).eq('id', item.id);
+      await supabase.from(table).update(updateData).eq('id', item.id);
+    } else {
+      // Approving/denying a creator submission
+      if (item.type === 'spread') {
+        const updateData: any = {
+          status: action === 'approve' ? 'approved' : 'denied',
+          reviewed_at: now.toISOString(),
+        };
+        if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
+        await supabase.from('content_submissions').update(updateData).eq('id', item.id);
+      } else if (item.type === 'deal') {
+        const updateData: any = {
+          status: action === 'approve' ? 'accepted' : 'denied',
+          reviewed_at: now.toISOString(),
+        };
+        if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
+        await supabase.from('deal_applications').update(updateData).eq('id', item.id);
+      } else if (item.type === 'reward') {
+        const updateData: any = {
+          status: action === 'approve' ? 'approved' : 'denied',
+          reviewed_at: now.toISOString(),
+        };
+        await supabase.from('reward_submissions').update(updateData).eq('id', item.id);
+      }
     }
 
     toast({ title: action === 'approve' ? 'Approved' : 'Denied' });
