@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark, Gift, Plus, X } from 'lucide-react';
-import SubmitReward from '@/components/SubmitReward';';
+import SubmitReward from '@/components/SubmitReward';
 import { Campaign } from '@/types/campaign';
 
 interface RewardOverlayProps {
