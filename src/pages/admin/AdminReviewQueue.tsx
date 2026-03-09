@@ -370,7 +370,7 @@ const AdminReviewQueue = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Creator</TableHead>
+              <TableHead>From</TableHead>
               <TableHead>Ad</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Views</TableHead>
