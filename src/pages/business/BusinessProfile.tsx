@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
+import { Pencil, ExternalLink, Plus, Megaphone, Handshake, Gift } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
 
