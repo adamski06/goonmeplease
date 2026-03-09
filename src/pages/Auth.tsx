@@ -153,19 +153,10 @@ const Auth: React.FC = () => {
   };
 
   const handleTikTokNext = (username: string) => {
-    // OAuth users (Apple) skip phone step — go straight to app
-    if (isOAuthUser) {
-      navigate('/user');
-      return;
-    }
     setSignUpStep('phone');
   };
 
   const handleTikTokSkip = () => {
-    if (isOAuthUser) {
-      navigate('/user');
-      return;
-    }
     setSignUpStep('phone');
   };
 
