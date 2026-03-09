@@ -387,6 +387,53 @@ const Activity: React.FC = () => {
               </div>
             );
           })}
+          {rewardSubmissions.map(rs => {
+            const rewardStatusConfig: Record<string, { label: string; gradient: string; border: string }> = {
+              pending_review: { label: 'Under Review', gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)', border: 'rgba(252,211,77,0.5)' },
+              approved: { label: 'Approved', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
+              denied: { label: 'Denied', gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)', border: 'rgba(252,165,165,0.5)' },
+              completed: { label: 'Completed', gradient: 'linear-gradient(180deg, rgba(124,58,237,0.9) 0%, rgba(109,40,217,0.95) 100%)', border: 'rgba(167,139,250,0.5)' },
+            };
+            const rs_status = rewardStatusConfig[rs.status] || rewardStatusConfig.pending_review;
+            return (
+              <button
+                key={rs.id}
+                onClick={() => setSelectedRewardSubmission(rs)}
+                className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                }}
+              >
+                <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+                  {rs.reward_logo ? (
+                    <img src={rs.reward_logo} alt={rs.reward_brand} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-lg font-bold text-black/30">{rs.reward_brand[0]}</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-bold text-black font-montserrat truncate block">{rs.reward_brand}</span>
+                  <p className="text-xs text-black/50 font-jakarta line-clamp-1">{rs.reward_title}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Gift className="h-3 w-3 text-purple-500/60" />
+                    <span className="text-[11px] font-medium text-black/40 font-jakarta">Reward</span>
+                  </div>
+                </div>
+                <div
+                  className="flex items-center gap-1.5 rounded-[14px] px-2.5 py-1 flex-shrink-0"
+                  style={{
+                    background: rs_status.gradient,
+                    border: `1px solid ${rs_status.border}`,
+                    boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <span className="text-[10px] font-bold text-white font-montserrat">{rs_status.label}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       )}
 
