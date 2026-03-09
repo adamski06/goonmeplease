@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket, User } from 'lucide-react';
+import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket, User, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -49,7 +49,7 @@ const BusinessRewardDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [thumbModalOpen, setThumbModalOpen] = useState(false);
-  const [couponDialogOpen, setCouponDialogOpen] = useState(false);
+  const [couponDialogOpen, setCouponDialogOpen] = useState(false); // kept for potential future use
   const [newCouponCode, setNewCouponCode] = useState('');
   const [savingCodes, setSavingCodes] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -223,6 +223,7 @@ const BusinessRewardDetail: React.FC = () => {
   }
 
   const codesCount = reward.coupon_codes?.length || 0;
+  const claimedCoupons = submissions.filter(s => s.coupon_code);
 
   const cardStyle = {
     background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
@@ -288,19 +289,115 @@ const BusinessRewardDetail: React.FC = () => {
         }}>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-xs" style={{ color: 'hsl(270, 50%, 50%)' }}>Coupon Codes</span>
-            <button
-              onClick={() => setCouponDialogOpen(true)}
-              className="text-xs font-medium px-2 py-1 rounded-lg transition-colors hover:bg-background/50"
-              style={{ color: 'hsl(270, 50%, 50%)' }}
-            >
-              Manage
-            </button>
           </div>
           <p className="text-2xl font-bold" style={{ color: 'hsl(270, 60%, 35%)' }}>
             {codesCount}
-            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(270, 40%, 50%)' }}>codes</span>
+            <span className="text-sm font-normal ml-1" style={{ color: 'hsl(270, 40%, 50%)' }}>available</span>
+          </p>
+          <p className="text-xs mt-1" style={{ color: 'hsl(270, 40%, 55%)' }}>
+            {claimedCoupons.length} claimed
           </p>
         </div>
+      </div>
+
+      {/* Coupon Manager — Full Section */}
+      <div className="rounded-[28px] p-6 mb-8" style={cardStyle}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-bold text-foreground font-montserrat flex items-center gap-2">
+            <Ticket className="h-4 w-4" />
+            Coupon Manager
+          </h3>
+          <span className="text-xs text-muted-foreground">{codesCount} available · {claimedCoupons.length} claimed</span>
+        </div>
+
+        {/* Add codes */}
+        <div className="flex gap-2 mb-4">
+          <Input
+            value={newCouponCode}
+            onChange={(e) => setNewCouponCode(e.target.value)}
+            placeholder="Enter coupon code..."
+            className="flex-1"
+            onKeyDown={(e) => e.key === 'Enter' && addCouponCode()}
+            onPaste={(e) => {
+              const text = e.clipboardData.getData('text');
+              if (text.includes('\n') || text.includes(',') || text.includes(';')) {
+                e.preventDefault();
+                handleBulkPaste(text);
+              }
+            }}
+          />
+          <Button size="sm" onClick={addCouponCode} disabled={savingCodes}>
+            <Plus className="h-4 w-4 mr-1" /> Add
+          </Button>
+        </div>
+
+        {/* File upload + export */}
+        <div className="flex items-center gap-2 mb-4">
+          <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted border border-border text-xs font-medium cursor-pointer hover:bg-muted/80 transition-colors">
+            <Upload className="h-3.5 w-3.5" />
+            Import file
+            <input type="file" className="hidden" accept=".csv,.txt,.xlsx,.xls" onChange={handleFileUpload} />
+          </label>
+          {codesCount > 0 && (
+            <button
+              onClick={exportCouponCodes}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-muted border border-border text-xs font-medium hover:bg-muted/80 transition-colors"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Export CSV
+            </button>
+          )}
+        </div>
+
+        {/* Claimed coupons section */}
+        {claimedCoupons.length > 0 && (
+          <div className="mb-4">
+            <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
+              <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+              Claimed ({claimedCoupons.length})
+            </h4>
+            <div className="rounded-xl border border-border overflow-hidden">
+              {claimedCoupons.map((sub, i) => (
+                <div key={sub.id} className={`flex items-center justify-between px-4 py-2.5 ${i < claimedCoupons.length - 1 ? 'border-b border-border' : ''}`}>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center shrink-0">
+                      {sub.creator_avatar ? (
+                        <img src={sub.creator_avatar} alt="" className="h-full w-full rounded-full object-cover" />
+                      ) : (
+                        <User className="h-3.5 w-3.5 text-muted-foreground" />
+                      )}
+                    </div>
+                    <span className="text-sm text-foreground truncate">@{sub.creator_name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-mono font-semibold text-foreground bg-muted px-2.5 py-1 rounded-lg">{sub.coupon_code}</span>
+                    <span className="text-[10px] text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Available codes list */}
+        {codesCount > 0 && (
+          <div>
+            <h4 className="text-sm font-semibold text-foreground mb-2">Available ({codesCount})</h4>
+            <div className="max-h-48 overflow-y-auto space-y-1 rounded-xl border border-border p-3">
+              {(reward?.coupon_codes || []).map((code, i) => (
+                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-muted/50">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Ticket className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <span className="text-sm font-mono text-foreground truncate">{code}</span>
+                  </div>
+                  <button onClick={() => removeCouponCode(i)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
+                    <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Ad Details node — description + thumbnail */}
@@ -373,72 +470,6 @@ const BusinessRewardDetail: React.FC = () => {
         onSave={handleThumbnailCropSave}
         saving={uploading}
       />
-
-      {/* Coupon Codes Dialog */}
-      <Dialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="font-montserrat">Manage Coupon Codes</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            {/* Add codes */}
-            <div className="flex gap-2">
-              <Input
-                value={newCouponCode}
-                onChange={(e) => setNewCouponCode(e.target.value)}
-                placeholder="Enter code..."
-                onKeyDown={(e) => e.key === 'Enter' && addCouponCode()}
-                onPaste={(e) => {
-                  const text = e.clipboardData.getData('text');
-                  if (text.includes('\n') || text.includes(',') || text.includes(';')) {
-                    e.preventDefault();
-                    handleBulkPaste(text);
-                  }
-                }}
-              />
-              <Button size="sm" onClick={addCouponCode} disabled={savingCodes}>
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* File upload + export */}
-            <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted border border-border text-xs font-medium cursor-pointer hover:bg-muted/80 transition-colors">
-                <Upload className="h-3 w-3" />
-                Import file
-                <input type="file" className="hidden" accept=".csv,.txt,.xlsx,.xls" onChange={handleFileUpload} />
-              </label>
-              {codesCount > 0 && (
-                <button
-                  onClick={exportCouponCodes}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted border border-border text-xs font-medium hover:bg-muted/80 transition-colors"
-                >
-                  <Download className="h-3 w-3" />
-                  Export CSV
-                </button>
-              )}
-              <span className="text-xs text-muted-foreground ml-auto">{codesCount} code{codesCount !== 1 ? 's' : ''}</span>
-            </div>
-
-            {/* Code list */}
-            {codesCount > 0 && (
-              <div className="max-h-60 overflow-y-auto space-y-1 rounded-xl border border-border p-3">
-                {(reward?.coupon_codes || []).map((code, i) => (
-                  <div key={i} className="flex items-center justify-between py-1 px-2 rounded-lg hover:bg-muted/50">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Ticket className="h-3 w-3 text-muted-foreground shrink-0" />
-                      <span className="text-sm font-mono text-foreground truncate">{code}</span>
-                    </div>
-                    <button onClick={() => removeCouponCode(i)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
-                      <X className="h-3 w-3 text-muted-foreground hover:text-destructive" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* In Action — Submissions */}
       {submissions.length > 0 && (
