@@ -12,9 +12,11 @@ import {
 } from '@/components/ui/dialog';
 import CampaignCard from '@/components/CampaignCard';
 import DealCard from '@/components/DealCard';
+import RewardCard from '@/components/RewardCard';
 import BottomNav from '@/components/BottomNav';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useDeals } from '@/hooks/useDeals';
+import { useRewards } from '@/hooks/useRewards';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const Campaigns: React.FC = () => {
