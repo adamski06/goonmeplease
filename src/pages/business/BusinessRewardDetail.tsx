@@ -67,8 +67,6 @@ const BusinessRewardDetail: React.FC = () => {
       setLoading(false);
     };
     load();
-    };
-    load();
   }, [id]);
 
   const handleThumbnailCropSave = async (blob: Blob) => {
