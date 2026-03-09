@@ -39,17 +39,34 @@ const BusinessRewardDetail: React.FC = () => {
   const [newCouponCode, setNewCouponCode] = useState('');
   const [savingCodes, setSavingCodes] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [submissions, setSubmissions] = useState<RewardSubmission[]>([]);
 
   useEffect(() => {
     if (!id) return;
     const load = async () => {
-      const { data } = await supabase
-        .from('reward_ads')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-      if (data) setReward(data as RewardData);
+      const [rewardRes, subsRes] = await Promise.all([
+        supabase.from('reward_ads').select('*').eq('id', id).maybeSingle(),
+        supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
+      ]);
+      if (rewardRes.data) setReward(rewardRes.data as RewardData);
+
+      const subs = subsRes.data || [];
+      if (subs.length > 0) {
+        const creatorIds = [...new Set(subs.map(s => s.creator_id))];
+        const { data: profiles } = await supabase.from('profiles').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
+        const profileMap: Record<string, any> = {};
+        (profiles || []).forEach(p => { profileMap[p.user_id] = p; });
+        setSubmissions(subs.map(s => ({
+          ...s,
+          current_views: s.current_views || 0,
+          current_likes: s.current_likes || 0,
+          creator_name: profileMap[s.creator_id]?.username || profileMap[s.creator_id]?.full_name || 'Unknown',
+          creator_avatar: profileMap[s.creator_id]?.avatar_url || null,
+        })));
+      }
       setLoading(false);
+    };
+    load();
     };
     load();
   }, [id]);
