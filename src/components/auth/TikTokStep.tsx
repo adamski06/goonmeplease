@@ -125,12 +125,6 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
         >
           {saving ? 'Saving...' : 'Continue'}
         </Button>
-        <button
-          onClick={onSkip}
-          className="w-full py-2 text-xs font-medium text-black/40 hover:text-black/60 transition-colors"
-        >
-          Skip for now
-        </button>
       </div>
     </div>
   );
