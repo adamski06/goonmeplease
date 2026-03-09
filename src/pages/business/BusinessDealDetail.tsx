@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Users, CheckCircle, XCircle, Eye, ImagePlus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Users, CheckCircle, XCircle, Eye, ImagePlus, Trash2, Share2, Copy, Check, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
