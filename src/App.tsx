@@ -127,6 +127,7 @@ const App = () => (
                   <Route path="deals/:id/applications/:applicationId" element={<BusinessDealSubmissionDetail />} />
                   <Route path="rewards" element={<BusinessRewards />} />
                   <Route path="rewards/new" element={<CreateReward />} />
+                  <Route path="rewards/:id" element={<BusinessRewardDetail />} />
                   <Route path="settings" element={<BusinessSettings />} />
                 </Route>
                 <Route path="/rewards-embed" element={<Suspense fallback={<BusinessLoader />}><RewardsEmbed /></Suspense>} />
