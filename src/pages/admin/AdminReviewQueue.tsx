@@ -118,7 +118,28 @@ const AdminReviewQueue = () => {
       raw: a,
     }));
 
-    const all = [...spreadItems, ...dealItems].sort(
+    const rewardItems: ReviewItem[] = (rewardSubsRes.data || []).map(r => ({
+      id: r.id,
+      type: 'reward' as const,
+      status: r.status,
+      creator_id: r.creator_id,
+      creator_name: profilesMap[r.creator_id]?.full_name || profilesMap[r.creator_id]?.username || 'Unknown',
+      creator_avatar: profilesMap[r.creator_id]?.avatar_url || null,
+      creator_tiktok: tiktokMap[r.creator_id] || null,
+      ad_title: (r.reward_ads as any)?.title || '–',
+      brand_name: (r.reward_ads as any)?.brand_name || '–',
+      tiktok_video_url: r.tiktok_video_url,
+      tiktok_video_id: r.tiktok_video_id,
+      current_views: r.current_views || 0,
+      current_likes: r.current_likes || 0,
+      current_shares: 0,
+      message: null,
+      created_at: r.created_at,
+      ad: r.reward_ads,
+      raw: r,
+    }));
+
+    const all = [...spreadItems, ...dealItems, ...rewardItems].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
     setItems(all);
