@@ -223,6 +223,7 @@ const BusinessRewardDetail: React.FC = () => {
   }
 
   const codesCount = reward.coupon_codes?.length || 0;
+  const claimedCoupons = submissions.filter(s => s.coupon_code);
 
   const cardStyle = {
     background: 'linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%)',
