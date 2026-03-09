@@ -41,6 +41,7 @@ const Discover: React.FC = () => {
   const savedScrollPosition = useRef<number>(0);
   const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
   const { deals } = useDeals();
+  const { rewards } = useRewards();
 
   const filteredCampaigns = searchQuery.trim()
     ? campaigns.filter(c =>
