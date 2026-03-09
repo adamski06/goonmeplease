@@ -885,6 +885,10 @@ export type Database = {
         Args: { p_submission_id: string }
         Returns: number
       }
+      claim_reward_coupon: {
+        Args: { p_submission_id: string }
+        Returns: string
+      }
       get_or_create_tiktok_account: {
         Args: { p_tiktok_username: string }
         Returns: string
