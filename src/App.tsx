@@ -60,6 +60,7 @@ const AdTypesLibrary = lazyRetry(() => import("./pages/business/AdTypesLibrary")
 const BusinessRewards = lazyRetry(() => import("./pages/business/BusinessRewards"));
 const BusinessRewardDetail = lazyRetry(() => import("./pages/business/BusinessRewardDetail"));
 const CreateReward = lazyRetry(() => import("./pages/business/CreateReward"));
+const BusinessRewardSubmissionDetail = lazyRetry(() => import("./pages/business/BusinessRewardSubmissionDetail"));
 const RewardsEmbed = lazyRetry(() => import("./pages/RewardsEmbed"));
 const PublicAd = lazyRetry(() => import("./pages/PublicAd"));
 const PublicBrand = lazyRetry(() => import("./pages/PublicBrand"));
