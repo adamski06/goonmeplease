@@ -81,22 +81,22 @@ const AdminReviewQueue = () => {
     let tiktokMap: Record<string, string> = {};
     let businessMap: Record<string, any> = {};
 
-    const promises: Promise<any>[] = [];
+    const promises: Array<Promise<any> | PromiseLike<any>> = [];
     if (uniqueIds.length > 0) {
       promises.push(
         supabase.from('profiles').select('user_id, full_name, avatar_url, username').in('user_id', uniqueIds).then(r => {
           (r.data || []).forEach(p => { profilesMap[p.user_id] = p; });
-        }),
+        }) as any,
         supabase.from('tiktok_accounts_safe').select('user_id, tiktok_username').in('user_id', uniqueIds).then(r => {
           (r.data || []).forEach(t => { if (t.user_id) tiktokMap[t.user_id] = t.tiktok_username || ''; });
-        }),
+        }) as any,
       );
     }
     if (uniqueBusinessIds.length > 0) {
       promises.push(
         supabase.from('business_profiles').select('user_id, company_name, logo_url').in('user_id', uniqueBusinessIds).then(r => {
           (r.data || []).forEach(b => { businessMap[b.user_id] = b; });
-        }),
+        }) as any,
       );
     }
     await Promise.all(promises);
