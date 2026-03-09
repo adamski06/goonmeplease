@@ -339,9 +339,7 @@ const Auth: React.FC = () => {
                 <button
                   onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
-                    const { error } = await lovable.auth.signInWithOAuth('apple', {
-                      redirect_uri: window.location.origin,
-                    });
+                    const { error } = await signInWithApple();
                     if (error) {
                       toast({ title: 'Sign in failed', description: String(error), variant: 'destructive' });
                     }
