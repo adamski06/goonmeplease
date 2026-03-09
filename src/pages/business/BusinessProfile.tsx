@@ -232,15 +232,19 @@ const BusinessProfile: React.FC = () => {
                       <span
                         className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(59,130,246,0.32) 0%, rgba(37,99,235,0.22) 100%)',
-                          border: '1px solid rgba(59,130,246,0.45)',
+                          background: ad.type === 'reward'
+                            ? 'linear-gradient(135deg, rgba(168,85,247,0.32) 0%, rgba(139,92,246,0.22) 100%)'
+                            : 'linear-gradient(135deg, rgba(59,130,246,0.32) 0%, rgba(37,99,235,0.22) 100%)',
+                          border: ad.type === 'reward'
+                            ? '1px solid rgba(168,85,247,0.45)'
+                            : '1px solid rgba(59,130,246,0.45)',
                           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
-                          color: 'rgb(29,78,216)',
+                          color: ad.type === 'reward' ? 'rgb(126,34,206)' : 'rgb(29,78,216)',
                           backdropFilter: 'blur(6px)',
                         }}
                       >
-                        {isSpread ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
-                        {isSpread ? 'Spread' : 'Deal'}
+                        {ad.type === 'spread' ? <Megaphone className="h-2.5 w-2.5" /> : ad.type === 'deal' ? <Handshake className="h-2.5 w-2.5" /> : <Gift className="h-2.5 w-2.5" />}
+                        {ad.type === 'spread' ? 'Spread' : ad.type === 'deal' ? 'Deal' : 'Reward'}
                       </span>
                     </div>
 
