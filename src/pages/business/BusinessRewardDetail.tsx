@@ -49,7 +49,7 @@ const BusinessRewardDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [thumbModalOpen, setThumbModalOpen] = useState(false);
-  const [couponDialogOpen, setCouponDialogOpen] = useState(false);
+  const [couponDialogOpen, setCouponDialogOpen] = useState(false); // kept for potential future use
   const [newCouponCode, setNewCouponCode] = useState('');
   const [savingCodes, setSavingCodes] = useState(false);
   const [copied, setCopied] = useState(false);
