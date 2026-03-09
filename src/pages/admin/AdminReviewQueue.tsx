@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 type ReviewItem = {
   id: string;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   status: string;
   creator_id: string;
   creator_name: string;
@@ -40,7 +40,7 @@ const AdminReviewQueue = () => {
   const { toast } = useToast();
 
   const load = async () => {
-    const [subsRes, appsRes] = await Promise.all([
+    const [subsRes, appsRes, rewardSubsRes] = await Promise.all([
       supabase
         .from('content_submissions')
         .select('*, campaigns(title, brand_name, description, cover_image_url, guidelines, category, video_length, product_visibility, total_budget)')
@@ -51,11 +51,17 @@ const AdminReviewQueue = () => {
         .select('*, deals(title, brand_name, description, cover_image_url, guidelines, category, video_length, product_visibility, total_budget)')
         .eq('status', 'pending')
         .order('created_at', { ascending: false }),
+      supabase
+        .from('reward_submissions')
+        .select('*, reward_ads(title, brand_name, description, cover_image_url, guidelines, category, reward_description, views_required)')
+        .eq('status', 'pending_review')
+        .order('created_at', { ascending: false }),
     ]);
 
     const allCreatorIds = [
       ...((subsRes.data || []).map(s => s.creator_id)),
       ...((appsRes.data || []).map(a => a.creator_id)),
+      ...((rewardSubsRes.data || []).map(r => r.creator_id)),
     ];
     const uniqueIds = [...new Set(allCreatorIds)];
 
@@ -112,7 +118,28 @@ const AdminReviewQueue = () => {
       raw: a,
     }));
 
-    const all = [...spreadItems, ...dealItems].sort(
+    const rewardItems: ReviewItem[] = (rewardSubsRes.data || []).map(r => ({
+      id: r.id,
+      type: 'reward' as const,
+      status: r.status,
+      creator_id: r.creator_id,
+      creator_name: profilesMap[r.creator_id]?.full_name || profilesMap[r.creator_id]?.username || 'Unknown',
+      creator_avatar: profilesMap[r.creator_id]?.avatar_url || null,
+      creator_tiktok: tiktokMap[r.creator_id] || null,
+      ad_title: (r.reward_ads as any)?.title || '–',
+      brand_name: (r.reward_ads as any)?.brand_name || '–',
+      tiktok_video_url: r.tiktok_video_url,
+      tiktok_video_id: r.tiktok_video_id,
+      current_views: r.current_views || 0,
+      current_likes: r.current_likes || 0,
+      current_shares: 0,
+      message: null,
+      created_at: r.created_at,
+      ad: r.reward_ads,
+      raw: r,
+    }));
+
+    const all = [...spreadItems, ...dealItems, ...rewardItems].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
     setItems(all);
@@ -133,13 +160,19 @@ const AdminReviewQueue = () => {
       };
       if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
       await supabase.from('content_submissions').update(updateData).eq('id', item.id);
-    } else {
+    } else if (item.type === 'deal') {
       const updateData: any = {
         status: action === 'approve' ? 'accepted' : 'denied',
         reviewed_at: now.toISOString(),
       };
       if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
       await supabase.from('deal_applications').update(updateData).eq('id', item.id);
+    } else if (item.type === 'reward') {
+      const updateData: any = {
+        status: action === 'approve' ? 'approved' : 'denied',
+        reviewed_at: now.toISOString(),
+      };
+      await supabase.from('reward_submissions').update(updateData).eq('id', item.id);
     }
 
     toast({ title: action === 'approve' ? 'Approved' : 'Denied' });
@@ -223,7 +256,7 @@ const AdminReviewQueue = () => {
                       </a>
                     )}
                   </div>
-                  <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
+                  <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : reviewItem.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
                 </div>
 
                 {reviewItem.tiktok_video_url ? (
@@ -336,7 +369,7 @@ const AdminReviewQueue = () => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{item.type === 'spread' ? 'Spread' : 'Deal'}</Badge>
+                  <Badge variant="outline">{item.type === 'spread' ? 'Spread' : item.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
                 </TableCell>
                 <TableCell className="text-sm">{item.current_views.toLocaleString()}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{fmt(item.created_at)}</TableCell>

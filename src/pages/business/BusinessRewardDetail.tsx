@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket } from 'lucide-react';
+import { ArrowLeft, Eye, ImagePlus, Trash2, Gift, Plus, X, Upload, Download, Copy, Check, Ticket, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -27,6 +27,20 @@ interface RewardData {
   coupon_codes: string[] | null;
 }
 
+interface RewardSubmission {
+  id: string;
+  creator_id: string;
+  tiktok_video_url: string;
+  tiktok_video_id: string | null;
+  status: string;
+  current_views: number;
+  current_likes: number;
+  coupon_code: string | null;
+  created_at: string;
+  creator_name?: string;
+  creator_avatar?: string | null;
+}
+
 const BusinessRewardDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -39,16 +53,31 @@ const BusinessRewardDetail: React.FC = () => {
   const [newCouponCode, setNewCouponCode] = useState('');
   const [savingCodes, setSavingCodes] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [submissions, setSubmissions] = useState<RewardSubmission[]>([]);
 
   useEffect(() => {
     if (!id) return;
     const load = async () => {
-      const { data } = await supabase
-        .from('reward_ads')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-      if (data) setReward(data as RewardData);
+      const [rewardRes, subsRes] = await Promise.all([
+        supabase.from('reward_ads').select('*').eq('id', id).maybeSingle(),
+        supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
+      ]);
+      if (rewardRes.data) setReward(rewardRes.data as RewardData);
+
+      const subs = subsRes.data || [];
+      if (subs.length > 0) {
+        const creatorIds = [...new Set(subs.map(s => s.creator_id))];
+        const { data: profiles } = await supabase.from('profiles').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
+        const profileMap: Record<string, any> = {};
+        (profiles || []).forEach(p => { profileMap[p.user_id] = p; });
+        setSubmissions(subs.map(s => ({
+          ...s,
+          current_views: s.current_views || 0,
+          current_likes: s.current_likes || 0,
+          creator_name: profileMap[s.creator_id]?.username || profileMap[s.creator_id]?.full_name || 'Unknown',
+          creator_avatar: profileMap[s.creator_id]?.avatar_url || null,
+        })));
+      }
       setLoading(false);
     };
     load();
@@ -410,6 +439,44 @@ const BusinessRewardDetail: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* In Action — Submissions */}
+      {submissions.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-base font-bold text-foreground font-montserrat mb-4">In Action</h3>
+          <div className="space-y-3">
+            {submissions.map(sub => {
+              const statusColor = sub.status === 'approved' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                : sub.status === 'denied' ? 'bg-red-500/10 text-red-600 border-red-500/20'
+                : 'bg-amber-500/10 text-amber-600 border-amber-500/20';
+              const statusLabel = sub.status === 'approved' ? 'Approved'
+                : sub.status === 'denied' ? 'Denied'
+                : 'Under Review';
+              return (
+                <div key={sub.id} className="rounded-[20px] p-4 flex items-center gap-4" style={cardStyle}>
+                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    {sub.creator_avatar ? (
+                      <img src={sub.creator_avatar} alt="" className="h-full w-full rounded-full object-cover" />
+                    ) : (
+                      <User className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">@{sub.creator_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {sub.current_views.toLocaleString()} views · {new Date(sub.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {sub.coupon_code && (
+                    <span className="text-xs font-mono bg-muted px-2 py-1 rounded-lg text-foreground">{sub.coupon_code}</span>
+                  )}
+                  <Badge variant="outline" className={statusColor}>{statusLabel}</Badge>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
