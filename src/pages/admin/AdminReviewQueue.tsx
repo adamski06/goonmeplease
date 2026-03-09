@@ -40,7 +40,7 @@ const AdminReviewQueue = () => {
   const { toast } = useToast();
 
   const load = async () => {
-    const [subsRes, appsRes] = await Promise.all([
+    const [subsRes, appsRes, rewardSubsRes] = await Promise.all([
       supabase
         .from('content_submissions')
         .select('*, campaigns(title, brand_name, description, cover_image_url, guidelines, category, video_length, product_visibility, total_budget)')
@@ -51,11 +51,17 @@ const AdminReviewQueue = () => {
         .select('*, deals(title, brand_name, description, cover_image_url, guidelines, category, video_length, product_visibility, total_budget)')
         .eq('status', 'pending')
         .order('created_at', { ascending: false }),
+      supabase
+        .from('reward_submissions')
+        .select('*, reward_ads(title, brand_name, description, cover_image_url, guidelines, category, reward_description, views_required)')
+        .eq('status', 'pending_review')
+        .order('created_at', { ascending: false }),
     ]);
 
     const allCreatorIds = [
       ...((subsRes.data || []).map(s => s.creator_id)),
       ...((appsRes.data || []).map(a => a.creator_id)),
+      ...((rewardSubsRes.data || []).map(r => r.creator_id)),
     ];
     const uniqueIds = [...new Set(allCreatorIds)];
 
