@@ -86,28 +86,16 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
 
     setSubmitting(true);
     try {
-      const usernameMatch = tiktokUrl.match(/tiktok\.com\/@([^/]+)/);
-      const tiktokUsername = usernameMatch ? usernameMatch[1] : null;
-
-      if (!tiktokUsername) {
-        toast.error('Could not detect TikTok username from the link.');
-        setSubmitting(false);
-        return;
-      }
-
-      // Verify the submitted video is from the creator's registered TikTok account
+      // Use the creator's registered TikTok account (don't extract username from URL)
       const { data: registeredAccounts } = await supabase
         .rpc('get_user_tiktok_accounts', { p_user_id: user.id });
 
-      if (registeredAccounts && registeredAccounts.length > 0) {
-        const registeredUsernames = registeredAccounts.map(
-          (a: any) => a.tiktok_username?.toLowerCase()
-        );
-        if (!registeredUsernames.includes(tiktokUsername.toLowerCase())) {
-          toast.error(`This video is from @${tiktokUsername}, but your registered TikTok is @${registeredAccounts[0].tiktok_username}. Please submit a video from your own account.`);
-          setSubmitting(false);
-          return;
-        }
+      const tiktokUsername = registeredAccounts?.[0]?.tiktok_username;
+
+      if (!tiktokUsername) {
+        toast.error('No TikTok account linked. Please add your TikTok in settings.');
+        setSubmitting(false);
+        return;
       }
 
       const { data: accountId, error: accountError } = await supabase

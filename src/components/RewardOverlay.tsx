@@ -24,6 +24,8 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, []);
 
   const handleContinue = () => {
