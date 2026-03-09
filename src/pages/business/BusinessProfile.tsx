@@ -24,7 +24,7 @@ interface AdItem {
   cover_image_url: string | null;
   is_active: boolean | null;
   max_earnings: number | null;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
 }
 
 const BusinessProfile: React.FC = () => {
