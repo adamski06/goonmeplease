@@ -16,9 +16,11 @@ import {
 import { Campaign } from '@/types/campaign';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useDeals } from '@/hooks/useDeals';
+import { useRewards } from '@/hooks/useRewards';
 import BottomNav from '@/components/BottomNav';
 import CampaignOverlay from '@/components/CampaignOverlay';
 import DealOverlay from '@/components/DealOverlay';
+import RewardOverlay from '@/components/RewardOverlay';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Discover: React.FC = () => {
