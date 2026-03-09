@@ -634,6 +634,66 @@ const Activity: React.FC = () => {
         </div>
       )}
 
+      {/* Reward submission detail overlay */}
+      {selectedRewardSubmission && (
+        <div className="fixed inset-0 z-40">
+          <div
+            className="absolute inset-0 bg-black/60"
+            style={{
+              opacity: isClosingSubmission ? 0 : 1,
+              transition: 'opacity 0.35s ease-out',
+            }}
+            onClick={() => {
+              if (isClosingSubmission) return;
+              setIsClosingSubmission(true);
+              setTimeout(() => {
+                setSelectedRewardSubmission(null);
+                setIsClosingSubmission(false);
+              }, 400);
+            }}
+          />
+
+          <style>{`
+            @keyframes reward-slide-up {
+              0% { transform: translateY(calc(100% + 92px)); }
+              100% { transform: translateY(0); }
+            }
+            @keyframes reward-slide-down {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(calc(100% + 92px)); }
+            }
+          `}</style>
+
+          <div
+            className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
+            style={{
+              maxHeight: 'calc(100dvh - 148px)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
+              border: '1.5px solid rgba(255,255,255,0.8)',
+              boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+              animation: isClosingSubmission
+                ? 'reward-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
+                : 'reward-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
+              <RewardInActionDetail
+                submission={selectedRewardSubmission}
+                onBack={() => {
+                  if (isClosingSubmission) return;
+                  setIsClosingSubmission(true);
+                  setTimeout(() => {
+                    setSelectedRewardSubmission(null);
+                    setIsClosingSubmission(false);
+                  }, 400);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <BottomNav />
     </div>
   );
