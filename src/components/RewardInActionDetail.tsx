@@ -66,28 +66,13 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
     const fetchStats = async () => {
       setRefreshing(true);
       try {
-        // Use oEmbed to get fresh stats
-        if (submission.tiktok_video_url) {
-          const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(submission.tiktok_video_url)}`;
-          const res = await fetch(oembedUrl);
-          if (res.ok) {
-            const data = await res.json();
-            const freshViews = data.view_count || 0;
-            const freshLikes = data.like_count || 0;
-            if (freshViews > 0) setViews(freshViews);
-            if (freshLikes > 0) setLikes(freshLikes);
-
-            // Update in DB
-            if (freshViews > 0 || freshLikes > 0) {
-              await supabase
-                .from('reward_submissions')
-                .update({
-                  current_views: freshViews > 0 ? freshViews : undefined,
-                  current_likes: freshLikes > 0 ? freshLikes : undefined,
-                })
-                .eq('id', submission.id);
-            }
-          }
+        const { data: statsData } = await supabase.functions.invoke('fetch-tiktok-stats', {
+          body: { reward_submission_ids: [submission.id] },
+        });
+        if (statsData?.results?.[submission.id]) {
+          const r = statsData.results[submission.id];
+          if (r.views > 0) setViews(r.views);
+          if (r.likes > 0) setLikes(r.likes);
         }
       } catch (e) {
         console.error('Failed to fetch stats:', e);
@@ -95,7 +80,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
       setRefreshing(false);
     };
     fetchStats();
-  }, [submission.id, submission.tiktok_video_url]);
+  }, [submission.id]);
 
   const submitHelpRequest = async () => {
     if (!helpMessage.trim()) return;
