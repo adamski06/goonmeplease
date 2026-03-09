@@ -9,9 +9,10 @@ import SubmitDraft from '@/components/SubmitDraft';
 import CampaignOverlay from '@/components/CampaignOverlay';
 import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
 import InActionDetail from '@/components/InActionDetail';
+import RewardInActionDetail, { RewardSubmission } from '@/components/RewardInActionDetail';
 import { Campaign } from '@/types/campaign';
 import { useRecentCampaigns } from '@/hooks/useRecentCampaigns';
-import { ChevronRight, X, Clock, CheckCircle, Send } from 'lucide-react';
+import { ChevronRight, X, Clock, CheckCircle, Send, Gift } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useFavorites } from '@/hooks/useFavorites';
 import { supabase } from '@/integrations/supabase/client';
@@ -95,17 +96,19 @@ const Activity: React.FC = () => {
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
+  const [rewardSubmissions, setRewardSubmissions] = useState<RewardSubmission[]>([]);
   const [dealApplications, setDealApplications] = useState<{ id: string; deal_id: string; status: string; created_at: string; deal_brand: string; deal_title: string; deal_logo: string }[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
+  const [selectedRewardSubmission, setSelectedRewardSubmission] = useState<RewardSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
 
   const fetchActiveSubmissions = useCallback(async () => {
     if (!user) { setSubmissionsLoading(false); return; }
     setSubmissionsLoading(true);
 
-    // Fetch campaign submissions and deal applications in parallel
-    const [submissionsRes, dealsRes] = await Promise.all([
+    // Fetch campaign submissions, deal applications, and reward submissions in parallel
+    const [submissionsRes, dealsRes, rewardsRes] = await Promise.all([
       supabase
         .from('content_submissions')
         .select('id, campaign_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, created_at')
@@ -114,6 +117,11 @@ const Activity: React.FC = () => {
       supabase
         .from('deal_applications')
         .select('id, deal_id, status, created_at')
+        .eq('creator_id', user.id)
+        .order('created_at', { ascending: false }),
+      supabase
+        .from('reward_submissions')
+        .select('id, reward_ad_id, tiktok_video_url, tiktok_video_id, status, current_views, current_likes, coupon_code, created_at')
         .eq('creator_id', user.id)
         .order('created_at', { ascending: false }),
     ]);
@@ -198,6 +206,39 @@ const Activity: React.FC = () => {
       }));
     } else {
       setDealApplications([]);
+    }
+
+    // Process reward submissions
+    const rewardData = rewardsRes.data;
+    if (rewardData && rewardData.length > 0) {
+      const rewardAdIds = [...new Set(rewardData.map(r => r.reward_ad_id))];
+      const { data: rewardAds } = await supabase
+        .from('reward_ads')
+        .select('id, title, brand_name, brand_logo_url, reward_description, views_required')
+        .in('id', rewardAdIds);
+
+      const rewardMap = new Map((rewardAds || []).map(r => [r.id, r]));
+      setRewardSubmissions(rewardData.map(rs => {
+        const ad = rewardMap.get(rs.reward_ad_id);
+        return {
+          id: rs.id,
+          reward_ad_id: rs.reward_ad_id,
+          tiktok_video_url: rs.tiktok_video_url,
+          tiktok_video_id: rs.tiktok_video_id,
+          status: rs.status,
+          current_views: rs.current_views || 0,
+          current_likes: rs.current_likes || 0,
+          created_at: rs.created_at,
+          coupon_code: rs.coupon_code,
+          reward_brand: ad?.brand_name || '',
+          reward_title: ad?.title || '',
+          reward_logo: ad?.brand_logo_url || '',
+          reward_description: ad?.reward_description || '',
+          views_required: ad?.views_required || 0,
+        };
+      }));
+    } else {
+      setRewardSubmissions([]);
     }
 
     setSubmissionsLoading(false);
@@ -296,7 +337,7 @@ const Activity: React.FC = () => {
           <CampaignListSkeleton count={2} />
         </div>
       )}
-      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0) && !activeCampaign && (
+      {!submissionsLoading && (activeSubmissions.length > 0 || dealApplications.length > 0 || rewardSubmissions.length > 0) && !activeCampaign && (
         <div className="px-3 pt-2 space-y-2.5">
           {activeSubmissions.map(sub => (
             <InActionCard key={sub.id} submission={sub} onClick={() => setSelectedSubmission(sub)} />
@@ -344,6 +385,53 @@ const Activity: React.FC = () => {
                   <span className="text-[10px] font-bold text-white font-montserrat">{ds.label}</span>
                 </div>
               </div>
+            );
+          })}
+          {rewardSubmissions.map(rs => {
+            const rewardStatusConfig: Record<string, { label: string; gradient: string; border: string }> = {
+              pending_review: { label: 'Under Review', gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)', border: 'rgba(252,211,77,0.5)' },
+              approved: { label: 'Approved', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
+              denied: { label: 'Denied', gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)', border: 'rgba(252,165,165,0.5)' },
+              completed: { label: 'Completed', gradient: 'linear-gradient(180deg, rgba(124,58,237,0.9) 0%, rgba(109,40,217,0.95) 100%)', border: 'rgba(167,139,250,0.5)' },
+            };
+            const rs_status = rewardStatusConfig[rs.status] || rewardStatusConfig.pending_review;
+            return (
+              <button
+                key={rs.id}
+                onClick={() => setSelectedRewardSubmission(rs)}
+                className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+                }}
+              >
+                <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+                  {rs.reward_logo ? (
+                    <img src={rs.reward_logo} alt={rs.reward_brand} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-lg font-bold text-black/30">{rs.reward_brand[0]}</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-bold text-black font-montserrat truncate block">{rs.reward_brand}</span>
+                  <p className="text-xs text-black/50 font-jakarta line-clamp-1">{rs.reward_title}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <Gift className="h-3 w-3 text-purple-500/60" />
+                    <span className="text-[11px] font-medium text-black/40 font-jakarta">Reward</span>
+                  </div>
+                </div>
+                <div
+                  className="flex items-center gap-1.5 rounded-[14px] px-2.5 py-1 flex-shrink-0"
+                  style={{
+                    background: rs_status.gradient,
+                    border: `1px solid ${rs_status.border}`,
+                    boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <span className="text-[10px] font-bold text-white font-montserrat">{rs_status.label}</span>
+                </div>
+              </button>
             );
           })}
         </div>
@@ -417,7 +505,7 @@ const Activity: React.FC = () => {
         </div>
       )}
 
-      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && dealApplications.length === 0 && (
+      {!submissionsLoading && !activeCampaign && activeSubmissions.length === 0 && dealApplications.length === 0 && rewardSubmissions.length === 0 && (
         <div className="flex items-center justify-center px-6 py-10">
           <p className="text-black/40 font-jakarta text-sm">No active campaigns yet</p>
         </div>
@@ -537,6 +625,66 @@ const Activity: React.FC = () => {
                   setIsClosingSubmission(true);
                   setTimeout(() => {
                     setSelectedSubmission(null);
+                    setIsClosingSubmission(false);
+                  }, 400);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reward submission detail overlay */}
+      {selectedRewardSubmission && (
+        <div className="fixed inset-0 z-40">
+          <div
+            className="absolute inset-0 bg-black/60"
+            style={{
+              opacity: isClosingSubmission ? 0 : 1,
+              transition: 'opacity 0.35s ease-out',
+            }}
+            onClick={() => {
+              if (isClosingSubmission) return;
+              setIsClosingSubmission(true);
+              setTimeout(() => {
+                setSelectedRewardSubmission(null);
+                setIsClosingSubmission(false);
+              }, 400);
+            }}
+          />
+
+          <style>{`
+            @keyframes reward-slide-up {
+              0% { transform: translateY(calc(100% + 92px)); }
+              100% { transform: translateY(0); }
+            }
+            @keyframes reward-slide-down {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(calc(100% + 92px)); }
+            }
+          `}</style>
+
+          <div
+            className="absolute left-3 right-3 bottom-[92px] rounded-[48px] overflow-hidden z-[60]"
+            style={{
+              maxHeight: 'calc(100dvh - 148px)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 100%)',
+              border: '1.5px solid rgba(255,255,255,0.8)',
+              boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+              animation: isClosingSubmission
+                ? 'reward-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
+                : 'reward-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
+              <RewardInActionDetail
+                submission={selectedRewardSubmission}
+                onBack={() => {
+                  if (isClosingSubmission) return;
+                  setIsClosingSubmission(true);
+                  setTimeout(() => {
+                    setSelectedRewardSubmission(null);
                     setIsClosingSubmission(false);
                   }, 400);
                 }}
