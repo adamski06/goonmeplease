@@ -41,7 +41,7 @@ const AdminReviewQueue = () => {
   const { toast } = useToast();
 
   const load = async () => {
-    const [subsRes, appsRes, rewardSubsRes] = await Promise.all([
+    const [subsRes, appsRes, rewardSubsRes, pendingCampaigns, pendingDeals, pendingRewards] = await Promise.all([
       supabase
         .from('content_submissions')
         .select('*, campaigns(title, brand_name, description, cover_image_url, guidelines, category, video_length, product_visibility, total_budget)')
@@ -57,6 +57,9 @@ const AdminReviewQueue = () => {
         .select('*, reward_ads(title, brand_name, description, cover_image_url, guidelines, category, reward_description, views_required)')
         .eq('status', 'pending_review')
         .order('created_at', { ascending: false }),
+      supabase.from('campaigns').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
+      supabase.from('deals').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
+      supabase.from('reward_ads').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
     ]);
 
     const allCreatorIds = [
@@ -66,81 +69,100 @@ const AdminReviewQueue = () => {
     ];
     const uniqueIds = [...new Set(allCreatorIds)];
 
+    // Also fetch business profiles for pending ads
+    const allBusinessIds = [
+      ...((pendingCampaigns.data || []).map(c => c.business_id)),
+      ...((pendingDeals.data || []).map(d => d.business_id)),
+      ...((pendingRewards.data || []).map(r => r.business_id)),
+    ];
+    const uniqueBusinessIds = [...new Set(allBusinessIds)];
+
     let profilesMap: Record<string, any> = {};
     let tiktokMap: Record<string, string> = {};
+    let businessMap: Record<string, any> = {};
+
+    const promises: Promise<any>[] = [];
     if (uniqueIds.length > 0) {
-      const [profRes, tikRes] = await Promise.all([
-        supabase.from('profiles').select('user_id, full_name, avatar_url, username').in('user_id', uniqueIds),
-        supabase.from('tiktok_accounts_safe').select('user_id, tiktok_username').in('user_id', uniqueIds),
-      ]);
-      (profRes.data || []).forEach(p => { profilesMap[p.user_id] = p; });
-      (tikRes.data || []).forEach(t => { if (t.user_id) tiktokMap[t.user_id] = t.tiktok_username || ''; });
+      promises.push(
+        supabase.from('profiles').select('user_id, full_name, avatar_url, username').in('user_id', uniqueIds).then(r => {
+          (r.data || []).forEach(p => { profilesMap[p.user_id] = p; });
+        }),
+        supabase.from('tiktok_accounts_safe').select('user_id, tiktok_username').in('user_id', uniqueIds).then(r => {
+          (r.data || []).forEach(t => { if (t.user_id) tiktokMap[t.user_id] = t.tiktok_username || ''; });
+        }),
+      );
     }
+    if (uniqueBusinessIds.length > 0) {
+      promises.push(
+        supabase.from('business_profiles').select('user_id, company_name, logo_url').in('user_id', uniqueBusinessIds).then(r => {
+          (r.data || []).forEach(b => { businessMap[b.user_id] = b; });
+        }),
+      );
+    }
+    await Promise.all(promises);
 
     const spreadItems: ReviewItem[] = (subsRes.data || []).map(s => ({
-      id: s.id,
-      type: 'spread' as const,
-      status: s.status,
-      creator_id: s.creator_id,
-      creator_name: profilesMap[s.creator_id]?.full_name || profilesMap[s.creator_id]?.username || 'Unknown',
-      creator_avatar: profilesMap[s.creator_id]?.avatar_url || null,
-      creator_tiktok: tiktokMap[s.creator_id] || null,
-      ad_title: (s.campaigns as any)?.title || '–',
-      brand_name: (s.campaigns as any)?.brand_name || '–',
-      tiktok_video_url: s.tiktok_video_url,
-      tiktok_video_id: s.tiktok_video_id,
-      current_views: s.current_views || 0,
-      current_likes: s.current_likes || 0,
-      current_shares: s.current_shares || 0,
-      message: null,
-      created_at: s.created_at,
-      ad: s.campaigns,
-      raw: s,
+      id: s.id, type: 'spread' as const, category: 'submission' as const, status: s.status,
+      creator_id: s.creator_id, creator_name: profilesMap[s.creator_id]?.full_name || profilesMap[s.creator_id]?.username || 'Unknown',
+      creator_avatar: profilesMap[s.creator_id]?.avatar_url || null, creator_tiktok: tiktokMap[s.creator_id] || null,
+      ad_title: (s.campaigns as any)?.title || '–', brand_name: (s.campaigns as any)?.brand_name || '–',
+      tiktok_video_url: s.tiktok_video_url, tiktok_video_id: s.tiktok_video_id,
+      current_views: s.current_views || 0, current_likes: s.current_likes || 0, current_shares: s.current_shares || 0,
+      message: null, created_at: s.created_at, ad: s.campaigns, raw: s,
     }));
 
     const dealItems: ReviewItem[] = (appsRes.data || []).map(a => ({
-      id: a.id,
-      type: 'deal' as const,
-      status: a.status,
-      creator_id: a.creator_id,
-      creator_name: profilesMap[a.creator_id]?.full_name || profilesMap[a.creator_id]?.username || 'Unknown',
-      creator_avatar: profilesMap[a.creator_id]?.avatar_url || null,
-      creator_tiktok: tiktokMap[a.creator_id] || null,
-      ad_title: (a.deals as any)?.title || '–',
-      brand_name: (a.deals as any)?.brand_name || '–',
-      tiktok_video_url: a.tiktok_video_url,
-      tiktok_video_id: a.tiktok_video_id,
-      current_views: a.current_views || 0,
-      current_likes: a.current_likes || 0,
-      current_shares: 0,
-      message: a.message,
-      created_at: a.created_at,
-      ad: a.deals,
-      raw: a,
+      id: a.id, type: 'deal' as const, category: 'submission' as const, status: a.status,
+      creator_id: a.creator_id, creator_name: profilesMap[a.creator_id]?.full_name || profilesMap[a.creator_id]?.username || 'Unknown',
+      creator_avatar: profilesMap[a.creator_id]?.avatar_url || null, creator_tiktok: tiktokMap[a.creator_id] || null,
+      ad_title: (a.deals as any)?.title || '–', brand_name: (a.deals as any)?.brand_name || '–',
+      tiktok_video_url: a.tiktok_video_url, tiktok_video_id: a.tiktok_video_id,
+      current_views: a.current_views || 0, current_likes: a.current_likes || 0, current_shares: 0,
+      message: a.message, created_at: a.created_at, ad: a.deals, raw: a,
     }));
 
     const rewardItems: ReviewItem[] = (rewardSubsRes.data || []).map(r => ({
-      id: r.id,
-      type: 'reward' as const,
-      status: r.status,
-      creator_id: r.creator_id,
-      creator_name: profilesMap[r.creator_id]?.full_name || profilesMap[r.creator_id]?.username || 'Unknown',
-      creator_avatar: profilesMap[r.creator_id]?.avatar_url || null,
-      creator_tiktok: tiktokMap[r.creator_id] || null,
-      ad_title: (r.reward_ads as any)?.title || '–',
-      brand_name: (r.reward_ads as any)?.brand_name || '–',
-      tiktok_video_url: r.tiktok_video_url,
-      tiktok_video_id: r.tiktok_video_id,
-      current_views: r.current_views || 0,
-      current_likes: r.current_likes || 0,
-      current_shares: 0,
-      message: null,
-      created_at: r.created_at,
-      ad: r.reward_ads,
-      raw: r,
+      id: r.id, type: 'reward' as const, category: 'submission' as const, status: r.status,
+      creator_id: r.creator_id, creator_name: profilesMap[r.creator_id]?.full_name || profilesMap[r.creator_id]?.username || 'Unknown',
+      creator_avatar: profilesMap[r.creator_id]?.avatar_url || null, creator_tiktok: tiktokMap[r.creator_id] || null,
+      ad_title: (r.reward_ads as any)?.title || '–', brand_name: (r.reward_ads as any)?.brand_name || '–',
+      tiktok_video_url: r.tiktok_video_url, tiktok_video_id: r.tiktok_video_id,
+      current_views: r.current_views || 0, current_likes: r.current_likes || 0, current_shares: 0,
+      message: null, created_at: r.created_at, ad: r.reward_ads, raw: r,
     }));
 
-    const all = [...spreadItems, ...dealItems, ...rewardItems].sort(
+    // Pending ad items (new ads submitted by businesses)
+    const pendingAdItems: ReviewItem[] = [
+      ...(pendingCampaigns.data || []).map(c => ({
+        id: c.id, type: 'spread' as const, category: 'ad' as const, status: c.status || 'pending',
+        creator_id: c.business_id, creator_name: businessMap[c.business_id]?.company_name || 'Unknown Business',
+        creator_avatar: businessMap[c.business_id]?.logo_url || null, creator_tiktok: null,
+        ad_title: c.title, brand_name: c.brand_name,
+        tiktok_video_url: null, tiktok_video_id: null,
+        current_views: 0, current_likes: 0, current_shares: 0,
+        message: null, created_at: c.created_at, ad: c, raw: c,
+      })),
+      ...(pendingDeals.data || []).map(d => ({
+        id: d.id, type: 'deal' as const, category: 'ad' as const, status: d.status || 'pending',
+        creator_id: d.business_id, creator_name: businessMap[d.business_id]?.company_name || 'Unknown Business',
+        creator_avatar: businessMap[d.business_id]?.logo_url || null, creator_tiktok: null,
+        ad_title: d.title, brand_name: d.brand_name,
+        tiktok_video_url: null, tiktok_video_id: null,
+        current_views: 0, current_likes: 0, current_shares: 0,
+        message: null, created_at: d.created_at, ad: d, raw: d,
+      })),
+      ...(pendingRewards.data || []).map(r => ({
+        id: r.id, type: 'reward' as const, category: 'ad' as const, status: r.status || 'pending',
+        creator_id: r.business_id, creator_name: businessMap[r.business_id]?.company_name || 'Unknown Business',
+        creator_avatar: businessMap[r.business_id]?.logo_url || null, creator_tiktok: null,
+        ad_title: r.title, brand_name: r.brand_name,
+        tiktok_video_url: null, tiktok_video_id: null,
+        current_views: 0, current_likes: 0, current_shares: 0,
+        message: null, created_at: r.created_at, ad: r, raw: r,
+      })),
+    ];
+
+    const all = [...spreadItems, ...dealItems, ...rewardItems, ...pendingAdItems].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
     setItems(all);
