@@ -233,26 +233,48 @@ const AdminReviewQueue = () => {
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to queue
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left: Ad requirements */}
-          <div className="space-y-4">
-            <h2 className="font-montserrat font-semibold text-lg">Ad Requirements</h2>
+        {reviewItem.category === 'ad' ? (
+          /* ---- New Ad Review (single column) ---- */
+          <div className="max-w-2xl space-y-4">
             <Card className="border-border">
               <CardContent className="p-5 space-y-4">
+                <div className="flex items-center gap-3 mb-2">
+                  {reviewItem.creator_avatar ? (
+                    <img src={reviewItem.creator_avatar} alt="" className="h-10 w-10 rounded-full object-cover bg-muted" />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      <Building2 className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-semibold">{reviewItem.creator_name}</span>
+                    <span className="text-xs text-muted-foreground block">Business</span>
+                  </div>
+                  <Badge variant="outline">{reviewItem.type === 'spread' ? 'Spread' : reviewItem.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
+                  <Badge variant="secondary" className="text-amber-600 bg-amber-500/10 border-amber-500/20">New Ad</Badge>
+                </div>
+
                 {ad.cover_image_url && (
-                  <img src={ad.cover_image_url} alt="" className="w-full h-40 object-cover rounded-[4px]" />
+                  <img src={ad.cover_image_url} alt="" className="w-full h-48 object-cover rounded-[4px]" />
                 )}
+
                 <div>
-                  <p className="font-semibold">{reviewItem.ad_title}</p>
+                  <p className="font-semibold text-lg">{reviewItem.ad_title}</p>
                   <p className="text-sm text-muted-foreground mt-1">{reviewItem.brand_name}</p>
                 </div>
+
                 {ad.description && <p className="text-sm">{ad.description}</p>}
+
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   {ad.category && <div><span className="text-muted-foreground">Category:</span> {ad.category}</div>}
                   {ad.video_length && <div><span className="text-muted-foreground">Video Length:</span> {ad.video_length}</div>}
                   {ad.product_visibility && <div><span className="text-muted-foreground">Visibility:</span> {ad.product_visibility}</div>}
-                  {ad.total_budget && <div><span className="text-muted-foreground">Budget:</span> {money(ad.total_budget)}</div>}
+                  {ad.total_budget != null && <div><span className="text-muted-foreground">Budget:</span> {money(ad.total_budget)}</div>}
+                  {ad.max_earnings != null && <div><span className="text-muted-foreground">Max Earnings:</span> {money(ad.max_earnings)}</div>}
+                  {ad.reward_description && <div><span className="text-muted-foreground">Reward:</span> {ad.reward_description}</div>}
+                  {ad.views_required != null && <div><span className="text-muted-foreground">Views Required:</span> {ad.views_required.toLocaleString()}</div>}
                 </div>
+
                 {guidelines.length > 0 && (
                   <div>
                     <p className="text-sm font-medium mb-2">Guidelines</p>
@@ -265,91 +287,140 @@ const AdminReviewQueue = () => {
                     </ul>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Right: Submission */}
-          <div className="space-y-4">
-            <h2 className="font-montserrat font-semibold text-lg">Submission</h2>
-            <Card className="border-border">
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center gap-2 mb-2">
-                  {reviewItem.creator_avatar ? (
-                    <img src={reviewItem.creator_avatar} alt="" className="h-8 w-8 rounded-full object-cover bg-muted" />
-                  ) : (
-                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium">{reviewItem.creator_name}</span>
-                    {reviewItem.creator_tiktok && (
-                      <a href={`https://www.tiktok.com/@${reviewItem.creator_tiktok}`} target="_blank" rel="noreferrer" className="block text-xs text-primary hover:underline">
-                        @{reviewItem.creator_tiktok}
-                      </a>
-                    )}
-                  </div>
-                  <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : reviewItem.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
-                </div>
-
-                {reviewItem.tiktok_video_url ? (
-                  <div className="rounded-[4px] overflow-hidden bg-black aspect-[9/16] max-h-[500px]">
-                    <iframe
-                      src={`https://www.tiktok.com/embed/v2/${reviewItem.tiktok_video_id || ''}`}
-                      className="w-full h-full"
-                      allowFullScreen
-                      allow="encrypted-media"
-                    />
-                  </div>
-                ) : (
-                  <div className="bg-muted rounded-[4px] aspect-[9/16] max-h-[500px] flex items-center justify-center text-muted-foreground text-sm">
-                    No video submitted
-                  </div>
-                )}
-
-                {reviewItem.tiktok_video_url && (
-                  <a href={reviewItem.tiktok_video_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline block">
-                    Open on TikTok ↗
-                  </a>
-                )}
-
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div>
-                    <p className="text-lg font-semibold">{reviewItem.current_views.toLocaleString()}</p>
-                    <p className="text-[11px] text-muted-foreground">Views</p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold">{reviewItem.current_likes.toLocaleString()}</p>
-                    <p className="text-[11px] text-muted-foreground">Likes</p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold">{reviewItem.current_shares.toLocaleString()}</p>
-                    <p className="text-[11px] text-muted-foreground">Shares</p>
-                  </div>
-                </div>
-
-                {reviewItem.message && (
-                  <div>
-                    <p className="text-sm font-medium">Creator message</p>
-                    <p className="text-sm text-muted-foreground">{reviewItem.message}</p>
-                  </div>
-                )}
-
-                <p className="text-xs text-muted-foreground">Submitted {fmt(reviewItem.created_at)}</p>
+                <p className="text-xs text-muted-foreground">Created {fmt(reviewItem.created_at)}</p>
 
                 <div className="flex gap-3 pt-2">
                   <Button className="flex-1" onClick={() => handleAction(reviewItem, 'approve')} disabled={acting}>
-                    <Check className="h-4 w-4 mr-1" /> Approve
+                    <Check className="h-4 w-4 mr-1" /> Launch Ad
                   </Button>
                   <Button variant="destructive" className="flex-1" onClick={() => handleAction(reviewItem, 'deny')} disabled={acting}>
-                    <X className="h-4 w-4 mr-1" /> Deny
+                    <X className="h-4 w-4 mr-1" /> Reject
                   </Button>
                 </div>
               </CardContent>
             </Card>
           </div>
-        </div>
+        ) : (
+          /* ---- Creator Submission Review (two columns) ---- */
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left: Ad requirements */}
+            <div className="space-y-4">
+              <h2 className="font-montserrat font-semibold text-lg">Ad Requirements</h2>
+              <Card className="border-border">
+                <CardContent className="p-5 space-y-4">
+                  {ad.cover_image_url && (
+                    <img src={ad.cover_image_url} alt="" className="w-full h-40 object-cover rounded-[4px]" />
+                  )}
+                  <div>
+                    <p className="font-semibold">{reviewItem.ad_title}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{reviewItem.brand_name}</p>
+                  </div>
+                  {ad.description && <p className="text-sm">{ad.description}</p>}
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    {ad.category && <div><span className="text-muted-foreground">Category:</span> {ad.category}</div>}
+                    {ad.video_length && <div><span className="text-muted-foreground">Video Length:</span> {ad.video_length}</div>}
+                    {ad.product_visibility && <div><span className="text-muted-foreground">Visibility:</span> {ad.product_visibility}</div>}
+                    {ad.total_budget && <div><span className="text-muted-foreground">Budget:</span> {money(ad.total_budget)}</div>}
+                  </div>
+                  {guidelines.length > 0 && (
+                    <div>
+                      <p className="text-sm font-medium mb-2">Guidelines</p>
+                      <ul className="space-y-1">
+                        {guidelines.map((g: string, i: number) => (
+                          <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                            <span className="text-primary shrink-0">•</span> {g}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right: Submission */}
+            <div className="space-y-4">
+              <h2 className="font-montserrat font-semibold text-lg">Submission</h2>
+              <Card className="border-border">
+                <CardContent className="p-5 space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    {reviewItem.creator_avatar ? (
+                      <img src={reviewItem.creator_avatar} alt="" className="h-8 w-8 rounded-full object-cover bg-muted" />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium">{reviewItem.creator_name}</span>
+                      {reviewItem.creator_tiktok && (
+                        <a href={`https://www.tiktok.com/@${reviewItem.creator_tiktok}`} target="_blank" rel="noreferrer" className="block text-xs text-primary hover:underline">
+                          @{reviewItem.creator_tiktok}
+                        </a>
+                      )}
+                    </div>
+                    <Badge variant="outline" className="ml-auto">{reviewItem.type === 'spread' ? 'Spread' : reviewItem.type === 'deal' ? 'Deal' : 'Reward'}</Badge>
+                  </div>
+
+                  {reviewItem.tiktok_video_url ? (
+                    <div className="rounded-[4px] overflow-hidden bg-black aspect-[9/16] max-h-[500px]">
+                      <iframe
+                        src={`https://www.tiktok.com/embed/v2/${reviewItem.tiktok_video_id || ''}`}
+                        className="w-full h-full"
+                        allowFullScreen
+                        allow="encrypted-media"
+                      />
+                    </div>
+                  ) : (
+                    <div className="bg-muted rounded-[4px] aspect-[9/16] max-h-[500px] flex items-center justify-center text-muted-foreground text-sm">
+                      No video submitted
+                    </div>
+                  )}
+
+                  {reviewItem.tiktok_video_url && (
+                    <a href={reviewItem.tiktok_video_url} target="_blank" rel="noreferrer" className="text-xs text-primary underline block">
+                      Open on TikTok ↗
+                    </a>
+                  )}
+
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-lg font-semibold">{reviewItem.current_views.toLocaleString()}</p>
+                      <p className="text-[11px] text-muted-foreground">Views</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold">{reviewItem.current_likes.toLocaleString()}</p>
+                      <p className="text-[11px] text-muted-foreground">Likes</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold">{reviewItem.current_shares.toLocaleString()}</p>
+                      <p className="text-[11px] text-muted-foreground">Shares</p>
+                    </div>
+                  </div>
+
+                  {reviewItem.message && (
+                    <div>
+                      <p className="text-sm font-medium">Creator message</p>
+                      <p className="text-sm text-muted-foreground">{reviewItem.message}</p>
+                    </div>
+                  )}
+
+                  <p className="text-xs text-muted-foreground">Submitted {fmt(reviewItem.created_at)}</p>
+
+                  <div className="flex gap-3 pt-2">
+                    <Button className="flex-1" onClick={() => handleAction(reviewItem, 'approve')} disabled={acting}>
+                      <Check className="h-4 w-4 mr-1" /> Approve
+                    </Button>
+                    <Button variant="destructive" className="flex-1" onClick={() => handleAction(reviewItem, 'deny')} disabled={acting}>
+                      <X className="h-4 w-4 mr-1" /> Deny
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )
       </div>
     );
   }
