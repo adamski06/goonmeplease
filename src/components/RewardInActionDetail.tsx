@@ -58,6 +58,11 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
   const [submittingHelp, setSubmittingHelp] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [couponCode, setCouponCode] = useState(submission.coupon_code || null);
+  const [swipeX, setSwipeX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [revealStarted, setRevealStarted] = useState(false);
+  const swipeStartRef = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const isApproved = submission.status === 'approved' || submission.status === 'completed';
   const viewsProgress = submission.views_required > 0 && isApproved
