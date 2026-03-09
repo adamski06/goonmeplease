@@ -206,6 +206,15 @@ const Discover: React.FC = () => {
             onToggleSave={() => {}}
           />
         )}
+        {selectedReward && (
+          <RewardOverlay
+            reward={selectedReward}
+            isClosing={isClosingReward}
+            onClose={handleBackFromReward}
+            isSaved={false}
+            onToggleSave={() => {}}
+          />
+        )}
 
         <div className="flex flex-col border-b border-black/10 bg-white safe-area-top">
           <div className="flex items-center justify-center px-4 py-3">
