@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 type ReviewItem = {
   id: string;
   type: 'spread' | 'deal' | 'reward';
+  category: 'submission' | 'ad';
   status: string;
   creator_id: string;
   creator_name: string;
