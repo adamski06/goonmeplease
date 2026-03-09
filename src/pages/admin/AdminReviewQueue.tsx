@@ -160,13 +160,19 @@ const AdminReviewQueue = () => {
       };
       if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
       await supabase.from('content_submissions').update(updateData).eq('id', item.id);
-    } else {
+    } else if (item.type === 'deal') {
       const updateData: any = {
         status: action === 'approve' ? 'accepted' : 'denied',
         reviewed_at: now.toISOString(),
       };
       if (action === 'approve') updateData.payout_available_at = payoutDate.toISOString();
       await supabase.from('deal_applications').update(updateData).eq('id', item.id);
+    } else if (item.type === 'reward') {
+      const updateData: any = {
+        status: action === 'approve' ? 'approved' : 'denied',
+        reviewed_at: now.toISOString(),
+      };
+      await supabase.from('reward_submissions').update(updateData).eq('id', item.id);
     }
 
     toast({ title: action === 'approve' ? 'Approved' : 'Denied' });
