@@ -97,6 +97,13 @@ const Discover: React.FC = () => {
     setSelectedDeal(deal);
   };
 
+  const handleSelectReward = (reward: Campaign) => {
+    if (featuredScrollRef.current) {
+      savedScrollPosition.current = featuredScrollRef.current.scrollTop;
+    }
+    setSelectedReward(reward);
+  };
+
   const handleBackFromDetail = () => {
     if (isClosingDetail) return;
     setIsClosingDetail(true);
