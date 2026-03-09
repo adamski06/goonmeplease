@@ -189,7 +189,7 @@ const BusinessProfile: React.FC = () => {
             </button>
 
             {ads.map((ad) => {
-              const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : `/business/deals/${ad.id}`;
+              const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : ad.type === 'deal' ? `/business/deals/${ad.id}` : `/business/rewards/${ad.id}`;
               const isSpread = ad.type === 'spread';
               return (
                 <button
