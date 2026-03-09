@@ -20,5 +20,7 @@ export interface Campaign {
   exampleImages?: string[];
   pool?: number;
   ratePerView?: number;
-  type?: 'spread' | 'deal';
+  type?: 'spread' | 'deal' | 'reward';
+  rewardDescription?: string;
+  viewsRequired?: number;
 }

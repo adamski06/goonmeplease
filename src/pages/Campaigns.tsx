@@ -12,9 +12,11 @@ import {
 } from '@/components/ui/dialog';
 import CampaignCard from '@/components/CampaignCard';
 import DealCard from '@/components/DealCard';
+import RewardCard from '@/components/RewardCard';
 import BottomNav from '@/components/BottomNav';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useDeals } from '@/hooks/useDeals';
+import { useRewards } from '@/hooks/useRewards';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
 const Campaigns: React.FC = () => {
@@ -25,6 +27,7 @@ const Campaigns: React.FC = () => {
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const { campaigns, loading: campaignsLoading, hasMore, loadMore, refresh } = useCampaigns(2);
   const { deals } = useDeals();
+  const { rewards } = useRewards();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Pull-to-refresh state
@@ -34,21 +37,30 @@ const Campaigns: React.FC = () => {
 
   // Interleave deals into campaign feed (1 deal every 3 campaigns)
   const feedItems = React.useMemo(() => {
-    const items: Array<{ type: 'campaign' | 'deal'; data: typeof campaigns[0] }> = [];
+    const items: Array<{ type: 'campaign' | 'deal' | 'reward'; data: typeof campaigns[0] }> = [];
     let dealIdx = 0;
+    let rewardIdx = 0;
     campaigns.forEach((campaign, i) => {
       items.push({ type: 'campaign', data: campaign });
       // Insert a deal after every 3rd campaign
       if ((i + 1) % 3 === 0 && dealIdx < deals.length) {
         items.push({ type: 'deal', data: deals[dealIdx++] });
       }
+      // Insert a reward after every 5th campaign
+      if ((i + 1) % 5 === 0 && rewardIdx < rewards.length) {
+        items.push({ type: 'reward', data: rewards[rewardIdx++] });
+      }
     });
     // Append remaining deals
     while (dealIdx < deals.length) {
       items.push({ type: 'deal', data: deals[dealIdx++] });
     }
+    // Append remaining rewards
+    while (rewardIdx < rewards.length) {
+      items.push({ type: 'reward', data: rewards[rewardIdx++] });
+    }
     return items;
-  }, [campaigns, deals]);
+  }, [campaigns, deals, rewards]);
 
   // Fetch user favorites
   useEffect(() => {
@@ -193,7 +205,14 @@ const Campaigns: React.FC = () => {
           } as React.CSSProperties}
         >
           {feedItems.map((item) =>
-            item.type === 'deal' ? (
+            item.type === 'reward' ? (
+              <RewardCard
+                key={`reward-${item.data.id}`}
+                reward={item.data}
+                isSaved={false}
+                onToggleFavorite={() => {}}
+              />
+            ) : item.type === 'deal' ? (
               <DealCard
                 key={`deal-${item.data.id}`}
                 deal={item.data}

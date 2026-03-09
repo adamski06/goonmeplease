@@ -660,6 +660,82 @@ export type Database = {
         }
         Relationships: []
       }
+      reward_submissions: {
+        Row: {
+          coupon_code: string | null
+          created_at: string
+          creator_id: string
+          current_likes: number | null
+          current_views: number | null
+          id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reward_ad_id: string
+          status: string
+          tiktok_account_id: string
+          tiktok_video_id: string | null
+          tiktok_video_url: string
+          updated_at: string
+        }
+        Insert: {
+          coupon_code?: string | null
+          created_at?: string
+          creator_id: string
+          current_likes?: number | null
+          current_views?: number | null
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reward_ad_id: string
+          status?: string
+          tiktok_account_id: string
+          tiktok_video_id?: string | null
+          tiktok_video_url: string
+          updated_at?: string
+        }
+        Update: {
+          coupon_code?: string | null
+          created_at?: string
+          creator_id?: string
+          current_likes?: number | null
+          current_views?: number | null
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reward_ad_id?: string
+          status?: string
+          tiktok_account_id?: string
+          tiktok_video_id?: string | null
+          tiktok_video_url?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_submissions_reward_ad_id_fkey"
+            columns: ["reward_ad_id"]
+            isOneToOne: false
+            referencedRelation: "reward_ads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reward_submissions_tiktok_account_id_fkey"
+            columns: ["tiktok_account_id"]
+            isOneToOne: false
+            referencedRelation: "tiktok_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reward_submissions_tiktok_account_id_fkey"
+            columns: ["tiktok_account_id"]
+            isOneToOne: false
+            referencedRelation: "tiktok_accounts_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_requests: {
         Row: {
           admin_notes: string | null

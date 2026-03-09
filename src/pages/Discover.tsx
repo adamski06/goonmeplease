@@ -16,9 +16,11 @@ import {
 import { Campaign } from '@/types/campaign';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useDeals } from '@/hooks/useDeals';
+import { useRewards } from '@/hooks/useRewards';
 import BottomNav from '@/components/BottomNav';
 import CampaignOverlay from '@/components/CampaignOverlay';
 import DealOverlay from '@/components/DealOverlay';
+import RewardOverlay from '@/components/RewardOverlay';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 const Discover: React.FC = () => {
@@ -28,8 +30,10 @@ const Discover: React.FC = () => {
   const navigate = useNavigate();
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Campaign | null>(null);
+  const [selectedReward, setSelectedReward] = useState<Campaign | null>(null);
   const [isClosingDetail, setIsClosingDetail] = useState(false);
   const [isClosingDeal, setIsClosingDeal] = useState(false);
+  const [isClosingReward, setIsClosingReward] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,6 +41,7 @@ const Discover: React.FC = () => {
   const savedScrollPosition = useRef<number>(0);
   const { campaigns, loading: campaignsLoading, hasMore, loadMore } = useCampaigns();
   const { deals } = useDeals();
+  const { rewards } = useRewards();
 
   const filteredCampaigns = searchQuery.trim()
     ? campaigns.filter(c =>
@@ -54,11 +59,20 @@ const Discover: React.FC = () => {
       )
     : deals;
 
+  const filteredRewards = searchQuery.trim()
+    ? rewards.filter(r =>
+        r.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : rewards;
+
   // Shuffle campaigns and deals together, stable per content set
   const shuffledItems = useMemo(() => {
-    const allItems: (Campaign & { _kind: 'spread' | 'deal' })[] = [
+    const allItems: (Campaign & { _kind: 'spread' | 'deal' | 'reward' })[] = [
       ...filteredCampaigns.map(c => ({ ...c, _kind: 'spread' as const })),
       ...filteredDeals.map(d => ({ ...d, _kind: 'deal' as const })),
+      ...filteredRewards.map(r => ({ ...r, _kind: 'reward' as const })),
     ];
     // Fisher-Yates shuffle with a seed based on ids for stability
     for (let i = allItems.length - 1; i > 0; i--) {
@@ -66,7 +80,7 @@ const Discover: React.FC = () => {
       [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
     }
     return allItems;
-  }, [filteredCampaigns, filteredDeals]);
+  }, [filteredCampaigns, filteredDeals, filteredRewards]);
 
   const handleSelectCampaign = (campaign: Campaign) => {
     if (featuredScrollRef.current) {
@@ -81,6 +95,13 @@ const Discover: React.FC = () => {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
     setSelectedDeal(deal);
+  };
+
+  const handleSelectReward = (reward: Campaign) => {
+    if (featuredScrollRef.current) {
+      savedScrollPosition.current = featuredScrollRef.current.scrollTop;
+    }
+    setSelectedReward(reward);
   };
 
   const handleBackFromDetail = () => {
@@ -103,6 +124,15 @@ const Discover: React.FC = () => {
     setTimeout(() => {
       setSelectedDeal(null);
       setIsClosingDeal(false);
+    }, 400);
+  };
+
+  const handleBackFromReward = () => {
+    if (isClosingReward) return;
+    setIsClosingReward(true);
+    setTimeout(() => {
+      setSelectedReward(null);
+      setIsClosingReward(false);
     }, 400);
   };
 
@@ -176,6 +206,15 @@ const Discover: React.FC = () => {
             onToggleSave={() => {}}
           />
         )}
+        {selectedReward && (
+          <RewardOverlay
+            reward={selectedReward}
+            isClosing={isClosingReward}
+            onClose={handleBackFromReward}
+            isSaved={false}
+            onToggleSave={() => {}}
+          />
+        )}
 
         <div className="flex flex-col border-b border-black/10 bg-white safe-area-top">
           <div className="flex items-center justify-center px-4 py-3">
@@ -231,11 +270,16 @@ const Discover: React.FC = () => {
               <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                 {shuffledItems.map((item) => {
                   const isDeal = item._kind === 'deal';
-                  const rate = isDeal ? item.ratePerView : (item.tiers[0]?.rate ?? item.ratePerView ?? 0.5);
+                  const isReward = item._kind === 'reward';
+                  const rate = isDeal ? item.ratePerView : isReward ? null : (item.tiers[0]?.rate ?? item.ratePerView ?? 0.5);
+                  const badgeLabel = isReward ? 'REWARD' : isDeal ? 'DEAL' : 'SPREAD';
+                  const badgeStyle = isReward
+                    ? { background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)', borderColor: 'rgba(167,139,250,0.4)' }
+                    : { background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' };
                   return (
                     <div
                       key={item.id}
-                      onClick={() => isDeal ? handleSelectDeal(item) : handleSelectCampaign(item)}
+                      onClick={() => isReward ? handleSelectReward(item) : isDeal ? handleSelectDeal(item) : handleSelectCampaign(item)}
                       className="relative overflow-hidden w-full rounded-[28px] aspect-[9/14] select-none"
                       style={{ WebkitUserDrag: 'none', touchAction: 'pan-y' } as React.CSSProperties}
                     >
@@ -247,8 +291,8 @@ const Discover: React.FC = () => {
                           {item.logo && <img src={item.logo} alt={item.brand} className="w-full h-full object-cover pointer-events-none" draggable={false} />}
                         </div>
                         <span className="text-sm font-medium text-white font-montserrat drop-shadow-md flex-1 truncate">{item.brand}</span>
-                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' }}>
-                          <span className="text-[9px] font-bold text-white font-montserrat">{isDeal ? 'DEAL' : 'SPREAD'}</span>
+                        <div className="rounded-[12px] px-2 py-1 flex items-center border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] shrink-0" style={badgeStyle}>
+                          <span className="text-[9px] font-bold text-white font-montserrat">{badgeLabel}</span>
                         </div>
                       </div>
                       <div className="absolute bottom-1.5 left-1.5 right-1.5 rounded-[22px] px-2.5 pt-2 pb-2 flex flex-col gap-1.5" style={cardBottomPanel}>
@@ -256,14 +300,22 @@ const Discover: React.FC = () => {
                           {item.description}
                         </p>
                         <div className="flex items-center gap-1.5">
-                          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                            <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(item.maxEarnings))}` : `${Math.floor(convert(item.maxEarnings))} ${symbol}`}</span>
-                          </div>
-                          {rate != null && (
-                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(rate))}` : `${Math.floor(convert(rate))} ${symbol}`}</span>
-                              <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
+                          {isReward ? (
+                            <div className="bg-gradient-to-b from-purple-600 to-purple-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-purple-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                              <span className="text-xs font-bold text-white font-montserrat">{(item.viewsRequired || 0).toLocaleString()} views</span>
                             </div>
+                          ) : (
+                            <>
+                              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                                <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(item.maxEarnings))}` : `${Math.floor(convert(item.maxEarnings))} ${symbol}`}</span>
+                              </div>
+                              {rate != null && (
+                                <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                                  <span className="text-xs font-bold text-white font-montserrat">{currencyInfo.symbolBefore ? `${symbol}${Math.floor(convert(rate))}` : `${Math.floor(convert(rate))} ${symbol}`}</span>
+                                  <span className="text-[9px] font-semibold text-white/80 font-montserrat">/1k</span>
+                                </div>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
