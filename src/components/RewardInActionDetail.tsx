@@ -85,6 +85,27 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
     fetchStats();
   }, [submission.id]);
 
+  const claimReward = async () => {
+    setClaiming(true);
+    try {
+      const { data, error } = await supabase.rpc('claim_reward_coupon', {
+        p_submission_id: submission.id,
+      });
+      if (error) throw error;
+      setCouponCode(data as string);
+      toast.success('🎉 Reward claimed! Your coupon code is ready.');
+    } catch (e: any) {
+      console.error(e);
+      const msg = e?.message || '';
+      if (msg.includes('No coupon codes available')) {
+        toast.error('No coupon codes available right now. Please contact the brand.');
+      } else {
+        toast.error('Failed to claim reward. Please try again.');
+      }
+    }
+    setClaiming(false);
+  };
+
   const submitHelpRequest = async () => {
     if (!helpMessage.trim()) return;
     setSubmittingHelp(true);
