@@ -12,7 +12,7 @@ interface EmbedData {
   cover_image_url: string | null;
   max_earnings: number | null;
   description: string | null;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   rate_display: string;
 }
 
