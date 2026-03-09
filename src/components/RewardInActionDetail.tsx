@@ -278,25 +278,64 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
               <p className="text-lg font-bold text-purple-700 font-montserrat tracking-wider">{couponCode}</p>
             </div>
           ) : goalReached ? (
-            <button
-              onClick={claimReward}
-              disabled={claiming}
-              className="w-full py-3.5 rounded-full text-center font-semibold text-sm transition-all active:scale-[0.97] disabled:opacity-60"
-              style={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                color: 'hsl(270, 60%, 40%)',
-              }}
-            >
-              {claiming ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="h-3.5 w-3.5 border-2 border-purple-400/30 border-t-purple-600 rounded-full animate-spin" />
-                  Claiming...
+            <div className="relative overflow-hidden rounded-full" style={{ height: '48px' }}>
+              {/* Swipe track */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                }}
+              />
+              {/* Shimmer hint */}
+              {!claiming && !revealStarted && (
+                <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+                  <div
+                    className="absolute top-0 bottom-0 w-20"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.12), transparent)',
+                      animation: 'swipeHint 2s ease-in-out infinite',
+                    }}
+                  />
                 </div>
-              ) : (
-                '🎁 Claim Your Reward'
               )}
-            </button>
+              {/* Swipe handle */}
+              <div
+                className="absolute top-1 bottom-1 left-1 flex items-center justify-center rounded-full cursor-grab active:cursor-grabbing transition-all"
+                style={{
+                  width: '40px',
+                  background: 'linear-gradient(180deg, hsl(270, 60%, 55%) 0%, hsl(270, 60%, 40%) 100%)',
+                  boxShadow: '0 2px 8px rgba(124,58,237,0.4)',
+                  transform: `translateX(${swipeX}px)`,
+                  transition: isDragging ? 'none' : 'transform 0.3s ease',
+                }}
+                onTouchStart={handleSwipeStart}
+                onTouchMove={handleSwipeMove}
+                onTouchEnd={handleSwipeEnd}
+                onMouseDown={handleSwipeStart}
+                onMouseMove={handleSwipeMove}
+                onMouseUp={handleSwipeEnd}
+                onMouseLeave={() => isDragging && handleSwipeEnd()}
+              >
+                {claiming ? (
+                  <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <Gift className="h-4 w-4 text-white" />
+                )}
+              </div>
+              {/* Label */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span
+                  className="text-sm font-semibold font-montserrat transition-opacity"
+                  style={{
+                    color: 'hsl(270, 60%, 40%)',
+                    opacity: Math.max(0, 1 - swipeX / 80),
+                  }}
+                >
+                  Swipe to Claim Reward
+                </span>
+              </div>
+            </div>
           ) : (
             <div
               className="w-full py-3 rounded-full text-center"
