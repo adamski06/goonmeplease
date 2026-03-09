@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 
 type ReviewItem = {
   id: string;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
   status: string;
   creator_id: string;
   creator_name: string;
