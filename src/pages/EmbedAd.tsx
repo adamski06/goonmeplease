@@ -49,8 +49,23 @@ const EmbedAd: React.FC = () => {
           .maybeSingle();
         if (deal) {
           setAd({ ...deal, type: 'deal', rate_display: deal.rate_per_view ? `$${(deal.rate_per_view * 1000).toFixed(2)}/1k` : '' });
+        } else {
+          // Try reward_ads
+          const { data: reward } = await supabase
+            .from('reward_ads')
+            .select('id, title, brand_name, brand_logo_url, cover_image_url, description, reward_description, views_required')
+            .eq('id', id)
+            .eq('is_active', true)
+            .maybeSingle();
+          if (reward) {
+            setAd({
+              ...reward,
+              type: 'reward',
+              max_earnings: null,
+              rate_display: reward.views_required > 0 ? `${reward.views_required.toLocaleString()} views` : 'Just post',
+            });
+          }
         }
-      }
       setLoading(false);
     };
     load();

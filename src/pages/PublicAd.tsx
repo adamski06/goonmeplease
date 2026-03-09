@@ -90,8 +90,35 @@ const PublicAd: React.FC = () => {
             .eq('user_id', deal.business_id)
             .maybeSingle();
           if (biz) setBusiness(biz);
+        } else {
+          // Try reward_ads
+          const { data: reward } = await supabase
+            .from('reward_ads')
+            .select('id, title, brand_name, brand_logo_url, description, cover_image_url, guidelines, category, business_id, reward_description, views_required')
+            .eq('id', id)
+            .eq('is_active', true)
+            .maybeSingle();
+
+          if (reward) {
+            setAd({
+              ...reward,
+              type: 'reward' as const,
+              rate_display: reward.views_required > 0 ? `${reward.views_required.toLocaleString()} views` : 'Just post',
+              max_earnings: null,
+              total_budget: null,
+              video_length: null,
+              reward_description: reward.reward_description,
+              views_required: reward.views_required,
+            });
+
+            const { data: biz } = await supabase
+              .from('business_profiles')
+              .select('company_name, logo_url, website, description, industry')
+              .eq('user_id', reward.business_id)
+              .maybeSingle();
+            if (biz) setBusiness(biz);
+          }
         }
-      }
 
       setLoading(false);
     };
