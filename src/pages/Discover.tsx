@@ -127,6 +127,15 @@ const Discover: React.FC = () => {
     }, 400);
   };
 
+  const handleBackFromReward = () => {
+    if (isClosingReward) return;
+    setIsClosingReward(true);
+    setTimeout(() => {
+      setSelectedReward(null);
+      setIsClosingReward(false);
+    }, 400);
+  };
+
   useEffect(() => {
     if (user) {
       const fetchFavorites = async () => {
