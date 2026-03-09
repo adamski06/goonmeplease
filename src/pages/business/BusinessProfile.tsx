@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Pencil, ExternalLink, Plus, Megaphone, Handshake } from 'lucide-react';
+import { Pencil, ExternalLink, Plus, Megaphone, Handshake, Gift } from 'lucide-react';
 import ProfileOnboardingChat from '@/components/business/ProfileOnboardingChat';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
 
@@ -24,7 +24,7 @@ interface AdItem {
   cover_image_url: string | null;
   is_active: boolean | null;
   max_earnings: number | null;
-  type: 'spread' | 'deal';
+  type: 'spread' | 'deal' | 'reward';
 }
 
 const BusinessProfile: React.FC = () => {
@@ -42,17 +42,19 @@ const BusinessProfile: React.FC = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const [profileRes, campaignsRes, dealsRes] = await Promise.all([
+    const [profileRes, campaignsRes, dealsRes, rewardsRes] = await Promise.all([
       supabase.from('business_profiles').select('company_name, description, website, logo_url, industry, target_audience, brand_values, onboarding_complete').eq('user_id', user.id).maybeSingle(),
       supabase.from('campaigns').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
       supabase.from('deals').select('id, title, brand_name, cover_image_url, is_active, max_earnings').eq('business_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('reward_ads').select('id, title, brand_name, cover_image_url, is_active').eq('business_id', user.id).order('created_at', { ascending: false }),
     ]);
 
     if (profileRes.data) setProfile(profileRes.data);
 
     const spreadAds: AdItem[] = (campaignsRes.data || []).map(c => ({ ...c, type: 'spread' as const }));
     const dealAds: AdItem[] = (dealsRes.data || []).map(d => ({ ...d, type: 'deal' as const }));
-    const allAds = [...spreadAds, ...dealAds].sort(() => 0); // preserve creation order interleaved
+    const rewardAds: AdItem[] = (rewardsRes.data || []).map(r => ({ ...r, max_earnings: null, type: 'reward' as const }));
+    const allAds = [...spreadAds, ...dealAds, ...rewardAds].sort(() => 0);
     setAds(allAds);
 
     if (spreadAds.length > 0) {
@@ -187,7 +189,7 @@ const BusinessProfile: React.FC = () => {
             </button>
 
             {ads.map((ad) => {
-              const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : `/business/deals/${ad.id}`;
+              const path = ad.type === 'spread' ? `/business/campaigns/${ad.id}` : ad.type === 'deal' ? `/business/deals/${ad.id}` : `/business/rewards/${ad.id}`;
               const isSpread = ad.type === 'spread';
               return (
                 <button
@@ -230,15 +232,19 @@ const BusinessProfile: React.FC = () => {
                       <span
                         className="shrink-0 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(59,130,246,0.32) 0%, rgba(37,99,235,0.22) 100%)',
-                          border: '1px solid rgba(59,130,246,0.45)',
+                          background: ad.type === 'reward'
+                            ? 'linear-gradient(135deg, rgba(168,85,247,0.32) 0%, rgba(139,92,246,0.22) 100%)'
+                            : 'linear-gradient(135deg, rgba(59,130,246,0.32) 0%, rgba(37,99,235,0.22) 100%)',
+                          border: ad.type === 'reward'
+                            ? '1px solid rgba(168,85,247,0.45)'
+                            : '1px solid rgba(59,130,246,0.45)',
                           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55)',
-                          color: 'rgb(29,78,216)',
+                          color: ad.type === 'reward' ? 'rgb(126,34,206)' : 'rgb(29,78,216)',
                           backdropFilter: 'blur(6px)',
                         }}
                       >
-                        {isSpread ? <Megaphone className="h-2.5 w-2.5" /> : <Handshake className="h-2.5 w-2.5" />}
-                        {isSpread ? 'Spread' : 'Deal'}
+                        {ad.type === 'spread' ? <Megaphone className="h-2.5 w-2.5" /> : ad.type === 'deal' ? <Handshake className="h-2.5 w-2.5" /> : <Gift className="h-2.5 w-2.5" />}
+                        {ad.type === 'spread' ? 'Spread' : ad.type === 'deal' ? 'Deal' : 'Reward'}
                       </span>
                     </div>
 

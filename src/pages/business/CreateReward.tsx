@@ -189,7 +189,7 @@ const CreateReward: React.FC = () => {
       // If setup fails, still navigate — the reward is created, card can be added later
       console.error('Stripe setup error:', err);
       toast({ title: 'Reward ad launched!', description: 'Note: Payment method setup skipped. You can add it later.' });
-      navigate('/business/rewards');
+      navigate(`/business/rewards/${rewardAd.id}`);
     }
   };
 
