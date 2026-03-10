@@ -63,7 +63,7 @@ const lazyRetry = (importFn: () => Promise<any>) =>
   );
 
 // Lazy-loaded pages
-const Auth = lazyRetry(() => import("./pages/Auth"));
+const Auth = lazyRetry(() => import("./pages/Auth")); // Still needed for /user/auth
 const UserLayout = lazyRetry(() => import("./components/UserLayout"));
 const CampaignDetail = lazyRetry(() => import("./pages/CampaignDetail"));
 const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
