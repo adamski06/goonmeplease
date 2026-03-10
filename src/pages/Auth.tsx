@@ -53,6 +53,8 @@ const Auth: React.FC = () => {
   const [showMethodSheet, setShowMethodSheet] = useState(false);
   const [isOAuthUser, setIsOAuthUser] = useState(false);
   const emailSignupInProgress = React.useRef(false);
+  // Gate: don't show auth UI until we've confirmed user needs it
+  const [authCheckDone, setAuthCheckDone] = useState(false);
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -61,38 +63,51 @@ const Auth: React.FC = () => {
 
   // Detect returning OAuth users who need onboarding
   useEffect(() => {
-    if (!loading && user) {
-      // If email signup is in progress, let handleCredentialsNext manage the flow
-      if (emailSignupInProgress.current) return;
-      // If we're mid-signup flow (email), don't interfere
-      if (isSignUp && signUpStep !== 'credentials') return;
+    if (loading) return;
 
-      // Check if this user needs onboarding (new OAuth user with no username)
-      const checkOnboarding = async () => {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('username')
-          .eq('user_id', user.id)
-          .maybeSingle();
-
-        if (!profile?.username) {
-          // New user (OAuth or otherwise) — show TikTok onboarding
-          const provider = user.app_metadata?.provider;
-          const oauthUser = provider && provider !== 'email';
-          setIsOAuthUser(!!oauthUser);
-          setNewUserId(user.id);
-          setIsSignUp(true);
-          setSignUpStep('tiktok');
-          setAuthView('signup');
-          return;
-        }
-
-        // Existing user with profile — always redirect
-        checkCreatorRole();
-      };
-
-      checkOnboarding();
+    if (!user) {
+      // No user — show auth UI
+      setAuthCheckDone(true);
+      return;
     }
+
+    // If email signup is in progress, let handleCredentialsNext manage the flow
+    if (emailSignupInProgress.current) {
+      setAuthCheckDone(true);
+      return;
+    }
+    // If we're mid-signup flow (email), don't interfere
+    if (isSignUp && signUpStep !== 'credentials') {
+      setAuthCheckDone(true);
+      return;
+    }
+
+    // Check if this user needs onboarding (new OAuth user with no username)
+    const checkOnboarding = async () => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!profile?.username) {
+        // New user (OAuth or otherwise) — show TikTok onboarding
+        const provider = user.app_metadata?.provider;
+        const oauthUser = provider && provider !== 'email';
+        setIsOAuthUser(!!oauthUser);
+        setNewUserId(user.id);
+        setIsSignUp(true);
+        setSignUpStep('tiktok');
+        setAuthView('signup');
+        setAuthCheckDone(true);
+        return;
+      }
+
+      // Existing user with profile — redirect (don't show auth UI at all)
+      checkCreatorRole();
+    };
+
+    checkOnboarding();
   }, [user, loading]);
 
   const checkCreatorRole = async () => {
@@ -197,7 +212,8 @@ const Auth: React.FC = () => {
     navigate('/user');
   };
 
-  if (loading) {
+  // Show loader while auth is initializing OR while checking if user should be redirected
+  if (loading || !authCheckDone) {
     return <JarlaLoader />;
   }
 
