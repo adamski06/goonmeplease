@@ -7,6 +7,7 @@ const DEFAULT_BATCH_SIZE = 6;
 interface UseCampaignsReturn {
   campaigns: Campaign[];
   loading: boolean;
+  initialLoadComplete: boolean;
   hasMore: boolean;
   loadMore: () => void;
   refresh: () => Promise<void>;
