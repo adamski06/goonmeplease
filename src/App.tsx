@@ -172,7 +172,7 @@ const App = () => (
                   <Route path="creators/:userId" element={<AdminCreatorDetail />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
-                <Route path="/" element={<Auth />} />
+                <Route path="/" element={<RootRoute />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
