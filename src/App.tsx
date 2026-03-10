@@ -13,11 +13,12 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import jarlaLogoSrc from "@/assets/jarla-logo.png";
 
 /**
- * Lightweight root route: checks auth session immediately.
- * Logged in → redirect to /user (skips Auth entirely, no flash).
- * Not logged in → render Auth page.
+ * Lightweight root gate: checks auth immediately.
+ * Logged in → redirect to /user (no Auth flash).
+ * Loading → black screen (no spinner).
+ * Not logged in → renders children (Auth page).
  */
-const RootRoute = () => {
+const RootGate = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -28,8 +29,7 @@ const RootRoute = () => {
     return <Navigate to="/user" replace />;
   }
 
-  // Not logged in — Auth is already lazy-loaded below
-  return null; // Will be caught by the route element below
+  return <>{children}</>;
 };
 
 const BusinessLoader = () => (
