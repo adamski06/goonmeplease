@@ -131,7 +131,7 @@ const EmbedAd: React.FC = () => {
           )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
-          <img src={jarlaLogo} alt="Jarla" style={{ height: 10 }} />
+          <img src={jarlaLogo} alt="Jarla" style={{ height: 10, filter: 'invert(1)' }} />
           <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.15)' }}>Powered by Jarla</span>
         </div>
       </div>
