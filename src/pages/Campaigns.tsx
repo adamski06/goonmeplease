@@ -266,7 +266,7 @@ const Campaigns: React.FC = () => {
               `}</style>
             </div>
           )}
-          {!campaignsLoading && campaigns.length === 0 && (
+          {!campaignsLoading && campaigns.length === 0 && feedItems.length === 0 && (
             <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
               <div className="text-white/40">No campaigns available</div>
             </div>

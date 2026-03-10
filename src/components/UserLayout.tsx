@@ -22,7 +22,8 @@ const UserLayout: React.FC = () => {
   const ready = !loading;
 
   if (!ready) {
-    return <JarlaLoader />;
+    // Blank screen — Suspense fallback already showed the loader
+    return <div className="h-screen w-screen bg-black" />;
   }
 
   if (!isMobile) {
