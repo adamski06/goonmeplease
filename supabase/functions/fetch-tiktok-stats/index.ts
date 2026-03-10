@@ -52,6 +52,28 @@ serve(async (req) => {
   }
 
   try {
+    // Authenticate the caller
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json();
     const { submission_ids, reward_submission_ids } = body;
 
@@ -65,19 +87,29 @@ serve(async (req) => {
       });
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    // Check if the user is an admin
+    const { data: userRoles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+    const isAdmin = userRoles?.some((r: any) => r.role === "admin");
 
     const results: Record<string, { views: number; likes: number; shares: number; earnings: number }> = {};
 
     // --- Handle spread/content submissions ---
     if (hasSpread) {
-      const { data: submissions, error: fetchError } = await supabase
+      // Fetch submissions and verify ownership
+      let query = supabase
         .from("content_submissions")
-        .select("id, tiktok_video_url, tiktok_video_id, campaign_id")
+        .select("id, tiktok_video_url, tiktok_video_id, campaign_id, creator_id")
         .in("id", submission_ids);
 
+      // Non-admins can only fetch their own submissions
+      if (!isAdmin) {
+        query = query.eq("creator_id", user.id);
+      }
+
+      const { data: submissions, error: fetchError } = await query;
       if (fetchError) throw fetchError;
 
       for (const sub of submissions || []) {
@@ -114,11 +146,17 @@ serve(async (req) => {
 
     // --- Handle reward submissions ---
     if (hasReward) {
-      const { data: rewardSubs, error: rewardError } = await supabase
+      let rewardQuery = supabase
         .from("reward_submissions")
-        .select("id, tiktok_video_url, tiktok_video_id, reward_ad_id")
+        .select("id, tiktok_video_url, tiktok_video_id, reward_ad_id, creator_id")
         .in("id", reward_submission_ids);
 
+      // Non-admins can only fetch their own reward submissions
+      if (!isAdmin) {
+        rewardQuery = rewardQuery.eq("creator_id", user.id);
+      }
+
+      const { data: rewardSubs, error: rewardError } = await rewardQuery;
       if (rewardError) throw rewardError;
 
       for (const sub of rewardSubs || []) {
@@ -143,7 +181,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: "An internal error occurred. Please try again." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
