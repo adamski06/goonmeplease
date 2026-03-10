@@ -235,40 +235,9 @@ const Campaigns: React.FC = () => {
               <p className="text-white/20 text-sm font-jakarta">You're all caught up</p>
             </div>
           )}
-          {campaignsLoading && campaigns.length === 0 && (
-            <div className="h-[calc(100dvh-80px)] flex flex-col items-center justify-center snap-start bg-black">
-              <div className="relative h-10 w-[140px] mb-6">
-                <div
-                  className="absolute inset-0 bg-white/20"
-                  style={{
-                    WebkitMaskImage: `url(${jarlaLogo})`,
-                    maskImage: `url(${jarlaLogo})`,
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'center',
-                    maskPosition: 'center',
-                  }}
-                />
-              </div>
-              <div className="w-32 h-[3px] rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
-                <div
-                  className="h-full rounded-full bg-white/20"
-                  style={{ animation: 'expandCenter 0.5s ease-out forwards' }}
-                />
-              </div>
-              <style>{`
-                @keyframes expandCenter {
-                  0% { width: 0%; }
-                  100% { width: 100%; }
-                }
-              `}</style>
-            </div>
-          )}
-          {initialLoadComplete && campaigns.length === 0 && feedItems.length === 0 && (
-            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
-              <div className="text-white/40">No campaigns available</div>
+          {!initialLoadComplete && feedItems.length === 0 && (
+            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start bg-black">
+              <div className="h-5 w-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
             </div>
           )}
         </div>
