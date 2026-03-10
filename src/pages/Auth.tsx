@@ -212,7 +212,8 @@ const Auth: React.FC = () => {
     navigate('/user');
   };
 
-  if (loading) {
+  // Show loader while auth is initializing OR while checking if user should be redirected
+  if (loading || !authCheckDone) {
     return <JarlaLoader />;
   }
 
