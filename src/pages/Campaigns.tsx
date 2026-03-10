@@ -25,7 +25,7 @@ const Campaigns: React.FC = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
-  const { campaigns, loading: campaignsLoading, hasMore, loadMore, refresh } = useCampaigns(2);
+  const { campaigns, loading: campaignsLoading, initialLoadComplete, hasMore, loadMore, refresh } = useCampaigns(2);
   const { deals } = useDeals();
   const { rewards } = useRewards();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -266,7 +266,7 @@ const Campaigns: React.FC = () => {
               `}</style>
             </div>
           )}
-          {!campaignsLoading && campaigns.length === 0 && (
+          {initialLoadComplete && campaigns.length === 0 && feedItems.length === 0 && (
             <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start">
               <div className="text-white/40">No campaigns available</div>
             </div>

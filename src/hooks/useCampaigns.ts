@@ -7,6 +7,7 @@ const DEFAULT_BATCH_SIZE = 6;
 interface UseCampaignsReturn {
   campaigns: Campaign[];
   loading: boolean;
+  initialLoadComplete: boolean;
   hasMore: boolean;
   loadMore: () => void;
   refresh: () => Promise<void>;
@@ -48,6 +49,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const offsetRef = useRef(0);
   const allTiersRef = useRef<any[]>([]);
   const initialLoadDone = useRef(false);
@@ -95,6 +97,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
       setCampaigns(batch);
       offsetRef.current = batch.length;
       setLoading(false);
+      setInitialLoadComplete(true);
     };
     load();
   }, [fetchBatch]);
@@ -122,7 +125,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
     return campaigns.find(c => c.id === id);
   }, [campaigns]);
 
-  return { campaigns, loading, hasMore, loadMore, refresh, getCampaignById };
+  return { campaigns, loading, initialLoadComplete, hasMore, loadMore, refresh, getCampaignById };
 }
 
 // Fetch a single campaign by ID (for deep links, recent, favorites)
