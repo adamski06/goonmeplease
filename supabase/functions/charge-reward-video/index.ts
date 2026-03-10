@@ -15,9 +15,13 @@ serve(async (req) => {
   }
 
   try {
-    const { reward_ad_id, business_id } = await req.json();
-    if (!reward_ad_id || !business_id) {
-      throw new Error("Missing reward_ad_id or business_id");
+    // Authenticate the caller
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const supabaseAdmin = createClient(
@@ -25,6 +29,36 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { reward_ad_id, business_id } = await req.json();
+    if (!reward_ad_id || !business_id) {
+      throw new Error("Missing reward_ad_id or business_id");
+    }
+
+    // Verify the caller is the business owner or an admin
+    const { data: callerRoles } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+
+    const isAdmin = callerRoles?.some((r: any) => r.role === "admin");
+    const isOwner = user.id === business_id;
+
+    if (!isAdmin && !isOwner) {
+      return new Response(JSON.stringify({ error: "Forbidden: not authorized to charge this business" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Get the business's Stripe customer ID
     const { data: bp, error: bpError } = await supabaseAdmin
@@ -53,8 +87,11 @@ serve(async (req) => {
     if (customer.deleted) throw new Error("Stripe customer has been deleted");
 
     const defaultPm = customer.invoice_settings?.default_payment_method;
-    if (!defaultPm) {
-      // Try to find any payment method
+    let paymentMethodId: string;
+
+    if (defaultPm) {
+      paymentMethodId = defaultPm as string;
+    } else {
       const pms = await stripe.paymentMethods.list({
         customer: bp.stripe_customer_id,
         type: "card",
@@ -63,36 +100,14 @@ serve(async (req) => {
       if (pms.data.length === 0) {
         throw new Error("No payment method on file for this business");
       }
-      // Use the first available
-      const paymentMethodId = pms.data[0].id;
-
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: CHARGE_AMOUNT_CENTS,
-        currency: "usd",
-        customer: bp.stripe_customer_id,
-        payment_method: paymentMethodId,
-        off_session: true,
-        confirm: true,
-        description: `Jarla Reward: ${reward?.title || reward_ad_id} — video submission`,
-        metadata: {
-          reward_ad_id,
-          business_id,
-          type: "reward_video_charge",
-        },
-      });
-
-      return new Response(JSON.stringify({ success: true, payment_intent_id: paymentIntent.id }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
+      paymentMethodId = pms.data[0].id;
     }
 
-    // Charge using default payment method
     const paymentIntent = await stripe.paymentIntents.create({
       amount: CHARGE_AMOUNT_CENTS,
       currency: "usd",
       customer: bp.stripe_customer_id,
-      payment_method: defaultPm as string,
+      payment_method: paymentMethodId,
       off_session: true,
       confirm: true,
       description: `Jarla Reward: ${reward?.title || reward_ad_id} — video submission`,
