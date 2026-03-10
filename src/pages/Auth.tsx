@@ -390,10 +390,7 @@ const Auth: React.FC = () => {
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         <div className="w-full max-w-sm">
           {/* Logo */}
-          <div className="flex justify-center mb-8">
             <img src={jarlaLogo} alt="Jarla" className="h-12" />
-              />
-            </div>
           </div>
 
           {isSignUp ? (
