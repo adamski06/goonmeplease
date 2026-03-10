@@ -75,6 +75,62 @@ const AdminSettings = () => {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Launch Screen Download */}
+      <Card className="border-border">
+        <CardContent className="p-6 space-y-4">
+          <div>
+            <label className="text-sm font-medium">App Launch Screen</label>
+            <p className="text-xs text-muted-foreground mb-3">
+              White background with centered Jarla logo. Download as PNG for App Store submission.
+            </p>
+          </div>
+
+          {/* Preview */}
+          <div className="border border-border rounded-xl overflow-hidden w-48 aspect-[9/19.5] flex items-center justify-center bg-white mx-auto">
+            <img src={jarlaLogo} alt="Jarla" className="w-[60%] object-contain" />
+          </div>
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              const canvas = document.createElement('canvas');
+              const size = 2732; // Apple's largest launch screen size
+              canvas.width = size;
+              canvas.height = size;
+              const ctx = canvas.getContext('2d');
+              if (!ctx) return;
+
+              ctx.fillStyle = '#FFFFFF';
+              ctx.fillRect(0, 0, size, size);
+
+              const img = new Image();
+              img.crossOrigin = 'anonymous';
+              img.onload = () => {
+                const logoWidth = size * 0.35;
+                const logoHeight = (img.height / img.width) * logoWidth;
+                const x = (size - logoWidth) / 2;
+                const y = (size - logoHeight) / 2;
+                ctx.drawImage(img, x, y, logoWidth, logoHeight);
+
+                canvas.toBlob((blob) => {
+                  if (!blob) return;
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'LaunchScreen-2732x2732.png';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }, 'image/png');
+              };
+              img.src = jarlaLogo;
+            }}
+          >
+            <Download className="h-4 w-4 mr-1" />
+            Download Launch Screen (2732×2732)
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 };
