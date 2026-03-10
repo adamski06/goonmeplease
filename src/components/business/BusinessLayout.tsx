@@ -67,8 +67,7 @@ const BusinessLayout: React.FC = () => {
         <img
           src={jarlaLogo}
           alt="Jarla"
-          className="h-5"
-          style={{ filter: 'invert(1)' }}
+          className="h-5 dark:invert"
         />
         <div className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
       </div>

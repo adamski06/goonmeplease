@@ -305,7 +305,7 @@ const PublicAd: React.FC = () => {
 
         {/* Footer */}
         <div className="pt-6 border-t border-black/[0.04] flex items-center justify-center gap-2">
-          <img src={jarlaLogo} alt="Jarla" className="h-3.5" style={{ filter: 'invert(1)' }} />
+          <img src={jarlaLogo} alt="Jarla" className="h-3.5 opacity-30" />
           <span className="text-[11px] text-black/20 font-jakarta">Powered by Jarla</span>
         </div>
       </div>
