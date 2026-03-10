@@ -209,21 +209,7 @@ const Auth: React.FC = () => {
       <div className="min-h-screen flex flex-col bg-white relative">
         {/* Logo */}
         <div className="flex justify-center pt-10 pb-10">
-          <div className="relative h-10 w-[140px]">
-            <div
-              className="absolute inset-0 bg-black"
-              style={{
-                WebkitMaskImage: `url(${jarlaLogo})`,
-                maskImage: `url(${jarlaLogo})`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center',
-              }}
-            />
-          </div>
+          <img src={jarlaLogo} alt="Jarla" className="h-10" />
         </div>
 
         {/* Animated image rows */}
