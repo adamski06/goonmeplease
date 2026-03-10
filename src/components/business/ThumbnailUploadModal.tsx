@@ -100,13 +100,15 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
   const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    // Draw at higher resolution for quality
+    // Draw at higher resolution for quality (1080w for 9:14 ≈ 1080x1680)
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = 540;
-    exportCanvas.height = 540 / aspectRatio;
+    exportCanvas.width = 1080;
+    exportCanvas.height = Math.round(1080 / aspectRatio);
     const ctx = exportCanvas.getContext('2d');
     if (!ctx || !imageEl) return;
     const ratio = exportCanvas.width / CANVAS_WIDTH;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(
       imageEl,
       offset.x * ratio,
@@ -117,7 +119,7 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
     exportCanvas.toBlob(
       (blob) => { if (blob) onSave(blob); },
       'image/jpeg',
-      0.9,
+      0.92,
     );
   };
 
