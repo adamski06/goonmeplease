@@ -48,6 +48,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const offsetRef = useRef(0);
   const allTiersRef = useRef<any[]>([]);
   const initialLoadDone = useRef(false);
