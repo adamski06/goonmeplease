@@ -96,6 +96,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
       setCampaigns(batch);
       offsetRef.current = batch.length;
       setLoading(false);
+      setInitialLoadComplete(true);
     };
     load();
   }, [fetchBatch]);
