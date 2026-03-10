@@ -222,7 +222,7 @@ const Auth: React.FC = () => {
   // Welcome screen
   if (authView === 'welcome') {
     return (
-      <div className="min-h-screen flex flex-col bg-white relative">
+      <div className="min-h-screen flex flex-col bg-white relative animate-fade-in" style={{ animationDuration: '0.5s' }}>
         {/* Logo */}
         <div className="flex justify-center pt-10 pb-10">
           <div className="relative h-10 w-[140px]">
