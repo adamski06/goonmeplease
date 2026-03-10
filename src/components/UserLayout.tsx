@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useIsMobile } from '@/hooks/use-mobile';
+
 import Campaigns from '@/pages/Campaigns';
 import Discover from '@/pages/Discover';
 import Activity from '@/pages/Activity';
