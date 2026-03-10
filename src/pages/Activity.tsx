@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate, useLocation } from 'react-router-dom';
