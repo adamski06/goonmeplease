@@ -12,7 +12,7 @@ const TAB_PATHS = ['/user', '/user/discover', '/user/activity', '/user/alerts', 
 
 const UserLayout: React.FC = () => {
   const { loading } = useAuth();
-  const isMobile = useIsMobile();
+  
   const location = useLocation();
 
   // Mount ALL tabs immediately so they preload
