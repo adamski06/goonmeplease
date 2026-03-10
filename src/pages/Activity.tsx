@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -244,9 +244,23 @@ const Activity: React.FC = () => {
     setSubmissionsLoading(false);
   }, [user]);
 
+  // Track if initial fetch is done
+  const initialFetchDone = useRef(false);
+
   useEffect(() => {
-    fetchActiveSubmissions();
+    fetchActiveSubmissions().then(() => {
+      initialFetchDone.current = true;
+    });
   }, [fetchActiveSubmissions]);
+
+  // Refetch submissions when this tab becomes visible (user navigates to /user/activity)
+  const lastPath = useRef(location.pathname);
+  useEffect(() => {
+    if (location.pathname === '/user/activity' && lastPath.current !== '/user/activity' && initialFetchDone.current) {
+      fetchActiveSubmissions();
+    }
+    lastPath.current = location.pathname;
+  }, [location.pathname, fetchActiveSubmissions]);
 
   useEffect(() => {
     const state = location.state as { campaign?: Campaign } | null;

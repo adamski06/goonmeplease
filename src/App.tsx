@@ -5,12 +5,32 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import JarlaLoader from "@/components/JarlaLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import jarlaLogoSrc from "@/assets/jarla-logo.png";
+
+/**
+ * Lightweight root gate: checks auth immediately.
+ * Logged in → redirect to /user (no Auth flash).
+ * Loading → black screen (no spinner).
+ * Not logged in → renders children (Auth page).
+ */
+const RootGate = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="min-h-screen bg-black" />;
+  }
+
+  if (user) {
+    return <Navigate to="/user" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const BusinessLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-5">
@@ -36,7 +56,7 @@ const lazyRetry = (importFn: () => Promise<any>) =>
   );
 
 // Lazy-loaded pages
-const Auth = lazyRetry(() => import("./pages/Auth"));
+const Auth = lazyRetry(() => import("./pages/Auth")); // Still needed for /user/auth
 const UserLayout = lazyRetry(() => import("./components/UserLayout"));
 const CampaignDetail = lazyRetry(() => import("./pages/CampaignDetail"));
 const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
@@ -145,7 +165,7 @@ const App = () => (
                   <Route path="creators/:userId" element={<AdminCreatorDetail />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
-                <Route path="/" element={<Auth />} />
+                <Route path="/" element={<RootGate><Auth /></RootGate>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
