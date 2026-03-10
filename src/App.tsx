@@ -14,15 +14,13 @@ import jarlaLogoSrc from "@/assets/jarla-logo.png";
 
 /**
  * Lightweight root route: checks auth session immediately.
- * If logged in → redirect to /user (skipping Auth page entirely).
- * If not logged in → render Auth page.
- * Shows a simple black screen while checking (no logo/spinner flash).
+ * Logged in → redirect to /user (skips Auth entirely, no flash).
+ * Not logged in → render Auth page.
  */
 const RootRoute = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    // Plain black screen — matches the app's bg, no spinner to avoid flash
     return <div className="min-h-screen bg-black" />;
   }
 
@@ -30,13 +28,8 @@ const RootRoute = () => {
     return <Navigate to="/user" replace />;
   }
 
-  // Not logged in — lazy-load Auth
-  const Auth = lazy(() => import("./pages/Auth"));
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-white" />}>
-      <Auth />
-    </Suspense>
-  );
+  // Not logged in — Auth is already lazy-loaded below
+  return null; // Will be caught by the route element below
 };
 
 const BusinessLoader = () => (
