@@ -125,7 +125,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
     return campaigns.find(c => c.id === id);
   }, [campaigns]);
 
-  return { campaigns, loading, hasMore, loadMore, refresh, getCampaignById };
+  return { campaigns, loading, initialLoadComplete, hasMore, loadMore, refresh, getCampaignById };
 }
 
 // Fetch a single campaign by ID (for deep links, recent, favorites)
