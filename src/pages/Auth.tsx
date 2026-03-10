@@ -212,9 +212,9 @@ const Auth: React.FC = () => {
     navigate('/user');
   };
 
-  // Show loader while auth is initializing OR while checking if user should be redirected
+  // Show white screen while auth is initializing — matches auth page bg for seamless transition
   if (loading || !authCheckDone) {
-    return <JarlaLoader />;
+    return <div className="min-h-screen bg-white" />;
   }
 
   const currentStep = stepNumber(signUpStep);
