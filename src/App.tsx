@@ -5,12 +5,39 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import JarlaLoader from "@/components/JarlaLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import jarlaLogoSrc from "@/assets/jarla-logo.png";
+
+/**
+ * Lightweight root route: checks auth session immediately.
+ * If logged in → redirect to /user (skipping Auth page entirely).
+ * If not logged in → render Auth page.
+ * Shows a simple black screen while checking (no logo/spinner flash).
+ */
+const RootRoute = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    // Plain black screen — matches the app's bg, no spinner to avoid flash
+    return <div className="min-h-screen bg-black" />;
+  }
+
+  if (user) {
+    return <Navigate to="/user" replace />;
+  }
+
+  // Not logged in — lazy-load Auth
+  const Auth = lazy(() => import("./pages/Auth"));
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <Auth />
+    </Suspense>
+  );
+};
 
 const BusinessLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-5">
