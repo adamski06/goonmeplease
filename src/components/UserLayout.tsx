@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
-import JarlaLoader from '@/components/JarlaLoader';
 import Campaigns from '@/pages/Campaigns';
 import Discover from '@/pages/Discover';
 import Activity from '@/pages/Activity';
