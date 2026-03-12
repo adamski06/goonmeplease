@@ -45,7 +45,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}>
       <div
         className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
         style={{
@@ -53,6 +53,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
           transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
+        onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
       />
 
       <style>{`

@@ -27,8 +27,11 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
   const [dragging, setDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const CANVAS_WIDTH = 270;
-  const CANVAS_HEIGHT = CANVAS_WIDTH / aspectRatio;
+  const DISPLAY_WIDTH = 270;
+  const DISPLAY_HEIGHT = DISPLAY_WIDTH / aspectRatio;
+  // Use high-res internal canvas for crisp editing (2x for retina)
+  const CANVAS_WIDTH = DISPLAY_WIDTH * 2;
+  const CANVAS_HEIGHT = DISPLAY_HEIGHT * 2;
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
