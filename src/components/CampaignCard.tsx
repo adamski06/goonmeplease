@@ -113,7 +113,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       setGuideSliding(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 520);
+    }, 380);
   };
 
   const handlePictureClick = () => {
