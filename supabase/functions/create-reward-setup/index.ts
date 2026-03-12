@@ -64,12 +64,7 @@ serve(async (req) => {
       customerId = customer.id;
     }
 
-    // Save stripe_customer_id to business profile
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
+    // Save stripe_customer_id to business profile (reuse adminClient from role check)
 
     await supabaseAdmin
       .from("business_profiles")
