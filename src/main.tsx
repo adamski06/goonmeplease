@@ -3,44 +3,87 @@ import App from "./App.tsx";
 import "./index.css";
 import "./i18n";
 import { initNativeAuthHandler } from "./lib/nativeAuthHandler";
+import { supabase } from "./integrations/supabase/client";
+
+function renderNativeBridgeMessage(message: string) {
+  const root = document.getElementById("root");
+  if (!root) return;
+
+  root.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000">' +
+    `<p style="color:#fff;font-size:14px;font-family:system-ui">${message}</p></div>`;
+}
+
+function extractTokensFromLocation() {
+  const searchParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+
+  const accessToken = searchParams.get("access_token") || hashParams.get("access_token");
+  const refreshToken = searchParams.get("refresh_token") || hashParams.get("refresh_token");
+
+  return { accessToken, refreshToken };
+}
+
+function redirectBackToNative(scheme: string, accessToken: string, refreshToken: string) {
+  const callbackUrl = `${scheme}://auth-callback?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+  window.location.replace(callbackUrl);
+}
 
 /**
- * Handle native OAuth callback redirect.
- * When the published app receives OAuth tokens after Apple Sign In,
- * it redirects to: app.lovable.jarla://auth-callback?access_token=...&refresh_token=...
- * But FIRST, the published app page loads at /user/auth?native=app.lovable.jarla
- * with tokens in the hash fragment. This code intercepts that and redirects to the custom scheme.
+ * Native OAuth bridge for callback page:
+ * - We redirect native users to /user/auth?native=<scheme>
+ * - This page may receive tokens in hash/query OR receive session shortly after init
+ * - We handle both cases before booting the React app
  */
-function handleNativeOAuthRedirect(): boolean {
+async function handleNativeOAuthRedirect(): Promise<boolean> {
   const params = new URLSearchParams(window.location.search);
-  const nativeScheme = params.get('native');
+  const nativeScheme = params.get("native");
 
   if (!nativeScheme) return false;
 
-  // Extract tokens from hash fragment (Supabase/broker puts them there)
-  const hash = window.location.hash.substring(1);
-  const hashParams = new URLSearchParams(hash);
+  renderNativeBridgeMessage("Returning to app…");
 
-  const accessToken = hashParams.get('access_token');
-  const refreshToken = hashParams.get('refresh_token');
-
-  if (accessToken && refreshToken) {
-    // Redirect to the native app via custom URL scheme
-    window.location.href = `${nativeScheme}://auth-callback?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-
-    // Show a simple loading state while redirecting
-    document.getElementById('root')!.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000">' +
-      '<p style="color:#fff;font-size:14px;font-family:system-ui">Returning to app…</p></div>';
+  const directTokens = extractTokensFromLocation();
+  if (directTokens.accessToken && directTokens.refreshToken) {
+    redirectBackToNative(nativeScheme, directTokens.accessToken, directTokens.refreshToken);
     return true;
   }
 
-  return false;
+  const { data: initialSessionData } = await supabase.auth.getSession();
+  if (initialSessionData.session?.access_token && initialSessionData.session?.refresh_token) {
+    redirectBackToNative(nativeScheme, initialSessionData.session.access_token, initialSessionData.session.refresh_token);
+    return true;
+  }
+
+  await new Promise<void>((resolve) => {
+    const timeout = window.setTimeout(() => {
+      subscription?.unsubscribe();
+      resolve();
+    }, 6000);
+
+    let subscription: { unsubscribe: () => void } | null = null;
+
+    const authSub = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.access_token && session?.refresh_token) {
+        window.clearTimeout(timeout);
+        subscription?.unsubscribe();
+        redirectBackToNative(nativeScheme, session.access_token, session.refresh_token);
+        resolve();
+      }
+    });
+
+    subscription = authSub.data.subscription;
+  });
+
+  renderNativeBridgeMessage("Could not return to app automatically. Please close this view and try again.");
+  return true;
 }
 
-// If this is a native OAuth callback on the published site, redirect and stop
-if (!handleNativeOAuthRedirect()) {
-  // Normal app startup
-  initNativeAuthHandler();
-  createRoot(document.getElementById("root")!).render(<App />);
-}
+(async () => {
+  const wasHandled = await handleNativeOAuthRedirect();
+
+  if (!wasHandled) {
+    initNativeAuthHandler();
+    createRoot(document.getElementById("root")!).render(<App />);
+  }
+})();
