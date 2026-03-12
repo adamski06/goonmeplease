@@ -12,6 +12,7 @@ export function useNodeExpand(entityId: string) {
   const openRafRef = useRef<number | null>(null);
 
   const openNode = useCallback(() => {
+    Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {});
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
