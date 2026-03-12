@@ -120,32 +120,21 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
         <div
           className="fixed inset-0 z-50"
           style={{ touchAction: 'none' }}
-          onClick={closeNode}
+          onClick={handleClose}
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="absolute rounded-[48px] overflow-hidden"
+            className="absolute overflow-hidden"
             style={{
-              top: '56px',
-              bottom: '92px',
-              left: '12px',
-              right: '12px',
-              clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-              willChange: 'clip-path',
-              transition: expandReady
-                ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
-                : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+              ...getOverlayStyle(),
               ...nodeStyle,
             }}
           >
             <div
             className="h-full flex flex-col overflow-hidden relative"
-            style={{
-              opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
-            }}
+            style={getContentStyle()}
           >
             {/* X close */}
             <button
