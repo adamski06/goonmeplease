@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Browser } from '@capacitor/browser';
+import { supabase } from '@/integrations/supabase/client';
 import { lovable } from '@/integrations/lovable/index';
-
 /**
  * Handles Apple Sign In across web and native Capacitor environments.
  * Uses Lovable managed auth bridge for both environments.
