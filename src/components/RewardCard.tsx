@@ -310,6 +310,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );

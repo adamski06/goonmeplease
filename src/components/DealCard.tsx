@@ -317,6 +317,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );
