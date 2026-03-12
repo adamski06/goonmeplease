@@ -45,7 +45,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-40">
+    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => e.stopPropagation()}>
       <div
         className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
         style={{
