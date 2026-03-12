@@ -22,7 +22,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   onToggleFavorite,
 }) => {
   const { formatPrice, label, convert } = useCurrency();
-  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(campaign.id);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, setOverlayRef, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(campaign.id);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);

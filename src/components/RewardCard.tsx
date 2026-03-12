@@ -13,7 +13,7 @@ interface RewardCardProps {
 }
 
 const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavorite }) => {
-  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(reward.id);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, setOverlayRef, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(reward.id);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
 
