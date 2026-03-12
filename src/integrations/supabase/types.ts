@@ -843,6 +843,111 @@ export type Database = {
       }
     }
     Views: {
+      business_profiles_public: {
+        Row: {
+          address: string | null
+          brand_values: string | null
+          city: string | null
+          company_name: string | null
+          country: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          industry: string | null
+          logo_url: string | null
+          onboarding_complete: boolean | null
+          organization_number: string | null
+          phone_number: string | null
+          postal_code: string | null
+          target_audience: string | null
+          updated_at: string | null
+          user_id: string | null
+          vat_number: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          brand_values?: string | null
+          city?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          industry?: string | null
+          logo_url?: string | null
+          onboarding_complete?: boolean | null
+          organization_number?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vat_number?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          brand_values?: string | null
+          city?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          industry?: string | null
+          logo_url?: string | null
+          onboarding_complete?: boolean | null
+          organization_number?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          target_audience?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vat_number?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          phone_number: string | null
+          updated_at: string | null
+          user_id: string | null
+          username: string | null
+          username_changed_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          phone_number?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          username?: string | null
+          username_changed_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          phone_number?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          username?: string | null
+          username_changed_at?: string | null
+        }
+        Relationships: []
+      }
       tiktok_accounts_safe: {
         Row: {
           created_at: string | null
