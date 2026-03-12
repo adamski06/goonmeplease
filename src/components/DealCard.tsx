@@ -194,22 +194,29 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
       {/* Expanded overlay */}
       {isExpanded && (
         <div
+          className="fixed inset-0 z-50"
+          style={{ touchAction: 'none' }}
           onClick={closeNode}
-          className="fixed z-50 rounded-[48px] overflow-hidden"
-          style={{
-            top: '56px',
-            bottom: '92px',
-            left: '12px',
-            right: '12px',
-            clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-            willChange: 'clip-path',
-            transition: expandReady
-              ? 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)'
-              : 'clip-path 0.4s cubic-bezier(0.32, 0.72, 0, 1) 0.15s',
-            ...nodeStyle,
-          }}
+          onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
+            onClick={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            className="absolute rounded-[48px] overflow-hidden"
+            style={{
+              top: '56px',
+              bottom: '92px',
+              left: '12px',
+              right: '12px',
+              clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
+              willChange: 'clip-path',
+              transition: expandReady
+                ? 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)'
+                : 'clip-path 0.4s cubic-bezier(0.32, 0.72, 0, 1) 0.15s',
+              ...nodeStyle,
+            }}
+          >
+            <div
             className="h-full flex flex-col overflow-hidden relative"
             style={{
               opacity: expandReady && !isClosing ? 1 : 0,
@@ -234,7 +241,12 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
 
             {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex-1 overflow-y-auto overscroll-contain px-5 py-4"
+              onClick={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
+            >
               {/* How Deals work */}
               <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
                 <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Deals work</h3>
@@ -305,6 +317,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );

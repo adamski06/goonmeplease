@@ -204,8 +204,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       {isExpanded && (
         <div
           onClick={closeNode}
+          onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
           className="fixed z-50 rounded-[48px] overflow-hidden"
           style={{
+            touchAction: 'none',
             top: '56px',
             bottom: '92px',
             left: '12px',
@@ -263,7 +265,12 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 <h2 className="text-base font-bold text-black font-montserrat flex-1">{campaign.brand}</h2>
               </div>
 
-              <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+              <div
+                className="flex-1 overflow-y-auto overscroll-contain px-5 py-4"
+                onClick={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
+                style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
+              >
                 {/* How Spread works */}
                 <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
                   <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Spread works</h3>
