@@ -102,8 +102,8 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
   return (
     <div ref={cardRef} className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
       {/* Ambient color glow */}
-      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.6 : 0 }}>
-        <img src={deal.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[55px] saturate-[1.7]" decoding="async" />
+      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.4 : 0 }}>
+        <img src={deal.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[55px] saturate-[1.4]" decoding="async" />
       </div>
       {/* Card image */}
       <div className="absolute top-14 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
