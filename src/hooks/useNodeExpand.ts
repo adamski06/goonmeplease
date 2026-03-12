@@ -59,7 +59,7 @@ export function useNodeExpand(entityId: string) {
 
   // Style for the card image/node to slide left when overlay opens
   const getCardSlideStyle = useCallback((): React.CSSProperties => {
-    const isOpen = mountReady && !isClosing;
+    const isOpen = isExpanded && mountReady && !isClosing;
     return {
       transform: isOpen ? 'translate3d(-30%,0,0)' : 'translate3d(0,0,0)',
       opacity: isOpen ? 0.4 : 1,
@@ -68,7 +68,7 @@ export function useNodeExpand(entityId: string) {
       WebkitBackfaceVisibility: 'hidden',
       transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.34s ease',
     };
-  }, [mountReady, isClosing]);
+  }, [isExpanded, mountReady, isClosing]);
 
   const getContentStyle = useCallback((): React.CSSProperties => {
     const isVisible = mountReady && !isClosing;
