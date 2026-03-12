@@ -17,7 +17,7 @@ interface DealCardProps {
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
-  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(deal.id);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(deal.id);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
 
@@ -88,7 +88,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
       {/* Card image */}
-      <div className="absolute top-14 left-3 right-3 bottom-3">
+      <div className="absolute top-14 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
           onClick={openNode}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
@@ -105,9 +105,8 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
         className={`absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden ${isClosing ? 'z-[60]' : 'z-10'}`}
         style={{
           height: '180px',
-          opacity: isClosing ? 1 : isExpanded ? 0 : 1,
-          transition: isClosing ? 'opacity 0.35s ease-out 0.15s' : 'none',
           pointerEvents: isExpanded ? 'none' : 'auto',
+          ...getCardSlideStyle(),
           ...nodeStyle,
         }}
       >

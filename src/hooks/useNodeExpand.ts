@@ -11,7 +11,6 @@ export function useNodeExpand(entityId: string) {
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
-    // Mount off-screen first, then slide in on next frame
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setMountReady(true);
@@ -49,6 +48,16 @@ export function useNodeExpand(entityId: string) {
     };
   }, [mountReady, isClosing]);
 
+  // Style for the card image/node to slide left when overlay opens
+  const getCardSlideStyle = useCallback((): React.CSSProperties => {
+    const isOpen = mountReady && !isClosing;
+    return {
+      transform: isOpen ? 'translateX(-30%)' : 'translateX(0)',
+      opacity: isOpen ? 0.4 : 1,
+      transition: 'transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.28s ease',
+    };
+  }, [mountReady, isClosing]);
+
   const getContentStyle = useCallback((): React.CSSProperties => {
     return { opacity: 1 };
   }, []);
@@ -60,6 +69,7 @@ export function useNodeExpand(entityId: string) {
     openNode,
     closeNode,
     getOverlayStyle,
+    getCardSlideStyle,
     getContentStyle,
   };
 }
