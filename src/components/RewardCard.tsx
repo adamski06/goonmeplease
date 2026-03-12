@@ -4,6 +4,7 @@ import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import SubmitReward from '@/components/SubmitReward';
+import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 
 interface RewardCardProps {
   reward: Campaign;
@@ -40,6 +41,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
     setInitClip(getClipInset());
     setIsExpanded(true);
     setExpandReady(false);
+    addRecentCampaign(reward.id, 'reward');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setExpandReady(true);

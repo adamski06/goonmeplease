@@ -87,7 +87,7 @@ const Discover: React.FC = () => {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
     setSelectedCampaign(campaign);
-    addRecentCampaign(campaign.id);
+    addRecentCampaign(campaign.id, 'spread');
   };
 
   const handleSelectDeal = (deal: Campaign) => {
@@ -102,6 +102,7 @@ const Discover: React.FC = () => {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
     setSelectedReward(reward);
+    addRecentCampaign(reward.id, 'reward');
   };
 
   const handleBackFromDetail = () => {
