@@ -79,8 +79,8 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
   return (
     <div ref={cardRef} className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
       {/* Ambient color glow - concentrated around card edges */}
-      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.5 : 0 }}>
-        <img src={reward.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[60px] saturate-150" decoding="async" />
+      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.7 : 0 }}>
+        <img src={reward.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[50px] saturate-200" decoding="async" />
       </div>
       {/* Card image */}
       <div className="absolute top-14 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
