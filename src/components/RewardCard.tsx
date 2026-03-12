@@ -257,7 +257,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
               }}
             >
-              <SubmitReward reward={reward} onBack={handleBackFromSubmit} onClose={closeNode} />
+              <SubmitReward reward={reward} onBack={handleBackFromSubmit} onClose={handleClose} />
             </div>
           </div>
         </div>
