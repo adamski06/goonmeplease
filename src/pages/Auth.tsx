@@ -252,7 +252,7 @@ const Auth: React.FC = () => {
         </div>
 
         {/* Animated image rows */}
-        <div className="overflow-hidden pb-6 space-y-3">
+        <div className="overflow-hidden pb-4 space-y-3 mt-2">
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {[...gridImages, ...gridImages].map((src, i) => (
