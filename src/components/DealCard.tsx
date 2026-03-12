@@ -17,60 +17,9 @@ interface DealCardProps {
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [expandReady, setExpandReady] = useState(false);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(deal.id);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
-
-  const nodeRef = useRef<HTMLDivElement>(null);
-
-  const getClipInset = () => {
-    if (!nodeRef.current) return 'inset(0)';
-    const rect = nodeRef.current.getBoundingClientRect();
-    const finalTop = 56;
-    const finalLeft = 12;
-    const finalW = window.innerWidth - 24;
-    const finalH = window.innerHeight - 148;
-    const top = rect.top - finalTop;
-    const left = rect.left - finalLeft;
-    const bottom = finalH - (rect.bottom - finalTop);
-    const right = finalW - (rect.right - finalLeft);
-    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
-  };
-
-  const [initClip, setInitClip] = useState('inset(0)');
-
-  const openNode = () => {
-    setInitClip(getClipInset());
-    setIsExpanded(true);
-    setExpandReady(false);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setExpandReady(true);
-      });
-    });
-  };
-
-  const closeNode = () => {
-    if (!isExpanded || isClosing) return;
-    setInitClip(getClipInset());
-    setExpandReady(false);
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsExpanded(false);
-      setIsClosing(false);
-    }, 380);
-  };
-
-  const handleNodeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isExpanded) {
-      closeNode();
-    } else {
-      openNode();
-    }
-  };
 
   const handleSendRequest = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -121,11 +70,14 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
       });
   }, [deal.id, user]);
 
-  useEffect(() => {
-    setIsExpanded(false);
-    setIsClosing(false);
-    setExpandReady(false);
-  }, [deal.id]);
+  const handleNodeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isExpanded) {
+      closeNode();
+    } else {
+      openNode();
+    }
+  };
 
   const nodeStyle = {
     background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
