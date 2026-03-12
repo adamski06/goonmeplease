@@ -60,7 +60,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
     setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
-    }, 520);
+    }, 380);
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
