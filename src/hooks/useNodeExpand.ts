@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export function useNodeExpand(entityId: string) {
@@ -7,49 +7,54 @@ export function useNodeExpand(entityId: string) {
   const [mountReady, setMountReady] = useState(false);
 
   const nodeRef = useRef<HTMLDivElement>(null);
-
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const openRafRef = useRef<number | null>(null);
+  const raf1Ref = useRef<number | null>(null);
+  const raf2Ref = useRef<number | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+
+  const clearAnimationHandles = useCallback(() => {
+    if (raf1Ref.current !== null) {
+      cancelAnimationFrame(raf1Ref.current);
+      raf1Ref.current = null;
+    }
+    if (raf2Ref.current !== null) {
+      cancelAnimationFrame(raf2Ref.current);
+      raf2Ref.current = null;
+    }
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
 
   const openNode = useCallback(() => {
     Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {});
+    clearAnimationHandles();
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
-  }, []);
+  }, [clearAnimationHandles]);
 
-  // Called by the overlay div's ref — forces layout read then triggers animation
   const setOverlayRef = useCallback((el: HTMLDivElement | null) => {
     overlayRef.current = el;
-    if (el) {
-      // Force browser to paint the off-screen position first
-      void el.getBoundingClientRect();
-      requestAnimationFrame(() => {
-        setMountReady(true);
-      });
-    }
   }, []);
 
   const closeNode = useCallback(() => {
     if (!isExpanded || isClosing) return;
+
+    clearAnimationHandles();
     setIsClosing(true);
     setMountReady(false);
-    setTimeout(() => {
+
+    closeTimerRef.current = window.setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
+      closeTimerRef.current = null;
     }, 380);
-  }, [isExpanded, isClosing]);
+  }, [clearAnimationHandles, isClosing, isExpanded]);
 
-  useLayoutEffect(() => {
-    if (openRafRef.current !== null) {
-      cancelAnimationFrame(openRafRef.current);
-      openRafRef.current = null;
-    }
-
-    if (!isExpanded) {
-      setMountReady(false);
-      return;
-    }
+  useEffect(() => {
+    if (!isExpanded) return;
 
     const el = overlayRef.current;
     if (!el) return;
@@ -58,26 +63,38 @@ export function useNodeExpand(entityId: string) {
     setMountReady(false);
     void el.getBoundingClientRect();
 
-    openRafRef.current = requestAnimationFrame(() => {
-      openRafRef.current = requestAnimationFrame(() => {
+    raf1Ref.current = requestAnimationFrame(() => {
+      raf2Ref.current = requestAnimationFrame(() => {
         setMountReady(true);
-        openRafRef.current = null;
+        raf2Ref.current = null;
       });
+      raf1Ref.current = null;
     });
 
     return () => {
-      if (openRafRef.current !== null) {
-        cancelAnimationFrame(openRafRef.current);
-        openRafRef.current = null;
+      if (raf1Ref.current !== null) {
+        cancelAnimationFrame(raf1Ref.current);
+        raf1Ref.current = null;
+      }
+      if (raf2Ref.current !== null) {
+        cancelAnimationFrame(raf2Ref.current);
+        raf2Ref.current = null;
       }
     };
   }, [isExpanded]);
 
   useEffect(() => {
+    clearAnimationHandles();
     setIsExpanded(false);
     setIsClosing(false);
     setMountReady(false);
-  }, [entityId]);
+  }, [entityId, clearAnimationHandles]);
+
+  useEffect(() => {
+    return () => {
+      clearAnimationHandles();
+    };
+  }, [clearAnimationHandles]);
 
   const getOverlayStyle = useCallback((): React.CSSProperties => {
     const isOpen = mountReady && !isClosing;
@@ -95,9 +112,9 @@ export function useNodeExpand(entityId: string) {
     };
   }, [mountReady, isClosing]);
 
-  // Style for the card image/node to slide left when overlay opens
+  // Slide card image/node immediately on open; always reset on close.
   const getCardSlideStyle = useCallback((): React.CSSProperties => {
-    const isOpen = isExpanded && mountReady && !isClosing;
+    const isOpen = isExpanded && !isClosing;
     return {
       transform: isOpen ? 'translate3d(-30%,0,0)' : 'translate3d(0,0,0)',
       opacity: isOpen ? 0.4 : 1,
@@ -106,7 +123,7 @@ export function useNodeExpand(entityId: string) {
       WebkitBackfaceVisibility: 'hidden',
       transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.34s ease',
     };
-  }, [isExpanded, mountReady, isClosing]);
+  }, [isExpanded, isClosing]);
 
   const getContentStyle = useCallback((): React.CSSProperties => {
     const isVisible = mountReady && !isClosing;
