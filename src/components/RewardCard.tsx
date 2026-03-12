@@ -65,7 +65,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
       {/* Card image */}
-      <div className="absolute top-14 left-3 right-3 bottom-3">
+      <div className="absolute top-14 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
           onClick={handleOpen}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"

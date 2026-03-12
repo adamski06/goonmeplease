@@ -100,7 +100,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
       {/* Card container with image */}
-      <div className="absolute top-20 left-3 right-3 bottom-3">
+      <div className="absolute top-20 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
