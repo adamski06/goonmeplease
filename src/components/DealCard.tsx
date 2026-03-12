@@ -17,7 +17,7 @@ interface DealCardProps {
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
-  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(deal.id);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(deal.id);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
 
