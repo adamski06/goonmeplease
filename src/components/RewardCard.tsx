@@ -59,7 +59,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
       setIsClosing(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 520);
+    }, 380);
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
@@ -173,8 +173,8 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
               clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
               willChange: 'clip-path',
               transition: expandReady
-                ? 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)'
-                : 'clip-path 0.4s cubic-bezier(0.32, 0.72, 0, 1) 0.15s',
+                ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
+                : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
               ...nodeStyle,
             }}
           >
