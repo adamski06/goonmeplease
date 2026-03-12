@@ -426,7 +426,7 @@ const Activity: React.FC = () => {
       </div>
 
       {/* Active submissions list */}
-      {submissionsLoading && !activeCampaign && (
+      {submissionsLoading && !initialFetchDone.current && !activeCampaign && (
         <div className="px-3 pt-2">
           <CampaignListSkeleton count={2} />
         </div>
