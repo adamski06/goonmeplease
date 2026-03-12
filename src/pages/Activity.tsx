@@ -122,9 +122,9 @@ const Activity: React.FC = () => {
   const isPulling = useRef(false);
   const PULL_THRESHOLD = 80;
 
-  const fetchActiveSubmissions = useCallback(async () => {
+  const fetchActiveSubmissions = useCallback(async (silent = false) => {
     if (!user) { setSubmissionsLoading(false); return; }
-    setSubmissionsLoading(true);
+    if (!silent) setSubmissionsLoading(true);
 
     // Fetch campaign submissions, deal applications, and reward submissions in parallel
     const [submissionsRes, dealsRes, rewardsRes] = await Promise.all([
@@ -276,7 +276,7 @@ const Activity: React.FC = () => {
   const lastPath = useRef(location.pathname);
   useEffect(() => {
     if (location.pathname === '/user/activity' && lastPath.current !== '/user/activity' && initialFetchDone.current) {
-      fetchActiveSubmissions();
+      fetchActiveSubmissions(true);
     }
     lastPath.current = location.pathname;
   }, [location.pathname, fetchActiveSubmissions]);
