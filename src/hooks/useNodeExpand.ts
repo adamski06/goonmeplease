@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect, useLayoutEffect } from 'react';
 
 export function useNodeExpand(entityId: string) {
   const [isExpanded, setIsExpanded] = useState(false);
