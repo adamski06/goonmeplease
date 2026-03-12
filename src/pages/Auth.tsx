@@ -84,13 +84,22 @@ const Auth: React.FC = () => {
 
     // Check if this user needs onboarding (new OAuth user with no username)
     const checkOnboarding = async () => {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      const [{ data: profile }, { data: tiktokAccounts }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('username')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+        supabase
+          .from('tiktok_accounts_safe')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1),
+      ]);
 
-      if (!profile?.username) {
+      const hasTikTok = tiktokAccounts && tiktokAccounts.length > 0;
+
+      if (!profile?.username || !hasTikTok) {
         // New user (OAuth or otherwise) — show TikTok onboarding
         const provider = user.app_metadata?.provider;
         const oauthUser = provider && provider !== 'email';

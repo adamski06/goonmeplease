@@ -56,6 +56,11 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
         .from('profiles')
         .update({ username: username })
         .eq('user_id', userId);
+
+      // Create TikTok account record
+      await supabase.rpc('get_or_create_tiktok_account', {
+        p_tiktok_username: username,
+      });
     } catch (e) {
       // Non-blocking — continue even if update fails
       console.error('Failed to set username from TikTok handle:', e);
