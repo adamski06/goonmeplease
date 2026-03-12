@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
