@@ -337,6 +337,47 @@ const Activity: React.FC = () => {
     }, 400);
   };
 
+  // Pull-to-refresh handlers
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await Promise.all([
+      fetchActiveSubmissions(),
+      refetchRecent(),
+      refetchFavorites(),
+    ]);
+    setIsRefreshing(false);
+  }, [fetchActiveSubmissions, refetchRecent, refetchFavorites]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const container = scrollContainerRef.current;
+    if (container && container.scrollTop <= 0 && !isRefreshing) {
+      touchStartY.current = e.touches[0].clientY;
+      isPulling.current = true;
+    }
+  }, [isRefreshing]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isPulling.current || isRefreshing) return;
+    const deltaY = e.touches[0].clientY - touchStartY.current;
+    if (deltaY > 0) {
+      setPullDistance(Math.min(deltaY * 0.5, 120));
+    } else {
+      isPulling.current = false;
+      setPullDistance(0);
+    }
+  }, [isRefreshing]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!isPulling.current) return;
+    isPulling.current = false;
+    if (pullDistance >= PULL_THRESHOLD) {
+      handleRefresh();
+      setPullDistance(0);
+    } else {
+      setPullDistance(0);
+    }
+  }, [pullDistance, handleRefresh]);
+
   // Loading handled by UserLayout
 
   return (
