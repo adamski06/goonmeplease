@@ -159,23 +159,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* Expanded overlay - fixed, animates from captured position (same pattern as profile page) */}
+      {/* Expanded overlay - fixed, animates with GPU-composited transform */}
       {isExpanded && (
         <div
-          onClick={closeNode}
+          onClick={handleClose}
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          className="fixed z-50 rounded-[48px] overflow-hidden"
+          className="fixed z-50 overflow-hidden"
           style={{
             touchAction: 'none',
-            top: '56px',
-            bottom: '92px',
-            left: '12px',
-            right: '12px',
-            clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-            willChange: 'clip-path',
-            transition: expandReady
-              ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
-              : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+            ...getOverlayStyle(),
             background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
             border: '1.5px solid rgba(255,255,255,0.8)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
@@ -184,10 +176,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           {/* Expanded content - fades in */}
           <div
             className="h-full flex flex-col overflow-hidden relative"
-            style={{
-              opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.2s ease-out' : 'opacity 0.15s ease-out',
-            }}
+            style={getContentStyle()}
           >
             {/* X close button */}
             <button
