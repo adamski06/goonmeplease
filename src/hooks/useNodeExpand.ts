@@ -8,6 +8,7 @@ export function useNodeExpand(entityId: string) {
   const nodeRef = useRef<HTMLDivElement>(null);
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
+  const openRafRef = useRef<number | null>(null);
 
   const openNode = useCallback(() => {
     setIsExpanded(true);
