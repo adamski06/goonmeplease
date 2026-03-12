@@ -25,7 +25,7 @@ export function useNodeExpand(entityId: string) {
     setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
-    }, 300);
+    }, 450);
   }, [isExpanded, isClosing]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function useNodeExpand(entityId: string) {
       borderRadius: '48px',
       transform: isOpen ? 'translateX(0)' : 'translateX(105%)',
       willChange: 'transform',
-      transition: 'transform 0.28s cubic-bezier(0.32, 0.72, 0, 1)',
+      transition: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
     };
   }, [mountReady, isClosing]);
 
@@ -54,7 +54,7 @@ export function useNodeExpand(entityId: string) {
     return {
       transform: isOpen ? 'translateX(-30%)' : 'translateX(0)',
       opacity: isOpen ? 0.4 : 1,
-      transition: 'transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.28s ease',
+      transition: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease',
     };
   }, [mountReady, isClosing]);
 
