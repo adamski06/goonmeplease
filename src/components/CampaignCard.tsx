@@ -121,9 +121,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       <div className="absolute top-20 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
           onClick={handlePictureClick}
-          className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
+          onContextMenu={(e) => e.preventDefault()}
+          className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer select-none"
+          style={{ WebkitTouchCallout: 'none' }}
         >
-          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
+          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover pointer-events-none select-none" style={{ WebkitTouchCallout: 'none', userSelect: 'none', WebkitUserSelect: 'none' } as React.CSSProperties} fetchPriority="high" decoding="async" draggable={false} />
           <div
             className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
             style={{

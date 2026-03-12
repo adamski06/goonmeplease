@@ -86,9 +86,11 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
       <div className="absolute top-14 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
           onClick={handleOpen}
-          className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
+          onContextMenu={(e) => e.preventDefault()}
+          className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer select-none"
+          style={{ WebkitTouchCallout: 'none' }}
         >
-          <img src={reward.image || placeholderBlue} alt={reward.brand} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
+          <img src={reward.image || placeholderBlue} alt={reward.brand} className="w-full h-full object-cover pointer-events-none select-none" style={{ WebkitTouchCallout: 'none', userSelect: 'none', WebkitUserSelect: 'none' } as React.CSSProperties} fetchPriority="high" decoding="async" draggable={false} />
           <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} />
         </div>
       </div>
