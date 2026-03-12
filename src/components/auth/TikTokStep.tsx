@@ -121,7 +121,7 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
         </div>
       )}
 
-      <div className="space-y-2 pt-2">
+      <div className="space-y-2.5 pt-2">
         <Button
           onClick={handleContinue}
           disabled={!username || saving}
@@ -130,6 +130,13 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
         >
           {saving ? 'Saving...' : 'Continue'}
         </Button>
+        <button
+          type="button"
+          onClick={onSkip}
+          className="w-full py-2.5 text-sm font-medium text-black/40 hover:text-black/60 transition-colors"
+        >
+          Skip for now
+        </button>
       </div>
     </div>
   );

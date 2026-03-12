@@ -4,6 +4,8 @@ import { Campaign } from '@/types/campaign';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import tiktokLogo from '@/assets/tiktok-logo.png';
+import { useNavigate } from 'react-router-dom';
 
 interface SubmitDraftProps {
   campaign: Campaign;
@@ -28,6 +30,7 @@ const isValidTikTokUrl = (url: string): boolean => {
 
 const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -36,6 +39,21 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
   const [resolving, setResolving] = useState(false);
   const [urlValid, setUrlValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [hasTikTok, setHasTikTok] = useState<boolean | null>(null);
+
+  // Check if user has a TikTok account linked
+  useEffect(() => {
+    if (!user) return;
+    const check = async () => {
+      const { data } = await supabase
+        .from('tiktok_accounts_safe')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+      setHasTikTok(data && data.length > 0);
+    };
+    check();
+  }, [user]);
 
   const resolveVideoId = useCallback(async (url: string) => {
     // First try direct extraction
@@ -148,6 +166,42 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
   };
 
   const canSubmit = urlValid && confirmed && guidelinesConfirmed && !submitting && !resolving;
+
+  // Block if no TikTok linked
+  if (hasTikTok === false) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center px-5 pt-5 pb-3 border-b border-black/10 flex-shrink-0">
+          <button onClick={onBack} className="p-1 -ml-1">
+            <ChevronLeft className="h-5 w-5 text-black/60" />
+          </button>
+          <div className="flex items-center gap-2 flex-1 justify-center pr-6">
+            <h2 className="text-sm font-bold text-black font-montserrat">Submit TikTok</h2>
+          </div>
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mb-5">
+            <img src={tiktokLogo} alt="TikTok" className="w-9 h-9 object-contain" />
+          </div>
+          <h3 className="text-lg font-bold text-black font-montserrat mb-2">Connect TikTok first</h3>
+          <p className="text-sm text-black/50 font-jakarta leading-relaxed mb-6">
+            You need to link your TikTok account before you can submit videos to campaigns.
+          </p>
+          <button
+            onClick={() => navigate('/user/edit-profile')}
+            className="px-6 py-3 rounded-full text-sm font-bold text-white font-montserrat transition-all active:scale-[0.97]"
+            style={{
+              background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
+              border: '1.5px solid rgba(60,60,60,0.6)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1)',
+            }}
+          >
+            Go to Profile Settings
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
