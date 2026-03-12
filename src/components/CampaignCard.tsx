@@ -99,9 +99,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
-      {/* Ambient color glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.35 }}>
-        <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-150 blur-[80px]" decoding="async" />
+      {/* Ambient color glow - concentrated around card edges */}
+      <div className="absolute top-16 left-0 right-0 bottom-0 pointer-events-none" style={{ opacity: 0.5 }}>
+        <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[60px] saturate-150" decoding="async" />
       </div>
       {/* Card container with image */}
       <div className="absolute top-20 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
