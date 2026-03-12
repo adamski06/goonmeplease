@@ -169,6 +169,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
+            ref={setOverlayRef}
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
             className="absolute overflow-hidden"

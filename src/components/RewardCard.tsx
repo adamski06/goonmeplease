@@ -141,6 +141,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
+            ref={setOverlayRef}
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
             className="absolute overflow-hidden"
