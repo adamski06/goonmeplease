@@ -53,21 +53,18 @@ export function useNodeExpand(entityId: string) {
     }, 380);
   }, [clearAnimationHandles, isClosing, isExpanded]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isExpanded) return;
 
     const el = overlayRef.current;
     if (!el) return;
 
-    // Ensure first paint is off-screen before transitioning in
+    // Paint one frame off-screen, then start both overlay + thumbnail transitions together.
     setMountReady(false);
     void el.getBoundingClientRect();
 
     raf1Ref.current = requestAnimationFrame(() => {
-      raf2Ref.current = requestAnimationFrame(() => {
-        setMountReady(true);
-        raf2Ref.current = null;
-      });
+      setMountReady(true);
       raf1Ref.current = null;
     });
 
