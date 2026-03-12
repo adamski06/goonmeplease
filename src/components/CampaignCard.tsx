@@ -204,9 +204,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       {isExpanded && (
         <div
           onClick={closeNode}
+          onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
           className="fixed z-50 rounded-[48px] overflow-hidden"
           style={{
-            top: '56px',
+            touchAction: 'none',
             bottom: '92px',
             left: '12px',
             right: '12px',
