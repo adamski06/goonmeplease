@@ -66,7 +66,7 @@ serve(async (req) => {
 
     // Save stripe_customer_id to business profile (reuse adminClient from role check)
 
-    await supabaseAdmin
+    await adminClient
       .from("business_profiles")
       .update({ stripe_customer_id: customerId })
       .eq("user_id", userId);
