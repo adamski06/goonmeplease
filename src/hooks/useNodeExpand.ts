@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect, useLayoutEffect } from 'react';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export function useNodeExpand(entityId: string) {
