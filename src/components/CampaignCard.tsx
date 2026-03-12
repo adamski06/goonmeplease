@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
-import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
+import EarningsGraph, { calculateEarningsData } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { useNodeExpand } from '@/hooks/useNodeExpand';
 
 interface CampaignCardProps {
   campaign: Campaign;

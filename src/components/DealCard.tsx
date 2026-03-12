@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bookmark, X, Send } from 'lucide-react';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from 'sonner';
+import { useNodeExpand } from '@/hooks/useNodeExpand';
 
 interface DealCardProps {
   deal: Campaign;
