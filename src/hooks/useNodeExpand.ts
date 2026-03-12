@@ -109,18 +109,18 @@ export function useNodeExpand(entityId: string) {
     };
   }, [mountReady, isClosing]);
 
-  // Slide card image/node immediately on open; always reset on close.
+  // Slide + fade thumbnail in sync with overlay entrance.
   const getCardSlideStyle = useCallback((): React.CSSProperties => {
-    const isOpen = isExpanded && !isClosing;
+    const isOpen = isExpanded && mountReady && !isClosing;
     return {
-      transform: isOpen ? 'translate3d(-30%,0,0)' : 'translate3d(0,0,0)',
-      opacity: isOpen ? 0.4 : 1,
+      transform: isOpen ? 'translate3d(-22%,0,0)' : 'translate3d(0,0,0)',
+      opacity: isOpen ? 0 : 1,
       willChange: 'transform, opacity',
       backfaceVisibility: 'hidden',
       WebkitBackfaceVisibility: 'hidden',
-      transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.34s ease',
+      transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s ease',
     };
-  }, [isExpanded, isClosing]);
+  }, [isExpanded, mountReady, isClosing]);
 
   const getContentStyle = useCallback((): React.CSSProperties => {
     const isVisible = mountReady && !isClosing;
