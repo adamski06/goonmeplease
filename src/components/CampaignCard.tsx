@@ -141,7 +141,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
       {/* Card container with image */}
-      <div className="absolute top-14 left-3 right-3 bottom-3">
+      <div className="absolute top-20 left-3 right-3 bottom-3">
         <div
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
@@ -153,8 +153,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
             }}
           />
-          <div className={`absolute inset-x-0 bottom-[148px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
+          <div className={`absolute inset-x-0 bottom-[88px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className="absolute inset-x-0 bottom-[-40px] h-[140px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         onClick={handleNodeClick}
         className={`absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden ${isClosing ? 'z-[60]' : 'z-10'}`}
         style={{
-          height: '180px',
+          height: '120px',
           opacity: isClosing ? 1 : isExpanded ? 0 : 1,
           transition: isClosing ? 'opacity 0.35s ease-out 0.15s' : 'none',
           pointerEvents: isExpanded ? 'none' : 'auto',
@@ -174,8 +174,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
-        <div className="px-6 flex flex-col h-[180px]">
-          <div className="flex items-center gap-2.5 pt-5 pb-1">
+        <div className="px-6 flex flex-col h-[120px] justify-center">
+          <div className="flex items-center gap-2.5 pb-3">
             <div className="h-[28px] w-[28px] rounded-full overflow-hidden border border-black/10 flex-shrink-0 flex items-center justify-center bg-black/5">
               {campaign.logo ? (
                 <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling && ((e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex'); }} />
@@ -187,17 +187,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               <span className="text-[9px] font-bold text-white font-montserrat">SPREAD</span>
             </div>
           </div>
-          <div className="pb-2">
-            <p className="text-sm text-black font-medium font-jakarta line-clamp-2 leading-relaxed">{campaign.description}</p>
-          </div>
-          <div className="flex items-center justify-center gap-2 flex-1 pb-5">
-            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(campaign.maxEarnings, { decimals: 0 })}</span>
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-full px-4 py-2 flex items-baseline gap-1 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <span className="text-sm font-bold text-white font-montserrat">{formatPrice(campaign.maxEarnings, { decimals: 0 })}</span>
             </div>
-            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[24px] px-5 py-2.5 flex items-baseline gap-1.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-              <span className="text-xl font-bold text-white font-montserrat">{formatPrice(displayRate, { decimals: 0 })}</span>
-              <span className="text-sm font-semibold text-white/80 font-montserrat">/1k views</span>
+            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-full px-4 py-2 flex items-baseline gap-1 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <span className="text-sm font-bold text-white font-montserrat">{formatPrice(displayRate, { decimals: 0 })}</span>
+              <span className="text-xs font-semibold text-white/80 font-montserrat">/1k</span>
             </div>
+            <span className="text-sm font-semibold text-black/60 font-montserrat ml-auto">Start creating →</span>
           </div>
         </div>
       </div>
