@@ -25,7 +25,7 @@ export function useNodeExpand(entityId: string) {
     setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
-    }, 300);
+    }, 450);
   }, [isExpanded, isClosing]);
 
   useEffect(() => {
