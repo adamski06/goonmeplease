@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bookmark, X, Send } from 'lucide-react';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from 'sonner';
+import { useNodeExpand } from '@/hooks/useNodeExpand';
 
 interface DealCardProps {
   deal: Campaign;
@@ -17,60 +17,9 @@ interface DealCardProps {
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [expandReady, setExpandReady] = useState(false);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(deal.id);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
-
-  const nodeRef = useRef<HTMLDivElement>(null);
-
-  const getClipInset = () => {
-    if (!nodeRef.current) return 'inset(0)';
-    const rect = nodeRef.current.getBoundingClientRect();
-    const finalTop = 56;
-    const finalLeft = 12;
-    const finalW = window.innerWidth - 24;
-    const finalH = window.innerHeight - 148;
-    const top = rect.top - finalTop;
-    const left = rect.left - finalLeft;
-    const bottom = finalH - (rect.bottom - finalTop);
-    const right = finalW - (rect.right - finalLeft);
-    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
-  };
-
-  const [initClip, setInitClip] = useState('inset(0)');
-
-  const openNode = () => {
-    setInitClip(getClipInset());
-    setIsExpanded(true);
-    setExpandReady(false);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setExpandReady(true);
-      });
-    });
-  };
-
-  const closeNode = () => {
-    if (!isExpanded || isClosing) return;
-    setInitClip(getClipInset());
-    setExpandReady(false);
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsExpanded(false);
-      setIsClosing(false);
-    }, 380);
-  };
-
-  const handleNodeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (isExpanded) {
-      closeNode();
-    } else {
-      openNode();
-    }
-  };
 
   const handleSendRequest = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -121,11 +70,14 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
       });
   }, [deal.id, user]);
 
-  useEffect(() => {
-    setIsExpanded(false);
-    setIsClosing(false);
-    setExpandReady(false);
-  }, [deal.id]);
+  const handleNodeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isExpanded) {
+      closeNode();
+    } else {
+      openNode();
+    }
+  };
 
   const nodeStyle = {
     background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
@@ -202,26 +154,15 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
           <div
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="absolute rounded-[48px] overflow-hidden"
+            className="absolute overflow-hidden"
             style={{
-              top: '56px',
-              bottom: '92px',
-              left: '12px',
-              right: '12px',
-              clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-              willChange: 'clip-path',
-              transition: expandReady
-                ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
-                : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+              ...getOverlayStyle(),
               ...nodeStyle,
             }}
           >
             <div
             className="h-full flex flex-col overflow-hidden relative"
-            style={{
-              opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
-            }}
+            style={getContentStyle()}
           >
             {/* X close */}
             <button

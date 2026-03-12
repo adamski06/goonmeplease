@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Bookmark, Gift, Plus, X } from 'lucide-react';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import SubmitReward from '@/components/SubmitReward';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
+import { useNodeExpand } from '@/hooks/useNodeExpand';
 
 interface RewardCardProps {
   reward: Campaign;
@@ -13,61 +13,29 @@ interface RewardCardProps {
 }
 
 const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavorite }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [expandReady, setExpandReady] = useState(false);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(reward.id);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
 
-  const nodeRef = useRef<HTMLDivElement>(null);
-
-  const getClipInset = () => {
-    if (!nodeRef.current) return 'inset(0)';
-    const rect = nodeRef.current.getBoundingClientRect();
-    const finalTop = 56;
-    const finalLeft = 12;
-    const finalW = window.innerWidth - 24;
-    const finalH = window.innerHeight - 148;
-    const top = rect.top - finalTop;
-    const left = rect.left - finalLeft;
-    const bottom = finalH - (rect.bottom - finalTop);
-    const right = finalW - (rect.right - finalLeft);
-    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
-  };
-
-  const [initClip, setInitClip] = useState('inset(0)');
-
-  const openNode = () => {
-    setInitClip(getClipInset());
-    setIsExpanded(true);
-    setExpandReady(false);
+  const handleOpen = () => {
     addRecentCampaign(reward.id, 'reward');
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setExpandReady(true);
-      });
-    });
+    openNode();
   };
 
-  const closeNode = () => {
-    if (!isExpanded || isClosing) return;
-    setInitClip(getClipInset());
-    setExpandReady(false);
-    setIsClosing(true);
+  const handleClose = () => {
+    closeNode();
     setTimeout(() => {
-      setIsExpanded(false);
-      setIsClosing(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 380);
+    }, 320);
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isExpanded) {
-      closeNode();
+      handleClose();
     } else {
-      openNode();
+      handleOpen();
     }
   };
 
@@ -88,12 +56,6 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
     }, 300);
   };
 
-  useEffect(() => {
-    setIsExpanded(false);
-    setIsClosing(false);
-    setExpandReady(false);
-  }, [reward.id]);
-
   const nodeStyle = {
     background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
     border: '1.5px solid rgba(255,255,255,0.8)',
@@ -105,7 +67,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
       {/* Card image */}
       <div className="absolute top-14 left-3 right-3 bottom-3">
         <div
-          onClick={openNode}
+          onClick={handleOpen}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
           <img src={reward.image || placeholderBlue} alt={reward.brand} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
@@ -158,36 +120,25 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
         <div
           className="fixed inset-0 z-50"
           style={{ touchAction: 'none' }}
-          onClick={closeNode}
+          onClick={handleClose}
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="absolute rounded-[48px] overflow-hidden"
+            className="absolute overflow-hidden"
             style={{
-              top: '56px',
-              bottom: '92px',
-              left: '12px',
-              right: '12px',
-              clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-              willChange: 'clip-path',
-              transition: expandReady
-                ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
-                : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+              ...getOverlayStyle(),
               ...nodeStyle,
             }}
           >
             <div
             className="h-full flex flex-col overflow-hidden relative"
-            style={{
-              opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
-            }}
+            style={getContentStyle()}
           >
             {/* X close */}
             <button
-              onClick={(e) => { e.stopPropagation(); closeNode(); }}
+              onClick={(e) => { e.stopPropagation(); handleClose(); }}
               className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)', border: '1px solid rgba(0,0,0,0.06)' }}
             >
@@ -306,7 +257,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 pointerEvents: showSubmit && !submitSliding ? 'auto' : 'none',
               }}
             >
-              <SubmitReward reward={reward} onBack={handleBackFromSubmit} onClose={closeNode} />
+              <SubmitReward reward={reward} onBack={handleBackFromSubmit} onClose={handleClose} />
             </div>
           </div>
         </div>

@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
-import tiktokIcon from '@/assets/tiktok-icon.png';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
-import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
+import EarningsGraph, { calculateEarningsData } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { useNodeExpand } from '@/hooks/useNodeExpand';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -22,15 +22,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   onToggleFavorite,
 }) => {
   const { formatPrice, label, convert } = useCurrency();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [expandReady, setExpandReady] = useState(false);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(campaign.id);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
-
-  const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContinue = () => {
     addRecentCampaign(campaign.id, 'spread');
@@ -70,71 +66,34 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
-  // Compute clip-path inset to clip overlay down to the node's bounds
-  const getClipInset = () => {
-    if (!nodeRef.current) return 'inset(0)';
-    const rect = nodeRef.current.getBoundingClientRect();
-    // The overlay is fixed at top:56 bottom:92 left:12 right:12
-    const finalTop = 56;
-    const finalLeft = 12;
-    const finalW = window.innerWidth - 24;
-    const finalH = window.innerHeight - 148;
-    // Inset values relative to the overlay's own bounds
-    const top = rect.top - finalTop;
-    const left = rect.left - finalLeft;
-    const bottom = finalH - (rect.bottom - finalTop);
-    const right = finalW - (rect.right - finalLeft);
-    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
-  };
-
-  const [initClip, setInitClip] = useState('inset(0)');
-
-  const openNode = () => {
-    setInitClip(getClipInset());
-    setIsExpanded(true);
-    setExpandReady(false);
+  const handleOpen = () => {
     addRecentCampaign(campaign.id, 'spread');
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setExpandReady(true);
-      });
-    });
+    openNode();
   };
 
-  const closeNode = () => {
-    if (!isExpanded || isClosing) return;
-    setInitClip(getClipInset());
-    setExpandReady(false);
-    setIsClosing(true);
+  const handleClose = () => {
+    closeNode();
     setTimeout(() => {
-      setIsExpanded(false);
-      setIsClosing(false);
       setShowGuide(false);
       setGuideSliding(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 380);
+    }, 320);
   };
 
   const handlePictureClick = () => {
-    openNode();
+    handleOpen();
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (showGuide || guideSliding) return;
     if (isExpanded) {
-      closeNode();
+      handleClose();
     } else {
-      openNode();
+      handleOpen();
     }
   };
-
-  useEffect(() => {
-    setIsExpanded(false);
-    setIsClosing(false);
-    setExpandReady(false);
-  }, [campaign.id]);
 
   const displayRate = campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5;
 
@@ -200,23 +159,15 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
       </div>
 
-      {/* Expanded overlay - fixed, animates from captured position (same pattern as profile page) */}
+      {/* Expanded overlay - fixed, animates with GPU-composited transform */}
       {isExpanded && (
         <div
-          onClick={closeNode}
+          onClick={handleClose}
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          className="fixed z-50 rounded-[48px] overflow-hidden"
+          className="fixed z-50 overflow-hidden"
           style={{
             touchAction: 'none',
-            top: '56px',
-            bottom: '92px',
-            left: '12px',
-            right: '12px',
-            clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
-            willChange: 'clip-path',
-            transition: expandReady
-              ? 'clip-path 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
-              : 'clip-path 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+            ...getOverlayStyle(),
             background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
             border: '1.5px solid rgba(255,255,255,0.8)',
             boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
@@ -225,16 +176,13 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           {/* Expanded content - fades in */}
           <div
             className="h-full flex flex-col overflow-hidden relative"
-            style={{
-              opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.2s ease-out' : 'opacity 0.15s ease-out',
-            }}
+            style={getContentStyle()}
           >
             {/* X close button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                closeNode();
+                handleClose();
               }}
               className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
