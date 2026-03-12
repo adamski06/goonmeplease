@@ -114,8 +114,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   return (
     <div ref={cardRef} className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
       {/* Ambient color glow - concentrated around card edges */}
-      <div className="absolute top-16 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.6 : 0 }}>
-        <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[55px] saturate-[1.7]" decoding="async" />
+      <div className="absolute top-16 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.4 : 0 }}>
+        <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[55px] saturate-[1.4]" decoding="async" />
       </div>
       {/* Card container with image */}
       <div className="absolute top-20 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
@@ -145,11 +145,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           height: '120px',
           pointerEvents: isExpanded ? 'none' : 'auto',
           ...getCardSlideStyle(),
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(240,240,240,0.7) 100%)',
-          border: '1.5px solid rgba(255,255,255,0.5)',
-          boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.03)',
-          backdropFilter: 'blur(24px) saturate(1.4)',
-          WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+          border: '1.5px solid rgba(255,255,255,0.8)',
+          boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
         <div className="px-6 flex flex-col h-[120px] justify-center">
