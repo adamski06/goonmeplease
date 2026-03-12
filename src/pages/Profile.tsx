@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
