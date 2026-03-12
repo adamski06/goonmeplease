@@ -145,11 +145,9 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           height: '120px',
           pointerEvents: isExpanded ? 'none' : 'auto',
           ...getCardSlideStyle(),
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(240,240,240,0.7) 100%)',
-          border: '1.5px solid rgba(255,255,255,0.5)',
-          boxShadow: '0 -8px 40px rgba(0,0,0,0.15), 0 12px 40px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.03)',
-          backdropFilter: 'blur(24px) saturate(1.4)',
-          WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+          border: '1.5px solid rgba(255,255,255,0.8)',
+          boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
         }}
       >
         <div className="px-6 flex flex-col h-[120px] justify-center">
