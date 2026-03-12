@@ -84,6 +84,7 @@ export function useNodeExpand(entityId: string) {
     isClosing,
     openNode,
     closeNode,
+    setOverlayRef,
     getOverlayStyle,
     getCardSlideStyle,
     getContentStyle,
