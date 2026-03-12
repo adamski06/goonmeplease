@@ -103,6 +103,19 @@ serve(async (req) => {
   }
 
   try {
+    // Auth check for all requests
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const anonClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!);
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await anonClient.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     const { message, conversationHistory, action, profileUpdates } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -110,17 +123,7 @@ serve(async (req) => {
 
     // If action is "save", save the profile data
     if (action === 'save' && profileUpdates) {
-      const authHeader = req.headers.get('Authorization');
-      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
       const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-      
-      const anonClient = createClient(supabaseUrl, Deno.env.get('SUPABASE_ANON_KEY')!);
-      const token = authHeader?.replace('Bearer ', '');
-      const { data: { user }, error: authError } = await anonClient.auth.getUser(token);
-      
-      if (authError || !user) {
-        throw new Error('Unauthorized');
-      }
 
       const adminClient = createClient(supabaseUrl, supabaseKey);
       
