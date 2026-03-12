@@ -77,8 +77,11 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
           animation: isClosing
             ? 'pill-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
             : 'pill-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+          touchAction: 'pan-y',
+          overscrollBehavior: 'contain',
         }}
         onClick={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         <div className="h-full flex flex-col overflow-hidden relative" style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
           {/* X close button */}
