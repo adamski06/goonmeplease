@@ -233,7 +233,7 @@ const Auth: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <div className="flex justify-center pt-10 pb-10">
+        <div className="flex justify-center pt-16 pb-6">
           <div className="relative h-10 w-[140px]">
             <div
               className="absolute inset-0 bg-black"
@@ -252,7 +252,7 @@ const Auth: React.FC = () => {
         </div>
 
         {/* Animated image rows */}
-        <div className="overflow-hidden pb-6 space-y-3">
+        <div className="overflow-hidden pb-4 space-y-3 mt-2">
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {[...gridImages, ...gridImages].map((src, i) => (
@@ -294,8 +294,8 @@ const Auth: React.FC = () => {
 
         {/* Tagline & buttons */}
         <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10">
-          <h1 className="text-3xl font-bold text-black text-center leading-tight mb-8">
-            Create content.<br />Get paid.
+          <h1 className="text-2xl font-bold text-black text-center mb-8 font-montserrat">
+            Start creating
           </h1>
 
           <div className="w-full max-w-xs space-y-2.5">
