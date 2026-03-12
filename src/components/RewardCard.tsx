@@ -82,9 +82,8 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
         className={`absolute left-5 right-5 bottom-6 rounded-[48px] overflow-hidden ${isClosing ? 'z-[60]' : 'z-10'}`}
         style={{
           height: '180px',
-          opacity: isClosing ? 1 : isExpanded ? 0 : 1,
-          transition: isClosing ? 'opacity 0.35s ease-out 0.15s' : 'none',
           pointerEvents: isExpanded ? 'none' : 'auto',
+          ...getCardSlideStyle(),
           ...nodeStyle,
         }}
       >
