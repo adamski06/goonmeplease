@@ -172,8 +172,8 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
               <div
                 className="relative mx-auto rounded-[20px] overflow-hidden cursor-grab active:cursor-grabbing"
                 style={{
-                  width: CANVAS_WIDTH,
-                  height: CANVAS_HEIGHT,
+                  width: DISPLAY_WIDTH,
+                  height: DISPLAY_HEIGHT,
                   maxHeight: 420,
                   border: '1px solid hsl(var(--border))',
                   background: 'hsl(var(--muted))',
@@ -187,7 +187,7 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
                   className="block"
-                  style={{ touchAction: 'none' }}
+                  style={{ touchAction: 'none', width: DISPLAY_WIDTH, height: DISPLAY_HEIGHT }}
                 />
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm">
                   <Move className="h-3 w-3 text-white/60" />
