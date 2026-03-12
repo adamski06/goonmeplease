@@ -71,11 +71,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
       <div className="pt-4">
         <Button
           type="submit"
-          className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
+          className="w-full py-3.5 h-auto rounded-full text-base font-bold text-white border border-white/20 shadow-lg hover:opacity-90"
           style={{
             background: 'linear-gradient(180deg, rgba(60, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.95) 100%)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             boxShadow: '0 4px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
           }}
           disabled={isLoading}
@@ -100,10 +100,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
             toast({ title: 'Sign in failed', description: String(error), variant: 'destructive' });
           }
         }}
-        className="w-full py-3 rounded-full font-semibold text-white flex items-center justify-center gap-2 transition-all hover:opacity-90"
+        className="w-full py-3.5 rounded-full text-base font-bold text-white flex items-center justify-center gap-2.5 transition-all hover:opacity-90"
         style={{
-          background: 'rgba(0,0,0,0.88)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.15)',
+          background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.96) 100%)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.25)',
+          border: '1px solid rgba(255,255,255,0.08)',
         }}
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
