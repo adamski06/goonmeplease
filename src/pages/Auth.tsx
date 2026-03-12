@@ -233,7 +233,7 @@ const Auth: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <div className="flex justify-center pt-16 pb-6">
+        <div className="flex justify-center pt-24 pb-6">
           <div className="relative h-10 w-[140px]">
             <div
               className="absolute inset-0 bg-black"
