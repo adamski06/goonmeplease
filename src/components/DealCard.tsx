@@ -17,7 +17,7 @@ interface DealCardProps {
 const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
-  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(deal.id);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, setOverlayRef, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(deal.id);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
 
@@ -169,6 +169,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
+            ref={setOverlayRef}
             onClick={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
             className="absolute overflow-hidden"

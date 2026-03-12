@@ -7,17 +7,22 @@ export function useNodeExpand(entityId: string) {
 
   const nodeRef = useRef<HTMLDivElement>(null);
 
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+
   const openNode = useCallback(() => {
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
+  }, []);
 
-    // Ensure one painted frame off-screen before activating slide-in
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setMountReady(true);
-      });
-    });
+  // Called by the overlay div's ref — forces layout read then triggers animation
+  const setOverlayRef = useCallback((el: HTMLDivElement | null) => {
+    overlayRef.current = el;
+    if (el) {
+      // Force browser to acknowledge the off-screen position
+      void el.getBoundingClientRect();
+      setMountReady(true);
+    }
   }, []);
 
   const closeNode = useCallback(() => {
@@ -79,6 +84,7 @@ export function useNodeExpand(entityId: string) {
     isClosing,
     openNode,
     closeNode,
+    setOverlayRef,
     getOverlayStyle,
     getCardSlideStyle,
     getContentStyle,
