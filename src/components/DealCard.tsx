@@ -241,7 +241,12 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
             </div>
 
             {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto px-5 py-4" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex-1 overflow-y-auto overscroll-contain px-5 py-4"
+              onClick={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
+            >
               {/* How Deals work */}
               <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
                 <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Deals work</h3>
