@@ -15,6 +15,7 @@ const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { formatPrice, label, convert } = useCurrency();
 
   // Creator stats
