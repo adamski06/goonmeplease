@@ -92,7 +92,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-40">
+    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => e.stopPropagation()}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
@@ -126,8 +126,11 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
           animation: isClosing
             ? 'pill-slide-down 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards'
             : 'pill-slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+          touchAction: 'pan-y',
+          overscrollBehavior: 'contain',
         }}
         onClick={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         <div className="h-full flex flex-col overflow-hidden relative" style={{ maxHeight: 'calc(100dvh - 148px)', height: 'calc(100dvh - 148px)' }}>
           {/* X close button */}
