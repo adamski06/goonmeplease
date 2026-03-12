@@ -30,6 +30,7 @@ const isValidTikTokUrl = (url: string): boolean => {
 
 const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -38,6 +39,21 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
   const [resolving, setResolving] = useState(false);
   const [urlValid, setUrlValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [hasTikTok, setHasTikTok] = useState<boolean | null>(null);
+
+  // Check if user has a TikTok account linked
+  useEffect(() => {
+    if (!user) return;
+    const check = async () => {
+      const { data } = await supabase
+        .from('tiktok_accounts_safe')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+      setHasTikTok(data && data.length > 0);
+    };
+    check();
+  }, [user]);
 
   const resolveVideoId = useCallback(async (url: string) => {
     const directId = extractTikTokVideoId(url);
