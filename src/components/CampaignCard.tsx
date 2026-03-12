@@ -98,7 +98,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   const displayRate = campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5;
 
   return (
-    <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always">
+    <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
+      {/* Ambient color glow */}
+      <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.35 }}>
+        <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-150 blur-[80px]" decoding="async" />
+      </div>
       {/* Card container with image */}
       <div className="absolute top-20 left-3 right-3 bottom-3" style={getCardSlideStyle()}>
         <div
