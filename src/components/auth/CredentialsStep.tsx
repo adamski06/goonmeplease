@@ -85,12 +85,13 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
       <div className="pt-2">
         <Button
           type="submit"
-          className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
+          className="w-full py-3.5 h-auto rounded-full text-base font-bold text-white border border-white/20 shadow-lg hover:opacity-90"
           style={{
-            background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.95) 100%)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+            background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.96) 100%)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.25)',
+            border: '1px solid rgba(255,255,255,0.08)',
           }}
           disabled={isLoading}
         >
