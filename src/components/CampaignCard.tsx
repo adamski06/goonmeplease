@@ -210,8 +210,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             touchAction: 'none',
             top: '56px',
             bottom: '92px',
+            left: '12px',
             right: '12px',
-            clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
             willChange: 'clip-path',
             transition: expandReady
               ? 'clip-path 0.5s cubic-bezier(0.32, 0.72, 0, 1)'
