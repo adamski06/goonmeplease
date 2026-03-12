@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Campaign } from '@/types/campaign';
 import { fetchCampaignsByIds } from '@/hooks/useCampaigns';
 
@@ -16,19 +16,24 @@ export function addRecentCampaign(campaignId: string) {
   } catch {}
 }
 
-export function useRecentCampaigns(): { campaigns: Campaign[]; loading: boolean } {
+export function useRecentCampaigns(): { campaigns: Campaign[]; loading: boolean; refetch: () => void } {
   const [recentCampaigns, setRecentCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchRecent = useCallback(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) { setLoading(false); return; }
       const ids: string[] = JSON.parse(stored);
       if (ids.length === 0) { setLoading(false); return; }
+      setLoading(true);
       fetchCampaignsByIds(ids).then(c => { setRecentCampaigns(c); setLoading(false); });
     } catch { setLoading(false); }
   }, []);
 
-  return { campaigns: recentCampaigns, loading };
+  useEffect(() => {
+    fetchRecent();
+  }, [fetchRecent]);
+
+  return { campaigns: recentCampaigns, loading, refetch: fetchRecent };
 }
