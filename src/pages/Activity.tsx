@@ -7,6 +7,7 @@ import BottomNav from '@/components/BottomNav';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import CampaignOverlay from '@/components/CampaignOverlay';
+import RewardOverlay from '@/components/RewardOverlay';
 import InActionCard, { ActiveSubmission } from '@/components/InActionCard';
 import InActionDetail from '@/components/InActionDetail';
 import RewardInActionDetail, { RewardSubmission } from '@/components/RewardInActionDetail';
