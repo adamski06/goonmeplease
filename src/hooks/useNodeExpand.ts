@@ -11,6 +11,8 @@ export function useNodeExpand(entityId: string) {
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
+
+    // Ensure one painted frame off-screen before activating slide-in
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setMountReady(true);
@@ -25,7 +27,7 @@ export function useNodeExpand(entityId: string) {
     setTimeout(() => {
       setIsExpanded(false);
       setIsClosing(false);
-    }, 450);
+    }, 380);
   }, [isExpanded, isClosing]);
 
   useEffect(() => {
@@ -42,9 +44,11 @@ export function useNodeExpand(entityId: string) {
       left: '12px',
       right: '12px',
       borderRadius: '48px',
-      transform: isOpen ? 'translateX(0)' : 'translateX(105%)',
+      transform: isOpen ? 'translate3d(0,0,0)' : 'translate3d(120%,0,0)',
       willChange: 'transform',
-      transition: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
+      backfaceVisibility: 'hidden',
+      WebkitBackfaceVisibility: 'hidden',
+      transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1)',
     };
   }, [mountReady, isClosing]);
 
@@ -52,15 +56,22 @@ export function useNodeExpand(entityId: string) {
   const getCardSlideStyle = useCallback((): React.CSSProperties => {
     const isOpen = mountReady && !isClosing;
     return {
-      transform: isOpen ? 'translateX(-30%)' : 'translateX(0)',
+      transform: isOpen ? 'translate3d(-30%,0,0)' : 'translate3d(0,0,0)',
       opacity: isOpen ? 0.4 : 1,
-      transition: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease',
+      willChange: 'transform, opacity',
+      backfaceVisibility: 'hidden',
+      WebkitBackfaceVisibility: 'hidden',
+      transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.34s ease',
     };
   }, [mountReady, isClosing]);
 
   const getContentStyle = useCallback((): React.CSSProperties => {
-    return { opacity: 1 };
-  }, []);
+    const isVisible = mountReady && !isClosing;
+    return {
+      opacity: isVisible ? 1 : 0,
+      transition: isVisible ? 'opacity 0.2s ease 0.06s' : 'opacity 0.12s ease',
+    };
+  }, [mountReady, isClosing]);
 
   return {
     nodeRef,
