@@ -34,6 +34,19 @@ serve(async (req) => {
     const email = userData.user.email;
     if (!email) throw new Error("User email not available");
 
+    // Verify business role
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+    const { data: isBusinessRole } = await adminClient.rpc('has_role', {
+      _user_id: userId, _role: 'business'
+    });
+    if (!isBusinessRole) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     const { rewardAdId } = await req.json();
     if (!rewardAdId) throw new Error("Missing rewardAdId");
 
