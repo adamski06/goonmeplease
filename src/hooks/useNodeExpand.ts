@@ -109,16 +109,13 @@ export function useNodeExpand(entityId: string) {
     };
   }, [mountReady, isClosing]);
 
-  // Slide + fade thumbnail in sync with overlay entrance.
+  // Fade thumbnail out in place when overlay opens — no sliding.
   const getCardSlideStyle = useCallback((): React.CSSProperties => {
     const isOpen = isExpanded && mountReady && !isClosing;
     return {
-      transform: isOpen ? 'translate3d(-22%,0,0)' : 'translate3d(0,0,0)',
       opacity: isOpen ? 0 : 1,
-      willChange: 'transform, opacity',
-      backfaceVisibility: 'hidden',
-      WebkitBackfaceVisibility: 'hidden',
-      transition: 'transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s ease',
+      willChange: 'opacity',
+      transition: 'opacity 0.3s ease',
     };
   }, [isExpanded, mountReady, isClosing]);
 
