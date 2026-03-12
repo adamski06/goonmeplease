@@ -50,7 +50,7 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
     const img = new Image();
     img.onload = () => {
       setImageEl(img);
-      // Fit image to cover canvas
+      // Fit image to cover canvas (use canvas coords, not display)
       const scaleX = CANVAS_WIDTH / img.width;
       const scaleY = CANVAS_HEIGHT / img.height;
       const fitScale = Math.max(scaleX, scaleY);

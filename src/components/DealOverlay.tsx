@@ -101,6 +101,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
           transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
+        onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
       />
 
       <style>{`
