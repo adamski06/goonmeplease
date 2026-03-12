@@ -93,7 +93,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     setInitClip(getClipInset());
     setIsExpanded(true);
     setExpandReady(false);
-    addRecentCampaign(campaign.id);
+    addRecentCampaign(campaign.id, 'spread');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setExpandReady(true);

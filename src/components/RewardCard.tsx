@@ -41,6 +41,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
     setInitClip(getClipInset());
     setIsExpanded(true);
     setExpandReady(false);
+    addRecentCampaign(reward.id, 'reward');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setExpandReady(true);

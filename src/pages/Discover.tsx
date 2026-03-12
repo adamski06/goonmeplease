@@ -102,6 +102,7 @@ const Discover: React.FC = () => {
       savedScrollPosition.current = featuredScrollRef.current.scrollTop;
     }
     setSelectedReward(reward);
+    addRecentCampaign(reward.id, 'reward');
   };
 
   const handleBackFromDetail = () => {
