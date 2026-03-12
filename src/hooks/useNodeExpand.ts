@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect, useLayoutEffect } from 'react';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export function useNodeExpand(entityId: string) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -11,6 +12,7 @@ export function useNodeExpand(entityId: string) {
   const openRafRef = useRef<number | null>(null);
 
   const openNode = useCallback(() => {
+    Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {});
     setIsExpanded(true);
     setIsClosing(false);
     setMountReady(false);
