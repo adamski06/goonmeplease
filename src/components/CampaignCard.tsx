@@ -402,7 +402,6 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             </div>
           </div>
         </div>
-      </div>
       )}
     </div>
   );
