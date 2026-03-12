@@ -19,9 +19,11 @@ export function useNodeExpand(entityId: string) {
   const setOverlayRef = useCallback((el: HTMLDivElement | null) => {
     overlayRef.current = el;
     if (el) {
-      // Force browser to acknowledge the off-screen position
+      // Force browser to paint the off-screen position first
       void el.getBoundingClientRect();
-      setMountReady(true);
+      requestAnimationFrame(() => {
+        setMountReady(true);
+      });
     }
   }, []);
 
