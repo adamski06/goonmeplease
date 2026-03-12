@@ -33,7 +33,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContinue = () => {
-    addRecentCampaign(campaign.id);
+    addRecentCampaign(campaign.id, 'spread');
     setSubmitSliding(true);
     setTimeout(() => {
       setShowSubmit(true);
