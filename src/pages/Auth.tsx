@@ -99,7 +99,7 @@ const Auth: React.FC = () => {
 
       const hasTikTok = tiktokAccounts && tiktokAccounts.length > 0;
 
-      if (!profile?.username || !hasTikTok) {
+      if (!hasTikTok) {
         // New user (OAuth or otherwise) — show TikTok onboarding
         const provider = user.app_metadata?.provider;
         const oauthUser = provider && provider !== 'email';
