@@ -227,7 +227,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             className="h-full flex flex-col overflow-hidden relative"
             style={{
               opacity: expandReady && !isClosing ? 1 : 0,
-              transition: expandReady ? 'opacity 0.35s ease-out 0.1s' : 'opacity 0.25s ease-out',
+              transition: expandReady ? 'opacity 0.2s ease-out' : 'opacity 0.15s ease-out',
             }}
           >
             {/* X close button */}
