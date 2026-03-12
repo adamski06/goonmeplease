@@ -179,6 +179,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
       {/* Expanded overlay - fixed, animates with GPU-composited transform */}
       {isExpanded && (
         <div
+          ref={setOverlayRef}
           onClick={handleClose}
           onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
           className="fixed z-50 overflow-hidden"
