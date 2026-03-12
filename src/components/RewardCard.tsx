@@ -67,7 +67,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
       {/* Card image */}
       <div className="absolute top-14 left-3 right-3 bottom-3">
         <div
-          onClick={openNode}
+          onClick={handleOpen}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
           <img src={reward.image || placeholderBlue} alt={reward.brand} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
