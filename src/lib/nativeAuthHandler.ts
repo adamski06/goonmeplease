@@ -20,8 +20,9 @@ export function initNativeAuthHandler() {
       // Only handle our auth callback
       if (urlObj.host !== 'auth-callback') return;
 
-      const accessToken = urlObj.searchParams.get('access_token');
-      const refreshToken = urlObj.searchParams.get('refresh_token');
+      const hashParams = new URLSearchParams(urlObj.hash.replace(/^#/, ''));
+      const accessToken = urlObj.searchParams.get('access_token') || hashParams.get('access_token');
+      const refreshToken = urlObj.searchParams.get('refresh_token') || hashParams.get('refresh_token');
 
       if (accessToken && refreshToken) {
         await supabase.auth.setSession({
