@@ -167,7 +167,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         style={{
           height: '120px',
           opacity: isClosing ? 1 : isExpanded ? 0 : 1,
-          transition: isClosing ? 'opacity 0.35s ease-out 0.15s' : 'none',
+          transition: isClosing ? 'opacity 0.25s ease-out 0.1s' : 'none',
           pointerEvents: isExpanded ? 'none' : 'auto',
           background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
           border: '1.5px solid rgba(255,255,255,0.8)',
