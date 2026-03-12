@@ -5,8 +5,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, ChevronLeft } from 'lucide-react';
+import { Camera, ChevronLeft, Check, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import tiktokLogo from '@/assets/tiktok-logo.png';
 
 interface ProfileEditContentProps {
   onSaved?: () => void;
