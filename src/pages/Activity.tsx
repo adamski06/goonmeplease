@@ -349,8 +349,11 @@ const Activity: React.FC = () => {
   }, [fetchActiveSubmissions, refetchRecent, refetchFavorites]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    const container = scrollContainerRef.current;
-    if (container && container.scrollTop <= 0 && !isRefreshing) {
+    if (isRefreshing) return;
+    const scrollTop = scrollContainerRef.current
+      ? scrollContainerRef.current.scrollTop
+      : window.scrollY || document.documentElement.scrollTop;
+    if (scrollTop <= 0) {
       touchStartY.current = e.touches[0].clientY;
       isPulling.current = true;
     }
