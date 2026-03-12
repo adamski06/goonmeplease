@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Bookmark, Plus, X } from 'lucide-react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
@@ -97,10 +97,24 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
 
   const displayRate = campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5;
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [glowVisible, setGlowVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setGlowVisible(entry.intersectionRatio > 0.6),
+      { threshold: [0, 0.6, 1] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
+    <div ref={cardRef} className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
       {/* Ambient color glow - concentrated around card edges */}
-      <div className="absolute top-16 left-0 right-0 bottom-0 pointer-events-none" style={{ opacity: 0.5 }}>
+      <div className="absolute top-16 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.5 : 0 }}>
         <img src={campaign.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[60px] saturate-150" decoding="async" />
       </div>
       {/* Card container with image */}
