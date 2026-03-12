@@ -138,7 +138,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
           >
             {/* X close */}
             <button
-              onClick={(e) => { e.stopPropagation(); closeNode(); }}
+              onClick={(e) => { e.stopPropagation(); handleClose(); }}
               className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.1) 100%)', border: '1px solid rgba(0,0,0,0.06)' }}
             >
