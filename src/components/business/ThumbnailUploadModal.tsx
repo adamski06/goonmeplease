@@ -80,15 +80,20 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
 
   useEffect(() => { draw(); }, [draw]);
 
+  const canvasToDisplayRatio = CANVAS_WIDTH / DISPLAY_WIDTH;
+
   const handlePointerDown = (e: React.PointerEvent) => {
     setDragging(true);
-    setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+    setDragStart({ x: e.clientX - offset.x / canvasToDisplayRatio, y: e.clientY - offset.y / canvasToDisplayRatio });
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!dragging) return;
-    setOffset({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+    setOffset({
+      x: (e.clientX - dragStart.x) * canvasToDisplayRatio,
+      y: (e.clientY - dragStart.y) * canvasToDisplayRatio,
+    });
   };
 
   const handlePointerUp = () => setDragging(false);
