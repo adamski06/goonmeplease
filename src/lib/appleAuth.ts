@@ -37,10 +37,8 @@ export async function signInWithApple(): Promise<{ error: any }> {
         const interval = setInterval(async () => {
           if (popup.closed) {
             clearInterval(interval);
-            const { data: session } = await lovable.auth.signInWithOAuth('apple', {
-              redirect_uri: window.location.origin,
-            });
-            if ((session as any)?.tokens) {
+            const { data: session } = await supabase.auth.getSession();
+            if (session?.session) {
               window.location.reload();
             }
             resolve({ error: null });
