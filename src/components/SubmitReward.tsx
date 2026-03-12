@@ -4,6 +4,8 @@ import { Campaign } from '@/types/campaign';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import tiktokLogo from '@/assets/tiktok-logo.png';
+import { useNavigate } from 'react-router-dom';
 
 interface SubmitRewardProps {
   reward: Campaign;
