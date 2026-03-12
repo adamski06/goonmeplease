@@ -381,11 +381,39 @@ const Activity: React.FC = () => {
   // Loading handled by UserLayout
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div
+      ref={scrollContainerRef}
+      className="min-h-screen bg-white pb-24 overflow-y-auto"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Header */}
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center justify-center px-4 py-3">
           <span className="text-base font-semibold text-black">Action</span>
+        </div>
+      </div>
+
+      {/* Pull-to-refresh indicator */}
+      <div
+        className="flex items-center justify-center overflow-hidden transition-all duration-200"
+        style={{ height: isRefreshing ? 48 : pullDistance > 10 ? pullDistance : 0 }}
+      >
+        <div className={`flex items-center gap-2 ${isRefreshing ? 'animate-pulse' : ''}`}>
+          <svg
+            className={`h-5 w-5 text-black/40 transition-transform duration-200 ${isRefreshing ? 'animate-spin' : ''}`}
+            style={{ transform: !isRefreshing ? `rotate(${Math.min(pullDistance / PULL_THRESHOLD, 1) * 360}deg)` : undefined }}
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          >
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+            <path d="M16 21h5v-5" />
+          </svg>
+          <span className="text-xs font-medium text-black/40 font-jakarta">
+            {isRefreshing ? 'Updating...' : pullDistance >= PULL_THRESHOLD ? 'Release to refresh' : 'Pull to refresh'}
+          </span>
         </div>
       </div>
 
