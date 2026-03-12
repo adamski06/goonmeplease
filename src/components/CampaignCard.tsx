@@ -208,8 +208,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           className="fixed z-50 rounded-[48px] overflow-hidden"
           style={{
             touchAction: 'none',
+            top: '56px',
             bottom: '92px',
-            left: '12px',
             right: '12px',
             clipPath: expandReady ? 'inset(0 round 48px)' : initClip,
             willChange: 'clip-path',
