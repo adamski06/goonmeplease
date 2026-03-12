@@ -59,7 +59,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
       setIsClosing(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 520);
+    }, 380);
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
