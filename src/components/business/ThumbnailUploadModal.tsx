@@ -27,8 +27,11 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
   const [dragging, setDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const CANVAS_WIDTH = 270;
-  const CANVAS_HEIGHT = CANVAS_WIDTH / aspectRatio;
+  const DISPLAY_WIDTH = 270;
+  const DISPLAY_HEIGHT = DISPLAY_WIDTH / aspectRatio;
+  // Use high-res internal canvas for crisp editing (2x for retina)
+  const CANVAS_WIDTH = DISPLAY_WIDTH * 2;
+  const CANVAS_HEIGHT = DISPLAY_HEIGHT * 2;
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -47,7 +50,7 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
     const img = new Image();
     img.onload = () => {
       setImageEl(img);
-      // Fit image to cover canvas
+      // Fit image to cover canvas (use canvas coords, not display)
       const scaleX = CANVAS_WIDTH / img.width;
       const scaleY = CANVAS_HEIGHT / img.height;
       const fitScale = Math.max(scaleX, scaleY);
@@ -77,15 +80,20 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
 
   useEffect(() => { draw(); }, [draw]);
 
+  const canvasToDisplayRatio = CANVAS_WIDTH / DISPLAY_WIDTH;
+
   const handlePointerDown = (e: React.PointerEvent) => {
     setDragging(true);
-    setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+    setDragStart({ x: e.clientX - offset.x / canvasToDisplayRatio, y: e.clientY - offset.y / canvasToDisplayRatio });
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!dragging) return;
-    setOffset({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+    setOffset({
+      x: (e.clientX - dragStart.x) * canvasToDisplayRatio,
+      y: (e.clientY - dragStart.y) * canvasToDisplayRatio,
+    });
   };
 
   const handlePointerUp = () => setDragging(false);
@@ -164,8 +172,8 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
               <div
                 className="relative mx-auto rounded-[20px] overflow-hidden cursor-grab active:cursor-grabbing"
                 style={{
-                  width: CANVAS_WIDTH,
-                  height: CANVAS_HEIGHT,
+                  width: DISPLAY_WIDTH,
+                  height: DISPLAY_HEIGHT,
                   maxHeight: 420,
                   border: '1px solid hsl(var(--border))',
                   background: 'hsl(var(--muted))',
@@ -179,7 +187,7 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
                   className="block"
-                  style={{ touchAction: 'none' }}
+                  style={{ touchAction: 'none', width: DISPLAY_WIDTH, height: DISPLAY_HEIGHT }}
                 />
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-sm">
                   <Move className="h-3 w-3 text-white/60" />

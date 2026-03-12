@@ -92,7 +92,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-40" style={{ touchAction: 'none' }} onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 transition-opacity duration-300 ease-out"
@@ -101,6 +101,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
           transition: 'opacity 0.35s ease-out',
         }}
         onClick={onClose}
+        onTouchMove={(e) => { e.preventDefault(); e.stopPropagation(); }}
       />
 
       <style>{`
