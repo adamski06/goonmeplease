@@ -85,10 +85,24 @@ const DealCard: React.FC<DealCardProps> = ({ deal, isSaved, onToggleFavorite }) 
     boxShadow: '0 -8px 40px rgba(0,0,0,0.25), 0 12px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
   };
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [glowVisible, setGlowVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setGlowVisible(entry.intersectionRatio > 0.6),
+      { threshold: [0, 0.6, 1] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
-      {/* Ambient color glow - concentrated around card edges */}
-      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none" style={{ opacity: 0.5 }}>
+    <div ref={cardRef} className="h-[calc(100dvh-80px)] relative flex flex-col items-center justify-start snap-start snap-always overflow-hidden">
+      {/* Ambient color glow */}
+      <div className="absolute top-10 left-0 right-0 bottom-0 pointer-events-none transition-opacity duration-700" style={{ opacity: glowVisible ? 0.5 : 0 }}>
         <img src={deal.image || placeholderBlue} alt="" className="w-full h-full object-cover scale-[1.3] blur-[60px] saturate-150" decoding="async" />
       </div>
       {/* Card image */}
