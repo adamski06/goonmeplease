@@ -100,10 +100,10 @@ const ThumbnailUploadModal: React.FC<ThumbnailUploadModalProps> = ({
   const handleSave = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    // Draw at higher resolution for quality (1080w for 9:14 ≈ 1080x1680)
+    // Draw at higher resolution for retina quality (1440w for 9:14 ≈ 1440x2240)
     const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = 1080;
-    exportCanvas.height = Math.round(1080 / aspectRatio);
+    exportCanvas.width = 1440;
+    exportCanvas.height = Math.round(1440 / aspectRatio);
     const ctx = exportCanvas.getContext('2d');
     if (!ctx || !imageEl) return;
     const ratio = exportCanvas.width / CANVAS_WIDTH;

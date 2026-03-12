@@ -146,7 +146,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
           onClick={handlePictureClick}
           className="absolute inset-x-0 top-0 bottom-0 rounded-[48px] overflow-hidden cursor-pointer"
         >
-          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" loading="lazy" />
+          <img src={campaign.image || placeholderBlue} alt={campaign.brand} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
           <div
             className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none"
             style={{
