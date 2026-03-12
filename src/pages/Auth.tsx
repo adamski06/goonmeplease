@@ -294,8 +294,8 @@ const Auth: React.FC = () => {
 
         {/* Tagline & buttons */}
         <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10">
-          <h1 className="text-3xl font-bold text-black text-center leading-tight mb-8">
-            Create content.<br />Get paid.
+          <h1 className="text-2xl font-bold text-black text-center mb-8 font-montserrat">
+            Start creating
           </h1>
 
           <div className="w-full max-w-xs space-y-2.5">
