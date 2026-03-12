@@ -276,7 +276,7 @@ const Activity: React.FC = () => {
   const lastPath = useRef(location.pathname);
   useEffect(() => {
     if (location.pathname === '/user/activity' && lastPath.current !== '/user/activity' && initialFetchDone.current) {
-      fetchActiveSubmissions();
+      fetchActiveSubmissions(true);
     }
     lastPath.current = location.pathname;
   }, [location.pathname, fetchActiveSubmissions]);
