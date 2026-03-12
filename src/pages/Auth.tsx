@@ -219,10 +219,19 @@ const Auth: React.FC = () => {
 
   const currentStep = stepNumber(signUpStep);
 
-  // Welcome screen
-  if (authView === 'welcome') {
-    return (
-      <div className="min-h-screen flex flex-col bg-white relative animate-fade-in" style={{ animationDuration: '0.5s' }}>
+  const slideDirection = authView === 'welcome' ? 0 : 1;
+
+  return (
+    <div className="min-h-screen bg-white relative overflow-hidden">
+      {/* Welcome screen */}
+      <div
+        className="min-h-screen flex flex-col absolute inset-0"
+        style={{
+          transform: `translateX(${slideDirection === 0 ? '0%' : '-100%'})`,
+          transition: 'transform 0.45s cubic-bezier(0.32, 0.72, 0, 1)',
+          pointerEvents: authView === 'welcome' ? 'auto' : 'none',
+        }}
+      >
         {/* Logo */}
         <div className="flex justify-center pt-10 pb-10">
           <div className="relative h-10 w-[140px]">
@@ -329,12 +338,10 @@ const Auth: React.FC = () => {
         {/* Bottom sheet for sign-up method */}
         {showMethodSheet && (
           <>
-            {/* Backdrop */}
             <div
               className="fixed inset-0 bg-black/40 z-40 transition-opacity"
               onClick={() => setShowMethodSheet(false)}
             />
-            {/* Sheet */}
             <div
               className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-[28px] px-6 pt-6 pb-10"
               style={{
@@ -351,7 +358,6 @@ const Auth: React.FC = () => {
               </h3>
 
               <div className="space-y-2.5 max-w-xs mx-auto">
-                {/* Apple Sign In */}
                 <button
                   onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
@@ -375,14 +381,12 @@ const Auth: React.FC = () => {
                   Continue with Apple
                 </button>
 
-                {/* Divider */}
                 <div className="flex items-center gap-3 py-1">
                   <div className="flex-1 h-px bg-black/10" />
                   <span className="text-xs text-black/40 font-medium">or</span>
                   <div className="flex-1 h-px bg-black/10" />
                 </div>
 
-                {/* Sign up with email */}
                 <button
                   onClick={() => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
@@ -411,70 +415,74 @@ const Auth: React.FC = () => {
           </>
         )}
       </div>
-    );
-  }
 
-  // Signup / Login forms — full white background, no card node
-  return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <div className="flex-1 flex items-center justify-center px-6 py-8">
-        <div className="w-full max-w-sm">
-          {/* Logo */}
-          <div className="flex justify-center mb-8">
-            <div className="relative h-12 w-[160px]">
-              <div
-                className="absolute inset-0 bg-black"
-                style={{
-                  WebkitMaskImage: `url(${jarlaLogo})`,
-                  maskImage: `url(${jarlaLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-            </div>
-          </div>
-
-          {isSignUp ? (
-            <>
-              {signUpStep === 'credentials' && (
-                <CredentialsStep
-                  onNext={handleCredentialsNext}
-                  onSwitchToLogin={() => { setIsSignUp(false); setAuthView('login'); }}
-                  isLoading={isLoading}
+      {/* Login / Signup forms — slides in from right */}
+      <div
+        className="min-h-screen flex flex-col absolute inset-0"
+        style={{
+          transform: `translateX(${slideDirection === 0 ? '100%' : '0%'})`,
+          transition: 'transform 0.45s cubic-bezier(0.32, 0.72, 0, 1)',
+          pointerEvents: authView !== 'welcome' ? 'auto' : 'none',
+        }}
+      >
+        <div className="flex-1 flex items-center justify-center px-6 py-8">
+          <div className="w-full max-w-sm">
+            {/* Logo */}
+            <div className="flex justify-center mb-8">
+              <div className="relative h-12 w-[160px]">
+                <div
+                  className="absolute inset-0 bg-black"
+                  style={{
+                    WebkitMaskImage: `url(${jarlaLogo})`,
+                    maskImage: `url(${jarlaLogo})`,
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center',
+                  }}
                 />
-              )}
-              {signUpStep === 'tiktok' && newUserId && (
-                <TikTokStep userId={newUserId} onNext={handleTikTokNext} onSkip={handleTikTokSkip} />
-              )}
-              {signUpStep === 'phone' && newUserId && (
-                <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
-              )}
+              </div>
+            </div>
 
-              {/* Step indicator — hide for OAuth users (single step) */}
-              {!isOAuthUser && (
-                <div className="flex justify-center gap-2 mt-6">
-                  {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
-                    <div
-                      key={s}
-                      className={`h-1.5 rounded-full transition-all ${
-                        s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <LoginForm
-              onSubmit={handleLogin}
-              onSwitchToSignUp={() => { setIsSignUp(true); setAuthView('signup'); setSignUpStep('credentials'); }}
-              isLoading={isLoading}
-            />
-          )}
+            {isSignUp ? (
+              <>
+                {signUpStep === 'credentials' && (
+                  <CredentialsStep
+                    onNext={handleCredentialsNext}
+                    onSwitchToLogin={() => { setIsSignUp(false); setAuthView('login'); }}
+                    isLoading={isLoading}
+                  />
+                )}
+                {signUpStep === 'tiktok' && newUserId && (
+                  <TikTokStep userId={newUserId} onNext={handleTikTokNext} onSkip={handleTikTokSkip} />
+                )}
+                {signUpStep === 'phone' && newUserId && (
+                  <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
+                )}
+
+                {!isOAuthUser && (
+                  <div className="flex justify-center gap-2 mt-6">
+                    {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
+                      <div
+                        key={s}
+                        className={`h-1.5 rounded-full transition-all ${
+                          s === currentStep ? 'w-6 bg-black' : 'w-1.5 bg-black/20'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <LoginForm
+                onSubmit={handleLogin}
+                onSwitchToSignUp={() => { setIsSignUp(true); setAuthView('signup'); setSignUpStep('credentials'); }}
+                isLoading={isLoading}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
