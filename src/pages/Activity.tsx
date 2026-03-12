@@ -20,37 +20,47 @@ import { supabase } from '@/integrations/supabase/client';
 
 const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) => void }> = ({ campaigns, onSelect }) => (
   <div className="space-y-2.5">
-    {campaigns.map((campaign) => (
-      <button
-        key={campaign.id}
-        onClick={() => onSelect(campaign)}
-        className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
-        style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
-          border: '1.5px solid rgba(255,255,255,0.8)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
-        }}
-      >
-        <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
-          {campaign.logo ? (
-            <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-lg font-bold text-black/30">{campaign.brand?.[0]}</span>
-          )}
-        </div>
-        <div className="flex-1 min-w-0">
-          <span className="text-sm font-bold text-black font-montserrat truncate block mb-0.5">{campaign.brand}</span>
-          <p className="text-xs text-black/50 font-jakarta line-clamp-1">{campaign.description}</p>
-        </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-            <span className="text-xs font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
-            <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
+    {campaigns.map((campaign) => {
+      const isReward = campaign.type === 'reward';
+      return (
+        <button
+          key={campaign.id}
+          onClick={() => onSelect(campaign)}
+          className="w-full rounded-[28px] overflow-hidden flex items-center gap-3 px-4 py-3 text-left transition-all active:scale-[0.98]"
+          style={{
+            background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,0.95) 100%)',
+            border: '1.5px solid rgba(255,255,255,0.8)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 2px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(0,0,0,0.05)',
+          }}
+        >
+          <div className="w-14 h-14 rounded-[18px] overflow-hidden flex-shrink-0 bg-black/5 flex items-center justify-center">
+            {campaign.logo ? (
+              <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-lg font-bold text-black/30">{campaign.brand?.[0]}</span>
+            )}
           </div>
-          <ChevronRight className="h-4 w-4 text-black/30" />
-        </div>
-      </button>
-    ))}
+          <div className="flex-1 min-w-0">
+            <span className="text-sm font-bold text-black font-montserrat truncate block mb-0.5">{campaign.brand}</span>
+            <p className="text-xs text-black/50 font-jakarta line-clamp-1">{campaign.description}</p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {isReward ? (
+              <div className="rounded-[14px] px-2.5 py-1 flex items-center gap-1 border border-purple-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)' }}>
+                <Gift className="h-3 w-3 text-white/80" />
+                <span className="text-[10px] font-bold text-white font-montserrat">REWARD</span>
+              </div>
+            ) : (
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                <span className="text-xs font-bold text-white font-montserrat">{campaign.maxEarnings.toLocaleString()}</span>
+                <span className="text-[9px] font-semibold text-white/80 font-montserrat">sek</span>
+              </div>
+            )}
+            <ChevronRight className="h-4 w-4 text-black/30" />
+          </div>
+        </button>
+      );
+    })}
   </div>
 );
 
