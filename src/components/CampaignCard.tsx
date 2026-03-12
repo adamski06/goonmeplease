@@ -22,15 +22,11 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
   onToggleFavorite,
 }) => {
   const { formatPrice, label, convert } = useCurrency();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [expandReady, setExpandReady] = useState(false);
+  const { nodeRef, isExpanded, isClosing, openNode, closeNode, getOverlayStyle, getContentStyle } = useNodeExpand(campaign.id);
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
-
-  const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleContinue = () => {
     addRecentCampaign(campaign.id, 'spread');
@@ -70,71 +66,34 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
     }, 300);
   };
 
-  // Compute clip-path inset to clip overlay down to the node's bounds
-  const getClipInset = () => {
-    if (!nodeRef.current) return 'inset(0)';
-    const rect = nodeRef.current.getBoundingClientRect();
-    // The overlay is fixed at top:56 bottom:92 left:12 right:12
-    const finalTop = 56;
-    const finalLeft = 12;
-    const finalW = window.innerWidth - 24;
-    const finalH = window.innerHeight - 148;
-    // Inset values relative to the overlay's own bounds
-    const top = rect.top - finalTop;
-    const left = rect.left - finalLeft;
-    const bottom = finalH - (rect.bottom - finalTop);
-    const right = finalW - (rect.right - finalLeft);
-    return `inset(${Math.max(0, top)}px ${Math.max(0, right)}px ${Math.max(0, bottom)}px ${Math.max(0, left)}px round 48px)`;
-  };
-
-  const [initClip, setInitClip] = useState('inset(0)');
-
-  const openNode = () => {
-    setInitClip(getClipInset());
-    setIsExpanded(true);
-    setExpandReady(false);
+  const handleOpen = () => {
     addRecentCampaign(campaign.id, 'spread');
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setExpandReady(true);
-      });
-    });
+    openNode();
   };
 
-  const closeNode = () => {
-    if (!isExpanded || isClosing) return;
-    setInitClip(getClipInset());
-    setExpandReady(false);
-    setIsClosing(true);
+  const handleClose = () => {
+    closeNode();
     setTimeout(() => {
-      setIsExpanded(false);
-      setIsClosing(false);
       setShowGuide(false);
       setGuideSliding(false);
       setShowSubmit(false);
       setSubmitSliding(false);
-    }, 380);
+    }, 320);
   };
 
   const handlePictureClick = () => {
-    openNode();
+    handleOpen();
   };
 
   const handleNodeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (showGuide || guideSliding) return;
     if (isExpanded) {
-      closeNode();
+      handleClose();
     } else {
-      openNode();
+      handleOpen();
     }
   };
-
-  useEffect(() => {
-    setIsExpanded(false);
-    setIsClosing(false);
-    setExpandReady(false);
-  }, [campaign.id]);
 
   const displayRate = campaign.tiers[0]?.rate ?? campaign.ratePerView ?? 0.5;
 
