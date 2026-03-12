@@ -153,8 +153,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
             }}
           />
-          <div className={`absolute inset-x-0 bottom-[148px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-            <div className="absolute inset-x-0 bottom-[-40px] h-[180px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
+          <div className={`absolute inset-x-0 bottom-[88px] p-4 transition-opacity duration-300 ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className="absolute inset-x-0 bottom-[-40px] h-[140px] bg-gradient-to-t from-black/70 via-black/40 to-transparent pointer-events-none" />
           </div>
         </div>
       </div>
