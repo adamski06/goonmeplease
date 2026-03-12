@@ -182,7 +182,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                closeNode();
+                handleClose();
               }}
               className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full flex items-center justify-center"
               style={{
