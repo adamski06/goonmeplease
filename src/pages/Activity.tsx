@@ -668,8 +668,16 @@ const Activity: React.FC = () => {
         </Tabs>
       </div>
 
-      {/* Campaign detail overlay */}
-      {selectedRecentCampaign && (
+      {/* Campaign/Reward detail overlay */}
+      {selectedRecentCampaign && selectedRecentCampaign.type === 'reward' ? (
+        <RewardOverlay
+          reward={selectedRecentCampaign}
+          isClosing={isClosingOverlay}
+          onClose={handleCloseOverlay}
+          isSaved={favoriteIds.includes(selectedRecentCampaign.id)}
+          onToggleSave={(e) => { e.stopPropagation(); toggleFavorite(selectedRecentCampaign.id); }}
+        />
+      ) : selectedRecentCampaign ? (
         <CampaignOverlay
           campaign={selectedRecentCampaign}
           isClosing={isClosingOverlay}
@@ -677,7 +685,7 @@ const Activity: React.FC = () => {
           isSaved={favoriteIds.includes(selectedRecentCampaign.id)}
           onToggleSave={(e) => { e.stopPropagation(); toggleFavorite(selectedRecentCampaign.id); }}
         />
-      )}
+      ) : null}
 
       {/* In Action detail overlay */}
       {selectedSubmission && (
