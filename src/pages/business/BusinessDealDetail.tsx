@@ -110,7 +110,9 @@ const BusinessDealDetail: React.FC = () => {
   const handleThumbnailCropSave = async (blob: Blob) => {
     if (!id) return;
     setUploading(true);
-    const path = `thumbnails/deal-${id}.jpg`;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setUploading(false); return; }
+    const path = `${user.id}/thumbnails/deal-${id}.jpg`;
     const { error: uploadError } = await supabase.storage
       .from('campaign-assets')
       .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });

@@ -34,6 +34,19 @@ serve(async (req) => {
     const email = userData.user.email;
     if (!email) throw new Error("User email not available");
 
+    // Verify business role
+    const adminClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+    const { data: isBusinessRole } = await adminClient.rpc('has_role', {
+      _user_id: userId, _role: 'business'
+    });
+    if (!isBusinessRole) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     const { rewardAdId } = await req.json();
     if (!rewardAdId) throw new Error("Missing rewardAdId");
 
@@ -51,14 +64,9 @@ serve(async (req) => {
       customerId = customer.id;
     }
 
-    // Save stripe_customer_id to business profile
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
+    // Save stripe_customer_id to business profile (reuse adminClient from role check)
 
-    await supabaseAdmin
+    await adminClient
       .from("business_profiles")
       .update({ stripe_customer_id: customerId })
       .eq("user_id", userId);
@@ -83,7 +91,7 @@ serve(async (req) => {
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error("[create-reward-setup] Error:", msg);
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: "An internal error occurred. Please try again." }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });

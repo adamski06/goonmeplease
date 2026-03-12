@@ -123,8 +123,10 @@ const BusinessCampaignDetail: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file || !id) return;
     setUploading(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setUploading(false); return; }
     const ext = file.name.split('.').pop();
-    const path = `thumbnails/${id}.${ext}`;
+    const path = `${user.id}/thumbnails/${id}.${ext}`;
     const { error: uploadError } = await supabase.storage
       .from('campaign-assets')
       .upload(path, file, { upsert: true });
@@ -150,7 +152,9 @@ const BusinessCampaignDetail: React.FC = () => {
   const handleThumbnailCropSave = async (blob: Blob) => {
     if (!id) return;
     setUploading(true);
-    const path = `thumbnails/${id}.jpg`;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setUploading(false); return; }
+    const path = `${user.id}/thumbnails/${id}.jpg`;
     const { error: uploadError } = await supabase.storage
       .from('campaign-assets')
       .upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
