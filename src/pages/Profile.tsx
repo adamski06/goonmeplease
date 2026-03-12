@@ -116,6 +116,14 @@ const ProfilePage: React.FC = () => {
     }
   }, [user, loading, navigate]);
 
+  // Auto-open profile edit if navigated with ?edit=true
+  useEffect(() => {
+    if (searchParams.get('edit') === 'true' && !profileExpanded && !loading && user) {
+      openProfile();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, loading, user]);
+
   // Fetch real creator stats from submissions + balance
   useEffect(() => {
     if (!user) return;
