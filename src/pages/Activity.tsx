@@ -91,8 +91,8 @@ const Activity: React.FC = () => {
   const [selectedRecentCampaign, setSelectedRecentCampaign] = useState<Campaign | null>(null);
   const [isClosingOverlay, setIsClosingOverlay] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
-  const { campaigns: recentCampaigns, loading: recentLoading } = useRecentCampaigns();
-  const { campaigns: favoriteCampaigns, loading: favoritesLoading, favoriteIds, toggleFavorite } = useFavorites();
+  const { campaigns: recentCampaigns, loading: recentLoading, refetch: refetchRecent } = useRecentCampaigns();
+  const { campaigns: favoriteCampaigns, loading: favoritesLoading, favoriteIds, toggleFavorite, refetch: refetchFavorites } = useFavorites();
 
   // In Action state
   const [activeSubmissions, setActiveSubmissions] = useState<ActiveSubmission[]>([]);
@@ -102,6 +102,14 @@ const Activity: React.FC = () => {
   const [selectedSubmission, setSelectedSubmission] = useState<ActiveSubmission | null>(null);
   const [selectedRewardSubmission, setSelectedRewardSubmission] = useState<RewardSubmission | null>(null);
   const [isClosingSubmission, setIsClosingSubmission] = useState(false);
+
+  // Pull-to-refresh state
+  const [pullDistance, setPullDistance] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const touchStartY = useRef(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isPulling = useRef(false);
+  const PULL_THRESHOLD = 80;
 
   const fetchActiveSubmissions = useCallback(async () => {
     if (!user) { setSubmissionsLoading(false); return; }
