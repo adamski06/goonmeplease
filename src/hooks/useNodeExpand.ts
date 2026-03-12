@@ -37,6 +37,39 @@ export function useNodeExpand(entityId: string) {
     }, 380);
   }, [isExpanded, isClosing]);
 
+  useLayoutEffect(() => {
+    if (openRafRef.current !== null) {
+      cancelAnimationFrame(openRafRef.current);
+      openRafRef.current = null;
+    }
+
+    if (!isExpanded) {
+      setMountReady(false);
+      return;
+    }
+
+    const el = overlayRef.current;
+    if (!el) return;
+
+    // Ensure first paint is off-screen before transitioning in
+    setMountReady(false);
+    void el.getBoundingClientRect();
+
+    openRafRef.current = requestAnimationFrame(() => {
+      openRafRef.current = requestAnimationFrame(() => {
+        setMountReady(true);
+        openRafRef.current = null;
+      });
+    });
+
+    return () => {
+      if (openRafRef.current !== null) {
+        cancelAnimationFrame(openRafRef.current);
+        openRafRef.current = null;
+      }
+    };
+  }, [isExpanded]);
+
   useEffect(() => {
     setIsExpanded(false);
     setIsClosing(false);
