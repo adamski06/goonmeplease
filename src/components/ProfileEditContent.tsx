@@ -40,6 +40,23 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
     }
   }, [profile]);
 
+  // Fetch TikTok account
+  useEffect(() => {
+    if (!user) return;
+    const fetchTikTok = async () => {
+      setTiktokLoading(true);
+      const { data } = await supabase
+        .from('tiktok_accounts_safe')
+        .select('tiktok_username')
+        .eq('user_id', user.id)
+        .limit(1)
+        .maybeSingle();
+      setTiktokUsername(data?.tiktok_username || null);
+      setTiktokLoading(false);
+    };
+    fetchTikTok();
+  }, [user]);
+
   const canChangeUsername = () => {
     if (!profile?.username_changed_at) return true;
     const lastChanged = new Date(profile.username_changed_at);
