@@ -282,6 +282,80 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
               className="bg-black/[0.03] border-black/[0.06] text-black font-jakarta"
             />
           </div>
+
+          {/* TikTok Account */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat">
+              TikTok Account
+            </Label>
+            {tiktokLoading ? (
+              <div className="flex items-center gap-2 py-2">
+                <Loader2 className="h-4 w-4 animate-spin text-black/30" />
+                <span className="text-sm text-black/40 font-jakarta">Loading...</span>
+              </div>
+            ) : tiktokUsername && !tiktokEditing ? (
+              <div
+                className="flex items-center gap-3 p-3 rounded-xl"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                }}
+              >
+                <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <img src={tiktokLogo} alt="" className="w-5 h-5 object-contain" />
+                </div>
+                <span className="text-sm font-medium text-black font-jakarta flex-1">@{tiktokUsername}</span>
+                <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    value={tiktokInput}
+                    onChange={(e) => setTiktokInput(e.target.value)}
+                    placeholder="@username"
+                    className="flex-1 bg-black/[0.03] border-black/[0.06] text-black font-jakarta"
+                  />
+                  <button
+                    onClick={async () => {
+                      const trimmed = tiktokInput.trim().replace(/^@/, '');
+                      if (!trimmed || trimmed.length < 2) return;
+                      setTiktokSaving(true);
+                      try {
+                        await supabase.rpc('get_or_create_tiktok_account', {
+                          p_tiktok_username: trimmed,
+                        });
+                        setTiktokUsername(trimmed);
+                        setTiktokEditing(false);
+                        setTiktokInput('');
+                        toast({ title: 'TikTok linked', description: `@${trimmed} has been connected.` });
+                      } catch (err: any) {
+                        toast({ title: 'Failed to link TikTok', description: err.message, variant: 'destructive' });
+                      } finally {
+                        setTiktokSaving(false);
+                      }
+                    }}
+                    disabled={!tiktokInput.trim() || tiktokSaving}
+                    className="h-9 px-4 rounded-full text-sm font-semibold text-white flex items-center justify-center"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.96) 100%)',
+                      opacity: !tiktokInput.trim() || tiktokSaving ? 0.4 : 1,
+                    }}
+                  >
+                    {tiktokSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Link'}
+                  </button>
+                </div>
+                {tiktokUsername && tiktokEditing && (
+                  <button
+                    onClick={() => setTiktokEditing(false)}
+                    className="text-xs text-black/40 font-jakarta underline underline-offset-2"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
