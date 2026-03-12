@@ -25,6 +25,11 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [tiktokUsername, setTiktokUsername] = useState<string | null>(null);
+  const [tiktokLoading, setTiktokLoading] = useState(true);
+  const [tiktokInput, setTiktokInput] = useState('');
+  const [tiktokEditing, setTiktokEditing] = useState(false);
+  const [tiktokSaving, setTiktokSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
