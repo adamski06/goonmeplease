@@ -183,7 +183,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
             You need to link your TikTok account before you can submit videos.
           </p>
           <button
-            onClick={() => navigate('/user/edit-profile')}
+            onClick={() => navigate('/user/profile?edit=true')}
             className="px-6 py-3 rounded-full text-sm font-bold text-white font-montserrat transition-all active:scale-[0.97]"
             style={{
               background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',

@@ -159,9 +159,10 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
         <div className="flex-1 overflow-y-auto px-5 py-8">
           <TikTokStep
             userId={user.id}
-            onNext={(newUsername) => {
+            onNext={async (newUsername) => {
               setTiktokUsername(newUsername);
               setShowTikTokStep(false);
+              await refetchProfile();
               toast({ title: 'TikTok linked', description: `@${newUsername} has been connected.` });
             }}
             onSkip={() => setShowTikTokStep(false)}

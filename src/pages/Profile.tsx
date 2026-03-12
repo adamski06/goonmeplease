@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,6 +15,7 @@ const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { formatPrice, label, convert } = useCurrency();
 
   // Creator stats
@@ -114,6 +115,14 @@ const ProfilePage: React.FC = () => {
       navigate('/user/auth');
     }
   }, [user, loading, navigate]);
+
+  // Auto-open profile edit if navigated with ?edit=true
+  useEffect(() => {
+    if (searchParams.get('edit') === 'true' && !profileExpanded && !loading && user) {
+      openProfile();
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, loading, user]);
 
   // Fetch real creator stats from submissions + balance
   useEffect(() => {
