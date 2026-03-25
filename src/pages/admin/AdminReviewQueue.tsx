@@ -548,7 +548,7 @@ const AdminReviewQueue = () => {
           </TableHeader>
           <TableBody>
             {items.map((item) => (
-              <TableRow key={`${item.type}-${item.id}`} className="cursor-pointer hover:bg-accent/50" onClick={() => setReviewItem(item)}>
+              <TableRow key={`${item.type}-${item.id}`} className="cursor-pointer hover:bg-accent/50" onClick={() => openReview(item)}>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     {item.creator_avatar ? (
