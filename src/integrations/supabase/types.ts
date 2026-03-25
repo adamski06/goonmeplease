@@ -192,6 +192,7 @@ export type Database = {
       }
       content_submissions: {
         Row: {
+          ai_review: Json | null
           campaign_id: string
           created_at: string
           creator_id: string
@@ -210,6 +211,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_review?: Json | null
           campaign_id: string
           created_at?: string
           creator_id: string
@@ -228,6 +230,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_review?: Json | null
           campaign_id?: string
           created_at?: string
           creator_id?: string
@@ -307,6 +310,7 @@ export type Database = {
       }
       deal_applications: {
         Row: {
+          ai_review: Json | null
           created_at: string
           creator_id: string
           current_likes: number | null
@@ -323,6 +327,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_review?: Json | null
           created_at?: string
           creator_id: string
           current_likes?: number | null
@@ -339,6 +344,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_review?: Json | null
           created_at?: string
           creator_id?: string
           current_likes?: number | null
@@ -695,6 +701,7 @@ export type Database = {
       }
       reward_submissions: {
         Row: {
+          ai_review: Json | null
           coupon_code: string | null
           created_at: string
           creator_id: string
@@ -712,6 +719,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_review?: Json | null
           coupon_code?: string | null
           created_at?: string
           creator_id: string
@@ -729,6 +737,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_review?: Json | null
           coupon_code?: string | null
           created_at?: string
           creator_id?: string
