@@ -86,7 +86,7 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
     return rows.map(row => mapDbCampaign(row, allTiersRef.current));
   }, []);
 
-  // Initial load
+  // Initial load — preload images so nothing flashes after spinner
   useEffect(() => {
     if (initialLoadDone.current) return;
     initialLoadDone.current = true;
@@ -94,6 +94,22 @@ export function useCampaigns(batchSize: number = DEFAULT_BATCH_SIZE): UseCampaig
     const load = async () => {
       setLoading(true);
       const batch = await fetchBatch(0);
+
+      // Preload cover images for the first visible cards
+      const imageUrls = batch.slice(0, 3).map(c => c.image).filter(Boolean);
+      if (imageUrls.length > 0) {
+        await Promise.all(
+          imageUrls.map(url =>
+            new Promise<void>((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve();
+              img.onerror = () => resolve();
+              img.src = url;
+            })
+          )
+        );
+      }
+
       setCampaigns(batch);
       offsetRef.current = batch.length;
       setLoading(false);
