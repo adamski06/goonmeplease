@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
-import { ChevronLeft, ChevronRight, LogOut, User, Bell, Shield, HelpCircle, FileText, MessageCircle, Trash2, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Shield, HelpCircle, FileText, MessageCircle, ExternalLink, MoreHorizontal, Pencil, Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Settings: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -31,31 +21,12 @@ const Settings: React.FC = () => {
     });
   };
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-
-  const handleDeleteAccount = async () => {
-    setDeleting(true);
-    try {
-      const { error } = await supabase.functions.invoke('delete-account');
-      if (error) throw error;
-      await signOut();
-      navigate('/');
-      toast({ title: 'Account deleted', description: 'Your account and data have been permanently deleted.' });
-    } catch (e: any) {
-      toast({ title: 'Error', description: e.message || 'Failed to delete account. Please try again.', variant: 'destructive' });
-    } finally {
-      setDeleting(false);
-      setShowDeleteDialog(false);
-    }
-  };
-
   const settingsSections = [
     {
       title: 'Account',
       items: [
-        { icon: User, label: 'Edit Profile', action: () => navigate('/user/edit-profile') },
-        { icon: Bell, label: 'Notifications', action: () => {} },
+        { icon: Pencil, label: 'Edit Profile', action: () => navigate('/user/edit-profile') },
+        { icon: Bell, label: 'Notifications', action: () => navigate('/user/alerts') },
       ],
     },
     {
@@ -89,9 +60,12 @@ const Settings: React.FC = () => {
       {/* Account info */}
       <div className="px-4 pt-5 pb-2">
         <div className="flex items-center gap-3 mb-6">
-          <div className="h-12 w-12 rounded-full bg-black/5 flex items-center justify-center">
-            <User className="h-5 w-5 text-black/40" />
-          </div>
+          <Avatar className="h-12 w-12">
+            <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.full_name || 'User'} />
+            <AvatarFallback className="bg-black/5 text-black/40 text-sm font-semibold">
+              {(profile?.full_name || 'U').charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
           <div>
             <p className="text-sm font-semibold text-black font-montserrat">{profile?.full_name || 'User'}</p>
             <p className="text-xs text-black/50 font-jakarta">{user?.email}</p>
@@ -147,50 +121,24 @@ const Settings: React.FC = () => {
           <span className="text-sm font-medium text-red-600 font-jakarta">Sign Out</span>
         </button>
 
-        {/* Delete account */}
+        {/* More */}
         <button
-          onClick={() => setShowDeleteDialog(true)}
+          onClick={() => navigate('/user/more-settings')}
           className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl"
           style={{
-            background: 'linear-gradient(180deg, rgba(239,68,68,0.03) 0%, rgba(239,68,68,0.06) 100%)',
-            border: '1px solid rgba(239,68,68,0.08)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.04) 100%)',
+            border: '1px solid rgba(0,0,0,0.06)',
           }}
         >
-          <Trash2 className="h-5 w-5 text-red-400/60" />
-          <span className="text-sm text-red-500/80 font-jakarta">Delete Account</span>
+          <MoreHorizontal className="h-5 w-5 text-black/30" />
+          <span className="text-sm text-black/50 font-jakarta">More</span>
+          <ChevronRight className="h-4 w-4 text-black/20 ml-auto" />
         </button>
 
         <p className="text-center text-xs text-black/30 font-jakarta pt-2 pb-8">
           Version 1.0.0
         </p>
       </div>
-
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="mx-4 rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="font-montserrat">Delete Account</AlertDialogTitle>
-            <AlertDialogDescription className="font-jakarta text-sm space-y-2">
-              <p>This will permanently delete your account and all associated data including:</p>
-              <ul className="list-disc pl-4 space-y-1">
-                <li>Your profile and personal information</li>
-                <li>All content submissions and earnings history</li>
-                <li>Connected TikTok accounts</li>
-              </ul>
-              <p className="font-medium text-destructive">This action cannot be undone.</p>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="font-jakarta">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteAccount}
-              disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-jakarta"
-            >
-              {deleting ? 'Deleting...' : 'Delete My Account'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };

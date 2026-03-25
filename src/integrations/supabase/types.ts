@@ -498,6 +498,39 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          is_read: boolean
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payout_requests: {
         Row: {
           admin_notes: string | null
@@ -993,6 +1026,16 @@ export type Database = {
       claim_reward_coupon: {
         Args: { p_submission_id: string }
         Returns: string
+      }
+      create_notification: {
+        Args: {
+          p_data?: Json
+          p_message: string
+          p_title: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: undefined
       }
       get_or_create_tiktok_account: {
         Args: { p_tiktok_username: string }

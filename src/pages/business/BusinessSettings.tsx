@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Bell, Shield, HelpCircle, FileText, LogOut, Pencil, Sun, Moon, Trash2 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,7 @@ const BusinessSettings: React.FC = () => {
   const { toast } = useToast();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteInput, setDeleteInput] = useState('');
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -28,6 +30,7 @@ const BusinessSettings: React.FC = () => {
   };
 
   const handleDeleteAccount = async () => {
+    if (deleteInput !== 'DELETE') return;
     setDeleting(true);
     try {
       const { error } = await supabase.functions.invoke('delete-account');
@@ -40,6 +43,7 @@ const BusinessSettings: React.FC = () => {
     } finally {
       setDeleting(false);
       setShowDeleteDialog(false);
+      setDeleteInput('');
     }
   };
 
@@ -157,26 +161,36 @@ const BusinessSettings: React.FC = () => {
         <p className="text-center text-xs text-muted-foreground font-jakarta pt-2">Version 1.0.0</p>
       </div>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialog open={showDeleteDialog} onOpenChange={(open) => { setShowDeleteDialog(open); if (!open) setDeleteInput(''); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="font-montserrat">Delete Account</AlertDialogTitle>
-            <AlertDialogDescription className="font-jakarta text-sm space-y-2">
-              <p>This will permanently delete your account and all associated data including:</p>
-              <ul className="list-disc pl-4 space-y-1">
-                <li>Your business profile and company information</li>
-                <li>All campaigns, deals, and reward ads</li>
-                <li>All submission data</li>
-              </ul>
-              <p className="font-medium text-destructive">This action cannot be undone.</p>
+            <AlertDialogDescription className="font-jakarta text-sm space-y-2" asChild>
+              <div>
+                <p>This will permanently delete your account and all associated data including:</p>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>Your business profile and company information</li>
+                  <li>All campaigns, deals, and reward ads</li>
+                  <li>All submission data</li>
+                </ul>
+                <p className="font-medium text-destructive">This action cannot be undone.</p>
+                <p className="mt-3">Type <span className="font-mono font-bold">DELETE</span> to confirm:</p>
+                <Input
+                  value={deleteInput}
+                  onChange={(e) => setDeleteInput(e.target.value)}
+                  placeholder="Type DELETE"
+                  className="mt-2 font-mono"
+                  autoComplete="off"
+                />
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="font-jakarta">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteAccount}
-              disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-jakarta"
+              disabled={deleting || deleteInput !== 'DELETE'}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-jakarta disabled:opacity-40"
             >
               {deleting ? 'Deleting...' : 'Delete My Account'}
             </AlertDialogAction>
