@@ -123,7 +123,11 @@ const Settings: React.FC = () => {
                 >
                   <item.icon className="h-5 w-5 text-black/40" />
                   <span className="text-sm text-black font-jakarta flex-1">{item.label}</span>
-                  <ChevronRight className="h-4 w-4 text-black/20" />
+                  {(item as any).external ? (
+                    <ExternalLink className="h-4 w-4 text-black/20" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 text-black/20" />
+                  )}
                 </button>
               ))}
             </div>
