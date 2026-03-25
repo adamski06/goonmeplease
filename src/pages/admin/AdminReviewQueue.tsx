@@ -173,6 +173,40 @@ const AdminReviewQueue = () => {
 
   useEffect(() => { load(); }, []);
 
+  // Trigger AI review when opening a submission
+  const triggerAiReview = async (item: ReviewItem) => {
+    if (item.category === 'ad') return; // No AI review for ad approvals
+    setAiReview(null);
+
+    // Check if raw data already has ai_review cached
+    if (item.raw?.ai_review) {
+      setAiReview(item.raw.ai_review);
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('review-submission', {
+        body: { submissionId: item.id, type: item.type },
+      });
+      if (error) throw error;
+      if (data?.review) {
+        setAiReview(data.review);
+      }
+    } catch (e: any) {
+      console.error('AI review error:', e);
+      toast({ title: 'AI Review', description: 'Could not get AI review for this submission.', variant: 'destructive' });
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const openReview = (item: ReviewItem) => {
+    setReviewItem(item);
+    setAiReview(null);
+    triggerAiReview(item);
+  };
+
   const handleAction = async (item: ReviewItem, action: 'approve' | 'deny') => {
     setActing(true);
     const now = new Date();
