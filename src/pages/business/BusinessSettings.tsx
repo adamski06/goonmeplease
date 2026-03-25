@@ -1,16 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Bell, Shield, HelpCircle, FileText, LogOut, Pencil, Sun, Moon } from 'lucide-react';
+import { Bell, Shield, HelpCircle, FileText, LogOut, Pencil, Sun, Moon, Trash2 } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const BusinessSettings: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/business/auth');
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      const { error } = await supabase.functions.invoke('delete-account');
+      if (error) throw error;
+      await supabase.auth.signOut();
+      navigate('/');
+      toast({ title: 'Account deleted', description: 'Your account and data have been permanently deleted.' });
+    } catch (e: any) {
+      toast({ title: 'Error', description: e.message || 'Failed to delete account.', variant: 'destructive' });
+    } finally {
+      setDeleting(false);
+      setShowDeleteDialog(false);
+    }
   };
 
   const sections = [
@@ -19,14 +49,19 @@ const BusinessSettings: React.FC = () => {
       items: [
         { icon: Pencil, label: 'Edit Profile', action: () => navigate('/business/edit-profile') },
         { icon: Bell, label: 'Notifications', action: () => {} },
-        { icon: Shield, label: 'Privacy & Security', action: () => {} },
       ],
     },
     {
       title: 'Support',
       items: [
         { icon: HelpCircle, label: 'Help Center', action: () => {} },
-        { icon: FileText, label: 'Terms of Service', action: () => {} },
+      ],
+    },
+    {
+      title: 'Legal',
+      items: [
+        { icon: Shield, label: 'Privacy Policy', action: () => window.open('https://jarla.org/privacy', '_blank') },
+        { icon: FileText, label: 'Terms of Service', action: () => window.open('https://jarla.org/terms', '_blank') },
       ],
     },
   ];
@@ -107,8 +142,47 @@ const BusinessSettings: React.FC = () => {
           <span className="text-sm font-medium text-destructive font-jakarta">Sign Out</span>
         </button>
 
+        <button
+          onClick={() => setShowDeleteDialog(true)}
+          className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-colors hover:opacity-90"
+          style={{
+            background: 'linear-gradient(180deg, hsl(0 84% 60% / 0.03) 0%, hsl(0 84% 60% / 0.06) 100%)',
+            border: '1px solid hsl(0 84% 60% / 0.1)',
+          }}
+        >
+          <Trash2 className="h-5 w-5 text-destructive/50" />
+          <span className="text-sm text-destructive/70 font-jakarta">Delete Account</span>
+        </button>
+
         <p className="text-center text-xs text-muted-foreground font-jakarta pt-2">Version 1.0.0</p>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-montserrat">Delete Account</AlertDialogTitle>
+            <AlertDialogDescription className="font-jakarta text-sm space-y-2">
+              <p>This will permanently delete your account and all associated data including:</p>
+              <ul className="list-disc pl-4 space-y-1">
+                <li>Your business profile and company information</li>
+                <li>All campaigns, deals, and reward ads</li>
+                <li>All submission data</li>
+              </ul>
+              <p className="font-medium text-destructive">This action cannot be undone.</p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="font-jakarta">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-jakarta"
+            >
+              {deleting ? 'Deleting...' : 'Delete My Account'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
