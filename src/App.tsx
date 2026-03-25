@@ -62,7 +62,7 @@ const CampaignDetail = lazyRetry(() => import("./pages/CampaignDetail"));
 const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
 const Settings = lazyRetry(() => import("./pages/Settings"));
 const Support = lazyRetry(() => import("./pages/Support"));
-const NotFound = lazyRetry(() => import("./pages/NotFound"));
+const MoreSettings = lazyRetry(() => import("./pages/MoreSettings"));
 const BusinessAuth = lazyRetry(() => import("./pages/business/BusinessAuth"));
 const BusinessLayout = lazyRetry(() => import("./components/business/BusinessLayout"));
 const BusinessProfile = lazyRetry(() => import("./pages/business/BusinessProfile"));
