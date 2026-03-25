@@ -63,6 +63,7 @@ const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
 const Settings = lazyRetry(() => import("./pages/Settings"));
 const Support = lazyRetry(() => import("./pages/Support"));
 const MoreSettings = lazyRetry(() => import("./pages/MoreSettings"));
+const HelpCenter = lazyRetry(() => import("./pages/HelpCenter"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
 const BusinessAuth = lazyRetry(() => import("./pages/business/BusinessAuth"));
 const BusinessLayout = lazyRetry(() => import("./components/business/BusinessLayout"));
@@ -135,6 +136,7 @@ const App = () => (
                 <Route path="/user/settings" element={<Settings />} />
                 <Route path="/user/more-settings" element={<MoreSettings />} />
                 <Route path="/user/support" element={<Support />} />
+                <Route path="/user/help" element={<HelpCenter />} />
                 {/* Business routes — white loader */}
                 <Route path="/business/auth" element={<Suspense fallback={<BusinessLoader />}><BusinessAuth /></Suspense>} />
                 <Route path="/business" element={<Suspense fallback={<BusinessLoader />}><BusinessLayout /></Suspense>}>
