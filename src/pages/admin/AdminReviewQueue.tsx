@@ -38,6 +38,8 @@ const AdminReviewQueue = () => {
   const [loading, setLoading] = useState(true);
   const [reviewItem, setReviewItem] = useState<ReviewItem | null>(null);
   const [acting, setActing] = useState(false);
+  const [aiReview, setAiReview] = useState<any>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const { toast } = useToast();
 
   const load = async () => {
