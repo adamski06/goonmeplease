@@ -5,7 +5,7 @@ import { PanelLeft, Sparkle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import BusinessSidebar from './BusinessSidebar';
-import { useTheme } from 'next-themes';
+
 
 const CREATION_ROUTES = ['/business/campaigns/new', '/business/deals/new', '/business/rewards/new', '/business/new', '/business/ad-types'];
 
@@ -15,7 +15,7 @@ const BusinessLayout: React.FC = () => {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { resolvedTheme } = useTheme();
+  
 
   const isCreationRoute = CREATION_ROUTES.includes(location.pathname);
   const isCollapsed = isCreationRoute && !sidebarExpanded;
@@ -67,8 +67,7 @@ const BusinessLayout: React.FC = () => {
         <img
           src={jarlaLogo}
           alt="Jarla"
-          className="h-5"
-          style={{ filter: resolvedTheme === 'dark' ? 'none' : 'invert(1)' }}
+          className="h-5 dark:brightness-100 brightness-0"
         />
         <div className="h-4 w-4 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
       </div>
@@ -84,8 +83,7 @@ const BusinessLayout: React.FC = () => {
         <img
           src={jarlaLogo}
           alt="Jarla"
-          className="h-[18px]"
-          style={{ filter: resolvedTheme === 'dark' ? 'none' : 'invert(1)' }}
+          className="h-[18px] dark:brightness-100 brightness-0"
         />
         {/* Expand sidebar + AI buttons — fade in when topbar is visible */}
         <div

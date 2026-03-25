@@ -34,7 +34,7 @@ const RootGate = ({ children }: { children: React.ReactNode }) => {
 
 const BusinessLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-5">
-    <img src={jarlaLogoSrc} alt="Jarla" className="h-5 dark:invert-0 invert" />
+    <img src={jarlaLogoSrc} alt="Jarla" className="h-5 dark:brightness-100 brightness-0" />
     <div className="h-3.5 w-3.5 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin" />
   </div>
 );

@@ -86,7 +86,7 @@ const BusinessAuth: React.FC = () => {
           <img
             src={jarlaLogo}
             alt="Jarla"
-            className="h-8 dark:invert-0 invert mb-10"
+            className="h-8 mb-10 dark:brightness-100 brightness-0"
           />
 
           <h1
