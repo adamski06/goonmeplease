@@ -444,6 +444,67 @@ const AdminReviewQueue = () => {
 
                   <p className="text-xs text-muted-foreground">Submitted {fmt(reviewItem.created_at)}</p>
 
+                  {/* AI Review Panel */}
+                  {reviewItem.category === 'submission' && (
+                    <div className="rounded-lg border border-border p-4 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Bot className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-semibold">AI Review</span>
+                      </div>
+                      {aiLoading ? (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Analyzing video against brief...
+                        </div>
+                      ) : aiReview ? (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            {aiReview.recommendation === 'approve' ? (
+                              <Badge className="bg-green-500/10 text-green-600 border-green-500/20 hover:bg-green-500/10">
+                                <CheckCircle2 className="h-3 w-3 mr-1" /> Recommends Approve
+                              </Badge>
+                            ) : aiReview.recommendation === 'deny' ? (
+                              <Badge className="bg-red-500/10 text-red-600 border-red-500/20 hover:bg-red-500/10">
+                                <XCircle className="h-3 w-3 mr-1" /> Recommends Deny
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline">
+                                <AlertTriangle className="h-3 w-3 mr-1" /> Uncertain
+                              </Badge>
+                            )}
+                            <Badge variant="outline" className="text-xs">
+                              {aiReview.confidence} confidence
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-foreground">{aiReview.summary}</p>
+                          {aiReview.details?.length > 0 && (
+                            <ul className="space-y-1">
+                              {aiReview.details.map((d: string, i: number) => (
+                                <li key={i} className="text-xs text-muted-foreground flex gap-1.5">
+                                  <span className="text-primary shrink-0">•</span> {d}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                          {aiReview.concerns?.length > 0 && (
+                            <div>
+                              <p className="text-xs font-medium text-destructive mb-1">Concerns:</p>
+                              <ul className="space-y-1">
+                                {aiReview.concerns.map((c: string, i: number) => (
+                                  <li key={i} className="text-xs text-destructive/80 flex gap-1.5">
+                                    <AlertTriangle className="h-3 w-3 shrink-0 mt-0.5" /> {c}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-xs text-muted-foreground">AI review not available.</p>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex gap-3 pt-2">
                     <Button className="flex-1" onClick={() => handleAction(reviewItem, 'approve')} disabled={acting}>
                       <Check className="h-4 w-4 mr-1" /> Approve
