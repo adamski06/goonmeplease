@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
@@ -17,7 +16,27 @@ import BottomNav from '@/components/BottomNav';
 import { useCampaigns } from '@/hooks/useCampaigns';
 import { useDeals } from '@/hooks/useDeals';
 import { useRewards } from '@/hooks/useRewards';
-import jarlaLogo from '@/assets/jarla-logo.png';
+
+const preloadImage = (url: string) =>
+  new Promise<void>((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+
+    const img = new Image();
+    img.onload = finish;
+    img.onerror = finish;
+    img.src = url;
+
+    if (typeof img.decode === 'function') {
+      img.decode().then(finish).catch(() => undefined);
+    }
+
+    window.setTimeout(finish, 1500);
+  });
 
 const Campaigns: React.FC = () => {
   const { user, loading } = useAuth();
@@ -34,6 +53,7 @@ const Campaigns: React.FC = () => {
   const touchStartY = useRef(0);
   const [refreshing, setRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
+  const [feedVisualReady, setFeedVisualReady] = useState(false);
 
   // Interleave deals into campaign feed (1 deal every 3 campaigns)
   const feedItems = React.useMemo(() => {
@@ -62,6 +82,48 @@ const Campaigns: React.FC = () => {
     return items;
   }, [campaigns, deals, rewards]);
 
+  // Keep launch spinner visible until first card media is decoded
+  useEffect(() => {
+    if (!initialLoadComplete) {
+      setFeedVisualReady(false);
+      return;
+    }
+
+    if (feedVisualReady) return;
+
+    if (feedItems.length === 0) {
+      setFeedVisualReady(true);
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadFirstCardAssets = async () => {
+      const firstVisibleItems = feedItems.slice(0, 1);
+      const urls = Array.from(
+        new Set(
+          firstVisibleItems
+            .flatMap((item) => [item.data.image, item.data.logo])
+            .filter((url): url is string => Boolean(url && url.trim()))
+        )
+      );
+
+      if (urls.length > 0) {
+        await Promise.all(urls.map(preloadImage));
+      }
+
+      if (!cancelled) {
+        setFeedVisualReady(true);
+      }
+    };
+
+    loadFirstCardAssets();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialLoadComplete, feedItems, feedVisualReady]);
+
   // Fetch user favorites
   useEffect(() => {
     if (user) {
@@ -84,7 +146,7 @@ const Campaigns: React.FC = () => {
       setShowAuthPrompt(true);
       return;
     }
-    
+
     if (favorites.includes(campaignId)) {
       await supabase
         .from('favorites')
@@ -189,13 +251,19 @@ const Campaigns: React.FC = () => {
           </div>
         )}
 
-        <div 
+        {!feedVisualReady && (
+          <div className="h-[calc(100dvh-80px)] flex items-center justify-center bg-black">
+            <div className="h-5 w-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
+          </div>
+        )}
+
+        <div
           ref={scrollRef}
           onScroll={onScroll}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)] overscroll-none"
+          className={`flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)] overscroll-none ${!feedVisualReady ? 'hidden' : ''}`}
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -235,11 +303,6 @@ const Campaigns: React.FC = () => {
               <p className="text-white/20 text-sm font-jakarta">You're all caught up</p>
             </div>
           )}
-          {!initialLoadComplete && feedItems.length === 0 && (
-            <div className="h-[calc(100dvh-80px)] flex items-center justify-center snap-start bg-black">
-              <div className="h-5 w-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
-            </div>
-          )}
         </div>
       </main>
 
@@ -252,13 +315,13 @@ const Campaigns: React.FC = () => {
             Create an account to save campaigns, track your submissions, and start earning.
           </p>
           <div className="flex flex-col gap-3">
-            <button 
+            <button
               onClick={() => { setShowAuthPrompt(false); navigate('/user/auth?mode=signup'); }}
               className="w-full py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-black/80 transition-colors"
             >
               Create account
             </button>
-            <button 
+            <button
               onClick={() => { setShowAuthPrompt(false); navigate('/user/auth?mode=login'); }}
               className="w-full py-3 border border-black/20 text-black rounded-full text-sm font-medium hover:bg-black/5 transition-colors"
             >
