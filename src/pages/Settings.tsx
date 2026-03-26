@@ -39,8 +39,8 @@ const Settings: React.FC = () => {
     {
       title: 'Legal',
       items: [
-        { icon: Shield, label: 'Privacy Policy', action: () => window.open('https://jarla.org/privacy', '_blank'), external: true },
-        { icon: FileText, label: 'Terms of Service', action: () => window.open('https://jarla.org/terms', '_blank'), external: true },
+        { icon: Shield, label: 'Privacy Policy', action: () => navigate('/user/privacy') },
+        { icon: FileText, label: 'Terms of Service', action: () => navigate('/user/terms') },
       ],
     },
   ];

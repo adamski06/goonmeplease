@@ -64,6 +64,8 @@ const Settings = lazyRetry(() => import("./pages/Settings"));
 const Support = lazyRetry(() => import("./pages/Support"));
 const MoreSettings = lazyRetry(() => import("./pages/MoreSettings"));
 const HelpCenter = lazyRetry(() => import("./pages/HelpCenter"));
+const TermsOfService = lazyRetry(() => import("./pages/TermsOfService"));
+const PrivacyPolicy = lazyRetry(() => import("./pages/PrivacyPolicy"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
 const BusinessAuth = lazyRetry(() => import("./pages/business/BusinessAuth"));
 const BusinessLayout = lazyRetry(() => import("./components/business/BusinessLayout"));
@@ -137,6 +139,8 @@ const App = () => (
                 <Route path="/user/more-settings" element={<MoreSettings />} />
                 <Route path="/user/support" element={<Support />} />
                 <Route path="/user/help" element={<HelpCenter />} />
+                <Route path="/user/terms" element={<TermsOfService />} />
+                <Route path="/user/privacy" element={<PrivacyPolicy />} />
                 {/* Business routes — white loader */}
                 <Route path="/business/auth" element={<Suspense fallback={<BusinessLoader />}><BusinessAuth /></Suspense>} />
                 <Route path="/business" element={<Suspense fallback={<BusinessLoader />}><BusinessLayout /></Suspense>}>
