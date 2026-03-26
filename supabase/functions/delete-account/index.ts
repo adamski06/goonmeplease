@@ -101,46 +101,71 @@ Deno.serve(async (req) => {
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-
-    const {
-      data: { user },
-      error: authError,
-    } = await anonClient.auth.getUser();
-
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-    // Check if admin is deleting another user
-    let targetUserId = user.id;
+    // Determine target user
+    let targetUserId: string;
     
-    try {
-      const body = await req.json();
-      if (body?.target_user_id) {
-        // Verify caller is admin
-        const { data: isAdmin } = await adminClient.rpc("has_role", {
-          _user_id: user.id,
-          _role: "admin",
-        });
-        
-        if (!isAdmin) {
-          return new Response(JSON.stringify({ error: "Forbidden" }), {
-            status: 403,
+    // Check if this is a service-role call with target_user_id
+    const isServiceRole = authHeader.replace("Bearer ", "") === serviceRoleKey;
+    
+    if (isServiceRole) {
+      // Service role can delete any user by specifying target_user_id
+      try {
+        const body = await req.json();
+        if (!body?.target_user_id) {
+          return new Response(JSON.stringify({ error: "target_user_id required" }), {
+            status: 400,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
         targetUserId = body.target_user_id;
+      } catch {
+        return new Response(JSON.stringify({ error: "Invalid request body" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
-    } catch {
-      // No body or invalid JSON — self-delete
+    } else {
+      // Regular user self-delete
+      const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
+        global: { headers: { Authorization: authHeader } },
+      });
+
+      const {
+        data: { user },
+        error: authError,
+      } = await anonClient.auth.getUser();
+
+      if (authError || !user) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      targetUserId = user.id;
+      
+      // Check if admin is deleting another user
+      try {
+        const body = await req.json();
+        if (body?.target_user_id) {
+          const { data: isAdmin } = await adminClient.rpc("has_role", {
+            _user_id: user.id,
+            _role: "admin",
+          });
+          
+          if (!isAdmin) {
+            return new Response(JSON.stringify({ error: "Forbidden" }), {
+              status: 403,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          targetUserId = body.target_user_id;
+        }
+      } catch {
+        // No body — self-delete
+      }
     }
 
     await deleteUserData(adminClient, targetUserId);
