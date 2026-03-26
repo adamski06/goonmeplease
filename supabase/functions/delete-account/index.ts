@@ -69,6 +69,7 @@ async function deleteUserData(adminClient: any, userId: string) {
 }
 
 Deno.serve(async (req) => {
+  console.log("delete-account function called", req.method);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
