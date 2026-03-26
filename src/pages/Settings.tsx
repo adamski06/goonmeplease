@@ -46,7 +46,7 @@ const Settings: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white pb-24 animate-slide-in-right">
+    <div className="min-h-screen bg-white pb-24">
       {/* Header */}
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">

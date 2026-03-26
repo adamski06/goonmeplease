@@ -175,7 +175,7 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   return (
     <div className="h-full flex flex-col">
       {/* Save button header */}
-      <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-black/10">
+      <div className="flex items-center justify-between px-5 pb-3 border-b border-black/10 safe-area-top pt-3">
         <button onClick={onSaved} className="p-1 -ml-1">
           <ChevronLeft className="h-5 w-5 text-black/60" />
         </button>

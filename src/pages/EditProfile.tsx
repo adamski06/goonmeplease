@@ -6,7 +6,7 @@ const EditProfile: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white animate-slide-in-right">
+    <div className="min-h-screen bg-white">
       <ProfileEditContent onSaved={() => navigate(-1)} />
     </div>
   );
