@@ -8,22 +8,11 @@ const corsHeaders = {
 
 async function deleteUserData(adminClient: any, userId: string) {
   // Delete in order respecting foreign keys
-  // First: earnings (references content_submissions)
   await adminClient.from("earnings").delete().eq("creator_id", userId);
-  
-  // Second: content_submissions (references tiktok_accounts & campaigns)
   await adminClient.from("content_submissions").delete().eq("creator_id", userId);
-  
-  // Third: reward_submissions (references tiktok_accounts & reward_ads)
   await adminClient.from("reward_submissions").delete().eq("creator_id", userId);
-  
-  // Fourth: deal_applications
   await adminClient.from("deal_applications").delete().eq("creator_id", userId);
-  
-  // Now safe to delete tiktok_accounts (no more FK references)
   await adminClient.from("tiktok_accounts").delete().eq("user_id", userId);
-  
-  // Other user data
   await adminClient.from("payout_requests").delete().eq("creator_id", userId);
   await adminClient.from("support_requests").delete().eq("user_id", userId);
   await adminClient.from("favorites").delete().eq("user_id", userId);
@@ -38,7 +27,6 @@ async function deleteUserData(adminClient: any, userId: string) {
     .maybeSingle();
 
   if (businessProfile) {
-    // Delete campaigns and related data
     const { data: campaigns } = await adminClient
       .from("campaigns")
       .select("id")
@@ -51,7 +39,6 @@ async function deleteUserData(adminClient: any, userId: string) {
       await adminClient.from("campaigns").delete().eq("business_id", userId);
     }
 
-    // Delete deals
     const { data: deals } = await adminClient
       .from("deals")
       .select("id")
@@ -63,7 +50,6 @@ async function deleteUserData(adminClient: any, userId: string) {
       await adminClient.from("deals").delete().eq("business_id", userId);
     }
 
-    // Delete reward ads
     const { data: rewardAds } = await adminClient
       .from("reward_ads")
       .select("id")
@@ -78,7 +64,6 @@ async function deleteUserData(adminClient: any, userId: string) {
     await adminClient.from("business_profiles").delete().eq("user_id", userId);
   }
 
-  // Delete profile and roles
   await adminClient.from("profiles").delete().eq("user_id", userId);
   await adminClient.from("user_roles").delete().eq("user_id", userId);
 }
@@ -102,75 +87,63 @@ Deno.serve(async (req) => {
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
+    
+    // Parse body first (before consuming stream)
+    let body: any = null;
+    try {
+      body = await req.json();
+    } catch {
+      // No body
+    }
 
-    // Determine target user
     let targetUserId: string;
-    
-    // Check if this is a service-role call with target_user_id
-    const isServiceRole = authHeader.replace("Bearer ", "") === serviceRoleKey;
-    
-    if (isServiceRole) {
-      // Service role can delete any user by specifying target_user_id
-      try {
-        const body = await req.json();
-        if (!body?.target_user_id) {
-          return new Response(JSON.stringify({ error: "target_user_id required" }), {
-            status: 400,
+
+    // Try to authenticate as a regular user first
+    const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: authError } = await anonClient.auth.getUser();
+
+    if (user) {
+      // Authenticated user
+      targetUserId = user.id;
+
+      // Admin can delete other users
+      if (body?.target_user_id && body.target_user_id !== user.id) {
+        const { data: isAdmin } = await adminClient.rpc("has_role", {
+          _user_id: user.id,
+          _role: "admin",
+        });
+
+        if (!isAdmin) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
         targetUserId = body.target_user_id;
-      } catch {
-        return new Response(JSON.stringify({ error: "Invalid request body" }), {
-          status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
       }
-    } else {
-      // Regular user self-delete
-      const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
-        global: { headers: { Authorization: authHeader } },
-      });
-
-      const {
-        data: { user },
-        error: authError,
-      } = await anonClient.auth.getUser();
-
-      if (authError || !user) {
+    } else if (body?.target_user_id) {
+      // Service role / internal call — verify the token is the service role key
+      const token = authHeader.replace("Bearer ", "");
+      if (token !== serviceRoleKey) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-
-      targetUserId = user.id;
-      
-      // Check if admin is deleting another user
-      try {
-        const body = await req.json();
-        if (body?.target_user_id) {
-          const { data: isAdmin } = await adminClient.rpc("has_role", {
-            _user_id: user.id,
-            _role: "admin",
-          });
-          
-          if (!isAdmin) {
-            return new Response(JSON.stringify({ error: "Forbidden" }), {
-              status: 403,
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-            });
-          }
-          targetUserId = body.target_user_id;
-        }
-      } catch {
-        // No body — self-delete
-      }
+      targetUserId = body.target_user_id;
+    } else {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
+    console.log(`Deleting user data for: ${targetUserId}`);
     await deleteUserData(adminClient, targetUserId);
 
-    // Delete the auth user
     const { error: deleteError } = await adminClient.auth.admin.deleteUser(targetUserId);
     if (deleteError) {
       console.error("Failed to delete auth user:", deleteError);
@@ -183,6 +156,7 @@ Deno.serve(async (req) => {
       );
     }
 
+    console.log(`Successfully deleted user: ${targetUserId}`);
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
