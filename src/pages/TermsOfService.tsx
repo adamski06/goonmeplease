@@ -6,7 +6,7 @@ const TermsOfService: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white pb-24 animate-slide-in-right">
+    <div className="min-h-screen bg-white pb-24">
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
           <button onClick={() => navigate(-1)} className="p-1 -ml-1">

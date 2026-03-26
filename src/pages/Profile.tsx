@@ -270,8 +270,7 @@ const ProfilePage: React.FC = () => {
         {/* Earnings Node - inline placeholder */}
         <div
           ref={earningsRef}
-          onClick={() => !earningsExpanded && openEarnings()}
-          className="rounded-[48px] overflow-hidden cursor-pointer"
+          className="rounded-[48px] overflow-hidden"
           style={{
             height: '180px',
             visibility: earningsExpanded ? 'hidden' : 'visible',
