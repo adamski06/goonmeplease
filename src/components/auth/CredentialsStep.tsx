@@ -99,6 +99,13 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
         </Button>
       </div>
 
+      <p className="text-center text-black/40 text-xs pt-1">
+        By signing up, you agree to our{' '}
+        <a href="https://jarla.org/privacy" target="_blank" rel="noopener noreferrer" className="underline text-black/60">Terms of Service</a>
+        {' '}and{' '}
+        <a href="https://jarla.org/privacy" target="_blank" rel="noopener noreferrer" className="underline text-black/60">Privacy Policy</a>
+      </p>
+
       <p className="text-center text-black/50 text-sm pt-1">
         Already have an account?{' '}
         <button type="button" onClick={onSwitchToLogin} className="text-black underline hover:text-black/70">
