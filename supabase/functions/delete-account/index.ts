@@ -126,10 +126,10 @@ Deno.serve(async (req) => {
         targetUserId = body.target_user_id;
       }
     } else if (body?.target_user_id) {
-      // Service role / internal call — verify the token is the service role key
-      const token = authHeader.replace("Bearer ", "");
-      if (token !== serviceRoleKey) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      // Verify service role access by trying to get the target user via admin API
+      const { data: targetUser, error: targetError } = await adminClient.auth.admin.getUserById(body.target_user_id);
+      if (targetError || !targetUser?.user) {
+        return new Response(JSON.stringify({ error: "Unauthorized or user not found" }), {
           status: 401,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
