@@ -31,16 +31,30 @@ const PhoneVerifyStep: React.FC<PhoneVerifyStepProps> = ({ userId, onNext, onSki
     const trimmed = phone.trim();
 
     if (!trimmed || trimmed.length < 6) {
-      toast({ title: 'Invalid number', description: 'Please enter a valid phone number', variant: 'destructive' });
+      toast({ title: 'Invalid number', description: 'Please enter a valid phone number with country code (e.g. +46701234567)', variant: 'destructive' });
       return;
     }
 
+    // Ensure it starts with +
+    const formatted = trimmed.startsWith('+') ? trimmed : `+${trimmed}`;
+
     setIsSaving(true);
-    // Simulate sending code
-    await new Promise(r => setTimeout(r, 800));
-    setOtpSent(true);
-    setIsSaving(false);
-    toast({ title: 'Code sent!', description: `Verification code sent to ${trimmed}` });
+    try {
+      const { data, error } = await supabase.functions.invoke('phone-verify', {
+        body: { action: 'send', phone: formatted },
+      });
+
+      if (error) throw new Error(error.message || 'Failed to send code');
+      if (data?.error) throw new Error(data.error);
+
+      setPhone(formatted);
+      setOtpSent(true);
+      toast({ title: 'Code sent!', description: `Verification code sent to ${formatted}` });
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message || 'Failed to send verification code', variant: 'destructive' });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleVerify = async (e: React.FormEvent) => {
@@ -53,16 +67,36 @@ const PhoneVerifyStep: React.FC<PhoneVerifyStepProps> = ({ userId, onNext, onSki
 
     setIsSaving(true);
     try {
-      // Accept any 6-digit code for now
-      const { error } = await supabase
-        .from('profiles')
-        .update({ phone_number: phone.trim() })
-        .eq('user_id', userId);
+      const { data, error } = await supabase.functions.invoke('phone-verify', {
+        body: { action: 'verify', phone, code: otp },
+      });
 
-      if (error) throw error;
+      if (error) throw new Error(error.message || 'Verification failed');
+      if (data?.error) throw new Error(data.error);
+
+      toast({ title: 'Verified!', description: 'Your phone number has been verified.' });
       onNext();
     } catch (err: any) {
-      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+      toast({ title: 'Verification failed', description: err.message || 'Invalid or expired code', variant: 'destructive' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setIsSaving(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('phone-verify', {
+        body: { action: 'send', phone },
+      });
+
+      if (error) throw new Error(error.message);
+      if (data?.error) throw new Error(data.error);
+
+      setOtp('');
+      toast({ title: 'Code resent!', description: `New code sent to ${phone}` });
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message || 'Failed to resend code', variant: 'destructive' });
     } finally {
       setIsSaving(false);
     }
@@ -73,7 +107,7 @@ const PhoneVerifyStep: React.FC<PhoneVerifyStepProps> = ({ userId, onNext, onSki
       <form onSubmit={handleSendCode} className="space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-xl font-semibold text-black">Verify your number</h2>
-          <p className="text-sm text-black/50">We'll send you a verification code</p>
+          <p className="text-sm text-black/50">We'll send you a verification code via SMS</p>
         </div>
 
         <div className="space-y-1.5">
@@ -87,6 +121,7 @@ const PhoneVerifyStep: React.FC<PhoneVerifyStepProps> = ({ userId, onNext, onSki
             autoComplete="tel"
             className="bg-transparent border-0 border-b border-black/20 rounded-none px-0 py-2 text-black placeholder:text-black/40 focus-visible:ring-0 focus-visible:border-black"
           />
+          <p className="text-xs text-black/40">Include country code (e.g. +46 for Sweden)</p>
         </div>
 
         <Button
@@ -150,9 +185,8 @@ const PhoneVerifyStep: React.FC<PhoneVerifyStepProps> = ({ userId, onNext, onSki
         </button>
         <button
           type="button"
-          onClick={async () => {
-            toast({ title: 'Code resent!', description: `New code sent to ${phone}` });
-          }}
+          onClick={handleResend}
+          disabled={isSaving}
           className="text-sm text-black/40 hover:text-black/60"
         >
           Resend code
