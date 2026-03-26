@@ -183,6 +183,7 @@ const Campaigns: React.FC = () => {
   // Faster snap settling — detect scroll end and snap programmatically
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const handleSnapSettle = useCallback(() => {
+    if (feedItems.length <= 1) return; // No snapping needed for single item
     if (scrollTimer.current) clearTimeout(scrollTimer.current);
     scrollTimer.current = setTimeout(() => {
       if (!scrollRef.current) return;
@@ -195,7 +196,7 @@ const Campaigns: React.FC = () => {
         container.scrollTo({ top: targetScroll, behavior: 'smooth' });
       }
     }, 80);
-  }, []);
+  }, [feedItems.length]);
 
   const onScroll = useCallback(() => {
     handleScroll();
