@@ -183,6 +183,7 @@ const Campaigns: React.FC = () => {
   // Faster snap settling — detect scroll end and snap programmatically
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const handleSnapSettle = useCallback(() => {
+    if (feedItems.length <= 1) return; // No snapping needed for single item
     if (scrollTimer.current) clearTimeout(scrollTimer.current);
     scrollTimer.current = setTimeout(() => {
       if (!scrollRef.current) return;
@@ -195,7 +196,7 @@ const Campaigns: React.FC = () => {
         container.scrollTo({ top: targetScroll, behavior: 'smooth' });
       }
     }, 80);
-  }, []);
+  }, [feedItems.length]);
 
   const onScroll = useCallback(() => {
     handleScroll();
@@ -263,7 +264,7 @@ const Campaigns: React.FC = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className={`flex-1 overflow-y-scroll snap-y snap-mandatory scrollbar-hide h-[calc(100dvh-80px)] overscroll-none ${!feedVisualReady ? 'hidden' : ''}`}
+          className={`flex-1 overflow-y-scroll ${feedItems.length > 1 ? 'snap-y snap-mandatory' : ''} scrollbar-hide h-[calc(100dvh-80px)] overscroll-none ${!feedVisualReady ? 'hidden' : ''}`}
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -297,8 +298,8 @@ const Campaigns: React.FC = () => {
               />
             )
           )}
-          {/* Spacer so the last card can snap fully into view */}
-          {feedItems.length > 0 && !campaignsLoading && (
+          {/* Spacer so the last card can snap fully into view — only when multiple items */}
+          {feedItems.length > 1 && !campaignsLoading && (
             <div className="h-[calc(100dvh-80px)] snap-start flex items-center justify-center">
               <p className="text-white/20 text-sm font-jakarta">You're all caught up</p>
             </div>
