@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,7 @@ type AdItem = {
   table: 'campaigns' | 'deals' | 'reward_ads';
   title: string;
   brand_name: string;
+  business_id: string;
   status: string;
   is_active: boolean;
   budget: number | null;
@@ -35,18 +37,19 @@ const AdminAllAds = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'pending' | 'paused'>('all');
   const [toggling, setToggling] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const load = async () => {
     const [campRes, dealRes, rewardRes] = await Promise.all([
-      supabase.from('campaigns').select('id, title, brand_name, status, is_active, total_budget, created_at').order('created_at', { ascending: false }),
-      supabase.from('deals').select('id, title, brand_name, status, is_active, total_budget, created_at').order('created_at', { ascending: false }),
-      supabase.from('reward_ads').select('id, title, brand_name, status, is_active, created_at').order('created_at', { ascending: false }),
+      supabase.from('campaigns').select('id, title, brand_name, business_id, status, is_active, total_budget, created_at').order('created_at', { ascending: false }),
+      supabase.from('deals').select('id, title, brand_name, business_id, status, is_active, total_budget, created_at').order('created_at', { ascending: false }),
+      supabase.from('reward_ads').select('id, title, brand_name, business_id, status, is_active, created_at').order('created_at', { ascending: false }),
     ]);
 
     const all: AdItem[] = [
-      ...(campRes.data || []).map(c => ({ id: c.id, type: 'Spread' as const, table: 'campaigns' as const, title: c.title, brand_name: c.brand_name, status: c.status || 'active', is_active: c.is_active ?? true, budget: c.total_budget, created_at: c.created_at })),
-      ...(dealRes.data || []).map(d => ({ id: d.id, type: 'Deal' as const, table: 'deals' as const, title: d.title, brand_name: d.brand_name, status: d.status || 'active', is_active: d.is_active ?? true, budget: d.total_budget, created_at: d.created_at })),
-      ...(rewardRes.data || []).map(r => ({ id: r.id, type: 'Reward' as const, table: 'reward_ads' as const, title: r.title, brand_name: r.brand_name, status: r.status || 'active', is_active: r.is_active ?? true, budget: null, created_at: r.created_at })),
+      ...(campRes.data || []).map(c => ({ id: c.id, type: 'Spread' as const, table: 'campaigns' as const, title: c.title, brand_name: c.brand_name, business_id: c.business_id, status: c.status || 'active', is_active: c.is_active ?? true, budget: c.total_budget, created_at: c.created_at })),
+      ...(dealRes.data || []).map(d => ({ id: d.id, type: 'Deal' as const, table: 'deals' as const, title: d.title, brand_name: d.brand_name, business_id: d.business_id, status: d.status || 'active', is_active: d.is_active ?? true, budget: d.total_budget, created_at: d.created_at })),
+      ...(rewardRes.data || []).map(r => ({ id: r.id, type: 'Reward' as const, table: 'reward_ads' as const, title: r.title, brand_name: r.brand_name, business_id: r.business_id, status: r.status || 'active', is_active: r.is_active ?? true, budget: null, created_at: r.created_at })),
     ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     setAds(all);
@@ -115,7 +118,7 @@ const AdminAllAds = () => {
           </TableHeader>
           <TableBody>
             {filtered.map((ad) => (
-              <TableRow key={`${ad.table}-${ad.id}`}>
+              <TableRow key={`${ad.table}-${ad.id}`} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/admin/business/${ad.business_id}`)}>
                 <TableCell className="font-medium max-w-[200px] truncate">{ad.title}</TableCell>
                 <TableCell className="text-sm text-muted-foreground truncate max-w-[120px]">{ad.brand_name}</TableCell>
                 <TableCell>
