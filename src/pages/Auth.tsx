@@ -15,17 +15,6 @@ import LoginForm from '@/components/auth/LoginForm';
 import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
 import TikTokStep from '@/components/auth/TikTokStep';
 
-// Grid images
-import img1 from '@/assets/campaigns/fashion-style.jpg';
-import img2 from '@/assets/campaigns/tech-unboxing.jpg';
-import img3 from '@/assets/campaigns/coffee-moment.jpg';
-import img4 from '@/assets/campaigns/fitness-workout.jpg';
-import img5 from '@/assets/campaigns/music-lifestyle.jpg';
-import img6 from '@/assets/campaigns/street-style.jpg';
-import img7 from '@/assets/campaigns/creative-design.jpg';
-import img8 from '@/assets/campaigns/food-delivery.jpg';
-
-const gridImages = [img1, img2, img3, img4, img5, img6, img7, img8];
 
 // Signup flow: credentials → tiktok → phone (email) or just tiktok (Apple)
 type SignUpStep = 'credentials' | 'tiktok' | 'phone';
@@ -260,37 +249,7 @@ const Auth: React.FC = () => {
           </div>
         </div>
 
-        {/* Animated image rows */}
-        <div className="overflow-hidden pb-4 space-y-3 mt-2">
-          <div className="relative h-[160px]">
-            <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
-              {[...gridImages, ...gridImages].map((src, i) => (
-                <div key={`r1-${i}`} className="w-[120px] h-[160px] rounded-xl overflow-hidden shrink-0">
-                  <img src={src} alt="" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="relative h-[160px]">
-            <div className="flex gap-3 animate-[scrollRight_38s_linear_infinite] absolute" style={{ width: 'max-content' }}>
-              {[...gridImages.slice().reverse(), ...gridImages.slice().reverse()].map((src, i) => (
-                <div key={`r2-${i}`} className="w-[120px] h-[160px] rounded-xl overflow-hidden shrink-0">
-                  <img src={src} alt="" className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         <style>{`
-          @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          @keyframes scrollRight {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-          }
           @keyframes sheetUp {
             0% { transform: translateY(100%); }
             100% { transform: translateY(0); }
