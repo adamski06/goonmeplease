@@ -249,7 +249,33 @@ const Auth: React.FC = () => {
           </div>
         </div>
 
+        {/* Animated placeholder rows */}
+        <div className="overflow-hidden pb-4 space-y-3 mt-2">
+          <div className="relative h-[160px]">
+            <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+              {Array.from({ length: 16 }).map((_, i) => (
+                <div key={`r1-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+              ))}
+            </div>
+          </div>
+          <div className="relative h-[160px]">
+            <div className="flex gap-3 animate-[scrollRight_38s_linear_infinite] absolute" style={{ width: 'max-content' }}>
+              {Array.from({ length: 16 }).map((_, i) => (
+                <div key={`r2-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+              ))}
+            </div>
+          </div>
+        </div>
+
         <style>{`
+          @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+          }
           @keyframes sheetUp {
             0% { transform: translateY(100%); }
             100% { transform: translateY(0); }
