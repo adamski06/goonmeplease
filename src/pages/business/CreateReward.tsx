@@ -162,7 +162,6 @@ const CreateReward: React.FC = () => {
       category: audience.trim() || null,
       reward_description: rewardDescription.trim(),
       views_required: effectiveViews,
-      coupon_codes: couponCodes.length > 0 ? couponCodes : null,
       is_active: false,
       status: 'pending',
     } as any).select('id').single();
@@ -171,6 +170,12 @@ const CreateReward: React.FC = () => {
       toast({ title: 'Error', description: error?.message || 'Failed to create reward', variant: 'destructive' });
       setIsSubmitting(false);
       return;
+    }
+
+    if (couponCodes.length > 0) {
+      await supabase.from('reward_coupons').insert(
+        couponCodes.map((code) => ({ reward_ad_id: rewardAd.id, code }))
+      );
     }
 
     // Redirect to Stripe setup to save payment method
