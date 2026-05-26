@@ -456,13 +456,13 @@ const BusinessRewardDetail: React.FC = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-2">Available ({codesCount})</h4>
             <div className="max-h-48 overflow-y-auto space-y-1 rounded-xl border border-border p-3">
-              {(reward?.coupon_codes || []).map((code, i) => (
-                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-muted/50">
+              {availableCoupons.map((c) => (
+                <div key={c.id} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-muted/50">
                   <div className="flex items-center gap-2 min-w-0">
                     <Ticket className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-sm font-mono text-foreground truncate">{code}</span>
+                    <span className="text-sm font-mono text-foreground truncate">{c.code}</span>
                   </div>
-                  <button onClick={() => removeCouponCode(i)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
+                  <button onClick={() => removeCouponCode(c.id)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
                     <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
                   </button>
                 </div>
