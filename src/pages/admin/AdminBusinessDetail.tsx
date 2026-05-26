@@ -6,9 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
@@ -42,6 +46,36 @@ const AdminBusinessDetail = () => {
   const [reviewAd, setReviewAd] = useState<any>(null);
   const [acting, setActing] = useState(false);
   const [togglingAd, setTogglingAd] = useState<string | null>(null);
+  const [editingReward, setEditingReward] = useState<any | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editViews, setEditViews] = useState<number>(0);
+  const [editRewardDesc, setEditRewardDesc] = useState('');
+  const [savingReward, setSavingReward] = useState(false);
+
+  const openEditReward = (r: any) => {
+    setEditingReward(r);
+    setEditTitle(r.title || '');
+    setEditViews(r.views_required || 0);
+    setEditRewardDesc(r.reward_description || '');
+  };
+
+  const saveReward = async () => {
+    if (!editingReward) return;
+    setSavingReward(true);
+    const { error } = await supabase.from('reward_ads').update({
+      title: editTitle,
+      views_required: editViews,
+      reward_description: editRewardDesc,
+    }).eq('id', editingReward.id);
+    if (error) {
+      toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
+    } else {
+      setRewards(prev => prev.map(x => x.id === editingReward.id ? { ...x, title: editTitle, views_required: editViews, reward_description: editRewardDesc } : x));
+      toast({ title: 'Reward updated' });
+      setEditingReward(null);
+    }
+    setSavingReward(false);
+  };
 
   const toggleAdStatus = async (type: 'campaign' | 'deal' | 'reward', id: string, currentStatus: string) => {
     setTogglingAd(id);
@@ -469,14 +503,23 @@ const AdminBusinessDetail = () => {
                     <TableCell className="max-w-[200px] truncate">{r.reward_description}</TableCell>
                     <TableCell>{fmt(r.created_at)}</TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant={r.status === 'active' ? 'outline' : 'default'}
-                        disabled={togglingAd === r.id}
-                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
-                      >
-                        {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReward(r); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={r.status === 'active' ? 'outline' : 'default'}
+                          disabled={togglingAd === r.id}
+                          onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
+                        >
+                          {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -485,6 +528,42 @@ const AdminBusinessDetail = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <Dialog open={!!editingReward} onOpenChange={(o) => !o && setEditingReward(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Reward</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Views required</Label>
+              <Input
+                type="number"
+                min={0}
+                value={editViews}
+                onChange={(e) => setEditViews(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Reward description</Label>
+              <Textarea
+                rows={3}
+                value={editRewardDesc}
+                onChange={(e) => setEditRewardDesc(e.target.value)}
+                placeholder="e.g. Free product, 50% discount code…"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingReward(null)} disabled={savingReward}>Cancel</Button>
+            <Button onClick={saveReward} disabled={savingReward}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
