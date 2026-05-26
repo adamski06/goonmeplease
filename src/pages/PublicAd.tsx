@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import { useSeo } from '@/lib/useSeo';
 import { ExternalLink, Clock } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
@@ -125,6 +126,35 @@ const PublicAd: React.FC = () => {
     };
     load();
   }, [id]);
+
+  useSeo(
+    ad
+      ? {
+          title: `${ad.title} — ${ad.brand_name} on Jarla`,
+          description:
+            ad.description?.slice(0, 160) ||
+            `Create a TikTok video for ${ad.brand_name} on Jarla and earn ${ad.rate_display}.`,
+          canonical: `https://jarla.app/ad/${ad.id}`,
+          ogType: 'product',
+          ogImage: ad.cover_image_url || undefined,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: ad.title,
+            description: ad.description || undefined,
+            image: ad.cover_image_url || undefined,
+            brand: { '@type': 'Brand', name: ad.brand_name },
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'USD',
+              price: ad.max_earnings ?? 0,
+              availability: 'https://schema.org/InStock',
+              seller: { '@type': 'Organization', name: ad.brand_name },
+            },
+          },
+        }
+      : { title: 'Ad — Jarla' }
+  );
 
   if (loading) {
     return (

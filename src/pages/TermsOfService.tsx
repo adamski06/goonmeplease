@@ -9,10 +9,10 @@ const TermsOfService: React.FC = () => {
     <div className="min-h-screen bg-white pb-24">
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
-          <button onClick={() => navigate(-1)} className="p-1 -ml-1">
+          <button onClick={() => navigate(-1)} className="p-1 -ml-1" aria-label="Go back">
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
-          <span className="text-base font-semibold text-black flex-1 text-center pr-6 font-montserrat">Terms of Service</span>
+          <h1 className="text-base font-semibold text-black flex-1 text-center pr-6 font-montserrat m-0">Terms of Service</h1>
         </div>
       </div>
 
