@@ -503,14 +503,23 @@ const AdminBusinessDetail = () => {
                     <TableCell className="max-w-[200px] truncate">{r.reward_description}</TableCell>
                     <TableCell>{fmt(r.created_at)}</TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant={r.status === 'active' ? 'outline' : 'default'}
-                        disabled={togglingAd === r.id}
-                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
-                      >
-                        {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReward(r); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={r.status === 'active' ? 'outline' : 'default'}
+                          disabled={togglingAd === r.id}
+                          onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
+                        >
+                          {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
