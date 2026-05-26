@@ -1,0 +1,14 @@
+# Jarla
+
+> Jarla connects creators with top brands for paid TikTok campaigns, deals, and rewards. Creators earn money per video view; brands launch performance-based ad campaigns.
+
+Jarla is a mobile-first platform where creators make TikTok videos for brand campaigns and get paid based on real video performance. Brands fund campaigns, deals, and reward ads; creators discover them, submit videos, and earn money or rewards once content is approved.
+
+## Pages
+
+- [Home](/): Sign in or sign up to start earning as a creator.
+- [Creator sign in](/user/auth): Creator authentication and onboarding.
+- [Business sign in](/business/auth): Brand and business authentication.
+- [Help Center](/user/help): Frequently asked questions for creators.
+- [Terms of Service](/user/terms): Platform terms.
+- [Privacy Policy](/user/privacy): How Jarla handles personal data.
