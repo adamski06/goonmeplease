@@ -228,7 +228,7 @@ const BusinessRewardDetail: React.FC = () => {
     );
   }
 
-  const codesCount = reward.coupon_codes?.length || 0;
+  const codesCount = availableCoupons.length;
   const claimedCoupons = submissions.filter(s => s.coupon_code);
 
   const cardStyle = {
