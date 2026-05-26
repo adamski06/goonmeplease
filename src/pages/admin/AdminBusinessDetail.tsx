@@ -46,6 +46,36 @@ const AdminBusinessDetail = () => {
   const [reviewAd, setReviewAd] = useState<any>(null);
   const [acting, setActing] = useState(false);
   const [togglingAd, setTogglingAd] = useState<string | null>(null);
+  const [editingReward, setEditingReward] = useState<any | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editViews, setEditViews] = useState<number>(0);
+  const [editRewardDesc, setEditRewardDesc] = useState('');
+  const [savingReward, setSavingReward] = useState(false);
+
+  const openEditReward = (r: any) => {
+    setEditingReward(r);
+    setEditTitle(r.title || '');
+    setEditViews(r.views_required || 0);
+    setEditRewardDesc(r.reward_description || '');
+  };
+
+  const saveReward = async () => {
+    if (!editingReward) return;
+    setSavingReward(true);
+    const { error } = await supabase.from('reward_ads').update({
+      title: editTitle,
+      views_required: editViews,
+      reward_description: editRewardDesc,
+    }).eq('id', editingReward.id);
+    if (error) {
+      toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
+    } else {
+      setRewards(prev => prev.map(x => x.id === editingReward.id ? { ...x, title: editTitle, views_required: editViews, reward_description: editRewardDesc } : x));
+      toast({ title: 'Reward updated' });
+      setEditingReward(null);
+    }
+    setSavingReward(false);
+  };
 
   const toggleAdStatus = async (type: 'campaign' | 'deal' | 'reward', id: string, currentStatus: string) => {
     setTogglingAd(id);
