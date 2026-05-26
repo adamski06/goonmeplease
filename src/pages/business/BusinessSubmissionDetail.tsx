@@ -54,7 +54,7 @@ const BusinessSubmissionDetail: React.FC = () => {
         setSubmission(data as SubmissionData);
         
         const { data: profile } = await supabase
-          .from('profiles')
+          .from('profiles_public')
           .select('username')
           .eq('user_id', data.creator_id)
           .maybeSingle();

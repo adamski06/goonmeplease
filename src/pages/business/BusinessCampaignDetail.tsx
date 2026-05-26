@@ -75,7 +75,7 @@ const BusinessCampaignDetail: React.FC = () => {
       if (subs.length > 0) {
         const creatorIds = [...new Set(subs.map(s => s.creator_id))];
         const { data: profiles } = await supabase
-          .from('profiles')
+          .from('profiles_public')
           .select('user_id, username')
           .in('user_id', creatorIds);
         const usernameMap: Record<string, string> = {};
