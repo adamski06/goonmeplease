@@ -56,20 +56,32 @@ const BusinessRewardDetail: React.FC = () => {
   const [copied, setCopied] = useState<string | false>(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [submissions, setSubmissions] = useState<RewardSubmission[]>([]);
+  const [coupons, setCoupons] = useState<CouponRow[]>([]);
+
+  const reloadCoupons = async (rewardId: string) => {
+    const { data } = await supabase
+      .from('reward_coupons')
+      .select('id, code, claimed_at')
+      .eq('reward_ad_id', rewardId)
+      .order('created_at', { ascending: true });
+    setCoupons((data || []) as CouponRow[]);
+  };
 
   useEffect(() => {
     if (!id) return;
     const load = async () => {
-      const [rewardRes, subsRes] = await Promise.all([
+      const [rewardRes, subsRes, couponsRes] = await Promise.all([
         supabase.from('reward_ads').select('*').eq('id', id).maybeSingle(),
         supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
+        supabase.from('reward_coupons').select('id, code, claimed_at').eq('reward_ad_id', id).order('created_at', { ascending: true }),
       ]);
       if (rewardRes.data) setReward(rewardRes.data as RewardData);
+      setCoupons((couponsRes.data || []) as CouponRow[]);
 
       const subs = subsRes.data || [];
       if (subs.length > 0) {
         const creatorIds = [...new Set(subs.map(s => s.creator_id))];
-        const { data: profiles } = await supabase.from('profiles').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
+        const { data: profiles } = await supabase.from('profiles_public').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
         const profileMap: Record<string, any> = {};
         (profiles || []).forEach(p => { profileMap[p.user_id] = p; });
         setSubmissions(subs.map(s => ({
