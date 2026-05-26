@@ -41,6 +41,12 @@ async function handleNativeOAuthRedirect(): Promise<boolean> {
 
   if (!nativeScheme) return false;
 
+  const ALLOWED_NATIVE_SCHEMES = ["app.lovable.jarla"];
+  if (!ALLOWED_NATIVE_SCHEMES.includes(nativeScheme)) {
+    renderNativeBridgeMessage("Invalid redirect. Please close this view and try again.");
+    return true;
+  }
+
   renderNativeBridgeMessage("Returning to app…");
 
   const directTokens = extractTokensFromLocation();
