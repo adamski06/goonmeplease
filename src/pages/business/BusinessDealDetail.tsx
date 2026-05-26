@@ -69,7 +69,7 @@ const BusinessDealDetail: React.FC = () => {
       if (apps.length > 0) {
         const creatorIds = [...new Set(apps.map(a => a.creator_id))];
         const { data: profiles } = await supabase
-          .from('profiles')
+          .from('profiles_public')
           .select('user_id, username')
           .in('user_id', creatorIds);
 

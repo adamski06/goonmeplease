@@ -64,7 +64,7 @@ const PublicAd: React.FC = () => {
         });
 
         const { data: biz } = await supabase
-          .from('business_profiles')
+          .from('business_profiles_public')
           .select('company_name, logo_url, website, description, industry')
           .eq('user_id', campaign.business_id)
           .maybeSingle();
@@ -85,7 +85,7 @@ const PublicAd: React.FC = () => {
           });
 
           const { data: biz } = await supabase
-            .from('business_profiles')
+            .from('business_profiles_public')
             .select('company_name, logo_url, website, description, industry')
             .eq('user_id', deal.business_id)
             .maybeSingle();
@@ -112,7 +112,7 @@ const PublicAd: React.FC = () => {
             });
 
             const { data: biz } = await supabase
-              .from('business_profiles')
+              .from('business_profiles_public')
               .select('company_name, logo_url, website, description, industry')
               .eq('user_id', reward.business_id)
               .maybeSingle();

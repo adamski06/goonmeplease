@@ -32,7 +32,7 @@ const PublicBrand: React.FC = () => {
     if (!businessId) return;
     const load = async () => {
       const { data: profile } = await supabase
-        .from('business_profiles')
+        .from('business_profiles_public')
         .select('company_name, logo_url, website, description, industry, user_id')
         .eq('user_id', businessId)
         .maybeSingle();

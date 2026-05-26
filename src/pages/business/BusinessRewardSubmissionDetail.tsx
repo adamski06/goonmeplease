@@ -53,7 +53,7 @@ const BusinessRewardSubmissionDetail: React.FC = () => {
         setSubmission(data as RewardSubmissionData);
 
         const [profileRes, rewardRes] = await Promise.all([
-          supabase.from('profiles').select('username').eq('user_id', data.creator_id).maybeSingle(),
+          supabase.from('profiles_public').select('username').eq('user_id', data.creator_id).maybeSingle(),
           supabase.from('reward_ads').select('title, reward_description, views_required').eq('id', data.reward_ad_id).maybeSingle(),
         ]);
 

@@ -44,7 +44,7 @@ const UsernameStep: React.FC<UsernameStepProps> = ({ userId, fullName, onComplet
     try {
       // Check if username is taken
       const { data: existing } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('id')
         .eq('username', trimmed)
         .maybeSingle();

@@ -24,8 +24,9 @@ interface RewardData {
   category: string | null;
   reward_description: string;
   views_required: number;
-  coupon_codes: string[] | null;
 }
+
+interface CouponRow { id: string; code: string; claimed_at: string | null; }
 
 interface RewardSubmission {
   id: string;
@@ -55,20 +56,32 @@ const BusinessRewardDetail: React.FC = () => {
   const [copied, setCopied] = useState<string | false>(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [submissions, setSubmissions] = useState<RewardSubmission[]>([]);
+  const [coupons, setCoupons] = useState<CouponRow[]>([]);
+
+  const reloadCoupons = async (rewardId: string) => {
+    const { data } = await supabase
+      .from('reward_coupons')
+      .select('id, code, claimed_at')
+      .eq('reward_ad_id', rewardId)
+      .order('created_at', { ascending: true });
+    setCoupons((data || []) as CouponRow[]);
+  };
 
   useEffect(() => {
     if (!id) return;
     const load = async () => {
-      const [rewardRes, subsRes] = await Promise.all([
+      const [rewardRes, subsRes, couponsRes] = await Promise.all([
         supabase.from('reward_ads').select('*').eq('id', id).maybeSingle(),
         supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
+        supabase.from('reward_coupons').select('id, code, claimed_at').eq('reward_ad_id', id).order('created_at', { ascending: true }),
       ]);
       if (rewardRes.data) setReward(rewardRes.data as RewardData);
+      setCoupons((couponsRes.data || []) as CouponRow[]);
 
       const subs = subsRes.data || [];
       if (subs.length > 0) {
         const creatorIds = [...new Set(subs.map(s => s.creator_id))];
-        const { data: profiles } = await supabase.from('profiles').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
+        const { data: profiles } = await supabase.from('profiles_public').select('user_id, username, full_name, avatar_url').in('user_id', creatorIds);
         const profileMap: Record<string, any> = {};
         (profiles || []).forEach(p => { profileMap[p.user_id] = p; });
         setSubmissions(subs.map(s => ({
@@ -123,36 +136,37 @@ const BusinessRewardDetail: React.FC = () => {
     return /[A-Z0-9]/.test(s);
   };
 
+  const availableCoupons = coupons.filter(c => !c.claimed_at);
+  const existingCodes = new Set(coupons.map(c => c.code));
+
+  const insertCoupons = async (codesToAdd: string[]) => {
+    if (!reward || codesToAdd.length === 0) return 0;
+    const unique = codesToAdd.filter(c => !existingCodes.has(c));
+    if (unique.length === 0) return 0;
+    setSavingCodes(true);
+    const { error } = await supabase.from('reward_coupons').insert(
+      unique.map(code => ({ reward_ad_id: reward.id, code }))
+    );
+    if (!error) {
+      await reloadCoupons(reward.id);
+    }
+    setSavingCodes(false);
+    return error ? 0 : unique.length;
+  };
+
   const addCouponCode = async () => {
     const code = newCouponCode.trim();
     if (!code || !reward) return;
-    const existing = reward.coupon_codes || [];
-    if (existing.includes(code)) return;
-    const updated = [...existing, code];
-    setSavingCodes(true);
-    const { error } = await supabase.from('reward_ads').update({ coupon_codes: updated }).eq('id', reward.id);
-    if (!error) {
-      setReward({ ...reward, coupon_codes: updated });
-      setNewCouponCode('');
-    }
-    setSavingCodes(false);
+    const added = await insertCoupons([code]);
+    if (added > 0) setNewCouponCode('');
   };
 
   const handleBulkPaste = async (text: string) => {
     if (!reward) return;
     const raw = text.split(/[\n,;]+/).map(c => c.trim()).filter(Boolean);
     const codes = raw.filter(looksLikeCode);
-    const existing = reward.coupon_codes || [];
-    const unique = codes.filter(c => !existing.includes(c));
-    if (unique.length === 0) return;
-    const updated = [...existing, ...unique];
-    setSavingCodes(true);
-    const { error } = await supabase.from('reward_ads').update({ coupon_codes: updated }).eq('id', reward.id);
-    if (!error) {
-      setReward({ ...reward, coupon_codes: updated });
-      sonnerToast.success(`Added ${unique.length} codes`);
-    }
-    setSavingCodes(false);
+    const added = await insertCoupons(codes);
+    if (added > 0) sonnerToast.success(`Added ${added} codes`);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,18 +180,8 @@ const BusinessRewardDetail: React.FC = () => {
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows: string[][] = utils.sheet_to_json(ws, { header: 1 });
       const codes = rows.flat().map(c => String(c).trim()).filter(Boolean).filter(looksLikeCode);
-      const existing = reward?.coupon_codes || [];
-      const unique = codes.filter(c => !existing.includes(c));
-      if (unique.length > 0 && reward) {
-        const updated = [...existing, ...unique];
-        setSavingCodes(true);
-        const { error } = await supabase.from('reward_ads').update({ coupon_codes: updated }).eq('id', reward.id);
-        if (!error) {
-          setReward({ ...reward, coupon_codes: updated });
-          sonnerToast.success(`Added ${unique.length} codes`);
-        }
-        setSavingCodes(false);
-      }
+      const added = await insertCoupons(codes);
+      if (added > 0) sonnerToast.success(`Added ${added} codes`);
     } else {
       const reader = new FileReader();
       reader.onload = (ev) => {
@@ -189,16 +193,15 @@ const BusinessRewardDetail: React.FC = () => {
     e.target.value = '';
   };
 
-  const removeCouponCode = async (index: number) => {
+  const removeCouponCode = async (couponId: string) => {
     if (!reward) return;
-    const updated = (reward.coupon_codes || []).filter((_, i) => i !== index);
-    const { error } = await supabase.from('reward_ads').update({ coupon_codes: updated }).eq('id', reward.id);
-    if (!error) setReward({ ...reward, coupon_codes: updated });
+    const { error } = await supabase.from('reward_coupons').delete().eq('id', couponId);
+    if (!error) await reloadCoupons(reward.id);
   };
 
   const exportCouponCodes = () => {
-    if (!reward?.coupon_codes) return;
-    const csv = reward.coupon_codes.join('\n');
+    if (availableCoupons.length === 0) return;
+    const csv = availableCoupons.map(c => c.code).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -225,7 +228,7 @@ const BusinessRewardDetail: React.FC = () => {
     );
   }
 
-  const codesCount = reward.coupon_codes?.length || 0;
+  const codesCount = availableCoupons.length;
   const claimedCoupons = submissions.filter(s => s.coupon_code);
 
   const cardStyle = {
@@ -453,13 +456,13 @@ const BusinessRewardDetail: React.FC = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-2">Available ({codesCount})</h4>
             <div className="max-h-48 overflow-y-auto space-y-1 rounded-xl border border-border p-3">
-              {(reward?.coupon_codes || []).map((code, i) => (
-                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-muted/50">
+              {availableCoupons.map((c) => (
+                <div key={c.id} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-muted/50">
                   <div className="flex items-center gap-2 min-w-0">
                     <Ticket className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <span className="text-sm font-mono text-foreground truncate">{code}</span>
+                    <span className="text-sm font-mono text-foreground truncate">{c.code}</span>
                   </div>
-                  <button onClick={() => removeCouponCode(i)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
+                  <button onClick={() => removeCouponCode(c.id)} className="shrink-0 p-1 hover:bg-destructive/10 rounded transition-colors">
                     <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
                   </button>
                 </div>
