@@ -528,6 +528,42 @@ const AdminBusinessDetail = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <Dialog open={!!editingReward} onOpenChange={(o) => !o && setEditingReward(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Reward</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Views required</Label>
+              <Input
+                type="number"
+                min={0}
+                value={editViews}
+                onChange={(e) => setEditViews(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Reward description</Label>
+              <Textarea
+                rows={3}
+                value={editRewardDesc}
+                onChange={(e) => setEditRewardDesc(e.target.value)}
+                placeholder="e.g. Free product, 50% discount code…"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingReward(null)} disabled={savingReward}>Cancel</Button>
+            <Button onClick={saveReward} disabled={savingReward}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
