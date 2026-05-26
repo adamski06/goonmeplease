@@ -40,10 +40,10 @@ const Support: React.FC = () => {
     <div className="min-h-screen bg-background pb-24">
       <div className="flex flex-col border-b border-border safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
-          <button onClick={() => navigate(-1)} className="p-1 -ml-1">
+          <button onClick={() => navigate(-1)} className="p-1 -ml-1" aria-label="Go back">
             <ChevronLeft className="h-6 w-6 text-foreground" />
           </button>
-          <span className="text-base font-semibold text-foreground flex-1 text-center pr-6 font-montserrat">Contact Support</span>
+          <h1 className="text-base font-semibold text-foreground flex-1 text-center pr-6 font-montserrat m-0">Contact Support</h1>
         </div>
       </div>
 
@@ -53,10 +53,11 @@ const Support: React.FC = () => {
         </p>
 
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-1.5 block">
+          <label htmlFor="support-subject" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-1.5 block">
             Subject
           </label>
           <input
+            id="support-subject"
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
@@ -67,10 +68,11 @@ const Support: React.FC = () => {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-1.5 block">
+          <label htmlFor="support-message" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-montserrat mb-1.5 block">
             Message
           </label>
           <textarea
+            id="support-message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Describe your issue or question..."

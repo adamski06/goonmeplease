@@ -50,19 +50,19 @@ const HelpCenter: React.FC = () => {
     <div className="min-h-screen bg-white pb-24">
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center px-4 py-3 relative">
-          <button onClick={() => navigate(-1)} className="p-1 -ml-1">
+          <button onClick={() => navigate(-1)} className="p-1 -ml-1" aria-label="Go back">
             <ChevronLeft className="h-6 w-6 text-black" />
           </button>
-          <span className="text-base font-semibold text-black flex-1 text-center pr-6 font-montserrat">Help Center</span>
+          <h1 className="text-base font-semibold text-black flex-1 text-center pr-6 font-montserrat m-0">Help Center</h1>
         </div>
       </div>
 
       <div className="px-4 pt-6 space-y-6">
         {/* FAQ */}
         <div>
-          <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat mb-3 px-1">
+          <h2 className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat mb-3 px-1">
             Frequently Asked Questions
-          </h3>
+          </h2>
           <Accordion type="single" collapsible className="space-y-2">
             {faqs.map((faq, i) => (
               <AccordionItem
