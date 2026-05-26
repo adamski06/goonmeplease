@@ -24,8 +24,9 @@ interface RewardData {
   category: string | null;
   reward_description: string;
   views_required: number;
-  coupon_codes: string[] | null;
 }
+
+interface CouponRow { id: string; code: string; claimed_at: string | null; }
 
 interface RewardSubmission {
   id: string;
