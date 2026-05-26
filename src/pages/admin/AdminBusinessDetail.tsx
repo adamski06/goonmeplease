@@ -6,9 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
