@@ -678,7 +678,6 @@ export type Database = {
           brand_name: string
           business_id: string
           category: string | null
-          coupon_codes: string[] | null
           cover_image_url: string | null
           created_at: string
           description: string | null
@@ -696,7 +695,6 @@ export type Database = {
           brand_name: string
           business_id: string
           category?: string | null
-          coupon_codes?: string[] | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
@@ -714,7 +712,6 @@ export type Database = {
           brand_name?: string
           business_id?: string
           category?: string | null
-          coupon_codes?: string[] | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
@@ -728,6 +725,41 @@ export type Database = {
           views_required?: number
         }
         Relationships: []
+      }
+      reward_coupons: {
+        Row: {
+          claimed_at: string | null
+          claimed_by: string | null
+          code: string
+          created_at: string
+          id: string
+          reward_ad_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          claimed_by?: string | null
+          code: string
+          created_at?: string
+          id?: string
+          reward_ad_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          claimed_by?: string | null
+          code?: string
+          created_at?: string
+          id?: string
+          reward_ad_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_coupons_reward_ad_id_fkey"
+            columns: ["reward_ad_id"]
+            isOneToOne: false
+            referencedRelation: "reward_ads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reward_submissions: {
         Row: {
@@ -917,66 +949,36 @@ export type Database = {
     Views: {
       business_profiles_public: {
         Row: {
-          address: string | null
-          brand_values: string | null
           city: string | null
           company_name: string | null
           country: string | null
-          created_at: string | null
           description: string | null
           id: string | null
           industry: string | null
           logo_url: string | null
-          onboarding_complete: boolean | null
-          organization_number: string | null
-          phone_number: string | null
-          postal_code: string | null
-          target_audience: string | null
-          updated_at: string | null
           user_id: string | null
-          vat_number: string | null
           website: string | null
         }
         Insert: {
-          address?: string | null
-          brand_values?: string | null
           city?: string | null
           company_name?: string | null
           country?: string | null
-          created_at?: string | null
           description?: string | null
           id?: string | null
           industry?: string | null
           logo_url?: string | null
-          onboarding_complete?: boolean | null
-          organization_number?: string | null
-          phone_number?: string | null
-          postal_code?: string | null
-          target_audience?: string | null
-          updated_at?: string | null
           user_id?: string | null
-          vat_number?: string | null
           website?: string | null
         }
         Update: {
-          address?: string | null
-          brand_values?: string | null
           city?: string | null
           company_name?: string | null
           country?: string | null
-          created_at?: string | null
           description?: string | null
           id?: string | null
           industry?: string | null
           logo_url?: string | null
-          onboarding_complete?: boolean | null
-          organization_number?: string | null
-          phone_number?: string | null
-          postal_code?: string | null
-          target_audience?: string | null
-          updated_at?: string | null
           user_id?: string | null
-          vat_number?: string | null
           website?: string | null
         }
         Relationships: []
@@ -988,7 +990,6 @@ export type Database = {
           created_at: string | null
           full_name: string | null
           id: string | null
-          phone_number: string | null
           updated_at: string | null
           user_id: string | null
           username: string | null
@@ -1000,7 +1001,6 @@ export type Database = {
           created_at?: string | null
           full_name?: string | null
           id?: string | null
-          phone_number?: string | null
           updated_at?: string | null
           user_id?: string | null
           username?: string | null
@@ -1012,7 +1012,6 @@ export type Database = {
           created_at?: string | null
           full_name?: string | null
           id?: string | null
-          phone_number?: string | null
           updated_at?: string | null
           user_id?: string | null
           username?: string | null
