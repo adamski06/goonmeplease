@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { getHighResLogoUrl } from '@/lib/logoUrl';
+import { useSeo } from '@/lib/useSeo';
 import { ExternalLink, Clock } from 'lucide-react';
 import jarlaLogo from '@/assets/jarla-logo.png';
 
