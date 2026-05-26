@@ -63,6 +63,28 @@ const PublicBrand: React.FC = () => {
     load();
   }, [businessId]);
 
+  useSeo(
+    brand
+      ? {
+          title: `${brand.company_name} — Brand on Jarla`,
+          description:
+            brand.description?.slice(0, 160) ||
+            `Discover paid TikTok campaigns from ${brand.company_name} on Jarla.`,
+          canonical: `https://jarla.app/brand/${brand.user_id}`,
+          ogType: 'profile',
+          ogImage: brand.logo_url || undefined,
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: brand.company_name,
+            url: brand.website || undefined,
+            logo: brand.logo_url || undefined,
+            description: brand.description || undefined,
+          },
+        }
+      : { title: 'Brand — Jarla' }
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
