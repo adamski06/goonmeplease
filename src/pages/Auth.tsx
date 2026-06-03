@@ -9,6 +9,14 @@ import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import jarlaLogo from '@/assets/jarla-logo.png';
 import { Button } from '@/components/ui/button';
+import a1Asset from '@/assets/auth-bg/a1.png.asset.json';
+import a2Asset from '@/assets/auth-bg/a2.png.asset.json';
+import a3Asset from '@/assets/auth-bg/a3.png.asset.json';
+import a4Asset from '@/assets/auth-bg/a4.png.asset.json';
+import a5Asset from '@/assets/auth-bg/a5.png.asset.json';
+
+const AUTH_IMAGES = [a1Asset.url, a2Asset.url, a3Asset.url, a4Asset.url, a5Asset.url];
+const GRAIN_SVG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 import CredentialsStep from '@/components/auth/CredentialsStep';
 import LoginForm from '@/components/auth/LoginForm';
@@ -249,19 +257,25 @@ const Auth: React.FC = () => {
           </div>
         </div>
 
-        {/* Animated placeholder rows */}
+        {/* Animated image rows */}
         <div className="overflow-hidden pb-4 space-y-3 mt-2">
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={`r1-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+                <div key={`r1-${i}`} className="relative w-[120px] h-[160px] rounded-xl shrink-0 overflow-hidden bg-black/5">
+                  <img src={AUTH_IMAGES[i % AUTH_IMAGES.length]} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-60" style={{ backgroundImage: GRAIN_SVG, backgroundSize: '160px 160px' }} />
+                </div>
               ))}
             </div>
           </div>
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollRight_38s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={`r2-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+                <div key={`r2-${i}`} className="relative w-[120px] h-[160px] rounded-xl shrink-0 overflow-hidden bg-black/5">
+                  <img src={AUTH_IMAGES[(i + 2) % AUTH_IMAGES.length]} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-60" style={{ backgroundImage: GRAIN_SVG, backgroundSize: '160px 160px' }} />
+                </div>
               ))}
             </div>
           </div>
