@@ -6,7 +6,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const TIKTOK_URL_RE = /^https:\/\/([a-z0-9-]+\.)*tiktok\.com\//i;
+
 async function fetchTiktokStats(videoUrl: string, videoId: string | null) {
+  if (!TIKTOK_URL_RE.test(videoUrl)) {
+    return { views: 0, likes: 0, shares: 0 };
+  }
   let views = 0, likes = 0, shares = 0;
 
   // Try oEmbed first
