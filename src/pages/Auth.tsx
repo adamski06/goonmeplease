@@ -257,19 +257,25 @@ const Auth: React.FC = () => {
           </div>
         </div>
 
-        {/* Animated placeholder rows */}
+        {/* Animated image rows */}
         <div className="overflow-hidden pb-4 space-y-3 mt-2">
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollLeft_35s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={`r1-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+                <div key={`r1-${i}`} className="relative w-[120px] h-[160px] rounded-xl shrink-0 overflow-hidden bg-black/5">
+                  <img src={AUTH_IMAGES[i % AUTH_IMAGES.length]} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-60" style={{ backgroundImage: GRAIN_SVG, backgroundSize: '160px 160px' }} />
+                </div>
               ))}
             </div>
           </div>
           <div className="relative h-[160px]">
             <div className="flex gap-3 animate-[scrollRight_38s_linear_infinite] absolute" style={{ width: 'max-content' }}>
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={`r2-${i}`} className="w-[120px] h-[160px] rounded-xl shrink-0 bg-black/5" />
+                <div key={`r2-${i}`} className="relative w-[120px] h-[160px] rounded-xl shrink-0 overflow-hidden bg-black/5">
+                  <img src={AUTH_IMAGES[(i + 2) % AUTH_IMAGES.length]} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-60" style={{ backgroundImage: GRAIN_SVG, backgroundSize: '160px 160px' }} />
+                </div>
               ))}
             </div>
           </div>
