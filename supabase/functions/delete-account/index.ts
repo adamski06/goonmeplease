@@ -105,40 +105,29 @@ Deno.serve(async (req) => {
 
     const { data: { user }, error: authError } = await anonClient.auth.getUser();
 
-    if (user) {
-      // Authenticated user
-      targetUserId = user.id;
-
-      // Admin can delete other users
-      if (body?.target_user_id && body.target_user_id !== user.id) {
-        const { data: isAdmin } = await adminClient.rpc("has_role", {
-          _user_id: user.id,
-          _role: "admin",
-        });
-
-        if (!isAdmin) {
-          return new Response(JSON.stringify({ error: "Forbidden" }), {
-            status: 403,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        }
-        targetUserId = body.target_user_id;
-      }
-    } else if (body?.target_user_id) {
-      // Verify service role access by trying to get the target user via admin API
-      const { data: targetUser, error: targetError } = await adminClient.auth.admin.getUserById(body.target_user_id);
-      if (targetError || !targetUser?.user) {
-        return new Response(JSON.stringify({ error: "Unauthorized or user not found" }), {
-          status: 401,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      targetUserId = body.target_user_id;
-    } else {
+    if (!user || authError) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    targetUserId = user.id;
+
+    // Admin can delete other users
+    if (body?.target_user_id && body.target_user_id !== user.id) {
+      const { data: isAdmin } = await adminClient.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
+      });
+
+      if (!isAdmin) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      targetUserId = body.target_user_id;
     }
 
     console.log(`Deleting user data for: ${targetUserId}`);
