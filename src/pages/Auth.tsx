@@ -442,7 +442,7 @@ const Auth: React.FC = () => {
           pointerEvents: authView !== 'welcome' ? 'auto' : 'none',
         }}
       >
-        <div className="flex-1 flex items-center justify-center px-6 py-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
           <div className="w-full max-w-sm">
             {/* Logo */}
             <div className="flex justify-center mb-8">
@@ -496,21 +496,22 @@ const Auth: React.FC = () => {
                 isLoading={isLoading}
               />
             )}
-          </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-[11px] text-black/40 leading-relaxed">
-              By continuing, you agree to our{' '}
-              <a href="https://jarla.org/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="https://jarla.org/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
-                Privacy Policy
-              </a>
-            </p>
+            <div className="mt-6 text-center">
+              <p className="text-[11px] text-black/40 leading-relaxed">
+                By continuing, you agree to our{' '}
+                <a href="https://jarla.org/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
+                  Terms of Service
+                </a>{' '}
+                and{' '}
+                <a href="https://jarla.org/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
+                  Privacy Policy
+                </a>
+              </p>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
