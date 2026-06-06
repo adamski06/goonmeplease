@@ -473,9 +473,6 @@ const Auth: React.FC = () => {
                 {signUpStep === 'tiktok' && newUserId && (
                   <TikTokStep userId={newUserId} onNext={handleTikTokNext} onSkip={handleTikTokSkip} />
                 )}
-                {signUpStep === 'phone' && newUserId && (
-                  <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
-                )}
 
                 {!isOAuthUser && (
                   <div className="flex justify-center gap-2 mt-6">
