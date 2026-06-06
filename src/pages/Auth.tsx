@@ -19,21 +19,20 @@ const GRAIN_SVG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2
 
 import CredentialsStep from '@/components/auth/CredentialsStep';
 import LoginForm from '@/components/auth/LoginForm';
-import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
+
 import TikTokStep from '@/components/auth/TikTokStep';
 
 
-// Signup flow: credentials → tiktok → phone (email) or just tiktok (Apple)
-type SignUpStep = 'credentials' | 'tiktok' | 'phone';
+// Signup flow: credentials → tiktok (no phone step)
+type SignUpStep = 'credentials' | 'tiktok';
 type AuthView = 'welcome' | 'signup' | 'login';
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
 const stepNumber = (step: SignUpStep) => {
   switch (step) {
     case 'credentials': return 1;
     case 'tiktok': return 2;
-    case 'phone': return 3;
   }
 };
 
@@ -172,15 +171,11 @@ const Auth: React.FC = () => {
     }
   };
 
-  const handleTikTokNext = (username: string) => {
-    setSignUpStep('phone');
+  const handleTikTokNext = (_username: string) => {
+    navigate('/user');
   };
 
   const handleTikTokSkip = () => {
-    setSignUpStep('phone');
-  };
-
-  const handlePhoneNext = () => {
     navigate('/user');
   };
 
@@ -300,18 +295,18 @@ const Auth: React.FC = () => {
         `}</style>
 
         {/* Tagline & buttons */}
-        <div className="flex-1 flex flex-col items-center justify-center px-8 pb-10">
-          <h1 className="text-2xl font-bold text-black text-center mb-8 font-montserrat">
+        <div className="flex-1 flex flex-col items-center justify-evenly px-8 py-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-black text-center font-montserrat">
             Start creating
           </h1>
 
-          <div className="w-full max-w-xs space-y-2.5">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md space-y-2.5 sm:space-y-3">
             <button
               onClick={() => {
                 Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {});
                 setShowMethodSheet(true);
               }}
-              className="w-full py-3.5 rounded-full text-base font-bold text-white transition-all"
+              className="w-full py-3.5 sm:py-4 md:py-5 rounded-full text-base sm:text-lg md:text-xl font-bold text-white transition-all"
               style={{
                 background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.96) 100%)',
                 backdropFilter: 'blur(16px)',
@@ -328,7 +323,7 @@ const Auth: React.FC = () => {
                 setAuthView('login');
                 setIsSignUp(false);
               }}
-              className="w-full py-3.5 rounded-full text-base font-bold text-black transition-all"
+              className="w-full py-3.5 sm:py-4 md:py-5 rounded-full text-base sm:text-lg md:text-xl font-bold text-black transition-all"
               style={{
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(245,245,245,0.9) 100%)',
                 backdropFilter: 'blur(16px)',
@@ -341,7 +336,9 @@ const Auth: React.FC = () => {
             </button>
           </div>
 
-          <div className="mt-6 text-center">
+
+          <div className="text-center">
+
             <p className="text-[11px] text-black/40 leading-relaxed">
               By continuing, you agree to our{' '}
               <a href="https://jarla.org/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
@@ -477,9 +474,6 @@ const Auth: React.FC = () => {
                 )}
                 {signUpStep === 'tiktok' && newUserId && (
                   <TikTokStep userId={newUserId} onNext={handleTikTokNext} onSkip={handleTikTokSkip} />
-                )}
-                {signUpStep === 'phone' && newUserId && (
-                  <PhoneVerifyStep userId={newUserId} onNext={handlePhoneNext} onSkip={handlePhoneNext} />
                 )}
 
                 {!isOAuthUser && (

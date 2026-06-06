@@ -85,7 +85,7 @@ const CredentialsStep: React.FC<CredentialsStepProps> = ({ onNext, onSwitchToLog
       <div className="pt-2">
         <Button
           type="submit"
-          className="w-full py-3.5 h-auto rounded-full text-base font-bold text-white border border-white/20 shadow-lg hover:opacity-90"
+          className="w-full py-3.5 sm:py-4 md:py-5 h-auto rounded-full text-base sm:text-lg md:text-xl font-bold text-white border border-white/20 shadow-lg hover:opacity-90"
           style={{
             background: 'linear-gradient(180deg, rgba(30,30,30,0.92) 0%, rgba(0,0,0,0.96) 100%)',
             backdropFilter: 'blur(16px)',

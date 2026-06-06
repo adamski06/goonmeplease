@@ -125,7 +125,7 @@ const TikTokStep: React.FC<TikTokStepProps> = ({ userId, onNext, onSkip }) => {
         <Button
           onClick={handleContinue}
           disabled={!username || saving}
-          className="w-full py-3 h-auto rounded-full font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
+          className="w-full py-3 sm:py-4 md:py-5 h-auto rounded-full text-base sm:text-lg md:text-xl font-semibold text-white border border-white/20 shadow-lg hover:opacity-90"
           style={blackGlassStyle}
         >
           {saving ? 'Saving...' : 'Continue'}
