@@ -171,15 +171,11 @@ const Auth: React.FC = () => {
     }
   };
 
-  const handleTikTokNext = (username: string) => {
-    setSignUpStep('phone');
+  const handleTikTokNext = (_username: string) => {
+    navigate('/user');
   };
 
   const handleTikTokSkip = () => {
-    setSignUpStep('phone');
-  };
-
-  const handlePhoneNext = () => {
     navigate('/user');
   };
 
