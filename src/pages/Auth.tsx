@@ -337,7 +337,8 @@ const Auth: React.FC = () => {
           </div>
 
 
-          <div className="mt-6 text-center">
+          <div className="text-center">
+
             <p className="text-[11px] text-black/40 leading-relaxed">
               By continuing, you agree to our{' '}
               <a href="https://jarla.org/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
