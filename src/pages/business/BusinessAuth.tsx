@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { getAuthRedirectUrl } from '@/lib/authRedirect';
 
 import { z } from 'zod';
 import jarlaLogo from '@/assets/jarla-logo.png';
@@ -56,7 +57,7 @@ const BusinessAuth: React.FC = () => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/business`,
+            emailRedirectTo: getAuthRedirectUrl('/business'),
             data: { full_name: fullName },
           },
         });
