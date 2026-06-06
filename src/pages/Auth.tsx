@@ -19,7 +19,7 @@ const GRAIN_SVG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2
 
 import CredentialsStep from '@/components/auth/CredentialsStep';
 import LoginForm from '@/components/auth/LoginForm';
-import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
+
 import TikTokStep from '@/components/auth/TikTokStep';
 
 
