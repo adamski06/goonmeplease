@@ -143,7 +143,7 @@ const Auth: React.FC = () => {
     emailSignupInProgress.current = true;
     try {
       setSignUpFullName(data.fullName || '');
-      const { error } = await signUp(data.email, data.password, data.fullName);
+      const { error, requiresEmailConfirmation, userId } = await signUp(data.email, data.password, data.fullName);
       if (error) {
         if (error.message.includes('already registered')) {
           toast({ title: t('auth.accountExists'), description: t('auth.accountExistsDesc'), variant: 'destructive' });
@@ -154,13 +154,25 @@ const Auth: React.FC = () => {
         return;
       }
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const { data: session } = await supabase.auth.getSession();
-      if (!session?.session?.user) {
-        throw new Error('Not authenticated');
+      if (requiresEmailConfirmation) {
+        emailSignupInProgress.current = false;
+        setIsSignUp(false);
+        setAuthView('login');
+        toast({
+          title: t('auth.accountCreated'),
+          description: t('auth.checkEmailToContinue'),
+        });
+        return;
       }
 
-      const currentUserId = session.session.user.id;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data: session } = await supabase.auth.getSession();
+      const currentUserId = session?.session?.user?.id ?? userId;
+
+      if (!currentUserId) {
+        throw new Error(t('auth.noSessionAfterSignup'));
+      }
+
       setNewUserId(currentUserId);
       setSignUpStep('tiktok');
       emailSignupInProgress.current = false;
