@@ -13,8 +13,9 @@ import a2Asset from '@/assets/auth-bg/a2.png.asset.json';
 import a3Asset from '@/assets/auth-bg/a3.png.asset.json';
 import a4Asset from '@/assets/auth-bg/a4.png.asset.json';
 import a5Asset from '@/assets/auth-bg/a5.png.asset.json';
+import { resolveAssetUrl } from '@/lib/assetUrl';
 
-const AUTH_IMAGES = [a2Asset.url, a3Asset.url, a4Asset.url, a5Asset.url];
+const AUTH_IMAGES = [a2Asset.url, a3Asset.url, a4Asset.url, a5Asset.url].map(resolveAssetUrl);
 const GRAIN_SVG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")";
 
 import CredentialsStep from '@/components/auth/CredentialsStep';
