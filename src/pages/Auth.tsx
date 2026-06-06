@@ -23,17 +23,16 @@ import PhoneVerifyStep from '@/components/auth/PhoneVerifyStep';
 import TikTokStep from '@/components/auth/TikTokStep';
 
 
-// Signup flow: credentials → tiktok → phone (email) or just tiktok (Apple)
-type SignUpStep = 'credentials' | 'tiktok' | 'phone';
+// Signup flow: credentials → tiktok (no phone step)
+type SignUpStep = 'credentials' | 'tiktok';
 type AuthView = 'welcome' | 'signup' | 'login';
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
 const stepNumber = (step: SignUpStep) => {
   switch (step) {
     case 'credentials': return 1;
     case 'tiktok': return 2;
-    case 'phone': return 3;
   }
 };
 
