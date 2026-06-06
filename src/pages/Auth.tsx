@@ -503,6 +503,19 @@ const Auth: React.FC = () => {
               />
             )}
           </div>
+
+          <div className="mt-6 text-center">
+            <p className="text-[11px] text-black/40 leading-relaxed">
+              By continuing, you agree to our{' '}
+              <a href="https://jarla.org/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
+                Terms of Service
+              </a>{' '}
+              and{' '}
+              <a href="https://jarla.org/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-black/70">
+                Privacy Policy
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
