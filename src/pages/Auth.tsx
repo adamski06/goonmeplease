@@ -80,40 +80,20 @@ const Auth: React.FC = () => {
 
     // Check if this user needs onboarding (new OAuth user with no username)
     const checkOnboarding = async () => {
-      const [{ data: profile }, { data: tiktokAccounts }] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('username')
-          .eq('user_id', user.id)
-          .maybeSingle(),
-        supabase
-          .from('tiktok_accounts_safe')
-          .select('id')
-          .eq('user_id', user.id)
-          .limit(1),
-      ]);
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      const hasTikTok = tiktokAccounts && tiktokAccounts.length > 0;
-
-      if (!hasTikTok) {
-        // New user (OAuth or otherwise) — show TikTok onboarding
-        const provider = user.app_metadata?.provider;
-        const oauthUser = provider && provider !== 'email';
-        setIsOAuthUser(!!oauthUser);
-        setNewUserId(user.id);
-        setIsSignUp(true);
-        setSignUpStep('tiktok');
-        setAuthView('signup');
-        setAuthCheckDone(true);
-        return;
-      }
-
-      // Existing user with profile — redirect (don't show auth UI at all)
+      // TikTok linking is no longer part of onboarding — TikTok Login Kit will handle it later.
+      void profile;
       checkCreatorRole();
     };
 
     checkOnboarding();
   }, [user, loading]);
+
 
   const checkCreatorRole = async () => {
     if (!user) return;
@@ -174,8 +154,9 @@ const Auth: React.FC = () => {
       }
 
       setNewUserId(currentUserId);
-      setSignUpStep('tiktok');
       emailSignupInProgress.current = false;
+      navigate('/user');
+
     } catch (error: any) {
       emailSignupInProgress.current = false;
       toast({ title: t('auth.signUpFailed'), description: error.message, variant: 'destructive' });
