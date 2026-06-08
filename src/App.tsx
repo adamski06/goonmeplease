@@ -59,6 +59,7 @@ const lazyRetry = (importFn: () => Promise<any>) =>
 const Auth = lazyRetry(() => import("./pages/Auth")); // Still needed for /user/auth
 const LinkedInCallback = lazyRetry(() => import("./pages/LinkedInCallback"));
 const TikTokCallback = lazyRetry(() => import("./pages/TikTokCallback"));
+const FacebookCallback = lazyRetry(() => import("./pages/FacebookCallback"));
 const UserLayout = lazyRetry(() => import("./components/UserLayout"));
 const CampaignDetail = lazyRetry(() => import("./pages/CampaignDetail"));
 const EditProfile = lazyRetry(() => import("./pages/EditProfile"));
@@ -137,6 +138,7 @@ const App = () => (
                 <Route path="/user/auth" element={<Auth />} />
                 <Route path="/auth/linkedin/callback" element={<LinkedInCallback />} />
                 <Route path="/auth/tiktok/callback" element={<TikTokCallback />} />
+                <Route path="/auth/facebook/callback" element={<FacebookCallback />} />
                 <Route path="/user/campaigns/:id" element={<CampaignDetail />} />
                 <Route path="/user/edit-profile" element={<EditProfile />} />
                 <Route path="/user/settings" element={<Settings />} />

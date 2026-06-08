@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { signInWithLinkedIn } from '@/lib/linkedinAuth';
 import { signInWithTikTok } from '@/lib/tiktokAuth';
+import { signInWithFacebook } from '@/lib/facebookAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 import jarlaLogo from '@/assets/jarla-logo.png';
@@ -418,6 +419,30 @@ const Auth: React.FC = () => {
                     <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
                   </svg>
                   Continue with LinkedIn
+                </button>
+
+                <button
+                  onClick={() => {
+                    Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+                    try {
+                      signInWithFacebook();
+                    } catch (e) {
+                      toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
+                    }
+                  }}
+                  className="w-full py-3.5 rounded-full text-base font-bold text-white flex items-center justify-center gap-2.5 transition-all"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(24,119,242,0.96) 0%, rgba(13,90,196,1) 100%)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 4px 20px rgba(24,119,242,0.35)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                    <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.412c0-3.017 1.792-4.683 4.533-4.683 1.312 0 2.686.235 2.686.235v2.967h-1.514c-1.491 0-1.956.93-1.956 1.886v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+                  </svg>
+                  Continue with Facebook
                 </button>
               </div>
             </div>
