@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.linkedin-callback]
 verify_jwt = false
+
+[functions.tiktok-auth-callback]
+verify_jwt = false
