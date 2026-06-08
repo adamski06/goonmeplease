@@ -18,6 +18,12 @@ const extractTikTokVideoId = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+const extractTikTokUsername = (url: string): string | null => {
+  const match = url.match(/@([A-Za-z0-9._]+)/);
+  return match ? match[1] : null;
+};
+
+
 const isValidTikTokUrl = (url: string): boolean => {
   try {
     const u = new URL(url.trim());
@@ -39,21 +45,8 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
   const [resolving, setResolving] = useState(false);
   const [urlValid, setUrlValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [hasTikTok, setHasTikTok] = useState<boolean | null>(null);
 
-  // Check if user has a TikTok account linked
-  useEffect(() => {
-    if (!user) return;
-    const check = async () => {
-      const { data } = await supabase
-        .from('tiktok_accounts_safe')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1);
-      setHasTikTok(data && data.length > 0);
-    };
-    check();
-  }, [user]);
+
 
   const resolveVideoId = useCallback(async (url: string) => {
     const directId = extractTikTokVideoId(url);
@@ -104,14 +97,14 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
 
     setSubmitting(true);
     try {
-      // Use the creator's registered TikTok account (don't extract username from URL)
       const { data: registeredAccounts } = await supabase
         .rpc('get_user_tiktok_accounts', { p_user_id: user.id });
 
-      const tiktokUsername = registeredAccounts?.[0]?.tiktok_username;
+      const tiktokUsername =
+        registeredAccounts?.[0]?.tiktok_username ?? extractTikTokUsername(tiktokUrl);
 
       if (!tiktokUsername) {
-        toast.error('No TikTok account linked. Please add your TikTok in settings.');
+        toast.error('Could not detect a TikTok username in that URL.');
         setSubmitting(false);
         return;
       }
@@ -122,6 +115,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
       if (accountError || !accountId) {
         throw accountError || new Error('Could not resolve TikTok account');
       }
+
 
       // Check for existing submission
       const { data: existing } = await supabase
