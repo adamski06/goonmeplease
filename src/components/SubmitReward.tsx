@@ -429,7 +429,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
             color: 'white',
           }}
         >
-          {submitting ? 'Submitting...' : 'Submit Video'}
+          {submitting ? t('adOverlay.submitting') : t('adOverlay.submitVideo')}
         </button>
       </div>
     </div>
