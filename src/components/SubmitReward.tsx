@@ -237,7 +237,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
           <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
             {reward.logo && <img src={reward.logo} alt={reward.brand} className="w-full h-full object-cover" />}
           </div>
-          <h2 className="text-sm font-bold text-black font-montserrat">Submit TikTok</h2>
+          <h2 className="text-sm font-bold text-black font-montserrat">{t('adOverlay.submitTiktok')}</h2>
         </div>
       </div>
 
