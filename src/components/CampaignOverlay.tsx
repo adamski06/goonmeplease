@@ -241,7 +241,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                 }}
               >
                 <Plus className="h-4 w-4" />
-                Continue
+                {t('adOverlay.continue')}
               </button>
               <button
                 onClick={onToggleSave}
