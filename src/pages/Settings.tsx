@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
-import { ChevronLeft, ChevronRight, LogOut, Shield, HelpCircle, FileText, MessageCircle, ExternalLink, MoreHorizontal, Pencil, Bell } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Shield, HelpCircle, FileText, MessageCircle, ExternalLink, MoreHorizontal, Pencil, Bell, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -41,6 +41,7 @@ const Settings: React.FC = () => {
       items: [
         { icon: Shield, label: 'Privacy Policy', action: () => window.open('https://jarla.org/privacy', '_blank') },
         { icon: FileText, label: 'Terms of Service', action: () => window.open('https://jarla.org/terms', '_blank') },
+        { icon: Trash2, label: 'Data Deletion', action: () => window.open('https://jarla.org/datadelete', '_blank') },
       ],
     },
   ];
