@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import tiktokLogo from '@/assets/tiktok-logo.png';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SubmitDraftProps {
   campaign: Campaign;
@@ -37,6 +38,7 @@ const isValidTikTokUrl = (url: string): boolean => {
 const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [videoId, setVideoId] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -188,9 +190,9 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
           >
             <CheckCircle className="h-10 w-10 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-bold text-black font-montserrat mb-2">Video Submitted</h3>
+          <h3 className="text-xl font-bold text-black font-montserrat mb-2">{t('adOverlay.videoSubmitted')}</h3>
           <p className="text-sm text-black/60 font-jakarta leading-relaxed mb-2">
-            Your TikTok has been sent to {campaign.brand} for review. You'll be notified once it's approved.
+            {t('adOverlay.spreadSentForReview', { brand: campaign.brand })}
           </p>
 
           {/* TikTok embed preview */}
@@ -230,7 +232,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
               color: 'white',
             }}
           >
-            Done
+            {t('adOverlay.done')}
           </button>
         </div>
       </div>
@@ -248,7 +250,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
           <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
           </div>
-          <h2 className="text-sm font-bold text-black font-montserrat">Submit TikTok</h2>
+          <h2 className="text-sm font-bold text-black font-montserrat">{t('adOverlay.submitTiktok')}</h2>
         </div>
       </div>
 
@@ -256,7 +258,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
       <div className="flex-1 overflow-y-auto px-5 py-4">
         {/* Link input */}
         <div className="mb-5">
-          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Your TikTok link</h3>
+          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">{t('adOverlay.yourTiktokLink')}</h3>
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
@@ -356,7 +358,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
                 {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
               </div>
               <span className={`text-sm font-semibold font-montserrat ${confirmed ? 'text-emerald-700' : 'text-black/70'}`}>
-                This is my video
+                {t('adOverlay.thisIsMyVideo')}
               </span>
             </button>
           </div>
@@ -381,8 +383,8 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
               <Link2 className="h-6 w-6 text-black/40" strokeWidth={1.5} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold text-black/60 font-montserrat">Paste your TikTok link</p>
-              <p className="text-xs text-black/40 font-jakarta mt-1">The video will appear here</p>
+              <p className="text-sm font-semibold text-black/60 font-montserrat">{t('adOverlay.pasteYourTiktokLink')}</p>
+              <p className="text-xs text-black/40 font-jakarta mt-1">{t('adOverlay.videoWillAppearHere')}</p>
             </div>
           </div>
         )}
@@ -396,7 +398,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
           }}
         >
-          <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Video requirements</h3>
+          <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.videoRequirements')}</h3>
           <ul className="space-y-1.5">
             {campaign.guidelines.map((guideline, idx) => (
               <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
@@ -432,7 +434,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
             {guidelinesConfirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
           </div>
           <span className={`text-sm font-semibold font-montserrat ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/70'}`}>
-            I followed all requirements
+            {t('adOverlay.iFollowedAllRequirements')}
           </span>
         </button>
       </div>
@@ -456,7 +458,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
             ) : (
               <Upload className="h-4 w-4" />
             )}
-            {submitting ? 'Submitting...' : 'Submit'}
+            {submitting ? t('adOverlay.submitting') : t('adOverlay.submit')}
           </span>
         </button>
       </div>

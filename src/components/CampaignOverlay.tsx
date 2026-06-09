@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Bookmark, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
@@ -24,6 +25,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
 }) => {
   const [backdropVisible, setBackdropVisible] = useState(false);
   const { formatPrice, label, convert } = useCurrency();
+  const { t } = useTranslation();
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
@@ -158,9 +160,9 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
             <div className="flex-1 overflow-y-auto px-5 py-4">
               {/* How Spread works */}
               <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
-                <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Spread works</h3>
+                <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">{t('adOverlay.howSpreadWorks')}</h3>
                 <ul className="space-y-1.5">
-                  {['Create your video following the brand\u2019s guidelines', 'Post it on TikTok and submit the link', 'Earn money based on the views your video gets', 'When the pool runs out, views convert to score instead'].map((step, i) => (
+                  {[t('adOverlay.spreadStep1'), t('adOverlay.spreadStep2'), t('adOverlay.spreadStep3'), t('adOverlay.spreadStep4')].map((step, i) => (
                     <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
                       <span className="text-black/40 mt-0.5">{i + 1}.</span>
                       {step}
@@ -182,7 +184,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
                 }}
               >
-                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.requirements')}</h3>
                 <ul className="space-y-1.5">
                   {campaign.guidelines.map((guideline, idx) => (
                     <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
@@ -211,7 +213,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                   return (
                     <>
                       <div className="flex items-baseline justify-between mt-3 mb-1">
-                        <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Pool</span>
+                        <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">{t('adOverlay.pool')}</span>
                         <div className="flex items-baseline gap-1">
                           <span className="text-lg font-bold text-white font-montserrat">{convert(poolAmount).toLocaleString()}</span>
                           <span className="text-xs text-white/60 font-jakarta">{label}</span>
@@ -239,7 +241,7 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                 }}
               >
                 <Plus className="h-4 w-4" />
-                Continue
+                {t('adOverlay.continue')}
               </button>
               <button
                 onClick={onToggleSave}

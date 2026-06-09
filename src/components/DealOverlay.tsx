@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface DealOverlayProps {
   deal: Campaign;
@@ -25,6 +26,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
 }) => {
   const { user } = useAuth();
   const { formatPrice, label, convert } = useCurrency();
+  const { t } = useTranslation();
   const [backdropVisible, setBackdropVisible] = useState(false);
   const [requesting, setRequesting] = useState(false);
   const [requested, setRequested] = useState(false);
@@ -163,7 +165,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             </h2>
             {/* Deal badge - positioned before the X button area */}
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
-              <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
+              <span className="text-[10px] font-bold text-white font-montserrat">{t('adOverlay.dealBadge')}</span>
             </div>
           </div>
 
@@ -178,24 +180,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
               }}
             >
-              <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Deals work</h3>
+              <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">{t('adOverlay.howDealsWork')}</h3>
               <ul className="space-y-1.5">
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">1.</span>
-                  Send a request to the brand
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">2.</span>
-                  Brand reviews your profile and accepts or declines
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">3.</span>
-                  If accepted, you create the content and submit your video
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">4.</span>
-                  Earn based on your video's performance
-                </li>
+                {[t('adOverlay.dealStep1'), t('adOverlay.dealStep2'), t('adOverlay.dealStep3'), t('adOverlay.dealStep4')].map((step, i) => (
+                  <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
+                    <span className="text-black/40 mt-0.5">{i + 1}.</span>
+                    {step}
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -213,7 +205,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
                 }}
               >
-                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.requirements')}</h3>
                 <ul className="space-y-1.5">
                   {deal.guidelines.map((guideline, idx) => (
                     <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
@@ -229,14 +221,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             {deal.maxEarnings > 0 && (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <div className="flex items-baseline justify-between mb-1">
-                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Max Earnings</span>
+                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">{t('adOverlay.maxEarnings')}</span>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white font-montserrat">{convert(deal.maxEarnings).toLocaleString()}</span>
                     <span className="text-xs text-white/60 font-jakarta">{label}</span>
                   </div>
                 </div>
                 <p className="text-xs text-white/50 font-jakarta">
-                  Based on your video's views after acceptance.
+                  {t('adOverlay.basedOnViews')}
                 </p>
               </div>
             )}
@@ -256,7 +248,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
               }}
             >
               <Send className="h-4 w-4" />
-              {requested ? 'Request Sent!' : requesting ? 'Sending...' : 'Send Request'}
+              {requested ? t('adOverlay.requestSent') : requesting ? t('adOverlay.sending') : t('adOverlay.sendRequest')}
             </button>
             <button
               onClick={onToggleSave}
