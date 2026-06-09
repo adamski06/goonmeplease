@@ -337,7 +337,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
                 {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
               </div>
               <span className={`text-sm font-semibold font-montserrat ${confirmed ? 'text-emerald-700' : 'text-black/70'}`}>
-                This is my video
+                {t('adOverlay.thisIsMyVideo')}
               </span>
             </button>
           </div>
