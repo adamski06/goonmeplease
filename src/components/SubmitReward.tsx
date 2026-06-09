@@ -361,8 +361,8 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
               <Link2 className="h-6 w-6 text-black/40" strokeWidth={1.5} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold text-black/60 font-montserrat">Paste your TikTok link</p>
-              <p className="text-xs text-black/40 font-jakarta mt-1">The video will appear here</p>
+              <p className="text-sm font-semibold text-black/60 font-montserrat">{t('adOverlay.pasteYourTiktokLink')}</p>
+              <p className="text-xs text-black/40 font-jakarta mt-1">{t('adOverlay.videoWillAppearHere')}</p>
             </div>
           </div>
         )}
