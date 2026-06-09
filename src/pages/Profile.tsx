@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import JarlaLoader from '@/components/JarlaLoader';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,12 +12,15 @@ import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/integrations/supabase/client';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
+
 const ProfilePage: React.FC = () => {
   const { user, loading, signOut } = useAuth();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { formatPrice, label, convert } = useCurrency();
+
 
   // Creator stats
   const [totalVideos, setTotalVideos] = useState(0);
@@ -184,7 +188,7 @@ const ProfilePage: React.FC = () => {
     fetchStats();
   }, [user]);
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  const firstName = profile?.full_name?.split(' ')[0] || t('creatorUI.userFallback');
 
   // Loading handled by UserLayout
 
@@ -194,8 +198,9 @@ const ProfilePage: React.FC = () => {
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center justify-center px-4 py-3 relative">
           <span className="text-base font-semibold text-black">
-            {profile?.username ? `@${profile.username}` : profile?.full_name || 'Profile'}
+            {profile?.username ? `@${profile.username}` : profile?.full_name || t('creatorUI.profileTitle')}
           </span>
+
           <button onClick={() => navigate('/user/settings')} className="absolute right-4 p-2">
             <Settings className="h-6 w-6 text-black" />
           </button>
@@ -245,7 +250,7 @@ const ProfilePage: React.FC = () => {
                 {firstName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+            <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || t('creatorUI.userFallback')}</h2>
             {profile?.username && (
               <p className="text-sm text-black/50 font-jakarta mt-0.5">@{profile.username}</p>
             )}
@@ -257,14 +262,15 @@ const ProfilePage: React.FC = () => {
             <div className="flex gap-8 mt-4">
               <div className="flex flex-col items-center">
                 <span className="text-lg font-bold text-black font-montserrat">{totalVideos}</span>
-                <span className="text-xs text-black/50 font-jakarta">Videos made</span>
+                <span className="text-xs text-black/50 font-jakarta">{t('creatorUI.videosMade')}</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-lg font-bold text-black font-montserrat">{totalViews.toLocaleString()}</span>
-                <span className="text-xs text-black/50 font-jakarta">Total views</span>
+                <span className="text-xs text-black/50 font-jakarta">{t('creatorUI.totalViews')}</span>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
@@ -306,7 +312,7 @@ const ProfilePage: React.FC = () => {
                   {firstName.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || 'User'}</h2>
+              <h2 className="text-base font-bold text-black font-montserrat">{profile?.full_name || t('creatorUI.userFallback')}</h2>
             </div>
           </div>
 
