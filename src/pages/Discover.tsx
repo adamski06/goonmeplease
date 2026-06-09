@@ -2,8 +2,10 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import JarlaLoader from '@/components/JarlaLoader';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
+
 
 import { supabase } from '@/integrations/supabase/client';
 import { addRecentCampaign } from '@/hooks/useRecentCampaigns';
@@ -28,6 +30,8 @@ const Discover: React.FC = () => {
   const { symbol, convert, currency, currencyInfo } = useCurrency();
   const { profile } = useProfile();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Campaign | null>(null);
   const [selectedReward, setSelectedReward] = useState<Campaign | null>(null);
@@ -326,7 +330,7 @@ const Discover: React.FC = () => {
               </div>
             ) : !campaignsLoading ? (
               <div className="flex items-center justify-center py-20">
-                <p className="text-black/40 text-sm">{searchQuery.trim() ? 'No results found' : 'No campaigns available'}</p>
+                <p className="text-black/40 text-sm">{searchQuery.trim() ? t('creatorUI.noResults') : t('creatorUI.noCampaigns')}</p>
               </div>
             ) : null}
             {campaignsLoading && campaigns.length > 0 && (
