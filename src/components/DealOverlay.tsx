@@ -221,7 +221,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             {deal.maxEarnings > 0 && (
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <div className="flex items-baseline justify-between mb-1">
-                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Max Earnings</span>
+                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">{t('adOverlay.maxEarnings')}</span>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white font-montserrat">{convert(deal.maxEarnings).toLocaleString()}</span>
                     <span className="text-xs text-white/60 font-jakarta">{label}</span>
