@@ -228,7 +228,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                   </div>
                 </div>
                 <p className="text-xs text-white/50 font-jakarta">
-                  Based on your video's views after acceptance.
+                  {t('adOverlay.basedOnViews')}
                 </p>
               </div>
             )}
