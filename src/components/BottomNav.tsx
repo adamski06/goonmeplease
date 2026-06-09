@@ -5,6 +5,8 @@ import { useProfile } from '@/contexts/ProfileContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from 'lucide-react';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { useTranslation } from 'react-i18next';
+
 
 
 interface BottomNavProps {
@@ -17,9 +19,11 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
   const location = useLocation();
   const { user } = useAuth();
   const { profile } = useProfile();
+  const { t } = useTranslation();
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'User';
+  const firstName = profile?.full_name?.split(' ')[0] || t('creatorUI.userFallback');
   const currentPath = location.pathname;
+
 
   const isDark = variant === 'dark';
   const activeColor = isDark ? 'text-white' : 'text-black';
