@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/contexts/ProfileContext';
-import { ChevronLeft, ChevronRight, LogOut, Shield, HelpCircle, FileText, MessageCircle, ExternalLink, MoreHorizontal, Pencil, Bell } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LogOut, Shield, HelpCircle, FileText, MessageCircle, ExternalLink, MoreHorizontal, Pencil, Bell, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
