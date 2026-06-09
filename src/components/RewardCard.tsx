@@ -186,7 +186,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 </div>
                 <h2 className="text-base font-bold text-black font-montserrat flex-1">{reward.brand}</h2>
                 <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 100%)', border: '1px solid rgba(52,211,153,0.4)' }}>
-                  <span className="text-[10px] font-bold text-white font-montserrat">REWARD</span>
+                  <span className="text-[10px] font-bold text-white font-montserrat">{t('adOverlay.rewardBadge')}</span>
                 </div>
               </div>
 
