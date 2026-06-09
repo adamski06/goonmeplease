@@ -5,9 +5,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 type AdItem = {
   id: string;
@@ -36,6 +37,8 @@ const AdminAllAds = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'active' | 'pending' | 'paused'>('all');
   const [toggling, setToggling] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<AdItem | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -68,6 +71,19 @@ const AdminAllAds = () => {
     setAds(prev => prev.map(a => a.id === ad.id ? { ...a, status: newStatus, is_active: isActivating } : a));
     toast({ title: isActivating ? 'Ad set live' : 'Ad paused' });
     setToggling(null);
+  };
+
+  const deleteAd = async (ad: AdItem) => {
+    setDeleting(ad.id);
+    const { error } = await supabase.from(ad.table).delete().eq('id', ad.id);
+    if (error) {
+      toast({ title: 'Failed to delete ad', description: error.message, variant: 'destructive' });
+    } else {
+      setAds(prev => prev.filter(a => !(a.id === ad.id && a.table === ad.table)));
+      toast({ title: 'Ad deleted' });
+    }
+    setDeleting(null);
+    setConfirmDelete(null);
   };
 
   const filtered = filter === 'all' ? ads : ads.filter(a => {
@@ -113,7 +129,7 @@ const AdminAllAds = () => {
               <TableHead>Status</TableHead>
               <TableHead>Budget</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="text-right">Toggle</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -129,23 +145,56 @@ const AdminAllAds = () => {
                 </TableCell>
                 <TableCell className="text-sm">{money(ad.budget)}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{format(new Date(ad.created_at), 'MMM d, yyyy')}</TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    disabled={toggling === ad.id}
-                    onClick={() => toggleStatus(ad)}
-                    className={ad.status === 'active' ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'}
-                  >
-                    {ad.status === 'active' ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
-                    {ad.status === 'active' ? 'Pause' : 'Set Live'}
-                  </Button>
+                <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-end gap-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={toggling === ad.id}
+                      onClick={() => toggleStatus(ad)}
+                      className={ad.status === 'active' ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'}
+                    >
+                      {ad.status === 'active' ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
+                      {ad.status === 'active' ? 'Pause' : 'Set Live'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={deleting === ad.id}
+                      onClick={() => setConfirmDelete(ad)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
+
+
+
+      <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this ad?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes "{confirmDelete?.title}" ({confirmDelete?.type}). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => confirmDelete && deleteAd(confirmDelete)}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
