@@ -5,6 +5,8 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { signInWithLinkedIn } from '@/lib/linkedinAuth';
+import { signInWithTikTok } from '@/lib/tiktokAuth';
+import { signInWithFacebook } from '@/lib/facebookAuth';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
