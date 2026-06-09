@@ -412,7 +412,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
             {guidelinesConfirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
           </div>
           <span className={`text-sm font-semibold font-montserrat ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/70'}`}>
-            I followed all requirements
+            {t('adOverlay.iFollowedAllRequirements')}
           </span>
         </button>
       </div>
