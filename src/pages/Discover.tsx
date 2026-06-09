@@ -278,9 +278,7 @@ const Discover: React.FC = () => {
                   const isReward = item._kind === 'reward';
                   const rate = isDeal ? item.ratePerView : isReward ? null : (item.tiers[0]?.rate ?? item.ratePerView ?? 0.5);
                   const badgeLabel = isReward ? 'REWARD' : isDeal ? 'DEAL' : 'SPREAD';
-                  const badgeStyle = isReward
-                    ? { background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)', borderColor: 'rgba(167,139,250,0.4)' }
-                    : { background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' };
+                  const badgeStyle = { background: 'linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.9) 100%)', borderColor: 'rgba(255,255,255,0.15)' };
                   return (
                     <div
                       key={item.id}
