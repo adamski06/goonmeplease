@@ -190,9 +190,9 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
           >
             <CheckCircle className="h-10 w-10 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-bold text-black font-montserrat mb-2">Video Submitted</h3>
+          <h3 className="text-xl font-bold text-black font-montserrat mb-2">{t('adOverlay.videoSubmitted')}</h3>
           <p className="text-sm text-black/60 font-jakarta leading-relaxed mb-2">
-            Your TikTok has been sent to {campaign.brand} for review. You'll be notified once it's approved.
+            {t('adOverlay.spreadSentForReview', { brand: campaign.brand })}
           </p>
 
           {/* TikTok embed preview */}
