@@ -18,6 +18,8 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(true);
+  const { t } = useTranslation();
+
 
   const handleOpen = () => {
     addRecentCampaign(reward.id, 'reward');
