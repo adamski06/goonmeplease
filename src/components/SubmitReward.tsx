@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import tiktokLogo from '@/assets/tiktok-logo.png';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SubmitRewardProps {
   reward: Campaign;
