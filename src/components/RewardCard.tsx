@@ -229,7 +229,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 {/* Requirements */}
                 {reward.guidelines.length > 0 && (
                   <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)' }}>
-                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.requirements')}</h3>
                     <ul className="space-y-1.5">
                       {reward.guidelines.map((g, idx) => (
                         <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
