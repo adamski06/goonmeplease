@@ -326,7 +326,7 @@ const Discover: React.FC = () => {
               </div>
             ) : !campaignsLoading ? (
               <div className="flex items-center justify-center py-20">
-                <p className="text-black/40 text-sm">{searchQuery.trim() ? 'No results found' : 'No campaigns available'}</p>
+                <p className="text-black/40 text-sm">{searchQuery.trim() ? t('creatorUI.noResults') : t('creatorUI.noCampaigns')}</p>
               </div>
             ) : null}
             {campaignsLoading && campaigns.length > 0 && (
