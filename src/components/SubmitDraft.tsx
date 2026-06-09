@@ -232,7 +232,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
               color: 'white',
             }}
           >
-            Done
+            {t('adOverlay.done')}
           </button>
         </div>
       </div>
