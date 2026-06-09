@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/integrations/supabase/client';
 import { CheckCircle, DollarSign, TrendingUp, Bell } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+
 
 interface Notification {
   id: string;
@@ -25,8 +27,10 @@ const typeIcon: Record<string, React.ReactNode> = {
 const Alerts: React.FC = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [fetching, setFetching] = useState(true);
+
 
   useEffect(() => {
     if (!loading && !user) {
@@ -83,8 +87,9 @@ const Alerts: React.FC = () => {
     <div className="min-h-screen bg-white pb-24">
       <div className="flex flex-col border-b border-black/10 safe-area-top">
         <div className="flex items-center justify-center px-4 py-3">
-          <span className="text-base font-semibold text-black">Alerts</span>
+          <span className="text-base font-semibold text-black">{t('creatorUI.alertsTitle')}</span>
         </div>
+
       </div>
 
       <div className="px-4 pt-3">
@@ -95,7 +100,7 @@ const Alerts: React.FC = () => {
         ) : notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
             <Bell className="h-10 w-10 text-black/15" />
-            <p className="text-black/40 text-sm font-jakarta">No notifications yet</p>
+            <p className="text-black/40 text-sm font-jakarta">{t('creatorUI.noNotifications')}</p>
           </div>
         ) : (
           <div className="space-y-1">

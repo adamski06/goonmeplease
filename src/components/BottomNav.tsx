@@ -64,7 +64,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
             <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H15V15H9V21H4C3.44772 21 3 20.5523 3 20V10.5Z" />
           </svg>
           <span className={`text-[10px] ${isActive('/user') ? `font-semibold ${activeColor}` : inactiveColor}`}>
-            Home
+            {t('creatorUI.navHome')}
           </span>
         </button>
 
@@ -90,7 +90,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
             />
           </svg>
           <span className={`text-[10px] ${isActive('/user/discover') ? `font-semibold ${activeColor}` : inactiveColor}`}>
-            Discover
+            {t('creatorUI.navDiscover')}
           </span>
         </button>
 
@@ -111,7 +111,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
             />
           </svg>
           <span className={`text-[10px] ${isActive('/user/activity') ? `font-semibold ${activeColor}` : inactiveColor}`}>
-            Action
+            {t('creatorUI.navAction')}
           </span>
         </button>
 
@@ -133,7 +133,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
           <span className={`text-[10px] ${isActive('/user/alerts') ? `font-semibold ${activeColor}` : inactiveColor}`}>
-            Alerts
+            {t('creatorUI.navAlerts')}
           </span>
         </button>
 
@@ -157,7 +157,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ variant = 'light', onAuthRequired
             <User className={`h-6 w-6 ${inactiveColor}`} />
           )}
           <span className={`text-[10px] ${isActive('/user/profile') ? `font-semibold ${activeColor}` : inactiveColor}`}>
-            Profile
+            {t('creatorUI.navProfile')}
           </span>
         </button>
       </div>
