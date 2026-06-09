@@ -143,13 +143,13 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
                   >
                     <X className="h-3 w-3 text-black/50" />
                   </button>
-                  <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat pr-6">How Rewards work</h3>
+                  <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat pr-6">{t('adOverlay.howRewardsWork')}</h3>
                   <ul className="space-y-1.5">
                     {[
-                      'Create your video following the brand\u2019s guidelines',
-                      'Post it on TikTok and submit the link',
-                      `Reach ${(reward.viewsRequired || 0).toLocaleString()} views on your video`,
-                      'Receive your reward (coupon code, free product, etc.)',
+                      t('adOverlay.rewardStep1'),
+                      t('adOverlay.rewardStep2'),
+                      t('adOverlay.rewardStep3', { views: (reward.viewsRequired || 0).toLocaleString() }),
+                      t('adOverlay.rewardStep4'),
                     ].map((step, i) => (
                       <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
                         <span className="text-black/40 mt-0.5">{i + 1}.</span>
