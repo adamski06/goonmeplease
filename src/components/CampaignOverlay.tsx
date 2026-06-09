@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Bookmark, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
