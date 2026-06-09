@@ -268,7 +268,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                   }}
                 >
                   <Plus className="h-4 w-4" />
-                  Continue
+                  {t('adOverlay.continue')}
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onToggleFavorite(reward.id, e); }}
