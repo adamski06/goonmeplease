@@ -248,7 +248,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
               }}
             >
               <Send className="h-4 w-4" />
-              {requested ? 'Request Sent!' : requesting ? 'Sending...' : 'Send Request'}
+              {requested ? t('adOverlay.requestSent') : requesting ? t('adOverlay.sending') : t('adOverlay.sendRequest')}
             </button>
             <button
               onClick={onToggleSave}
