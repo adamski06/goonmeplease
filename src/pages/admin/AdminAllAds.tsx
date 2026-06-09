@@ -37,6 +37,8 @@ const AdminAllAds = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'active' | 'pending' | 'paused'>('all');
   const [toggling, setToggling] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<AdItem | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
