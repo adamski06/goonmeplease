@@ -458,7 +458,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
             ) : (
               <Upload className="h-4 w-4" />
             )}
-            {submitting ? 'Submitting...' : 'Submit'}
+            {submitting ? t('adOverlay.submitting') : t('adOverlay.submit')}
           </span>
         </button>
       </div>
