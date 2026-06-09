@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause, Pencil } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { ArrowLeft, Building2, Megaphone, Handshake, Gift, Check, X, Play, Pause, Pencil, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -51,6 +52,10 @@ const AdminBusinessDetail = () => {
   const [editViews, setEditViews] = useState<number>(0);
   const [editRewardDesc, setEditRewardDesc] = useState('');
   const [savingReward, setSavingReward] = useState(false);
+  const [deletingAd, setDeletingAd] = useState<string | null>(null);
+  const [deletingCompany, setDeletingCompany] = useState(false);
+  const [confirmDeleteAd, setConfirmDeleteAd] = useState<{ id: string; title: string; table: 'campaigns' | 'deals' | 'reward_ads'; type: 'Spread' | 'Deal' | 'Reward' } | null>(null);
+  const [confirmDeleteCompany, setConfirmDeleteCompany] = useState(false);
 
   const openEditReward = (r: any) => {
     setEditingReward(r);
@@ -75,6 +80,46 @@ const AdminBusinessDetail = () => {
       setEditingReward(null);
     }
     setSavingReward(false);
+  };
+
+  const deleteAd = async () => {
+    if (!confirmDeleteAd) return;
+
+    setDeletingAd(confirmDeleteAd.id);
+    const { error } = await supabase.from(confirmDeleteAd.table).delete().eq('id', confirmDeleteAd.id);
+
+    if (error) {
+      toast({ title: 'Failed to delete ad', description: error.message, variant: 'destructive' });
+    } else {
+      if (confirmDeleteAd.table === 'campaigns') setCampaigns(prev => prev.filter(item => item.id !== confirmDeleteAd.id));
+      if (confirmDeleteAd.table === 'deals') setDeals(prev => prev.filter(item => item.id !== confirmDeleteAd.id));
+      if (confirmDeleteAd.table === 'reward_ads') setRewards(prev => prev.filter(item => item.id !== confirmDeleteAd.id));
+      toast({ title: 'Ad deleted' });
+    }
+
+    setDeletingAd(null);
+    setConfirmDeleteAd(null);
+  };
+
+  const deleteCompany = async () => {
+    if (!userId) return;
+
+    setDeletingCompany(true);
+    try {
+      const { error } = await supabase.functions.invoke('delete-account', {
+        body: { target_user_id: userId },
+      });
+
+      if (error) throw error;
+
+      toast({ title: 'Company deleted' });
+      navigate('/admin/businesses');
+    } catch (e: any) {
+      toast({ title: 'Failed to delete company', description: e.message || 'Please try again.', variant: 'destructive' });
+    } finally {
+      setDeletingCompany(false);
+      setConfirmDeleteCompany(false);
+    }
   };
 
   const toggleAdStatus = async (type: 'campaign' | 'deal' | 'reward', id: string, currentStatus: string) => {
@@ -393,6 +438,17 @@ const AdminBusinessDetail = () => {
             {profile?.industry || '–'} · {profile?.website || '–'}
           </p>
         </div>
+        <div className="ml-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            disabled={deletingCompany}
+            className="text-destructive hover:text-destructive"
+            onClick={() => setConfirmDeleteCompany(true)}
+          >
+            <Trash2 className="h-4 w-4 mr-1" /> Delete company
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -437,14 +493,28 @@ const AdminBusinessDetail = () => {
                     <TableCell>{money(c.budget_spent)}</TableCell>
                     <TableCell>{fmt(c.created_at)}</TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant={c.status === 'active' ? 'outline' : 'default'}
-                        disabled={togglingAd === c.id}
-                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
-                      >
-                        {c.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant={c.status === 'active' ? 'outline' : 'default'}
+                          disabled={togglingAd === c.id}
+                          onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
+                        >
+                          {c.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          disabled={deletingAd === c.id}
+                          className="text-destructive hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDeleteAd({ id: c.id, title: c.title, table: 'campaigns', type: 'Spread' });
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -470,14 +540,28 @@ const AdminBusinessDetail = () => {
                     <TableCell>{d.rate_per_view ? `$${d.rate_per_view}` : '–'}</TableCell>
                     <TableCell>{fmt(d.created_at)}</TableCell>
                     <TableCell>
-                      <Button
-                        size="sm"
-                        variant={d.status === 'active' ? 'outline' : 'default'}
-                        disabled={togglingAd === d.id}
-                        onClick={(e) => { e.stopPropagation(); toggleAdStatus('deal', d.id, d.status || 'pending'); }}
-                      >
-                        {d.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant={d.status === 'active' ? 'outline' : 'default'}
+                          disabled={togglingAd === d.id}
+                          onClick={(e) => { e.stopPropagation(); toggleAdStatus('deal', d.id, d.status || 'pending'); }}
+                        >
+                          {d.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          disabled={deletingAd === d.id}
+                          className="text-destructive hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDeleteAd({ id: d.id, title: d.title, table: 'deals', type: 'Deal' });
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -518,6 +602,18 @@ const AdminBusinessDetail = () => {
                           onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
                         >
                           {r.status === 'active' ? <><Pause className="h-3 w-3 mr-1" /> Pause</> : <><Play className="h-3 w-3 mr-1" /> Set Live</>}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          disabled={deletingAd === r.id}
+                          className="text-destructive hover:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDeleteAd({ id: r.id, title: r.title, table: 'reward_ads', type: 'Reward' });
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -564,6 +660,46 @@ const AdminBusinessDetail = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!confirmDeleteAd} onOpenChange={(open) => !open && setConfirmDeleteAd(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this ad?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes "{confirmDeleteAd?.title}" ({confirmDeleteAd?.type}). This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={deleteAd}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmDeleteCompany} onOpenChange={setConfirmDeleteCompany}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this company?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes {profile?.company_name ? `"${profile.company_name}"` : 'this company'} and all associated ads, submissions, and account data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={deleteCompany}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
