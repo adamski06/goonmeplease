@@ -250,7 +250,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
           <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
             <img src={campaign.logo} alt={campaign.brand} className="w-full h-full object-cover" />
           </div>
-          <h2 className="text-sm font-bold text-black font-montserrat">Submit TikTok</h2>
+          <h2 className="text-sm font-bold text-black font-montserrat">{t('adOverlay.submitTiktok')}</h2>
         </div>
       </div>
 
