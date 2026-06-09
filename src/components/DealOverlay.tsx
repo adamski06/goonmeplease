@@ -180,24 +180,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)',
               }}
             >
-              <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Deals work</h3>
+              <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">{t('adOverlay.howDealsWork')}</h3>
               <ul className="space-y-1.5">
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">1.</span>
-                  Send a request to the brand
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">2.</span>
-                  Brand reviews your profile and accepts or declines
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">3.</span>
-                  If accepted, you create the content and submit your video
-                </li>
-                <li className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                  <span className="text-black/40 mt-0.5">4.</span>
-                  Earn based on your video's performance
-                </li>
+                {[t('adOverlay.dealStep1'), t('adOverlay.dealStep2'), t('adOverlay.dealStep3'), t('adOverlay.dealStep4')].map((step, i) => (
+                  <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
+                    <span className="text-black/40 mt-0.5">{i + 1}.</span>
+                    {step}
+                  </li>
+                ))}
               </ul>
             </div>
 
