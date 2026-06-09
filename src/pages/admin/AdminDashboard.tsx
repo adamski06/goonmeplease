@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
-import { Building2, ChevronRight } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { Building2, ChevronRight, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,20 +12,45 @@ const AdminDashboard = () => {
   const [businesses, setBusinesses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ campaigns: 0, deals: 0, rewards: 0 });
+  const [confirmDelete, setConfirmDelete] = useState<{ userId: string; companyName: string } | null>(null);
+  const [deletingCompany, setDeletingCompany] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const load = async () => {
+    const [biz, camp, dl, rw] = await Promise.all([
+      supabase.from('business_profiles').select('*').order('created_at', { ascending: false }),
+      supabase.from('campaigns').select('id', { count: 'exact', head: true }),
+      supabase.from('deals').select('id', { count: 'exact', head: true }),
+      supabase.from('reward_ads').select('id', { count: 'exact', head: true }),
+    ]);
+    setBusinesses(biz.data || []);
+    setStats({ campaigns: camp.count || 0, deals: dl.count || 0, rewards: rw.count || 0 });
+    setLoading(false);
+  };
+
+  const deleteCompany = async () => {
+    if (!confirmDelete) return;
+
+    setDeletingCompany(confirmDelete.userId);
+    try {
+      const { error } = await supabase.functions.invoke('delete-account', {
+        body: { target_user_id: confirmDelete.userId },
+      });
+
+      if (error) throw error;
+
+      toast({ title: 'Company deleted' });
+      setConfirmDelete(null);
+      await load();
+    } catch (e: any) {
+      toast({ title: 'Failed to delete company', description: e.message || 'Please try again.', variant: 'destructive' });
+    } finally {
+      setDeletingCompany(null);
+    }
+  };
 
   useEffect(() => {
-    const load = async () => {
-      const [biz, camp, dl, rw] = await Promise.all([
-        supabase.from('business_profiles').select('*').order('created_at', { ascending: false }),
-        supabase.from('campaigns').select('id', { count: 'exact', head: true }),
-        supabase.from('deals').select('id', { count: 'exact', head: true }),
-        supabase.from('reward_ads').select('id', { count: 'exact', head: true }),
-      ]);
-      setBusinesses(biz.data || []);
-      setStats({ campaigns: camp.count || 0, deals: dl.count || 0, rewards: rw.count || 0 });
-      setLoading(false);
-    };
     load();
   }, []);
 
@@ -75,7 +103,21 @@ const AdminDashboard = () => {
                   {b.industry || 'No industry'} · {b.website || 'No website'} · Joined {format(new Date(b.created_at), 'MMM d, yyyy')}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div className="flex items-center gap-1 shrink-0">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  disabled={deletingCompany === b.user_id}
+                  className="text-destructive hover:text-destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setConfirmDelete({ userId: b.user_id, companyName: b.company_name });
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -84,6 +126,26 @@ const AdminDashboard = () => {
           <p className="text-center text-muted-foreground py-10">No businesses yet</p>
         )}
       </div>
+
+      <AlertDialog open={!!confirmDelete} onOpenChange={(open) => !open && setConfirmDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this company?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently deletes {confirmDelete?.companyName ? `"${confirmDelete.companyName}"` : 'this company'} and all of its ads, submissions, and account data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={deleteCompany}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
