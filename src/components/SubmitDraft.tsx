@@ -258,7 +258,7 @@ const SubmitDraft: React.FC<SubmitDraftProps> = ({ campaign, onBack, onClose }) 
       <div className="flex-1 overflow-y-auto px-5 py-4">
         {/* Link input */}
         <div className="mb-5">
-          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">Your TikTok link</h3>
+          <h3 className="text-sm font-semibold text-black mb-3 font-montserrat">{t('adOverlay.yourTiktokLink')}</h3>
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
