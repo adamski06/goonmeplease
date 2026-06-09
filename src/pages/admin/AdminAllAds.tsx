@@ -173,7 +173,8 @@ const AdminAllAds = () => {
           </TableBody>
         </Table>
       )}
-      )}
+
+
 
       <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
