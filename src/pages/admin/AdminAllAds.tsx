@@ -145,17 +145,28 @@ const AdminAllAds = () => {
                 </TableCell>
                 <TableCell className="text-sm">{money(ad.budget)}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{format(new Date(ad.created_at), 'MMM d, yyyy')}</TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    disabled={toggling === ad.id}
-                    onClick={() => toggleStatus(ad)}
-                    className={ad.status === 'active' ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'}
-                  >
-                    {ad.status === 'active' ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
-                    {ad.status === 'active' ? 'Pause' : 'Set Live'}
-                  </Button>
+                <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex justify-end gap-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={toggling === ad.id}
+                      onClick={() => toggleStatus(ad)}
+                      className={ad.status === 'active' ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'}
+                    >
+                      {ad.status === 'active' ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
+                      {ad.status === 'active' ? 'Pause' : 'Set Live'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={deleting === ad.id}
+                      onClick={() => setConfirmDelete(ad)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
