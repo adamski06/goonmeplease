@@ -220,7 +220,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
               color: 'white',
             }}
           >
-            Done
+            {t('adOverlay.done')}
           </button>
         </div>
       </div>
