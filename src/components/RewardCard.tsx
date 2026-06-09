@@ -195,22 +195,31 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
               >
                 {/* How Rewards work */}
-                <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
-                  <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat">How Rewards work</h3>
-                  <ul className="space-y-1.5">
-                    {[
-                      'Create your video following the brand\u2019s guidelines',
-                      'Post it on TikTok and submit the link',
-                      `Reach ${(reward.viewsRequired || 0).toLocaleString()} views on your video`,
-                      'Receive your reward (coupon code, free product, etc.)',
-                    ].map((step, i) => (
-                      <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
-                        <span className="text-black/40 mt-0.5">{i + 1}.</span>
-                        {step}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {showHowItWorks && (
+                  <div className="rounded-xl p-4 mb-4 relative" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.07) 100%)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5)' }}>
+                    <button
+                      onClick={() => setShowHowItWorks(false)}
+                      className="absolute top-2 right-2 h-6 w-6 rounded-full flex items-center justify-center"
+                      style={{ background: 'rgba(0,0,0,0.06)' }}
+                    >
+                      <X className="h-3 w-3 text-black/50" />
+                    </button>
+                    <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat pr-6">How Rewards work</h3>
+                    <ul className="space-y-1.5">
+                      {[
+                        'Create your video following the brand\u2019s guidelines',
+                        'Post it on TikTok and submit the link',
+                        `Reach ${(reward.viewsRequired || 0).toLocaleString()} views on your video`,
+                        'Receive your reward (coupon code, free product, etc.)',
+                      ].map((step, i) => (
+                        <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
+                          <span className="text-black/40 mt-0.5">{i + 1}.</span>
+                          {step}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 <p className="text-sm text-black font-medium font-jakarta leading-relaxed mb-5">{reward.description}</p>
 
