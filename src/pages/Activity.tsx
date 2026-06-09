@@ -46,7 +46,7 @@ const CampaignList: React.FC<{ campaigns: Campaign[]; onSelect: (c: Campaign) =>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             {isReward ? (
-              <div className="rounded-[14px] px-2.5 py-1 flex items-center gap-1 border border-purple-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)' }}>
+              <div className="rounded-[14px] px-2.5 py-1 flex items-center gap-1 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 100%)' }}>
                 <Gift className="h-3 w-3 text-white/80" />
                 <span className="text-[10px] font-bold text-white font-montserrat">REWARD</span>
               </div>
@@ -492,7 +492,7 @@ const Activity: React.FC = () => {
               pending_review: { label: 'Under Review', gradient: 'linear-gradient(180deg, rgba(245,158,11,0.85) 0%, rgba(217,119,6,0.95) 100%)', border: 'rgba(252,211,77,0.5)' },
               approved: { label: 'Approved', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
               denied: { label: 'Denied', gradient: 'linear-gradient(180deg, rgba(220,38,38,0.85) 0%, rgba(185,28,28,0.95) 100%)', border: 'rgba(252,165,165,0.5)' },
-              completed: { label: 'Completed', gradient: 'linear-gradient(180deg, rgba(124,58,237,0.9) 0%, rgba(109,40,217,0.95) 100%)', border: 'rgba(167,139,250,0.5)' },
+              completed: { label: 'Completed', gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)', border: 'rgba(52,211,153,0.5)' },
             };
             const rs_status = rewardStatusConfig[rs.status] || rewardStatusConfig.pending_review;
             return (
@@ -517,7 +517,7 @@ const Activity: React.FC = () => {
                   <span className="text-sm font-bold text-black font-montserrat truncate block">{rs.reward_brand}</span>
                   <p className="text-xs text-black/50 font-jakarta line-clamp-1">{rs.reward_title}</p>
                   <div className="flex items-center gap-1 mt-1">
-                    <Gift className="h-3 w-3 text-purple-500/60" />
+                    <Gift className="h-3 w-3 text-emerald-500/60" />
                     <span className="text-[11px] font-medium text-black/40 font-jakarta">Reward</span>
                   </div>
                 </div>

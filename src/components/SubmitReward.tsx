@@ -175,11 +175,11 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
             style={{
-              background: 'linear-gradient(180deg, rgba(124,58,237,0.15) 0%, rgba(124,58,237,0.25) 100%)',
-              border: '2px solid rgba(124,58,237,0.4)',
+              background: 'linear-gradient(180deg, rgba(5,150,105,0.15) 0%, rgba(5,150,105,0.25) 100%)',
+              border: '2px solid rgba(5,150,105,0.4)',
             }}
           >
-            <CheckCircle className="h-10 w-10 text-purple-600" />
+            <CheckCircle className="h-10 w-10 text-emerald-600" />
           </div>
           <h3 className="text-xl font-bold text-black font-montserrat mb-2">Video Submitted</h3>
           <p className="text-sm text-black/60 font-jakarta leading-relaxed mb-2">
@@ -255,7 +255,7 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
                 className="w-full h-12 pl-10 pr-10 rounded-xl text-sm font-jakarta text-black placeholder:text-black/30 outline-none transition-all"
                 style={{
                   background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                  border: urlValid ? '1.5px solid rgba(124,58,237,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
+                  border: urlValid ? '1.5px solid rgba(5,150,105,0.4)' : '1.5px solid rgba(0,0,0,0.1)',
                 }}
               />
               {tiktokUrl && (
@@ -271,12 +271,12 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
               style={{
                 background: urlValid
                   ? confirmed
-                    ? 'linear-gradient(180deg, rgba(124,58,237,1) 0%, rgba(109,40,217,1) 100%)'
+                    ? 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(4,120,87,1) 100%)'
                     : 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)'
                   : 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)',
                 border: urlValid
                   ? confirmed
-                    ? '1.5px solid rgba(167,139,250,0.5)'
+                    ? '1.5px solid rgba(52,211,153,0.5)'
                     : '1.5px solid rgba(60,60,60,0.6)'
                   : '1.5px solid rgba(0,0,0,0.1)',
                 boxShadow: urlValid ? '0 2px 8px rgba(0,0,0,0.15)' : 'none',
@@ -316,10 +316,10 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
               className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl -mt-2 transition-all active:scale-[0.98]"
               style={{
                 background: confirmed
-                  ? 'linear-gradient(180deg, rgba(124,58,237,0.08) 0%, rgba(124,58,237,0.15) 100%)'
+                  ? 'linear-gradient(180deg, rgba(5,150,105,0.08) 0%, rgba(5,150,105,0.15) 100%)'
                   : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
                 border: confirmed
-                  ? '1.5px solid rgba(124,58,237,0.4)'
+                  ? '1.5px solid rgba(5,150,105,0.4)'
                   : '1.5px solid rgba(0,0,0,0.08)',
               }}
             >
@@ -327,14 +327,14 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
                 className="h-5 w-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
                 style={{
                   background: confirmed
-                    ? 'linear-gradient(180deg, rgba(124,58,237,1) 0%, rgba(109,40,217,1) 100%)'
+                    ? 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(4,120,87,1) 100%)'
                     : 'rgba(0,0,0,0.08)',
                   border: confirmed ? 'none' : '1.5px solid rgba(0,0,0,0.12)',
                 }}
               >
                 {confirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
               </div>
-              <span className={`text-sm font-semibold font-montserrat ${confirmed ? 'text-purple-700' : 'text-black/70'}`}>
+              <span className={`text-sm font-semibold font-montserrat ${confirmed ? 'text-emerald-700' : 'text-black/70'}`}>
                 This is my video
               </span>
             </button>
@@ -391,10 +391,10 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
           className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl mt-3 transition-all active:scale-[0.98]"
           style={{
             background: guidelinesConfirmed
-              ? 'linear-gradient(180deg, rgba(124,58,237,0.08) 0%, rgba(124,58,237,0.15) 100%)'
+              ? 'linear-gradient(180deg, rgba(5,150,105,0.08) 0%, rgba(5,150,105,0.15) 100%)'
               : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
             border: guidelinesConfirmed
-              ? '1.5px solid rgba(124,58,237,0.4)'
+              ? '1.5px solid rgba(5,150,105,0.4)'
               : '1.5px solid rgba(0,0,0,0.08)',
           }}
         >
@@ -402,14 +402,14 @@ const SubmitReward: React.FC<SubmitRewardProps> = ({ reward, onBack, onClose }) 
             className="h-5 w-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all"
             style={{
               background: guidelinesConfirmed
-                ? 'linear-gradient(180deg, rgba(124,58,237,1) 0%, rgba(109,40,217,1) 100%)'
+                ? 'linear-gradient(180deg, rgba(5,150,105,1) 0%, rgba(4,120,87,1) 100%)'
                 : 'rgba(0,0,0,0.08)',
               border: guidelinesConfirmed ? 'none' : '1.5px solid rgba(0,0,0,0.12)',
             }}
           >
             {guidelinesConfirmed && <CheckCircle className="h-3.5 w-3.5 text-white" />}
           </div>
-          <span className={`text-sm font-semibold font-montserrat ${guidelinesConfirmed ? 'text-purple-700' : 'text-black/70'}`}>
+          <span className={`text-sm font-semibold font-montserrat ${guidelinesConfirmed ? 'text-emerald-700' : 'text-black/70'}`}>
             I followed all requirements
           </span>
         </button>

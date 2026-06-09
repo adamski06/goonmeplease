@@ -43,8 +43,8 @@ const statusConfig: Record<string, { label: string; gradient: string; border: st
   },
   completed: {
     label: 'Completed',
-    gradient: 'linear-gradient(180deg, rgba(124,58,237,0.9) 0%, rgba(109,40,217,0.95) 100%)',
-    border: 'rgba(167,139,250,0.5)',
+    gradient: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.95) 100%)',
+    border: 'rgba(52,211,153,0.5)',
   },
 };
 
@@ -258,9 +258,9 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
         <div
           className="rounded-2xl p-4 mt-4"
           style={{
-            background: 'linear-gradient(180deg, rgba(124,58,237,0.9) 0%, rgba(88,28,195,0.95) 100%)',
-            border: '1px solid rgba(167,139,250,0.4)',
-            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 4px 20px rgba(124,58,237,0.25)',
+            background: 'linear-gradient(180deg, rgba(5,150,105,0.9) 0%, rgba(88,28,195,0.95) 100%)',
+            border: '1px solid rgba(52,211,153,0.4)',
+            boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.2), 0 4px 20px rgba(5,150,105,0.25)',
           }}
         >
           <div className="flex items-center gap-2 mb-3">
@@ -306,8 +306,8 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
               }}
             >
-              <span className="text-[10px] font-semibold text-purple-600/60 font-montserrat uppercase tracking-wider block mb-1">Your Coupon Code</span>
-              <p className="text-lg font-bold text-purple-700 font-montserrat tracking-wider">{couponCode}</p>
+              <span className="text-[10px] font-semibold text-emerald-600/60 font-montserrat uppercase tracking-wider block mb-1">Your Coupon Code</span>
+              <p className="text-lg font-bold text-emerald-700 font-montserrat tracking-wider">{couponCode}</p>
             </div>
           ) : goalReached ? (
             <div className="relative overflow-hidden rounded-full" style={{ height: '48px' }}>
@@ -325,7 +325,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
                   <div
                     className="absolute top-0 bottom-0 w-20"
                     style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.12), transparent)',
+                      background: 'linear-gradient(90deg, transparent, rgba(5,150,105,0.12), transparent)',
                       animation: 'swipeHint 2s ease-in-out infinite',
                     }}
                   />
@@ -337,7 +337,7 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
                 style={{
                   width: '40px',
                   background: 'linear-gradient(180deg, hsl(270, 60%, 55%) 0%, hsl(270, 60%, 40%) 100%)',
-                  boxShadow: '0 2px 8px rgba(124,58,237,0.4)',
+                  boxShadow: '0 2px 8px rgba(5,150,105,0.4)',
                   transform: `translateX(${swipeX}px)`,
                   transition: isDragging ? 'none' : 'transform 0.3s ease',
                 }}
