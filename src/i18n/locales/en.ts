@@ -321,4 +321,47 @@ export default {
     denied: 'Rejected',
     paid: 'Paid',
   },
+
+  // Creator UI
+  creatorUI: {
+    // Bottom nav
+    navHome: 'Home',
+    navDiscover: 'Discover',
+    navAction: 'Action',
+    navAlerts: 'Alerts',
+    navProfile: 'Profile',
+    // Profile
+    profileTitle: 'Profile',
+    videosMade: 'Videos made',
+    totalViews: 'Total views',
+    userFallback: 'User',
+    // Alerts
+    alertsTitle: 'Alerts',
+    noNotifications: 'No notifications yet',
+    // Settings
+    settingsTitle: 'Settings',
+    sectionAccount: 'Account',
+    sectionPreferences: 'Preferences',
+    sectionSupport: 'Support',
+    sectionLegal: 'Legal',
+    editProfile: 'Edit Profile',
+    notifications: 'Notifications',
+    language: 'Language',
+    contactSupport: 'Contact Support',
+    helpCenter: 'Help Center',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    dataDeletion: 'Data Deletion',
+    signOut: 'Sign Out',
+    signedOut: 'Signed out',
+    signedOutDesc: 'You have been signed out successfully.',
+    version: 'Version',
+    // Discover
+    noResults: 'No results found',
+    noCampaigns: 'No campaigns available',
+    reward: 'Reward',
+    // Language picker
+    chooseLanguage: 'Choose language',
+  },
 };
+
