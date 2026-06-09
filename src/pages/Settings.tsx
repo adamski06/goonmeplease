@@ -41,6 +41,7 @@ const Settings: React.FC = () => {
       items: [
         { icon: Shield, label: 'Privacy Policy', action: () => window.open('https://jarla.org/privacy', '_blank') },
         { icon: FileText, label: 'Terms of Service', action: () => window.open('https://jarla.org/terms', '_blank') },
+        { icon: Trash2, label: 'Data Deletion', action: () => window.open('https://jarla.org/datadelete', '_blank') },
       ],
     },
   ];
