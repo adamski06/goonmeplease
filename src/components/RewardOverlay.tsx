@@ -190,14 +190,14 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
               <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <div className="flex items-center gap-2 mb-2">
                   <Gift className="h-4 w-4 text-white/80" />
-                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Your Reward</span>
+                  <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">{t('adOverlay.yourReward')}</span>
                 </div>
                 <p className="text-base font-bold text-white font-montserrat mb-2">
                   {reward.rewardDescription}
                 </p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-xs text-white/60 font-jakarta">
-                    Reach {(reward.viewsRequired || 0).toLocaleString()} views to unlock
+                    {t('adOverlay.reachToUnlock', { views: (reward.viewsRequired || 0).toLocaleString() })}
                   </span>
                 </div>
               </div>
