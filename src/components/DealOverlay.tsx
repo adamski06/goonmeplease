@@ -205,7 +205,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)',
                 }}
               >
-                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.requirements')}</h3>
                 <ul className="space-y-1.5">
                   {deal.guidelines.map((guideline, idx) => (
                     <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
