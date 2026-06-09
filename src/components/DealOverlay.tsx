@@ -165,7 +165,7 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
             </h2>
             {/* Deal badge - positioned before the X button area */}
             <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)', border: '1px solid rgba(96,165,250,0.4)' }}>
-              <span className="text-[10px] font-bold text-white font-montserrat">DEAL</span>
+              <span className="text-[10px] font-bold text-white font-montserrat">{t('adOverlay.dealBadge')}</span>
             </div>
           </div>
 
