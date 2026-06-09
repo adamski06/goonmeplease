@@ -73,6 +73,19 @@ const AdminAllAds = () => {
     setToggling(null);
   };
 
+  const deleteAd = async (ad: AdItem) => {
+    setDeleting(ad.id);
+    const { error } = await supabase.from(ad.table).delete().eq('id', ad.id);
+    if (error) {
+      toast({ title: 'Failed to delete ad', description: error.message, variant: 'destructive' });
+    } else {
+      setAds(prev => prev.filter(a => !(a.id === ad.id && a.table === ad.table)));
+      toast({ title: 'Ad deleted' });
+    }
+    setDeleting(null);
+    setConfirmDelete(null);
+  };
+
   const filtered = filter === 'all' ? ads : ads.filter(a => {
     if (filter === 'active') return a.status === 'active';
     if (filter === 'pending') return a.status === 'pending';
