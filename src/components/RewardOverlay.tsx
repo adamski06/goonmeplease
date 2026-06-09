@@ -123,7 +123,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
                 {reward.brand}
               </h2>
               {/* Reward badge */}
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%)', border: '1px solid rgba(167,139,250,0.4)' }}>
+              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 100%)', border: '1px solid rgba(52,211,153,0.4)' }}>
                 <span className="text-[10px] font-bold text-white font-montserrat">REWARD</span>
               </div>
             </div>
@@ -175,7 +175,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
               )}
 
               {/* Reward details */}
-              <div className="bg-gradient-to-b from-purple-600 to-purple-800 rounded-2xl p-4 mb-4 border border-purple-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+              <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                 <div className="flex items-center gap-2 mb-2">
                   <Gift className="h-4 w-4 text-white/80" />
                   <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Your Reward</span>

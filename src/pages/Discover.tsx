@@ -302,8 +302,8 @@ const Discover: React.FC = () => {
                         </p>
                         <div className="flex items-center gap-1.5">
                           {isReward ? (
-                            <div className="bg-gradient-to-b from-purple-600 to-purple-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-purple-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                              <span className="text-xs font-bold text-white font-montserrat">{(item.viewsRequired || 0).toLocaleString()} views</span>
+                            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-[14px] px-2.5 py-1 flex items-baseline gap-0.5 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                              <span className="text-xs font-bold text-white font-montserrat truncate">{item.rewardDescription || 'Reward'}</span>
                             </div>
                           ) : (
                             <>
