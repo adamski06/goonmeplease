@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bookmark, Gift, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import SubmitReward from '@/components/SubmitReward';
