@@ -16,6 +16,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
   const { nodeRef, isExpanded, isClosing, openNode, closeNode, setOverlayRef, getOverlayStyle, getCardSlideStyle, getContentStyle } = useNodeExpand(reward.id);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(true);
 
   const handleOpen = () => {
     addRecentCampaign(reward.id, 'reward');

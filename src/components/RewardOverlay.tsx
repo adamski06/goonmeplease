@@ -21,6 +21,7 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
   const [backdropVisible, setBackdropVisible] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(true);
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
