@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bookmark, Gift, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
 import { Campaign } from '@/types/campaign';
 import SubmitReward from '@/components/SubmitReward';
@@ -17,6 +18,8 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(true);
+  const { t } = useTranslation();
+
 
   const handleOpen = () => {
     addRecentCampaign(reward.id, 'reward');
@@ -183,7 +186,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 </div>
                 <h2 className="text-base font-bold text-black font-montserrat flex-1">{reward.brand}</h2>
                 <div className="flex items-center gap-1 px-2.5 py-1 rounded-full mr-9" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 100%)', border: '1px solid rgba(52,211,153,0.4)' }}>
-                  <span className="text-[10px] font-bold text-white font-montserrat">REWARD</span>
+                  <span className="text-[10px] font-bold text-white font-montserrat">{t('adOverlay.rewardBadge')}</span>
                 </div>
               </div>
 
@@ -204,13 +207,13 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                     >
                       <X className="h-3 w-3 text-black/50" />
                     </button>
-                    <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat pr-6">How Rewards work</h3>
+                    <h3 className="text-sm font-semibold text-black/80 mb-2 font-montserrat pr-6">{t('adOverlay.howRewardsWork')}</h3>
                     <ul className="space-y-1.5">
                       {[
-                        'Create your video following the brand\u2019s guidelines',
-                        'Post it on TikTok and submit the link',
-                        `Reach ${(reward.viewsRequired || 0).toLocaleString()} views on your video`,
-                        'Receive your reward (coupon code, free product, etc.)',
+                        t('adOverlay.rewardStep1'),
+                        t('adOverlay.rewardStep2'),
+                        t('adOverlay.rewardStep3', { views: (reward.viewsRequired || 0).toLocaleString() }),
+                        t('adOverlay.rewardStep4'),
                       ].map((step, i) => (
                         <li key={i} className="text-sm text-black/70 font-jakarta flex items-start gap-2">
                           <span className="text-black/40 mt-0.5">{i + 1}.</span>
@@ -226,7 +229,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 {/* Requirements */}
                 {reward.guidelines.length > 0 && (
                   <div className="rounded-xl p-4 mb-4" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.08) 100%)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.5), 0 2px 8px rgba(0,0,0,0.04)' }}>
-                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">Requirements</h3>
+                    <h3 className="text-sm font-semibold text-black mb-2 font-montserrat">{t('adOverlay.requirements')}</h3>
                     <ul className="space-y-1.5">
                       {reward.guidelines.map((g, idx) => (
                         <li key={idx} className="text-sm text-black/80 font-jakarta flex items-start gap-2">
@@ -241,13 +244,13 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                 <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-2xl p-4 mb-4 border border-emerald-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                   <div className="flex items-center gap-2 mb-2">
                     <Gift className="h-4 w-4 text-white/80" />
-                    <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">Your Reward</span>
+                    <span className="text-xs font-semibold text-white/70 font-montserrat uppercase tracking-wider">{t('adOverlay.yourReward')}</span>
                   </div>
                   <p className="text-base font-bold text-white font-montserrat mb-2">
                     {reward.rewardDescription}
                   </p>
                   <span className="text-xs text-white/60 font-jakarta">
-                    Reach {(reward.viewsRequired || 0).toLocaleString()} views to unlock
+                    {t('adOverlay.reachToUnlock', { views: (reward.viewsRequired || 0).toLocaleString() })}
                   </span>
                 </div>
               </div>
@@ -265,7 +268,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, isSaved, onToggleFavori
                   }}
                 >
                   <Plus className="h-4 w-4" />
-                  Continue
+                  {t('adOverlay.continue')}
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); onToggleFavorite(reward.id, e); }}
