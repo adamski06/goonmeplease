@@ -129,7 +129,7 @@ const AdminAllAds = () => {
               <TableHead>Status</TableHead>
               <TableHead>Budget</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="text-right">Toggle</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
