@@ -178,6 +178,15 @@ const CreateReward: React.FC = () => {
       );
     }
 
+    // Auto-create a Google Sheet for coupon management (Jarla-owned, shared with the business)
+    try {
+      await supabase.functions.invoke('reward-sheet-create', {
+        body: { rewardAdId: rewardAd.id },
+      });
+    } catch (sheetErr) {
+      console.error('Sheet create failed:', sheetErr);
+    }
+
     // Redirect to Stripe setup to save payment method
     try {
       const { data: setupData, error: setupError } = await supabase.functions.invoke('create-reward-setup', {
