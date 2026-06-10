@@ -79,7 +79,7 @@ const BusinessRewardDetail: React.FC = () => {
         supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
         supabase.from('reward_coupons').select('id, code, claimed_at').eq('reward_ad_id', id).order('created_at', { ascending: true }),
       ]);
-      if (rewardRes.data) setReward(rewardRes.data as RewardData);
+      if (rewardRes.data) setReward(rewardRes.data as unknown as RewardData);
       setCoupons((couponsRes.data || []) as CouponRow[]);
 
       const subs = subsRes.data || [];
