@@ -372,10 +372,10 @@ const Auth: React.FC = () => {
 
               <div className="space-y-2.5 max-w-xs mx-auto">
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
                     try {
-                      signInWithTikTok();
+                      await signInWithTikTok();
                     } catch (e) {
                       toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
                     }

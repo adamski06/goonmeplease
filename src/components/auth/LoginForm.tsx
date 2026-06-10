@@ -96,9 +96,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
       {/* TikTok Sign In */}
       <button
         type="button"
-        onClick={() => {
+        onClick={async () => {
           try {
-            signInWithTikTok();
+            await signInWithTikTok();
           } catch (e) {
             toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
           }
