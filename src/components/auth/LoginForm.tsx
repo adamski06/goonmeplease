@@ -148,9 +148,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
       {/* Facebook Sign In */}
       <button
         type="button"
-        onClick={() => {
+        onClick={async () => {
           try {
-            signInWithFacebook();
+            await signInWithFacebook();
           } catch (e) {
             toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
           }
