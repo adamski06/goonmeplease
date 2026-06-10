@@ -57,6 +57,34 @@ const AdminBusinessDetail = () => {
   const [confirmDeleteAd, setConfirmDeleteAd] = useState<{ id: string; title: string; table: 'campaigns' | 'deals' | 'reward_ads'; type: 'Spread' | 'Deal' | 'Reward' } | null>(null);
   const [confirmDeleteCompany, setConfirmDeleteCompany] = useState(false);
 
+  // Edit requirements (guidelines) for any ad type
+  const [editingReqs, setEditingReqs] = useState<{ id: string; title: string; table: 'campaigns' | 'deals' | 'reward_ads' } | null>(null);
+  const [editReqsText, setEditReqsText] = useState('');
+  const [savingReqs, setSavingReqs] = useState(false);
+
+  const openEditReqs = (ad: any, table: 'campaigns' | 'deals' | 'reward_ads') => {
+    setEditingReqs({ id: ad.id, title: ad.title, table });
+    setEditReqsText((ad.guidelines || []).join('\n'));
+  };
+
+  const saveReqs = async () => {
+    if (!editingReqs) return;
+    setSavingReqs(true);
+    const guidelines = editReqsText.split('\n').map(l => l.trim()).filter(Boolean);
+    const { error } = await supabase.from(editingReqs.table).update({ guidelines }).eq('id', editingReqs.id);
+    if (error) {
+      toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
+    } else {
+      const updater = (prev: any[]) => prev.map(x => x.id === editingReqs.id ? { ...x, guidelines } : x);
+      if (editingReqs.table === 'campaigns') setCampaigns(updater);
+      if (editingReqs.table === 'deals') setDeals(updater);
+      if (editingReqs.table === 'reward_ads') setRewards(updater);
+      toast({ title: 'Requirements updated' });
+      setEditingReqs(null);
+    }
+    setSavingReqs(false);
+  };
+
   const openEditReward = (r: any) => {
     setEditingReward(r);
     setEditTitle(r.title || '');
@@ -496,6 +524,13 @@ const AdminBusinessDetail = () => {
                       <div className="flex gap-2">
                         <Button
                           size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReqs(c, 'campaigns'); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Reqs
+                        </Button>
+                        <Button
+                          size="sm"
                           variant={c.status === 'active' ? 'outline' : 'default'}
                           disabled={togglingAd === c.id}
                           onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
@@ -541,6 +576,13 @@ const AdminBusinessDetail = () => {
                     <TableCell>{fmt(d.created_at)}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReqs(d, 'deals'); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Reqs
+                        </Button>
                         <Button
                           size="sm"
                           variant={d.status === 'active' ? 'outline' : 'default'}
@@ -594,6 +636,13 @@ const AdminBusinessDetail = () => {
                           onClick={(e) => { e.stopPropagation(); openEditReward(r); }}
                         >
                           <Pencil className="h-3 w-3 mr-1" /> Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReqs(r, 'reward_ads'); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Reqs
                         </Button>
                         <Button
                           size="sm"
@@ -657,6 +706,28 @@ const AdminBusinessDetail = () => {
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingReward(null)} disabled={savingReward}>Cancel</Button>
             <Button onClick={saveReward} disabled={savingReward}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!editingReqs} onOpenChange={(o) => !o && setEditingReqs(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Requirements</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label>Requirements — one per line</Label>
+            <Textarea
+              rows={10}
+              value={editReqsText}
+              onChange={(e) => setEditReqsText(e.target.value)}
+              placeholder={'Show the product clearly\nMention the brand name\n…'}
+            />
+            <p className="text-xs text-muted-foreground">Editing: {editingReqs?.title}</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingReqs(null)} disabled={savingReqs}>Cancel</Button>
+            <Button onClick={saveReqs} disabled={savingReqs}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
