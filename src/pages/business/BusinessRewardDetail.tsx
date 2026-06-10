@@ -26,8 +26,8 @@ interface RewardData {
   category: string | null;
   reward_description: string;
   views_required: number;
-  coupon_sheet_id: string | null;
-  coupon_sheet_url: string | null;
+  coupon_sheet_id?: string | null;
+  coupon_sheet_url?: string | null;
 }
 
 interface CouponRow { id: string; code: string; claimed_at: string | null; }
