@@ -10,6 +10,8 @@ import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
+import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
+
 interface RewardData {
   id: string;
   title: string;
@@ -24,6 +26,8 @@ interface RewardData {
   category: string | null;
   reward_description: string;
   views_required: number;
+  coupon_sheet_id: string | null;
+  coupon_sheet_url: string | null;
 }
 
 interface CouponRow { id: string; code: string; claimed_at: string | null; }
