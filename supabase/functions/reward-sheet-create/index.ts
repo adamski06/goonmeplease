@@ -52,8 +52,13 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ spreadsheetId: ad.coupon_sheet_id, url: ad.coupon_sheet_url, existed: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const sheetsKey = Deno.env.get("GOOGLE_SHEETS_API_KEY")!;
-    const driveKey = Deno.env.get("GOOGLE_DRIVE_API_KEY")!;
+    const sheetsKey = Deno.env.get("GOOGLE_SHEETS_API_KEY");
+    const driveKey = Deno.env.get("GOOGLE_DRIVE_API_KEY");
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    console.log("keys present", { sheets: !!sheetsKey, drive: !!driveKey, lovable: !!lovableKey });
+    if (!sheetsKey || !driveKey || !lovableKey) {
+      return new Response(JSON.stringify({ error: "Missing connector keys", detail: { sheets: !!sheetsKey, drive: !!driveKey, lovable: !!lovableKey } }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     // 1) Create spreadsheet
     const createRes = await fetch(`${SHEETS}/spreadsheets`, {
@@ -99,6 +104,7 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify({ spreadsheetId, url, sharedWith: ownerEmail }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
-    return new Response(JSON.stringify({ error: String(e?.message || e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    console.error("reward-sheet-create error", e);
+    return new Response(JSON.stringify({ error: String(e?.message || e), stack: String(e?.stack || "") }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });
