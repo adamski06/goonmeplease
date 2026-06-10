@@ -710,6 +710,28 @@ const AdminBusinessDetail = () => {
         </DialogContent>
       </Dialog>
 
+      <Dialog open={!!editingReqs} onOpenChange={(o) => !o && setEditingReqs(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Requirements</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label>Requirements — one per line</Label>
+            <Textarea
+              rows={10}
+              value={editReqsText}
+              onChange={(e) => setEditReqsText(e.target.value)}
+              placeholder={'Show the product clearly\nMention the brand name\n…'}
+            />
+            <p className="text-xs text-muted-foreground">Editing: {editingReqs?.title}</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingReqs(null)} disabled={savingReqs}>Cancel</Button>
+            <Button onClick={saveReqs} disabled={savingReqs}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <AlertDialog open={!!confirmDeleteAd} onOpenChange={(open) => !open && setConfirmDeleteAd(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
