@@ -57,6 +57,34 @@ const AdminBusinessDetail = () => {
   const [confirmDeleteAd, setConfirmDeleteAd] = useState<{ id: string; title: string; table: 'campaigns' | 'deals' | 'reward_ads'; type: 'Spread' | 'Deal' | 'Reward' } | null>(null);
   const [confirmDeleteCompany, setConfirmDeleteCompany] = useState(false);
 
+  // Edit requirements (guidelines) for any ad type
+  const [editingReqs, setEditingReqs] = useState<{ id: string; title: string; table: 'campaigns' | 'deals' | 'reward_ads' } | null>(null);
+  const [editReqsText, setEditReqsText] = useState('');
+  const [savingReqs, setSavingReqs] = useState(false);
+
+  const openEditReqs = (ad: any, table: 'campaigns' | 'deals' | 'reward_ads') => {
+    setEditingReqs({ id: ad.id, title: ad.title, table });
+    setEditReqsText((ad.guidelines || []).join('\n'));
+  };
+
+  const saveReqs = async () => {
+    if (!editingReqs) return;
+    setSavingReqs(true);
+    const guidelines = editReqsText.split('\n').map(l => l.trim()).filter(Boolean);
+    const { error } = await supabase.from(editingReqs.table).update({ guidelines }).eq('id', editingReqs.id);
+    if (error) {
+      toast({ title: 'Save failed', description: error.message, variant: 'destructive' });
+    } else {
+      const updater = (prev: any[]) => prev.map(x => x.id === editingReqs.id ? { ...x, guidelines } : x);
+      if (editingReqs.table === 'campaigns') setCampaigns(updater);
+      if (editingReqs.table === 'deals') setDeals(updater);
+      if (editingReqs.table === 'reward_ads') setRewards(updater);
+      toast({ title: 'Requirements updated' });
+      setEditingReqs(null);
+    }
+    setSavingReqs(false);
+  };
+
   const openEditReward = (r: any) => {
     setEditingReward(r);
     setEditTitle(r.title || '');
