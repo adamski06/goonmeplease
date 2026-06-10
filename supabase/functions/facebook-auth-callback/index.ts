@@ -3,14 +3,18 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 const FACEBOOK_APP_ID = '986627434278211';
 const REDIRECT_URI = `${Deno.env.get('SUPABASE_URL')}/functions/v1/facebook-auth-callback`;
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function htmlError(message: string, origin?: string) {
-  const safeOrigin = origin ?? '';
+  const safeOrigin = origin && /^https?:\/\/[a-zA-Z0-9.\-:]+$/.test(origin) ? origin : '';
   return new Response(
     `<!doctype html><meta charset="utf-8"><title>Sign-in failed</title>
 <body style="font-family:system-ui;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
 <div style="text-align:center;max-width:420px;padding:24px">
-<p style="font-size:14px;opacity:0.8">${message}</p>
-${safeOrigin ? `<a href="${safeOrigin}/user/auth" style="color:#1877F2">Return to sign in</a>` : ''}
+<p style="font-size:14px;opacity:0.8">${escapeHtml(message)}</p>
+${safeOrigin ? `<a href="${escapeHtml(safeOrigin)}/user/auth" style="color:#1877F2">Return to sign in</a>` : ''}
 </div></body>`,
     { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
   );
