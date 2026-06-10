@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
 
 const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
@@ -618,7 +619,7 @@ const AdminBusinessDetail = () => {
           ) : (
             <Table>
               <TableHeader><TableRow>
-                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
+                <TableHead>Title</TableHead><TableHead>Status</TableHead><TableHead>Views Req.</TableHead><TableHead>Reward</TableHead><TableHead>Sheet</TableHead><TableHead>Created</TableHead><TableHead>Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {rewards.map((r) => (
@@ -627,6 +628,15 @@ const AdminBusinessDetail = () => {
                     <TableCell><Badge variant={statusVariant(r.status)}>{r.status || 'active'}</Badge></TableCell>
                     <TableCell>{r.views_required?.toLocaleString()}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{r.reward_description}</TableCell>
+                    <TableCell>
+                      <RewardCouponSheetPanel
+                        rewardAdId={r.id}
+                        sheetId={r.coupon_sheet_id ?? null}
+                        sheetUrl={r.coupon_sheet_url ?? null}
+                        onUpdated={(sid, url) => setRewards(prev => prev.map(x => x.id === r.id ? { ...x, coupon_sheet_id: sid, coupon_sheet_url: url } : x))}
+                        compact
+                      />
+                    </TableCell>
                     <TableCell>{fmt(r.created_at)}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">

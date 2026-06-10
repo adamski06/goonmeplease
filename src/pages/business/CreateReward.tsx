@@ -48,7 +48,7 @@ const CreateReward: React.FC = () => {
 
   const canProceed = () => {
     if (step === 0) return title.trim().length > 0 && description.trim().length > 0 && guidelinesList.some(g => g.trim().length > 0);
-    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0) && couponCodes.length >= 100;
+    if (step === 1) return rewardDescription.trim().length > 0 && viewsPreset !== null && (viewsPreset !== -1 || parseInt(customViews) > 0);
     return true;
   };
 
@@ -176,6 +176,15 @@ const CreateReward: React.FC = () => {
       await supabase.from('reward_coupons').insert(
         couponCodes.map((code) => ({ reward_ad_id: rewardAd.id, code }))
       );
+    }
+
+    // Auto-create a Google Sheet for coupon management (Jarla-owned, shared with the business)
+    try {
+      await supabase.functions.invoke('reward-sheet-create', {
+        body: { rewardAdId: rewardAd.id },
+      });
+    } catch (sheetErr) {
+      console.error('Sheet create failed:', sheetErr);
     }
 
     // Redirect to Stripe setup to save payment method
@@ -381,17 +390,28 @@ const CreateReward: React.FC = () => {
                   )}
                 </div>
 
-                {/* Coupon codes */}
-                <div className="space-y-1.5">
+                {/* Coupon codes via Google Sheet */}
+                <div className="space-y-2">
                   <Label className="text-sm font-medium">Coupon codes</Label>
+                  <div className="rounded-[10px] border border-border bg-muted/30 p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Ticket className="h-4 w-4 text-foreground" />
+                      <p className="text-sm font-medium text-foreground">Google Sheet kopplas automatiskt</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      När du lanserar din ad skapar vi ett Google-kalkylark åt dig. Du och Jarla får åtkomst direkt — klistra in alla kupongkoder i kolumn A och synka när du vill. Koder markeras automatiskt som <span className="font-mono">USED</span> i arket när en kreatör låser upp dem.
+                    </p>
+                    {couponCodes.length > 0 && (
+                      <p className="text-xs text-emerald-600 font-medium">{couponCodes.length} startkod{couponCodes.length > 1 ? 'er' : ''} tillagda nedan (valfritt)</p>
+                    )}
+                  </div>
                   <button
                     onClick={() => setCouponDialogOpen(true)}
                     className="w-full flex items-center gap-2 h-10 rounded-[4px] border border-input bg-background px-3 text-sm text-muted-foreground hover:border-foreground/50 transition-colors"
                   >
-                    <Ticket className="h-4 w-4" />
-                    {couponCodes.length > 0 ? `${couponCodes.length} code${couponCodes.length > 1 ? 's' : ''} added` : 'Add coupon codes...'}
+                    <Plus className="h-4 w-4" />
+                    {couponCodes.length > 0 ? `${couponCodes.length} startkod${couponCodes.length > 1 ? 'er' : ''} (valfritt)` : 'Lägg till startkoder (valfritt)'}
                   </button>
-                  <p className="text-xs text-muted-foreground">Add at least 100 codes that will be distributed to creators as rewards.{couponCodes.length > 0 && couponCodes.length < 100 && <span className="text-amber-500 font-medium"> ({100 - couponCodes.length} more needed)</span>}</p>
                 </div>
               </div>
             )}

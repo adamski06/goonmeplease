@@ -10,6 +10,8 @@ import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
+import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
+
 interface RewardData {
   id: string;
   title: string;
@@ -24,6 +26,8 @@ interface RewardData {
   category: string | null;
   reward_description: string;
   views_required: number;
+  coupon_sheet_id?: string | null;
+  coupon_sheet_url?: string | null;
 }
 
 interface CouponRow { id: string; code: string; claimed_at: string | null; }
@@ -75,7 +79,7 @@ const BusinessRewardDetail: React.FC = () => {
         supabase.from('reward_submissions').select('*').eq('reward_ad_id', id).order('created_at', { ascending: false }),
         supabase.from('reward_coupons').select('id, code, claimed_at').eq('reward_ad_id', id).order('created_at', { ascending: true }),
       ]);
-      if (rewardRes.data) setReward(rewardRes.data as RewardData);
+      if (rewardRes.data) setReward(rewardRes.data as unknown as RewardData);
       setCoupons((couponsRes.data || []) as CouponRow[]);
 
       const subs = subsRes.data || [];
@@ -370,6 +374,16 @@ const BusinessRewardDetail: React.FC = () => {
             {claimedCoupons.length} claimed
           </p>
         </div>
+      </div>
+
+      {/* Google Sheet panel */}
+      <div className="mb-6">
+        <RewardCouponSheetPanel
+          rewardAdId={reward.id}
+          sheetId={reward.coupon_sheet_id ?? null}
+          sheetUrl={reward.coupon_sheet_url ?? null}
+          onUpdated={(sid, url) => setReward(prev => prev ? { ...prev, coupon_sheet_id: sid, coupon_sheet_url: url } : prev)}
+        />
       </div>
 
       {/* Coupon Manager — Full Section */}

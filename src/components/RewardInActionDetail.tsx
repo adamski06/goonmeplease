@@ -93,11 +93,12 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
   const claimReward = async () => {
     setClaiming(true);
     try {
-      const { data, error } = await supabase.rpc('claim_reward_coupon', {
-        p_submission_id: submission.id,
+      const { data, error } = await supabase.functions.invoke('reward-claim-coupon', {
+        body: { submissionId: submission.id },
       });
       if (error) throw error;
-      setCouponCode(data as string);
+      if (data?.error) throw new Error(data.error);
+      setCouponCode(data.code as string);
       toast.success('🎉 Reward claimed! Your coupon code is ready.');
     } catch (e: any) {
       console.error(e);
