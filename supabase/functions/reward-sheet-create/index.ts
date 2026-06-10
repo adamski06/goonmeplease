@@ -52,8 +52,13 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ spreadsheetId: ad.coupon_sheet_id, url: ad.coupon_sheet_url, existed: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const sheetsKey = Deno.env.get("GOOGLE_SHEETS_API_KEY")!;
-    const driveKey = Deno.env.get("GOOGLE_DRIVE_API_KEY")!;
+    const sheetsKey = Deno.env.get("GOOGLE_SHEETS_API_KEY");
+    const driveKey = Deno.env.get("GOOGLE_DRIVE_API_KEY");
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    console.log("keys present", { sheets: !!sheetsKey, drive: !!driveKey, lovable: !!lovableKey });
+    if (!sheetsKey || !driveKey || !lovableKey) {
+      return new Response(JSON.stringify({ error: "Missing connector keys", detail: { sheets: !!sheetsKey, drive: !!driveKey, lovable: !!lovableKey } }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     // 1) Create spreadsheet
     const createRes = await fetch(`${SHEETS}/spreadsheets`, {
