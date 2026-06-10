@@ -639,6 +639,13 @@ const AdminBusinessDetail = () => {
                         </Button>
                         <Button
                           size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReqs(r, 'reward_ads'); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Reqs
+                        </Button>
+                        <Button
+                          size="sm"
                           variant={r.status === 'active' ? 'outline' : 'default'}
                           disabled={togglingAd === r.id}
                           onClick={(e) => { e.stopPropagation(); toggleAdStatus('reward', r.id, r.status || 'pending'); }}
