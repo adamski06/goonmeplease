@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
 
 const statusVariant = (s: string | null) => {
   if (!s) return 'secondary' as const;
