@@ -524,6 +524,13 @@ const AdminBusinessDetail = () => {
                       <div className="flex gap-2">
                         <Button
                           size="sm"
+                          variant="outline"
+                          onClick={(e) => { e.stopPropagation(); openEditReqs(c, 'campaigns'); }}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" /> Reqs
+                        </Button>
+                        <Button
+                          size="sm"
                           variant={c.status === 'active' ? 'outline' : 'default'}
                           disabled={togglingAd === c.id}
                           onClick={(e) => { e.stopPropagation(); toggleAdStatus('campaign', c.id, c.status || 'pending'); }}
