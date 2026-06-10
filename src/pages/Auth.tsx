@@ -398,10 +398,10 @@ const Auth: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
                     try {
-                      signInWithLinkedIn();
+                      await signInWithLinkedIn();
                     } catch (e) {
                       toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
                     }
