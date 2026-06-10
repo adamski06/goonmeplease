@@ -23,20 +23,29 @@ export function initNativeAuthHandler() {
       const hashParams = new URLSearchParams(urlObj.hash.replace(/^#/, ''));
       const accessToken = urlObj.searchParams.get('access_token') || hashParams.get('access_token');
       const refreshToken = urlObj.searchParams.get('refresh_token') || hashParams.get('refresh_token');
+      const tokenHash = urlObj.searchParams.get('token_hash') || hashParams.get('token_hash');
 
       if (accessToken && refreshToken) {
         await supabase.auth.setSession({
           access_token: accessToken,
           refresh_token: refreshToken,
         });
-
-        // Dismiss the in-app browser overlay
-        try {
-          await Browser.close();
-        } catch {
-          // Browser.close() can throw if already closed
-        }
+      } else if (tokenHash) {
+        await supabase.auth.verifyOtp({
+          type: 'magiclink',
+          token_hash: tokenHash,
+        });
+      } else {
+        return;
       }
+
+      // Dismiss the in-app browser overlay
+      try {
+        await Browser.close();
+      } catch {
+        // Browser.close() can throw if already closed
+      }
+
     } catch (e) {
       console.error('[NativeAuth] Error handling auth callback:', e);
     }
