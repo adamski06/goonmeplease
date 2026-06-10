@@ -376,6 +376,16 @@ const BusinessRewardDetail: React.FC = () => {
         </div>
       </div>
 
+      {/* Google Sheet panel */}
+      <div className="mb-6">
+        <RewardCouponSheetPanel
+          rewardAdId={reward.id}
+          sheetId={reward.coupon_sheet_id ?? null}
+          sheetUrl={reward.coupon_sheet_url ?? null}
+          onUpdated={(sid, url) => setReward(prev => prev ? { ...prev, coupon_sheet_id: sid, coupon_sheet_url: url } : prev)}
+        />
+      </div>
+
       {/* Coupon Manager — Full Section */}
       <div className="rounded-[28px] p-6 mb-8" style={cardStyle}>
         <div className="flex items-center justify-between mb-4">
