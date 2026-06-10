@@ -678,6 +678,9 @@ export type Database = {
           brand_name: string
           business_id: string
           category: string | null
+          coupon_sheet_id: string | null
+          coupon_sheet_url: string | null
+          coupon_source: string
           cover_image_url: string | null
           created_at: string
           description: string | null
@@ -695,6 +698,9 @@ export type Database = {
           brand_name: string
           business_id: string
           category?: string | null
+          coupon_sheet_id?: string | null
+          coupon_sheet_url?: string | null
+          coupon_source?: string
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
@@ -712,6 +718,9 @@ export type Database = {
           brand_name?: string
           business_id?: string
           category?: string | null
+          coupon_sheet_id?: string | null
+          coupon_sheet_url?: string | null
+          coupon_source?: string
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
@@ -734,6 +743,7 @@ export type Database = {
           created_at: string
           id: string
           reward_ad_id: string
+          sheet_row: number | null
         }
         Insert: {
           claimed_at?: string | null
@@ -742,6 +752,7 @@ export type Database = {
           created_at?: string
           id?: string
           reward_ad_id: string
+          sheet_row?: number | null
         }
         Update: {
           claimed_at?: string | null
@@ -750,6 +761,7 @@ export type Database = {
           created_at?: string
           id?: string
           reward_ad_id?: string
+          sheet_row?: number | null
         }
         Relationships: [
           {
