@@ -34,12 +34,14 @@ Deno.serve(async (req) => {
       return htmlError('Missing authorization code.');
     }
 
-    let state: { origin: string; nonce: string };
+    let state: { origin: string; nonce: string; native?: string };
     try {
       state = JSON.parse(atob(stateParam));
     } catch {
       return htmlError('Invalid state.');
     }
+
+
 
     const originOk =
       state.origin === 'https://goonmeplease.lovable.app' ||
