@@ -115,8 +115,12 @@ Deno.serve(async (req) => {
     }
 
     const tokenHash = linkData.properties.hashed_token;
-    const redirect = `${state.origin}/auth/facebook/callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`;
+    const nativeScheme = state.native && /^[a-z0-9.\-]+$/i.test(state.native) ? state.native : null;
+    const redirect = nativeScheme
+      ? `${nativeScheme}://auth-callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`
+      : `${state.origin}/auth/facebook/callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`;
     return new Response(null, { status: 302, headers: { Location: redirect } });
+
   } catch (e) {
     console.error('facebook-auth-callback fatal', e);
     return htmlError('Unexpected error.');
