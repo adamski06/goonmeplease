@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       return htmlError('Missing authorization code.');
     }
 
-    let state: { origin: string; nonce: string };
+    let state: { origin: string; nonce: string; native?: string };
     try {
       state = JSON.parse(atob(stateParam));
     } catch {
@@ -126,7 +126,10 @@ Deno.serve(async (req) => {
     }
 
     const tokenHash = linkData.properties.hashed_token;
-    const redirect = `${state.origin}/auth/linkedin/callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`;
+    const nativeScheme = state.native && /^[a-z0-9.\-]+$/i.test(state.native) ? state.native : null;
+    const redirect = nativeScheme
+      ? `${nativeScheme}://auth-callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`
+      : `${state.origin}/auth/linkedin/callback#token_hash=${encodeURIComponent(tokenHash)}&email=${encodeURIComponent(email)}`;
     return new Response(null, { status: 302, headers: { Location: redirect } });
   } catch (e) {
     console.error('linkedin-callback fatal', e);

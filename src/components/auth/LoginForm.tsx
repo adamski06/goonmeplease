@@ -123,9 +123,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
       {/* LinkedIn Sign In */}
       <button
         type="button"
-        onClick={() => {
+        onClick={async () => {
           try {
-            signInWithLinkedIn();
+            await signInWithLinkedIn();
           } catch (e) {
             toast({ title: 'Sign in failed', description: String(e), variant: 'destructive' });
           }
