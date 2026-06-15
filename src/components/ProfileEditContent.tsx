@@ -26,9 +26,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tiktokUsername, setTiktokUsername] = useState<string | null>(null);
-  const [tiktokLoading, setTiktokLoading] = useState(true);
-  const [showTikTokStep, setShowTikTokStep] = useState(false);
+  const [tiktokUsername, setTiktokUsername] = useState('');
+  const [instagramUsername, setInstagramUsername] = useState('');
+  const [linkedinUsername, setLinkedinUsername] = useState('');
 
   useEffect(() => {
     if (profile) {
@@ -39,21 +39,21 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
     }
   }, [profile]);
 
-  // Fetch TikTok account
+  // Fetch social handles directly from profiles (not in ProfileContext)
   useEffect(() => {
     if (!user) return;
-    const fetchTikTok = async () => {
-      setTiktokLoading(true);
+    (async () => {
       const { data } = await supabase
-        .from('tiktok_accounts_safe')
-        .select('tiktok_username')
+        .from('profiles')
+        .select('tiktok_username, instagram_username, linkedin_username')
         .eq('user_id', user.id)
-        .limit(1)
         .maybeSingle();
-      setTiktokUsername(data?.tiktok_username || null);
-      setTiktokLoading(false);
-    };
-    fetchTikTok();
+      if (data) {
+        setTiktokUsername(data.tiktok_username || '');
+        setInstagramUsername(data.instagram_username || '');
+        setLinkedinUsername(data.linkedin_username || '');
+      }
+    })();
   }, [user]);
 
   const canChangeUsername = () => {
