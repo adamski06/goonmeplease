@@ -104,6 +104,30 @@ const AdminSettings = () => {
         </CardContent>
       </Card>
 
+      {/* Signup options */}
+      <Card className="border-border">
+        <CardContent className="p-6 space-y-4">
+          <div>
+            <label className="text-sm font-medium">Creator Signup Options</label>
+            <p className="text-xs text-muted-foreground mb-2">
+              Toggle which sign-up methods are visible to creators on the auth screen. Changes go live immediately.
+            </p>
+          </div>
+          <div className="space-y-3">
+            {SIGNUP_KEYS.map((s) => (
+              <div key={s.key} className="flex items-center justify-between">
+                <span className="text-sm">{s.label}</span>
+                <Switch
+                  checked={!!signupToggles[s.key]}
+                  onCheckedChange={(v) => toggleSignupOption(s.key, v)}
+                />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+
       {/* Launch Screen Download */}
       <Card className="border-border">
         <CardContent className="p-6 space-y-4">
