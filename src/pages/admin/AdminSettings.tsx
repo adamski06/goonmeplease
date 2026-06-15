@@ -3,25 +3,41 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { Loader2, Save, Download } from 'lucide-react';
 import { useCurrency } from '@/contexts/CurrencyContext';
 import { toast } from '@/hooks/use-toast';
 import jarlaLogo from '@/assets/jarla-logo.png';
+
+const SIGNUP_KEYS = [
+  { key: 'signup_email_enabled', label: 'Email & Password' },
+  { key: 'signup_tiktok_enabled', label: 'TikTok' },
+  { key: 'signup_linkedin_enabled', label: 'LinkedIn' },
+  { key: 'signup_facebook_enabled', label: 'Facebook' },
+] as const;
 
 const AdminSettings = () => {
   const { label, convert } = useCurrency();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [minPayout, setMinPayout] = useState('');
+  const [signupToggles, setSignupToggles] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const load = async () => {
       const { data } = await supabase
         .from('platform_settings')
-        .select('*')
-        .eq('key', 'min_payout_amount')
-        .maybeSingle();
-      if (data) setMinPayout(data.value);
+        .select('key,value');
+      if (data) {
+        const payout = data.find((r) => r.key === 'min_payout_amount');
+        if (payout) setMinPayout(payout.value);
+        const toggles: Record<string, boolean> = {};
+        for (const s of SIGNUP_KEYS) {
+          const row = data.find((r) => r.key === s.key);
+          toggles[s.key] = row ? row.value === 'true' : true;
+        }
+        setSignupToggles(toggles);
+      }
       setLoading(false);
     };
     load();
@@ -39,6 +55,18 @@ const AdminSettings = () => {
       toast({ title: 'Saved', description: 'Platform settings updated.' });
     }
     setSaving(false);
+  };
+
+  const toggleSignupOption = async (key: string, value: boolean) => {
+    setSignupToggles((prev) => ({ ...prev, [key]: value }));
+    const { error } = await supabase
+      .from('platform_settings')
+      .update({ value: value ? 'true' : 'false', updated_at: new Date().toISOString() })
+      .eq('key', key);
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      setSignupToggles((prev) => ({ ...prev, [key]: !value }));
+    }
   };
 
   if (loading) {
