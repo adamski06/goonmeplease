@@ -148,10 +148,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   };
 
   const firstName = fullName?.split(' ')[0] || username || 'U';
-
-
-
+  return (
     <div className="h-full flex flex-col">
+
       {/* Save button header */}
       <div className="flex items-center justify-between px-5 pb-3 border-b border-black/10 safe-area-top pt-3">
         <button onClick={onSaved} className="p-1 -ml-1">
