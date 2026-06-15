@@ -149,33 +149,8 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
 
   const firstName = fullName?.split(' ')[0] || username || 'U';
 
-  // Full-screen TikTok step overlay
-  if (showTikTokStep && user) {
-    return (
-      <div className="h-full flex flex-col bg-white">
-        <div className="flex items-center px-5 pt-5 pb-3 border-b border-black/10">
-          <button onClick={() => setShowTikTokStep(false)} className="p-1 -ml-1">
-            <ChevronLeft className="h-5 w-5 text-black/60" />
-          </button>
-          <h2 className="text-base font-bold text-black font-montserrat ml-3">Link TikTok</h2>
-        </div>
-        <div className="flex-1 overflow-y-auto px-5 py-8">
-          <TikTokStep
-            userId={user.id}
-            onNext={async (newUsername) => {
-              setTiktokUsername(newUsername);
-              setShowTikTokStep(false);
-              await refetchProfile();
-              toast({ title: 'TikTok linked', description: `@${newUsername} has been connected.` });
-            }}
-            onSkip={() => setShowTikTokStep(false)}
-          />
-        </div>
-      </div>
-    );
-  }
 
-  return (
+
     <div className="h-full flex flex-col">
       {/* Save button header */}
       <div className="flex items-center justify-between px-5 pb-3 border-b border-black/10 safe-area-top pt-3">
