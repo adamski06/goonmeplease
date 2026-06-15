@@ -5,10 +5,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Camera, ChevronLeft, Check, Loader2 } from 'lucide-react';
+import { Camera, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import tiktokLogo from '@/assets/tiktok-logo.png';
-import TikTokStep from '@/components/auth/TikTokStep';
+
+const stripHandle = (v: string) => v.trim().replace(/^@+/, '').replace(/\s+/g, '');
 
 interface ProfileEditContentProps {
   onSaved?: () => void;
@@ -26,9 +26,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || '');
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tiktokUsername, setTiktokUsername] = useState<string | null>(null);
-  const [tiktokLoading, setTiktokLoading] = useState(true);
-  const [showTikTokStep, setShowTikTokStep] = useState(false);
+  const [tiktokUsername, setTiktokUsername] = useState('');
+  const [instagramUsername, setInstagramUsername] = useState('');
+  const [linkedinUsername, setLinkedinUsername] = useState('');
 
   useEffect(() => {
     if (profile) {
@@ -39,21 +39,21 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
     }
   }, [profile]);
 
-  // Fetch TikTok account
+  // Fetch social handles directly from profiles (not in ProfileContext)
   useEffect(() => {
     if (!user) return;
-    const fetchTikTok = async () => {
-      setTiktokLoading(true);
+    (async () => {
       const { data } = await supabase
-        .from('tiktok_accounts_safe')
-        .select('tiktok_username')
+        .from('profiles')
+        .select('tiktok_username, instagram_username, linkedin_username')
         .eq('user_id', user.id)
-        .limit(1)
         .maybeSingle();
-      setTiktokUsername(data?.tiktok_username || null);
-      setTiktokLoading(false);
-    };
-    fetchTikTok();
+      if (data) {
+        setTiktokUsername(data.tiktok_username || '');
+        setInstagramUsername(data.instagram_username || '');
+        setLinkedinUsername(data.linkedin_username || '');
+      }
+    })();
   }, [user]);
 
   const canChangeUsername = () => {
@@ -111,6 +111,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
         full_name: fullName.trim() || null,
         phone_number: phoneNumber.trim() || null,
         avatar_url: avatarUrl || null,
+        tiktok_username: stripHandle(tiktokUsername) || null,
+        instagram_username: stripHandle(instagramUsername) || null,
+        linkedin_username: stripHandle(linkedinUsername) || null,
       };
 
       const usernameChanged = username.trim() !== (profile?.username || '');
@@ -145,35 +148,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
   };
 
   const firstName = fullName?.split(' ')[0] || username || 'U';
-
-  // Full-screen TikTok step overlay
-  if (showTikTokStep && user) {
-    return (
-      <div className="h-full flex flex-col bg-white">
-        <div className="flex items-center px-5 pt-5 pb-3 border-b border-black/10">
-          <button onClick={() => setShowTikTokStep(false)} className="p-1 -ml-1">
-            <ChevronLeft className="h-5 w-5 text-black/60" />
-          </button>
-          <h2 className="text-base font-bold text-black font-montserrat ml-3">Link TikTok</h2>
-        </div>
-        <div className="flex-1 overflow-y-auto px-5 py-8">
-          <TikTokStep
-            userId={user.id}
-            onNext={async (newUsername) => {
-              setTiktokUsername(newUsername);
-              setShowTikTokStep(false);
-              await refetchProfile();
-              toast({ title: 'TikTok linked', description: `@${newUsername} has been connected.` });
-            }}
-            onSkip={() => setShowTikTokStep(false)}
-          />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-full flex flex-col">
+
       {/* Save button header */}
       <div className="flex items-center justify-between px-5 pb-3 border-b border-black/10 safe-area-top pt-3">
         <button onClick={onSaved} className="p-1 -ml-1">
@@ -308,46 +285,52 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
             />
           </div>
 
-          {/* TikTok Account */}
+          {/* TikTok */}
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat">
-              TikTok Account
+              TikTok Username
             </Label>
-            {tiktokLoading ? (
-              <div className="flex items-center gap-2 py-2">
-                <Loader2 className="h-4 w-4 animate-spin text-black/30" />
-                <span className="text-sm text-black/40 font-jakarta">Loading...</span>
-              </div>
-            ) : tiktokUsername ? (
-              <div
-                className="flex items-center gap-3 p-3 rounded-xl"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img src={tiktokLogo} alt="" className="w-5 h-5 object-contain" />
-                </div>
-                <span className="text-sm font-medium text-black font-jakarta flex-1">@{tiktokUsername}</span>
-                <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowTikTokStep(true)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl transition-all active:scale-[0.98]"
-                style={{
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.06) 100%)',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
-              >
-                <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img src={tiktokLogo} alt="" className="w-5 h-5 object-contain" />
-                </div>
-                <span className="text-sm font-medium text-black/50 font-jakarta flex-1 text-left">Link your TikTok account</span>
-                <ChevronLeft className="h-4 w-4 text-black/30 rotate-180" />
-              </button>
-            )}
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-black/40 font-jakarta">@</span>
+              <Input
+                value={tiktokUsername}
+                onChange={(e) => setTiktokUsername(e.target.value)}
+                placeholder="yourhandle"
+                className="pl-7 bg-black/[0.03] border-black/[0.06] text-black font-jakarta"
+              />
+            </div>
+          </div>
+
+          {/* Instagram */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat">
+              Instagram Username
+            </Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-black/40 font-jakarta">@</span>
+              <Input
+                value={instagramUsername}
+                onChange={(e) => setInstagramUsername(e.target.value)}
+                placeholder="yourhandle"
+                className="pl-7 bg-black/[0.03] border-black/[0.06] text-black font-jakarta"
+              />
+            </div>
+          </div>
+
+          {/* LinkedIn */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-black/40 uppercase tracking-wider font-montserrat">
+              LinkedIn Username
+            </Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-black/40 font-jakarta">@</span>
+              <Input
+                value={linkedinUsername}
+                onChange={(e) => setLinkedinUsername(e.target.value)}
+                placeholder="yourhandle"
+                className="pl-7 bg-black/[0.03] border-black/[0.06] text-black font-jakarta"
+              />
+            </div>
           </div>
         </div>
       </div>

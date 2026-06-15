@@ -637,8 +637,11 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          instagram_username: string | null
+          linkedin_username: string | null
           phone_number: string | null
           stripe_connect_id: string | null
+          tiktok_username: string | null
           updated_at: string
           user_id: string
           username: string | null
@@ -650,8 +653,11 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          instagram_username?: string | null
+          linkedin_username?: string | null
           phone_number?: string | null
           stripe_connect_id?: string | null
+          tiktok_username?: string | null
           updated_at?: string
           user_id: string
           username?: string | null
@@ -663,8 +669,11 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          instagram_username?: string | null
+          linkedin_username?: string | null
           phone_number?: string | null
           stripe_connect_id?: string | null
+          tiktok_username?: string | null
           updated_at?: string
           user_id?: string
           username?: string | null
