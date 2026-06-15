@@ -22,6 +22,7 @@ const GRAIN_SVG = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2
 
 import CredentialsStep from '@/components/auth/CredentialsStep';
 import LoginForm from '@/components/auth/LoginForm';
+import { useSignupOptions } from '@/hooks/useSignupOptions';
 
 import TikTokStep from '@/components/auth/TikTokStep';
 
@@ -58,6 +59,7 @@ const Auth: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { options: signupOptions } = useSignupOptions();
 
   // Detect returning OAuth users who need onboarding
   useEffect(() => {
