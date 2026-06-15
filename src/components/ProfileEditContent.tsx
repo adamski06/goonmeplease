@@ -111,6 +111,9 @@ const ProfileEditContent: React.FC<ProfileEditContentProps> = ({ onSaved }) => {
         full_name: fullName.trim() || null,
         phone_number: phoneNumber.trim() || null,
         avatar_url: avatarUrl || null,
+        tiktok_username: stripHandle(tiktokUsername) || null,
+        instagram_username: stripHandle(instagramUsername) || null,
+        linkedin_username: stripHandle(linkedinUsername) || null,
       };
 
       const usernameChanged = username.trim() !== (profile?.username || '');
