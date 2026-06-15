@@ -47,6 +47,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Jarla behöver tillgång till kameran för att du ska kunna ta en profilbild.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Jarla behöver tillgång till dina foton för att du ska kunna välja en profilbild.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Jarla behöver behörighet för att spara bilder i ditt fotobibliotek.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Jarla behöver tillgång till mikrofonen för att kunna spela in video.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
