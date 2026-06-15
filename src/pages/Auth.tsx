@@ -373,6 +373,31 @@ const Auth: React.FC = () => {
               </h3>
 
               <div className="space-y-2.5 max-w-xs mx-auto">
+                {signupOptions.email && (
+                  <button
+                    onClick={() => {
+                      Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+                      setShowMethodSheet(false);
+                      setIsSignUp(true);
+                      setSignUpStep('credentials');
+                      setAuthView('signup');
+                    }}
+                    className="w-full py-3.5 rounded-full text-base font-bold text-black flex items-center justify-center gap-2.5 transition-all"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(245,245,245,0.9) 100%)',
+                      border: '1.5px solid rgba(0,0,0,0.1)',
+                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8), 0 4px 16px rgba(0,0,0,0.08)',
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="3" y="5" width="18" height="14" rx="2"/>
+                      <path d="m3 7 9 6 9-6"/>
+                    </svg>
+                    Continue with Email
+                  </button>
+                )}
+
+                {signupOptions.tiktok && (
                 <button
                   onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
@@ -398,7 +423,9 @@ const Auth: React.FC = () => {
                   </svg>
                   Continue with TikTok
                 </button>
+                )}
 
+                {signupOptions.linkedin && (
                 <button
                   onClick={async () => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
@@ -422,7 +449,9 @@ const Auth: React.FC = () => {
                   </svg>
                   Continue with LinkedIn
                 </button>
+                )}
 
+                {signupOptions.facebook && (
                 <button
                   onClick={() => {
                     Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
@@ -446,6 +475,7 @@ const Auth: React.FC = () => {
                   </svg>
                   Continue with Facebook
                 </button>
+                )}
               </div>
             </div>
           </>
