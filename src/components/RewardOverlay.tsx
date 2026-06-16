@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Bookmark, Gift, Plus, X } from 'lucide-react';
+import { Bookmark, Gift, Plus, X, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SubmitReward from '@/components/SubmitReward';
 import { Campaign } from '@/types/campaign';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface RewardOverlayProps {
   reward: Campaign;
