@@ -61,12 +61,14 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
 
     setRequesting(true);
     try {
-      // Check if already applied
+      // Check if a non-rejected application already exists
       const { data: existing } = await supabase
         .from('deal_applications')
-        .select('id')
+        .select('id, status')
         .eq('deal_id', deal.id)
         .eq('creator_id', user.id)
+        .neq('status', 'rejected')
+        .limit(1)
         .maybeSingle();
 
       if (existing) {
