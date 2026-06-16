@@ -25,7 +25,9 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(true);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
@@ -33,7 +35,23 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
     return () => { document.body.style.overflow = ''; };
   }, []);
 
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('reward_submissions')
+      .select('id, status')
+      .eq('reward_ad_id', reward.id)
+      .eq('creator_id', user.id)
+      .neq('status', 'denied')
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setAlreadySubmitted(true);
+      });
+  }, [reward.id, user]);
+
   const handleContinue = () => {
+    if (alreadySubmitted) return;
     setSubmitSliding(true);
     setTimeout(() => {
       setShowSubmit(true);
