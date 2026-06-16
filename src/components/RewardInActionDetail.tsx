@@ -299,18 +299,31 @@ const RewardInActionDetail: React.FC<RewardInActionDetailProps> = ({ submission,
           </div>
 
           {/* Coupon code or status */}
-          {couponCode ? (
-            <div
-              className="rounded-xl p-3 text-center"
-              style={{
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-              }}
-            >
-              <span className="text-[10px] font-semibold text-emerald-600/60 font-montserrat uppercase tracking-wider block mb-1">Your Coupon Code</span>
-              <p className="text-lg font-bold text-emerald-700 font-montserrat tracking-wider">{couponCode}</p>
-            </div>
-          ) : goalReached ? (
+          {couponCode ? (() => {
+            const isUrl = /^https?:\/\//i.test(couponCode.trim());
+            const handleOpen = () => {
+              if (isUrl) window.open(couponCode.trim(), '_blank', 'noopener,noreferrer');
+            };
+            const handleCopy = () => {
+              navigator.clipboard?.writeText(couponCode).then(() => toast.success('Copied!')).catch(() => {});
+            };
+            return (
+              <button
+                type="button"
+                onClick={isUrl ? handleOpen : handleCopy}
+                className="w-full rounded-xl p-3 text-center transition-transform active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.9) 100%)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                }}
+              >
+                <span className="text-[10px] font-semibold text-emerald-600/60 font-montserrat uppercase tracking-wider block mb-1">
+                  {isUrl ? 'Tap to open your reward' : 'Your Coupon Code (tap to copy)'}
+                </span>
+                <p className={`text-lg font-bold text-emerald-700 font-montserrat tracking-wider ${isUrl ? 'underline break-all' : ''}`}>{couponCode}</p>
+              </button>
+            );
+          })() : goalReached ? (
             <div className="relative overflow-hidden rounded-full" style={{ height: '48px' }}>
               {/* Swipe track */}
               <div
