@@ -296,6 +296,27 @@ const Activity: React.FC = () => {
     }
   }, [location.state]);
 
+  // Auto-open submission/reward when arriving from a notification link
+  useEffect(() => {
+    if (submissionsLoading) return;
+    const params = new URLSearchParams(location.search);
+    const rewardId = params.get('reward_submission');
+    const subId = params.get('submission');
+    if (rewardId) {
+      const match = rewardSubmissions.find(r => r.id === rewardId);
+      if (match) {
+        setSelectedRewardSubmission(match);
+        navigate('/user/activity', { replace: true });
+      }
+    } else if (subId) {
+      const match = activeSubmissions.find(s => s.id === subId);
+      if (match) {
+        setSelectedSubmission(match);
+        navigate('/user/activity', { replace: true });
+      }
+    }
+  }, [location.search, submissionsLoading, rewardSubmissions, activeSubmissions, navigate]);
+
   useEffect(() => {
     if (!loading && !user) {
       navigate('/user/auth');
