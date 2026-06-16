@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Bookmark, Gift, Plus, X } from 'lucide-react';
+import { Bookmark, Gift, Plus, X, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SubmitReward from '@/components/SubmitReward';
 import { Campaign } from '@/types/campaign';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface RewardOverlayProps {
   reward: Campaign;
@@ -23,7 +25,9 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(true);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
@@ -31,7 +35,23 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
     return () => { document.body.style.overflow = ''; };
   }, []);
 
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('reward_submissions')
+      .select('id, status')
+      .eq('reward_ad_id', reward.id)
+      .eq('creator_id', user.id)
+      .neq('status', 'denied')
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setAlreadySubmitted(true);
+      });
+  }, [reward.id, user]);
+
   const handleContinue = () => {
+    if (alreadySubmitted) return;
     setSubmitSliding(true);
     setTimeout(() => {
       setShowSubmit(true);
@@ -207,7 +227,8 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
             <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
               <button
                 onClick={handleContinue}
-                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                disabled={alreadySubmitted}
+                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
                   border: '1.5px solid rgba(60,60,60,0.6)',
@@ -215,8 +236,8 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
                   color: 'white',
                 }}
               >
-                <Plus className="h-4 w-4" />
-                {t('adOverlay.continue')}
+                {alreadySubmitted ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                {alreadySubmitted ? t('adOverlay.alreadySubmitted', 'Already submitted') : t('adOverlay.continue')}
               </button>
               <button
                 onClick={onToggleSave}

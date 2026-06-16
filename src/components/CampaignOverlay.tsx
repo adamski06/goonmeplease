@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import placeholderBlue from '@/assets/campaigns/placeholder-blue.jpg';
-import { Bookmark, Plus, X } from 'lucide-react';
+import { Bookmark, Plus, X, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import EarningsGraph, { calculateEarningsData, formatViewsForNote, formatEarningsForNote } from '@/components/EarningsGraph';
 import SubmissionGuide from '@/components/SubmissionGuide';
 import SubmitDraft from '@/components/SubmitDraft';
 import { Campaign } from '@/types/campaign';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface CampaignOverlayProps {
   campaign: Campaign;
@@ -26,10 +28,12 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
   const [backdropVisible, setBackdropVisible] = useState(false);
   const { formatPrice, label, convert } = useCurrency();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [showGuide, setShowGuide] = useState(false);
   const [guideSliding, setGuideSliding] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [submitSliding, setSubmitSliding] = useState(false);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setBackdropVisible(true));
@@ -37,7 +41,23 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
     return () => { document.body.style.overflow = ''; };
   }, []);
 
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('content_submissions')
+      .select('id, status')
+      .eq('campaign_id', campaign.id)
+      .eq('creator_id', user.id)
+      .neq('status', 'denied')
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setAlreadySubmitted(true);
+      });
+  }, [campaign.id, user]);
+
   const handleContinue = () => {
+    if (alreadySubmitted) return;
     setSubmitSliding(true);
     setTimeout(() => {
       setShowSubmit(true);
@@ -232,7 +252,8 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
             <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
               <button
                 onClick={handleContinue}
-                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                disabled={alreadySubmitted}
+                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
                   border: '1.5px solid rgba(60,60,60,0.6)',
@@ -240,8 +261,8 @@ const CampaignOverlay: React.FC<CampaignOverlayProps> = ({
                   color: 'white',
                 }}
               >
-                <Plus className="h-4 w-4" />
-                {t('adOverlay.continue')}
+                {alreadySubmitted ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                {alreadySubmitted ? t('adOverlay.alreadySubmitted', 'Already submitted') : t('adOverlay.continue')}
               </button>
               <button
                 onClick={onToggleSave}
