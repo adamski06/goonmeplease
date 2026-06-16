@@ -45,6 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         <h2 className="text-xl font-semibold text-black">Welcome back</h2>
       </div>
 
+      {opts.email && (<>
       <div className="space-y-1.5">
         <Label htmlFor="signin-email" className="text-black text-sm font-medium">Email</Label>
         <Input
