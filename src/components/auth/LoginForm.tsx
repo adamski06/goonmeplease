@@ -154,8 +154,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with LinkedIn
       </button>
+      )}
 
-      {/* Facebook Sign In */}
+      {opts.facebook && (
+      /* Facebook Sign In */
       <button
         type="button"
         onClick={async () => {
@@ -179,6 +181,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with Facebook
       </button>
+      )}
 
       <p className="text-center text-black/50 text-sm pt-2">
         Don't have an account?{' '}
