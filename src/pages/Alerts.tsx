@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle, DollarSign, TrendingUp, Bell } from 'lucide-react';
+import { CheckCircle, DollarSign, TrendingUp, Bell, Gift } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 
@@ -22,6 +22,8 @@ const typeIcon: Record<string, React.ReactNode> = {
   video_approved: <CheckCircle className="h-5 w-5 text-green-500" />,
   earning_received: <DollarSign className="h-5 w-5 text-amber-500" />,
   payout_completed: <TrendingUp className="h-5 w-5 text-blue-500" />,
+  reward_approved: <CheckCircle className="h-5 w-5 text-emerald-500" />,
+  reward_goal_reached: <Gift className="h-5 w-5 text-emerald-500" />,
 };
 
 const Alerts: React.FC = () => {
@@ -104,28 +106,41 @@ const Alerts: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-1">
-            {notifications.map((n) => (
-              <div
-                key={n.id}
-                className={`flex items-start gap-3 px-3 py-3 rounded-xl transition-colors ${
-                  !n.is_read ? 'bg-black/[0.03]' : ''
-                }`}
-              >
-                <div className="mt-0.5 shrink-0">
-                  {typeIcon[n.type] || <Bell className="h-5 w-5 text-black/30" />}
+            {notifications.map((n) => {
+              const isReward = n.type === 'reward_approved' || n.type === 'reward_goal_reached';
+              const isSubmission = n.type === 'video_approved';
+              const clickable = isReward || isSubmission;
+              const onClick = () => {
+                if (isReward && n.data?.reward_submission_id) {
+                  navigate(`/user/activity?reward_submission=${n.data.reward_submission_id}`);
+                } else if (isSubmission && n.data?.submission_id) {
+                  navigate(`/user/activity?submission=${n.data.submission_id}`);
+                }
+              };
+              return (
+                <div
+                  key={n.id}
+                  onClick={clickable ? onClick : undefined}
+                  className={`flex items-start gap-3 px-3 py-3 rounded-xl transition-colors ${
+                    !n.is_read ? 'bg-black/[0.03]' : ''
+                  } ${clickable ? 'cursor-pointer active:bg-black/[0.06]' : ''}`}
+                >
+                  <div className="mt-0.5 shrink-0">
+                    {typeIcon[n.type] || <Bell className="h-5 w-5 text-black/30" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-black font-montserrat">{n.title}</p>
+                    <p className="text-xs text-black/60 font-jakarta mt-0.5 leading-relaxed">{n.message}</p>
+                    <p className="text-[11px] text-black/30 font-jakarta mt-1">
+                      {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
+                    </p>
+                  </div>
+                  {!n.is_read && (
+                    <div className="mt-2 h-2 w-2 rounded-full bg-blue-500 shrink-0" />
+                  )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-black font-montserrat">{n.title}</p>
-                  <p className="text-xs text-black/60 font-jakarta mt-0.5 leading-relaxed">{n.message}</p>
-                  <p className="text-[11px] text-black/30 font-jakarta mt-1">
-                    {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
-                  </p>
-                </div>
-                {!n.is_read && (
-                  <div className="mt-2 h-2 w-2 rounded-full bg-blue-500 shrink-0" />
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
