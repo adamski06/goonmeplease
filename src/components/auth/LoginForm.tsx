@@ -101,8 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
       )}
 
       {opts.tiktok && (
-
-      {/* TikTok Sign In */}
+      /* TikTok Sign In */
       <button
         type="button"
         onClick={async () => {
@@ -128,8 +127,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with TikTok
       </button>
+      )}
 
-      {/* LinkedIn Sign In */}
+      {opts.linkedin && (
+      /* LinkedIn Sign In */
       <button
         type="button"
         onClick={async () => {
