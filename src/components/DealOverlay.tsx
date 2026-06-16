@@ -37,14 +37,16 @@ const DealOverlay: React.FC<DealOverlayProps> = ({
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  // Check if already applied on mount
+  // Check if already applied on mount (ignore rejected — can re-apply)
   useEffect(() => {
     if (!user) return;
     supabase
       .from('deal_applications')
-      .select('id')
+      .select('id, status')
       .eq('deal_id', deal.id)
       .eq('creator_id', user.id)
+      .neq('status', 'rejected')
+      .limit(1)
       .maybeSingle()
       .then(({ data }) => {
         if (data) setRequested(true);
