@@ -543,6 +543,7 @@ const Auth: React.FC = () => {
                 onSubmit={handleLogin}
                 onSwitchToSignUp={() => { setIsSignUp(true); setAuthView('signup'); setSignUpStep('credentials'); }}
                 isLoading={isLoading}
+                options={signupOptions}
               />
             )}
 
