@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle, DollarSign, TrendingUp, Bell } from 'lucide-react';
+import { CheckCircle, DollarSign, TrendingUp, Bell, Gift } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 
@@ -22,6 +22,8 @@ const typeIcon: Record<string, React.ReactNode> = {
   video_approved: <CheckCircle className="h-5 w-5 text-green-500" />,
   earning_received: <DollarSign className="h-5 w-5 text-amber-500" />,
   payout_completed: <TrendingUp className="h-5 w-5 text-blue-500" />,
+  reward_approved: <CheckCircle className="h-5 w-5 text-emerald-500" />,
+  reward_goal_reached: <Gift className="h-5 w-5 text-emerald-500" />,
 };
 
 const Alerts: React.FC = () => {
