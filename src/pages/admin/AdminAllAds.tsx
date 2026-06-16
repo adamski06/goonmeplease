@@ -134,7 +134,7 @@ const AdminAllAds = () => {
           </TableHeader>
           <TableBody>
             {filtered.map((ad) => (
-              <TableRow key={`${ad.table}-${ad.id}`} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/admin/business/${ad.business_id}`)}>
+              <TableRow key={`${ad.table}-${ad.id}`} className="cursor-pointer hover:bg-accent/50" onClick={() => navigate(`/admin/ads/${ad.type === 'Spread' ? 'spread' : ad.type === 'Deal' ? 'deal' : 'reward'}/${ad.id}`)}>
                 <TableCell className="font-medium max-w-[200px] truncate">{ad.title}</TableCell>
                 <TableCell className="text-sm text-muted-foreground truncate max-w-[120px]">{ad.brand_name}</TableCell>
                 <TableCell>
