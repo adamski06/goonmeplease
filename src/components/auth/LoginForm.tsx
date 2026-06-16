@@ -15,12 +15,15 @@ interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
   onSwitchToSignUp: () => void;
   isLoading: boolean;
+  options?: { email: boolean; tiktok: boolean; linkedin: boolean; facebook: boolean };
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoading }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoading, options }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { toast } = useToast();
+  const opts = options ?? { email: true, tiktok: true, linkedin: true, facebook: true };
+  const anySocial = opts.tiktok || opts.linkedin || opts.facebook;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
