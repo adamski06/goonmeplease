@@ -227,7 +227,8 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
             <div className="px-5 py-5 flex items-center justify-center gap-3 flex-shrink-0">
               <button
                 onClick={handleContinue}
-                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2"
+                disabled={alreadySubmitted}
+                className="h-12 px-8 text-sm font-bold rounded-full flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(10,10,10,1) 100%)',
                   border: '1.5px solid rgba(60,60,60,0.6)',
@@ -235,8 +236,8 @@ const RewardOverlay: React.FC<RewardOverlayProps> = ({
                   color: 'white',
                 }}
               >
-                <Plus className="h-4 w-4" />
-                {t('adOverlay.continue')}
+                {alreadySubmitted ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                {alreadySubmitted ? t('adOverlay.alreadySubmitted', 'Already submitted') : t('adOverlay.continue')}
               </button>
               <button
                 onClick={onToggleSave}
