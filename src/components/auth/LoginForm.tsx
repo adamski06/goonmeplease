@@ -15,12 +15,15 @@ interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
   onSwitchToSignUp: () => void;
   isLoading: boolean;
+  options?: { email: boolean; tiktok: boolean; linkedin: boolean; facebook: boolean };
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoading }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoading, options }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { toast } = useToast();
+  const opts = options ?? { email: true, tiktok: true, linkedin: true, facebook: true };
+  const anySocial = opts.tiktok || opts.linkedin || opts.facebook;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         <h2 className="text-xl font-semibold text-black">Welcome back</h2>
       </div>
 
+      {opts.email && (<>
       <div className="space-y-1.5">
         <Label htmlFor="signin-email" className="text-black text-sm font-medium">Email</Label>
         <Input
@@ -85,15 +89,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
           {isLoading ? 'Signing in...' : 'Sign In'}
         </Button>
       </div>
+      </>)}
 
       {/* Divider */}
+      {opts.email && anySocial && (
       <div className="flex items-center gap-3 pt-2">
         <div className="flex-1 h-px bg-black/10" />
         <span className="text-xs text-black/40">or</span>
         <div className="flex-1 h-px bg-black/10" />
       </div>
+      )}
 
-      {/* TikTok Sign In */}
+      {opts.tiktok && (
+      /* TikTok Sign In */
       <button
         type="button"
         onClick={async () => {
@@ -119,8 +127,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with TikTok
       </button>
+      )}
 
-      {/* LinkedIn Sign In */}
+      {opts.linkedin && (
+      /* LinkedIn Sign In */
       <button
         type="button"
         onClick={async () => {
@@ -144,8 +154,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with LinkedIn
       </button>
+      )}
 
-      {/* Facebook Sign In */}
+      {opts.facebook && (
+      /* Facebook Sign In */
       <button
         type="button"
         onClick={async () => {
@@ -169,6 +181,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onSwitchToSignUp, isLoa
         </svg>
         Continue with Facebook
       </button>
+      )}
 
       <p className="text-center text-black/50 text-sm pt-2">
         Don't have an account?{' '}
