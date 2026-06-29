@@ -9,29 +9,34 @@ import { toast } from 'sonner';
 interface Props {
   table: 'campaigns' | 'reward_ads' | 'deals';
   rowId: string;
+  title?: string | null;
   description: string | null;
   guidelines: string[] | null;
-  onSaved: (data: { description: string | null; guidelines: string[] | null }) => void;
+  onSaved: (data: { title?: string | null; description: string | null; guidelines: string[] | null }) => void;
 }
 
-const EditableAdDetails: React.FC<Props> = ({ table, rowId, description, guidelines, onSaved }) => {
+const EditableAdDetails: React.FC<Props> = ({ table, rowId, title, description, guidelines, onSaved }) => {
+  const hasTitle = title !== undefined;
   const [editing, setEditing] = useState(false);
+  const [ttl, setTtl] = useState(title ?? '');
   const [desc, setDesc] = useState(description ?? '');
   const [items, setItems] = useState<string[]>(guidelines ?? []);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    setTtl(title ?? '');
     setDesc(description ?? '');
     setItems(guidelines ?? []);
-  }, [description, guidelines]);
+  }, [title, description, guidelines]);
 
   const save = async () => {
     setSaving(true);
     const cleaned = items.map(i => i.trim()).filter(Boolean);
-    const payload = {
+    const payload: { title?: string | null; description: string | null; guidelines: string[] | null } = {
       description: desc.trim() || null,
       guidelines: cleaned.length ? cleaned : null,
     };
+    if (hasTitle) payload.title = ttl.trim() || null;
     const { error } = await supabase.from(table).update(payload).eq('id', rowId);
     setSaving(false);
     if (error) {
@@ -47,10 +52,14 @@ const EditableAdDetails: React.FC<Props> = ({ table, rowId, description, guideli
     return (
       <>
         <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex-1" />
+          <div className="flex-1 min-w-0">
+            {hasTitle && title && (
+              <h3 className="text-base font-bold text-foreground font-montserrat">{title}</h3>
+            )}
+          </div>
           <button
             onClick={() => setEditing(true)}
-            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0"
             title="Edit"
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -78,6 +87,16 @@ const EditableAdDetails: React.FC<Props> = ({ table, rowId, description, guideli
 
   return (
     <div className="mb-4 space-y-3">
+      {hasTitle && (
+        <div>
+          <label className="text-xs font-semibold text-foreground mb-1.5 block">Title</label>
+          <Input
+            value={ttl}
+            onChange={(e) => setTtl(e.target.value)}
+            placeholder="Ad title…"
+          />
+        </div>
+      )}
       <div>
         <label className="text-xs font-semibold text-foreground mb-1.5 block">Description</label>
         <Textarea
@@ -127,6 +146,7 @@ const EditableAdDetails: React.FC<Props> = ({ table, rowId, description, guideli
           size="sm"
           variant="ghost"
           onClick={() => {
+            setTtl(title ?? '');
             setDesc(description ?? '');
             setItems(guidelines ?? []);
             setEditing(false);
