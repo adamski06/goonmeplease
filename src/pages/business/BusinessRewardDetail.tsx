@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import EditableAdDetails from '@/components/business/EditableAdDetails';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
