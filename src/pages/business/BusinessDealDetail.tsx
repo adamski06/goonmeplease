@@ -424,11 +424,10 @@ const BusinessDealDetail: React.FC = () => {
       >
         {/* Left: text content */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{deal.title}</h3>
-
           <EditableAdDetails
             table="deals"
             rowId={deal.id}
+            title={deal.title}
             description={deal.description}
             guidelines={deal.guidelines}
             onSaved={(d) => setDeal(prev => prev ? { ...prev, ...d } : prev)}
