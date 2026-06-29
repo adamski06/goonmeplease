@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import EditableAdDetails from '@/components/business/EditableAdDetails';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CampaignData {
