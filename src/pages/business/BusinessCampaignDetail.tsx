@@ -403,11 +403,10 @@ const BusinessCampaignDetail: React.FC = () => {
       <div className="rounded-[28px] p-6 flex gap-5" style={cardStyle}>
         {/* Left: text content */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{campaign.title}</h3>
-
           <EditableAdDetails
             table="campaigns"
             rowId={campaign.id}
+            title={campaign.title}
             description={campaign.description}
             guidelines={campaign.guidelines}
             onSaved={(d) => setCampaign(prev => prev ? { ...prev, ...d } : prev)}
