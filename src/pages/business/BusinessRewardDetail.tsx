@@ -491,11 +491,10 @@ const BusinessRewardDetail: React.FC = () => {
       <div className="rounded-[28px] p-6 flex gap-5" style={cardStyle}>
         {/* Left: text content */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{reward.title}</h3>
-
           <EditableAdDetails
             table="reward_ads"
             rowId={reward.id}
+            title={reward.title}
             description={reward.description}
             guidelines={reward.guidelines}
             onSaved={(d) => setReward(prev => prev ? { ...prev, ...d } : prev)}
