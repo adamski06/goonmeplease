@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import EditableAdDetails from '@/components/business/EditableAdDetails';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import RewardCouponSheetPanel from '@/components/business/RewardCouponSheetPanel';
@@ -492,23 +493,13 @@ const BusinessRewardDetail: React.FC = () => {
         <div className="flex-1 min-w-0">
           <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{reward.title}</h3>
 
-          {reward.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{reward.description}</p>
-          )}
-
-          {reward.guidelines && reward.guidelines.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
-              <ul className="space-y-1.5">
-                {reward.guidelines.map((g, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-foreground/40 mt-0.5">•</span>
-                    {g}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <EditableAdDetails
+            table="reward_ads"
+            rowId={reward.id}
+            description={reward.description}
+            guidelines={reward.guidelines}
+            onSaved={(d) => setReward(prev => prev ? { ...prev, ...d } : prev)}
+          />
 
           <div className="pt-3 space-y-1.5">
             <div className="flex items-center gap-2">

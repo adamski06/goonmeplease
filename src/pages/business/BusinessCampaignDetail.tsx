@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { toast as sonnerToast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import EditableAdDetails from '@/components/business/EditableAdDetails';
 import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface CampaignData {
@@ -404,23 +405,13 @@ const BusinessCampaignDetail: React.FC = () => {
         <div className="flex-1 min-w-0">
           <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{campaign.title}</h3>
 
-          {campaign.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{campaign.description}</p>
-          )}
-
-          {campaign.guidelines && campaign.guidelines.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
-              <ul className="space-y-1.5">
-                {campaign.guidelines.map((g, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-foreground/40 mt-0.5">•</span>
-                    {g}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <EditableAdDetails
+            table="campaigns"
+            rowId={campaign.id}
+            description={campaign.description}
+            guidelines={campaign.guidelines}
+            onSaved={(d) => setCampaign(prev => prev ? { ...prev, ...d } : prev)}
+          />
 
           {/* Earnings — simple two rows */}
           <div className="pt-3 space-y-1.5">

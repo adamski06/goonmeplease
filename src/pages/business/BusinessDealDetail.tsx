@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import ThumbnailUploadModal from '@/components/business/ThumbnailUploadModal';
+import EditableAdDetails from '@/components/business/EditableAdDetails';
 
 interface DealData {
   id: string;
@@ -425,23 +426,13 @@ const BusinessDealDetail: React.FC = () => {
         <div className="flex-1 min-w-0">
           <h3 className="text-base font-bold text-foreground font-montserrat mb-3">{deal.title}</h3>
 
-          {deal.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{deal.description}</p>
-          )}
-
-          {deal.guidelines && deal.guidelines.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-xs font-semibold text-foreground mb-2">Guidelines</h4>
-              <ul className="space-y-1.5">
-                {deal.guidelines.map((g, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-foreground/40 mt-0.5">•</span>
-                    {g}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <EditableAdDetails
+            table="deals"
+            rowId={deal.id}
+            description={deal.description}
+            guidelines={deal.guidelines}
+            onSaved={(d) => setDeal(prev => prev ? { ...prev, ...d } : prev)}
+          />
 
           {/* Pricing pills — glassy green */}
           <div className="flex items-center gap-2 pt-3 flex-wrap">
